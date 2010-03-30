@@ -112,9 +112,9 @@ for a wide range of languages (courtesy of Pygments) by using the following
 syntax:
 
     ```ruby```
-    def foo
-      puts 'bar'
-    end
+      def foo
+        puts 'bar'
+      end
     ```
 
 The block must start with three backticks (as the first characters on the
@@ -122,9 +122,13 @@ line). After that comes the name of the language that is contained by the
 block. The language must be one of the `short name` lexer strings supported by
 Pygments. See the [list of lexers](http://pygments.org/docs/lexers/) for valid
 options. Following the language name you may add an additional three backticks
-for aesthetic reasons (but this is not required). The block must end with at
-least three backticks as the first characters on a line. You may add more
-backticks for balance if you like.
+for aesthetic reasons (but this is not required).
+
+If the block contents are indented two spaces or one tab, then that whitespace
+will be ignored (this makes the blocks easier to read in plaintext).
+
+The block must end with at least three backticks as the first characters on a
+line. You may add more backticks for balance if you like.
 
 
 ## API DOCUMENTATION
