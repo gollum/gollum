@@ -28,12 +28,12 @@ that corresponds to the format of the content:
 
 Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
-names regardless of where there are located in the repository.
+names regardless of where they are located in the repository.
 
 
 ## WIKI LINKS
 
-Wiki links in Gollum are processed before page content is converted into HTML.
+Wiki links in Gollum are processed before page content is converted to HTML.
 They take the following form:
 
     [[Page Name]]
