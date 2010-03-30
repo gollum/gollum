@@ -59,7 +59,7 @@ Here's a simple example:
 
 ## HTML SANITIZATION
 
-For security and compatibility reasons GitHub Wikis may not contain custom CSS
+For security and compatibility reasons Gollum wikis may not contain custom CSS
 or JavaScript. These tags will be stripped from the converted HTML.
 
 
