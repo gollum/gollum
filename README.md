@@ -108,10 +108,6 @@ In Textile, it would look like this:
 
     "Gollum Manual":[file:gollum.pdf]
 
-And in HTML, like so:
-
-    <img src="[file:gollum.pdf]" alt="Gollum Manual" />
-
 
 ## ESCAPING WIKI AND STATIC LINKS
 
