@@ -57,6 +57,12 @@ Here's a simple example:
     <div id="footer">...</div>
 
 
+## HTML SANITIZATION
+
+For security and compatibility reasons GitHub Wikis may not contain custom CSS
+or JavaScript. These tags will be stripped from the converted HTML.
+
+
 ## WIKI LINKS
 
 Wiki links in Gollum are processed before page content is converted to HTML.
