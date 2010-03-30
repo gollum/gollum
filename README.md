@@ -20,12 +20,11 @@ choose. Other content (images, CSS, JavaScript, PDFs, etc) may also be
 present and organized in the same way.
 
 Page files may be written in formats that render to HTML. Currently supported
-formats are Markdown, Textile, and HTML. They must have the proper file
-extension that corresponds to the format of the content:
+formats are Markdown and Textile. They must have the proper file extension
+that corresponds to the format of the content:
 
   * Markdown: .markdown, .mkdn, .md
   * Textile: .textile
-  * HTML: .html
 
 Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
