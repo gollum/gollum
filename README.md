@@ -31,10 +31,6 @@ Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
 names regardless of where there are located in the repository.
 
-CSS and JavaScript (.css and .js) files are automatically detected and
-injected into page files that live at the same directory level or lower. This
-allows you to easily apply CSS and JS to specific sets of pages.
-
 
 ## WIKI LINKS
 
