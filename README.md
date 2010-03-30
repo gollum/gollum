@@ -16,8 +16,11 @@ you choose to edit them by hand.
 
 A Gollum repository's contents are designed to be human editable. Page content
 is written in `page files` and may be organized into directories any way you
-choose. Other content (images, CSS, JavaScript, PDFs, etc) may also be
-present and organized in the same way.
+choose. Layouts can be created in `layout files`. Other content (images, PDFs,
+etc) may also be present and organized in the same way.
+
+
+## PAGE FILES
 
 Page files may be written in formats that render to HTML. Currently supported
 formats are Markdown and Textile. They must have the proper file extension
@@ -29,6 +32,29 @@ that corresponds to the format of the content:
 Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
 names regardless of where they are located in the repository.
+
+The special page file `home.ext` (where the extension is one of the supported
+formats) will be used as the entrance page to your wiki. If it is missing, an
+automatically generated table of contents will be shown instead.
+
+
+## LAYOUT FILES
+
+Layout files allow you to wrap page content with a header, footer, sidebar,
+etc. Layout files must be named `_layout.ext` where the extension is one of
+the supported formats. Layouts affect all pages in their directory and any
+subdirectories that do not have layout files of their own.
+
+Inside your layout file, you must use the following content link to specify
+where the page content should reside:
+
+    [[[content]]]
+
+Here's a simple example:
+
+    <div id="header">...</div>
+    <div id="content">[[[content]]]</div>
+    <div id="footer">...</div>
 
 
 ## WIKI LINKS
