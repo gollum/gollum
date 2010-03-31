@@ -93,40 +93,40 @@ Gollum does a breadth first search and uses the first match that it finds.
 To display images that are contained in the Gollum repository you should use
 the image tag.
 
-    [[Image:gollum.png]]
+    [[image:gollum.png]]
 
 In addition to the simple format, there are a variety of options that you
 can specify between pipe delimieters.
 
 To specify alt text, use the `alt=` option. Default is no alt text.
 
-    [[Image:gollum.png|alt=Gollum and his precious wiki]]
+    [[image:gollum.png|alt=Gollum and his precious wiki]]
 
 To place the image in a frame, use the `frame` option. When combined with the
 `alt=` option, the alt text will be used as a caption as well. Default is no
 frame.
 
-    [[Image:gollum.png|frame|alt=Gollum and his precious wiki]]
+    [[image:gollum.png|frame|alt=Gollum and his precious wiki]]
 
 To specify the alignment of the image on the page, use the `align=` option.
 Possible values are `left`, `center`, and `right`. Default is `center`.
 
-    [[Image:gollum.png|align=center]]
+    [[image:gollum.png|align=center]]
 
 To float an image so that text flows around it, use the `float` option.
 Default is not floating.
 
-    [[Image:gollum.png|float]]
+    [[image:gollum.png|float]]
 
 To specify a max-width, use the `width=` option. Units must be specified in
 either `px` or `em`. Default is `250px`.
 
-    [[Image:gollum.pdf|width=400px]]
+    [[image:gollum.pdf|width=400px]]
 
 To specify a max-height, use the `height=` option. Units must be specified in
 either `px` or `em`. Default is `250px`.
 
-    [[Image:gollum.pdf|height=300px]]
+    [[image:gollum.pdf|height=300px]]
 
 ## STATIC LINKS
 
