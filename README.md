@@ -121,12 +121,12 @@ Default is not floating.
 To specify a max-width, use the `width=` option. Units must be specified in
 either `px` or `em`. Default is `250px`.
 
-    [[image:gollum.pdf|width=400px]]
+    [[image:gollum.png|width=400px]]
 
 To specify a max-height, use the `height=` option. Units must be specified in
 either `px` or `em`. Default is `250px`.
 
-    [[image:gollum.pdf|height=300px]]
+    [[image:gollum.png|height=300px]]
 
 ## FILE LINKS
 
