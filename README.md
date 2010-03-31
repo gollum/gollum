@@ -88,6 +88,46 @@ Here are a few more examples:
 The page file may exist anywhere in the directory structure of the repository.
 Gollum does a breadth first search and uses the first match that it finds.
 
+## IMAGES
+
+To display images that are contained in the Gollum repository you should use
+the image tag.
+
+    [[Image:gollum.png]]
+
+In addition to the simple format, there are a variety of options that you
+can specify between pipe delimieters.
+
+To specify alt text, use the `alt=` option. Default is no alt text.
+
+    [[Image:gollum.png|alt=Gollum and his precious wiki]]
+
+To place the image in a frame, use the `frame` option. When combined with the
+`alt=` option, the alt text will be used as a caption as well. Default is no
+frame.
+
+    [[Image:gollum.png|frame|alt=Gollum and his precious wiki]]
+
+To specify the alignment of the image on the page, use the `align=` option.
+Possible values are `left`, `center`, and `right`. Default is `center`.
+
+    [[Image:gollum.png|align=center]]
+
+To float an image so that text flows around it, use the `float` option.
+Default is not floating.
+
+    [[Image:gollum.png|float]]
+
+To specify a max-width, use the `width=` option. Units must be specified in
+either `px` or `em`. Default is `250px`.
+
+    [[Image:gollum.pdf|width=400px]]
+
+To specify a max-height, use the `height=` option. Units must be specified in
+either `px` or `em`. Default is `250px`.
+
+    [[Image:gollum.pdf|height=300px]]
+
 ## STATIC LINKS
 
 To link to static files that are contained in the Gollum repository you should
