@@ -22,12 +22,21 @@ choose. Special footers can be created in `footer files`. Other content
 
 ## PAGE FILES
 
-Page files may be written in formats that render to HTML. Currently supported
-formats are Markdown and Textile. They must have the proper file extension
-that corresponds to the format of the content:
+Page files may be written in any format supported by
+[GitHub-Markup](http://github.com/defunkt/github-markup). The current list of
+formats and allowed extensions is:
 
-  * Markdown: .markdown, .mkdn, .md
+  * Markdown: .markdown, .mdown, .mkdn, .mkd, .md
   * Textile: .textile
+  * RDoc: .rdoc
+  * Org Mode: .org
+  * ReStructured Text: .rest.txt, .rst.txt, .rest, .rst
+  * ASCIIDoc: .asciidoc
+  * POD: .pod
+  * Roff: .1, .2, .3, ...
+
+Gollum detects the page file format via the extension, so files must have one
+of the supported extensions in order to be converted.
 
 Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
