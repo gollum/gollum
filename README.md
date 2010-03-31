@@ -128,34 +128,12 @@ either `px` or `em`. Default is `250px`.
 
     [[image:gollum.pdf|height=300px]]
 
-## STATIC LINKS
+## FILE LINKS
 
 To link to static files that are contained in the Gollum repository you should
-use the static link tag. Because this tag produces a URL instead of a full
-link tag, it is contained within single brackets. It uses the `file:`
-identifier to mark the contents as a static file reference. Static links are
-processed before page content is converted into HTML.
+use the file link tag.
 
-You can use either absolute or relative paths to specify the file location.
-Absolute paths (that start with a slash) are bound to the repository root.
-
-    [file:/gollum.pdf]
-    [file:/docs/gollum.pdf]
-
-Relative paths (without a beginning slash) are referenced from the location of
-the page file. For example, if your page file is `documentation.md` and is
-stored in the `docs` directory under the repository root, then the following
-link in `documentation.md` will produce a URL to `/docs/gollum.pdf`:
-
-    [file:gollum.pdf]
-
-In Markdown, a link would take the following form:
-
-    [Gollum Manual]([file:gollum.pdf])
-
-In Textile, it would look like this:
-
-    "Gollum Manual":[file:gollum.pdf]
+    [[file:gollum.pdf]]
 
 
 ## ESCAPING WIKI AND STATIC LINKS
