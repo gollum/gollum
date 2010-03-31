@@ -71,7 +71,7 @@ They take the following form:
 If you'd like the link text to be something other than the page name, you can
 use the advanced form:
 
-    [[Page Name | Alternate Text]]
+    [[Page Name|Alternate Text]]
 
 The above wiki links will create a link to the corresponding page file named
 `page-name.ext` where `ext` may be any of the allowed extension types. The
@@ -83,7 +83,7 @@ conversion is as follows:
 Here are a few more examples:
 
     [[Tom "TPW" Preston-Werner]] -> tom--tpw--preston-werner.ext
-    [[Quantum Physics | quantum]] -> quantum-physics.ext
+    [[Quantum Physics|quantum]] -> quantum-physics.ext
 
 The page file may exist anywhere in the directory structure of the repository.
 Gollum does a breadth first search and uses the first match that it finds.
