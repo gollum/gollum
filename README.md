@@ -38,6 +38,9 @@ formats and allowed extensions is:
 Gollum detects the page file format via the extension, so files must have one
 of the supported extensions in order to be converted.
 
+Page files may only contain lowercase alphanumeric characters and dashes, plus
+the extension. For example: `tpw.md` and `apples-and-bananas.rst`.
+
 Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
 names regardless of where they are located in the repository.
@@ -61,88 +64,95 @@ For security and compatibility reasons Gollum wikis may not contain custom CSS
 or JavaScript. These tags will be stripped from the converted HTML.
 
 
-## WIKI LINKS
+## PAGE LINKS
 
-Wiki links in Gollum are processed before page content is converted to HTML.
-They take the following form:
+To link to another Gollum wiki page, use the Gollum Page Link Tag.
 
     [[Page Name]]
 
-If you'd like the link text to be something other than the page name, you can
-use the advanced form:
-
-    [[Page Name|Alternate Text]]
-
-The above wiki links will create a link to the corresponding page file named
+The above tag will create a link to the corresponding page file named
 `page-name.ext` where `ext` may be any of the allowed extension types. The
 conversion is as follows:
 
   1. Replace any non-alpha characters with a dash
   2. Lowercase all alpha characters
 
-Here are a few more examples:
+If you'd like the link text to be something that doesn't map directly to the
+page name, you can specify the actual page name after a pipe:
 
-    [[Tom "TPW" Preston-Werner]] -> tom--tpw--preston-werner.ext
-    [[Quantum Physics|quantum]] -> quantum-physics.ext
+    [[Page Name|page]]
+
+The above tag will link to `page.ext` using "Page Name" as the link text.
 
 The page file may exist anywhere in the directory structure of the repository.
 Gollum does a breadth first search and uses the first match that it finds.
 
+Here are a few more examples:
+
+    [[Tom "TPW" Preston-Werner]] -> tom--tpw--preston-werner.ext
+    [[Quantum Physics|quantum]] -> quantum.ext
+
+
+## FILE LINKS
+
+To link to static files that are contained in the Gollum repository you should
+use the Gollum File Link Tag.
+
+    [[Gollum|gollum.pdf]]
+
+
 ## IMAGES
 
 To display images that are contained in the Gollum repository you should use
-the image tag.
+the Gollum Image Tag. This will display the actual image on the page.
 
-    [[image:gollum.png]]
+    [[gollum.png]]
 
 In addition to the simple format, there are a variety of options that you
 can specify between pipe delimieters.
 
 To specify alt text, use the `alt=` option. Default is no alt text.
 
-    [[image:gollum.png|alt=Gollum and his precious wiki]]
+    [[gollum.png|alt=Gollum and his precious wiki]]
 
 To place the image in a frame, use the `frame` option. When combined with the
 `alt=` option, the alt text will be used as a caption as well. Default is no
 frame.
 
-    [[image:gollum.png|frame|alt=Gollum and his precious wiki]]
+    [[gollum.png|frame|alt=Gollum and his precious wiki]]
 
 To specify the alignment of the image on the page, use the `align=` option.
 Possible values are `left`, `center`, and `right`. Default is `center`.
 
-    [[image:gollum.png|align=center]]
+    [[gollum.png|align=center]]
 
 To float an image so that text flows around it, use the `float` option.
 Default is not floating.
 
-    [[image:gollum.png|float]]
+    [[gollum.png|float]]
 
 To specify a max-width, use the `width=` option. Units must be specified in
 either `px` or `em`. Default is `250px`.
 
-    [[image:gollum.png|width=400px]]
+    [[gollum.png|width=400px]]
 
 To specify a max-height, use the `height=` option. Units must be specified in
 either `px` or `em`. Default is `250px`.
 
-    [[image:gollum.png|height=300px]]
+    [[gollum.png|height=300px]]
 
-## FILE LINKS
-
-To link to static files that are contained in the Gollum repository you should
-use the file link tag.
-
-    [[file:gollum.pdf]]
+Any of these options may be composed together by simply separating them with
+pipes.
 
 
-## ESCAPING WIKI AND STATIC LINKS
+## ESCAPING GOLLUM TAGS
 
 If you need the literal text of a wiki or static link to show up in your final
 wiki page, simply preface the link with a single quote (like in LISP):
 
-    '[[Wiki Link]]
-    '[file:foo.jpg]
+    '[[Page Link]]
+    '[[File Link|file.pdf]]
+    '[[image.jpg]]
 
 This is useful for writing about the link syntax in your wiki pages.
 
