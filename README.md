@@ -93,6 +93,28 @@ Here are a few more examples:
     [[Quantum Physics|quantum]] -> quantum.ext
 
 
+## ABSOLUTE VS. RELATIVE PATHS
+
+For Gollum tags that operate on static files (images, PDFs, etc), the paths
+may be referenced as either relative or absolute. Relative paths point to a
+static file relative to the page file within the directory structure of the
+Gollum repo (even though after conversion, all page files appear to be top
+level). These paths are NOT prefixed with a slash. For example:
+
+    gollum.pdf
+    docs/diagram.png
+
+Absolute paths point to a static file relative to the Gollum repo's
+root, regardless of where the page file is stored within the directory
+structure. These paths ARE prefixed with a slash. For example:
+
+    /pdfs/gollum.pdf
+    /docs/diagram.png
+
+All of the examples in this README use relative paths, but you may use
+whatever works best in your situation.
+
+
 ## FILE LINKS
 
 To link to static files that are contained in the Gollum repository you should
