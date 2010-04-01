@@ -38,14 +38,16 @@ formats and allowed extensions is:
 Gollum detects the page file format via the extension, so files must have one
 of the supported extensions in order to be converted.
 
-Page files may only contain lowercase alphanumeric characters and dashes, plus
-the extension. For example: `tpw.md` and `apples-and-bananas.rst`.
+Page file names may contain any printable UTF-8 character except space
+(U+0020) and forward slash (U+002F). If you commit a page file with any of
+these characters in the name and push the repository to GitHub, a commit will
+be made on GitHub's side that replaces those characters with a dash (U+002D).
 
 Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
 names regardless of where they are located in the repository.
 
-The special page file `home.ext` (where the extension is one of the supported
+The special page file `Home.ext` (where the extension is one of the supported
 formats) will be used as the entrance page to your wiki. If it is missing, an
 automatically generated table of contents will be shown instead.
 
@@ -53,7 +55,7 @@ automatically generated table of contents will be shown instead.
 ## FOOTER FILES
 
 Footer files allow you to add a simple footer to your wiki. Footer files must
-be named `_footer.ext` where the extension is one of the supported formats.
+be named `_Footer.ext` where the extension is one of the supported formats.
 Footers affect all pages in their directory and any subdirectories that do not
 have footer files of their own.
 
@@ -68,29 +70,28 @@ or JavaScript. These tags will be stripped from the converted HTML.
 
 To link to another Gollum wiki page, use the Gollum Page Link Tag.
 
-    [[Page Name]]
+    [[San Francisco]]
 
 The above tag will create a link to the corresponding page file named
-`page-name.ext` where `ext` may be any of the allowed extension types. The
+`San-Francisco.ext` where `ext` may be any of the allowed extension types. The
 conversion is as follows:
 
-  1. Replace any non-alpha characters with a dash
-  2. Lowercase all alpha characters
+  1. Replace any non-printables, spaces, or slashes with dashes
 
 If you'd like the link text to be something that doesn't map directly to the
 page name, you can specify the actual page name after a pipe:
 
-    [[Page Name|page]]
+    [[SF|San Francisco]]
 
-The above tag will link to `page.ext` using "Page Name" as the link text.
+The above tag will link to `San-Francisco.ext` using "SF" as the link text.
 
 The page file may exist anywhere in the directory structure of the repository.
 Gollum does a breadth first search and uses the first match that it finds.
 
 Here are a few more examples:
 
-    [[Tom "TPW" Preston-Werner]] -> tom--tpw--preston-werner.ext
-    [[Quantum Physics|quantum]] -> quantum.ext
+    [[Tom "TPW" Preston-Werner]] -> Tom-"TPW"-Preston-Werner.ext
+    [[Quantum Physics|Quantum]] -> Quantum.ext
 
 
 ## ABSOLUTE VS. RELATIVE PATHS
