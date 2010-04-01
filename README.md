@@ -167,17 +167,6 @@ Any of these options may be composed together by simply separating them with
 pipes.
 
 
-## ICONS
-
-Gollum makes a variety of icons available without you having to place them in
-your Gollum repo or hotlink them from elsewhere. To display an icon, use a
-Gollum Image Tag with the file path set to `~/set/icon.ext` where `set` is the
-icon set and `icon.ext` is the name of the icon image. Currently only the
-FamFamFam Silk icons are available.
-
-    [[~/silk/cancel.png]]
-
-
 ## ESCAPING GOLLUM TAGS
 
 If you need the literal text of a wiki or static link to show up in your final
