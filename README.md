@@ -125,6 +125,9 @@ use the Gollum File Link Tag.
 
     [[Gollum|gollum.pdf]]
 
+The first part of the tag is the link text. The filename appears after the
+pipe.
+
 
 ## IMAGES
 
