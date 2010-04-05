@@ -40,8 +40,7 @@ of the supported extensions in order to be converted.
 
 Page file names may contain any printable UTF-8 character except space
 (U+0020) and forward slash (U+002F). If you commit a page file with any of
-these characters in the name and push the repository to GitHub, a commit will
-be made on GitHub's side that replaces those characters with a dash (U+002D).
+these characters in the name it will not be accessible via the web interface.
 
 Even though page files may be placed in any directory, there is still only a
 single namespace for page names, so all page files should have globally unique
@@ -57,7 +56,7 @@ automatically generated table of contents will be shown instead.
 Footer files allow you to add a simple footer to your wiki. Footer files must
 be named `_Footer.ext` where the extension is one of the supported formats.
 Footers affect all pages in their directory and any subdirectories that do not
-have footer files of their own.
+have a footer file of their own.
 
 
 ## HTML SANITIZATION
@@ -70,28 +69,31 @@ or JavaScript. These tags will be stripped from the converted HTML.
 
 To link to another Gollum wiki page, use the Gollum Page Link Tag.
 
-    [[San Francisco]]
+    [[Frodo]]
 
 The above tag will create a link to the corresponding page file named
-`San-Francisco.ext` where `ext` may be any of the allowed extension types. The
+`Frodo.ext` where `ext` may be any of the allowed extension types. The
 conversion is as follows:
 
-  1. Replace any non-printables, spaces, or slashes with dashes
+  1. Strip any non-printables ()
+  2. Replace any spaces () with dashes
+  3. Replace any slashes () with dashes
 
 If you'd like the link text to be something that doesn't map directly to the
 page name, you can specify the actual page name after a pipe:
 
-    [[SF|San Francisco]]
+    [[Frodo|Frodo Baggins]]
 
-The above tag will link to `San-Francisco.ext` using "SF" as the link text.
+The above tag will link to `Frodo-Baggins.ext` using "Frodo" as the link text.
 
 The page file may exist anywhere in the directory structure of the repository.
 Gollum does a breadth first search and uses the first match that it finds.
 
 Here are a few more examples:
 
-    [[Tom "TPW" Preston-Werner]] -> Tom-"TPW"-Preston-Werner.ext
-    [[Quantum Physics|Quantum]] -> Quantum.ext
+    [[J. R. R. Tolkien]]    -> J.-R.-R.-Tolkien.ext
+    [[Movies / The Hobbit]] -> Movies---The-Hobbit.ext
+    [[モルドール]]               -> モルドール.ext
 
 
 ## ABSOLUTE VS. RELATIVE PATHS
