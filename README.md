@@ -91,9 +91,9 @@ Gollum does a breadth first search and uses the first match that it finds.
 
 Here are a few more examples:
 
-    [[J. R. R. Tolkien]]    -> J.-R.-R.-Tolkien.ext
+    [[J. R. R. Tolkien]] -> J.-R.-R.-Tolkien.ext
     [[Movies / The Hobbit]] -> Movies---The-Hobbit.ext
-    [[モルドール]]               -> モルドール.ext
+    [[モルドール]] -> モルドール.ext
 
 
 ## ABSOLUTE VS. RELATIVE PATHS
