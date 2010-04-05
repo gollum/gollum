@@ -187,22 +187,22 @@ This is useful for writing about the link syntax in your wiki pages.
 
 ## SYNTAX HIGHLIGHTING
 
-In Markdown and Textile page files you can get automatic syntax highlighting
-for a wide range of languages (courtesy of Pygments) by using the following
-syntax:
+In page files you can get automatic syntax highlighting for a wide range of
+languages (courtesy of [Pygments](http://pygments.org/)) by using the
+following syntax:
 
     ```ruby```
       def foo
         puts 'bar'
       end
-    ```
+    ``````````
 
 The block must start with three backticks (as the first characters on the
 line). After that comes the name of the language that is contained by the
 block. The language must be one of the `short name` lexer strings supported by
 Pygments. See the [list of lexers](http://pygments.org/docs/lexers/) for valid
-options. Following the language name you may add an additional three backticks
-for aesthetic reasons (but this is not required).
+options. Following the language name you may optionally add an additional
+three backticks for aesthetic reasons.
 
 If the block contents are indented two spaces or one tab, then that whitespace
 will be ignored (this makes the blocks easier to read in plaintext).
