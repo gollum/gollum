@@ -227,7 +227,7 @@ Initialize the Gollum::Repo object:
 
     # Create a new Gollum object by initializing it with the path to the
     # Git repository.
-    gollum = Gollum.new("my-gollum-repo.git")
+    gollum = Gollum::Repo.new("my-gollum-repo.git")
     # => <Gollum::Repo>
 
 Get the latest HTML formatted version of the given canonical page name:
