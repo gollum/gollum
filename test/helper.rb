@@ -9,6 +9,8 @@ $LOAD_PATH.unshift(dir)
 
 require 'gollum'
 
+Dir.chdir(File.join(File.dirname(__FILE__), *%w[.]))
+
 ##
 # test/spec/mini 3
 # http://gist.github.com/25455

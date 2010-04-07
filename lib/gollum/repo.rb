@@ -1,6 +1,6 @@
 module Gollum
   class Repo
-    attr_accessor :path
+    attr_accessor :path, :repo
 
     # Initialize a new Gollum Repo.
     #
@@ -9,6 +9,7 @@ module Gollum
     # Returns a fresh Gollum::Repo.
     def initialize(path)
       self.path = path
+      self.repo = Grit::Repo.new(path)
     end
   end
 end
