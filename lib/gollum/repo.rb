@@ -11,5 +11,14 @@ module Gollum
       self.path = path
       self.repo = Grit::Repo.new(path)
     end
+
+    # Get the formatted page for a given page name.
+    #
+    # name - The String name of the wiki page.
+    #
+    # Returns a Gollum::Page or nil if no matching page was found.
+    def formatted_page(name)
+      Page.new()
+    end
   end
 end
