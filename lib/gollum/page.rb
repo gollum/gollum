@@ -27,7 +27,7 @@ module Gollum
     #
     # Returns the String data.
     def data
-      self.blob.data
+      self.blob.data rescue nil
     end
 
     # Find a page in the given Gollum repo.

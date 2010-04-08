@@ -5,6 +5,11 @@ context "Page" do
     @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"))
   end
 
+  test "new page" do
+    page = Gollum::Page.new(@wiki)
+    assert_nil page.data
+  end
+
   test "formatted page" do
     page = @wiki.formatted_page('Bilbo Baggins')
     assert_equal Gollum::Page, page.class
