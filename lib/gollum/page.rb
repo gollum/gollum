@@ -2,7 +2,7 @@ module Gollum
   class Page
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
-    attr_accessor :wiki, :data
+    attr_accessor :wiki, :blob
 
     # Initialize a page.
     #
@@ -19,8 +19,15 @@ module Gollum
     #
     # Returns the populated Gollum::Page.
     def populate(blob)
-      self.data = blob.data
+      self.blob = blob
       self
+    end
+
+    # The contents of the page.
+    #
+    # Returns the String data.
+    def data
+      self.blob.data
     end
 
     # Find a page in the given Gollum repo.
