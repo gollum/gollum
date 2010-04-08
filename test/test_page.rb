@@ -2,10 +2,16 @@ require 'helper'
 
 context "Page" do
   setup do
-    @repo = Gollum::Repo.new("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"))
   end
 
   test "formatted page" do
-    page = @repo.formatted_page('Bilbo-Baggins')
+    page = @wiki.formatted_page('Bilbo Baggins')
+    assert_equal Gollum::Page, page.class
+    assert page.data =~ /^# Bilbo Baggins\n\nBilbo Baggins/
+  end
+
+  test "no page match" do
+    assert_nil @wiki.formatted_page('I do not exist')
   end
 end

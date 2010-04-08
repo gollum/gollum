@@ -225,10 +225,10 @@ Initialize the Gollum::Repo object:
     # Require the Gollum library
     require 'gollum'
 
-    # Create a new Gollum object by initializing it with the path to the
+    # Create a new Gollum::Wiki object by initializing it with the path to the
     # Git repository.
-    gollum = Gollum::Repo.new("my-gollum-repo.git")
-    # => <Gollum::Repo>
+    gollum = Gollum::Wiki.new("my-gollum-repo.git")
+    # => <Gollum::Wiki>
 
 Get the latest HTML formatted version of the given canonical page name:
 

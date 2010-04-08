@@ -1,12 +1,12 @@
 require 'helper'
 
-context "Repo" do
+context "Wiki" do
   setup do
-    @repo = Gollum::Repo.new("examples/lotr.git")
+    @repo = Gollum::Wiki.new(testpath("examples/lotr.git"))
   end
 
   test "repo path" do
-    assert_equal "examples/lotr.git", @repo.path
+    assert_equal testpath("examples/lotr.git"), @repo.path
   end
 
   test "git repo" do

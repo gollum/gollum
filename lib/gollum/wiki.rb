@@ -1,5 +1,5 @@
 module Gollum
-  class Repo
+  class Wiki
     attr_accessor :path, :repo
 
     # Initialize a new Gollum Repo.
@@ -14,11 +14,11 @@ module Gollum
 
     # Get the formatted page for a given page name.
     #
-    # name - The String name of the wiki page.
+    # name - The human or canonical String page name of the wiki page.
     #
     # Returns a Gollum::Page or nil if no matching page was found.
     def formatted_page(name)
-      Page.new()
+      Page.new(self).find(name)
     end
   end
 end

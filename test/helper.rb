@@ -11,7 +11,11 @@ require 'gollum'
 
 # Make sure we're in the test dir, the tests expect that to be the current
 # directory.
-Dir.chdir(File.join(File.dirname(__FILE__), *%w[.]))
+TEST_DIR = File.join(File.dirname(__FILE__), *%w[.])
+
+def testpath(path)
+  File.join(TEST_DIR, path)
+end
 
 # test/spec/mini 3
 # http://gist.github.com/25455
