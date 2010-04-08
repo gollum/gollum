@@ -1,5 +1,7 @@
 module Gollum
   class Page
+    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/
+
     attr_accessor :wiki, :data
 
     # Initialize a page.
@@ -68,12 +70,16 @@ module Gollum
 
     # Compare the canonicalized versions of the two names.
     #
-    # name1 - A human or canonical String page name.
-    # name2 - A human or canonical String page name.
+    # name     - The human or canonical String page name.
+    # filename - the String filename on disk (including extension).
     #
     # Returns a Boolean.
-    def page_match(name1, name2)
-      Gollum.canonical_name(name1) == Gollum.canonical_name(name2)
+    def page_match(name, filename)
+      if filename =~ VALID_PAGE_RE
+        Gollum.canonical_name(name) == Gollum.canonical_name($1)
+      else
+        false
+      end
     end
   end
 end

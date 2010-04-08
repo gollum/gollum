@@ -18,6 +18,6 @@ module Gollum
   #
   # Returns the String canonical name.
   def self.canonical_name(name)
-    name.gsub(/ /, '-').sub(/\.(.+?)$/, '')
+    name.gsub(/ /, '-')
   end
 end
