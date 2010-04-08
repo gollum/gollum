@@ -14,4 +14,8 @@ context "Page" do
   test "no page match" do
     assert_nil @wiki.formatted_page('I do not exist')
   end
+
+  test "no ext match" do
+    assert_nil @wiki.formatted_page('Data')
+  end
 end
