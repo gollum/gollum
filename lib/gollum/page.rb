@@ -35,16 +35,6 @@ module Gollum
 
     # private
 
-    # Find a page in a given commit.
-    #
-    # commit - The Grit::Commit in which to look.
-    # name   - The human or canonical String page name.
-    #
-    # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_commit(commit, name)
-
-    end
-
     # Find a page in a given tree.
     #
     # tree - The Grit::Tree in which to look.
