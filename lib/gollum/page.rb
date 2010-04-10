@@ -30,6 +30,34 @@ module Gollum
       self.blob.data rescue nil
     end
 
+    # The format of the page.
+    #
+    # Returns the Symbol format of the page. One of:
+    #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
+    #     :roff ]
+    def format
+      case blob.name
+        when /\.(md|mkdn?|mdown|markdown)$/i
+          :markdown
+        when /\.(textile)$/i
+          :textile
+        when /\.(rdoc)$/i
+          :rdoc
+        when /\.(org)$/i
+          :org
+        when /\.(re?st(\.txt)?)$/i
+          :rest
+        when /\.(asciidoc)$/i
+          :asciidoc
+        when /\.(pod)$/i
+          :pod
+        when /\.(\d)$/i
+          :roff
+        else
+          nil
+      end
+    end
+
     # Find a page in the given Gollum repo.
     #
     # name - The human or canonical String page name to find.

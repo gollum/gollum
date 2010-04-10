@@ -14,6 +14,7 @@ context "Page" do
     page = @wiki.formatted_page('Bilbo Baggins')
     assert_equal Gollum::Page, page.class
     assert page.data =~ /^# Bilbo Baggins\n\nBilbo Baggins/
+    assert_equal :markdown, page.format
   end
 
   test "no page match" do
