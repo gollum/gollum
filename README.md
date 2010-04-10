@@ -230,12 +230,15 @@ Initialize the Gollum::Repo object:
     gollum = Gollum::Wiki.new("my-gollum-repo.git")
     # => <Gollum::Wiki>
 
-Get the latest HTML formatted version of the given canonical page name:
+Get the latest version of the given human or canonical page name:
 
-    page = gollum.formatted_page('page-name')
+    page = gollum.page('page-name')
     # => <Gollum::Page>
 
-    page.data
+    page.raw_data
+    # => "# My wiki page"
+
+    page.formatted_data
     # => "<h1>My wiki page</h1>"
 
     page.format
@@ -246,20 +249,6 @@ Get the latest HTML formatted version of the given canonical page name:
 
     vsn.id
     # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
-
-Get the latest raw version of the given canonical page name:
-
-    gollum.raw_page('page-name')
-    # => <Gollum::Page>
-
-    page.data
-    # => "# My wiki page"
-
-    page.format
-    # => :markdown
-
-    page.version
-    # => <Gollum::Version>
 
 Get a list of versions for a given canonical page name:
 

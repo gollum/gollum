@@ -17,7 +17,7 @@ module Gollum
     # name - The human or canonical String page name of the wiki page.
     #
     # Returns a Gollum::Page or nil if no matching page was found.
-    def formatted_page(name)
+    def page(name)
       Page.new(self).find(name)
     end
   end

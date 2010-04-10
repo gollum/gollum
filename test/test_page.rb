@@ -7,21 +7,23 @@ context "Page" do
 
   test "new page" do
     page = Gollum::Page.new(@wiki)
-    assert_nil page.data
+    assert_nil page.raw_data
+    assert_nil page.formatted_data
   end
 
-  test "formatted page" do
-    page = @wiki.formatted_page('Bilbo Baggins')
+  test "get existing page" do
+    page = @wiki.page('Bilbo Baggins')
     assert_equal Gollum::Page, page.class
-    assert page.data =~ /^# Bilbo Baggins\n\nBilbo Baggins/
+    assert page.raw_data =~ /^# Bilbo Baggins\n\nBilbo Baggins/
+    assert page.formatted_data =~ /<h1>Bilbo Baggins<\/h1>\n\n<p>Bilbo Baggins/
     assert_equal :markdown, page.format
   end
 
   test "no page match" do
-    assert_nil @wiki.formatted_page('I do not exist')
+    assert_nil @wiki.page('I do not exist')
   end
 
   test "no ext match" do
-    assert_nil @wiki.formatted_page('Data')
+    assert_nil @wiki.page('Data')
   end
 end

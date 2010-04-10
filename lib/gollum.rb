@@ -1,5 +1,6 @@
 # external
 require 'grit'
+require 'github/markup'
 
 # internal
 require 'gollum/wiki'

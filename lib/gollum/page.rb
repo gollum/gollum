@@ -23,10 +23,24 @@ module Gollum
       self
     end
 
-    # The contents of the page.
+    # The on-disk filename of the page.
+    #
+    # Returns the String name.
+    def name
+      self.blob.name rescue nil
+    end
+
+    # The formatted contents of the page.
     #
     # Returns the String data.
-    def data
+    def formatted_data
+      GitHub::Markup.render(self.blob.name, self.blob.data) rescue nil
+    end
+
+    # The raw contents of the page.
+    #
+    # Returns the String data.
+    def raw_data
       self.blob.data rescue nil
     end
 
@@ -65,7 +79,7 @@ module Gollum
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name)
       commit = self.wiki.repo.commits.first
-      content = find_page_in_tree(commit.tree, name)
+      find_page_in_tree(commit.tree, name)
     end
 
     # private
