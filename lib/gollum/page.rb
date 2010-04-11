@@ -83,11 +83,12 @@ module Gollum
 
     # Find a page in the given Gollum repo.
     #
-    # name - The human or canonical String page name to find.
+    # name    - The human or canonical String page name to find.
+    # version - The String version ID to find.
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find(name)
-      commit = self.wiki.repo.commits.first
+    def find(name, version)
+      commit = self.wiki.repo.commit(version)
       if page = find_page_in_tree(commit.tree, name)
         page.version = commit
         page

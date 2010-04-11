@@ -263,8 +263,7 @@ Get a list of versions for a given page:
 
 Get a specific version of a given canonical page file:
 
-    gollum.formatted_page('page-name', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
-    gollum.raw_page('page-name', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+    gollum.page('page-name', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
 
 Get the latest version of a given static file:
 

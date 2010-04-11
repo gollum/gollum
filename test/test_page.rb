@@ -32,6 +32,11 @@ context "Page" do
       page.versions.map { |v| v.id }
   end
 
+  test "specific page version" do
+    page = @wiki.page('Bilbo Baggins', 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb')
+    assert_equal 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb', page.version.id
+  end
+
   test "no page match" do
     assert_nil @wiki.page('I do not exist')
   end
