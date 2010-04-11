@@ -258,7 +258,7 @@ Get a list of versions for a given page:
     vsns.first.id
     # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
 
-    vsns.first.date
+    vsns.first.authored_date
     # => Sun Mar 28 19:11:21 -0700 2010
 
 Get a specific version of a given canonical page file:
