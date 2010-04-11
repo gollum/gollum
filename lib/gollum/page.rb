@@ -76,11 +76,9 @@ module Gollum
 
     # All of the versions that have touched this Page.
     #
-    # Returns an Array of Gollum::Version.
+    # Returns an Array of Grit::Commit.
     def versions
-      @wiki.repo.log('master', self.path).map do |v|
-        Version.new(v)
-      end
+      @wiki.repo.log('master', self.path)
     end
 
     # Find a page in the given Gollum repo.
@@ -91,7 +89,7 @@ module Gollum
     def find(name)
       commit = self.wiki.repo.commits.first
       if page = find_page_in_tree(commit.tree, name)
-        page.version = Version.new(commit)
+        page.version = commit
         page
       else
         nil

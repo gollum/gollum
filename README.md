@@ -245,7 +245,7 @@ Get the latest version of the given human or canonical page name:
     # => :markdown
 
     vsn = page.version
-    # => <Gollum::Version>
+    # => <Grit::Commit>
 
     vsn.id
     # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
@@ -253,7 +253,7 @@ Get the latest version of the given human or canonical page name:
 Get a list of versions for a given page:
 
     vsns = gollum.page('page-name').versions
-    # => [<Gollum::Version, <Gollum::Version, <Gollum::Version>]
+    # => [<Grit::Commit, <Grit::Commit, <Grit::Commit>]
 
     vsns.first.id
     # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
