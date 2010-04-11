@@ -267,18 +267,18 @@ Get a specific version of a given canonical page file:
 
 Get the latest version of a given static file:
 
-    file = gollum.static_file('asset.js')
+    file = gollum.file('asset.js')
     # => <Gollum::File>
 
-    file.data
+    file.raw_data
     # => "alert('hello');"
 
     file.version
-    # => <Gollum::Version>
+    # => <Grit::Commit>
 
 Get a specific version of a given static file:
 
-    gollum.static_file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+    gollum.file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
 
 Write a new version of a given canonical page file (the file will be created
 if it does not already exist) and commit the change.

@@ -21,5 +21,14 @@ module Gollum
     def page(name, version = 'master')
       Page.new(self).find(name, version)
     end
+
+    # Get the static file for a given name.
+    #
+    # name - The full String pathname to the file.
+    #
+    # Returns a Gollum::File or nil if no matching file was found.
+    def file(name)
+      File.new(self).find(name)
+    end
   end
 end
