@@ -2,7 +2,7 @@ module Gollum
   class Page
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
-    attr_accessor :wiki, :blob, :version
+    attr_accessor :wiki, :blob, :path, :version
 
     # Initialize a page.
     #
@@ -16,10 +16,12 @@ module Gollum
     # Populate this Page with information from the Blob.
     #
     # blob - The Grit::Blob that contains the info.
+    # path - The String directory path of the page file.
     #
     # Returns the populated Gollum::Page.
-    def populate(blob)
+    def populate(blob, path)
       self.blob = blob
+      self.path = (path + '/' + blob.name)[1..-1]
       self
     end
 
@@ -96,20 +98,39 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find_page_in_tree(tree, name)
+      treemap = {}
       trees = [tree]
 
       while !trees.empty?
-        trees.shift.contents.each do |item|
+        ptree = trees.shift
+        ptree.contents.each do |item|
           case item
             when Grit::Blob
-              return populate(item) if page_match(name, item.name)
+              if page_match(name, item.name)
+                return populate(item, tree_path(treemap, ptree))
+              end
             when Grit::Tree
+              treemap[item] = ptree
               trees << item
           end
         end
       end
 
       return nil # nothing was found
+    end
+
+    # The full directory path for the given tree.
+    #
+    # treemap - The Hash treemap containing parentage information.
+    # tree    - The Grit::Tree for which to compute the path.
+    #
+    # Returns the String path.
+    def tree_path(treemap, tree)
+      if ptree = treemap[tree]
+        tree_path(treemap, ptree) + '/' + tree.name
+      else
+        ''
+      end
     end
 
     # Compare the canonicalized versions of the two names.
