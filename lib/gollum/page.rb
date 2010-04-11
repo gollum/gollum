@@ -2,7 +2,7 @@ module Gollum
   class Page
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
-    attr_accessor :wiki, :blob
+    attr_accessor :wiki, :blob, :version
 
     # Initialize a page.
     #
@@ -79,7 +79,12 @@ module Gollum
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name)
       commit = self.wiki.repo.commits.first
-      find_page_in_tree(commit.tree, name)
+      if page = find_page_in_tree(commit.tree, name)
+        page.version = Version.new(commit)
+        page
+      else
+        nil
+      end
     end
 
     # private

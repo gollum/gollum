@@ -5,6 +5,7 @@ require 'github/markup'
 # internal
 require 'gollum/wiki'
 require 'gollum/page'
+require 'gollum/version'
 
 module Gollum
   VERSION = '0.0.1'
