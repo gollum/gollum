@@ -24,11 +24,12 @@ module Gollum
 
     # Get the static file for a given name.
     #
-    # name - The full String pathname to the file.
+    # name    - The full String pathname to the file.
+    # version - The String version ID to find (default: "master").
     #
     # Returns a Gollum::File or nil if no matching file was found.
-    def file(name)
-      File.new(self).find(name)
+    def file(name, version = 'master')
+      File.new(self).find(name, version)
     end
   end
 end

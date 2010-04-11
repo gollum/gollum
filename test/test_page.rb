@@ -18,7 +18,7 @@ context "Page" do
     assert page.formatted_data =~ /<h1>Bilbo Baggins<\/h1>\n\n<p>Bilbo Baggins/
     assert_equal 'Bilbo-Baggins.md', page.path
     assert_equal :markdown, page.format
-    assert_equal 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb', page.version.id
+    assert_equal @wiki.repo.commits.first.id, page.version.id
   end
 
   test "get nested page" do

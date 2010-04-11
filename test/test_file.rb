@@ -7,5 +7,11 @@ context "File" do
 
   test "new file" do
     file = Gollum::File.new(@wiki)
+    assert_nil file.raw_data
+  end
+
+  test "existing file" do
+    file = @wiki.file("Mordor/todo.txt")
+    assert_equal "[ ] Write section on Ents\n", file.raw_data
   end
 end
