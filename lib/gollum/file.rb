@@ -1,6 +1,6 @@
 module Gollum
   class File
-    attr_accessor :wiki, :blob
+    attr_accessor :wiki, :blob, :version
 
     # Initialize a file.
     #
@@ -28,6 +28,7 @@ module Gollum
       commit = self.wiki.repo.commit(version)
       if blob = commit.tree / name
         self.blob = blob
+        self.version = commit
         self
       else
         nil

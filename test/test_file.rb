@@ -13,5 +13,6 @@ context "File" do
   test "existing file" do
     file = @wiki.file("Mordor/todo.txt")
     assert_equal "[ ] Write section on Ents\n", file.raw_data
+    assert_equal @wiki.repo.commits.first.id, file.version.id
   end
 end
