@@ -74,6 +74,15 @@ module Gollum
       end
     end
 
+    # All of the versions that have touched this Page.
+    #
+    # Returns an Array of Gollum::Version.
+    def versions
+      @wiki.repo.log('master', self.path).map do |v|
+        Version.new(v)
+      end
+    end
+
     # Find a page in the given Gollum repo.
     #
     # name - The human or canonical String page name to find.

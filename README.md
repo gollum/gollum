@@ -250,9 +250,9 @@ Get the latest version of the given human or canonical page name:
     vsn.id
     # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
 
-Get a list of versions for a given canonical page name:
+Get a list of versions for a given page:
 
-    vsns = gollum.page_versions('page-name')
+    vsns = gollum.page('page-name').versions
     # => [<Gollum::Version, <Gollum::Version, <Gollum::Version>]
 
     vsns.first.id

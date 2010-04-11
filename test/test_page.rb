@@ -26,6 +26,12 @@ context "Page" do
     assert_equal 'Mordor/Eye-Of-Sauron.md', page.path
   end
 
+  test "page versions" do
+    page = @wiki.page('Bilbo Baggins')
+    assert_equal ['5bc1aaec6149e854078f1d0f8b71933bbc6c2e43'],
+      page.versions.map { |v| v.id }
+  end
+
   test "no page match" do
     assert_nil @wiki.page('I do not exist')
   end
