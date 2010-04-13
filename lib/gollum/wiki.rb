@@ -31,5 +31,24 @@ module Gollum
     def file(name, version = 'master')
       File.new(self).find(name, version)
     end
+
+    # Write a new version of a page to the Gollum repo root.
+    #
+    # name   - The String name of the page.
+    # data   - The new String contents of the page.
+    # commit - The commit Hash details { :message => String,
+    #                                    :author => String,
+    #                                    :email => String }
+    #
+    # Returns the String SHA1 of the newly written version.
+    def write_page(name, format, data, commit = {})
+      ext = Page.format_to_ext(format)
+      path = Gollum.canonical_name(name) + '.' + ext
+      index = self.repo.index
+      index.add(path, data)
+      actor = Grit::Actor.new(commit[:name], commit[:email])
+      parent = self.repo.commit('master')
+      index.commit(commit[:message], [parent], actor)
+    end
   end
 end

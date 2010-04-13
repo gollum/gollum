@@ -4,6 +4,23 @@ module Gollum
 
     attr_accessor :wiki, :blob, :path, :version
 
+    # Convert a format Symbol into an extension String.
+    #
+    # format - The format Symbol.
+    #
+    # Returns the String extension (no leading period).
+    def self.format_to_ext(format)
+      case format
+        when :markdown then 'md'
+        when :textile then 'textile'
+        when :rdoc then 'rdoc'
+        when :org then 'org'
+        when :rest then 'rest'
+        when :asciidoc then 'asciidoc'
+        when :pod then 'pod'
+      end
+    end
+
     # Initialize a page.
     #
     # wiki - The Gollum::Wiki in question.
