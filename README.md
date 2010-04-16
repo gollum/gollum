@@ -280,12 +280,16 @@ Get a specific version of a given static file:
 
     gollum.file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
 
-Write a new version of a page (the file will be created if it does not already
-exist) and commit the change. The file will be written at the repo root.
+Methods that write to the repository require a Hash of commit data that takes
+the following form:
 
     commit = { :message => 'commit message',
                :name => 'Tom Preston-Werner',
                :email => 'tom@github.com' }
+
+Write a new version of a page (the file will be created if it does not already
+exist) and commit the change. The file will be written at the repo root.
+
     gollum.write_page('Page Name', :markdown, 'Page contents', commit)
 
 Update an existing page (keeps the same name, format, and directory location).
@@ -294,8 +298,4 @@ Update an existing page (keeps the same name, format, and directory location).
 
 To delete a page and commit the change:
 
-    gollum.delete_page('Page Name')
-
-Once again, you can optionally specify a commit message:
-
-    gollum.delete_page('Page Name', 'commit message')
+    gollum.delete_page('Page Name', commit)
