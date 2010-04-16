@@ -51,5 +51,24 @@ module Gollum
       parent = self.repo.commit('master')
       index.commit(commit[:message], [parent], actor)
     end
+
+    # Update an existing page with new content. The location of the page
+    # inside the repository and the page's format will not change.
+    #
+    # page   - The Gollum::Page to update.
+    # data   - The new String contents of the page.
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :author  - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns the String SHA1 of the newly written version.
+    def update_page(page, data, commit = {})
+      index = self.repo.index
+      index.add(page.path, data)
+      actor = Grit::Actor.new(commit[:name], commit[:email])
+      parent = self.repo.commit('master')
+      index.commit(commit[:message], [parent], actor)
+    end
   end
 end
