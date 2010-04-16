@@ -36,9 +36,10 @@ module Gollum
     #
     # name   - The String name of the page.
     # data   - The new String contents of the page.
-    # commit - The commit Hash details { :message => String,
-    #                                    :author => String,
-    #                                    :email => String }
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :author  - The String author full name.
+    #          :email   - The String email address.
     #
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
