@@ -66,12 +66,12 @@ module Gollum
       end
     end
 
-    # Public: The Grit::Commit version of the page.
+    # Public: The current version of the page.
     #
     # Returns the Grit::Commit.
     attr_reader :version
 
-    # Public: All of the versions that have touched this Page.
+    # Public: All of the versions that have touched the Page.
     #
     # Returns an Array of Grit::Commit.
     def versions
@@ -156,7 +156,7 @@ module Gollum
       return nil # nothing was found
     end
 
-    # Populate this Page with information from the Blob.
+    # Populate the Page with information from the Blob.
     #
     # blob - The Grit::Blob that contains the info.
     # path - The String directory path of the page file.

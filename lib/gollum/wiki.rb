@@ -75,7 +75,7 @@ module Gollum
     #
     #########################################################################
 
-    # The Grit::Repo associated with this wiki.
+    # The Grit::Repo associated with the wiki.
     #
     # Returns the Grit::Repo.
     attr_reader :repo
