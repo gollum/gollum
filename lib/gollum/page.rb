@@ -19,7 +19,9 @@ module Gollum
       @blob.name rescue nil
     end
 
-    # Public: The String full path of the page.
+    # Public: The path of the page within the repo.
+    #
+    # Returns the String path.
     attr_reader :path
 
     # Public: The raw contents of the page.
@@ -65,6 +67,8 @@ module Gollum
     end
 
     # Public: The Grit::Commit version of the page.
+    #
+    # Returns the Grit::Commit.
     attr_reader :version
 
     # Public: All of the versions that have touched this Page.
@@ -76,12 +80,9 @@ module Gollum
 
     #########################################################################
     #
-    # Private
+    # Class Methods
     #
     #########################################################################
-
-    # The Grit::Commit version of the page.
-    attr_writer :version
 
     # Convert a format Symbol into an extension String.
     #
@@ -99,6 +100,17 @@ module Gollum
         when :pod then 'pod'
       end
     end
+
+    #########################################################################
+    #
+    # Internal Methods
+    #
+    #########################################################################
+
+    # Set the Grit::Commit version of the page.
+    #
+    # Returns nothing.
+    attr_writer :version
 
     # Find a page in the given Gollum repo.
     #

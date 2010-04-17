@@ -71,14 +71,18 @@ module Gollum
 
     #########################################################################
     #
-    # Private
+    # Internal Methods
     #
     #########################################################################
 
     # The Grit::Repo associated with this wiki.
+    #
+    # Returns the Grit::Repo.
     attr_reader :repo
 
     # The String path to the Git repository that holds the Gollum site.
+    #
+    # Returns the String path.
     attr_reader :path
   end
 end
