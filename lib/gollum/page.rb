@@ -2,7 +2,7 @@ module Gollum
   class Page
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
-    # Initialize a page.
+    # Public: Initialize a page.
     #
     # wiki - The Gollum::Wiki in question.
     #
@@ -12,31 +12,31 @@ module Gollum
       @blob = nil
     end
 
-    # The on-disk filename of the page.
+    # Public: The on-disk filename of the page.
     #
     # Returns the String name.
     def name
       @blob.name rescue nil
     end
 
-    # The String full path of the page.
+    # Public: The String full path of the page.
     attr_reader :path
 
-    # The raw contents of the page.
+    # Public: The raw contents of the page.
     #
     # Returns the String data.
     def raw_data
       @blob.data rescue nil
     end
 
-    # The formatted contents of the page.
+    # Public: The formatted contents of the page.
     #
     # Returns the String data.
     def formatted_data
       GitHub::Markup.render(@blob.name, @blob.data) rescue nil
     end
 
-    # The format of the page.
+    # Public: The format of the page.
     #
     # Returns the Symbol format of the page. One of:
     #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
@@ -64,10 +64,10 @@ module Gollum
       end
     end
 
-    # The Grit::Commit version of the page.
+    # Public: The Grit::Commit version of the page.
     attr_reader :version
 
-    # All of the versions that have touched this Page.
+    # Public: All of the versions that have touched this Page.
     #
     # Returns an Array of Grit::Commit.
     def versions
@@ -80,10 +80,10 @@ module Gollum
     #
     #########################################################################
 
-    # Private: The Grit::Commit version of the page.
+    # The Grit::Commit version of the page.
     attr_writer :version
 
-    # Private: Convert a format Symbol into an extension String.
+    # Convert a format Symbol into an extension String.
     #
     # format - The format Symbol.
     #
@@ -100,7 +100,7 @@ module Gollum
       end
     end
 
-    # Private: Find a page in the given Gollum repo.
+    # Find a page in the given Gollum repo.
     #
     # name    - The human or canonical String page name to find.
     # version - The String version ID to find.
@@ -116,7 +116,7 @@ module Gollum
       end
     end
 
-    # Private: Find a page in a given tree.
+    # Find a page in a given tree.
     #
     # tree - The Grit::Tree in which to look.
     # name - The canonical String page name.
@@ -144,7 +144,7 @@ module Gollum
       return nil # nothing was found
     end
 
-    # Private: Populate this Page with information from the Blob.
+    # Populate this Page with information from the Blob.
     #
     # blob - The Grit::Blob that contains the info.
     # path - The String directory path of the page file.
@@ -156,7 +156,7 @@ module Gollum
       self
     end
 
-    # Private: The full directory path for the given tree.
+    # The full directory path for the given tree.
     #
     # treemap - The Hash treemap containing parentage information.
     # tree    - The Grit::Tree for which to compute the path.
@@ -170,7 +170,7 @@ module Gollum
       end
     end
 
-    # Private: Compare the canonicalized versions of the two names.
+    # Compare the canonicalized versions of the two names.
     #
     # name     - The human or canonical String page name.
     # filename - the String filename on disk (including extension).

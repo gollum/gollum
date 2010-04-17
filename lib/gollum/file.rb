@@ -1,6 +1,6 @@
 module Gollum
   class File
-    # Initialize a file.
+    # Public: Initialize a file.
     #
     # wiki - The Gollum::Wiki in question.
     #
@@ -10,14 +10,14 @@ module Gollum
       @blob = nil
     end
 
-    # The raw contents of the page.
+    # Public: The raw contents of the page.
     #
     # Returns the String data.
     def raw_data
       @blob.data rescue nil
     end
 
-    # The Grit::Commit version of the file.
+    # Public: The Grit::Commit version of the file.
     attr_reader :version
 
     #########################################################################
@@ -26,7 +26,7 @@ module Gollum
     #
     #########################################################################
 
-    # Private: Find a file in the given Gollum repo.
+    # Find a file in the given Gollum repo.
     #
     # name    - The full String path.
     # version - The String version ID to find.

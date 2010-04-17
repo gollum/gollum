@@ -1,6 +1,6 @@
 module Gollum
   class Wiki
-    # Initialize a new Gollum Repo.
+    # Public: Initialize a new Gollum Repo.
     #
     # repo - The String path to the Git repository that holds the Gollum site.
     #
@@ -10,7 +10,7 @@ module Gollum
       @repo = Grit::Repo.new(path)
     end
 
-    # Get the formatted page for a given page name.
+    # Public: Get the formatted page for a given page name.
     #
     # name    - The human or canonical String page name of the wiki page.
     # version - The String version ID to find (default: "master").
@@ -20,7 +20,7 @@ module Gollum
       Page.new(self).find(name, version)
     end
 
-    # Get the static file for a given name.
+    # Public: Get the static file for a given name.
     #
     # name    - The full String pathname to the file.
     # version - The String version ID to find (default: "master").
@@ -30,7 +30,7 @@ module Gollum
       File.new(self).find(name, version)
     end
 
-    # Write a new version of a page to the Gollum repo root.
+    # Public: Write a new version of a page to the Gollum repo root.
     #
     # name   - The String name of the page.
     # data   - The new String contents of the page.
@@ -50,8 +50,8 @@ module Gollum
       index.commit(commit[:message], [parent], actor)
     end
 
-    # Update an existing page with new content. The location of the page
-    # inside the repository and the page's format will not change.
+    # Public: Update an existing page with new content. The location of the
+    # page inside the repository and the page's format will not change.
     #
     # page   - The Gollum::Page to update.
     # data   - The new String contents of the page.
@@ -75,11 +75,10 @@ module Gollum
     #
     #########################################################################
 
-    # Private: The Grit::Repo associated with this wiki.
+    # The Grit::Repo associated with this wiki.
     attr_reader :repo
 
-    # Private: The String path to the Git repository that holds the Gollum
-    # site.
+    # The String path to the Git repository that holds the Gollum site.
     attr_reader :path
   end
 end
