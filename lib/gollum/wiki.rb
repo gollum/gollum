@@ -1,15 +1,13 @@
 module Gollum
   class Wiki
-    attr_accessor :path, :repo
-
     # Initialize a new Gollum Repo.
     #
     # repo - The String path to the Git repository that holds the Gollum site.
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path)
-      self.path = path
-      self.repo = Grit::Repo.new(path)
+      @path = path
+      @repo = Grit::Repo.new(path)
     end
 
     # Get the formatted page for a given page name.
@@ -45,10 +43,10 @@ module Gollum
     def write_page(name, format, data, commit = {})
       ext = Page.format_to_ext(format)
       path = Gollum.canonical_name(name) + '.' + ext
-      index = self.repo.index
+      index = @repo.index
       index.add(path, data)
       actor = Grit::Actor.new(commit[:name], commit[:email])
-      parent = self.repo.commit('master')
+      parent = @repo.commit('master')
       index.commit(commit[:message], [parent], actor)
     end
 
@@ -64,11 +62,24 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def update_page(page, data, commit = {})
-      index = self.repo.index
+      index = @repo.index
       index.add(page.path, data)
       actor = Grit::Actor.new(commit[:name], commit[:email])
-      parent = self.repo.commit('master')
+      parent = @repo.commit('master')
       index.commit(commit[:message], [parent], actor)
     end
+
+    #########################################################################
+    #
+    # Private
+    #
+    #########################################################################
+
+    # Private: The Grit::Repo associated with this wiki.
+    attr_reader :repo
+
+    # Private: The String path to the Git repository that holds the Gollum
+    # site.
+    attr_reader :path
   end
 end

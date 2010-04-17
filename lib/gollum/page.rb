@@ -2,36 +2,38 @@ module Gollum
   class Page
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
-    attr_accessor :wiki, :blob, :path, :version
-
     # Initialize a page.
     #
     # wiki - The Gollum::Wiki in question.
     #
     # Returns a newly initialized Gollum::Page.
     def initialize(wiki)
-      self.wiki = wiki
+      @wiki = wiki
+      @blob = nil
     end
 
     # The on-disk filename of the page.
     #
     # Returns the String name.
     def name
-      self.blob.name rescue nil
+      @blob.name rescue nil
     end
+
+    # The String full path of the page.
+    attr_reader :path
 
     # The raw contents of the page.
     #
     # Returns the String data.
     def raw_data
-      self.blob.data rescue nil
+      @blob.data rescue nil
     end
 
     # The formatted contents of the page.
     #
     # Returns the String data.
     def formatted_data
-      GitHub::Markup.render(self.blob.name, self.blob.data) rescue nil
+      GitHub::Markup.render(@blob.name, @blob.data) rescue nil
     end
 
     # The format of the page.
@@ -40,7 +42,7 @@ module Gollum
     #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
     #     :roff ]
     def format
-      case blob.name
+      case @blob.name
         when /\.(md|mkdn?|mdown|markdown)$/i
           :markdown
         when /\.(textile)$/i
@@ -62,11 +64,14 @@ module Gollum
       end
     end
 
+    # The Grit::Commit version of the page.
+    attr_reader :version
+
     # All of the versions that have touched this Page.
     #
     # Returns an Array of Grit::Commit.
     def versions
-      @wiki.repo.log('master', self.path)
+      @wiki.repo.log('master', @path)
     end
 
     #########################################################################
@@ -74,6 +79,9 @@ module Gollum
     # Private
     #
     #########################################################################
+
+    # Private: The Grit::Commit version of the page.
+    attr_writer :version
 
     # Private: Convert a format Symbol into an extension String.
     #
@@ -99,7 +107,7 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name, version)
-      commit = self.wiki.repo.commit(version)
+      commit = @wiki.repo.commit(version)
       if page = find_page_in_tree(commit.tree, name)
         page.version = commit
         page
@@ -143,8 +151,8 @@ module Gollum
     #
     # Returns the populated Gollum::Page.
     def populate(blob, path)
-      self.blob = blob
-      self.path = (path + '/' + blob.name)[1..-1]
+      @blob = blob
+      @path = (path + '/' + blob.name)[1..-1]
       self
     end
 
