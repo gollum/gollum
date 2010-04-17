@@ -36,7 +36,7 @@ module Gollum
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
     #          :message - The String commit message.
-    #          :author  - The String author full name.
+    #          :name    - The String author full name.
     #          :email   - The String email address.
     #
     # Returns the String SHA1 of the newly written version.
@@ -57,7 +57,7 @@ module Gollum
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
     #          :message - The String commit message.
-    #          :author  - The String author full name.
+    #          :name    - The String author full name.
     #          :email   - The String email address.
     #
     # Returns the String SHA1 of the newly written version.
