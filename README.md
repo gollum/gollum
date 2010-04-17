@@ -294,8 +294,9 @@ exist) and commit the change. The file will be written at the repo root.
 
 Update an existing page (keeps the same name, format, and directory location).
 
+    page = gollum.find('Page Name')
     gollum.update_page(page, 'Page contents', commit)
 
 To delete a page and commit the change:
 
-    gollum.delete_page('Page Name', commit)
+    gollum.delete_page(page, commit)
