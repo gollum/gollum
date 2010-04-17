@@ -18,7 +18,13 @@ module Gollum
       self.blob.data rescue nil
     end
 
-    # Find a file in the given Gollum repo.
+    #########################################################################
+    #
+    # Private
+    #
+    #########################################################################
+
+    # Private: Find a file in the given Gollum repo.
     #
     # name    - The full String path.
     # version - The String version ID to find.
