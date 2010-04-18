@@ -35,7 +35,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data
-      GitHub::Markup.render(@blob.name, @blob.data) rescue nil
+      Gollum::Markup.render(@blob.name, @blob.data) rescue nil
     end
 
     # Public: The format of the page.
