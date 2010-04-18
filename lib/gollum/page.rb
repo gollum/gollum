@@ -35,7 +35,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data
-      Gollum::Markup.new(@blob.name, @blob.data).render rescue nil
+      Gollum::Markup.new(self).render rescue nil
     end
 
     # Public: The format of the page.

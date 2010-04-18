@@ -4,13 +4,12 @@ module Gollum
   class Markup
     # Initialize a new Markup object.
     #
-    # name - The String filename of the page.
-    # data - The String contents of the page.
+    # page - The Gollum::Page.
     #
     # Returns a new Gollum::Markup object, ready for rendering.
-    def initialize(name, data)
-      @name = name
-      @data = data
+    def initialize(page)
+      @name = page.name
+      @data = page.raw_data
       @tagmap = {}
     end
 
@@ -72,6 +71,9 @@ module Gollum
     # Returns the String HTML if the tag is a valid image tag or nil
     #   if it is not.
     def process_image_tag(tag)
+      parts = tag.split('|')
+      name = parts[0].strip
+
       nil
     end
 
@@ -93,8 +95,8 @@ module Gollum
     #   if it is not.
     def process_page_link_tag(tag)
       parts = tag.split('|')
-      name = parts[0]
-      cname = Gollum::canonical_name(parts[1] || parts[0])
+      name = parts[0].strip
+      cname = Gollum::canonical_name((parts[1] || parts[0]).strip)
       %{<a href="#{cname}">#{name}</a>}
     end
   end
