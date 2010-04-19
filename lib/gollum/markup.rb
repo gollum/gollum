@@ -12,6 +12,7 @@ module Gollum
       @name = page.name
       @data = page.raw_data
       @version = page.version.id
+      @dir = ::File.dirname(page.path)
       @tagmap = {}
     end
 
@@ -78,12 +79,17 @@ module Gollum
 
       if name =~ /^\//
         if file = @wiki.file(name[1..-1], @version)
-          %{<img src="#{file.name}" />}
+          %{<img src="/#{file.name}" />}
         else
           nil
         end
       else
-        nil
+        path = ::File.join(@dir, name)
+        if file = @wiki.file(path, @version)
+          %{<img src="/#{path}" />}
+        else
+          nil
+        end
       end
     end
 

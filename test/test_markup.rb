@@ -24,15 +24,26 @@ context "Markup" do
     assert_equal %{<p>a <a href="Bilbo-Baggins">Bilbo Baggins</a> b</p>\n}, output
   end
 
-  test "image" do
+  test "image with absolute path" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
     index.commit("Add alpha.jpg")
-
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] b", @commit)
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="alpha.jpg" /> b</p>\n}, output
+    assert_equal %{<p>a <img src="/alpha.jpg" /> b</p>\n}, output
   end
+
+  test "image with relative path" do
+    index = @wiki.repo.index
+    index.add("greek/alpha.jpg", "hi")
+    index.add("greek/Bilbo-Baggins.md", "a [[alpha.jpg]] b")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    output = Gollum::Markup.new(page).render
+    assert_equal %{<p>a <img src="/greek/alpha.jpg" /> b</p>\n}, output
+  end
+
 end
