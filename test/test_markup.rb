@@ -70,6 +70,22 @@ context "Markup" do
     end
   end
 
+  test "image with vertical align" do
+    %w{top texttop middle absmiddle bottom absbottom baseline}.each do |align|
+      content = "a [[alpha.jpg|align=#{align}]] b"
+      output = "<p>a <img src=\"/greek/alpha.jpg\" align=\"#{align}\" /> b</p>\n"
+      relative_image(content, output)
+    end
+  end
+
+  test "image with horizontal align" do
+    %w{left center right}.each do |align|
+      content = "a [[alpha.jpg|align=#{align}]] b"
+      output = "<p>a <div class=\"align-#{align}\"><div><img src=\"/greek/alpha.jpg\" /></div></div> b</p>\n"
+      relative_image(content, output)
+    end
+  end
+
   test "image with float" do
     content = "a\n\n[[alpha.jpg|float]]\n\nb"
     output = "<p>a</p>\n\n<p><div class=\"float-left;\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"

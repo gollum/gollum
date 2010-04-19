@@ -80,22 +80,24 @@ module Gollum
       if file = find_file(name)
         opts = parse_image_tag_options(tag)
 
-        floated = false
+        containered = false
 
         classes = [] # applied to whatever the outermost container is
         attrs = []   # applied to the image
         styles = []  # applied to the image
 
+        align = opts['align']
         if opts['float']
-          floated = true
-          align = opts['align'] || 'left'
+          containered = true
+          align ||= 'left'
           if %w{left right}.include?(align)
             classes << "float-#{align};"
           end
         elsif %w{top texttop middle absmiddle bottom absbottom baseline}.include?(align)
-          attrs << "align=#{align}"
-        elsif align = opts['align']
+          attrs << %{align="#{align}"}
+        elsif align
           if %w{left center right}.include?(align)
+            containered = true
             classes << "align-#{align}"
           end
         end
@@ -123,7 +125,7 @@ module Gollum
           style_string = %{ style="#{styles.join(' ')}"}
         end
 
-        if opts['frame'] || floated
+        if opts['frame'] || containered
           classes << 'frame' if opts['frame']
           %{<div class="#{classes.join(' ')}">} +
           %{<div>} +
