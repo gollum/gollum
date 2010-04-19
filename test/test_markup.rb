@@ -92,6 +92,14 @@ context "Markup" do
     relative_image(content, output)
   end
 
+  test "image with float and align" do
+    %w{left right}.each do |align|
+      content = "a\n\n[[alpha.jpg|float|align=#{align}]]\n\nb"
+      output = "<p>a</p>\n\n<p><div class=\"float-#{align};\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+      relative_image(content, output)
+    end
+  end
+
   test "image with frame" do
     content = "a\n\n[[alpha.jpg|frame]]\n\nb"
     output = "<p>a</p>\n\n<p><div class=\"frame\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
