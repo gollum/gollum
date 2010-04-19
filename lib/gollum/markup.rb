@@ -137,12 +137,14 @@ module Gollum
       end
     end
 
-    # Process any attributes present on the image tag and format them as an
-    # image tag fragment.
+    # Parse any options present on the image tag and extract them into a
+    # Hash of option names and values.
     #
     # tag - The String tag contents (the stuff inside the double brackets).
     #
-    # Returns the String image tag fragment.
+    # Returns the options Hash:
+    #   key - The String option name.
+    #   val - The String option value or true if it is a binary option.
     def parse_image_tag_options(tag)
       tag.split('|')[1..-1].inject({}) do |memo, attr|
         parts = attr.split('=').map { |x| x.strip }
