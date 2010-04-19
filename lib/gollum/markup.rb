@@ -80,19 +80,28 @@ module Gollum
       if file = find_file(name)
         opts = parse_image_tag_options(tag)
 
-        attrs = []
-        styles = []
+        floated = false
+
+        classes = [] # applied to whatever the outermost container is
+        attrs = []   # applied to the image
+        styles = []  # applied to the image
 
         if opts['float']
-          if align = opts['align']
-            styles << "float: #{align};"
-          else
-            attrs << %{align="#{align}"}
+          floated = true
+          align = opts['align'] || 'left'
+          if %w{left right}.include?(align)
+            classes << "float-#{align};"
+          end
+        elsif %w{top texttop middle absmiddle bottom absbottom baseline}.include?(align)
+          attrs << "align=#{align}"
+        elsif align = opts['align']
+          if %w{left center right}.include?(align)
+            classes << "align-#{align}"
           end
         end
 
         if width = opts['width']
-          if height =~ /^\d+(\.\d+)?(em|px)$/
+          if width =~ /^\d+(\.\d+)?(em|px)$/
             styles << "max-width: #{width};"
           end
         end
@@ -109,7 +118,24 @@ module Gollum
 
         attr_string = attrs.size > 0 ? attrs.join(' ') + ' ' : ''
 
-        %{<img src="/#{file.path}" #{attr_string}/>}
+        style_string =
+        if styles.empty?
+          ''
+        else
+          %{ style="#{styles.join(' ')}"}
+        end
+
+        if opts['frame'] || floated
+          classes << 'frame' if opts['frame']
+          %{<div class="#{classes.join(' ')}">} +
+          %{<div>} +
+          %{<img src="/#{file.path}"#{style_string} #{attr_string}/>} +
+          (alt ? %{<p>#{alt}</p>} : '') +
+          %{</div>} +
+          %{</div>}
+        else
+          %{<img src="/#{file.path}"#{style_string} #{attr_string}/>}
+        end
       end
     end
 

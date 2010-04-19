@@ -150,12 +150,14 @@ frame.
     [[gollum.png|frame|alt=Gollum and his precious wiki]]
 
 To specify the alignment of the image on the page, use the `align=` option.
-Possible values are `left`, `center`, and `right`. Default is `center`.
+Possible values are `left`, `center`, and `right`. Default is `left`.
 
     [[gollum.png|align=center]]
 
-To float an image so that text flows around it, use the `float` option.
-Default is not floating.
+To float an image so that text flows around it, use the `float` option. When
+`float` is specified, only `left` and `right` are valid `align` options.
+Default is not floating. When floating is activated but no alignment is
+specified, default aligntment is `left`.
 
     [[gollum.png|float]]
 

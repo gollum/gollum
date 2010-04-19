@@ -52,6 +52,42 @@ context "Markup" do
     relative_image(content, output)
   end
 
+  test "image with em or px dimension" do
+    %w{em px}.each do |unit|
+      %w{width height}.each do |dim|
+        content = "a [[alpha.jpg|#{dim}=100#{unit}]] b"
+        output = "<p>a <img src=\"/greek/alpha.jpg\" style=\"max-#{dim}: 100#{unit};\" /> b</p>\n"
+        relative_image(content, output)
+      end
+    end
+  end
+
+  test "image with bogus dimension" do
+    %w{width height}.each do |dim|
+      content = "a [[alpha.jpg|#{dim}=100]] b"
+      output = "<p>a <img src=\"/greek/alpha.jpg\" /> b</p>\n"
+      relative_image(content, output)
+    end
+  end
+
+  test "image with float" do
+    content = "a\n\n[[alpha.jpg|float]]\n\nb"
+    output = "<p>a</p>\n\n<p><div class=\"float-left;\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+    relative_image(content, output)
+  end
+
+  test "image with frame" do
+    content = "a\n\n[[alpha.jpg|frame]]\n\nb"
+    output = "<p>a</p>\n\n<p><div class=\"frame\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+    relative_image(content, output)
+  end
+
+  test "image with frame and alt" do
+    content = "a\n\n[[alpha.jpg|frame|alt=Alpha]]\n\nb"
+    output = "<p>a</p>\n\n<p><div class=\"frame\"><div><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><p>Alpha</p></div></div></p>\n\n<p>b</p>\n"
+    relative_image(content, output)
+  end
+
   test "file link with absolute path" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
