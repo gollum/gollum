@@ -78,8 +78,38 @@ module Gollum
       name = parts[0].strip
 
       if file = find_file(name)
-        attrs = process_image_tag_attributes(tag)
-        %{<img src="/#{file.path}" #{attrs}/>}
+        opts = parse_image_tag_options(tag)
+
+        attrs = []
+        styles = []
+
+        if opts['float']
+          if align = opts['align']
+            styles << "float: #{align};"
+          else
+            attrs << %{align="#{align}"}
+          end
+        end
+
+        if width = opts['width']
+          if height =~ /^\d+(\.\d+)?(em|px)$/
+            styles << "max-width: #{width};"
+          end
+        end
+
+        if height = opts['height']
+          if height =~ /^\d+(\.\d+)?(em|px)$/
+            styles << "max-height: #{height};"
+          end
+        end
+
+        if alt = opts['alt']
+          attrs << %{alt="#{alt}"}
+        end
+
+        attr_string = attrs.size > 0 ? attrs.join(' ') + ' ' : ''
+
+        %{<img src="/#{file.path}" #{attr_string}/>}
       end
     end
 
@@ -89,18 +119,12 @@ module Gollum
     # tag - The String tag contents (the stuff inside the double brackets).
     #
     # Returns the String image tag fragment.
-    def process_image_tag_attributes(tag)
-      attrs = tag.split('|')[1..-1].inject({}) do |memo, attr|
+    def parse_image_tag_options(tag)
+      tag.split('|')[1..-1].inject({}) do |memo, attr|
         parts = attr.split('=').map { |x| x.strip }
         memo[parts[0]] = (parts.size == 1 ? true : parts[1])
         memo
       end
-
-      fragments = []
-      if alt = attrs['alt']
-        fragments << %{alt="#{alt}"}
-      end
-      fragments.size > 0 ? fragments.join(' ') + ' ' : ''
     end
 
     # Attempt to process the tag as a file link tag.
