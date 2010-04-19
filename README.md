@@ -137,7 +137,7 @@ the Gollum Image Tag. This will display the actual image on the page.
     [[gollum.png]]
 
 In addition to the simple format, there are a variety of options that you
-can specify between pipe delimieters.
+can specify between pipe delimiters.
 
 To specify alt text, use the `alt=` option. Default is no alt text.
 
@@ -157,7 +157,7 @@ Possible values are `left`, `center`, and `right`. Default is `left`.
 To float an image so that text flows around it, use the `float` option. When
 `float` is specified, only `left` and `right` are valid `align` options.
 Default is not floating. When floating is activated but no alignment is
-specified, default aligntment is `left`.
+specified, default alignment is `left`.
 
     [[gollum.png|float]]
 
