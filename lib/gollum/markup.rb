@@ -118,11 +118,9 @@ module Gollum
 
         attr_string = attrs.size > 0 ? attrs.join(' ') + ' ' : ''
 
-        style_string =
-        if styles.empty?
-          ''
-        else
-          %{ style="#{styles.join(' ')}"}
+        style_string = ''
+        unless styles.empty?
+          style_string = %{ style="#{styles.join(' ')}"}
         end
 
         if opts['frame'] || floated
