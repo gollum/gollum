@@ -16,7 +16,7 @@ module Gollum
     #
     # Returns the String name.
     def name
-      @blob.name rescue nil
+      @blob && @blob.name
     end
 
     # Public: The path of the page within the repo.
@@ -28,14 +28,14 @@ module Gollum
     #
     # Returns the String data.
     def raw_data
-      @blob.data rescue nil
+      @blob && @blob.data
     end
 
     # Public: The formatted contents of the page.
     #
     # Returns the String data.
     def formatted_data
-      Gollum::Markup.new(self).render rescue nil
+      @blob && Gollum::Markup.new(self).render
     end
 
     # Public: The format of the page.
@@ -106,6 +106,11 @@ module Gollum
     # Internal Methods
     #
     #########################################################################
+
+    # The underlying wiki repo.
+    #
+    # Returns the Gollum::Wiki containing the page.
+    attr_reader :wiki
 
     # Set the Grit::Commit version of the page.
     #

@@ -10,11 +10,18 @@ module Gollum
       @blob = nil
     end
 
+    # Public: The on-disk filename of the file.
+    #
+    # Returns the String name.
+    def name
+      @blob && @blob.name
+    end
+
     # Public: The raw contents of the page.
     #
     # Returns the String data.
     def raw_data
-      @blob.data rescue nil
+      @blob && @blob.data
     end
 
     # Public: The Grit::Commit version of the file.

@@ -8,8 +8,10 @@ module Gollum
     #
     # Returns a new Gollum::Markup object, ready for rendering.
     def initialize(page)
+      @wiki = page.wiki
       @name = page.name
       @data = page.raw_data
+      @version = page.version.id
       @tagmap = {}
     end
 
@@ -74,7 +76,15 @@ module Gollum
       parts = tag.split('|')
       name = parts[0].strip
 
-      nil
+      if name =~ /^\//
+        if file = @wiki.file(name[1..-1], @version)
+          %{<img src="#{file.name}" />}
+        else
+          nil
+        end
+      else
+        nil
+      end
     end
 
     # Attempt to process the tag as a file link tag.

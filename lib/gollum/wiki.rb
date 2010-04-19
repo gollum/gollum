@@ -43,11 +43,17 @@ module Gollum
     def write_page(name, format, data, commit = {})
       ext = Page.format_to_ext(format)
       path = Gollum.canonical_name(name) + '.' + ext
-      index = @repo.index
-      index.add(path, data)
+
+      map = {}
+      if pcommit = @repo.commit('master')
+        map = tree_map(pcommit.tree)
+      end
+      map[path] = data
+      index = tree_map_to_index(map)
+
+      parents = pcommit ? [pcommit] : []
       actor = Grit::Actor.new(commit[:name], commit[:email])
-      parent = @repo.commit('master')
-      index.commit(commit[:message], [parent], actor)
+      index.commit(commit[:message], parents, actor)
     end
 
     # Public: Update an existing page with new content. The location of the
@@ -62,11 +68,13 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def update_page(page, data, commit = {})
-      index = @repo.index
+      pcommit = @repo.commit('master')
+      map = tree_map(pcommit.tree)
+      index = tree_map_to_index(map)
       index.add(page.path, data)
+
       actor = Grit::Actor.new(commit[:name], commit[:email])
-      parent = @repo.commit('master')
-      index.commit(commit[:message], [parent], actor)
+      index.commit(commit[:message], [pcommit], actor)
     end
 
     #########################################################################
@@ -84,5 +92,47 @@ module Gollum
     #
     # Returns the String path.
     attr_reader :path
+
+    # Fill an index with the existing state of the repository.
+    #
+    # tree - The Grit::Tree to start with.
+    #
+    # Returns a nested Hash of filename to content mappings.
+    def tree_map(tree)
+      map = {}
+      tree.contents.each do |item|
+        case item
+          when Grit::Blob
+            map[item.name] = item.data
+          when Grit::Tree
+            map[item.name] = tree_map(item)
+        end
+      end
+      map
+    end
+
+    # Use a treemap to fill in the index.
+    #
+    # map   - The Hash map:
+    #         key - The String directory or filename.
+    #         val - The Hash submap or the String contents of the file.
+    # index - The Grit::Index to use. Leave blank when calling from outside
+    #         this method (default: nil).
+    #
+    # Returns the Grit::Index.
+    def tree_map_to_index(map, prefix = '', index = nil)
+      index ||= @repo.index
+      map.each do |k, v|
+        case k
+          when String
+            name = [prefix, k].join('/')[1..-1]
+            index.add(k, v)
+          when Hash
+            new_prefix = [prefix, k].join('/')[1..-1]
+            tree_map_to_index(v, new_prefix, index)
+        end
+      end
+      index
+    end
   end
 end

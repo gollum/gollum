@@ -31,6 +31,12 @@ context "Wiki page writing" do
     assert_equal "Gollum page", @wiki.repo.commits.first.message
     assert_equal "Tom Preston-Werner", @wiki.repo.commits.first.author.name
     assert_equal "tom@github.com", @wiki.repo.commits.first.author.email
+    assert @wiki.page("Gollum")
+
+    @wiki.write_page("Bilbo", :markdown, "# Bilbo", commit)
+    assert_equal 2, @wiki.repo.commits.size
+    assert @wiki.page("Bilbo")
+    assert @wiki.page("Gollum")
   end
 
   test "update_page" do
