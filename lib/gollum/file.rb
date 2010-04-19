@@ -8,6 +8,7 @@ module Gollum
     def initialize(wiki)
       @wiki = wiki
       @blob = nil
+      @path = nil
     end
 
     # Public: The on-disk filename of the file.
@@ -27,6 +28,9 @@ module Gollum
     # Public: The Grit::Commit version of the file.
     attr_reader :version
 
+    # Public: The String path of the file.
+    attr_reader :path
+
     #########################################################################
     #
     # Internal Methods
@@ -43,6 +47,7 @@ module Gollum
       commit = @wiki.repo.commit(version)
       if blob = commit.tree / name
         @blob = blob
+        @path = name
         @version = commit
         self
       else

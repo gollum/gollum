@@ -77,19 +77,8 @@ module Gollum
       parts = tag.split('|')
       name = parts[0].strip
 
-      if name =~ /^\//
-        if file = @wiki.file(name[1..-1], @version)
-          %{<img src="/#{file.name}" />}
-        else
-          nil
-        end
-      else
-        path = ::File.join(@dir, name)
-        if file = @wiki.file(path, @version)
-          %{<img src="/#{path}" />}
-        else
-          nil
-        end
+      if file = find_file(name)
+        %{<img src="/#{file.path}" />}
       end
     end
 
@@ -100,7 +89,15 @@ module Gollum
     # Returns the String HTML if the tag is a valid file link tag or nil
     #   if it is not.
     def process_file_link_tag(tag)
-      nil
+      parts = tag.split('|')
+      name = parts[0].strip
+      path = parts[1] && parts[1].strip
+
+      if name && path && file = find_file(path)
+        %{<a href="/#{file.path}">#{name}</a>}
+      else
+        nil
+      end
     end
 
     # Attempt to process the tag as a page link tag.
@@ -114,6 +111,20 @@ module Gollum
       name = parts[0].strip
       cname = Gollum::canonical_name((parts[1] || parts[0]).strip)
       %{<a href="#{cname}">#{name}</a>}
+    end
+
+    # Find the given file in the repo.
+    #
+    # name - The String absolute or relative path of the file.
+    #
+    # Returns the Gollum::File or nil if none was found.
+    def find_file(name)
+      if name =~ /^\//
+        @wiki.file(name[1..-1], @version)
+      else
+        path = ::File.join(@dir, name)
+        @wiki.file(path, @version)
+      end
     end
   end
 end
