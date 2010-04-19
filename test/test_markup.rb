@@ -46,6 +46,12 @@ context "Markup" do
     assert_equal %{<p>a <img src="/greek/alpha.jpg" /> b</p>\n}, output
   end
 
+  test "image with alt" do
+    content = "a [[alpha.jpg|alt=Alpha Dog]] b"
+    output = %{<p>a <img src="/greek/alpha.jpg" alt="Alpha Dog" /> b</p>\n}
+    relative_image(content, output)
+  end
+
   test "file link with absolute path" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
@@ -68,4 +74,14 @@ context "Markup" do
     assert_equal %{<p>a <a href="/greek/alpha.jpg">Alpha</a> b</p>\n}, output
   end
 
+  def relative_image(content, output)
+    index = @wiki.repo.index
+    index.add("greek/alpha.jpg", "hi")
+    index.add("greek/Bilbo-Baggins.md", content)
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered
+  end
 end

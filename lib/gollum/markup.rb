@@ -78,8 +78,29 @@ module Gollum
       name = parts[0].strip
 
       if file = find_file(name)
-        %{<img src="/#{file.path}" />}
+        attrs = process_image_tag_attributes(tag)
+        %{<img src="/#{file.path}" #{attrs}/>}
       end
+    end
+
+    # Process any attributes present on the image tag and format them as an
+    # image tag fragment.
+    #
+    # tag - The String tag contents (the stuff inside the double brackets).
+    #
+    # Returns the String image tag fragment.
+    def process_image_tag_attributes(tag)
+      attrs = tag.split('|')[1..-1].inject({}) do |memo, attr|
+        parts = attr.split('=').map { |x| x.strip }
+        memo[parts[0]] = (parts.size == 1 ? true : parts[1])
+        memo
+      end
+
+      fragments = []
+      if alt = attrs['alt']
+        fragments << %{alt="#{alt}"}
+      end
+      fragments.size > 0 ? fragments.join(' ') + ' ' : ''
     end
 
     # Attempt to process the tag as a file link tag.
