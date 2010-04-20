@@ -227,12 +227,12 @@ Initialize the Gollum::Repo object:
 
     # Create a new Gollum::Wiki object by initializing it with the path to the
     # Git repository.
-    gollum = Gollum::Wiki.new("my-gollum-repo.git")
+    wiki = Gollum::Wiki.new("my-gollum-repo.git")
     # => <Gollum::Wiki>
 
 Get the latest version of the given human or canonical page name:
 
-    page = gollum.page('page-name')
+    page = wiki.page('page-name')
     # => <Gollum::Page>
 
     page.raw_data
@@ -252,7 +252,7 @@ Get the latest version of the given human or canonical page name:
 
 Get a list of versions for a given page:
 
-    vsns = gollum.page('page-name').versions
+    vsns = wiki.page('page-name').versions
     # => [<Grit::Commit, <Grit::Commit, <Grit::Commit>]
 
     vsns.first.id
@@ -263,11 +263,11 @@ Get a list of versions for a given page:
 
 Get a specific version of a given canonical page file:
 
-    gollum.page('page-name', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+    wiki.page('page-name', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
 
 Get the latest version of a given static file:
 
-    file = gollum.file('asset.js')
+    file = wiki.file('asset.js')
     # => <Gollum::File>
 
     file.raw_data
@@ -278,7 +278,7 @@ Get the latest version of a given static file:
 
 Get a specific version of a given static file:
 
-    gollum.file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+    wiki.file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
 
 Methods that write to the repository require a Hash of commit data that takes
 the following form:
@@ -290,13 +290,13 @@ the following form:
 Write a new version of a page (the file will be created if it does not already
 exist) and commit the change. The file will be written at the repo root.
 
-    gollum.write_page('Page Name', :markdown, 'Page contents', commit)
+    wiki.write_page('Page Name', :markdown, 'Page contents', commit)
 
 Update an existing page (keeps the same name, format, and directory location).
 
-    page = gollum.find('Page Name')
-    gollum.update_page(page, 'Page contents', commit)
+    page = wiki.find('Page Name')
+    wiki.update_page(page, 'Page contents', commit)
 
 To delete a page and commit the change:
 
-    gollum.delete_page(page, commit)
+    wiki.delete_page(page, commit)
