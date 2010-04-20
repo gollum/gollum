@@ -75,9 +75,8 @@ The above tag will create a link to the corresponding page file named
 `Frodo.ext` where `ext` may be any of the allowed extension types. The
 conversion is as follows:
 
-  1. Strip any non-printables (U+0000-U+001F, U+007F-U+009F)
-  2. Replace any spaces (U+0020) with dashes (U+002D)
-  3. Replace any slashes (U+002F) with dashes (U+002D)
+  1. Replace any spaces (U+0020) with dashes (U+002D)
+  2. Replace any slashes (U+002F) with dashes (U+002D)
 
 If you'd like the link text to be something that doesn't map directly to the
 page name, you can specify the actual page name after a pipe:

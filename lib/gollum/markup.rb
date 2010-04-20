@@ -182,7 +182,7 @@ module Gollum
     def process_page_link_tag(tag)
       parts = tag.split('|')
       name = parts[0].strip
-      cname = Gollum::canonical_name((parts[1] || parts[0]).strip)
+      cname = Page.cname((parts[1] || parts[0]).strip)
       %{<a href="#{cname}">#{name}</a>}
     end
 

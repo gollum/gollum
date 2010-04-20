@@ -42,7 +42,7 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
       ext = Page.format_to_ext(format)
-      path = Gollum.canonical_name(name) + '.' + ext
+      path = Page.cname(name) + '.' + ext
 
       map = {}
       if pcommit = @repo.commit('master')

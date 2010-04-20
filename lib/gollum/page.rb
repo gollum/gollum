@@ -84,6 +84,19 @@ module Gollum
     #
     #########################################################################
 
+    # Convert a human page name into a canonical page name.
+    #
+    # name - The String human page name.
+    #
+    # Examples
+    #   Page.cname("Bilbo Baggins")
+    #   # => 'Bilbo-Baggins'
+    #
+    # Returns the String canonical name.
+    def self.cname(name)
+      name.gsub(%r{[ /]}, '-')
+    end
+
     # Convert a format Symbol into an extension String.
     #
     # format - The format Symbol.
@@ -195,7 +208,7 @@ module Gollum
     # Returns a Boolean.
     def page_match(name, filename)
       if filename =~ VALID_PAGE_RE
-        Gollum.canonical_name(name) == Gollum.canonical_name($1)
+        Page.cname(name) == Page.cname($1)
       else
         false
       end
