@@ -192,24 +192,23 @@ In page files you can get automatic syntax highlighting for a wide range of
 languages (courtesy of [Pygments](http://pygments.org/)) by using the
 following syntax:
 
-    ```ruby```
+    ```ruby
       def foo
         puts 'bar'
       end
-    ``````````
+    ```
 
 The block must start with three backticks (as the first characters on the
 line). After that comes the name of the language that is contained by the
 block. The language must be one of the `short name` lexer strings supported by
 Pygments. See the [list of lexers](http://pygments.org/docs/lexers/) for valid
-options. Following the language name you may optionally add an additional
-three backticks for aesthetic reasons.
+options.
 
 If the block contents are indented two spaces or one tab, then that whitespace
 will be ignored (this makes the blocks easier to read in plaintext).
 
-The block must end with at least three backticks as the first characters on a
-line. You may add more backticks for balance if you like.
+The block must end with three backticks as the first characters on a
+line.
 
 
 ## API DOCUMENTATION
