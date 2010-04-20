@@ -44,4 +44,12 @@ context "Page" do
   test "no ext match" do
     assert_nil @wiki.page('Data')
   end
+
+  test "cname" do
+    assert_equal "Foo", Gollum::Page.cname("Foo")
+    assert_equal "Foo-Bar", Gollum::Page.cname("Foo Bar")
+    assert_equal "Foo---Bar", Gollum::Page.cname("Foo / Bar")
+    assert_equal "José", Gollum::Page.cname("José")
+    assert_equal "モルドール", Gollum::Page.cname("モルドール")
+  end
 end
