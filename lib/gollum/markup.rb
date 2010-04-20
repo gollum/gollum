@@ -14,6 +14,7 @@ module Gollum
       @version = page.version.id
       @dir = ::File.dirname(page.path)
       @tagmap = {}
+      @codemap = {}
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -22,9 +23,17 @@ module Gollum
     # Returns the formatted String content.
     def render
       data = extract_tags(@data)
+      data = extract_code(data)
       data = GitHub::Markup.render(@name, data) rescue ''
       data = process_tags(data)
+      data = process_code(data)
     end
+
+    #########################################################################
+    #
+    # Tags
+    #
+    #########################################################################
 
     # Extract all tags into the tagmap and replace with placeholders.
     #
@@ -198,6 +207,40 @@ module Gollum
         path = ::File.join(@dir, name)
         @wiki.file(path, @version)
       end
+    end
+
+    #########################################################################
+    #
+    # Code
+    #
+    #########################################################################
+
+    # Extract all code blocks into the codemap and replace with placeholders.
+    #
+    # data - The raw String data.
+    #
+    # Returns the placeholder'd String data.
+    def extract_code(data)
+      data.gsub(/^``` ?(.+)\n(.+)\n```$/m) do
+        id = Digest::SHA1.hexdigest($2)
+        @codemap[id] = { :lang => $1, :code => $2 }
+        id
+      end
+    end
+
+    # Process all code from the codemap and replace the placeholders with the
+    # final HTML.
+    #
+    # data - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
+    def process_code(data)
+      @codemap.each do |id, spec|
+        lang = spec[:lang]
+        code = spec[:code]
+        data.sub!(id, Albino.new(code, lang).colorize)
+      end
+      data
     end
   end
 end

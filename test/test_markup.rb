@@ -134,6 +134,21 @@ context "Markup" do
     assert_equal %{<p>a <a href="/greek/alpha.jpg">Alpha</a> b</p>\n}, output
   end
 
+  test "code blocks" do
+    content = "a\n\n```ruby\nx = 1\n```\n\nb"
+    output = "<p>a</p>\n\n<p><div class=\"highlight\"><pre>" +
+             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
+             "<span class=\"mi\">1</span>\n</pre>\n</div></p>\n\n<p>b</p>\n"
+
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered
+  end
+
   def relative_image(content, output)
     index = @wiki.repo.index
     index.add("greek/alpha.jpg", "hi")
