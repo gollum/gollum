@@ -89,6 +89,7 @@ module Gollum
     # name - The String human page name.
     #
     # Examples
+    #
     #   Page.cname("Bilbo Baggins")
     #   # => 'Bilbo-Baggins'
     #
