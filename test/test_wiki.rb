@@ -55,6 +55,39 @@ context "Wiki page writing" do
     assert_equal "tom@github.com", @wiki.repo.commits.first.author.email
   end
 
+  test "delete root page" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+
+    page = @wiki.page("Gollum")
+    @wiki.delete_page(page, commit)
+
+    assert_equal 2, @wiki.repo.commits.size
+    assert_nil @wiki.page("Gollum")
+  end
+
+  test "delete nested page" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+
+    index = @wiki.repo.index
+    index.add("greek/Bilbo-Baggins.md", "hi")
+    index.add("Gollum.md", "hi")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo-Baggins")
+    assert page
+    @wiki.delete_page(page, commit)
+
+    assert_equal 2, @wiki.repo.commits.size
+    assert_nil @wiki.page("Bilbo-Baggins")
+
+    assert @wiki.page("Gollum")
+  end
+
   teardown do
     FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end

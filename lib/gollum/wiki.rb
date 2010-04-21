@@ -77,6 +77,33 @@ module Gollum
       index.commit(commit[:message], [pcommit], actor)
     end
 
+    # Public: Delete a page.
+    #
+    # page   - The Gollum::Page to delete.
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :author  - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns the String SHA1 of the newly written version.
+    def delete_page(page, commit)
+      pcommit = @repo.commit('master')
+      map = tree_map(pcommit.tree)
+
+      parts = page.path.split('/')
+      name = parts.pop
+      container = nil
+      parts.each do |part|
+        container = map[part]
+      end
+      (container || map).delete(name)
+
+      index = tree_map_to_index(map)
+
+      actor = Grit::Actor.new(commit[:name], commit[:email])
+      index.commit(commit[:message], [pcommit], actor)
+    end
+
     #########################################################################
     #
     # Internal Methods
