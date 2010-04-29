@@ -294,7 +294,7 @@ exist) and commit the change. The file will be written at the repo root.
 
 Update an existing page (keeps the same name, format, and directory location).
 
-    page = wiki.find('Page Name')
+    page = wiki.page('Page Name')
     wiki.update_page(page, 'Page contents', commit)
 
 To delete a page and commit the change:
