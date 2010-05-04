@@ -238,7 +238,7 @@ module Gollum
       @codemap.each do |id, spec|
         lang = spec[:lang]
         code = spec[:code]
-        data.sub!(id, Albino.new(code, lang).colorize)
+        data.sub!(id, Gollum::Albino.new(code, lang).colorize)
       end
       data
     end
