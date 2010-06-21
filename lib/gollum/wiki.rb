@@ -10,6 +10,13 @@ module Gollum
       @repo = Grit::Repo.new(path)
     end
 
+    # Public: check whether the wiki's git repo exists on the filesystem.
+    #
+    # Returns true if the repo exists, and false if it does not.
+    def exist?
+      @repo.git.exist?
+    end
+
     # Public: Get the formatted page for a given page name.
     #
     # name    - The human or canonical String page name of the wiki page.

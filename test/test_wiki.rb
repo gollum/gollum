@@ -11,6 +11,7 @@ context "Wiki" do
 
   test "git repo" do
     assert_equal Grit::Repo, @wiki.repo.class
+    assert @wiki.exist?
   end
 end
 
