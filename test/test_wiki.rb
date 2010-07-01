@@ -89,6 +89,23 @@ context "Wiki page writing" do
     assert @wiki.page("Gollum")
   end
 
+  test "list pages" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+
+    index = @wiki.repo.index
+    index.add("greek/Bilbo-Baggins.md", "hi")
+    index.add("Gollum.md", "hi")
+    index.commit("Add alpha.jpg")
+
+    pages = @wiki.pages
+    assert_equal "Gollum.md",              pages[0].path
+    assert_equal "Gollum.md",              pages[0].name
+    assert_equal "greek/Bilbo-Baggins.md", pages[1].path
+    assert_equal "Bilbo-Baggins.md",       pages[1].name
+  end
+
   teardown do
     FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end

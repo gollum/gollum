@@ -111,6 +111,16 @@ module Gollum
       index.commit(commit[:message], [pcommit], actor)
     end
 
+    # Public: Lists all pages for this wiki.
+    #
+    # treeish - The String commit ID or ref to find  (default: master)
+    #
+    # Returns an Array of Gollum::Page instances.
+    def pages(treeish = nil)
+      treeish ||= 'master'
+      tree_list(@repo.commit(treeish).tree)
+    end
+
     #########################################################################
     #
     # Internal Methods
@@ -126,6 +136,26 @@ module Gollum
     #
     # Returns the String path.
     attr_reader :path
+
+    # Fill an array with a list of pages.
+    #
+    # tree     - The Grit::Tree to start with.
+    # sub_tree - Optional String specifying the parent path of the Page.
+    #
+    # Returns a flat Array of Gollum::Page instances.
+    def tree_list(tree, sub_tree = nil)
+      list = []
+      path = tree.name ? "#{sub_tree}/#{tree.name}" : ''
+      tree.contents.each do |item|
+        case item
+          when Grit::Blob
+            list << Page.new(self).populate(item, path)
+          when Grit::Tree
+            list.push *tree_list(item, path)
+        end
+      end
+      list
+    end
 
     # Fill an index with the existing state of the repository.
     #
