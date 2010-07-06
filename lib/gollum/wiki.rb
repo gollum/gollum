@@ -2,14 +2,24 @@ module Gollum
   class Wiki
     include Pagination
 
+    class << self
+      attr_accessor :page_class, :file_class
+    end
+
     # Public: Initialize a new Gollum Repo.
     #
-    # repo - The String path to the Git repository that holds the Gollum site.
+    # repo    - The String path to the Git repository that holds the Gollum 
+    #           site.
+    # options - Optional Hash:
+    #           :page_class - The page Class. Default: Gollum::Page
+    #           :file_class - The file Class. Default: Gollum::File
     #
     # Returns a fresh Gollum::Repo.
-    def initialize(path)
-      @path = path
-      @repo = Grit::Repo.new(path)
+    def initialize(path, options = {})
+      @path       = path
+      @repo       = Grit::Repo.new(path)
+      @page_class = options[:page_class] || self.class.page_class
+      @file_class = options[:file_class] || self.class.file_class
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -26,7 +36,7 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if no matching page was found.
     def page(name, version = 'master')
-      Page.new(self).find(name, version)
+      @page_class.new(self).find(name, version)
     end
 
     # Public: Get the static file for a given name.
@@ -36,7 +46,7 @@ module Gollum
     #
     # Returns a Gollum::File or nil if no matching file was found.
     def file(name, version = 'master')
-      File.new(self).find(name, version)
+      @file_class.new(self).find(name, version)
     end
 
     # Public: Write a new version of a page to the Gollum repo root.
@@ -50,8 +60,8 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
-      ext = Page.format_to_ext(format)
-      path = Page.cname(name) + '.' + ext
+      ext  = @page_class.format_to_ext(format)
+      path = @page_class.cname(name) + '.' + ext
 
       map = {}
       if pcommit = @repo.commit('master')
@@ -162,7 +172,7 @@ module Gollum
       tree.contents.each do |item|
         case item
           when Grit::Blob
-            list << Page.new(self).populate(item, path)
+            list << @page_class.new(self).populate(item, path)
           when Grit::Tree
             list.push *tree_list(item, path)
         end

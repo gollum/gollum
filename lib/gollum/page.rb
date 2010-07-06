@@ -2,6 +2,8 @@ module Gollum
   class Page
     include Pagination
 
+    Wiki.page_class = self
+
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
     # Public: Initialize a page.
