@@ -3,6 +3,7 @@ require 'grit'
 require 'github/markup'
 
 # internal
+require 'gollum/pagination'
 require 'gollum/wiki'
 require 'gollum/page'
 require 'gollum/file'

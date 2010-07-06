@@ -13,6 +13,31 @@ context "Wiki" do
     assert_equal Grit::Repo, @wiki.repo.class
     assert @wiki.exist?
   end
+
+  test "shows paginated log with no page" do
+    Gollum::Wiki.per_page = 3
+    assert_equal %w(
+      f01428b3138994aab19d5f880b6f37336ddf1f24
+      fbabba862dfa7ac35b39042dd4ad780c9f67b8cb
+      df26e61e707116f81ebc6b935ec6d1676b7e96c4),
+      @wiki.log.map { |c| c.id }
+  end
+
+  test "shows paginated log with 1st page" do
+    Gollum::Wiki.per_page = 3
+    assert_equal %w(
+      f01428b3138994aab19d5f880b6f37336ddf1f24
+      fbabba862dfa7ac35b39042dd4ad780c9f67b8cb
+      df26e61e707116f81ebc6b935ec6d1676b7e96c4),
+      @wiki.log(:page => 1).map { |c| c.id }
+  end
+
+  test "shows paginated log with next page" do
+    Gollum::Wiki.per_page = 3
+    assert_equal %w(
+      5bc1aaec6149e854078f1d0f8b71933bbc6c2e43),
+      @wiki.log(:page => 2).map { |c| c.id }
+  end
 end
 
 context "Wiki page writing" do

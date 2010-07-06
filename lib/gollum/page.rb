@@ -1,5 +1,7 @@
 module Gollum
   class Page
+    include Pagination
+
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
     # Public: Initialize a page.
@@ -73,9 +75,13 @@ module Gollum
 
     # Public: All of the versions that have touched the Page.
     #
+    # options - The options Hash:
+    #           :page     - The Integer page number (default: 1).
+    #           :per_page - The Integer max count of items to return.
+    #
     # Returns an Array of Grit::Commit.
-    def versions
-      @wiki.repo.log('master', @path)
+    def versions(options = {})
+      @wiki.repo.log('master', @path, log_pagination_options(options))
     end
 
     #########################################################################

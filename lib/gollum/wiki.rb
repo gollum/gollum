@@ -1,5 +1,7 @@
 module Gollum
   class Wiki
+    include Pagination
+
     # Public: Initialize a new Gollum Repo.
     #
     # repo - The String path to the Git repository that holds the Gollum site.
@@ -119,6 +121,17 @@ module Gollum
     def pages(treeish = nil)
       treeish ||= 'master'
       tree_list(@repo.commit(treeish).tree)
+    end
+
+    # Public: All of the versions that have touched the Page.
+    #
+    # options - The options Hash:
+    #           :page     - The Integer page number (default: 1).
+    #           :per_page - The Integer max count of items to return.
+    #
+    # Returns an Array of Grit::Commit.
+    def log(options = {})
+      @repo.log('master', nil, log_pagination_options(options))
     end
 
     #########################################################################
