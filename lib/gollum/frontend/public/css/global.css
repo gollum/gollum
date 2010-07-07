@@ -40,7 +40,11 @@ p {
   color: #666;
 }
 
-/***********************/
+a.absent {
+  color: #a00;
+}
+
+/* Images */
 
 .frame {
   margin: 1em 0;

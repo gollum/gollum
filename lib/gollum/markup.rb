@@ -41,7 +41,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
-      data.gsub(/\[\[(.+?)\]\]/) do
+      data.gsub(/\[\[(.+?)\]\]/m) do
         id = Digest::SHA1.hexdigest($1)
         @tagmap[id] = $1
         id
@@ -192,7 +192,11 @@ module Gollum
       parts = tag.split('|')
       name = parts[0].strip
       cname = Page.cname((parts[1] || parts[0]).strip)
-      %{<a href="#{cname}">#{name}</a>}
+      if @wiki.page(cname)
+        %{<a class="internal present" href="#{cname}">#{name}</a>}
+      else
+        %{<a class="internal absent" href="#{cname}">#{name}</a>}
+      end
     end
 
     # Find the given file in the repo.

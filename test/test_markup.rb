@@ -21,7 +21,15 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a href="Bilbo-Baggins">Bilbo Baggins</a> b</p>\n}, output
+    assert_equal %{<p>a <a class="internal present" href="Bilbo-Baggins">Bilbo Baggins</a> b</p>\n}, output
+  end
+
+  test "absent page link" do
+    @wiki.write_page("Tolkien", :markdown, "a [[J. R. R. Tolkien]]'s b", @commit)
+
+    page = @wiki.page("Tolkien")
+    output = Gollum::Markup.new(page).render
+    assert_equal %{<p>a <a class="internal absent" href="J.-R.-R.-Tolkien">J. R. R. Tolkien</a>'s b</p>\n}, output
   end
 
   test "image with absolute path" do
