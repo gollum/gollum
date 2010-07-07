@@ -1,0 +1,93 @@
+h1, h2, h3, h4, h5, h6 {
+  color: #f90;
+  font-weight: bold;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  font-size: 36pt;
+}
+
+h2 {
+  font-size: 32pt;
+}
+
+h3 {
+  font-size: 28pt;
+}
+
+h4 {
+  font-size: 24pt;
+}
+
+h5 {
+  font-size: 20pt;
+}
+
+h6 {
+  font-size: 16pt;
+}
+
+p {
+  font-family: Georgia, serif;
+  font-size: 14pt;
+  line-height: 22pt;
+}
+
+#content {
+  width: 60em;
+  margin: 0 auto;
+  color: #666;
+}
+
+/***********************/
+
+.frame {
+  margin: 1em 0;
+  display: inline-block;
+}
+
+.frame img {
+  display: block;
+}
+
+.frame > span {
+  display: block;
+  border: 1px solid #aaa;
+  padding: 4px;
+}
+
+.frame span span {
+  display: block;
+  font-size: 10pt;
+  margin: 0;
+  padding: 4px 0 2px 0;
+  text-align: center;
+  line-height: 10pt;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.float-left {
+  float: left;
+  padding: .5em 1em .25em 0;
+}
+
+.float-right {
+  float: right;
+  padding: .5em 0 .25em 1em;
+}
+
+.align-left {
+  display: block;
+  text-align: left;
+}
+
+.align-center {
+  display: block;
+  text-align: center;
+}
+
+.align-right {
+  display: block;
+  text-align: right;
+}

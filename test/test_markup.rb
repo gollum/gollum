@@ -81,34 +81,34 @@ context "Markup" do
   test "image with horizontal align" do
     %w{left center right}.each do |align|
       content = "a [[alpha.jpg|align=#{align}]] b"
-      output = "<p>a <div class=\"align-#{align}\"><div><img src=\"/greek/alpha.jpg\" /></div></div> b</p>\n"
+      output = "<p>a <span class=\"align-#{align}\"><span><img src=\"/greek/alpha.jpg\" /></span></span> b</p>\n"
       relative_image(content, output)
     end
   end
 
   test "image with float" do
     content = "a\n\n[[alpha.jpg|float]]\n\nb"
-    output = "<p>a</p>\n\n<p><div class=\"float-left;\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+    output = "<p>a</p>\n\n<p><span class=\"float-left\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>\n"
     relative_image(content, output)
   end
 
   test "image with float and align" do
     %w{left right}.each do |align|
       content = "a\n\n[[alpha.jpg|float|align=#{align}]]\n\nb"
-      output = "<p>a</p>\n\n<p><div class=\"float-#{align};\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+      output = "<p>a</p>\n\n<p><span class=\"float-#{align}\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>\n"
       relative_image(content, output)
     end
   end
 
   test "image with frame" do
     content = "a\n\n[[alpha.jpg|frame]]\n\nb"
-    output = "<p>a</p>\n\n<p><div class=\"frame\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>\n"
     relative_image(content, output)
   end
 
   test "image with frame and alt" do
     content = "a\n\n[[alpha.jpg|frame|alt=Alpha]]\n\nb"
-    output = "<p>a</p>\n\n<p><div class=\"frame\"><div><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><p>Alpha</p></div></div></p>\n\n<p>b</p>\n"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><span>Alpha</span></span></span></p>\n\n<p>b</p>\n"
     relative_image(content, output)
   end
 

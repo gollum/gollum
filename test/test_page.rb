@@ -28,7 +28,7 @@ context "Page" do
 
   test "page versions" do
     page = @wiki.page('Bilbo Baggins')
-    assert_equal ['5bc1aaec6149e854078f1d0f8b71933bbc6c2e43'],
+    assert_equal ["f25eccd98e9b667f9e22946f3e2f945378b8a72d", "5bc1aaec6149e854078f1d0f8b71933bbc6c2e43"],
       page.versions.map { |v| v.id }
   end
 

@@ -100,7 +100,7 @@ module Gollum
           containered = true
           align ||= 'left'
           if %w{left right}.include?(align)
-            classes << "float-#{align};"
+            classes << "float-#{align}"
           end
         elsif %w{top texttop middle absmiddle bottom absbottom baseline}.include?(align)
           attrs << %{align="#{align}"}
@@ -136,12 +136,12 @@ module Gollum
 
         if opts['frame'] || containered
           classes << 'frame' if opts['frame']
-          %{<div class="#{classes.join(' ')}">} +
-          %{<div>} +
+          %{<span class="#{classes.join(' ')}">} +
+          %{<span>} +
           %{<img src="/#{file.path}"#{style_string} #{attr_string}/>} +
-          (alt ? %{<p>#{alt}</p>} : '') +
-          %{</div>} +
-          %{</div>}
+          (alt ? %{<span>#{alt}</span>} : '') +
+          %{</span>} +
+          %{</span>}
         else
           %{<img src="/#{file.path}"#{style_string} #{attr_string}/>}
         end
