@@ -34,6 +34,12 @@ p {
   line-height: 22pt;
 }
 
+#nav {
+  width: 60em;
+  margin: 0 auto;
+  color: #666;
+}
+
 #content {
   width: 60em;
   margin: 0 auto;
@@ -42,6 +48,13 @@ p {
 
 a.absent {
   color: #a00;
+}
+
+/* Forms */
+
+textarea {
+  width: 100%;
+  height: 20em;
 }
 
 /* Images */

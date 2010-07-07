@@ -4,6 +4,8 @@ module Precious
       include Rack::Utils
       alias_method :h, :escape_html
 
+      attr_reader :name
+
       def title
         "Home"
       end

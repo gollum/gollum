@@ -32,6 +32,16 @@ context "Markup" do
     assert_equal %{<p>a <a class="internal absent" href="J.-R.-R.-Tolkien">J. R. R. Tolkien</a>'s b</p>\n}, output
   end
 
+  test "image with http url" do
+    ['http', 'https'].each do |scheme|
+      @wiki.write_page("Bilbo Baggins", :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", @commit)
+
+      page = @wiki.page("Bilbo Baggins")
+      output = Gollum::Markup.new(page).render
+      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.jpg" /> b</p>\n}, output
+    end
+  end
+
   test "image with absolute path" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")

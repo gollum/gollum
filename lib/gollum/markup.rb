@@ -85,8 +85,15 @@ module Gollum
     def process_image_tag(tag)
       parts = tag.split('|')
       name = parts[0].strip
+      path = nil
 
       if file = find_file(name)
+        path = "/#{file.path}"
+      elsif name =~ /^https?:\/\/.+(jpg|png|gif|svg|bmp)$/
+        path = name
+      end
+
+      if path
         opts = parse_image_tag_options(tag)
 
         containered = false
@@ -143,7 +150,7 @@ module Gollum
           %{</span>} +
           %{</span>}
         else
-          %{<img src="/#{file.path}"#{style_string} #{attr_string}/>}
+          %{<img src="#{path}"#{style_string} #{attr_string}/>}
         end
       end
     end

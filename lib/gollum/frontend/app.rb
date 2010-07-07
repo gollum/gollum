@@ -6,7 +6,7 @@ require 'mustache/sinatra'
 
 require 'gollum/frontend/views/layout'
 
-$path = "~/dev/mojombo/gollum/test/examples/lotr.git"
+$path = "~/dev/sandbox/lotr2"
 
 module Precious
   class App < Sinatra::Base
@@ -41,6 +41,38 @@ module Precious
       show_page_or_file('Home')
     end
 
+    get '/edit/:name' do
+      @name = params[:name]
+      wiki = Gollum::Wiki.new($path)
+      if page = wiki.page(@name)
+        @content = page.raw_data
+        mustache :edit
+      else
+        mustache :create
+      end
+    end
+
+    post '/edit/:name' do
+      name = params[:name]
+      wiki = Gollum::Wiki.new($path)
+      page = wiki.page(name)
+      commit = { :message => 'commit message',
+                 :name => 'Tom Preston-Werner',
+                 :email => 'tom@github.com' }
+      wiki.update_page(page, params[:content], commit)
+      redirect "/#{name}"
+    end
+
+    post '/create/:page' do
+      page = params[:page]
+      wiki = Gollum::Wiki.new($path)
+      commit = { :message => 'commit message',
+                 :name => 'Tom Preston-Werner',
+                 :email => 'tom@github.com' }
+      wiki.write_page(page, :markdown, params[:content], commit)
+      redirect "/#{page}"
+    end
+
     get '/*' do
       show_page_or_file(params[:splat].first)
     end
@@ -48,12 +80,14 @@ module Precious
     def show_page_or_file(name)
       wiki = Gollum::Wiki.new($path)
       if page = wiki.page(name)
+        @name = name
         @content = page.formatted_data
         mustache :page
       elsif file = wiki.file(name)
         file.raw_data
       else
-        halt 404
+        @name = name
+        mustache :create
       end
     end
   end
