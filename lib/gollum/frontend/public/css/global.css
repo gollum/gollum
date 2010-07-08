@@ -34,6 +34,19 @@ p {
   line-height: 22pt;
 }
 
+.highlight {
+  border: 1px solid #eee;
+  padding: 0;
+  margin: 0;
+  font-size: 12pt;
+}
+
+.highlight pre {
+  background-color: #f8f8ff;
+  margin: 0;
+  padding: .5em;
+}
+
 #nav {
   width: 60em;
   margin: 0 auto;
