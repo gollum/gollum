@@ -232,7 +232,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub(/^``` ?(.+)\n(.+)\n```$/m) do
+      data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
         id = Digest::SHA1.hexdigest($2)
         @codemap[id] = { :lang => $1, :code => $2 }
         id

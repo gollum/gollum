@@ -67,7 +67,7 @@ module Gollum
       if pcommit = @repo.commit('master')
         map = tree_map(pcommit.tree)
       end
-      map[path] = data
+      map[path] = normalize(data)
       index = tree_map_to_index(map)
 
       parents = pcommit ? [pcommit] : []
@@ -90,7 +90,7 @@ module Gollum
       pcommit = @repo.commit('master')
       map = tree_map(pcommit.tree)
       index = tree_map_to_index(map)
-      index.add(page.path, data)
+      index.add(page.path, normalize(data))
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
       index.commit(commit[:message], [pcommit], actor)
@@ -159,6 +159,15 @@ module Gollum
     #
     # Returns the String path.
     attr_reader :path
+
+    # Normalize the data.
+    #
+    # data - The String data to be normalized.
+    #
+    # Returns the normalized data String.
+    def normalize(data)
+      data.gsub(/\r/, '')
+    end
 
     # Fill an array with a list of pages.
     #
