@@ -44,10 +44,14 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
-      data.gsub(/\[\[(.+?)\]\]/m) do
-        id = Digest::SHA1.hexdigest($1)
-        @tagmap[id] = $1
-        id
+      data.gsub(/(.?)\[\[(.+?)\]\](.?)/m) do
+        if $1 == "'" && $3 != "'"
+          "[[#{$2}]]#{$3}"
+        else
+          id = Digest::SHA1.hexdigest($2)
+          @tagmap[id] = $2
+          "#{$1}#{id}#{$3}"
+        end
       end
     end
 

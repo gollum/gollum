@@ -182,6 +182,28 @@ context "Markup" do
     assert_equal output, rendered
   end
 
+  test "escaped wiki link" do
+    content = "a '[[Foo]], b"
+    output = "<p>a [[Foo]], b</p>"
+    compare(content, output)
+  end
+
+  test "quoted wiki link" do
+    content = "a '[[Foo]]', b"
+    output = "<p>a '<a class=\"internal absent\" href=\"Foo\">Foo</a>', b</p>"
+    compare(content, output)
+  end
+
+  def compare(content, output)
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered
+  end
+
   def relative_image(content, output)
     index = @wiki.repo.index
     index.add("greek/alpha.jpg", "hi")
