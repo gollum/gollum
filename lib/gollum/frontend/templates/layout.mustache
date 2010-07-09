@@ -4,16 +4,18 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Gollum - {{title}}</title>
-    <link rel="stylesheet" href="/css/global.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="/css/gollum.css" type="text/css" charset="utf-8" />
     <link rel="stylesheet" href="/css/syntax.css" type="text/css" charset="utf-8" />
   </head>
 
   <body>
-    <div id="nav">
-      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
-    </div>
-    <div id="content">
-      {{{yield}}}
+    <div id="main">
+      <div class="site">
+        <div id="guides">
+          {{{yield}}}
+        </div>
+      </div>
     </div>
   </body>
 </html>

@@ -1,10 +1,14 @@
-<h1>Editing {{name}}</h1>
+<div class="write">
+  <a href="/{{name}}">&laquo; Back</a>
+  <h1>Editing &ldquo;{{name}}&rdquo;</h1>
 
-<form method="post" action="/edit/{{name}}">
-  <div>
-    <textarea name="content">{{content}}</textarea>
-  </div>
-  <div>
-    <input type="submit" value="Save page" />
-  </div>
-</form>
+  <form class="edit_wiki" method="post" action="/edit/{{name}}">
+    <label>
+      Body
+      <textarea name="content">{{content}}</textarea>
+    </label>
+    <div class="actions">
+      <input type="submit" value="Save page" />
+    </div>
+  </form>
+</div>

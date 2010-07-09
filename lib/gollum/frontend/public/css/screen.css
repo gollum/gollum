@@ -1,0 +1,345 @@
+/****************************************************************************/
+/* Base
+/****************************************************************************/
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  color: black;
+}
+
+body {
+  background-color: white;
+  font: 13.34px helvetica, arial, freesans, clean, sans-serif;
+  *font-size: small;
+}
+
+table {
+  font-size: inherit;
+  font: 100%;
+}
+
+select, input[type=text], input[type=password], input[type=image], textarea {
+  font: 99% helvetica, arial, freesans, sans-serif;
+}
+select, option {
+  padding: 0 .25em;
+}
+optgroup {
+  margin-top: .5em;
+}
+
+input.text {
+  padding: 1px 0;
+}
+pre, code {
+  font: 12px Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+}
+
+body * {
+  line-height: 1.4em;
+}
+
+p{ margin:1em 0; }
+
+img {
+  border: 0;
+}
+
+abbr {
+  border-bottom: none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+* html .clearfix {height: 1%;}
+.clearfix {display:inline-block;}
+.clearfix {display: block;}
+
+/* always show vertical scroll bar to prevent page jitter */
+html {overflow-y: scroll;}
+
+.site {
+  margin: 2em auto 0 auto;
+  width: 920px;
+  padding: 0 15px;
+}
+
+/****************************************************************************/
+/* Guides
+/****************************************************************************/
+
+#guides {
+
+}
+
+  /* index */
+
+  #guides .index {
+
+  }
+
+    #guides h1 {
+      margin-bottom: .5em;
+    }
+
+    #guides .index ul {
+      list-style-type: none;
+      font-size: 120%;
+    }
+
+      #guides .index ul li {
+        padding-left: 1.5em;
+        background: white url(/images/modules/guides/book.png) no-repeat;
+      }
+
+    #guides .index .new {
+      margin-top: 1em;
+      border-top: 1px solid #ccc;
+      padding-top: .5em;
+    }
+
+      #guides .index .new ul li {
+        background: white url(/images/modules/guides/book_add.png) no-repeat;
+      }
+
+      #guides .index .new ul li a {
+        color: #c00;
+      }
+
+    #guides .write .delete_page {
+      float: right;
+    }
+
+  /* guide */
+
+  #guides .guide {
+    overflow: hidden;
+  }
+
+    /* main */
+
+    #guides .guide .main {
+      float: left;
+      width: 50em;
+    }
+
+    /* sidebar */
+
+    #guides .guide .sidebar {
+      float: right;
+      width: 15em;
+      border-left: 4px solid #e6e6e6;
+      margin: 2.1em 0 0 0;
+      padding-left: 1em;
+    }
+
+      #guides .guide .sidebar h3 {
+        margin: 0 0 .5em 0;
+      }
+
+      #guides .guide .sidebar ul {
+        list-style-type: none;
+        margin: 0;
+        color: #888;
+
+      }
+
+      #guides .guide .sidebar ul li {
+        padding-left: 12px;
+        background: white url(/images/modules/guides/sidebar/bullet_blue.png) -4px 0 no-repeat;
+        margin: .2em 0;
+      }
+
+  /* admin */
+
+  #guides .admin {
+    clear: both;
+    margin-top: 3em;
+    border-top: 4px solid #e6e6e6;
+    padding-top: .3em;
+    overflow: hidden;
+  }
+
+  /* write */
+
+  #guides .write {
+
+  }
+
+    #guides .write label {
+      font-size: 110%;
+      color: #666;
+      display: block;
+      margin: 1em 0;
+    }
+
+    #guides .write input.text,
+    #guides .write textarea {
+      padding: 5px;
+      border: 1px solid #888;
+    }
+
+    #guides .write input.text {
+      width: 40em;
+    }
+
+    #guides .write textarea {
+      width: 100%;
+      height: 25em;
+    }
+
+    #guides .write label span.title {
+      color: black;
+      font-weight: bold;
+    }
+
+    #guides .write .actions input {
+      margin-right: 1em;
+    }
+
+/****************************************************************************/
+/* Wiki
+/****************************************************************************/
+
+.wikistyle h1, .wikistyle h2, .wikistyle h3, .wikistyle h4, .wikistyle h5, .wikistyle h6 {
+  border: 0 !important;
+}
+
+.wikistyle h1 {
+  font-size: 170% !important;
+  border-top: 4px solid #aaa !important;
+  padding-top: .5em !important;
+  margin-top: 1.5em !important;
+}
+
+  .wikistyle h1:first-child {
+    margin-top: 0 !important;
+    padding-top: .25em !important;
+    border-top: none !important;
+  }
+
+.wikistyle h2 {
+  font-size: 150% !important;
+  margin-top: 1.5em !important;
+  border-top: 4px solid #e0e0e0 !important;
+  padding-top: .5em !important;
+}
+
+.wikistyle h3 {
+  margin-top: 1em !important;
+}
+
+.wikistyle p {
+  margin: 1em 0 !important;
+  line-height: 1.5em !important;
+}
+
+.wikistyle ul {
+  margin: 1em 0 1em 2em !important;
+}
+
+.wikistyle ol {
+  margin: 1em 0 1em 2em !important;
+}
+
+.wikistyle ul ul,
+.wikistyle ul ol,
+.wikistyle ol ol,
+.wikistyle ol ul {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.wikistyle blockquote {
+  margin: 1em 0 !important;
+  border-left: 5px solid #ddd !important;
+  padding-left: .6em !important;
+  color: #555 !important;
+}
+
+.wikistyle dt {
+  font-weight: bold !important;
+  margin-left: 1em !important;
+}
+
+.wikistyle dd {
+  margin-left: 2em !important;
+  margin-bottom: 1em !important;
+}
+
+.wikistyle table {
+  margin: 1em 0 !important;
+}
+
+  .wikistyle table th {
+    border-bottom: 1px solid #bbb !important;
+    padding: .2em 1em !important;
+  }
+
+  .wikistyle table td {
+    border-bottom: 1px solid #ddd !important;
+    padding: .2em 1em !important;
+  }
+
+.wikistyle pre {
+  margin: 1em 0 !important;
+  font-size: 90% !important;
+  background-color: #f8f8ff !important;
+  border: 1px solid #dedede !important;
+  padding: .5em !important;
+  line-height: 1.5em !important;
+  color: #444 !important;
+  overflow: auto !important;
+}
+
+  .wikistyle pre code {
+    padding: 0 !important;
+    font-size: 100% !important;
+    background-color: #f8f8ff !important;
+    border: none !important;
+  }
+
+.wikistyle code {
+  font-size: 90% !important;
+  background-color: #f8f8ff !important;
+  color: #444 !important;
+  padding: 0 .2em !important;
+  border: 1px solid #dedede !important;
+}
+
+/* console */
+
+.wikistyle pre.console {
+  margin: 1em 0 !important;
+  font-size: 90% !important;
+  background-color: black !important;
+  padding: .5em !important;
+  line-height: 1.5em !important;
+  color: white !important;
+}
+
+  .wikistyle pre.console code {
+    padding: 0 !important;
+    font-size: 100% !important;
+    background-color: black !important;
+    border: none !important;
+    color: white !important;
+  }
+
+  .wikistyle pre.console span {
+    color: #888 !important;
+  }
+
+  .wikistyle pre.console span.command {
+    color: yellow !important;
+  }

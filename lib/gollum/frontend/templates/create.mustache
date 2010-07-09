@@ -1,13 +1,18 @@
-<h1>Create a new page</h1>
+<div class="write">
+  <a href="/">&laquo; Home</a>
+  <h1>Create a new page</h1>
 
-<form method="post" action="/create/{{name}}">
-  <div>
-    <input type="text" name="page" value="{{name}}" />
-  </div>
-  <div>
-    <textarea name="content"></textarea>
-  </div>
-  <div>
-    <input type="submit" />
-  </div>
-</form>
+  <form class="new_wiki" method="post" action="/create/{{name}}">
+    <label>
+      Title<br />
+      <input class="text" type="text" name="page" value="{{name}}" />
+    </label>
+    <label>
+      Body
+      <textarea name="content"></textarea>
+    </label>
+    <div class="actions">
+      <input type="submit" value="Create page" />
+    </div>
+  </form>
+</div>
