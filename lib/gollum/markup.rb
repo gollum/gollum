@@ -22,8 +22,8 @@ module Gollum
     #
     # Returns the formatted String content.
     def render
-      data = extract_tags(@data)
-      data = extract_code(data)
+      data = extract_code(@data)
+      data = extract_tags(data)
       data = GitHub::Markup.render(@name, data) rescue ''
       data = process_tags(data)
       data = process_code(data)
