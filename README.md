@@ -30,6 +30,7 @@ formats and allowed extensions is:
   * Textile: .textile
   * RDoc: .rdoc
   * Org Mode: .org
+  * Creole: .creole
   * ReStructured Text: .rest.txt, .rst.txt, .rest, .rst
   * ASCIIDoc: .asciidoc
   * POD: .pod
