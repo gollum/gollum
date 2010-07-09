@@ -27,6 +27,9 @@ module Gollum
       data = GitHub::Markup.render(@name, data) rescue ''
       data = process_tags(data)
       data = process_code(data)
+      data = Sanitize.clean(data, SANITIZATION_OPTIONS)
+      data = data.gsub(/<p><\/p>/, '')
+      data
     end
 
     #########################################################################
@@ -100,7 +103,6 @@ module Gollum
 
         classes = [] # applied to whatever the outermost container is
         attrs = []   # applied to the image
-        styles = []  # applied to the image
 
         align = opts['align']
         if opts['float']
@@ -120,13 +122,13 @@ module Gollum
 
         if width = opts['width']
           if width =~ /^\d+(\.\d+)?(em|px)$/
-            styles << "max-width: #{width};"
+            attrs << %{width="#{width}"}
           end
         end
 
         if height = opts['height']
           if height =~ /^\d+(\.\d+)?(em|px)$/
-            styles << "max-height: #{height};"
+            attrs << %{height="#{height}"}
           end
         end
 
@@ -136,21 +138,16 @@ module Gollum
 
         attr_string = attrs.size > 0 ? attrs.join(' ') + ' ' : ''
 
-        style_string = ''
-        unless styles.empty?
-          style_string = %{ style="#{styles.join(' ')}"}
-        end
-
         if opts['frame'] || containered
           classes << 'frame' if opts['frame']
           %{<span class="#{classes.join(' ')}">} +
           %{<span>} +
-          %{<img src="/#{file.path}"#{style_string} #{attr_string}/>} +
+          %{<img src="/#{file.path}" #{attr_string}/>} +
           (alt ? %{<span>#{alt}</span>} : '') +
           %{</span>} +
           %{</span>}
         else
-          %{<img src="#{path}"#{style_string} #{attr_string}/>}
+          %{<img src="#{path}" #{attr_string}/>}
         end
       end
     end
