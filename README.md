@@ -69,10 +69,10 @@ or JavaScript. These tags will be stripped from the converted HTML.
 
 To link to another Gollum wiki page, use the Gollum Page Link Tag.
 
-    [[Frodo]]
+    [[Frodo Baggins]]
 
 The above tag will create a link to the corresponding page file named
-`Frodo.ext` where `ext` may be any of the allowed extension types. The
+`Frodo-Baggins.ext` where `ext` may be any of the allowed extension types. The
 conversion is as follows:
 
   1. Replace any spaces (U+0020) with dashes (U+002D)
