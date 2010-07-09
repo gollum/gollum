@@ -194,10 +194,16 @@ context "Markup" do
     compare(content, output)
   end
 
-  def compare(content, output)
+  test "org mode style double links" do
+    content = "a [[http://google.com][Google]] b"
+    output = "<p class=\"title\">a <a href=\"http://google.com\">Google</a> b</p>"
+    compare(content, output, 'org')
+  end
+
+  def compare(content, output, ext = "md")
     index = @wiki.repo.index
-    index.add("Bilbo-Baggins.md", content)
-    index.commit("Add alpha.jpg")
+    index.add("Bilbo-Baggins.#{ext}", content)
+    index.commit("Add baggins")
 
     page = @wiki.page("Bilbo Baggins")
     rendered = Gollum::Markup.new(page).render

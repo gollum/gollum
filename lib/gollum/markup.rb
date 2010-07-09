@@ -47,6 +47,8 @@ module Gollum
       data.gsub(/(.?)\[\[(.+?)\]\](.?)/m) do
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
+        elsif $2.include?('][')
+          $&
         else
           id = Digest::SHA1.hexdigest($2)
           @tagmap[id] = $2
