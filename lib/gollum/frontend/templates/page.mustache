@@ -9,3 +9,19 @@
     </div>
   </div>
 </div>
+<div class="admin">
+  <div style="float: left;">
+    <small>Last edited by <b>{{author}}</b>, {{date}}</small>
+    <div class="actions">
+      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
+    </div>
+  </div>
+  <div style="float: right;">
+    <small>Versions:</small>
+    <select id="versions_select" name="versions_select">
+      {{#versions}}
+        <option value="{{id}}">Version {{num}} ({{id7}}) by {{author}}</option>
+      {{/versions}}
+    </select>
+  </div>
+</div>

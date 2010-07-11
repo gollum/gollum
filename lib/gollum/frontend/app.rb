@@ -80,6 +80,7 @@ module Precious
     def show_page_or_file(name)
       wiki = Gollum::Wiki.new($path)
       if page = wiki.page(name)
+        @page = page
         @name = name
         @content = page.formatted_data
         mustache :page
