@@ -26,6 +26,7 @@ module Precious
           { :id => v.id,
             :id7 => v.id[0..6],
             :num => i,
+            :selected => @page.version.id == v.id,
             :author => v.author.name }
         end
       end

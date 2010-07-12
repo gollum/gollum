@@ -20,7 +20,7 @@
     <small>Versions:</small>
     <select id="versions_select" name="versions_select">
       {{#versions}}
-        <option value="{{id}}">Version {{num}} ({{id7}}) by {{author}}</option>
+        <option {{#selected}}selected="true" {{/selected}}value="/{{name}}/{{id}}">Version {{num}} ({{id7}}) by {{author}}</option>
       {{/versions}}
     </select>
   </div>

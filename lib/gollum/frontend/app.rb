@@ -73,6 +73,19 @@ module Precious
       redirect "/#{page}"
     end
 
+    get %r{/(.+?)/([0-9a-f]{40})} do
+      name = params[:captures][0]
+      wiki = Gollum::Wiki.new($path)
+      if page = wiki.page(name, params[:captures][1])
+        @page = page
+        @name = name
+        @content = page.formatted_data
+        mustache :page
+      else
+        halt 404
+      end
+    end
+
     get '/*' do
       show_page_or_file(params[:splat].first)
     end
