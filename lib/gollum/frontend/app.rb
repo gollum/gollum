@@ -1,12 +1,8 @@
-require 'rubygems'
-
 require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
 
 require 'gollum/frontend/views/layout'
-
-$path = "~/dev/sandbox/lotr2"
 
 module Precious
   class App < Sinatra::Base
@@ -106,5 +102,3 @@ module Precious
     end
   end
 end
-
-Precious::App.run!

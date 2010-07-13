@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
+help = <<HELP
+Gollum is a multi-format Wiki Engine/API/Frontend.
+
+Basic Command Line Usage:
+  gollum [options]
+
+Options:
+HELP
+
+require 'optparse'
+
+require 'rubygems'
+require 'gollum/frontend/app'
+
+exec = {}
+options = {}
+opts = OptionParser.new do |opts|
+  opts.banner = help
+
+  opts.on("--port [PORT]", "Bind port (default port 5432)") do |port|
+    options['port'] = port
+  end
+
+  opts.on("--version", "Display current version") do
+    puts "Gollum " + Gollum::VERSION
+    exit 0
+  end
+end
+
+# Read command line options into `options` hash
+opts.parse!
+
+$path = Dir.pwd
+
+Precious::App.run!
