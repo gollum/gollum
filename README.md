@@ -297,10 +297,11 @@ exist) and commit the change. The file will be written at the repo root.
 
     wiki.write_page('Page Name', :markdown, 'Page contents', commit)
 
-Update an existing page (keeps the same name, format, and directory location).
+Update an existing page. If the format is different than the page's current
+format, the file name will be changed to reflect the new format.
 
     page = wiki.page('Page Name')
-    wiki.update_page(page, 'Page contents', commit)
+    wiki.update_page(page, page.format, 'Page contents', commit)
 
 To delete a page and commit the change:
 

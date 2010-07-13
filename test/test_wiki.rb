@@ -74,13 +74,48 @@ context "Wiki page writing" do
     @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
 
     page = @wiki.page("Gollum")
-    @wiki.update_page(page, "# Gollum2", commit)
+    @wiki.update_page(page, :markdown, "# Gollum2", commit)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_equal "# Gollum2", @wiki.page("Gollum").raw_data
     assert_equal "Gollum page", @wiki.repo.commits.first.message
     assert_equal "Tom Preston-Werner", @wiki.repo.commits.first.author.name
     assert_equal "tom@github.com", @wiki.repo.commits.first.author.email
+  end
+
+  test "update page with format change" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+
+    assert_equal :markdown, @wiki.page("Gollum").format
+
+    page = @wiki.page("Gollum")
+    @wiki.update_page(page, :textile, "h1. Gollum", commit)
+
+    assert_equal 2, @wiki.repo.commits.size
+    assert_equal :textile, @wiki.page("Gollum").format
+    assert_equal "h1. Gollum", @wiki.page("Gollum").raw_data
+  end
+
+  test "update nested page with format change" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+
+    index = @wiki.repo.index
+    index.add("lotr/Gollum.md", "# Gollum")
+    index.commit("Add nested page")
+
+    page = @wiki.page("Gollum")
+    assert_equal :markdown, @wiki.page("Gollum").format
+    @wiki.update_page(page, :textile, "h1. Gollum", commit)
+
+    page = @wiki.page("Gollum")
+    assert_equal "lotr/Gollum.textile", page.path
+    assert_equal :textile, page.format
+    assert_equal "h1. Gollum", page.raw_data
   end
 
   test "delete root page" do

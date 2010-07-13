@@ -54,8 +54,10 @@ module Precious
       name = params[:name]
       wiki = Gollum::Wiki.new($path)
       page = wiki.page(name)
+      format = params[:format].intern
 
-      wiki.update_page(page, params[:content], commit_message)
+      wiki.update_page(page, format, params[:content], commit_message)
+
       redirect "/#{name}"
     end
 

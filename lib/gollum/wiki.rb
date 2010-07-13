@@ -6,10 +6,10 @@ module Gollum
       # Sets the page class used by all instances of this Wiki.
       attr_writer :page_class
 
-      # Sets the file class used by all instances of this Wiki.  
+      # Sets the file class used by all instances of this Wiki.
       attr_writer :file_class
 
-      # Gets the page class used by all instances of this Wiki.  
+      # Gets the page class used by all instances of this Wiki.
       # Default: Gollum::Page.
       def page_class
         @page_class ||
@@ -20,7 +20,7 @@ module Gollum
           end
       end
 
-      # Gets the file class used by all instances of this Wiki.  
+      # Gets the file class used by all instances of this Wiki.
       # Default: Gollum::File.
       def file_class
         @file_class ||
@@ -31,7 +31,7 @@ module Gollum
           end
       end
     end
-      
+
 
     # The String base path to prefix to internal links. For example, when set
     # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
@@ -40,7 +40,7 @@ module Gollum
 
     # Public: Initialize a new Gollum Repo.
     #
-    # repo    - The String path to the Git repository that holds the Gollum 
+    # repo    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
     #           :page_class - The page Class. Default: Gollum::Page
@@ -85,6 +85,7 @@ module Gollum
     # Public: Write a new version of a page to the Gollum repo root.
     #
     # name   - The String name of the page.
+    # format - The Symbol format of the page.
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
     #          :message - The String commit message.
@@ -93,14 +94,12 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
-      ext  = @page_class.format_to_ext(format)
-      path = @page_class.cname(name) + '.' + ext
-
       map = {}
       if pcommit = @repo.commit('master')
         map = tree_map(pcommit.tree)
       end
-      map[path] = normalize(data)
+
+      map = add_to_tree_map(map, '', name, format, data)
       index = tree_map_to_index(map)
 
       parents = pcommit ? [pcommit] : []
@@ -109,9 +108,12 @@ module Gollum
     end
 
     # Public: Update an existing page with new content. The location of the
-    # page inside the repository and the page's format will not change.
+    # page inside the repository will not change. If the given format is
+    # different than the current format of the page, the filename will be
+    # changed to reflect the new format.
     #
     # page   - The Gollum::Page to update.
+    # format - The Symbol format of the page.
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
     #          :message - The String commit message.
@@ -119,11 +121,22 @@ module Gollum
     #          :email   - The String email address.
     #
     # Returns the String SHA1 of the newly written version.
-    def update_page(page, data, commit = {})
+    def update_page(page, format, data, commit = {})
       pcommit = @repo.commit('master')
       map = tree_map(pcommit.tree)
-      index = tree_map_to_index(map)
-      index.add(page.path, normalize(data))
+
+      index = nil
+
+      if page.format == format
+        index = tree_map_to_index(map)
+        index.add(page.path, normalize(data))
+      else
+        map = delete_from_tree_map(map, page.path)
+        dir = ::File.dirname(page.path)
+        name = page.name.split('.')[0..-2].join('.')
+        map = add_to_tree_map(map, dir, name, format, data)
+        index = tree_map_to_index(map)
+      end
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
       index.commit(commit[:message], [pcommit], actor)
@@ -142,14 +155,7 @@ module Gollum
       pcommit = @repo.commit('master')
       map = tree_map(pcommit.tree)
 
-      parts = page.path.split('/')
-      name = parts.pop
-      container = nil
-      parts.each do |part|
-        container = map[part]
-      end
-      (container || map).delete(name)
-
+      map = delete_from_tree_map(map, page.path)
       index = tree_map_to_index(map)
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
@@ -262,6 +268,37 @@ module Gollum
         end
       end
       index
+    end
+
+    def add_to_tree_map(map, dir, name, format, data)
+      ext  = @page_class.format_to_ext(format)
+      path = @page_class.cname(name) + '.' + ext
+
+      parts = dir.split('/')
+      container = nil
+      parts.each do |part|
+        container = map[part]
+      end
+
+      (container || map)[path] = normalize(data)
+      map
+    end
+
+    # Delete an entry from a tree map.
+    #
+    # map  - The Hash tree map of the repository.
+    # path - The String path of the file to delete.
+    #
+    # Returns the modified Hash tree map.
+    def delete_from_tree_map(map, path)
+      parts = path.split('/')
+      name = parts.pop
+      container = nil
+      parts.each do |part|
+        container = map[part]
+      end
+      (container || map).delete(name)
+      map
     end
   end
 end

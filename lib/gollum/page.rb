@@ -25,7 +25,7 @@ module Gollum
       @blob = nil
     end
 
-    # Public: The on-disk filename of the page.
+    # Public: The on-disk filename of the page including extension.
     #
     # Returns the String name.
     def name
