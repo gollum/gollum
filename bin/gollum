@@ -23,7 +23,7 @@ options = {}
 opts = OptionParser.new do |opts|
   opts.banner = help
 
-  opts.on("--port [PORT]", "Bind port (default port 5432).") do |port|
+  opts.on("--port [PORT]", "Bind port (default port 4567).") do |port|
     options['port'] = port
   end
 
