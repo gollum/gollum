@@ -21,7 +21,9 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a class="internal present" href="/Bilbo-Baggins">Bilbo Baggins</a> b</p>}, output
+    assert_match /class="internal present"/, output
+    assert_match /href="\/Bilbo-Baggins"/,   output
+    assert_match /\>Bilbo Baggins\</,        output
   end
 
   test "absent page link" do
@@ -29,7 +31,9 @@ context "Markup" do
 
     page = @wiki.page("Tolkien")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a class="internal absent" href="/J.-R.-R.-Tolkien">J. R. R. Tolkien</a>'s b</p>}, output
+    assert_match /class="internal absent"/,         output
+    assert_match /href="\/J\.\-R\.\-R\.\-Tolkien"/, output
+    assert_match /\>J\. R\. R\. Tolkien\</,         output
   end
 
   test "page link with custom base path" do
@@ -39,7 +43,9 @@ context "Markup" do
 
       page = @wiki.page("Bilbo Baggins")
       output = Gollum::Markup.new(page).render
-      assert_equal %{<p>a <a class="internal present" href="/wiki/Bilbo-Baggins">Bilbo Baggins</a> b</p>}, output
+      assert_match /class="internal present"/,     output
+      assert_match /href="\/wiki\/Bilbo-Baggins"/, output
+      assert_match /\>Bilbo Baggins\</,            output
     end
   end
 
@@ -202,7 +208,10 @@ context "Markup" do
   test "quoted wiki link" do
     content = "a '[[Foo]]', b"
     output = "<p>a '<a class=\"internal absent\" href=\"/Foo\">Foo</a>', b</p>"
-    compare(content, output)
+    compare(content, output, 'md', [
+      /class="internal absent"/,
+      /href="\/Foo"/,
+      /\>Foo\</])
   end
 
   test "org mode style double links" do
@@ -211,14 +220,18 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
-  def compare(content, output, ext = "md")
+  def compare(content, output, ext = "md", regexes = [])
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.#{ext}", content)
     index.commit("Add baggins")
 
     page = @wiki.page("Bilbo Baggins")
     rendered = Gollum::Markup.new(page).render
-    assert_equal output, rendered
+    if regexes.empty?
+      assert_equal output, rendered
+    else
+      regexes.each { |r| assert_match r, output }
+    end
   end
 
   def relative_image(content, output)
