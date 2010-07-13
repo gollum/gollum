@@ -30,6 +30,7 @@ formats and allowed extensions is:
   * Textile: .textile
   * RDoc: .rdoc
   * Org Mode: .org
+  * Creole: .creole
   * ReStructured Text: .rest.txt, .rst.txt, .rest, .rst
   * ASCIIDoc: .asciidoc
   * POD: .pod
@@ -69,10 +70,10 @@ or JavaScript. These tags will be stripped from the converted HTML.
 
 To link to another Gollum wiki page, use the Gollum Page Link Tag.
 
-    [[Frodo]]
+    [[Frodo Baggins]]
 
 The above tag will create a link to the corresponding page file named
-`Frodo.ext` where `ext` may be any of the allowed extension types. The
+`Frodo-Baggins.ext` where `ext` may be any of the allowed extension types. The
 conversion is as follows:
 
   1. Replace any spaces (U+0020) with dashes (U+002D)
@@ -229,6 +230,10 @@ Initialize the Gollum::Repo object:
     # Git repository.
     wiki = Gollum::Wiki.new("my-gollum-repo.git")
     # => <Gollum::Wiki>
+
+By default, internal wiki links are all absolute from the root. To specify a different base path, you can send specify the `:base_path` option:
+
+    wiki = Gollum::Wiki.new("my-gollum-repo.git", :base_path => "/wiki")
 
 Get the latest version of the given human or canonical page name:
 

@@ -33,6 +33,11 @@ module Gollum
     end
       
 
+    # The String base path to prefix to internal links. For example, when set
+    # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
+    # to "/".
+    attr_reader :base_path
+
     # Public: Initialize a new Gollum Repo.
     #
     # repo    - The String path to the Git repository that holds the Gollum 
@@ -45,6 +50,7 @@ module Gollum
     def initialize(path, options = {})
       @path       = path
       @repo       = Grit::Repo.new(path)
+      @base_path  = options[:base_path] || "/"
       @page_class = options[:page_class] || self.class.page_class
       @file_class = options[:file_class] || self.class.file_class
     end
@@ -94,7 +100,7 @@ module Gollum
       if pcommit = @repo.commit('master')
         map = tree_map(pcommit.tree)
       end
-      map[path] = data
+      map[path] = normalize(data)
       index = tree_map_to_index(map)
 
       parents = pcommit ? [pcommit] : []
@@ -117,7 +123,7 @@ module Gollum
       pcommit = @repo.commit('master')
       map = tree_map(pcommit.tree)
       index = tree_map_to_index(map)
-      index.add(page.path, data)
+      index.add(page.path, normalize(data))
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
       index.commit(commit[:message], [pcommit], actor)
@@ -186,6 +192,15 @@ module Gollum
     #
     # Returns the String path.
     attr_reader :path
+
+    # Normalize the data.
+    #
+    # data - The String data to be normalized.
+    #
+    # Returns the normalized data String.
+    def normalize(data)
+      data.gsub(/\r/, '')
+    end
 
     # Fill an array with a list of pages.
     #

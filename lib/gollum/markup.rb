@@ -22,11 +22,14 @@ module Gollum
     #
     # Returns the formatted String content.
     def render
-      data = extract_tags(@data)
-      data = extract_code(data)
+      data = extract_code(@data)
+      data = extract_tags(data)
       data = GitHub::Markup.render(@name, data) rescue ''
       data = process_tags(data)
       data = process_code(data)
+      data = Sanitize.clean(data, SANITIZATION_OPTIONS)
+      data = data.gsub(/<p><\/p>/, '')
+      data
     end
 
     #########################################################################
@@ -41,10 +44,16 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
-      data.gsub(/\[\[(.+?)\]\]/) do
-        id = Digest::SHA1.hexdigest($1)
-        @tagmap[id] = $1
-        id
+      data.gsub(/(.?)\[\[(.+?)\]\](.?)/m) do
+        if $1 == "'" && $3 != "'"
+          "[[#{$2}]]#{$3}"
+        elsif $2.include?('][')
+          $&
+        else
+          id = Digest::SHA1.hexdigest($2)
+          @tagmap[id] = $2
+          "#{$1}#{id}#{$3}"
+        end
       end
     end
 
@@ -85,22 +94,28 @@ module Gollum
     def process_image_tag(tag)
       parts = tag.split('|')
       name = parts[0].strip
+      path = nil
 
       if file = find_file(name)
+        path = "/#{file.path}"
+      elsif name =~ /^https?:\/\/.+(jpg|png|gif|svg|bmp)$/
+        path = name
+      end
+
+      if path
         opts = parse_image_tag_options(tag)
 
         containered = false
 
         classes = [] # applied to whatever the outermost container is
         attrs = []   # applied to the image
-        styles = []  # applied to the image
 
         align = opts['align']
         if opts['float']
           containered = true
           align ||= 'left'
           if %w{left right}.include?(align)
-            classes << "float-#{align};"
+            classes << "float-#{align}"
           end
         elsif %w{top texttop middle absmiddle bottom absbottom baseline}.include?(align)
           attrs << %{align="#{align}"}
@@ -113,13 +128,13 @@ module Gollum
 
         if width = opts['width']
           if width =~ /^\d+(\.\d+)?(em|px)$/
-            styles << "max-width: #{width};"
+            attrs << %{width="#{width}"}
           end
         end
 
         if height = opts['height']
           if height =~ /^\d+(\.\d+)?(em|px)$/
-            styles << "max-height: #{height};"
+            attrs << %{height="#{height}"}
           end
         end
 
@@ -129,21 +144,16 @@ module Gollum
 
         attr_string = attrs.size > 0 ? attrs.join(' ') + ' ' : ''
 
-        style_string = ''
-        unless styles.empty?
-          style_string = %{ style="#{styles.join(' ')}"}
-        end
-
         if opts['frame'] || containered
           classes << 'frame' if opts['frame']
-          %{<div class="#{classes.join(' ')}">} +
-          %{<div>} +
-          %{<img src="/#{file.path}"#{style_string} #{attr_string}/>} +
-          (alt ? %{<p>#{alt}</p>} : '') +
-          %{</div>} +
-          %{</div>}
+          %{<span class="#{classes.join(' ')}">} +
+          %{<span>} +
+          %{<img src="/#{file.path}" #{attr_string}/>} +
+          (alt ? %{<span>#{alt}</span>} : '') +
+          %{</span>} +
+          %{</span>}
         else
-          %{<img src="/#{file.path}"#{style_string} #{attr_string}/>}
+          %{<img src="#{path}" #{attr_string}/>}
         end
       end
     end
@@ -192,7 +202,9 @@ module Gollum
       parts = tag.split('|')
       name = parts[0].strip
       cname = Page.cname((parts[1] || parts[0]).strip)
-      %{<a href="#{cname}">#{name}</a>}
+      link = ::File.join(@wiki.base_path, cname)
+      presence = @wiki.page(cname) ? "present" : "absent"
+      %{<a class="internal #{presence}" href="#{link}">#{name}</a>}
     end
 
     # Find the given file in the repo.
@@ -221,7 +233,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub(/^``` ?(.+)\n(.+)\n```$/m) do
+      data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
         id = Digest::SHA1.hexdigest($2)
         @codemap[id] = { :lang => $1, :code => $2 }
         id

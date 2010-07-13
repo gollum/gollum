@@ -1,0 +1,33 @@
+<div class="guide">
+  <div class="main">
+    <div class="actions">
+      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
+    </div>
+    <h1>{{human_name}}</h1>
+    <div class="wikistyle">
+      {{{content}}}
+    </div>
+  </div>
+</div>
+<div class="admin">
+  <div style="float: left;">
+    <small>Last edited by <b>{{author}}</b>, {{date}}</small>
+    <div class="actions">
+      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
+    </div>
+  </div>
+  <div style="float: right;">
+    <small>Versions:</small>
+    <select id="versions_select" name="versions_select">
+      {{#versions}}
+        <option {{#selected}}selected="true" {{/selected}}value="/{{name}}/{{id}}">Version {{num}} ({{id7}}) by {{author}}</option>
+      {{/versions}}
+    </select>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('#versions_select').change(function() {
+    location.href = this.value
+  })
+</script>

@@ -4,7 +4,7 @@ module Gollum
 
     Wiki.page_class = self
 
-    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|re?st(\.txt)?|asciidoc|pod|\d)$/i
+    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|\d)$/i
 
     # Public: Initialize a page.
     #
@@ -57,6 +57,8 @@ module Gollum
           :rdoc
         when /\.(org)$/i
           :org
+        when /\.(creole)$/i
+          :creole
         when /\.(re?st(\.txt)?)$/i
           :rest
         when /\.(asciidoc)$/i
@@ -117,6 +119,7 @@ module Gollum
         when :textile then 'textile'
         when :rdoc then 'rdoc'
         when :org then 'org'
+        when :creole then 'creole'
         when :rest then 'rest'
         when :asciidoc then 'asciidoc'
         when :pod then 'pod'

@@ -1,0 +1,55 @@
+a.absent {
+  color: #a00;
+}
+
+/* Images */
+
+.frame {
+  margin: 0;
+  display: inline-block;
+}
+
+.frame img {
+  display: block;
+}
+
+.frame > span {
+  display: block;
+  border: 1px solid #aaa;
+  padding: 4px;
+}
+
+.frame span span {
+  display: block;
+  font-size: 10pt;
+  margin: 0;
+  padding: 4px 0 2px 0;
+  text-align: center;
+  line-height: 10pt;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.float-left {
+  float: left;
+  padding: .5em 1em .25em 0;
+}
+
+.float-right {
+  float: right;
+  padding: .5em 0 .25em 1em;
+}
+
+.align-left {
+  display: block;
+  text-align: left;
+}
+
+.align-center {
+  display: block;
+  text-align: center;
+}
+
+.align-right {
+  display: block;
+  text-align: right;
+}

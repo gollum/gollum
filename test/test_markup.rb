@@ -21,7 +21,36 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a href="Bilbo-Baggins">Bilbo Baggins</a> b</p>\n}, output
+    assert_equal %{<p>a <a class="internal present" href="/Bilbo-Baggins">Bilbo Baggins</a> b</p>}, output
+  end
+
+  test "absent page link" do
+    @wiki.write_page("Tolkien", :markdown, "a [[J. R. R. Tolkien]]'s b", @commit)
+
+    page = @wiki.page("Tolkien")
+    output = Gollum::Markup.new(page).render
+    assert_equal %{<p>a <a class="internal absent" href="/J.-R.-R.-Tolkien">J. R. R. Tolkien</a>'s b</p>}, output
+  end
+
+  test "page link with custom base path" do
+    ["/wiki", "/wiki/"].each do |path|
+      @wiki = Gollum::Wiki.new(@path, :base_path => path)
+      @wiki.write_page("Bilbo Baggins", :markdown, "a [[Bilbo Baggins]] b", @commit)
+
+      page = @wiki.page("Bilbo Baggins")
+      output = Gollum::Markup.new(page).render
+      assert_equal %{<p>a <a class="internal present" href="/wiki/Bilbo-Baggins">Bilbo Baggins</a> b</p>}, output
+    end
+  end
+
+  test "image with http url" do
+    ['http', 'https'].each do |scheme|
+      @wiki.write_page("Bilbo Baggins", :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", @commit)
+
+      page = @wiki.page("Bilbo Baggins")
+      output = Gollum::Markup.new(page).render
+      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.jpg" /> b</p>}, output
+    end
   end
 
   test "image with absolute path" do
@@ -32,7 +61,7 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="/alpha.jpg" /> b</p>\n}, output
+    assert_equal %{<p>a <img src="/alpha.jpg" /> b</p>}, output
   end
 
   test "image with relative path" do
@@ -43,12 +72,12 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="/greek/alpha.jpg" /> b</p>\n}, output
+    assert_equal %{<p>a <img src="/greek/alpha.jpg" /> b</p>}, output
   end
 
   test "image with alt" do
     content = "a [[alpha.jpg|alt=Alpha Dog]] b"
-    output = %{<p>a <img src="/greek/alpha.jpg" alt="Alpha Dog" /> b</p>\n}
+    output = %{<p>a <img src="/greek/alpha.jpg" alt="Alpha Dog" /> b</p>}
     relative_image(content, output)
   end
 
@@ -56,7 +85,7 @@ context "Markup" do
     %w{em px}.each do |unit|
       %w{width height}.each do |dim|
         content = "a [[alpha.jpg|#{dim}=100#{unit}]] b"
-        output = "<p>a <img src=\"/greek/alpha.jpg\" style=\"max-#{dim}: 100#{unit};\" /> b</p>\n"
+        output = "<p>a <img src=\"/greek/alpha.jpg\" #{dim}=\"100#{unit}\" /> b</p>"
         relative_image(content, output)
       end
     end
@@ -65,7 +94,7 @@ context "Markup" do
   test "image with bogus dimension" do
     %w{width height}.each do |dim|
       content = "a [[alpha.jpg|#{dim}=100]] b"
-      output = "<p>a <img src=\"/greek/alpha.jpg\" /> b</p>\n"
+      output = "<p>a <img src=\"/greek/alpha.jpg\" /> b</p>"
       relative_image(content, output)
     end
   end
@@ -73,7 +102,7 @@ context "Markup" do
   test "image with vertical align" do
     %w{top texttop middle absmiddle bottom absbottom baseline}.each do |align|
       content = "a [[alpha.jpg|align=#{align}]] b"
-      output = "<p>a <img src=\"/greek/alpha.jpg\" align=\"#{align}\" /> b</p>\n"
+      output = "<p>a <img src=\"/greek/alpha.jpg\" align=\"#{align}\" /> b</p>"
       relative_image(content, output)
     end
   end
@@ -81,34 +110,34 @@ context "Markup" do
   test "image with horizontal align" do
     %w{left center right}.each do |align|
       content = "a [[alpha.jpg|align=#{align}]] b"
-      output = "<p>a <div class=\"align-#{align}\"><div><img src=\"/greek/alpha.jpg\" /></div></div> b</p>\n"
+      output = "<p>a <span class=\"align-#{align}\"><span><img src=\"/greek/alpha.jpg\" /></span></span> b</p>"
       relative_image(content, output)
     end
   end
 
   test "image with float" do
     content = "a\n\n[[alpha.jpg|float]]\n\nb"
-    output = "<p>a</p>\n\n<p><div class=\"float-left;\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+    output = "<p>a</p>\n\n<p><span class=\"float-left\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
   end
 
   test "image with float and align" do
     %w{left right}.each do |align|
       content = "a\n\n[[alpha.jpg|float|align=#{align}]]\n\nb"
-      output = "<p>a</p>\n\n<p><div class=\"float-#{align};\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+      output = "<p>a</p>\n\n<p><span class=\"float-#{align}\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>"
       relative_image(content, output)
     end
   end
 
   test "image with frame" do
     content = "a\n\n[[alpha.jpg|frame]]\n\nb"
-    output = "<p>a</p>\n\n<p><div class=\"frame\"><div><img src=\"/greek/alpha.jpg\" /></div></div></p>\n\n<p>b</p>\n"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
   end
 
   test "image with frame and alt" do
     content = "a\n\n[[alpha.jpg|frame|alt=Alpha]]\n\nb"
-    output = "<p>a</p>\n\n<p><div class=\"frame\"><div><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><p>Alpha</p></div></div></p>\n\n<p>b</p>\n"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><span>Alpha</span></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
   end
 
@@ -120,7 +149,7 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a href="/alpha.jpg">Alpha</a> b</p>\n}, output
+    assert_equal %{<p>a <a href="/alpha.jpg">Alpha</a> b</p>}, output
   end
 
   test "file link with relative path" do
@@ -131,18 +160,61 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a href="/greek/alpha.jpg">Alpha</a> b</p>\n}, output
+    assert_equal %{<p>a <a href="/greek/alpha.jpg">Alpha</a> b</p>}, output
   end
 
   test "code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
-    output = "<p>a</p>\n\n<p><div class=\"highlight\"><pre>" +
+    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div></p>\n\n<p>b</p>\n"
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
     index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered
+  end
+
+  test "code blocks with carriage returns" do
+    content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
+    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
+             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered
+  end
+
+  test "escaped wiki link" do
+    content = "a '[[Foo]], b"
+    output = "<p>a [[Foo]], b</p>"
+    compare(content, output)
+  end
+
+  test "quoted wiki link" do
+    content = "a '[[Foo]]', b"
+    output = "<p>a '<a class=\"internal absent\" href=\"/Foo\">Foo</a>', b</p>"
+    compare(content, output)
+  end
+
+  test "org mode style double links" do
+    content = "a [[http://google.com][Google]] b"
+    output = "<p class=\"title\">a <a href=\"http://google.com\">Google</a> b</p>"
+    compare(content, output, 'org')
+  end
+
+  def compare(content, output, ext = "md")
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.#{ext}", content)
+    index.commit("Add baggins")
 
     page = @wiki.page("Bilbo Baggins")
     rendered = Gollum::Markup.new(page).render
