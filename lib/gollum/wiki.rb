@@ -3,8 +3,35 @@ module Gollum
     include Pagination
 
     class << self
-      attr_accessor :page_class, :file_class
+      # Sets the page class used by all instances of this Wiki.
+      attr_writer :page_class
+
+      # Sets the file class used by all instances of this Wiki.  
+      attr_writer :file_class
+
+      # Gets the page class used by all instances of this Wiki.  
+      # Default: Gollum::Page.
+      def page_class
+        @page_class ||
+          if superclass.respond_to?(:page_class)
+            superclass.page_class
+          else
+            ::Gollum::Page
+          end
+      end
+
+      # Gets the file class used by all instances of this Wiki.  
+      # Default: Gollum::File.
+      def file_class
+        @file_class ||
+          if superclass.respond_to?(:file_class)
+            superclass.file_class
+          else
+            ::Gollum::File
+          end
+      end
     end
+      
 
     # Public: Initialize a new Gollum Repo.
     #
