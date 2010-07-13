@@ -231,6 +231,10 @@ Initialize the Gollum::Repo object:
     wiki = Gollum::Wiki.new("my-gollum-repo.git")
     # => <Gollum::Wiki>
 
+By default, internal wiki links are all absolute from the root. To specify a different base path, you can send specify the `:base_path` option:
+
+    wiki = Gollum::Wiki.new("my-gollum-repo.git", :base_path => "/wiki")
+
 Get the latest version of the given human or canonical page name:
 
     page = wiki.page('page-name')

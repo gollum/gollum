@@ -202,11 +202,9 @@ module Gollum
       parts = tag.split('|')
       name = parts[0].strip
       cname = Page.cname((parts[1] || parts[0]).strip)
-      if @wiki.page(cname)
-        %{<a class="internal present" href="#{cname}">#{name}</a>}
-      else
-        %{<a class="internal absent" href="#{cname}">#{name}</a>}
-      end
+      link = ::File.join(@wiki.base_path, cname)
+      presence = @wiki.page(cname) ? "present" : "absent"
+      %{<a class="internal #{presence}" href="#{link}">#{name}</a>}
     end
 
     # Find the given file in the repo.

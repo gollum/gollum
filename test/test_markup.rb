@@ -21,7 +21,7 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a class="internal present" href="Bilbo-Baggins">Bilbo Baggins</a> b</p>}, output
+    assert_equal %{<p>a <a class="internal present" href="/Bilbo-Baggins">Bilbo Baggins</a> b</p>}, output
   end
 
   test "absent page link" do
@@ -29,7 +29,18 @@ context "Markup" do
 
     page = @wiki.page("Tolkien")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <a class="internal absent" href="J.-R.-R.-Tolkien">J. R. R. Tolkien</a>'s b</p>}, output
+    assert_equal %{<p>a <a class="internal absent" href="/J.-R.-R.-Tolkien">J. R. R. Tolkien</a>'s b</p>}, output
+  end
+
+  test "page link with custom base path" do
+    ["/wiki", "/wiki/"].each do |path|
+      @wiki = Gollum::Wiki.new(@path, :base_path => path)
+      @wiki.write_page("Bilbo Baggins", :markdown, "a [[Bilbo Baggins]] b", @commit)
+
+      page = @wiki.page("Bilbo Baggins")
+      output = Gollum::Markup.new(page).render
+      assert_equal %{<p>a <a class="internal present" href="/wiki/Bilbo-Baggins">Bilbo Baggins</a> b</p>}, output
+    end
   end
 
   test "image with http url" do
@@ -190,7 +201,7 @@ context "Markup" do
 
   test "quoted wiki link" do
     content = "a '[[Foo]]', b"
-    output = "<p>a '<a class=\"internal absent\" href=\"Foo\">Foo</a>', b</p>"
+    output = "<p>a '<a class=\"internal absent\" href=\"/Foo\">Foo</a>', b</p>"
     compare(content, output)
   end
 

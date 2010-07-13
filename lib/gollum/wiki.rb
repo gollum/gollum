@@ -6,6 +6,11 @@ module Gollum
       attr_accessor :page_class, :file_class
     end
 
+    # The String base path to prefix to internal links. For example, when set
+    # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
+    # to "/".
+    attr_reader :base_path
+
     # Public: Initialize a new Gollum Repo.
     #
     # repo    - The String path to the Git repository that holds the Gollum 
@@ -18,6 +23,7 @@ module Gollum
     def initialize(path, options = {})
       @path       = path
       @repo       = Grit::Repo.new(path)
+      @base_path  = options[:base_path] || "/"
       @page_class = options[:page_class] || self.class.page_class
       @file_class = options[:file_class] || self.class.file_class
     end
