@@ -5,6 +5,15 @@ module Gollum
     Wiki.page_class = self
 
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|\d)$/i
+    FORMAT_NAMES = { :markdown => "Markdown",
+                     :textile => "Textile",
+                     :rdoc => "RDoc",
+                     :org => "Org-mode",
+                     :creole => "Creole",
+                     :rest => "reStructuredText",
+                     :asciidoc => "AsciiDoc",
+                     :pod => "Pod",
+                     :roff => "roff" }
 
     # Public: Initialize a page.
     #

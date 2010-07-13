@@ -4,8 +4,20 @@
 
   <form class="edit_wiki" method="post" action="/edit/{{name}}">
     <label>
+      Format<br />
+      <select name="format">
+        {{#formats}}
+          <option {{#selected}}selected="true" {{/selected}}value="{{id}}">{{name}}</option>
+        {{/formats}}
+      </select>
+    </label>
+    <label>
       Body
       <textarea name="content">{{content}}</textarea>
+    </label>
+    <label>
+      Edit Summary <small>(Briefly describe the changes you have made)</small><br />
+      <input type="text" class="text" name="message" />
     </label>
     <div class="actions">
       <input type="submit" value="Save page" />

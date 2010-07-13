@@ -3,6 +3,7 @@ require 'gollum'
 require 'mustache/sinatra'
 
 require 'gollum/frontend/views/layout'
+require 'gollum/frontend/views/editable'
 
 module Precious
   class App < Sinatra::Base
@@ -41,6 +42,7 @@ module Precious
       @name = params[:name]
       wiki = Gollum::Wiki.new($path)
       if page = wiki.page(@name)
+        @page = page
         @content = page.raw_data
         mustache :edit
       else
@@ -52,20 +54,18 @@ module Precious
       name = params[:name]
       wiki = Gollum::Wiki.new($path)
       page = wiki.page(name)
-      commit = { :message => 'commit message',
-                 :name => 'Tom Preston-Werner',
-                 :email => 'tom@github.com' }
-      wiki.update_page(page, params[:content], commit)
+
+      wiki.update_page(page, params[:content], commit_message)
       redirect "/#{name}"
     end
 
     post '/create/:page' do
       page = params[:page]
       wiki = Gollum::Wiki.new($path)
-      commit = { :message => 'commit message',
-                 :name => 'Tom Preston-Werner',
-                 :email => 'tom@github.com' }
-      wiki.write_page(page, :markdown, params[:content], commit)
+
+      format = params[:format].intern
+
+      wiki.write_page(page, format, params[:content], commit_message)
       redirect "/#{page}"
     end
 
@@ -99,6 +99,15 @@ module Precious
         @name = name
         mustache :create
       end
+    end
+
+    def commit_message
+      message = params[:message]
+      author_name = `git config --get user.name`.strip || 'Anonymous'
+      author_email = `git config --get user.email`.strip || 'anon@anon.com'
+      { :message => message,
+        :name => author_name,
+        :email => author_email }
     end
   end
 end

@@ -7,10 +7,23 @@
       Title<br />
       <input class="text" type="text" name="page" value="{{name}}" />
     </label>
+        <label>
+      Format<br />
+      <select name="format">
+        {{#formats}}
+          <option {{#selected}}selected="true" {{/selected}}value="{{id}}">{{name}}</option>
+        {{/formats}}
+      </select>
+    </label>
     <label>
       Body
       <textarea name="content"></textarea>
     </label>
+    <label>
+      Edit Summary <small>(Briefly describe the changes you have made)</small><br />
+      <input type="text" class="text" name="message" value="Create '{{name}}' page." />
+    </label>
+
     <div class="actions">
       <input type="submit" value="Create page" />
     </div>
