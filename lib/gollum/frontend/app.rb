@@ -59,14 +59,14 @@ module Precious
       redirect "/#{name}"
     end
 
-    post '/create/:page' do
-      page = params[:page]
+    post '/create/:name' do
+      page = params[:name]
       wiki = Gollum::Wiki.new($path)
 
       format = params[:format].intern
 
       wiki.write_page(page, format, params[:content], commit_message)
-      redirect "/#{page}"
+      redirect "/#{name}"
     end
 
     get %r{/(.+?)/([0-9a-f]{40})} do
