@@ -48,8 +48,8 @@ module Gollum
     def find(name, version)
       commit = @wiki.repo.commit(version)
       if blob = commit.tree / name
-        @blob = blob
-        @path = name
+        @blob    = blob
+        @path    = name
         @version = commit
         self
       else

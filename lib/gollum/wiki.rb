@@ -50,7 +50,7 @@ module Gollum
     def initialize(path, options = {})
       @path       = path
       @repo       = Grit::Repo.new(path)
-      @base_path  = options[:base_path] || "/"
+      @base_path  = options[:base_path]  || "/"
       @page_class = options[:page_class] || self.class.page_class
       @file_class = options[:file_class] || self.class.file_class
     end
@@ -99,11 +99,11 @@ module Gollum
         map = tree_map(pcommit.tree)
       end
 
-      map = add_to_tree_map(map, '', name, format, data)
+      map   = add_to_tree_map(map, '', name, format, data)
       index = tree_map_to_index(map)
 
       parents = pcommit ? [pcommit] : []
-      actor = Grit::Actor.new(commit[:name], commit[:email])
+      actor   = Grit::Actor.new(commit[:name], commit[:email])
       index.commit(commit[:message], parents, actor)
     end
 
@@ -123,7 +123,7 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def update_page(page, format, data, commit = {})
       pcommit = @repo.commit('master')
-      map = tree_map(pcommit.tree)
+      map     = tree_map(pcommit.tree)
 
       index = nil
 
@@ -131,10 +131,10 @@ module Gollum
         index = tree_map_to_index(map)
         index.add(page.path, normalize(data))
       else
-        map = delete_from_tree_map(map, page.path)
-        dir = ::File.dirname(page.path)
-        name = page.name.split('.')[0..-2].join('.')
-        map = add_to_tree_map(map, dir, name, format, data)
+        map   = delete_from_tree_map(map, page.path)
+        dir   = ::File.dirname(page.path)
+        name  = page.name.split('.')[0..-2].join('.')
+        map   = add_to_tree_map(map, dir, name, format, data)
         index = tree_map_to_index(map)
       end
 
@@ -153,9 +153,9 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def delete_page(page, commit)
       pcommit = @repo.commit('master')
-      map = tree_map(pcommit.tree)
+      map     = tree_map(pcommit.tree)
 
-      map = delete_from_tree_map(map, page.path)
+      map   = delete_from_tree_map(map, page.path)
       index = tree_map_to_index(map)
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
@@ -292,7 +292,7 @@ module Gollum
     # Returns the modified Hash tree map.
     def delete_from_tree_map(map, path)
       parts = path.split('/')
-      name = parts.pop
+      name  = parts.pop
       container = nil
       parts.each do |part|
         container = map[part]

@@ -6,14 +6,14 @@ module Gollum
 
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|\d)$/i
     FORMAT_NAMES = { :markdown => "Markdown",
-                     :textile => "Textile",
-                     :rdoc => "RDoc",
-                     :org => "Org-mode",
-                     :creole => "Creole",
-                     :rest => "reStructuredText",
+                     :textile  => "Textile",
+                     :rdoc     => "RDoc",
+                     :org      => "Org-mode",
+                     :creole   => "Creole",
+                     :rest     => "reStructuredText",
                      :asciidoc => "AsciiDoc",
-                     :pod => "Pod",
-                     :roff => "roff" }
+                     :pod      => "Pod",
+                     :roff     => "roff" }
 
     # Public: Initialize a page.
     #
@@ -125,13 +125,13 @@ module Gollum
     def self.format_to_ext(format)
       case format
         when :markdown then 'md'
-        when :textile then 'textile'
-        when :rdoc then 'rdoc'
-        when :org then 'org'
-        when :creole then 'creole'
-        when :rest then 'rest'
+        when :textile  then 'textile'
+        when :rdoc     then 'rdoc'
+        when :org      then 'org'
+        when :creole   then 'creole'
+        when :rest     then 'rest'
         when :asciidoc then 'asciidoc'
-        when :pod then 'pod'
+        when :pod      then 'pod'
       end
     end
 

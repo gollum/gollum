@@ -8,12 +8,12 @@ module Gollum
     #
     # Returns a new Gollum::Markup object, ready for rendering.
     def initialize(page)
-      @wiki = page.wiki
-      @name = page.name
-      @data = page.raw_data
+      @wiki    = page.wiki
+      @name    = page.name
+      @data    = page.raw_data
       @version = page.version.id
-      @dir = ::File.dirname(page.path)
-      @tagmap = {}
+      @dir     = ::File.dirname(page.path)
+      @tagmap  = {}
       @codemap = {}
     end
 
@@ -93,8 +93,8 @@ module Gollum
     #   if it is not.
     def process_image_tag(tag)
       parts = tag.split('|')
-      name = parts[0].strip
-      path = nil
+      name  = parts[0].strip
+      path  = nil
 
       if file = find_file(name)
         path = "/#{file.path}"
@@ -108,7 +108,7 @@ module Gollum
         containered = false
 
         classes = [] # applied to whatever the outermost container is
-        attrs = []   # applied to the image
+        attrs   = [] # applied to the image
 
         align = opts['align']
         if opts['float']
@@ -200,9 +200,9 @@ module Gollum
     #   if it is not.
     def process_page_link_tag(tag)
       parts = tag.split('|')
-      name = parts[0].strip
+      name  = parts[0].strip
       cname = Page.cname((parts[1] || parts[0]).strip)
-      link = ::File.join(@wiki.base_path, cname)
+      link  = ::File.join(@wiki.base_path, cname)
       presence = @wiki.page(cname) ? "present" : "absent"
       %{<a class="internal #{presence}" href="#{link}">#{name}</a>}
     end
