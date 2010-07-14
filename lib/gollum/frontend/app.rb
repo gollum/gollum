@@ -62,12 +62,12 @@ module Precious
     end
 
     post '/create/:name' do
-      page = params[:name]
+      name = params[:name]
       wiki = Gollum::Wiki.new($path)
 
       format = params[:format].intern
 
-      wiki.write_page(page, format, params[:content], commit_message)
+      wiki.write_page(name, format, params[:content], commit_message)
       redirect "/#{name}"
     end
 
