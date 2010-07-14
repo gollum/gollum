@@ -214,7 +214,7 @@ module Gollum
       if name =~ /^\//
         @wiki.file(name[1..-1], @version)
       else
-        path = ::File.join(@dir, name)
+        path = @dir == '.' ? name : ::File.join(@dir, name)
         @wiki.file(path, @version)
       end
     end

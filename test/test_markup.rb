@@ -71,6 +71,18 @@ context "Markup" do
     assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, output
   end
 
+  test "image with relative path on root" do
+    @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
+    index = @wiki.repo.index
+    index.add("alpha.jpg", "hi")
+    index.add("Bilbo-Baggins.md", "a [[alpha.jpg]] [[a | alpha.jpg]] b")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    output = Gollum::Markup.new(page).render
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, output
+  end
+
   test "image with relative path" do
     @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
     index = @wiki.repo.index
