@@ -15,6 +15,27 @@ module Gollum
                      :pod      => "Pod",
                      :roff     => "roff" }
 
+    # Checks if a filename has a valid extension understood by GitHub::Markup.
+    #
+    # filename - String filename, like "Home.md".
+    #
+    # Returns the matching String basename of the file without the extension.
+    def self.valid_filename?(filename)
+      filename && filename.to_s =~ VALID_PAGE_RE && $1
+    end
+
+    # Checks if a filename has a valid extension understood by GitHub::Markup.
+    # Also, checks if the filename has no "_" in the front (such as 
+    # _Footer.md).
+    #
+    # filename - String filename, like "Home.md".
+    #
+    # Returns the matching String basename of the file without the extension.
+    def self.valid_page_name?(filename)
+      match = valid_filename?(filename)
+      filename =~ /^_/ ? false : match
+    end
+
     # Public: Initialize a page.
     #
     # wiki - The Gollum::Wiki in question.
@@ -228,8 +249,8 @@ module Gollum
     #
     # Returns a Boolean.
     def page_match(name, filename)
-      if filename =~ VALID_PAGE_RE
-        Page.cname(name) == Page.cname($1)
+      if match = self.class.valid_filename?(filename)
+        Page.cname(name) == Page.cname(match)
       else
         false
       end

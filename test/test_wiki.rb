@@ -40,6 +40,13 @@ context "Wiki" do
       f01428b3138994aab19d5f880b6f37336ddf1f24),
       @wiki.log(:page => 2).map { |c| c.id }
   end
+
+  test "list pages" do
+    pages = @wiki.pages
+    assert_equal \
+      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile), 
+      pages.map { |p| p.name }.sort
+  end
 end
 
 context "Wiki page writing" do
@@ -149,23 +156,6 @@ context "Wiki page writing" do
     assert_nil @wiki.page("Bilbo-Baggins")
 
     assert @wiki.page("Gollum")
-  end
-
-  test "list pages" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-
-    index = @wiki.repo.index
-    index.add("greek/Bilbo-Baggins.md", "hi")
-    index.add("Gollum.md", "hi")
-    index.commit("Add alpha.jpg")
-
-    pages = @wiki.pages
-    assert_equal "Gollum.md",              pages[0].path
-    assert_equal "Gollum.md",              pages[0].name
-    assert_equal "greek/Bilbo-Baggins.md", pages[1].path
-    assert_equal "Bilbo-Baggins.md",       pages[1].name
   end
 
   teardown do

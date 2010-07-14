@@ -222,7 +222,9 @@ module Gollum
       tree.contents.each do |item|
         case item
           when Grit::Blob
-            list << @page_class.new(self).populate(item, path)
+            if @page_class.valid_page_name?(item.name)
+              list << @page_class.new(self).populate(item, path)
+            end
           when Grit::Tree
             list.push *tree_list(item, path)
         end
