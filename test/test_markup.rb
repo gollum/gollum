@@ -60,25 +60,27 @@ context "Markup" do
   end
 
   test "image with absolute path" do
+    @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
     index.commit("Add alpha.jpg")
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] [[a | /alpha.jpg]] b", @commit)
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="/alpha.jpg" /> b</p>}, output
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, output
   end
 
   test "image with relative path" do
+    @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
     index = @wiki.repo.index
     index.add("greek/alpha.jpg", "hi")
-    index.add("greek/Bilbo-Baggins.md", "a [[alpha.jpg]] b")
+    index.add("greek/Bilbo-Baggins.md", "a [[alpha.jpg]] [[a | alpha.jpg]] b")
     index.commit("Add alpha.jpg")
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="/greek/alpha.jpg" /> b</p>}, output
+    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /> <a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
   end
 
   test "image with alt" do

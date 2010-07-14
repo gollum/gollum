@@ -94,12 +94,10 @@ module Gollum
     def process_image_tag(tag)
       parts = tag.split('|')
       name  = parts[0].strip
-      path  = nil
-
-      if file = find_file(name)
-        path = "/#{file.path}"
+      path  = if file = find_file(name)
+        ::File.join @wiki.base_path, file.path
       elsif name =~ /^https?:\/\/.+(jpg|png|gif|svg|bmp)$/
-        path = name
+        name
       end
 
       if path
@@ -186,7 +184,7 @@ module Gollum
       path = parts[1] && parts[1].strip
 
       if name && path && file = find_file(path)
-        %{<a href="/#{file.path}">#{name}</a>}
+        %{<a href="#{::File.join @wiki.base_path, file.path}">#{name}</a>}
       else
         nil
       end
