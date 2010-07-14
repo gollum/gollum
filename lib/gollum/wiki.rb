@@ -43,6 +43,8 @@ module Gollum
     # repo    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
+    #           :base_path  - String base path for all Wiki links.  
+    #                         Default: "/"
     #           :page_class - The page Class. Default: Gollum::Page
     #           :file_class - The file Class. Default: Gollum::File
     #
