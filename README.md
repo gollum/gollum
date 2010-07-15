@@ -23,8 +23,8 @@ choose. Special footers can be created in `footer files`. Other content
 ## PAGE FILES
 
 Page files may be written in any format supported by
-[GitHub-Markup](http://github.com/defunkt/github-markup). The current list of
-formats and allowed extensions is:
+[GitHub-Markup](http://github.com/defunkt/github-markup) (except roff). The
+current list of formats and allowed extensions is:
 
   * Markdown: .markdown, .mdown, .mkdn, .mkd, .md
   * Textile: .textile
@@ -34,7 +34,6 @@ formats and allowed extensions is:
   * ReStructured Text: .rest.txt, .rst.txt, .rest, .rst
   * ASCIIDoc: .asciidoc
   * POD: .pod
-  * Roff: .1, .2, .3, ...
 
 Gollum detects the page file format via the extension, so files must have one
 of the supported extensions in order to be converted.
