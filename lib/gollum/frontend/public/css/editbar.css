@@ -48,6 +48,14 @@
       background-position: 2px -1438px;
     }
 
+    #editbar .ul {
+      background-position: 2px -1366px;
+    }
+
+    #editbar .ol {
+      background-position: 2px -1078px;
+    }
+
   #editbar .tab {
     float: left;
     display: block;
