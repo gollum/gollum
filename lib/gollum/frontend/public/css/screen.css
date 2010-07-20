@@ -343,3 +343,28 @@ html {overflow-y: scroll;}
   .wikistyle pre.console span.command {
     color: yellow !important;
   }
+
+/* Special markup considerations */
+
+/* asciidoc */
+
+.wikistyle .ulist p,
+.wikistyle .olist p {
+  margin: 0 !important;
+}
+
+.wikistyle .loweralpha {
+  list-style-type: lower-alpha;
+}
+
+.wikistyle .lowerroman {
+  list-style-type: lower-roman;
+}
+
+.wikistyle .upperalpha {
+  list-style-type: upper-alpha;
+}
+
+.wikistyle .upperroman {
+  list-style-type: upper-roman;
+}
