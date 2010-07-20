@@ -8,6 +8,10 @@
   font-size: 13px;
 }
 
+  #editbar .current {
+    display: block !important;
+  }
+
   #editbar .menu {
     overflow: hidden;
     background: white;
@@ -101,7 +105,9 @@
     width: 100%;
     overflow: visible;
     border-top: 1px solid #888;
-    height: 1750px;
+    height: 175px;
+    background-color: #E0EEF7;
+    display: none;
   }
 
     #editbar .sections .toc {
@@ -128,15 +134,11 @@
       background-color: white;
       float: right;
       width: 80%;
-      height: 1750px;
+      height: 175px;
     }
 
       #editbar .sections .page {
         display: none;
-      }
-
-      #editbar .sections .page.current {
-        display: block;
       }
 
       #editbar .sections .pages th {
@@ -156,11 +158,11 @@
         color: #bbb;
         padding-left: 1px;
       }
-      
+
       #editbar .sections .pages .shortcodes th {
         text-align: center;
       }
-      
+
       #editbar .sections .pages .shortcodes ul {
         list-style-type: none;
       }
