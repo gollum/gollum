@@ -427,9 +427,13 @@ if he were in seventh heaven.</pre>
         </table>
       </div>
 
-      <!-- Markdown Headers -->
+      <!--================================================================-->
+      <!-- Formatting                                                     -->
+      <!--================================================================-->
 
-      <div class="page markdown headers">
+      <!-- Asciidoc Formatting -->
+
+      <div class="page asciidoc formatting">
         <table cellpadding="0" cellspacing="0" border="0" width="100%">
           <tr>
             <th>Description</th>
@@ -437,22 +441,235 @@ if he were in seventh heaven.</pre>
             <th>What you get</th>
           </tr>
           <tr>
-            <td>First level heading</td>
-            <td><pre># Heading Text</pre></td>
-            <td><h1>Heading Text</h1></td>
+            <td>Bold</td>
+            <td><pre>*bold text*</pre></td>
+            <td><b>bold text</b></td>
           </tr>
           <tr>
-            <td>Second level heading</td>
-            <td><pre>## Heading Text</pre></td>
-            <td><h2>Heading Text</h2></td>
+            <td>Italic</td>
+            <td><pre>_italic text_</pre></td>
+            <td><i>italic text</i></td>
           </tr>
           <tr>
-            <td>Third level heading</td>
-            <td><pre>### Heading Text</pre></td>
-            <td><h3>Heading Text</h3></td>
+            <td>Monospace</td>
+            <td><pre>+monospace text+</pre></td>
+            <td><tt>monospace text</tt></td>
+          </tr>
+          <tr>
+            <td>Single quoted</td>
+            <td><pre>`single quoted text'</pre></td>
+            <td>‘single quoted text’</td>
+          </tr>
+          <tr>
+            <td>Double quoted</td>
+            <td><pre>``double quoted text''</pre></td>
+            <td>“double quoted text”</td>
+          </tr>
+          <tr>
+            <td>Superscript</td>
+            <td><pre>x^2^</pre></td>
+            <td>x<sup>2</sup></td>
+          </tr>
+          <tr>
+            <td>Subscript</td>
+            <td><pre>H~2~O</pre></td>
+            <td>H<sub>2</sub>O</td>
           </tr>
         </table>
       </div>
+
+      <!-- Creole Formatting -->
+
+      <div class="page creole formatting">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>Bold</td>
+            <td><pre>**bold text**</pre></td>
+            <td><b>bold text</b></td>
+          </tr>
+          <tr>
+            <td>Italic</td>
+            <td><pre>//italic text//</pre></td>
+            <td><i>italic text</i></td>
+          </tr>
+          <tr>
+            <td>Monospace</td>
+            <td><pre>{<span>{</span>{monospace text}<span>}</span>}</pre></td>
+            <td><tt>monospace text</tt></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Markdown Formatting -->
+
+      <div class="page markdown formatting">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>Bold</td>
+            <td><pre>**bold text**</pre></td>
+            <td><b>bold text</b></td>
+          </tr>
+          <tr>
+            <td>Italic</td>
+            <td><pre>*italic text*</pre></td>
+            <td><i>italic text</i></td>
+          </tr>
+          <tr>
+            <td>Inline code</td>
+            <td><pre>`inline code`</pre></td>
+            <td><div class="wikistyle"><code>inline code</code></div></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Orgmode Formatting -->
+
+      <div class="page org formatting">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>Bold</td>
+            <td><pre>*bold text*</pre></td>
+            <td><b>bold text</b></td>
+          </tr>
+          <tr>
+            <td>Italic</td>
+            <td><pre>/italic text/</pre></td>
+            <td><i>italic text</i></td>
+          </tr>
+          <tr>
+            <td>Inline code</td>
+            <td><pre>=inline code=</pre></td>
+            <td><div class="wikistyle"><code>inline code</code></div></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Pod Formatting -->
+
+      <div class="page pod formatting">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>Bold</td>
+            <td><pre>B&lt;bold text&gt;</pre></td>
+            <td><b>bold text</b></td>
+          </tr>
+          <tr>
+            <td>Italic</td>
+            <td><pre>I&lt;italic text&gt;</pre></td>
+            <td><i>italic text</i></td>
+          </tr>
+          <tr>
+            <td>Inline code</td>
+            <td><pre>C&lt;inline code&gt;</pre></td>
+            <td><div class="wikistyle"><code>inline code</code></div></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- RDoc Formatting -->
+
+      <div class="page rdoc formatting">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>Bold</td>
+            <td><pre>*bold text*</pre></td>
+            <td><b>bold text</b></td>
+          </tr>
+          <tr>
+            <td>Italic</td>
+            <td><pre>_italic text_</pre></td>
+            <td><i>italic text</i></td>
+          </tr>
+          <tr>
+            <td>Monospace</td>
+            <td><pre>+monospace text+</pre></td>
+            <td><tt>monospace text</tt></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- reStructuredText Formatting -->
+
+      <div class="page rest formatting">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>Bold</td>
+            <td><pre>**bold text**</pre></td>
+            <td><b>bold text</b></td>
+          </tr>
+          <tr>
+            <td>Italic</td>
+            <td><pre>*italic text*</pre></td>
+            <td><i>italic text</i></td>
+          </tr>
+          <tr>
+            <td>Monospace</td>
+            <td><pre>``monospace text``</pre></td>
+            <td><tt>monospace text</tt></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Textile Formatting -->
+
+      <div class="page textile formatting">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>Bold</td>
+            <td><pre>*bold text*</pre></td>
+            <td><b>bold text</b></td>
+          </tr>
+          <tr>
+            <td>Italic</td>
+            <td><pre>_italic text_</pre></td>
+            <td><i>italic text</i></td>
+          </tr>
+          <tr>
+            <td>Inline code</td>
+            <td><pre>@inline code@</pre></td>
+            <td><div class="wikistyle"><code>inline code</code></div></td>
+          </tr>
+        </table>
+      </div>
+
+      <!--================================================================-->
+      <!-- Headers                                                        -->
+      <!--================================================================-->
 
       <!-- Asciidoc, Creole Headers -->
 
@@ -503,6 +720,33 @@ if he were in seventh heaven.</pre>
           <tr>
             <td>Third level heading</td>
             <td><pre>*** Heading Text</pre></td>
+            <td><h3>Heading Text</h3></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Markdown Headers -->
+
+      <div class="page markdown headers">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <th>Description</th>
+            <th>What you type</th>
+            <th>What you get</th>
+          </tr>
+          <tr>
+            <td>First level heading</td>
+            <td><pre># Heading Text</pre></td>
+            <td><h1>Heading Text</h1></td>
+          </tr>
+          <tr>
+            <td>Second level heading</td>
+            <td><pre>## Heading Text</pre></td>
+            <td><h2>Heading Text</h2></td>
+          </tr>
+          <tr>
+            <td>Third level heading</td>
+            <td><pre>### Heading Text</pre></td>
             <td><h3>Heading Text</h3></td>
           </tr>
         </table>
@@ -600,9 +844,9 @@ if he were in seventh heaven.</pre>
           </tr>
           <tr>
             <td>Unordered list</td>
-            <td><pre>* Item 1
-** Item 1.1
-* Item 2
+            <td><pre>* Item 1<span class="invisible">¬</span>
+** Item 1.1<span class="invisible">¬</span>
+* Item 2<span class="invisible">¬</span>
 * Item 3</pre></td>
             <td>
               <div class="wikistyle">
@@ -614,9 +858,9 @@ if he were in seventh heaven.</pre>
           </tr>
           <tr>
             <td>Ordered list</td>
-            <td><pre>. Item 1
-.. Item 1.1
-. Item 2
+            <td><pre>. Item 1<span class="invisible">¬</span>
+.. Item 1.1<span class="invisible">¬</span>
+. Item 2<span class="invisible">¬</span>
 . Item 3</pre></td>
             <td>
               <div class="wikistyle">
@@ -641,9 +885,9 @@ if he were in seventh heaven.</pre>
           </tr>
           <tr>
             <td>Unordered list</td>
-            <td><pre>* Item 1
-** Item 1.1
-* Item 2
+            <td><pre>* Item 1<span class="invisible">¬</span>
+** Item 1.1<span class="invisible">¬</span>
+* Item 2<span class="invisible">¬</span>
 * Item 3</pre></td>
             <td>
               <div class="wikistyle">
@@ -654,9 +898,9 @@ if he were in seventh heaven.</pre>
           </tr>
           <tr>
             <td>Ordered list</td>
-            <td><pre># Item 1
-## Item 1.1
-# Item 2
+            <td><pre># Item 1<span class="invisible">¬</span>
+## Item 1.1<span class="invisible">¬</span>
+# Item 2<span class="invisible">¬</span>
 # Item 3</pre></td>
             <td>
               <div class="wikistyle">
