@@ -26,14 +26,26 @@ Page files may be written in any format supported by
 [GitHub-Markup](http://github.com/defunkt/github-markup) (except roff). The
 current list of formats and allowed extensions is:
 
-  * Markdown: .markdown, .mdown, .mkdn, .mkd, .md
-  * Textile: .textile
-  * RDoc: .rdoc
-  * Org Mode: .org
-  * Creole: .creole
-  * ReStructured Text: .rest.txt, .rst.txt, .rest, .rst
-  * ASCIIDoc: .asciidoc
-  * POD: .pod
+* ASCIIDoc: .asciidoc
+* Creole: .creole
+* Markdown: .markdown, .mdown, .mkdn, .mkd, .md
+* Org Mode: .org
+* Pod: .pod
+* RDoc: .rdoc
+* ReStructuredText: .rest.txt, .rst.txt, .rest, .rst
+* Textile: .textile
+
+In order to use these formats, you will need to install the proper
+dependencies:
+
+* [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc`
+* [Creole](http://wikicreole.org/) -- `gem install creole`
+* [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install rdiscount`
+* [Org](http://orgmode.org/) -- `gem install org-ruby`
+* [Pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML` comes with Perl >= 5.10. Lower versions should install Pod::Simple from CPAN.
+* [RDoc](http://rdoc.sourceforge.net/)
+* [ReStructuredText](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
+* [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
 
 Gollum detects the page file format via the extension, so files must have one
 of the supported extensions in order to be converted.
