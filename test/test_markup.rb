@@ -195,6 +195,15 @@ context "Markup" do
     assert_equal %{<p>a <a href="/greek/alpha.jpg">Alpha</a> b</p>}, output
   end
 
+  test "file link with external path" do
+    index = @wiki.repo.index
+    index.add("greek/Bilbo-Baggins.md", "a [[Alpha|http://example.com/alpha.jpg]] b")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal %{<p>a <a href="http://example.com/alpha.jpg">Alpha</a> b</p>}, page.formatted_data
+  end
+
   test "code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +

@@ -190,8 +190,10 @@ module Gollum
         nil
       end
 
-      if name && path
+      if name && path && file
         %{<a href="#{::File.join @wiki.base_path, file.path}">#{name}</a>}
+      elsif name && path
+        %{<a href="#{path}">#{name}</a>}
       else
         nil
       end
