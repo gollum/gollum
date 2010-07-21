@@ -16,11 +16,25 @@ context "Markup" do
     FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end
 
+  test "double page links no space" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a><a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>", page.formatted_data
+  end
+
+  test "double page links with space" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]] [[Bar]] b", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a> <a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>", page.formatted_data
+  end
+
   test "page link" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Bilbo Baggins]] b", @commit)
 
     page = @wiki.page("Bilbo Baggins")
-    output = Gollum::Markup.new(page).render
+    output = page.formatted_data
     assert_match /class="internal present"/, output
     assert_match /href="\/Bilbo-Baggins"/,   output
     assert_match /\>Bilbo Baggins\</,        output
@@ -30,7 +44,7 @@ context "Markup" do
     @wiki.write_page("Tolkien", :markdown, "a [[J. R. R. Tolkien]]'s b", @commit)
 
     page = @wiki.page("Tolkien")
-    output = Gollum::Markup.new(page).render
+    output = page.formatted_data
     assert_match /class="internal absent"/,         output
     assert_match /href="\/J\.\-R\.\-R\.\-Tolkien"/, output
     assert_match /\>J\. R\. R\. Tolkien\</,         output
@@ -42,7 +56,7 @@ context "Markup" do
       @wiki.write_page("Bilbo Baggins", :markdown, "a [[Bilbo Baggins]] b", @commit)
 
       page = @wiki.page("Bilbo Baggins")
-      output = Gollum::Markup.new(page).render
+      output = page.formatted_data
       assert_match /class="internal present"/,     output
       assert_match /href="\/wiki\/Bilbo-Baggins"/, output
       assert_match /\>Bilbo Baggins\</,            output
@@ -54,7 +68,7 @@ context "Markup" do
       @wiki.write_page("Bilbo Baggins", :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", @commit)
 
       page = @wiki.page("Bilbo Baggins")
-      output = Gollum::Markup.new(page).render
+      output = page.formatted_data
       assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.jpg" /> b</p>}, output
     end
   end
@@ -67,8 +81,7 @@ context "Markup" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] [[a | /alpha.jpg]] b", @commit)
 
     page = @wiki.page("Bilbo Baggins")
-    output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, output
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path on root" do
@@ -79,8 +92,7 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.page("Bilbo Baggins")
-    output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, output
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path" do
@@ -91,8 +103,8 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.page("Bilbo Baggins")
-    output = Gollum::Markup.new(page).render
-    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /> <a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
+    output = page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /><a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
   end
 
   test "image with alt" do

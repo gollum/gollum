@@ -44,7 +44,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
-      data.gsub(/(.?)\[\[(.+?)\]\](.?)/m) do
+      data.gsub(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
         elsif $2.include?('][')
