@@ -65,6 +65,24 @@ For security and compatibility reasons Gollum wikis may not contain custom CSS
 or JavaScript. These tags will be stripped from the converted HTML.
 
 
+## BRACKET TAGS
+
+A variety of Gollum tags use a double bracket syntax. For example:
+
+    [[Link]]
+
+Some tags will accept attributes which are separated by pipe symbols. For
+example:
+
+    [[Link|Page Title]]
+
+In all cases, the first thing in the link is what is displayed on the page.
+So, if the tag is an internal wiki link, the first thing in the tag will be
+the link text displayed on the page. If the tag is an embedded image, the
+first thing in the tag will be a path to an image file. Use this trick to
+easily remember which order things should appear in tags.
+
+
 ## PAGE LINKS
 
 To link to another Gollum wiki page, use the Gollum Page Link Tag.
@@ -95,13 +113,14 @@ Here are a few more examples:
     [[モルドール]] -> モルドール.ext
 
 
-## ABSOLUTE VS. RELATIVE PATHS
+## ABSOLUTE VS. RELATIVE VS. EXTERNAL PATH
 
 For Gollum tags that operate on static files (images, PDFs, etc), the paths
-may be referenced as either relative or absolute. Relative paths point to a
-static file relative to the page file within the directory structure of the
-Gollum repo (even though after conversion, all page files appear to be top
-level). These paths are NOT prefixed with a slash. For example:
+may be referenced as either relative, absolute, or external. Relative paths
+point to a static file relative to the page file within the directory
+structure of the Gollum repo (even though after conversion, all page files
+appear to be top level). These paths are NOT prefixed with a slash. For
+example:
 
     gollum.pdf
     docs/diagram.png
@@ -112,6 +131,12 @@ structure. These paths ARE prefixed with a slash. For example:
 
     /pdfs/gollum.pdf
     /docs/diagram.png
+
+External paths are full URLs. An external path must begin with either
+"http://" or "https://". For example:
+
+    http://example.com/pdfs/gollum.pdf
+    http://example.com/images/diagram.png
 
 All of the examples in this README use relative paths, but you may use
 whatever works best in your situation.
@@ -124,14 +149,14 @@ use the Gollum File Link Tag.
 
     [[Gollum|gollum.pdf]]
 
-The first part of the tag is the link text. The filename appears after the
-pipe.
+The first part of the tag is the link text. The path to the file appears after
+the pipe.
 
 
 ## IMAGES
 
 To display images that are contained in the Gollum repository you should use
-the Gollum Image Tag. This will display the actual image on the page.
+the Gollum Image Tag. This will display the actual image on the page. 
 
     [[gollum.png]]
 

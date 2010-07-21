@@ -180,10 +180,17 @@ module Gollum
     #   if it is not.
     def process_file_link_tag(tag)
       parts = tag.split('|')
-      name = parts[0].strip
-      path = parts[1] && parts[1].strip
+      name  = parts[0].strip
+      path  = parts[1] && parts[1].strip
+      path  = if path && file = find_file(path)
+        ::File.join @wiki.base_path, file.path
+      elsif path =~ /^https?:\/\/.+(jpg|png|gif|svg|bmp)$/
+        path
+      else
+        nil
+      end
 
-      if name && path && file = find_file(path)
+      if name && path
         %{<a href="#{::File.join @wiki.base_path, file.path}">#{name}</a>}
       else
         nil
