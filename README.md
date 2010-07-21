@@ -113,6 +113,18 @@ Here are a few more examples:
     [[モルドール]] -> モルドール.ext
 
 
+## EXTERNAL LINKS
+
+As a convenience, simple external links can be placed within brackets and they
+will be linked to the given URL with the URL as the link text. For example:
+
+    [[http://example.com]]
+
+External links must begin with either "http://" or "https://". If you need
+something more flexible, you can resort to the link syntax in the page's
+underlying markup format.
+
+
 ## ABSOLUTE VS. RELATIVE VS. EXTERNAL PATH
 
 For Gollum tags that operate on static files (images, PDFs, etc), the paths
