@@ -63,6 +63,13 @@ context "Markup" do
     end
   end
 
+  test "external page link" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[http://example.com]] b", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal "<p>a <a href=\"http://example.com\">http://example.com</a> b</p>", page.formatted_data
+  end
+
   test "image with http url" do
     ['http', 'https'].each do |scheme|
       @wiki.write_page("Bilbo Baggins", :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", @commit)

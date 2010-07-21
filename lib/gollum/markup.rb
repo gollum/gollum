@@ -184,7 +184,7 @@ module Gollum
       path  = parts[1] && parts[1].strip
       path  = if path && file = find_file(path)
         ::File.join @wiki.base_path, file.path
-      elsif path =~ /^https?:\/\/.+(jpg|png|gif|svg|bmp)$/
+      elsif path =~ %r{^https?://}
         path
       else
         nil
@@ -209,9 +209,13 @@ module Gollum
       parts = tag.split('|')
       name  = parts[0].strip
       cname = Page.cname((parts[1] || parts[0]).strip)
-      link  = ::File.join(@wiki.base_path, cname)
-      presence = @wiki.page(cname) ? "present" : "absent"
-      %{<a class="internal #{presence}" href="#{link}">#{name}</a>}
+      if name =~ %r{^https?://} && parts[1].nil?
+        %{<a href="#{name}">#{name}</a>}
+      else
+        link  = ::File.join(@wiki.base_path, cname)
+        presence = @wiki.page(cname) ? "present" : "absent"
+        %{<a class="internal #{presence}" href="#{link}">#{name}</a>}
+      end
     end
 
     # Find the given file in the repo.
