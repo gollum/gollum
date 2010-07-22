@@ -212,8 +212,14 @@ module Gollum
       if name =~ %r{^https?://} && parts[1].nil?
         %{<a href="#{name}">#{name}</a>}
       else
-        link  = ::File.join(@wiki.base_path, cname)
-        presence = @wiki.page(cname) ? "present" : "absent"
+        if page = @wiki.page(cname)
+          pname = page.name.split('.')[0..-2].join('.')
+          link = ::File.join(@wiki.base_path, Page.cname(pname))
+          presence = "present"
+        else
+          link = ::File.join(@wiki.base_path, cname)
+          presence = "absent"
+        end
         %{<a class="internal #{presence}" href="#{link}">#{name}</a>}
       end
     end

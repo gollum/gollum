@@ -62,7 +62,7 @@ module Precious
     end
 
     post '/create/:name' do
-      name = params[:name]
+      name = params[:page]
       wiki = Gollum::Wiki.new($path)
 
       format = params[:format].intern

@@ -271,7 +271,7 @@ module Gollum
     # Returns a Boolean.
     def page_match(name, filename)
       if match = self.class.valid_filename?(filename)
-        Page.cname(name) == Page.cname(match)
+        Page.cname(name).downcase == Page.cname(match).downcase
       else
         false
       end

@@ -21,6 +21,10 @@ context "Page" do
     assert_equal @wiki.repo.commits.first.id, page.version.id
   end
 
+  test "get existing page case insensitive" do
+    assert_equal @wiki.page('Bilbo Baggins').path, @wiki.page('bilbo baggins').path
+  end
+
   test "get nested page" do
     page = @wiki.page('Eye Of Sauron')
     assert_equal 'Mordor/Eye-Of-Sauron.md', page.path
