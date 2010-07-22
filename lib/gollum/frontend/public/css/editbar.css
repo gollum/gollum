@@ -33,7 +33,7 @@
     #editbar .button {
       width: 22px;
       height: 22px;
-      background: url(/images/buttons.png);
+      background: url(/images/editbar-buttons.png);
       text-indent: -100px;
       cursor: pointer;
       overflow: hidden;
@@ -43,27 +43,27 @@
     }
 
     #editbar .bold {
-      background-position: 2px -142px;
+      background-position: 4px 3px;
     }
 
     #editbar .italic {
-      background-position: 2px -862px;
+      background-position: 44px 3px;
     }
 
     #editbar .link {
-      background-position: 2px -1654px;
+      background-position: 4px -77px;
     }
 
     #editbar .image {
-      background-position: 2px -1438px;
+      background-position: 44px -77px;
     }
 
     #editbar .ul {
-      background-position: 2px -1366px;
+      background-position: 4px -37px;
     }
 
     #editbar .ol {
-      background-position: 2px -1078px;
+      background-position: 44px -37px;
     }
 
   #editbar .tab {
