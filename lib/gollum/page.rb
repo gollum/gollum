@@ -52,6 +52,28 @@ module Gollum
       @blob && @blob.name
     end
 
+    # Public: If the first element of a formatted page is an <h1> tag it can
+    # be considered the title of the page and used in the display. If the
+    # first element is NOT an <h1> tag, the title will be constructed from the
+    # filename by stripping the extension and replacing any dashes with
+    # spaces.
+    #
+    # Returns the fully sanitized String title.
+    def title
+      doc = Nokogiri::HTML(self.formatted_data)
+      if doc.first_element_child &&
+         doc.first_element_child.children &&
+         doc.first_element_child.children.first &&
+         doc.first_element_child.children.first.children &&
+         doc.first_element_child.children.first.children.first &&
+         doc.first_element_child.children.first.children.first.name &&
+         doc.first_element_child.children.first.children.first.name == 'h1'
+        Sanitize.clean(doc.first_element_child.children.first.children.first.to_html)
+      else
+        Sanitize.clean(self.name.split('.')[0..-2].join('.').gsub('-', ' '))
+      end
+    end
+
     # Public: The path of the page within the repo.
     #
     # Returns the String path.
@@ -134,7 +156,7 @@ module Gollum
     #
     # Returns the String canonical name.
     def self.cname(name)
-      name.gsub(%r{[ /]}, '-')
+      name.gsub(%r{[ /<>]}, '-')
     end
 
     # Convert a format Symbol into an extension String.

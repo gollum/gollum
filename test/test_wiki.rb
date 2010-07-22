@@ -16,35 +16,26 @@ context "Wiki" do
 
   test "shows paginated log with no page" do
     Gollum::Wiki.per_page = 3
-    assert_equal %w(
-      4fde706c7c8d3b30b6caec8c82ff4c01261350f2
-      1e716a3178a76fe39ee7b88f0cf2dc4a447566f6
-      afe2034d400ba21e13361f38f74900c51dbc7fde),
-      @wiki.log.map { |c| c.id }
+    commits = @wiki.repo.commits[0..2].map { |x| x.id }
+    assert_equal commits, @wiki.log.map { |c| c.id }
   end
 
   test "shows paginated log with 1st page" do
     Gollum::Wiki.per_page = 3
-    assert_equal %w(
-      4fde706c7c8d3b30b6caec8c82ff4c01261350f2
-      1e716a3178a76fe39ee7b88f0cf2dc4a447566f6
-      afe2034d400ba21e13361f38f74900c51dbc7fde),
-      @wiki.log(:page => 1).map { |c| c.id }
+    commits = @wiki.repo.commits[0..2].map { |x| x.id }
+    assert_equal commits, @wiki.log(:page => 1).map { |c| c.id }
   end
 
   test "shows paginated log with next page" do
     Gollum::Wiki.per_page = 3
-    assert_equal %w(
-      f25eccd98e9b667f9e22946f3e2f945378b8a72d
-      b0d108328459e44fff4a76cd19b10ddc34adce4b
-      f01428b3138994aab19d5f880b6f37336ddf1f24),
-      @wiki.log(:page => 2).map { |c| c.id }
+    commits = @wiki.repo.commits[3..5].map { |x| x.id }
+    assert_equal commits, @wiki.log(:page => 2).map { |c| c.id }
   end
 
   test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile), 
+      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-<b>Precious.md), 
       pages.map { |p| p.name }.sort
   end
 end

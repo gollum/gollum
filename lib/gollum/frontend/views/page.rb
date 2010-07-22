@@ -4,7 +4,7 @@ module Precious
       attr_reader :content, :page
 
       def human_name
-        @name.gsub(/-/, ' ')
+        @page.title
       end
 
       def title

@@ -223,9 +223,7 @@ html {overflow-y: scroll;}
 }
 
   .wikistyle h1:first-child {
-    margin-top: 0 !important;
-    padding-top: .25em !important;
-    border-top: none !important;
+    display: none;
   }
 
 .wikistyle h2 {

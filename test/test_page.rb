@@ -52,4 +52,24 @@ context "Page" do
     assert_equal "José", Gollum::Page.cname("José")
     assert_equal "モルドール", Gollum::Page.cname("モルドール")
   end
+
+  test "title from filename with normal contents" do
+    page = @wiki.page('Bilbo Baggins')
+    assert_equal 'Bilbo Baggins', page.title
+  end
+
+  test "title from filename with html contents" do
+    page = @wiki.page('My <b>Precious')
+    assert_equal 'My Precious', page.title
+  end
+
+  test "title from h1 with normal contents" do
+    page = @wiki.page('Home')
+    assert_equal "The LOTR Wiki", page.title
+  end
+
+  test "title from h1 with html contents" do
+    page = @wiki.page('Eye Of Sauron')
+    assert_equal "Eye Of Sauron", page.title
+  end
 end
