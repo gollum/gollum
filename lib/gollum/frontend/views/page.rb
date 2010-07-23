@@ -11,6 +11,10 @@ module Precious
         "A Page"
       end
 
+      def format
+        @page.format.to_s
+      end
+
       def author
         @page.version.author.name
       end

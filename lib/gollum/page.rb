@@ -24,7 +24,7 @@ module Gollum
     end
 
     # Checks if a filename has a valid extension understood by GitHub::Markup.
-    # Also, checks if the filename has no "_" in the front (such as 
+    # Also, checks if the filename has no "_" in the front (such as
     # _Footer.md).
     #
     # filename - String filename, like "Home.md".
@@ -60,15 +60,24 @@ module Gollum
     #
     # Returns the fully sanitized String title.
     def title
-      doc = Nokogiri::HTML(self.formatted_data)
-      if doc.first_element_child &&
-         doc.first_element_child.children &&
-         doc.first_element_child.children.first &&
-         doc.first_element_child.children.first.children &&
-         doc.first_element_child.children.first.children.first &&
-         doc.first_element_child.children.first.children.first.name &&
-         doc.first_element_child.children.first.children.first.name == 'h1'
-        Sanitize.clean(doc.first_element_child.children.first.children.first.to_html)
+      doc = Nokogiri::HTML(%{<div id="gollum-root">} + self.formatted_data + %{</div>})
+
+      header =
+      case self.format
+        when :asciidoc
+          doc.css("div#gollum-root > div#header > h1:first-child")
+        when :org
+          doc.css("div#gollum-root > p.title:first-child")
+        when :pod
+          doc.css("div#gollum-root > a.dummyTopAnchor:first-child + h1")
+        when :rest
+          doc.css("div#gollum-root > div > div > h1:first-child")
+        else
+          doc.css("div#gollum-root > h1:first-child")
+      end
+
+      if !header.empty?
+        Sanitize.clean(header.to_html)
       else
         Sanitize.clean(self.name.split('.')[0..-2].join('.').gsub('-', ' '))
       end

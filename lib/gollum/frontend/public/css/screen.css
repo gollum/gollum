@@ -222,10 +222,6 @@ html {overflow-y: scroll;}
   margin-top: 1.5em !important;
 }
 
-  .wikistyle h1:first-child {
-    display: none;
-  }
-
 .wikistyle h2 {
   font-size: 150% !important;
   margin-top: 1.5em !important;
@@ -344,25 +340,60 @@ html {overflow-y: scroll;}
 
 /* Special markup considerations */
 
+.wikistyle.gollum > h1:first-child {
+  display: none;
+}
+
 /* asciidoc */
 
-.wikistyle .ulist p,
-.wikistyle .olist p {
+.wikistyle.gollum.asciidoc > div#header > h1:first-child {
+  display: none;
+}
+
+.wikistyle.gollum.asciidoc .ulist p,
+.wikistyle.gollum.asciidoc .olist p {
   margin: 0 !important;
 }
 
-.wikistyle .loweralpha {
+.wikistyle.gollum.asciidoc .loweralpha {
   list-style-type: lower-alpha;
 }
 
-.wikistyle .lowerroman {
+.wikistyle.gollum.asciidoc .lowerroman {
   list-style-type: lower-roman;
 }
 
-.wikistyle .upperalpha {
+.wikistyle.gollum.asciidoc .upperalpha {
   list-style-type: upper-alpha;
 }
 
-.wikistyle .upperroman {
+.wikistyle.gollum.asciidoc .upperroman {
   list-style-type: upper-roman;
+}
+
+/* org */
+
+.wikistyle.gollum.org > p.title:first-child {
+  display: none;
+}
+
+.wikistyle.gollum.org p:first-child + h1 {
+  border-top: none !important;
+}
+
+/* pod */
+
+.wikistyle.gollum.pod > a.dummyTopAnchor:first-child + h1 {
+  display: none;
+}
+
+.wikistyle.gollum.pod h1 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* rest */
+
+.wikistyle.gollum.rest > div.document > div.section > h1:first-child {
+  display: none;
 }

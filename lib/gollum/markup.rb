@@ -24,7 +24,14 @@ module Gollum
     def render
       data = extract_code(@data)
       data = extract_tags(data)
-      data = GitHub::Markup.render(@name, data) rescue ''
+      begin
+        data = GitHub::Markup.render(@name, data)
+        if data.nil?
+          raise "There was an error converting #{@name} to HTML."
+        end
+      rescue Object => e
+        data = %{<p class="gollum-error">#{e.message}</p>}
+      end
       data = process_tags(data)
       data = process_code(data)
       data = Sanitize.clean(data, SANITIZATION_OPTIONS)
