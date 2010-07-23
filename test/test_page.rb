@@ -45,6 +45,10 @@ context "Page" do
     assert_nil @wiki.page('I do not exist')
   end
 
+  test "no version match" do
+    assert_nil @wiki.page('Bilbo Baggins', 'I do not exist')
+  end
+
   test "no ext match" do
     assert_nil @wiki.page('Data')
   end

@@ -200,12 +200,11 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name, version)
-      commit = @wiki.repo.commit(version)
-      if page = find_page_in_tree(commit.tree, name)
-        page.version = commit
-        page
-      else
-        nil
+      if commit = @wiki.repo.commit(version)
+        if page = find_page_in_tree(commit.tree, name)
+          page.version = commit
+          page
+        end
       end
     end
 
