@@ -33,37 +33,49 @@
     #editbar .button {
       width: 22px;
       height: 22px;
-      background: url(/images/editbar-buttons.png);
+      background: #e5e5e5 url(/images/editbar-buttons.png);
+      border: 1px solid #ddd;
       text-indent: -100px;
       cursor: pointer;
       overflow: hidden;
-      padding: 2px;
+      padding: 1px;
       display: block;
       float: left;
+      margin: 0 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      -khtml-border-radius: 2px;
+      border-radius: 2px;
+      background-repeat: no-repeat;
+    }
+
+    #editbar .button:hover {
+      background-color: #ccc;
+      border-color: #aaa;
     }
 
     #editbar .bold {
-      background-position: 4px 3px;
+      background-position: -97px 4px;
     }
 
     #editbar .italic {
-      background-position: 44px 3px;
+      background-position: -147px 4px;
     }
 
     #editbar .link {
-      background-position: 4px -77px;
+      background-position: -197px 4px;
     }
 
     #editbar .image {
-      background-position: 44px -77px;
+      background-position: -247px 4px;
     }
 
     #editbar .ul {
-      background-position: 4px -37px;
+      background-position: 3px 4px;
     }
 
     #editbar .ol {
-      background-position: 44px -37px;
+      background-position: -47px 4px;
     }
 
   #editbar .tab {
