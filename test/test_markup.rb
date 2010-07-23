@@ -19,15 +19,39 @@ context "Markup" do
   test "double page links no space" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", @commit)
 
-    page = @wiki.page("Bilbo Baggins")
-    assert_equal "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a><a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>", page.formatted_data
+    # "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a><a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>"
+    page    = @wiki.page("Bilbo Baggins")
+    doc     = Nokogiri::HTML page.formatted_data
+    paras   = doc / :p
+    para    = paras.first
+    anchors = para / :a
+    assert_equal 1, paras.size
+    assert_equal 2, anchors.size
+    assert_equal 'internal absent', anchors[0]['class']
+    assert_equal 'internal absent', anchors[1]['class']
+    assert_equal '/Foo',            anchors[0]['href']
+    assert_equal '/Bar',            anchors[1]['href']
+    assert_equal 'Foo',             anchors[0].text
+    assert_equal 'Bar',             anchors[1].text
   end
 
   test "double page links with space" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]] [[Bar]] b", @commit)
 
+    # "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a> <a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>"
     page = @wiki.page("Bilbo Baggins")
-    assert_equal "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a> <a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>", page.formatted_data
+    doc     = Nokogiri::HTML page.formatted_data
+    paras   = doc / :p
+    para    = paras.first
+    anchors = para / :a
+    assert_equal 1, paras.size
+    assert_equal 2, anchors.size
+    assert_equal 'internal absent', anchors[0]['class']
+    assert_equal 'internal absent', anchors[1]['class']
+    assert_equal '/Foo',            anchors[0]['href']
+    assert_equal '/Bar',            anchors[1]['href']
+    assert_equal 'Foo',             anchors[0].text
+    assert_equal 'Bar',             anchors[1].text
   end
 
   test "page link" do
@@ -88,7 +112,7 @@ context "Markup" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] [[a | /alpha.jpg]] b", @commit)
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path on root" do
@@ -99,7 +123,7 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path" do
@@ -111,7 +135,7 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = page.formatted_data
-    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /><a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
+    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /> <a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
   end
 
   test "image with alt" do
