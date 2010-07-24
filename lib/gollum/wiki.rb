@@ -171,7 +171,11 @@ module Gollum
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
       treeish ||= 'master'
-      tree_list(@repo.commit(treeish).tree)
+      if commit = @repo.commit(treeish)
+        tree_list(commit)
+      else
+        []
+      end
     end
 
     # Public: All of the versions that have touched the Page.
@@ -212,21 +216,24 @@ module Gollum
 
     # Fill an array with a list of pages.
     #
+    # commit   - The Grit::Commit 
     # tree     - The Grit::Tree to start with.
     # sub_tree - Optional String specifying the parent path of the Page.
     #
     # Returns a flat Array of Gollum::Page instances.
-    def tree_list(tree, sub_tree = nil)
+    def tree_list(commit, tree = commit.tree, sub_tree = nil)
       list = []
       path = tree.name ? "#{sub_tree}/#{tree.name}" : ''
       tree.contents.each do |item|
         case item
           when Grit::Blob
             if @page_class.valid_page_name?(item.name)
-              list << @page_class.new(self).populate(item, path)
+              page = @page_class.new(self).populate(item, path)
+              page.version = commit
+              list << page
             end
           when Grit::Tree
-            list.push *tree_list(item, path)
+            list.push *tree_list(commit, item, path)
         end
       end
       list

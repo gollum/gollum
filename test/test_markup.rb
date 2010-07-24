@@ -16,6 +16,11 @@ context "Markup" do
     FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end
 
+  test "formats page from Wiki#pages" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", @commit)
+    assert @wiki.pages[0].formatted_data
+  end
+
   test "double page links no space" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", @commit)
 
