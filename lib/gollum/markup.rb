@@ -72,7 +72,7 @@ module Gollum
     # Returns the marked up String data.
     def process_tags(data)
       @tagmap.each do |id, tag|
-        data.sub!(id, process_tag(tag))
+        data.gsub!(id, process_tag(tag))
       end
       data
     end
