@@ -152,6 +152,8 @@ module Gollum
     #
     # Returns the footer Page or nil if none exists.
     def footer
+      return nil if page_match('_Footer', self.name)
+
       dirs = self.path.split('/')
       dirs.pop
       while !dirs.empty?

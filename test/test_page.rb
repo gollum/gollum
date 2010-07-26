@@ -92,4 +92,9 @@ context "Page" do
     assert_equal "Ones does not simply **walk** into Mordor!\n", footer.raw_data
     assert_equal "Mordor/_Footer.md", footer.path
   end
+
+  test "footer itself" do
+    footer = @wiki.page("_Footer")
+    assert_nil footer.footer
+  end
 end
