@@ -33,7 +33,7 @@
     #editbar .button {
       width: 22px;
       height: 22px;
-      background: #e5e5e5 url(/images/editbar-buttons.png);
+      background: #e7ecfb url(/images/editbar-buttons.png);
       border: 1px solid #ddd;
       text-indent: -100px;
       cursor: pointer;
@@ -50,7 +50,7 @@
     }
 
     #editbar .button:hover {
-      background-color: #ccc;
+      background-color: #d9dde7;
       border-color: #aaa;
     }
 
