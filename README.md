@@ -320,6 +320,11 @@ Get the latest version of the given human or canonical page name:
     vsn.id
     # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
 
+Get the footer (if any) for a given page:
+
+    page.footer
+    # => <Gollum::Page>
+
 Get a list of versions for a given page:
 
     vsns = wiki.page('page-name').versions
