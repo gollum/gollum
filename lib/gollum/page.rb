@@ -257,7 +257,7 @@ module Gollum
           case item
             when Grit::Blob
               if page_match(name, item.name)
-                return populate(item, tree_path(treemap, ptree))
+                return self.class.new(@wiki).populate(item, tree_path(treemap, ptree))
               end
             when Grit::Tree
               treemap[item] = ptree
@@ -283,7 +283,7 @@ module Gollum
           when Grit::Blob
             if page_match(name, item.name)
               path = dir == '' ? '' : ::File.join('/', dir)
-              return populate(item, path)
+              return self.class.new(@wiki).populate(item, path)
             end
         end
       end
