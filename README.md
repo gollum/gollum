@@ -260,6 +260,23 @@ The block must end with three backticks as the first characters on a
 line.
 
 
+## MATHEMATICAL EQUATIONS
+
+Page files may contain mathematic equations in TeX syntax that will be nicely
+typeset into the expected output. A block-style equation is delimited by `\[`
+and `\]`. For example:
+
+    \[ P(E) = {n \choose k} p^k (1-p)^{ n-k} \]
+
+Inline equations are delimited by `\(` and `\)`. These equations will appear
+inline with regular text. For example:
+
+    The pythagorean formula is \( a^2 + b^2 = c^2 \).
+
+Gollum uses [MathJax](http://www.mathjax.org/) to convert the TeX syntax into
+output suitable for display in web browsers.
+
+
 ## API DOCUMENTATION
 
 The Gollum API allows you to retrieve raw or formatted wiki content from a Git

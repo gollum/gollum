@@ -291,6 +291,18 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
+  test "tex block syntax" do
+    content = 'a \[ a^2 \] b'
+    output = "<p>a <script type=\"math/tex; mode=display\">a^2</script> b</p>"
+    compare(content, output, 'md')
+  end
+
+  test "tex inline syntax" do
+    content = 'a \( a^2 \) b'
+    output = "<p>a <script type=\"math/tex\">a^2</script> b</p>"
+    compare(content, output, 'md')
+  end
+
   def compare(content, output, ext = "md", regexes = [])
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.#{ext}", content)

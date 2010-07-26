@@ -117,7 +117,7 @@
     width: 100%;
     overflow: visible;
     border-top: 1px solid #888;
-    height: 175px;
+    height: 185px;
     background-color: #E0EEF7;
     display: none;
   }
@@ -146,7 +146,7 @@
       background-color: white;
       float: right;
       width: 80%;
-      height: 175px;
+      height: 185px;
     }
 
       #editbar .sections .page {

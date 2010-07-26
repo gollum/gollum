@@ -15,6 +15,7 @@ module Gollum
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
       @codemap = {}
+      @texmap  = {}
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -22,7 +23,8 @@ module Gollum
     #
     # Returns the formatted String content.
     def render
-      data = extract_code(@data)
+      data = extract_tex(@data)
+      data = extract_code(data)
       data = extract_tags(data)
       begin
         data = GitHub::Markup.render(@name, data)
@@ -35,7 +37,52 @@ module Gollum
       data = process_tags(data)
       data = process_code(data)
       data = Sanitize.clean(data, SANITIZATION_OPTIONS)
+      data = process_tex(data)
       data = data.gsub(/<p><\/p>/, '')
+      data
+    end
+
+    #########################################################################
+    #
+    # TeX
+    #
+    #########################################################################
+
+    # Extract all TeX into the texmap and replace with placeholders.
+    #
+    # data - The raw String data.
+    #
+    # Returns the placeholder'd String data.
+    def extract_tex(data)
+      data.gsub(/\\\[\s*(.*?)\s*\\\]/m) do
+        id = Digest::SHA1.hexdigest($1)
+        @texmap[id] = [:block, $1]
+        id
+      end.gsub(/\\\(\s*(.*?)\s*\\\)/m) do
+        id = Digest::SHA1.hexdigest($1)
+        @texmap[id] = [:inline, $1]
+        id
+      end
+    end
+
+    # Process all TeX from the texmap and replace the placeholders with the
+    # final markup.
+    #
+    # data - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
+    def process_tex(data)
+      @texmap.each do |id, spec|
+        type, tex = *spec
+        out =
+        case type
+          when :block
+            %{<script type="math/tex; mode=display">#{tex}</script>}
+          when :inline
+            %{<script type="math/tex">#{tex}</script>}
+        end
+        data.gsub!(id, out)
+      end
       data
     end
 
