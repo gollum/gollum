@@ -4,9 +4,14 @@
       <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
     </div>
     <h1>{{human_name}}</h1>
-    <div class="wikistyle gollum {{format}}">
+    <div class="content wikistyle gollum {{format}}">
       {{{content}}}
     </div>
+    {{#has_footer}}
+    <div class="footer wikistyle gollum {{footer_format}}">
+      {{{footer_content}}}
+    </div>
+    {{/has_footer}}
   </div>
 </div>
 <div class="admin">

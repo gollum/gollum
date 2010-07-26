@@ -80,4 +80,16 @@ context "Page" do
     page = @wiki.page('Eye Of Sauron')
     assert_equal "Eye Of Sauron", page.title
   end
+
+  test "top level footer" do
+    footer = @wiki.page('Home').footer
+    assert_equal 'Lord of the Rings wiki', footer.raw_data
+    assert_equal '_Footer.md', footer.path
+  end
+
+  test "nested footer" do
+    footer = @wiki.page('Eye Of Sauron').footer
+    assert_equal "Ones does not simply **walk** into Mordor!\n", footer.raw_data
+    assert_equal "Mordor/_Footer.md", footer.path
+  end
 end

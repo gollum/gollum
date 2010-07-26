@@ -148,6 +148,28 @@ module Gollum
       @wiki.repo.log('master', @path, log_pagination_options(options))
     end
 
+    # Public: The footer Page.
+    #
+    # Returns the footer Page or nil if none exists.
+    def footer
+      dirs = self.path.split('/')
+      dirs.pop
+      while !dirs.empty?
+        tree = self.version.tree / dirs.join('/')
+        if page = find_page_in_this_tree(tree, dirs.join('/'), '_Footer')
+          return page
+        end
+        dirs.pop
+      end
+
+      tree = self.version.tree
+      if page = find_page_in_this_tree(tree, '', '_Footer')
+        return page
+      end
+
+      return nil
+    end
+
     #########################################################################
     #
     # Class Methods
@@ -239,6 +261,28 @@ module Gollum
               treemap[item] = ptree
               trees << item
           end
+        end
+      end
+
+      return nil # nothing was found
+    end
+
+    # Find a page in a given tree without recursing into subtrees.
+    #
+    # tree - The Grit::Tree in which to look.
+    # dir  - The String path of the given Grit::Tree.
+    # name - The canonical String page name.
+    #
+    # Returns a Gollum::Page or nil if the page could not be found.
+    def find_page_in_this_tree(tree, dir, name)
+      treemap = {}
+      tree.contents.each do |item|
+        case item
+          when Grit::Blob
+            if page_match(name, item.name)
+              path = dir == '' ? '' : ::File.join('/', dir)
+              return populate(item, path)
+            end
         end
       end
 

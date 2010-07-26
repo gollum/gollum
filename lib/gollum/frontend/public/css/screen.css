@@ -339,6 +339,11 @@ html {overflow-y: scroll;}
 
 /* Special markup considerations */
 
+.wikistyle.gollum.footer {
+  border-top: 4px solid #f0f0f0;
+  margin-top: 2em;
+}
+
 .wikistyle.gollum > h1:first-child {
   display: none;
 }
