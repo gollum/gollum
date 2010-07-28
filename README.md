@@ -11,6 +11,29 @@ interface.
 We are making the source available so that you may test your wikis locally if
 you choose to edit them by hand.
 
+Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
+[TomDoc](http://tomdoc.org/) for inline documentation.
+
+
+## INSTALLATION
+
+The best way to install Gollum is with RubyGems:
+
+    $ [sudo] gem isntall gollum
+
+In order to use the various formats that Gollum supports, you will need to
+separately install the necessary dependencies for each format. You only need
+to install the dependencies for the formats that you plan to use.
+
+* [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc`
+* [Creole](http://wikicreole.org/) -- `gem install creole`
+* [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install rdiscount`
+* [Org](http://orgmode.org/) -- `gem install org-ruby`
+* [Pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML` comes with Perl >= 5.10. Lower versions should install Pod::Simple from CPAN.
+* [RDoc](http://rdoc.sourceforge.net/)
+* [ReStructuredText](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
+* [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
+
 
 ## REPO STRUCTURE
 
@@ -34,18 +57,6 @@ current list of formats and allowed extensions is:
 * RDoc: .rdoc
 * ReStructuredText: .rest.txt, .rst.txt, .rest, .rst
 * Textile: .textile
-
-In order to use these formats, you will need to install the proper
-dependencies:
-
-* [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc`
-* [Creole](http://wikicreole.org/) -- `gem install creole`
-* [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install rdiscount`
-* [Org](http://orgmode.org/) -- `gem install org-ruby`
-* [Pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML` comes with Perl >= 5.10. Lower versions should install Pod::Simple from CPAN.
-* [RDoc](http://rdoc.sourceforge.net/)
-* [ReStructuredText](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
-* [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
 
 Gollum detects the page file format via the extension, so files must have one
 of the supported extensions in order to be converted.
@@ -376,3 +387,23 @@ format, the file name will be changed to reflect the new format.
 To delete a page and commit the change:
 
     wiki.delete_page(page, commit)
+
+
+## Contribute
+
+If you'd like to hack on Gollum, start by forking my repo on GitHub:
+
+http://github.com/mojombo/gollum
+
+To get all of the dependencies, install the gem first. The best way to get
+your changes merged back into core is as follows:
+
+1. Clone down your fork
+1. Create a topic branch to contain your change
+1. Hack away
+1. Add tests and make sure everything still passes by running `rake`
+1. If you are adding new functionality, document it in the README.md
+1. Do not change the version number, I will do that on my end
+1. If necessary, rebase your commits into logical chunks, without errors
+1. Push the branch up to GitHub
+1. Send me (mojombo) a pull request for your branch
