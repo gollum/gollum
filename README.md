@@ -35,6 +35,21 @@ to install the dependencies for the formats that you plan to use.
 * [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
 
 
+## RUNNING
+
+To view and edit your Gollum repository locally via the built in web
+interface, simply install the Gollum gem, navigate to your repository via the
+command line, and run the executable:
+
+    $ gollum
+
+This will start up a web server running the Gollum frontend and you can view
+and edit your wiki at http://localhost:4567. To get help on the command line
+utility, you can run it like so:
+
+    $ gollum --help
+
+
 ## REPO STRUCTURE
 
 A Gollum repository's contents are designed to be human editable. Page content
