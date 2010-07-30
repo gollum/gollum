@@ -100,7 +100,9 @@ have a footer file of their own.
 ## HTML SANITIZATION
 
 For security and compatibility reasons Gollum wikis may not contain custom CSS
-or JavaScript. These tags will be stripped from the converted HTML.
+or JavaScript. These tags will be stripped from the converted HTML. See
+`docs/sanitization.md` for more details on what tags and attributes are
+allowed.
 
 
 ## BRACKET TAGS
