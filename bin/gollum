@@ -23,8 +23,8 @@ options = {}
 opts = OptionParser.new do |opts|
   opts.banner = help
 
-  opts.on("--port [PORT]", "Bind port (default port 4567).") do |port|
-    options['port'] = port
+  opts.on("--port [PORT]", "Bind port (default 4567).") do |port|
+    options['port'] = port.to_i
   end
 
   opts.on("--version", "Display current version.") do
@@ -38,4 +38,4 @@ opts.parse!
 
 $path = ARGV[0] || Dir.pwd
 
-Precious::App.run!
+Precious::App.run!(options)
