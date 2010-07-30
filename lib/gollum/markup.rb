@@ -321,7 +321,10 @@ module Gollum
       @codemap.each do |id, spec|
         lang = spec[:lang]
         code = spec[:code]
-        data.sub!(id, Gollum::Albino.new(code, lang).colorize)
+        if code.all? { |line| line =~ /^(  |\t)/ }
+          code.gsub!(/^(  |\t)/m, '')
+        end
+        data.gsub!(id, Gollum::Albino.new(code, lang).colorize)
       end
       data
     end
