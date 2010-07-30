@@ -271,18 +271,20 @@ context "Markup" do
   end
 
   test "code blocks with two-space indent" do
-    content = "a\n\n```ruby\n  x = 1\n```\n\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
-             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+    content = "a\n\n```ruby\n  x = 1\n\n  y = 2\n```\n\nb"
+    output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
+             "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
+             "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
     compare(content, output)
   end
 
   test "code blocks with one-tab indent" do
-    content = "a\n\n```ruby\n\tx = 1\n```\n\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
-             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+    content = "a\n\n```ruby\n\tx = 1\n\n\ty = 2\n```\n\nb"
+    output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
+             "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
+             "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
     compare(content, output)
   end
 
