@@ -299,7 +299,7 @@ and `\]`. For example:
 Inline equations are delimited by `\(` and `\)`. These equations will appear
 inline with regular text. For example:
 
-    The pythagorean formula is \( a^2 + b^2 = c^2 \).
+    The Pythagorean theorum is \( a^2 + b^2 = c^2 \).
 
 Gollum uses [MathJax](http://www.mathjax.org/) to convert the TeX syntax into
 output suitable for display in web browsers.
@@ -406,7 +406,7 @@ To delete a page and commit the change:
     wiki.delete_page(page, commit)
 
 
-## Contribute
+## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:
 
