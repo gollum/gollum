@@ -8,6 +8,13 @@
   font-size: 13px;
 }
 
+  #editbar .inner {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+  }
+
   #editbar .current {
     display: block !important;
   }
@@ -24,6 +31,10 @@
     height: 26px;
     margin: 3px;
     padding-right: 6px;
+  }
+
+  #editbar .group-right {
+    float: right;
   }
 
   #editbar .group-separator {
@@ -103,7 +114,7 @@
       color: #333;
     }
 
-      #editbar .tab a.open:hover {
+    #editbar .tab a.open:hover {
       text-decoration: none;
     }
 

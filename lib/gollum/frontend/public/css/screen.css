@@ -182,19 +182,16 @@ html {overflow-y: scroll;}
       margin: 1em 0;
     }
 
-    #guides .write input.text,
-    #guides .write textarea {
+    #guides .write input.text {
       padding: 5px;
       border: 1px solid #888;
-    }
-
-    #guides .write input.text {
       width: 40em;
     }
 
     #guides .write textarea {
       width: 100%;
       height: 25em;
+      border: none;
     }
 
     #guides .write label span.title {
@@ -204,6 +201,12 @@ html {overflow-y: scroll;}
 
     #guides .write .actions input {
       margin-right: 1em;
+    }
+
+    #guides .write #preview_bucket {
+      border: 1px solid #888;
+      background-color: white;
+      padding: 5px;
     }
 
 /****************************************************************************/
@@ -337,6 +340,23 @@ html {overflow-y: scroll;}
     color: yellow !important;
   }
 
+/* Wiki form */
+
+.wiki-form .inner {
+  margin: 0;
+  padding: 5px 0 5px 5px;
+  background: #fff;
+  border: solid 1px #888
+}
+
+.wiki-form input[type=text] {
+  width: 100%;
+}
+
+label.wiki-label {
+  padding: 1em 5px;
+}
+
 /* Special markup considerations */
 
 .wikistyle.gollum.footer {
@@ -400,4 +420,69 @@ html {overflow-y: scroll;}
 
 .wikistyle.gollum.rest > div.document > div.section > h1:first-child {
   display: none;
+}
+
+/****************************************************************************/
+/* Comment Form
+/****************************************************************************/
+
+.comment-form-error{
+  margin:-15px 0 15px 0;
+  font-weight:bold;
+  color:#aa0000;
+}
+
+.comment-form{
+  margin:-10px 0 10px 0;
+  padding:5px;
+  background:#eee;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+}
+
+.comment-form textarea{
+  margin:0;
+  width:100%;
+  height:100px;
+}
+
+.comment-form p.help{
+  margin:3px 0 0 0;
+  float:right;
+  font-size:11px;
+  color:#666;
+}
+
+.comment-form ul.tabs{
+  margin:0 0 5px 0;
+}
+
+.comment-form ul.tabs li{
+  list-style-type:none;
+  margin:0;
+  display:inline-block;
+}
+
+.comment-form ul.tabs a{
+  display:inline-block;
+  padding:2px 8px;
+  font-size:11px;
+  font-weight:bold;
+  text-decoration:none;
+  color:#666;
+  border:1px solid transparent;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+}
+
+.comment-form ul.tabs a.selected{
+  color:#333;
+  background:#fff;
+  border-color:#bbb;
+  border-right-color: #ddd;
+  border-bottom-color: #ddd;
+}
+
+.comment-form .comment{
+  margin:5px 0 0 0;
 }

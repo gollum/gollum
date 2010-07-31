@@ -71,6 +71,13 @@ module Precious
       redirect "/#{name}"
     end
 
+    post '/preview' do
+      format = params['wiki_format']
+      data = params['text']
+      wiki = Gollum::Wiki.new($path)
+      wiki.preview_page("Preview", data, format).formatted_data
+    end
+
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
       wiki = Gollum::Wiki.new($path)
