@@ -2,7 +2,6 @@
   border-left: 1px solid #888;
   border-top: 1px solid #888;
   border-right:  1px solid #888;
-  width: 100%;
   overflow: hidden;
   font-family: sans-serif;
   font-size: 13px;
@@ -36,6 +35,10 @@
   #editbar .group-right {
     float: right;
   }
+
+    #editbar .group-right .tab.format {
+      margin-top: 4px;
+    }
 
   #editbar .group-separator {
     border-right: 1px solid #ddd;

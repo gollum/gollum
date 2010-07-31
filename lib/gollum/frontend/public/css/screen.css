@@ -344,9 +344,10 @@ html {overflow-y: scroll;}
 
 .wiki-form .inner {
   margin: 0;
-  padding: 5px 0 5px 5px;
+  padding: 0 0 0 5px;
   background: #fff;
-  border: solid 1px #888
+  border: solid 1px #888;
+  line-height: 0;
 }
 
 .wiki-form input[type=text] {
@@ -442,6 +443,7 @@ label.wiki-label {
 
 .comment-form textarea{
   margin:0;
+  padding: 5px 0;
   width:100%;
   height:100px;
 }
