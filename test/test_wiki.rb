@@ -40,6 +40,20 @@ context "Wiki" do
   end
 end
 
+context "Wiki page previewing" do
+  setup do
+    @path = testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+  end
+
+  test "preview_page" do
+    page = @wiki.preview_page("Test", "# Bilbo", :markdown)
+    assert_equal "# Bilbo", page.raw_data
+    assert_equal "<h1>Bilbo</h1>", page.formatted_data
+    assert_equal "Test.md", page.name
+  end
+end
+
 context "Wiki page writing" do
   setup do
     @path = testpath("examples/test.git")

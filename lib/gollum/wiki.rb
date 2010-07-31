@@ -84,6 +84,25 @@ module Gollum
       @file_class.new(self).find(name, version)
     end
 
+    # Public: Create an in-memory Page with the given data and format. This
+    # is useful for previewing what content will look like before committing
+    # it to the repository.
+    #
+    # name   - The String name of the page.
+    # format - The Symbol format of the page.
+    # data   - The new String contents of the page.
+    #
+    # Returns the in-memory Gollum::Page.
+    def preview_page(name, data, format)
+      page = @page_class.new(self)
+      ext = @page_class.format_to_ext(format.to_sym)
+      path = @page_class.cname(name) + '.' + ext
+      blob = OpenStruct.new(:name => path, :data => data)
+      page.populate(blob, path)
+      page.version = self.repo.commit("HEAD")
+      page
+    end
+
     # Public: Write a new version of a page to the Gollum repo root.
     #
     # name   - The String name of the page.

@@ -383,6 +383,13 @@ Get a specific version of a given static file:
 
     wiki.file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
 
+Get an in-memory Page preview (useful for generating previews for web
+interfaces):
+
+    preview = wiki.preview_page("My Page", "# Contents", :markdown)
+    preview.formatted_data
+    # => "<h1>Contents</h1>"
+
 Methods that write to the repository require a Hash of commit data that takes
 the following form:
 
