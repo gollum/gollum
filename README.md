@@ -19,7 +19,7 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 
 The best way to install Gollum is with RubyGems:
 
-    $ [sudo] gem isntall gollum
+    $ [sudo] gem install gollum
 
 In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
