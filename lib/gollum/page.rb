@@ -52,6 +52,10 @@ module Gollum
       @blob && @blob.name
     end
 
+    # Public: The canonical page name without extension, and dashes converted 
+    # to spaces.
+    #
+    # Returns the String name.
     def name
       filename.split('.')[0..-2].join('.').gsub('-', ' ')
     end
