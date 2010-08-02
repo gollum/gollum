@@ -406,7 +406,7 @@ Update an existing page. If the format is different than the page's current
 format, the file name will be changed to reflect the new format.
 
     page = wiki.page('Page Name')
-    wiki.update_page(page, page.format, 'Page contents', commit)
+    wiki.update_page(page, page.name, page.format, 'Page contents', commit)
 
 To delete a page and commit the change:
 

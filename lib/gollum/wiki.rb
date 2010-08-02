@@ -95,7 +95,7 @@ module Gollum
     # Returns the in-memory Gollum::Page.
     def preview_page(name, data, format)
       page = @page_class.new(self)
-      ext = @page_class.format_to_ext(format.to_sym)
+      ext  = @page_class.format_to_ext(format.to_sym)
       path = @page_class.cname(name) + '.' + ext
       blob = OpenStruct.new(:name => path, :data => data)
       page.populate(blob, path)
@@ -134,6 +134,7 @@ module Gollum
     # changed to reflect the new format.
     #
     # page   - The Gollum::Page to update.
+    # name   - The String extension-less name of the page.
     # format - The Symbol format of the page.
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
@@ -142,19 +143,19 @@ module Gollum
     #          :email   - The String email address.
     #
     # Returns the String SHA1 of the newly written version.
-    def update_page(page, format, data, commit = {})
-      pcommit = @repo.commit('master')
-      map     = tree_map(pcommit.tree)
+    def update_page(page, name, format, data, commit = {})
+      pcommit  = @repo.commit('master')
+      map      = tree_map(pcommit.tree)
+      name   ||= page.name
+      format ||= page.format
+      index    = nil
 
-      index = nil
-
-      if page.format == format
+      if page.name == name && page.format == format
         index = tree_map_to_index(map)
         index.add(page.path, normalize(data))
       else
         map   = delete_from_tree_map(map, page.path)
         dir   = ::File.dirname(page.path)
-        name  = page.name
         map   = add_to_tree_map(map, dir, name, format, data)
         index = tree_map_to_index(map)
       end

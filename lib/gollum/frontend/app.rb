@@ -56,7 +56,7 @@ module Precious
       page = wiki.page(name)
       format = params[:format].intern
 
-      wiki.update_page(page, format, params[:content], commit_message)
+      wiki.update_page(page, page.name, format, params[:content], commit_message)
 
       redirect "/#{name}"
     end

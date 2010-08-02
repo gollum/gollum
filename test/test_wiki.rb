@@ -87,7 +87,7 @@ context "Wiki page writing" do
     @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
 
     page = @wiki.page("Gollum")
-    @wiki.update_page(page, :markdown, "# Gollum2", commit)
+    @wiki.update_page(page, page.name, :markdown, "# Gollum2", commit)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_equal "# Gollum2", @wiki.page("Gollum").raw_data
@@ -105,11 +105,42 @@ context "Wiki page writing" do
     assert_equal :markdown, @wiki.page("Gollum").format
 
     page = @wiki.page("Gollum")
-    @wiki.update_page(page, :textile, "h1. Gollum", commit)
+    @wiki.update_page(page, page.name, :textile, "h1. Gollum", commit)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_equal :textile, @wiki.page("Gollum").format
     assert_equal "h1. Gollum", @wiki.page("Gollum").raw_data
+  end
+
+  test "update page with name change" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+
+    assert_equal :markdown, @wiki.page("Gollum").format
+
+    page = @wiki.page("Gollum")
+    @wiki.update_page(page, 'Smeagol', :markdown, "h1. Gollum", commit)
+
+    assert_equal 2, @wiki.repo.commits.size
+    assert_equal "h1. Gollum", @wiki.page("Smeagol").raw_data
+  end
+
+  test "update page with name and format change" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+
+    assert_equal :markdown, @wiki.page("Gollum").format
+
+    page = @wiki.page("Gollum")
+    @wiki.update_page(page, 'Smeagol', :textile, "h1. Gollum", commit)
+
+    assert_equal 2, @wiki.repo.commits.size
+    assert_equal :textile, @wiki.page("Smeagol").format
+    assert_equal "h1. Gollum", @wiki.page("Smeagol").raw_data
   end
 
   test "update nested page with format change" do
@@ -123,7 +154,7 @@ context "Wiki page writing" do
 
     page = @wiki.page("Gollum")
     assert_equal :markdown, @wiki.page("Gollum").format
-    @wiki.update_page(page, :textile, "h1. Gollum", commit)
+    @wiki.update_page(page, page.name, :textile, "h1. Gollum", commit)
 
     page = @wiki.page("Gollum")
     assert_equal "lotr/Gollum.textile", page.path
