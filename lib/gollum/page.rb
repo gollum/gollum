@@ -48,8 +48,12 @@ module Gollum
     # Public: The on-disk filename of the page including extension.
     #
     # Returns the String name.
-    def name
+    def filename
       @blob && @blob.name
+    end
+
+    def name
+      filename.split('.')[0..-2].join('.').gsub('-', ' ')
     end
 
     # Public: If the first element of a formatted page is an <h1> tag it can
@@ -79,7 +83,7 @@ module Gollum
       if !header.empty?
         Sanitize.clean(header.to_html)
       else
-        Sanitize.clean(self.name.split('.')[0..-2].join('.').gsub('-', ' '))
+        Sanitize.clean(name)
       end
     end
 
@@ -152,7 +156,7 @@ module Gollum
     #
     # Returns the footer Page or nil if none exists.
     def footer
-      return nil if page_match('_Footer', self.name)
+      return nil if page_match('_Footer', self.filename)
 
       dirs = self.path.split('/')
       dirs.pop

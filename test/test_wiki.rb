@@ -36,7 +36,7 @@ context "Wiki" do
     pages = @wiki.pages
     assert_equal \
       %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-<b>Precious.md), 
-      pages.map { |p| p.name }.sort
+      pages.map { |p| p.filename }.sort
   end
 end
 
@@ -50,7 +50,8 @@ context "Wiki page previewing" do
     page = @wiki.preview_page("Test", "# Bilbo", :markdown)
     assert_equal "# Bilbo", page.raw_data
     assert_equal "<h1>Bilbo</h1>", page.formatted_data
-    assert_equal "Test.md", page.name
+    assert_equal "Test.md", page.filename
+    assert_equal "Test", page.name
   end
 end
 

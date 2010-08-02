@@ -154,7 +154,7 @@ module Gollum
       else
         map   = delete_from_tree_map(map, page.path)
         dir   = ::File.dirname(page.path)
-        name  = page.name.split('.')[0..-2].join('.')
+        name  = page.name
         map   = add_to_tree_map(map, dir, name, format, data)
         index = tree_map_to_index(map)
       end

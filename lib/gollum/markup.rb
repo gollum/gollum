@@ -9,7 +9,7 @@ module Gollum
     # Returns a new Gollum::Markup object, ready for rendering.
     def initialize(page)
       @wiki    = page.wiki
-      @name    = page.name
+      @name    = page.filename
       @data    = page.raw_data
       @version = page.version.id
       @dir     = ::File.dirname(page.path)
@@ -267,8 +267,7 @@ module Gollum
         %{<a href="#{name}">#{name}</a>}
       else
         if page = @wiki.page(cname)
-          pname = page.name.split('.')[0..-2].join('.')
-          link = ::File.join(@wiki.base_path, Page.cname(pname))
+          link = ::File.join(@wiki.base_path, Page.cname(page.name))
           presence = "present"
         else
           link = ::File.join(@wiki.base_path, cname)
