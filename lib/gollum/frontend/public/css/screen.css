@@ -488,3 +488,79 @@ label.wiki-label {
 .comment-form .comment{
   margin:5px 0 0 0;
 }
+
+/****************************************************************************/
+/* History
+/****************************************************************************/
+
+table.commits {
+  width: 100%;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  margin-bottom: 2em;
+}
+
+  table.commits tr td {
+    background-color: #eaf2f5;
+  }
+
+  table.commits th {
+    font-weight: normal;
+    border-bottom: 1px solid #ccc;
+    padding: .3em .6em;
+    background-color: #eee;
+    font-size: 95%;
+    text-align:left;
+  }
+
+  table.commits td {
+    border-bottom: 1px solid #ccc;
+    padding: .3em .6em;
+  }
+
+    table.commits td.sha,
+    table.commits td.message {
+      font-family: Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+      font-size: 80%;
+    }
+
+    table.commits td.checkbox {
+      width: 3%;
+    }
+
+    table.commits td.sha {
+      width: 6%;
+    }
+
+    table.commits td.human {
+      font-family: Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+      font-size: 80%;
+      width: 4%;
+      color: #888;
+    }
+
+    table.commits td.author {
+      width: 15%;
+      font-weight: bold;
+    }
+
+      table.commits td.author img {
+        vertical-align: middle;
+        border: 1px solid #ccc;
+        padding: 1px;
+        background-color: white;
+      }
+
+    table.commits td.message a {
+      color: black;
+    }
+
+      table.commits td.message a:hover {
+        text-decoration: underline;
+      }
+
+    table.commits td.date {
+      width: 12%;
+      text-align: right;
+    }

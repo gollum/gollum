@@ -78,6 +78,13 @@ module Precious
       wiki.preview_page("Preview", data, format).formatted_data
     end
 
+    get '/history/:name' do
+      @name = params[:name]
+      wiki = Gollum::Wiki.new($path)
+      @page = wiki.page(@name)
+      mustache :history
+    end
+
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
       wiki = Gollum::Wiki.new($path)
