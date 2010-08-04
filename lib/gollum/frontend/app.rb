@@ -51,14 +51,15 @@ module Precious
     end
 
     post '/edit/:name' do
-      name = params[:name]
-      wiki = Gollum::Wiki.new($path)
-      page = wiki.page(name)
+      name   = params[:name]
+      wiki   = Gollum::Wiki.new($path)
+      page   = wiki.page(name)
       format = params[:format].intern
+      name   = params[:rename] if params[:rename]
 
-      wiki.update_page(page, page.name, format, params[:content], commit_message)
+      wiki.update_page(page, name, format, params[:content], commit_message)
 
-      redirect "/#{name}"
+      redirect "/#{Gollum::Page.cname name}"
     end
 
     post '/create/:name' do
