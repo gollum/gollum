@@ -3,29 +3,37 @@
   <h1>Create a new page</h1>
 
   <form class="new_wiki" method="post" action="/create/{{name}}">
-    <label>
-      Title<br />
-      <input class="text" type="text" name="page" value="{{name}}" />
-    </label>
-        <label>
-      Format<br />
-      <select name="format">
-        {{#formats}}
-          <option {{#selected}}selected="true" {{/selected}}value="{{id}}">{{name}}</option>
-        {{/formats}}
-      </select>
-    </label>
-    <label>
-      Body
-      <textarea name="content"></textarea>
-    </label>
-    <label>
-      Edit Summary <small>(Briefly describe the changes you have made)</small><br />
-      <input type="text" class="text" name="message" value="Create '{{name}}' page." />
-    </label>
+    <div>
+      <label>
+        Title<br />
+        <input class="text" type="text" name="page" value="{{name}}" />
+      </label>
+      <br />
 
-    <div class="actions">
-      <input type="submit" value="Create page" />
+      <div id="wiki-form" class="comment-form wiki-form">
+        <ul class="tabs inline-tabs">
+          <li><a href="#write_bucket" action="write">Write</a></li>
+          <li><a href="#preview_bucket" action="preview">Preview</a></li>
+        </ul>
+        <div id="write_bucket" class="tab-content">
+          {{>editbar}}
+          <div class="inner">
+            <textarea name="content">{{content}}</textarea>
+          </div>
+        </div>
+        <div id="preview_bucket" class="tab-content content-body content wikistyle gollum">
+          <p>Loading content...</p>
+        </div>
+      </div>
+
+      <label>
+        Edit Summary <small>(Briefly describe the changes you have made)</small><br />
+        <input type="text" class="text" name="message" value="Create '{{name}}' page." />
+      </label>
+
+      <div class="actions">
+        <input type="submit" value="Create page" />
+      </div>
     </div>
   </form>
 </div>
