@@ -564,3 +564,159 @@ table.commits {
       width: 12%;
       text-align: right;
     }
+
+/****************************************************************************/
+/* Files
+/****************************************************************************/
+
+#files {
+
+}
+
+  #files .file {
+    border: 1px solid #ccc;
+    margin-bottom: 1em;
+  }
+
+  #files .file .syntax{
+    border:none;
+    padding:0;
+  }
+
+    #files .file .meta {
+      padding:0 5px;
+      height:33px;
+      line-height:33px;
+      font-size:12px;
+      color:#333;
+      background:url(/images/modules/commit/file_head.gif) 0 0 repeat-x #eee;
+      text-shadow:1px 1px 0 rgba(255, 255, 255, 0.5);
+      border-bottom: 1px solid #ccc;
+      overflow: hidden;
+    }
+
+      #files .file .meta .info {
+        float: left;
+        height:33px;
+        line-height:33px;
+        font-family: Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+      }
+
+        #files .file .meta .info span{
+          padding-left:9px;
+          margin-left:5px;
+          background:url(/images/modules/commit/action_separator.png) 0 50% no-repeat;
+        }
+
+        #files .file .meta .info span:first-child, #files .file .meta .info .icon + span{
+          background:transparent;
+          margin-left:0;
+          padding-left:0;
+        }
+
+        #files .file .meta .info span.icon{
+          float:left;
+          margin:5px 5px 0 0;
+          padding:3px;
+          background:#f7f7f7;
+          border:1px solid #ccc;
+          border-right-color:#e5e5e5;
+          border-bottom-color:#e5e5e5;
+          -webkit-border-radius:3px;
+          -moz-border-radius:3px;
+          border-radius:3px;
+          line-height: 1em;
+        }
+
+    #files .file .meta .actions {
+      float: right;
+      height:33px;
+      line-height:33px;
+    }
+
+      #files .file .meta .actions li{
+        list-style-type:none;
+        float:left;
+        margin:0 0 0 7px;
+        height:33px;
+        line-height:33px;
+        padding-left:9px;
+        font-size:11px;
+        background:url(/images/modules/commit/action_separator.png) 0 50% no-repeat;
+      }
+
+      #files .file .meta .actions li:first-child{
+        background:transparent;
+        margin-left:0;
+        padding-left:0;
+      }
+
+        #files .file .meta .actions li a{
+          font-weight:bold;
+        }
+
+        #files .file .meta .actions li code{
+          font-size:11px;
+        }
+
+        #files .file .meta .actions li label input{
+          position:relative;
+          top:1px;
+        }
+
+    #files .file .data {
+      font-size: 80%;
+      overflow: auto;
+      background-color: #f8f8ff;
+    }
+
+    #files .file .data.empty {
+      font-size: 90%;
+      padding:5px 10px;
+      color:#777;
+    }
+
+    #files .image {
+      padding: 1.2em;
+      text-align: center;
+    }
+
+      #files .image img {
+        max-width: 60em;
+      }
+
+      #files .file .data pre, #files .file .line-data, #files .file .line-number {
+        font-family: 'Bitstream Vera Sans Mono', 'Courier', monospace;
+        font-size: 115%;
+      }
+
+        #files .file .data .highlight {
+          padding: 1em 0;
+        }
+
+        #files .file .data .highlight div {
+          padding-left: 1em;
+        }
+
+        #files .file .data .line_numbers {
+          background-color: #ececec;
+          color: #aaa;
+          padding: 1em .5em;
+          border-right: 1px solid #ddd;
+          text-align: right;
+        }
+
+        #files .file .data td.line_numbers{
+          padding:0 0.5em;
+          font-family: 'Bitstream Vera Sans Mono', 'Courier', monospace;
+          font-size: 115%;
+          -moz-user-select:none;
+          -khtml-user-select:none;
+          user-select:none;
+        }
+
+          #files .file .data .line_numbers span,
+          #files .file .data .line_numbers a {
+            color: #aaa;
+            cursor: pointer;
+          }
