@@ -4,14 +4,14 @@
       <a href="/{{name}}">&laquo; Back</a>
     </div>
     <h1>History of {{human_name}}</h1>
-    <form method="post" action="/compare/{{name}}">
+    <form id="history" method="post" action="/compare/{{name}}">
       <table class="commits" cellpadding="0" cellspacing="0">
         <tr>
           <th colspan="5">
-            Select any two versions to <input type="submit" value="Compare" />
+            Select any two versions to <input type="submit" value="Compare" disabled />
           </th>
         {{#versions}}
-          <tr>
+          <tr class="commit">
             <td class="checkbox">
               <input name="versions[]" type="checkbox" value="{{id}}" />
             </td>

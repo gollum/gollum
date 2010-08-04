@@ -505,6 +505,10 @@ table.commits {
     background-color: #eaf2f5;
   }
 
+    table.commits tr.selected td {
+      background-color: #FEFFE6;
+    }
+
   table.commits th {
     font-weight: normal;
     border-bottom: 1px solid #ccc;
