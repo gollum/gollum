@@ -78,6 +78,23 @@ module Precious
       wiki.preview_page("Preview", data, format).formatted_data
     end
 
+    get '/history/:name' do
+      @name = params[:name]
+      wiki = Gollum::Wiki.new($path)
+      @page = wiki.page(@name)
+      mustache :history
+    end
+
+    post '/compare/:name' do
+      @name = params[:name]
+      @versions = params[:versions]
+      wiki = Gollum::Wiki.new($path)
+      @page = wiki.page(@name)
+      diffs = wiki.repo.diff(@versions[1], @versions[0], @page.path)
+      @diff = diffs.first
+      mustache :compare
+    end
+
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
       wiki = Gollum::Wiki.new($path)

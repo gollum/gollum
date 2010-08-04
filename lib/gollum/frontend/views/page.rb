@@ -37,18 +37,6 @@ module Precious
         @footer ||= @page.footer
         @footer.format.to_s
       end
-
-      def versions
-        i = @page.versions.size + 1
-        @page.versions.map do |v|
-          i -= 1
-          { :id => v.id,
-            :id7 => v.id[0..6],
-            :num => i,
-            :selected => @page.version.id == v.id,
-            :author => v.author.name }
-        end
-      end
     end
   end
 end

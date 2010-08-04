@@ -22,11 +22,6 @@
     </div>
   </div>
   <div style="float: right;">
-    <small>Versions:</small>
-    <select id="versions_select" name="versions_select">
-      {{#versions}}
-        <option {{#selected}}selected="true" {{/selected}}value="/{{name}}/{{id}}">Version {{num}} ({{id7}}) by {{author}}</option>
-      {{/versions}}
-    </select>
+    <a href="/history/{{name}}">View Revision History</a>
   </div>
 </div>

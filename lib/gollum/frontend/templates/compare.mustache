@@ -1,0 +1,33 @@
+<div class="guide">
+  <div class="main">
+    <div class="actions">
+      <a href="/{{name}}">&laquo; Back</a>
+    </div>
+    <h1>Comparison of {{human_name}}: {{before}} &rarr; {{after}}</h1>
+    <div id="files">
+      <div class="file">
+        <div class="meta">
+          <div class="info">
+            <span class="icon">
+              <img alt="Txt" height="16" src="/images/txt.png" width="16">
+            </span>
+            {{path}}
+          </div>
+        </div>
+        <div class="data highlight">
+          <table cellpadding="0" cellspacing="0" width="100%">
+            {{#lines}}
+              <tr>
+                <td class="line_numbers">{{ldln}}</td>
+                <td class="line_numbers">{{rdln}}</td>
+                <td width="100%">
+                  <pre><div class="{{class}}">{{line}}</div></pre>
+                </td>
+              </tr>
+            {{/lines}}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

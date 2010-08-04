@@ -1,3 +1,6 @@
+# stdlib
+require 'digest/md5'
+
 # external
 require 'grit'
 require 'github/markup'
