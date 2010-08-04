@@ -36,6 +36,18 @@ context "Page" do
       page.versions.map { |v| v.id }
   end
 
+  test "page versions across renames" do
+    page = @wiki.page 'My-Precious'
+    assert_equal ['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b', '94523d7ae48aeba575099dd12926420d8fd0425d'],
+      page.versions.map { |v| v.id }
+  end
+
+  test "page versions without renames" do
+    page = @wiki.page 'My-Precious'
+    assert_equal ['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'],
+      page.versions(:follow => false).map { |v| v.id }
+  end
+
   test "specific page version" do
     page = @wiki.page('Bilbo Baggins', 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb')
     assert_equal 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb', page.version.id
@@ -67,7 +79,7 @@ context "Page" do
   end
 
   test "title from filename with html contents" do
-    page = @wiki.page('My <b>Precious')
+    page = @wiki.page('My <b>Precious', '0ed8cbe0a25235bd867e65193c7d837c66b328ef')
     assert_equal 'My Precious', page.title
   end
 

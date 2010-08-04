@@ -150,10 +150,20 @@ module Gollum
     # options - The options Hash:
     #           :page     - The Integer page number (default: 1).
     #           :per_page - The Integer max count of items to return.
+    #           :follow   - Follow's a file across renames, but falls back 
+    #                       to a slower Grit native call.  (default: true)
     #
     # Returns an Array of Grit::Commit.
     def versions(options = {})
-      @wiki.repo.log('master', @path, log_pagination_options(options))
+      options[:follow] = true if !options.key?(:follow)
+      options = log_pagination_options(options)
+      if options[:follow]
+        options[:pretty] = 'raw'
+        log = @wiki.repo.git.native "log", options, "master", "--", @path
+        Grit::Commit.list_from_string(@wiki.repo, log)
+      else
+        @wiki.repo.log('master', @path, options)
+      end
     end
 
     # Public: The footer Page.
