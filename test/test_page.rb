@@ -39,7 +39,7 @@ context "Page" do
   test "page versions across renames" do
     page = @wiki.page 'My-Precious'
     assert_equal ['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b', '94523d7ae48aeba575099dd12926420d8fd0425d'],
-      page.versions.map { |v| v.id }
+      page.versions(:follow => true).map { |v| v.id }
   end
 
   test "page versions without renames" do
