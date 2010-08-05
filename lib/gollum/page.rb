@@ -301,7 +301,9 @@ module Gollum
           when Grit::Blob
             if page_match(name, item.name)
               path = dir == '' ? '' : ::File.join('/', dir)
-              return self.class.new(@wiki).populate(item, path)
+              page = self.class.new(@wiki).populate(item, path)
+              page.version = self.version
+              page
             end
         end
       end
