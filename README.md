@@ -3,13 +3,15 @@ gollum -- A wiki built on top of Git
 
 ## DESCRIPTION
 
-Gollum is a simple wiki built on top of Git that powers GitHub Wikis. Gollum
-is designed so that you can create a compliant Git repository (known as a
-Gollum repository) either by hand, by calling API methods, or via the web
-interface.
+Gollum is a simple wiki system built on top of Git that powers GitHub Wikis.
 
-We are making the source available so that you may test your wikis locally if
-you choose to edit them by hand.
+Gollum wikis are simply Git repositories that adhere to a specific format.
+Gollum pages may be written in a variety of formats and can be edited in a
+number of ways depending on your needs. You can edit your wiki locally:
+
+* With your favorite text editor or IDE.
+* With the built-in web interface.
+* With the Gollum Ruby API.
 
 Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 [TomDoc](http://tomdoc.org/) for inline documentation.
