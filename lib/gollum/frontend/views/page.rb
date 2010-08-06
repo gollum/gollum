@@ -3,12 +3,8 @@ module Precious
     class Page < Layout
       attr_reader :content, :page, :footer
 
-      def human_name
-        @page.title
-      end
-
       def title
-        "A Page"
+        @page.title
       end
 
       def format

@@ -6,7 +6,7 @@ module Precious
       attr_reader :page, :content
 
       def title
-        "Edit"
+        "Editing #{@page.title}"
       end
     end
   end

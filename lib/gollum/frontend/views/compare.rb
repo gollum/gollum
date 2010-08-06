@@ -3,12 +3,8 @@ module Precious
     class Compare < Layout
       attr_reader :page, :diff, :versions
 
-      def human_name
-        @page.title
-      end
-
       def title
-        "A Page"
+        "Comparison of #{@page.title}"
       end
 
       def path

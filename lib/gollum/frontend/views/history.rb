@@ -3,12 +3,8 @@ module Precious
     class History < Layout
       attr_reader :page
 
-      def human_name
-        @page.title
-      end
-
       def title
-        "A Page"
+        "History of #{@page.title}"
       end
 
       def versions
