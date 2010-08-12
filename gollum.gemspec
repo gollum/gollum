@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.0.0'
+  s.version           = '1.0.1'
   s.date              = '2010-08-12'
   s.rubyforge_project = 'gollum'
 
@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('grit', "~> 2.0")
+  s.add_dependency('grit', "~> 2.1")
   s.add_dependency('github-markup', [">= 0.4.0", "< 1.0.0"])
   s.add_dependency('albino', "~> 1.0")
   s.add_dependency('sinatra', "~> 1.0")
