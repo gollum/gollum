@@ -4,14 +4,14 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '0.0.1'
-  s.date              = '2010-08-05'
+  s.version           = '1.0.0'
+  s.date              = '2010-08-12'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
   s.description = "A simple, Git-powered wiki with a sweet API and local frontend."
 
-  s.authors  = ["Tom Preston-Werner"]
+  s.authors  = ["Tom Preston-Werner", "Rick Olson"]
   s.email    = 'tom@github.com'
   s.homepage = 'http://github.com/github/gollum'
 
@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
 
   # = MANIFEST =
   s.files = %w[
+    HISTORY.md
     LICENSE
     README.md
     Rakefile
@@ -48,7 +49,6 @@ Gem::Specification.new do |s|
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
     lib/gollum/frontend/public/css/editbar.css
-    lib/gollum/frontend/public/css/global.css
     lib/gollum/frontend/public/css/gollum.css
     lib/gollum/frontend/public/css/screen.css
     lib/gollum/frontend/public/css/syntax.css

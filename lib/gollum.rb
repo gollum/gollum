@@ -15,7 +15,7 @@ require 'gollum/markup'
 require 'gollum/albino'
 
 module Gollum
-  VERSION = '0.0.1'
+  VERSION = '1.0.0'
 
   SANITIZATION_OPTIONS = {
     :elements => [
