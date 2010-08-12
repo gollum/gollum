@@ -10,6 +10,7 @@
           <th colspan="5">
             Select any two versions to <input type="submit" value="Compare" />
           </th>
+        </tr>
         {{#versions}}
           <tr class="commit">
             <td class="checkbox">
@@ -27,6 +28,10 @@
           </tr>
         {{/versions}}
       </table>
+      <div class="pagination">
+        {{{previous_link}}}
+        {{{next_link}}}
+      </div>
     </form>
   </div>
 </div>

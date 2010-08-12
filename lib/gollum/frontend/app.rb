@@ -80,9 +80,11 @@ module Precious
     end
 
     get '/history/:name' do
-      @name = params[:name]
-      wiki = Gollum::Wiki.new($path)
-      @page = wiki.page(@name)
+      @name     = params[:name]
+      wiki      = Gollum::Wiki.new($path)
+      @page     = wiki.page(@name)
+      @page_num = [params[:page].to_i, 1].max
+      @versions = @page.versions :page => @page_num
       mustache :history
     end
 
