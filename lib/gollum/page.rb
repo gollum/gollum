@@ -303,7 +303,7 @@ module Gollum
               path = dir == '' ? '' : ::File.join('/', dir)
               page = self.class.new(@wiki).populate(item, path)
               page.version = self.version
-              page
+              return page
             end
         end
       end
