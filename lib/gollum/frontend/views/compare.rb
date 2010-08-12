@@ -12,11 +12,11 @@ module Precious
       end
 
       def before
-        @versions[1][0..6]
+        @versions[0][0..6]
       end
 
       def after
-        @versions[0][0..6]
+        @versions[1][0..6]
       end
 
       def lines

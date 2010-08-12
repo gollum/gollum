@@ -87,12 +87,24 @@ module Precious
     end
 
     post '/compare/:name' do
-      @name = params[:name]
-      @versions = params[:versions]
-      wiki = Gollum::Wiki.new($path)
-      @page = wiki.page(@name)
-      diffs = wiki.repo.diff(@versions[1], @versions[0], @page.path)
-      @diff = diffs.first
+      @versions = params[:versions] || []
+      if @versions.size < 2
+        redirect "/history/#{params[:name]}"
+      else
+        redirect "/compare/%s/%s...%s" % [
+          params[:name],
+          @versions.last,
+          @versions.first]
+      end
+    end
+
+    get '/compare/:name/:version_list' do
+      @name     = params[:name]
+      @versions = params[:version_list].split(/\.{2,3}/)
+      wiki      = Gollum::Wiki.new($path)
+      @page     = wiki.page(@name)
+      diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+      @diff     = diffs.first
       mustache :compare
     end
 
