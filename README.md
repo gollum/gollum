@@ -63,7 +63,7 @@ choose. Special footers can be created in `footer files`. Other content
 ## PAGE FILES
 
 Page files may be written in any format supported by
-[GitHub-Markup](http://github.com/defunkt/github-markup) (except roff). The
+[GitHub-Markup](http://github.com/github/markup) (except roff). The
 current list of formats and allowed extensions is:
 
 * ASCIIDoc: .asciidoc
