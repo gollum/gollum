@@ -1,10 +1,14 @@
 # stdlib
 require 'digest/md5'
+require 'ostruct'
 
 # external
 require 'grit'
 require 'github/markup'
 require 'sanitize'
+
+# ruby 1.8 compatibility
+require 'gollum/ruby1.8'
 
 # internal
 require 'gollum/pagination'
