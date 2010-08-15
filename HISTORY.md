@@ -5,7 +5,7 @@
     1.0.x versions of Sanitize require Hpricot instead of Nokogiri
     and have bugs that may allow non-whitelisted HTML to sneak
     through.
-
+  * Introduce Ruby 1.9 compatibility fixes.
 
 # 1.0.1 / 2010-08-12
 
