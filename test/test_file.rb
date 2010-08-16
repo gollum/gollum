@@ -15,4 +15,8 @@ context "File" do
     assert_equal "[ ] Write section on Ents\n", file.raw_data
     assert_equal @wiki.repo.commits.first.id, file.version.id
   end
+
+  test "accessing tree" do
+    assert_nil @wiki.file("Mordor")
+  end
 end
