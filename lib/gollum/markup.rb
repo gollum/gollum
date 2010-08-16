@@ -200,7 +200,7 @@ module Gollum
           classes << 'frame' if opts['frame']
           %{<span class="#{classes.join(' ')}">} +
           %{<span>} +
-          %{<img src="/#{file.path}" #{attr_string}/>} +
+          %{<img src="#{path}" #{attr_string}/>} +
           (alt ? %{<span>#{alt}</span>} : '') +
           %{</span>} +
           %{</span>}

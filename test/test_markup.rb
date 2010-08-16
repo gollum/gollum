@@ -205,6 +205,12 @@ context "Markup" do
     relative_image(content, output)
   end
 
+  test "absolute image with frame" do
+    content = "a\n\n[[http://example.com/bilbo.jpg|frame]]\n\nb"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"http://example.com/bilbo.jpg\" /></span></span></p>\n\n<p>b</p>"
+    relative_image(content, output)
+  end
+
   test "image with frame and alt" do
     content = "a\n\n[[alpha.jpg|frame|alt=Alpha]]\n\nb"
     output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><span>Alpha</span></span></span></p>\n\n<p>b</p>"
