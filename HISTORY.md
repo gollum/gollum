@@ -6,6 +6,7 @@
     and have bugs that may allow non-whitelisted HTML to sneak
     through.
   * Introduce Ruby 1.9 compatibility fixes.
+  * Handle duplicate page errors in frontend.
 
 # 1.0.1 / 2010-08-12
 

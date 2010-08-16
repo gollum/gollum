@@ -68,8 +68,13 @@ module Precious
 
       format = params[:format].intern
 
-      wiki.write_page(name, format, params[:content], commit_message)
-      redirect "/#{name}"
+      begin
+        wiki.write_page(name, format, params[:content], commit_message)
+        redirect "/#{name}"
+      rescue Gollum::DuplicatePageError => e
+        @message = "Duplicate page: #{e.message}"
+        mustache :error
+      end
     end
 
     post '/preview' do
