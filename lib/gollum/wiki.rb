@@ -315,13 +315,24 @@ module Gollum
       ext  = @page_class.format_to_ext(format)
       path = @page_class.cname(name) + '.' + ext
 
-      parts = dir.split('/')
+      parts     = dir.split('/')
       container = nil
       parts.each do |part|
         container = map[part]
       end
 
-      (container || map)[path] = normalize(data)
+      container ||= map
+      downpath    = path.downcase
+      downpath.sub! /\.\w+$/, ''
+      container.keys.each do |existing|
+        file = existing.downcase
+        file.sub! /\.\w+$/, ''
+        if downpath == file
+          raise DuplicatePageError.new(dir, existing, path)
+        end
+      end
+
+      container[path] = normalize(data)
       map
     end
 

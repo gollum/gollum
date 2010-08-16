@@ -95,6 +95,16 @@ context "Wiki page writing" do
     assert @wiki.page("Gollum")
   end
 
+  test "is not allowed to overwrite file" do
+    commit = { :message => "Gollum page",
+               :name => "Tom Preston-Werner",
+               :email => "tom@github.com" }
+    @wiki.write_page("Abc-Def", :markdown, "# Gollum", commit)
+    assert_raises Gollum::DuplicatePageError do
+      @wiki.write_page("ABC DEF", :textile,  "# Gollum", commit)
+    end
+  end
+
   test "update_page" do
     commit = { :message => "Gollum page",
                :name => "Tom Preston-Werner",

@@ -80,15 +80,16 @@ context "Markup" do
   end
 
   test "page link with custom base path" do
-    ["/wiki", "/wiki/"].each do |path|
+    ["/wiki", "/wiki/"].each_with_index do |path, i|
+      name = "Bilbo Baggins #{i}"
       @wiki = Gollum::Wiki.new(@path, :base_path => path)
-      @wiki.write_page("Bilbo Baggins", :markdown, "a [[Bilbo Baggins]] b", @commit)
+      @wiki.write_page(name, :markdown, "a [[#{name}]] b", @commit)
 
-      page = @wiki.page("Bilbo Baggins")
+      page = @wiki.page(name)
       output = page.formatted_data
       assert_match /class="internal present"/,     output
-      assert_match /href="\/wiki\/Bilbo-Baggins"/, output
-      assert_match /\>Bilbo Baggins\</,            output
+      assert_match /href="\/wiki\/Bilbo-Baggins-\d"/, output
+      assert_match /\>Bilbo Baggins \d\</,            output
     end
   end
 
@@ -101,9 +102,10 @@ context "Markup" do
 
   test "image with http url" do
     ['http', 'https'].each do |scheme|
-      @wiki.write_page("Bilbo Baggins", :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", @commit)
+      name = "Bilbo Baggins #{scheme}"
+      @wiki.write_page(name, :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", @commit)
 
-      page = @wiki.page("Bilbo Baggins")
+      page = @wiki.page(name)
       output = page.formatted_data
       assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.jpg" /> b</p>}, output
     end
