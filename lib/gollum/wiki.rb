@@ -9,6 +9,12 @@ module Gollum
       # Sets the file class used by all instances of this Wiki.
       attr_writer :file_class
 
+      # Sets the default name for commits.
+      attr_accessor :default_committer_name
+
+      # Sets the default email for commits.
+      attr_accessor :default_committer_email
+
       # Gets the page class used by all instances of this Wiki.
       # Default: Gollum::Page.
       def page_class
@@ -32,6 +38,8 @@ module Gollum
       end
     end
 
+    self.default_committer_name  = 'Anonymous'
+    self.default_committer_email = 'anon@anon.com'
 
     # The String base path to prefix to internal links. For example, when set
     # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
@@ -115,7 +123,8 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
-      map = {}
+      commit = normalize_commit(commit)
+      map    = {}
       if pcommit = @repo.commit('master')
         map = tree_map(pcommit.tree)
       end
@@ -144,6 +153,7 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def update_page(page, name, format, data, commit = {})
+      commit   = normalize_commit(commit)
       pcommit  = @repo.commit('master')
       map      = tree_map(pcommit.tree)
       name   ||= page.name
@@ -169,7 +179,7 @@ module Gollum
     # page   - The Gollum::Page to delete.
     # commit - The commit Hash details:
     #          :message - The String commit message.
-    #          :author  - The String author full name.
+    #          :name    - The String author full name.
     #          :email   - The String email address.
     #
     # Returns the String SHA1 of the newly written version.
@@ -330,6 +340,20 @@ module Gollum
       end
       (container || map).delete(name)
       map
+    end
+
+    # Ensures a commit hash has all the required fields for a commit.
+    #
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :name    - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns the commit Hash
+    def normalize_commit(commit = {})
+      commit[:name]   = self.class.default_committer_name  if commit[:name].to_s.empty?
+      commit[:email]  = self.class.default_committer_email if commit[:email].to_s.empty?
+      commit
     end
   end
 end

@@ -38,6 +38,21 @@ context "Wiki" do
       %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-Precious.md), 
       pages.map { |p| p.filename }.sort
   end
+
+  test "normalizes commit hash" do
+    commit = {:message => 'abc'}
+    assert_equal({:message => 'abc', :name => 'Anonymous', :email => 'anon@anon.com'},
+      @wiki.normalize_commit(commit.dup))
+
+    commit[:name]  = 'bob'
+    commit[:email] = ''
+    assert_equal({:message => 'abc', :name => 'bob', :email => 'anon@anon.com'},
+      @wiki.normalize_commit(commit.dup))
+
+    commit[:email] = 'foo@bar.com'
+    assert_equal({:message => 'abc', :name => 'bob', :email => 'foo@bar.com'},
+      @wiki.normalize_commit(commit.dup))
+  end
 end
 
 context "Wiki page previewing" do

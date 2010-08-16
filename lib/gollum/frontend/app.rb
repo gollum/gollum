@@ -143,12 +143,9 @@ module Precious
     end
 
     def commit_message
-      message = params[:message]
-      author_name = `git config --get user.name`.strip || 'Anonymous'
-      author_email = `git config --get user.email`.strip || 'anon@anon.com'
-      { :message => message,
-        :name => author_name,
-        :email => author_email }
+      { :message => params[:message],
+        :name    => `git config --get user.name `.strip,
+        :email   => `git config --get user.email`.strip }
     end
   end
 end
