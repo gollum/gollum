@@ -6,6 +6,9 @@
     and have bugs that may allow non-whitelisted HTML to sneak
     through.
   * Introduce Ruby 1.9 compatibility fixes.
+  * Commit hashes are normalized so that missing author data is replaced with
+    anonymous info.
+  * Prevent `Gollum::Wiki#write_page` from clobbering existing pages.
   * Handle duplicate page errors in frontend.
 
 # 1.0.1 / 2010-08-12
