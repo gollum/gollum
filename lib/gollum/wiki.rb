@@ -166,7 +166,7 @@ module Gollum
       else
         map   = delete_from_tree_map(map, page.path)
         dir   = ::File.dirname(page.path)
-        map   = add_to_tree_map(map, dir, name, format, data)
+        map   = add_to_tree_map(map, dir, name, format, data, :allow_same_ext)
         index = tree_map_to_index(map)
       end
 
@@ -311,7 +311,23 @@ module Gollum
       index
     end
 
-    def add_to_tree_map(map, dir, name, format, data)
+    # Adds a Gollum::Page to the given tree map.
+    #
+    # map    - The Hash map:
+    #          key - The String directory or filename
+    #          val - The Hash submap or the String contents of the file.
+    # dir    - The String subdirectory of the Gollum::Page.
+    # name   - The String Gollum::Page name.
+    # format - The Symbol Gollum::Page format.
+    # data   - The String wiki data to store in the tree map.
+    # allow_same_ext - A Boolean determining if the tree map allows the same 
+    #                  filename with the same extension.
+    #
+    # Raises Gollum::DuplicatePageError if a matching filename already exists.
+    # This way, pages are not inadvertently overwritten.
+    #
+    # Returns the modified Hash map.
+    def add_to_tree_map(map, dir, name, format, data, allow_same_ext = false)
       ext  = @page_class.format_to_ext(format)
       path = @page_class.cname(name) + '.' + ext
 
@@ -325,9 +341,10 @@ module Gollum
       downpath    = path.downcase
       downpath.sub! /\.\w+$/, ''
       container.keys.each do |existing|
-        file = existing.downcase
+        file      = existing.downcase
+        file_ext  = ::File.extname(file).sub /^\./, ''
         file.sub! /\.\w+$/, ''
-        if downpath == file
+        if downpath == file && !(allow_same_ext && file_ext == ext)
           raise DuplicatePageError.new(dir, existing, path)
         end
       end
