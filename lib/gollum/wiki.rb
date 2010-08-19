@@ -124,13 +124,13 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
       commit = normalize_commit(commit)
-      map    = {}
+      index  = self.repo.index
+
       if pcommit = @repo.commit('master')
-        map = tree_map(pcommit.tree)
+        index.read_tree(pcommit.tree.id)
       end
 
-      map   = add_to_tree_map(map, '', name, format, data)
-      index = tree_map_to_index(map)
+      add_to_index(index, '', name, format, data)
 
       parents = pcommit ? [pcommit] : []
       actor   = Grit::Actor.new(commit[:name], commit[:email])
@@ -309,6 +309,44 @@ module Gollum
         end
       end
       index
+    end
+
+    # Adds a page to the given Index.
+    #
+    # index  - The Grit::Index to which the page will be added.
+    # dir    - The String subdirectory of the Gollum::Page without any
+    #          prefix or suffix slashes (e.g. "foo/bar").
+    # name   - The String Gollum::Page name.
+    # format - The Symbol Gollum::Page format.
+    # data   - The String wiki data to store in the tree map.
+    # allow_same_ext - A Boolean determining if the tree map allows the same
+    #                  filename with the same extension.
+    #
+    # Raises Gollum::DuplicatePageError if a matching filename already exists.
+    # This way, pages are not inadvertently overwritten.
+    #
+    # Returns nothing (modifies the Index in place).
+    def add_to_index(index, dir, name, format, data, allow_same_ext = false)
+      ext  = @page_class.format_to_ext(format)
+      path = @page_class.cname(name) + '.' + ext
+
+      dir = '/' if dir.strip.empty?
+
+      if index.current_tree && tree = index.current_tree / dir
+        downpath = path.downcase.sub(/\.\w+$/, '')
+
+        tree.blobs.each do |blob|
+          file = blob.name.downcase.sub(/\.\w+$/, '')
+          file_ext = ::File.extname(blob.name).sub(/^\./, '')
+          if downpath == file && !(allow_same_ext && file_ext == ext)
+            raise DuplicatePageError.new(dir, blob, path)
+          end
+        end
+      end
+
+      fullpath = ::File.join(dir, path)
+      fullpath = fullpath[1..-1] if fullpath =~ /^\//
+      index.add(fullpath, normalize(data))
     end
 
     # Adds a Gollum::Page to the given tree map.
