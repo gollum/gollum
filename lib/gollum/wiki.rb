@@ -51,7 +51,7 @@ module Gollum
     # repo    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
-    #           :base_path  - String base path for all Wiki links.  
+    #           :base_path  - String base path for all Wiki links.
     #                         Default: "/"
     #           :page_class - The page Class. Default: Gollum::Page
     #           :file_class - The file Class. Default: Gollum::File
@@ -246,7 +246,7 @@ module Gollum
 
     # Fill an array with a list of pages.
     #
-    # commit   - The Grit::Commit 
+    # commit   - The Grit::Commit
     # tree     - The Grit::Tree to start with.
     # sub_tree - Optional String specifying the parent path of the Page.
     #
@@ -358,7 +358,7 @@ module Gollum
     # name   - The String Gollum::Page name.
     # format - The Symbol Gollum::Page format.
     # data   - The String wiki data to store in the tree map.
-    # allow_same_ext - A Boolean determining if the tree map allows the same 
+    # allow_same_ext - A Boolean determining if the tree map allows the same
     #                  filename with the same extension.
     #
     # Raises Gollum::DuplicatePageError if a matching filename already exists.
