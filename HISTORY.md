@@ -1,5 +1,8 @@
 # HEAD
 
+* Major Enhancements
+  * Optimize page write/update/delete to use Grit::Index::read_tree instead
+    of manually recreating entire index contents.
 * Bug Fixes
   * Increase minimum Sanitize version requirement to 1.1.0.
     1.0.x versions of Sanitize require Hpricot instead of Nokogiri
