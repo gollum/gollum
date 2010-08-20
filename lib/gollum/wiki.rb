@@ -155,19 +155,19 @@ module Gollum
     def update_page(page, name, format, data, commit = {})
       commit   = normalize_commit(commit)
       pcommit  = @repo.commit('master')
-      map      = tree_map(pcommit.tree)
       name   ||= page.name
       format ||= page.format
-      index    = nil
+      index    = self.repo.index
+
+      index.read_tree(pcommit.tree.id)
 
       if page.name == name && page.format == format
-        index = tree_map_to_index(map)
         index.add(page.path, normalize(data))
       else
-        map   = delete_from_tree_map(map, page.path)
-        dir   = ::File.dirname(page.path)
-        map   = add_to_tree_map(map, dir, name, format, data, :allow_same_ext)
-        index = tree_map_to_index(map)
+        index.delete(page.path)
+        dir = ::File.dirname(page.path)
+        dir = '' if dir == '.'
+        add_to_index(index, dir, name, format, data, :allow_same_ext)
       end
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
@@ -311,6 +311,32 @@ module Gollum
       index
     end
 
+    # Determine if a given page path is scheduled to be deleted in the next
+    # commit for the given Index.
+    #
+    # map   - The Hash map:
+    #         key - The String directory or filename.
+    #         val - The Hash submap or the String contents of the file.
+    # path - The String path of the page file. This may include the format
+    #         extension in which case it will be ignored.
+    #
+    # Returns the Boolean response.
+    def page_path_scheduled_for_deletion?(map, path)
+      parts = path.split('/')
+      if parts.size == 1
+        deletions = map.keys.select { |k| !map[k] }
+        downfile = parts.first.downcase.sub(/\.\w+$/, '')
+        deletions.any? { |d| d.downcase.sub(/\.\w+$/, '') == downfile }
+      else
+        part = parts.shift
+        if rest = map[part]
+          page_path_scheduled_for_deletion?(rest, parts.join('/'))
+        else
+          nil
+        end
+      end
+    end
+
     # Adds a page to the given Index.
     #
     # index  - The Grit::Index to which the page will be added.
@@ -332,20 +358,22 @@ module Gollum
 
       dir = '/' if dir.strip.empty?
 
+      fullpath = ::File.join(dir, path)
+      fullpath = fullpath[1..-1] if fullpath =~ /^\//
+
       if index.current_tree && tree = index.current_tree / dir
         downpath = path.downcase.sub(/\.\w+$/, '')
 
         tree.blobs.each do |blob|
+          next if page_path_scheduled_for_deletion?(index.tree, fullpath)
           file = blob.name.downcase.sub(/\.\w+$/, '')
           file_ext = ::File.extname(blob.name).sub(/^\./, '')
           if downpath == file && !(allow_same_ext && file_ext == ext)
-            raise DuplicatePageError.new(dir, blob, path)
+            raise DuplicatePageError.new(dir, blob.name, path)
           end
         end
       end
 
-      fullpath = ::File.join(dir, path)
-      fullpath = fullpath[1..-1] if fullpath =~ /^\//
       index.add(fullpath, normalize(data))
     end
 
