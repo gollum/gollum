@@ -269,48 +269,6 @@ module Gollum
       list
     end
 
-    # Fill an index with the existing state of the repository.
-    #
-    # tree - The Grit::Tree to start with.
-    #
-    # Returns a nested Hash of filename to content mappings.
-    def tree_map(tree)
-      map = {}
-      tree.contents.each do |item|
-        case item
-          when Grit::Blob
-            map[item.name] = item.data
-          when Grit::Tree
-            map[item.name] = tree_map(item)
-        end
-      end
-      map
-    end
-
-    # Use a treemap to fill in the index.
-    #
-    # map   - The Hash map:
-    #         key - The String directory or filename.
-    #         val - The Hash submap or the String contents of the file.
-    # index - The Grit::Index to use. Leave blank when calling from outside
-    #         this method (default: nil).
-    #
-    # Returns the Grit::Index.
-    def tree_map_to_index(map, prefix = '', index = nil)
-      index ||= @repo.index
-      map.each do |k, v|
-        case k
-          when String
-            name = [prefix, k].join('/')[1..-1]
-            index.add(k, v)
-          when Hash
-            new_prefix = [prefix, k].join('/')[1..-1]
-            tree_map_to_index(v, new_prefix, index)
-        end
-      end
-      index
-    end
-
     # Determine if a given page path is scheduled to be deleted in the next
     # commit for the given Index.
     #
@@ -375,65 +333,6 @@ module Gollum
       end
 
       index.add(fullpath, normalize(data))
-    end
-
-    # Adds a Gollum::Page to the given tree map.
-    #
-    # map    - The Hash map:
-    #          key - The String directory or filename
-    #          val - The Hash submap or the String contents of the file.
-    # dir    - The String subdirectory of the Gollum::Page.
-    # name   - The String Gollum::Page name.
-    # format - The Symbol Gollum::Page format.
-    # data   - The String wiki data to store in the tree map.
-    # allow_same_ext - A Boolean determining if the tree map allows the same
-    #                  filename with the same extension.
-    #
-    # Raises Gollum::DuplicatePageError if a matching filename already exists.
-    # This way, pages are not inadvertently overwritten.
-    #
-    # Returns the modified Hash map.
-    def add_to_tree_map(map, dir, name, format, data, allow_same_ext = false)
-      ext  = @page_class.format_to_ext(format)
-      path = @page_class.cname(name) + '.' + ext
-
-      parts     = dir.split('/')
-      container = nil
-      parts.each do |part|
-        container = map[part]
-      end
-
-      container ||= map
-      downpath    = path.downcase
-      downpath.sub! /\.\w+$/, ''
-      container.keys.each do |existing|
-        file      = existing.downcase
-        file_ext  = ::File.extname(file).sub /^\./, ''
-        file.sub! /\.\w+$/, ''
-        if downpath == file && !(allow_same_ext && file_ext == ext)
-          raise DuplicatePageError.new(dir, existing, path)
-        end
-      end
-
-      container[path] = normalize(data)
-      map
-    end
-
-    # Delete an entry from a tree map.
-    #
-    # map  - The Hash tree map of the repository.
-    # path - The String path of the file to delete.
-    #
-    # Returns the modified Hash tree map.
-    def delete_from_tree_map(map, path)
-      parts = path.split('/')
-      name  = parts.pop
-      container = nil
-      parts.each do |part|
-        container = map[part]
-      end
-      (container || map).delete(name)
-      map
     end
 
     # Ensures a commit hash has all the required fields for a commit.
