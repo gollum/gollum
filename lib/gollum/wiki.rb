@@ -185,10 +185,10 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def delete_page(page, commit)
       pcommit = @repo.commit('master')
-      map     = tree_map(pcommit.tree)
 
-      map   = delete_from_tree_map(map, page.path)
-      index = tree_map_to_index(map)
+      index = self.repo.index
+      index.read_tree(pcommit.tree.id)
+      index.delete(page.path)
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
       index.commit(commit[:message], [pcommit], actor)
