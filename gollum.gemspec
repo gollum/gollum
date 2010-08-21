@@ -31,9 +31,11 @@ Gem::Specification.new do |s|
   s.add_dependency('sanitize', "~> 1.1")
   s.add_dependency('nokogiri', "~> 1.4")
 
-  s.add_development_dependency('shoulda')
+  s.add_development_dependency('RedCloth')
   s.add_development_dependency('mocha')
   s.add_development_dependency('org-ruby')
+  s.add_development_dependency('rdiscount')
+  s.add_development_dependency('shoulda')
 
   # = MANIFEST =
   s.files = %w[
