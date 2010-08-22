@@ -1,0 +1,20 @@
+<div class="guide">
+  <div class="main">
+    <div class="actions">
+      <form action="/search" method="get">
+        <a href="/">Home</a> | <input type="text" name="q" size="10" /> <input type="submit" value="search" />
+      </form>
+    </div>
+    <h1>Search for “{{search_string}}”</h1>
+    <div class="content wikistyle gollum">
+      <p>Searched with <code>{{search_command}}</code></p>
+      {{#has_results}}
+        <ul>
+        {{#results}}
+            <li><a href="/{{name}}">{{name}} ({{count}})</a></li>
+        {{/results}}
+        </ul>
+      {{/has_results}}
+    </div>
+  </div>
+</div>

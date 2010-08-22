@@ -1,7 +1,9 @@
 <div class="guide">
   <div class="main">
     <div class="actions">
-      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
+      <form action="/search" method="get">
+        <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a> | <input type="text" name="q" size="10" /> <input type="submit" value="search" />
+      </form>
     </div>
     <h1>{{title}}</h1>
     <div class="content wikistyle gollum {{format}}">

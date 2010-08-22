@@ -128,6 +128,13 @@ module Precious
       end
     end
 
+    get '/search' do
+      @q = params[:q]
+      @search_command = "cd #{$path} && git grep -c '#{@q}' master"
+      @results = `#{@search_command}`
+      mustache :search
+    end
+
     get '/*' do
       show_page_or_file(params[:splat].first)
     end
