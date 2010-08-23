@@ -53,9 +53,8 @@ if options['irb']
         @__initialized = true
       end
  
-      workspace = WorkSpace.new(binding)
- 
-      irb = Irb.new(workspace)
+      ws  = WorkSpace.new(binding)
+      irb = Irb.new(ws)
  
       @CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC]
       @CONF[:MAIN_CONTEXT] = irb.context
@@ -67,10 +66,28 @@ if options['irb']
   end
 
   require 'gollum'
-  wiki = Gollum::Wiki.new gollum_path
-  IRB.start_session binding
+  begin
+    wiki = Gollum::Wiki.new(gollum_path)
+    if !wiki.exist? then raise Grit::InvalidGitRepositoryError end
+    puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
+    puts 
+    puts %(    page = wiki.page('page-name'))
+    puts %(    # => <Gollum::Page>)
+    puts
+    puts %(    page.raw_data)
+    puts %(    # => "# My wiki page")
+    puts
+    puts %(    page.formatted_data)
+    puts %(    # => "<h1>My wiki page</h1>")
+    puts
+    puts "Check out the Gollum README for more."
+    IRB.start_session(binding)
+  rescue Grit::InvalidGitRepositoryError, Grit::NoSuchPathError
+    puts "Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}"
+    exit 0
+  end
 else
   require 'gollum/frontend/app'
-  Precious::App.set :gollum_path, gollum_path
+  Precious::App.set(:gollum_path, gollum_path)
   Precious::App.run!(options)
 end
