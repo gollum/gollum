@@ -38,7 +38,7 @@ end
 # Read command line options into `options` hash
 opts.parse!
 
-$path = ARGV[0] || Dir.pwd
+gollum_path = ARGV[0] || Dir.pwd
 
 if options['irb']
   require 'irb'
@@ -67,9 +67,10 @@ if options['irb']
   end
 
   require 'gollum'
-  wiki = Gollum::Wiki.new $path
+  wiki = Gollum::Wiki.new gollum_path
   IRB.start_session binding
 else
   require 'gollum/frontend/app'
+  Precious::App.set :gollum_path, gollum_path
   Precious::App.run!(options)
 end
