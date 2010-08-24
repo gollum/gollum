@@ -34,9 +34,9 @@ module Gollum
       rescue Object => e
         data = %{<p class="gollum-error">#{e.message}</p>}
       end
-      data = process_tags(data)
       data = process_code(data)
       data = Sanitize.clean(data, SANITIZATION_OPTIONS)
+      data = process_tags(data)
       data = process_tex(data)
       data = data.gsub(/<p><\/p>/, '')
       data
@@ -132,6 +132,8 @@ module Gollum
     def process_tag(tag)
       if html = process_image_tag(tag)
         return html
+      elsif html = process_gist_link_tag(tag)
+        return html
       elsif html = process_file_link_tag(tag)
         return html
       else
@@ -223,6 +225,18 @@ module Gollum
         parts = attr.split('=').map { |x| x.strip }
         memo[parts[0]] = (parts.size == 1 ? true : parts[1])
         memo
+      end
+    end
+
+    # Attempt to process the tag as a gist link tag.
+    #
+    # tag - The String tag contents (the stuff inside the double brackets).
+    #
+    # Returns the String HTML if the tag is a valid gist link tag or nil
+    #   if it is not.
+    def process_gist_link_tag(tag)
+      if tag =~ /^https?:\/\/gist\.github\.com\/\d+(?:\.js)?(?:\?file=\w+(?:\.\w+))*?$/
+        %{<script src="#{tag}"></script>}
       end
     end
 
