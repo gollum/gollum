@@ -53,6 +53,21 @@ context "Wiki" do
     assert_equal({:message => 'abc', :name => 'bob', :email => 'foo@bar.com'},
       @wiki.normalize_commit(commit.dup))
   end
+
+  test "#tree_map_for caches ref and tree" do
+    assert @wiki.ref_map.empty?
+    assert @wiki.tree_map.empty?
+    @wiki.tree_map_for 'master'
+    assert_equal({"master"=>"60f12f4254f58801b9ee7db7bca5fa8aeefaa56b"}, @wiki.ref_map)
+    assert_equal 'bilbo-baggins.md', @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0][0]
+  end
+
+  test "#tree_map_for only caches tree for commit" do
+    assert @wiki.tree_map.empty?
+    @wiki.tree_map_for '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
+    assert @wiki.ref_map.empty?
+    assert_equal 'bilbo-baggins.md', @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0][0]
+  end
 end
 
 context "Wiki page previewing" do
