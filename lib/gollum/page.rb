@@ -247,7 +247,8 @@ module Gollum
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name, version)
       if commit = @wiki.repo.commit(version)
-        if page = find_page_in_tree(commit.tree, name)
+        map = @wiki.tree_map_for(commit.id)
+        if page = find_page_in_tree(map, name)
           page.version = commit
           page
         end
@@ -256,26 +257,19 @@ module Gollum
 
     # Find a page in a given tree.
     #
-    # tree - The Grit::Tree in which to look.
+    # map  - The Array tree map from Wiki#tree_map.
     # name - The canonical String page name.
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_tree(tree, name)
-      treemap = {}
-      trees = [tree]
-
-      while !trees.empty?
-        ptree = trees.shift
-        ptree.contents.each do |item|
-          case item
-            when Grit::Blob
-              if page_match(name, item.name)
-                return self.class.new(@wiki).populate(item, tree_path(treemap, ptree))
-              end
-            when Grit::Tree
-              treemap[item] = ptree
-              trees << item
-          end
+    def find_page_in_tree(map, name)
+      map.each do |(tree_name, blob_sha)|
+        blob_name = ::File.basename(tree_name)
+        if page_match(name, blob_name)
+          dir  = ::File.dirname(tree_name)
+          blob = Grit::Blob.create(@wiki.repo, :id => blob_sha, :name => blob_name)
+          dir.sub! /(^\/)|(^\.$)/, ''
+          dir = "/#{dir}" if !dir.empty?
+          return self.class.new(@wiki).populate(blob, dir)
         end
       end
 
@@ -284,7 +278,7 @@ module Gollum
 
     # Find a page in a given tree without recursing into subtrees.
     #
-    # tree - The Array tree map from Wiki#tree_map.
+    # map  - The Array tree map from Wiki#tree_map.
     # dir  - The String path of the given Grit::Tree.
     # name - The canonical String page name.
     #
