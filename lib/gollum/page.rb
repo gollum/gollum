@@ -174,20 +174,15 @@ module Gollum
 
       dirs = self.path.split('/')
       dirs.pop
+      map = @wiki.tree_map_for(self.version.id)
       while !dirs.empty?
-        tree = self.version.tree / dirs.join('/')
-        if page = find_page_in_this_tree(tree, dirs.join('/'), '_Footer')
+        if page = find_page_in_this_tree(map, dirs.join('/'), '_Footer')
           return page
         end
         dirs.pop
       end
 
-      tree = self.version.tree
-      if page = find_page_in_this_tree(tree, '', '_Footer')
-        return page
-      end
-
-      return nil
+      find_page_in_this_tree(map, '', '_Footer')
     end
 
     #########################################################################
@@ -289,22 +284,28 @@ module Gollum
 
     # Find a page in a given tree without recursing into subtrees.
     #
-    # tree - The Grit::Tree in which to look.
+    # tree - The Array tree map from Wiki#tree_map.
     # dir  - The String path of the given Grit::Tree.
     # name - The canonical String page name.
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_this_tree(tree, dir, name)
-      treemap = {}
-      tree.contents.each do |item|
-        case item
-          when Grit::Blob
-            if page_match(name, item.name)
-              path = dir == '' ? '' : ::File.join('/', dir)
-              page = self.class.new(@wiki).populate(item, path)
-              page.version = self.version
-              return page
-            end
+    def find_page_in_this_tree(map, dir, name)
+      checked = dir.downcase
+      map.each do |(full_name, blob_sha)|
+        dir_name  = ::File.dirname(full_name)
+        if dir_name == '.'
+          dir_name = ''
+        else
+          dir_name.downcase!
+        end
+        blob_name = ::File.basename(full_name)
+        
+        if checked == dir_name && page_match(name, blob_name)
+          path = dir == '' ? '' : ::File.join('/', dir)
+          blob = Grit::Blob.create(@wiki.repo, :id => blob_sha, :name => blob_name)
+          page = self.class.new(@wiki).populate(blob, path)
+          page.version = self.version
+          return page
         end
       end
 
