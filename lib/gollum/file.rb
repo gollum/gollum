@@ -49,7 +49,7 @@ module Gollum
       checked = name.downcase
       map     = @wiki.tree_map_for(version)
       sha     = @wiki.ref_map[version] || version
-      if pair = map.detect { |(path, _)| path == checked }
+      if pair = map.detect { |(path, _)| path.downcase == checked }
         @path    = name
         @blob    = Grit::Blob.create(@wiki.repo,   :id => pair.last, :name => ::File.basename(@path))
         @version = Grit::Commit.create(@wiki.repo, :id => sha)

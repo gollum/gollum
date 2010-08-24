@@ -418,7 +418,6 @@ module Gollum
         path.gsub!(/\\\d{3}/)   { |m| m[1..-1].to_i(8).chr }
       end
       path.gsub!(/\\[rn"\\]/) { |m| eval(%("#{m.to_s}")) }
-      path.downcase!
       path
     end
 
