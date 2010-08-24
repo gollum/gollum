@@ -239,3 +239,58 @@ context "Wiki page writing" do
     FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end
 end
+
+context "Wiki sync with working directory" do
+  setup do
+    @path = testpath('examples/wdtest')
+    Grit::Repo.init(@path)
+    @wiki = Gollum::Wiki.new(@path)
+  end
+
+  test "write a page" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    assert_equal "Hi", File.read(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with same name and format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, page.name, page.format, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with different name and same format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, "New Page 2", page.format, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page-2.md"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with same name and different format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, page.name, :textile, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page.textile"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with different name and different format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, "New Page 2", :textile, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page-2.textile"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  test "delete a page" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.delete_page(page, commit_details)
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  teardown do
+    FileUtils.rm_r(@path)
+  end
+end

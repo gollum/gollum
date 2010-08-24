@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('grit', "~> 2.2")
+  s.add_dependency('grit', "~> 2.3")
   s.add_dependency('github-markup', [">= 0.4.0", "< 1.0.0"])
   s.add_dependency('albino', "~> 1.0")
   s.add_dependency('sinatra', "~> 1.0")

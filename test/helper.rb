@@ -18,6 +18,12 @@ def testpath(path)
   File.join(TEST_DIR, path)
 end
 
+def commit_details
+  { :message => "Did something at #{Time.now}",
+    :name => "Tom Preston-Werner",
+    :email => "tom@github.com" }
+end
+
 # test/spec/mini 3
 # http://gist.github.com/25455
 # chris@ozmm.org
