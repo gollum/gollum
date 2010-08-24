@@ -135,7 +135,9 @@ module Gollum
 
       parents = pcommit ? [pcommit] : []
       actor   = Grit::Actor.new(commit[:name], commit[:email])
-      index.commit(commit[:message], parents, actor)
+      sha = index.commit(commit[:message], parents, actor)
+      @ref_map.clear
+      sha
     end
 
     # Public: Update an existing page with new content. The location of the
@@ -172,7 +174,9 @@ module Gollum
       end
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
-      index.commit(commit[:message], [pcommit], actor)
+      sha = index.commit(commit[:message], [pcommit], actor)
+      @ref_map.clear
+      sha
     end
 
     # Public: Delete a page.
@@ -192,7 +196,9 @@ module Gollum
       index.delete(page.path)
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
-      index.commit(commit[:message], [pcommit], actor)
+      sha = index.commit(commit[:message], [pcommit], actor)
+      @ref_map.clear
+      sha
     end
 
     # Public: Lists all pages for this wiki.

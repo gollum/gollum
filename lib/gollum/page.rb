@@ -246,15 +246,14 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name, version)
-      if commit = @wiki.repo.commit(version)
-        map = @wiki.tree_map_for(commit.id)
-        if page = find_page_in_tree(map, name)
-          page.version = commit
-          page
-        end
+      map = @wiki.tree_map_for(version)
+      if page = find_page_in_tree(map, name)
+        sha = @wiki.ref_map[version] || version
+        page.version = Grit::Commit.create(@wiki.repo, :id => sha)
+        page
       end
+    rescue Grit::GitRuby::Repository::NoSuchShaFound
     end
-
     # Find a page in a given tree.
     #
     # map  - The Array tree map from Wiki#tree_map.

@@ -349,6 +349,7 @@ context "Markup" do
     index.add("greek/Bilbo-Baggins.md", content)
     index.commit("Add alpha.jpg")
 
+    @wiki.clear_cache
     page = @wiki.page("Bilbo Baggins")
     rendered = Gollum::Markup.new(page).render
     assert_equal output, rendered
