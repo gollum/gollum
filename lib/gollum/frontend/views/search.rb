@@ -1,11 +1,7 @@
 module Precious
   module Views
     class Search < Layout
-      attr_reader :content, :page, :footer
-
-      def search_string
-        @q
-      end
+      attr_reader :content, :page, :footer, :query
 
       def has_results
         !results.empty?

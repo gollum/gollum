@@ -129,8 +129,8 @@ module Precious
     end
 
     get '/search' do
-      @q = params[:q]
-      @search_command = "cd #{$path} && git grep -c '#{@q}' master"
+      @query = params[:q]
+      @search_command = "cd #{$path} && git grep -c '#{@query}' master"
       @results = `#{@search_command}`
       mustache :search
     end
