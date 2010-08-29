@@ -214,20 +214,17 @@ module Gollum
     #
     # Returns an Array with Objects of page name and count of matches
     def search(query)
-      search_command = "cd #{$path} && git grep -c '#{query}' master"
-      command_output = `#{search_command}`
-      results = []
-      command_output.each_line do |line|
-        result = line.split(":")
-        file = result[1]
-        count = result[2].to_i
-        name = file.split(".")[0]
-        results << {
-          :name => name,
-          :count => count
+      search_output = `cd #{$path} && git grep -c '#{query}' master`
+
+      search_output.split("\n").collect do |line|
+        result = line.split(':')
+        file_name = result[1]
+
+        {
+          :count  => result[2].to_i,
+          :name   => file_name.split('.').first
         }
       end
-      results
     end
 
     # Public: All of the versions that have touched the Page.
