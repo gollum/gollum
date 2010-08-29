@@ -21,6 +21,12 @@ context "Markup" do
     assert @wiki.pages[0].formatted_data
   end
 
+  #########################################################################
+  #
+  # Links
+  #
+  #########################################################################
+
   test "double page links no space" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", @commit)
 
@@ -99,6 +105,12 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     assert_equal "<p>a <a href=\"http://example.com\">http://example.com</a> b</p>", page.formatted_data
   end
+
+  #########################################################################
+  #
+  # Images
+  #
+  #########################################################################
 
   test "image with http url" do
     ['http', 'https'].each do |scheme|
@@ -217,6 +229,12 @@ context "Markup" do
     relative_image(content, output)
   end
 
+  #########################################################################
+  #
+  # File links
+  #
+  #########################################################################
+
   test "file link with absolute path" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
@@ -247,6 +265,12 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     assert_equal %{<p>a <a href="http://example.com/alpha.jpg">Alpha</a> b</p>}, page.formatted_data
   end
+
+  #########################################################################
+  #
+  # Code
+  #
+  #########################################################################
 
   test "code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
@@ -296,6 +320,12 @@ context "Markup" do
     compare(content, output)
   end
 
+  #########################################################################
+  #
+  # Various
+  #
+  #########################################################################
+
   test "escaped wiki link" do
     content = "a '[[Foo]], b"
     output = "<p>a [[Foo]], b</p>"
@@ -317,6 +347,12 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
+  #########################################################################
+  #
+  # TeX
+  #
+  #########################################################################
+
   test "tex block syntax" do
     content = 'a \[ a^2 \] b'
     output = "<p>a <script type=\"math/tex; mode=display\">a^2</script> b</p>"
@@ -328,6 +364,12 @@ context "Markup" do
     output = "<p>a <script type=\"math/tex\">a^2</script> b</p>"
     compare(content, output, 'md')
   end
+
+  #########################################################################
+  #
+  # Helpers
+  #
+  #########################################################################
 
   def compare(content, output, ext = "md", regexes = [])
     index = @wiki.repo.index
