@@ -35,6 +35,14 @@ module Gollum
       filename =~ /^_/ ? false : match
     end
 
+    # Reusable filter to turn a filename (without path) into a canonical name.
+    # Strips extension, converts spaces to dashes.
+    #
+    # Returns the filtered String.
+    def self.canonicalize_filename(filename)
+      filename.split('.')[0..-2].join('.').gsub('-', ' ')
+    end
+
     # Public: Initialize a page.
     #
     # wiki - The Gollum::Wiki in question.
@@ -57,7 +65,7 @@ module Gollum
     #
     # Returns the String name.
     def name
-      filename.split('.')[0..-2].join('.').gsub('-', ' ')
+      self.class.canonicalize_filename(filename)
     end
 
     # Public: If the first element of a formatted page is an <h1> tag it can

@@ -219,11 +219,11 @@ module Gollum
 
       search_output.split("\n").collect do |line|
         result = line.split(':')
-        file_name = result[1]
+        file_name = Gollum::Page.canonicalize_filename(::File.basename(result[1]))
 
         {
           :count  => result[2].to_i,
-          :name   => file_name.split('.').first
+          :name   => file_name
         }
       end
     end
