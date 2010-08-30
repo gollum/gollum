@@ -15,6 +15,7 @@ HELP
 
 require 'optparse'
 require 'rubygems'
+require 'gollum'
 
 exec = {}
 options = {}
@@ -65,7 +66,6 @@ if options['irb']
     end
   end
 
-  require 'gollum'
   begin
     wiki = Gollum::Wiki.new(gollum_path)
     if !wiki.exist? then raise Grit::InvalidGitRepositoryError end
