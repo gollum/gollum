@@ -35,7 +35,7 @@ context "Wiki" do
   test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-Precious.md), 
+      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-Precious.md),
       pages.map { |p| p.filename }.sort
   end
 
