@@ -176,13 +176,13 @@ module Gollum
       dirs.pop
       map = @wiki.tree_map_for(self.version.id)
       while !dirs.empty?
-        if page = find_page_in_this_tree(map, dirs.join('/'), '_Footer')
+        if page = find_page_in_tree(map, '_Footer', dirs.join('/'))
           return page
         end
         dirs.pop
       end
 
-      find_page_in_this_tree(map, '', '_Footer')
+      find_page_in_tree(map, '_Footer', '')
     end
 
     #########################################################################
@@ -254,51 +254,28 @@ module Gollum
       end
     rescue Grit::GitRuby::Repository::NoSuchShaFound
     end
+
     # Find a page in a given tree.
     #
-    # map  - The Array tree map from Wiki#tree_map.
-    # name - The canonical String page name.
+    # map         - The Array tree map from Wiki#tree_map.
+    # name        - The canonical String page name.
+    # checked_dir - Optional String of the directory a matching page needs
+    #               to be in.  The string should 
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_tree(map, name)
-      map.each do |(tree_name, blob_sha)|
-        blob_name = ::File.basename(tree_name)
-        if page_match(name, blob_name)
-          dir  = ::File.dirname(tree_name)
-          blob = Grit::Blob.create(@wiki.repo, :id => blob_sha, :name => blob_name)
-          dir.sub! /(^\/)|(^\.$)/, ''
-          dir = "/#{dir}" if !dir.empty?
-          return self.class.new(@wiki).populate(blob, dir)
-        end
+    def find_page_in_tree(map, name, checked_dir = nil)
+      if checked_dir = Wiki.normalize_directory(checked_dir)
+        checked_dir.downcase!
       end
 
-      return nil # nothing was found
-    end
-
-    # Find a page in a given tree without recursing into subtrees.
-    #
-    # map  - The Array tree map from Wiki#tree_map.
-    # dir  - The String path of the given Grit::Tree.
-    # name - The canonical String page name.
-    #
-    # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_this_tree(map, dir, name)
-      checked = dir.downcase
       map.each do |(full_name, blob_sha)|
-        dir_name  = ::File.dirname(full_name)
-        if dir_name == '.'
-          dir_name = ''
-        else
-          dir_name.downcase!
-        end
         blob_name = ::File.basename(full_name)
-        
-        if checked == dir_name && page_match(name, blob_name)
-          path = dir == '' ? '' : ::File.join('/', dir)
+        dir       = Wiki.normalize_directory(::File.dirname(full_name))
+        blob_in_dir = checked_dir.nil? || dir.downcase == checked_dir
+
+        if blob_in_dir && page_match(name, blob_name)
           blob = Grit::Blob.create(@wiki.repo, :id => blob_sha, :name => blob_name)
-          page = self.class.new(@wiki).populate(blob, path)
-          page.version = self.version
-          return page
+          return self.class.new(@wiki).populate(blob, dir)
         end
       end
 

@@ -431,6 +431,25 @@ module Gollum
     def clear_cache
       @ref_map  = {}
       @tree_map = {}
+    end    # Normalizes a given directory name for searching through tree paths.
+    # Ensures that a directory begins with a slash, or 
+    #
+    #   normalize_directory("")      # => ""
+    #   normalize_directory(".")     # => ""
+    #   normalize_directory("foo")   # => "/foo"
+    #   normalize_directory("/foo/") # => "/foo"
+    #   normalize_directory("/")     # => ""
+    #
+    # dir - String directory name.
+    #
+    # Returns a normalized String directory name, or nil if no directory 
+    # is given.
+    def self.normalize_directory(dir)
+      if dir
+        dir = ::File.expand_path(dir, '/')
+        dir = '' if dir == '/'
+      end
+      dir
     end
   end
 end
