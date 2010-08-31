@@ -33,6 +33,11 @@ module Gollum
     # Public: The String path of the file.
     attr_reader :path
 
+    # Public: The String mime type of the file.
+    def mime_type
+      @blob.mime_type
+    end
+
     #########################################################################
     #
     # Internal Methods

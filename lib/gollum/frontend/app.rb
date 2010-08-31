@@ -141,7 +141,7 @@ module Precious
         @content = page.formatted_data
         mustache :page
       elsif file = wiki.file(name)
-        content_type MIME::Types.type_for(name).to_s
+        content_type file.mime_type
         file.raw_data
       else
         @name = name

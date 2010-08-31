@@ -8,6 +8,7 @@
 * Minor Enhancements
   * Support a `:gollum_path` Sinatra setting for `Precious::App`
   * Add Wiki#size to efficiently count pages without loading them.
+  * Add the correct content type when serving files from the frontend.
 * Bug Fixes
   * Increase minimum Sanitize version requirement to 1.1.0.
     1.0.x versions of Sanitize require Hpricot instead of Nokogiri
