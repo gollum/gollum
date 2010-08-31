@@ -39,6 +39,10 @@ context "Wiki" do
       pages.map { |p| p.filename }.sort
   end
 
+  test "counts pages" do
+    assert_equal 4, @wiki.size
+  end
+
   test "normalizes commit hash" do
     commit = {:message => 'abc'}
     assert_equal({:message => 'abc', :name => 'Anonymous', :email => 'anon@anon.com'},
