@@ -264,19 +264,14 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find_page_in_tree(map, name, checked_dir = nil)
-      if checked_dir = Wiki.normalize_directory(checked_dir)
+      if checked_dir = BlobEntry.normalize_dir(checked_dir)
         checked_dir.downcase!
       end
 
-      map.each do |(full_name, blob_sha)|
-        blob_name = ::File.basename(full_name)
-        dir       = Wiki.normalize_directory(::File.dirname(full_name))
-        blob_in_dir = checked_dir.nil? || dir.downcase == checked_dir
-
-        if blob_in_dir && page_match(name, blob_name)
-          blob = Grit::Blob.create(@wiki.repo, :id => blob_sha, :name => blob_name)
-          return self.class.new(@wiki).populate(blob, dir)
-        end
+      map.each do |entry|
+        next unless checked_dir.nil? || entry.dir.downcase == checked_dir
+        next unless page_match(name, entry.name)
+        return self.class.new(@wiki).populate(entry.blob(@wiki.repo), entry.dir)
       end
 
       return nil # nothing was found

@@ -375,7 +375,7 @@ module Gollum
     #
     # ref - A String ref that is either a commit SHA or references one.
     #
-    # Returns an Array of [filename, sha] Arrays.
+    # Returns an Array of BlobEntry instances.
     def tree_map_for(ref)
       sha = @ref_map[ref] || ref
       @tree_map[sha] || begin
@@ -390,7 +390,7 @@ module Gollum
     #
     # sha - String commit SHA.
     #
-    # Returns an Array of [filename, sha] Arrays.
+    # Returns an Array of BlobEntry instances.
     def parse_tree_for(sha)
       tree  = @repo.git.native(:ls_tree, {:r => true, :z => true}, sha)
       items = []
@@ -405,12 +405,12 @@ module Gollum
     # line - A String line of output:
     #          "100644 blob 839c2291b30495b9a882c17d08254d3c90d8fb53	Home.md"
     #
-    # Returns an Array of [filename, sha].
+    # Returns an Array of BlobEntry instances.
     def parse_tree_line(line)
       data, name = line.split("\t")
       mode, type, sha = data.split(' ')
       name = decode_git_path(name)
-      [name, sha]
+      BlobEntry.new sha, name
     end
 
     # Decode octal sequences (\NNN) in tree path names.
@@ -431,25 +431,6 @@ module Gollum
     def clear_cache
       @ref_map  = {}
       @tree_map = {}
-    end    # Normalizes a given directory name for searching through tree paths.
-    # Ensures that a directory begins with a slash, or 
-    #
-    #   normalize_directory("")      # => ""
-    #   normalize_directory(".")     # => ""
-    #   normalize_directory("foo")   # => "/foo"
-    #   normalize_directory("/foo/") # => "/foo"
-    #   normalize_directory("/")     # => ""
-    #
-    # dir - String directory name.
-    #
-    # Returns a normalized String directory name, or nil if no directory 
-    # is given.
-    def self.normalize_directory(dir)
-      if dir
-        dir = ::File.expand_path(dir, '/')
-        dir = '' if dir == '/'
-      end
-      dir
     end
   end
 end
