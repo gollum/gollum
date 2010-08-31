@@ -441,9 +441,21 @@ module Gollum
     #
     # Returns the commit Hash
     def normalize_commit(commit = {})
-      commit[:name]   = self.class.default_committer_name  if commit[:name].to_s.empty?
-      commit[:email]  = self.class.default_committer_email if commit[:email].to_s.empty?
+      commit[:name]  = default_committer_name  if commit[:name].to_s.empty?
+      commit[:email] = default_committer_email if commit[:email].to_s.empty?
       commit
+    end
+
+    # Gets the default name for commits.
+    def default_committer_name
+      @default_committer_name ||= \
+        @repo.config['user.name'] || self.class.default_committer_name
+    end
+
+    # Gets the default email for commits.
+    def default_committer_email
+      @default_committer_email ||= \
+        @repo.config['user.email'] || self.class.default_committer_email
     end
 
     # Finds a full listing of files and their blob SHA for a given ref.  Each

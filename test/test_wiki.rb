@@ -45,12 +45,14 @@ context "Wiki" do
 
   test "normalizes commit hash" do
     commit = {:message => 'abc'}
-    assert_equal({:message => 'abc', :name => 'Anonymous', :email => 'anon@anon.com'},
+    name  = @wiki.repo.config['user.name']
+    email = @wiki.repo.config['user.email']
+    assert_equal({:message => 'abc', :name => name, :email => email},
       @wiki.normalize_commit(commit.dup))
 
     commit[:name]  = 'bob'
     commit[:email] = ''
-    assert_equal({:message => 'abc', :name => 'bob', :email => 'anon@anon.com'},
+    assert_equal({:message => 'abc', :name => 'bob', :email => email},
       @wiki.normalize_commit(commit.dup))
 
     commit[:email] = 'foo@bar.com'
