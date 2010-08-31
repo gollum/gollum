@@ -43,6 +43,10 @@ module Gollum
       page
     end
 
+    def inspect
+      %(#<Gollum::BlobEntry #{@sha} #{@path}>)
+    end
+
     # Normalizes a given directory name for searching through tree paths.
     # Ensures that a directory begins with a slash, or 
     #
