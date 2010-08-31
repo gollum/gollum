@@ -37,7 +37,13 @@ opts = OptionParser.new do |opts|
 end
 
 # Read command line options into `options` hash
-opts.parse!
+begin
+  opts.parse!
+rescue OptionParser::InvalidOption
+  puts "gollum: #{$!.message}"
+  puts "gollum: try 'gollum --help' for more information"
+  exit
+end
 
 gollum_path = ARGV[0] || Dir.pwd
 
