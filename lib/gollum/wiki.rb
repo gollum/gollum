@@ -207,12 +207,7 @@ module Gollum
     #
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
-      treeish ||= 'master'
-      if commit = @repo.commit(treeish)
-        tree_list(commit)
-      else
-        []
-      end
+      tree_list(treeish || 'master')
     end
 
     # Public: All of the versions that have touched the Page.
@@ -256,6 +251,12 @@ module Gollum
     # Returns the Hash cache.
     attr_reader :tree_map
 
+    # Gets the page class used by all instances of this Wiki.
+    attr_reader :page_class
+
+    # Gets the file class used by all instances of this Wiki.
+    attr_reader :file_class
+
     # Normalize the data.
     #
     # data - The String data to be normalized.
@@ -267,27 +268,15 @@ module Gollum
 
     # Fill an array with a list of pages.
     #
-    # commit   - The Grit::Commit
-    # tree     - The Grit::Tree to start with.
-    # sub_tree - Optional String specifying the parent path of the Page.
+    # ref - A String ref that is either a commit SHA or references one.
     #
     # Returns a flat Array of Gollum::Page instances.
-    def tree_list(commit, tree = commit.tree, sub_tree = nil)
-      list = []
-      path = tree.name ? "#{sub_tree}/#{tree.name}" : ''
-      tree.contents.each do |item|
-        case item
-          when Grit::Blob
-            if @page_class.valid_page_name?(item.name)
-              page = @page_class.new(self).populate(item, path)
-              page.version = commit
-              list << page
-            end
-          when Grit::Tree
-            list.push *tree_list(commit, item, path)
-        end
+    def tree_list(ref)
+      tree_map_for(ref).inject([]) do |list, entry|
+        next list unless @page_class.valid_page_name?(entry.name)
+        sha   = ref_map[ref]
+        list << entry.page(self, @repo.commit(sha))
       end
-      list
     end
 
     # Determine if a given page path is scheduled to be deleted in the next

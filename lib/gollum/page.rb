@@ -271,7 +271,7 @@ module Gollum
       map.each do |entry|
         next unless checked_dir.nil? || entry.dir.downcase == checked_dir
         next unless page_match(name, entry.name)
-        return self.class.new(@wiki).populate(entry.blob(@wiki.repo), entry.dir)
+        return entry.page(@wiki, @version)
       end
 
       return nil # nothing was found
