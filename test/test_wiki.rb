@@ -35,7 +35,7 @@ context "Wiki" do
   test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-Precious.md), 
+      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-Precious.md),
       pages.map { |p| p.filename }.sort
   end
 
@@ -107,58 +107,48 @@ context "Wiki page writing" do
   end
 
   test "write_page" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+    cd = commit_details
+    @wiki.write_page("Gollum", :markdown, "# Gollum", cd)
     assert_equal 1, @wiki.repo.commits.size
-    assert_equal "Gollum page", @wiki.repo.commits.first.message
-    assert_equal "Tom Preston-Werner", @wiki.repo.commits.first.author.name
-    assert_equal "tom@github.com", @wiki.repo.commits.first.author.email
+    assert_equal cd[:message], @wiki.repo.commits.first.message
+    assert_equal cd[:name], @wiki.repo.commits.first.author.name
+    assert_equal cd[:email], @wiki.repo.commits.first.author.email
     assert @wiki.page("Gollum")
 
-    @wiki.write_page("Bilbo", :markdown, "# Bilbo", commit)
+    @wiki.write_page("Bilbo", :markdown, "# Bilbo", commit_details)
     assert_equal 2, @wiki.repo.commits.size
     assert @wiki.page("Bilbo")
     assert @wiki.page("Gollum")
   end
 
   test "is not allowed to overwrite file" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-    @wiki.write_page("Abc-Def", :markdown, "# Gollum", commit)
+    @wiki.write_page("Abc-Def", :markdown, "# Gollum", commit_details)
     assert_raises Gollum::DuplicatePageError do
-      @wiki.write_page("ABC DEF", :textile,  "# Gollum", commit)
+      @wiki.write_page("ABC DEF", :textile,  "# Gollum", commit_details)
     end
   end
 
   test "update_page" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit_details)
 
     page = @wiki.page("Gollum")
-    @wiki.update_page(page, page.name, :markdown, "# Gollum2", commit)
+    cd = commit_details
+    @wiki.update_page(page, page.name, :markdown, "# Gollum2", cd)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_equal "# Gollum2", @wiki.page("Gollum").raw_data
-    assert_equal "Gollum page", @wiki.repo.commits.first.message
-    assert_equal "Tom Preston-Werner", @wiki.repo.commits.first.author.name
-    assert_equal "tom@github.com", @wiki.repo.commits.first.author.email
+    assert_equal cd[:message], @wiki.repo.commits.first.message
+    assert_equal cd[:name], @wiki.repo.commits.first.author.name
+    assert_equal cd[:email], @wiki.repo.commits.first.author.email
   end
 
   test "update page with format change" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit_details)
 
     assert_equal :markdown, @wiki.page("Gollum").format
 
     page = @wiki.page("Gollum")
-    @wiki.update_page(page, page.name, :textile, "h1. Gollum", commit)
+    @wiki.update_page(page, page.name, :textile, "h1. Gollum", commit_details)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_equal :textile, @wiki.page("Gollum").format
@@ -166,30 +156,24 @@ context "Wiki page writing" do
   end
 
   test "update page with name change" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit_details)
 
     assert_equal :markdown, @wiki.page("Gollum").format
 
     page = @wiki.page("Gollum")
-    @wiki.update_page(page, 'Smeagol', :markdown, "h1. Gollum", commit)
+    @wiki.update_page(page, 'Smeagol', :markdown, "h1. Gollum", commit_details)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_equal "h1. Gollum", @wiki.page("Smeagol").raw_data
   end
 
   test "update page with name and format change" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit_details)
 
     assert_equal :markdown, @wiki.page("Gollum").format
 
     page = @wiki.page("Gollum")
-    @wiki.update_page(page, 'Smeagol', :textile, "h1. Gollum", commit)
+    @wiki.update_page(page, 'Smeagol', :textile, "h1. Gollum", commit_details)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_equal :textile, @wiki.page("Smeagol").format
@@ -197,17 +181,13 @@ context "Wiki page writing" do
   end
 
   test "update nested page with format change" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-
     index = @wiki.repo.index
     index.add("lotr/Gollum.md", "# Gollum")
     index.commit("Add nested page")
 
     page = @wiki.page("Gollum")
     assert_equal :markdown, @wiki.page("Gollum").format
-    @wiki.update_page(page, page.name, :textile, "h1. Gollum", commit)
+    @wiki.update_page(page, page.name, :textile, "h1. Gollum", commit_details)
 
     page = @wiki.page("Gollum")
     assert_equal "lotr/Gollum.textile", page.path
@@ -216,23 +196,16 @@ context "Wiki page writing" do
   end
 
   test "delete root page" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-    @wiki.write_page("Gollum", :markdown, "# Gollum", commit)
+    @wiki.write_page("Gollum", :markdown, "# Gollum", commit_details)
 
     page = @wiki.page("Gollum")
-    @wiki.delete_page(page, commit)
+    @wiki.delete_page(page, commit_details)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_nil @wiki.page("Gollum")
   end
 
   test "delete nested page" do
-    commit = { :message => "Gollum page",
-               :name => "Tom Preston-Werner",
-               :email => "tom@github.com" }
-
     index = @wiki.repo.index
     index.add("greek/Bilbo-Baggins.md", "hi")
     index.add("Gollum.md", "hi")
@@ -240,7 +213,7 @@ context "Wiki page writing" do
 
     page = @wiki.page("Bilbo-Baggins")
     assert page
-    @wiki.delete_page(page, commit)
+    @wiki.delete_page(page, commit_details)
 
     assert_equal 2, @wiki.repo.commits.size
     assert_nil @wiki.page("Bilbo-Baggins")
@@ -250,5 +223,60 @@ context "Wiki page writing" do
 
   teardown do
     FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+  end
+end
+
+context "Wiki sync with working directory" do
+  setup do
+    @path = testpath('examples/wdtest')
+    Grit::Repo.init(@path)
+    @wiki = Gollum::Wiki.new(@path)
+  end
+
+  test "write a page" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    assert_equal "Hi", File.read(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with same name and format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, page.name, page.format, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with different name and same format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, "New Page 2", page.format, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page-2.md"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with same name and different format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, page.name, :textile, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page.textile"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  test "update a page with different name and different format" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.update_page(page, "New Page 2", :textile, "Bye", commit_details)
+    assert_equal "Bye", File.read(File.join(@path, "New-Page-2.textile"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  test "delete a page" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    page = @wiki.page("New Page")
+    @wiki.delete_page(page, commit_details)
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  teardown do
+    FileUtils.rm_r(@path)
   end
 end

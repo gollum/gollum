@@ -6,10 +6,6 @@ context "Markup" do
     FileUtils.rm_rf(@path)
     Grit::Repo.init_bare(@path)
     @wiki = Gollum::Wiki.new(@path)
-
-    @commit = { :message => "Add stuff",
-                :name => "Tom Preston-Werner",
-                :email => "tom@github.com" }
   end
 
   teardown do
@@ -17,12 +13,12 @@ context "Markup" do
   end
 
   test "formats page from Wiki#pages" do
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", commit_details)
     assert @wiki.pages[0].formatted_data
   end
 
   test "double page links no space" do
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", commit_details)
 
     # "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a><a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>"
     page    = @wiki.page("Bilbo Baggins")
@@ -41,7 +37,7 @@ context "Markup" do
   end
 
   test "double page links with space" do
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]] [[Bar]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]] [[Bar]] b", commit_details)
 
     # "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a> <a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>"
     page = @wiki.page("Bilbo Baggins")
@@ -60,7 +56,7 @@ context "Markup" do
   end
 
   test "page link" do
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Bilbo Baggins]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Bilbo Baggins]] b", commit_details)
 
     page = @wiki.page("Bilbo Baggins")
     output = page.formatted_data
@@ -70,7 +66,7 @@ context "Markup" do
   end
 
   test "absent page link" do
-    @wiki.write_page("Tolkien", :markdown, "a [[J. R. R. Tolkien]]'s b", @commit)
+    @wiki.write_page("Tolkien", :markdown, "a [[J. R. R. Tolkien]]'s b", commit_details)
 
     page = @wiki.page("Tolkien")
     output = page.formatted_data
@@ -83,7 +79,7 @@ context "Markup" do
     ["/wiki", "/wiki/"].each_with_index do |path, i|
       name = "Bilbo Baggins #{i}"
       @wiki = Gollum::Wiki.new(@path, :base_path => path)
-      @wiki.write_page(name, :markdown, "a [[#{name}]] b", @commit)
+      @wiki.write_page(name, :markdown, "a [[#{name}]] b", commit_details)
 
       page = @wiki.page(name)
       output = page.formatted_data
@@ -94,7 +90,7 @@ context "Markup" do
   end
 
   test "external page link" do
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[http://example.com]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[http://example.com]] b", commit_details)
 
     page = @wiki.page("Bilbo Baggins")
     assert_equal "<p>a <a href=\"http://example.com\">http://example.com</a> b</p>", page.formatted_data
@@ -103,7 +99,7 @@ context "Markup" do
   test "image with http url" do
     ['http', 'https'].each do |scheme|
       name = "Bilbo Baggins #{scheme}"
-      @wiki.write_page(name, :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", @commit)
+      @wiki.write_page(name, :markdown, "a [[#{scheme}://example.com/bilbo.jpg]] b", commit_details)
 
       page = @wiki.page(name)
       output = page.formatted_data
@@ -116,7 +112,7 @@ context "Markup" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
     index.commit("Add alpha.jpg")
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] [[a | /alpha.jpg]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] [[a | /alpha.jpg]] b", commit_details)
 
     page = @wiki.page("Bilbo Baggins")
     assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
@@ -221,7 +217,7 @@ context "Markup" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
     index.commit("Add alpha.jpg")
-    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Alpha|/alpha.jpg]] b", @commit)
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[Alpha|/alpha.jpg]] b", commit_details)
 
     page = @wiki.page("Bilbo Baggins")
     output = Gollum::Markup.new(page).render
