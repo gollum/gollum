@@ -1,3 +1,4 @@
+require 'cgi'
 require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
@@ -39,8 +40,8 @@ module Precious
       show_page_or_file('Home')
     end
 
-    get '/edit/:name' do
-      @name = params[:name]
+    get '/edit/*' do
+      @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path)
       if page = wiki.page(@name)
         @page = page
@@ -51,8 +52,8 @@ module Precious
       end
     end
 
-    post '/edit/:name' do
-      name   = params[:name]
+    post '/edit/*' do
+      name   = params[:splat].first
       wiki   = Gollum::Wiki.new(settings.gollum_path)
       page   = wiki.page(name)
       format = params[:format].intern
@@ -60,10 +61,10 @@ module Precious
 
       wiki.update_page(page, name, format, params[:content], commit_message)
 
-      redirect "/#{Gollum::Page.cname name}"
+      redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
 
-    post '/create/:name' do
+    post '/create/*' do
       name = params[:page]
       wiki = Gollum::Wiki.new(settings.gollum_path)
 
@@ -71,7 +72,7 @@ module Precious
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect "/#{name}"
+        redirect "/#{CGI.escape(name)}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -97,10 +98,10 @@ module Precious
     post '/compare/:name' do
       @versions = params[:versions] || []
       if @versions.size < 2
-        redirect "/history/#{params[:name]}"
+        redirect "/history/#{CGI.escape(params[:name])}"
       else
         redirect "/compare/%s/%s...%s" % [
-          params[:name],
+          CGI.escape(params[:name]),
           @versions.last,
           @versions.first]
       end

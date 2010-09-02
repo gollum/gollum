@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'cgi'
 
 module Gollum
   class Markup
@@ -267,10 +268,10 @@ module Gollum
         %{<a href="#{name}">#{name}</a>}
       else
         if page = @wiki.page(cname)
-          link = ::File.join(@wiki.base_path, Page.cname(page.name))
+          link = ::File.join(@wiki.base_path, CGI.escape(Page.cname(page.name)))
           presence = "present"
         else
-          link = ::File.join(@wiki.base_path, cname)
+          link = ::File.join(@wiki.base_path, CGI.escape(cname))
           presence = "absent"
         end
         %{<a class="internal #{presence}" href="#{link}">#{name}</a>}

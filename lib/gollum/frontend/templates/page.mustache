@@ -1,7 +1,7 @@
 <div class="guide">
   <div class="main">
     <div class="actions">
-      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
+      <a href="/">Home</a> | <a href="/edit/{{escaped_name}}">Edit</a>
     </div>
     <h1>{{title}}</h1>
     <div class="content wikistyle gollum {{format}}">
@@ -18,10 +18,10 @@
   <div style="float: left;">
     <small>Last edited by <b>{{author}}</b>, {{date}}</small>
     <div class="actions">
-      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
+      <a href="/">Home</a> | <a href="/edit/{{escaped_name}}">Edit</a>
     </div>
   </div>
   <div style="float: right;">
-    <a href="/history/{{name}}">View Revision History</a>
+    <a href="/history/{{escaped_name}}">View Revision History</a>
   </div>
 </div>
