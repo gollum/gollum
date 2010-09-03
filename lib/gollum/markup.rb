@@ -305,6 +305,7 @@ module Gollum
 	pages_li = pages.join('</li><li>')
 	if pages:
 	  pages_li = %{<li>#{pages_li}</li>}
+        end
         %{<ul id="pages">#{pages_li}</ul>}
       end
     end
