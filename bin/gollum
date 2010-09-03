@@ -95,5 +95,6 @@ if options['irb']
 else
   require 'gollum/frontend/app'
   Precious::App.set(:gollum_path, gollum_path)
+  Precious::App.set(:shared_wiki, Gollum::Wiki.new(gollum_path, :refs_to_prefetch => 'master'))
   Precious::App.run!(options)
 end
