@@ -96,6 +96,11 @@ module Gollum
     # Returns the String path.
     attr_reader :path
 
+    # Public: The Grit blob of the page within the repo.
+    #
+    # Returns the Blob.
+    attr_reader :blob
+
     # Public: The raw contents of the page.
     #
     # Returns the String data.

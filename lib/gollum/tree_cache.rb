@@ -37,8 +37,8 @@ module Gollum
     def tree_for(ref)
       sha = @ref_map[ref] || ref
       @tree_map[sha] || begin
-        real_sha              = @repo.git.rev_list({:max_count=>1}, ref)
-        @ref_map[ref]         = real_sha if real_sha != ref
+        real_sha              = ref_map[ref] || sha_for(ref)
+        @ref_map[ref]       ||= real_sha if real_sha != ref
         @tree_map[real_sha] ||= parse_tree_for(real_sha)
       end
     end
@@ -93,6 +93,62 @@ module Gollum
     def prefetch(refs)
       refs = [refs] if refs.kind_of?(String)
       refs && refs.each { |ref| tree_for(ref) }
+    end
+
+    # Updates a ref in the cache to point to a new commit id (sha).
+    #
+    # ref     - A String ref to update.
+    # new_sha - The String new commit id to which the ref should point.
+    #
+    # Returns nothing.
+    def update_ref(ref, new_sha)
+      old_sha = @ref_map[ref]
+      if old_sha && @tree_map[old_sha]
+        @tree_map[new_sha] = @tree_map[old_sha]
+        @tree_map.delete(old_sha)
+      end
+
+      @ref_map[ref] = new_sha
+    end
+
+    # Updates a page stored in a tree to a new sha and path
+    #
+    # old_sha  - String sha1 hash of the entry to replace or nil if
+    #            this page has just been created.
+    # old_path - String, the old path of the page.
+    # new_sha  - String sha1 hash of the new entry to insert, or nil if
+    #            the old page is just to be deleted and not replaced.
+    # new_path - String, the new path of the page.
+    # ref      - A String ref that is either a commit SHA or references one.
+    #
+    # Returns nothing.
+    def set_page_in_ref(old_sha, old_path, new_sha, new_path, ref)
+      tree = tree_for(ref)
+
+      if old_sha && old_path
+        tree.each_index do |index|
+          blob_entry = tree[index]
+          if blob_entry.sha == old_sha && blob_entry.path == old_path
+            if new_sha && new_path # replace the BlobEntry if there is a new one
+              tree[index] = BlobEntry.new new_sha, new_path
+            else                   # else just delete the old one
+              tree.delete_at(index)
+            end
+            break
+          end
+        end
+      else # if this is a new page, just insert it at the end
+        tree.push(BlobEntry.new new_sha, new_path)
+      end
+    end
+
+    # Get the sha1 id of the commit pointed to by a ref.
+    #
+    # ref - A String ref that is either a commit SHA or references one.
+    #
+    # Returns the sha1 id of the commit.
+    def sha_for(ref)
+      @repo.git.rev_list({:max_count=>1}, ref)
     end
   end
 end

@@ -135,13 +135,16 @@ module Gollum
         index.read_tree(pcommit.tree.id)
       end
 
-      add_to_index(index, '', name, format, data)
+      page_sha = add_to_index(index, '', name, format, data)
 
       parents = pcommit ? [pcommit] : []
       actor   = Grit::Actor.new(commit[:name], commit[:email])
       sha1    = index.commit(commit[:message], parents, actor)
 
-      @tree_cache.clear
+      new_page_path = page_file_name(name, format)
+      @tree_cache.set_page_in_ref(nil, nil, page_sha, new_page_path, treeish)
+      @tree_cache.update_ref(treeish, sha1)
+
       update_working_dir(index, '', name, format)
 
       sha1
@@ -176,17 +179,24 @@ module Gollum
 
       index.read_tree(pcommit.tree.id)
 
+      old_page_sha = page.blob.id
+
       if page.name == name && page.format == format
-        index.add(page.path, normalize(data))
+        normalized_data = normalize(data)
+        index.add(page.path, normalized_data)
+        new_page_sha = sha1_from_data(normalized_data)
       else
         index.delete(page.path)
-        add_to_index(index, dir, name, format, data, :allow_same_ext)
+        new_page_sha = add_to_index(index, dir, name, format, data, :allow_same_ext)
       end
 
       actor = Grit::Actor.new(commit[:name], commit[:email])
       sha1  = index.commit(commit[:message], [pcommit], actor)
 
-      @tree_cache.clear
+      new_page_path = ::File.join(dir, page_file_name(name, format))
+      @tree_cache.set_page_in_ref(old_page_sha, page.path, new_page_sha, new_page_path, treeish)
+      @tree_cache.update_ref(treeish, sha1)
+
       update_working_dir(index, dir, page.name, page.format)
       update_working_dir(index, dir, name, format)
 
@@ -217,7 +227,9 @@ module Gollum
       actor = Grit::Actor.new(commit[:name], commit[:email])
       sha1  = index.commit(commit[:message], [pcommit], actor)
       
-      @tree_cache.clear
+      @tree_cache.set_page_in_ref(page.blob.id, page.path, nil, nil, treeish)
+      @tree_cache.update_ref(treeish, sha1)
+
       update_working_dir(index, dir, page.name, page.format)
 
       sha1
@@ -407,7 +419,7 @@ module Gollum
     # Raises Gollum::DuplicatePageError if a matching filename already exists.
     # This way, pages are not inadvertently overwritten.
     #
-    # Returns nothing (modifies the Index in place).
+    # Returns the sha1 of the added object (modifies the Index in place).
     def add_to_index(index, dir, name, format, data, allow_same_ext = false)
       path = page_file_name(name, format)
 
@@ -429,7 +441,9 @@ module Gollum
         end
       end
 
-      index.add(fullpath, normalize(data))
+      normalized_data = normalize(data)
+      index.add(fullpath, normalized_data)
+      sha1_from_data(normalized_data)
     end
 
     # Ensures a commit hash has all the required fields for a commit.
@@ -464,6 +478,11 @@ module Gollum
     # TreeCache wrapper method
     def clear_cache
       @tree_cache.clear
+    end
+
+    # Get the sha1 hash for a data string
+    def sha1_from_data(data)
+      Grit::GitRuby::Blob.new(data).sha1
     end
 
     # Gets the default name for commits.
