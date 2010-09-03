@@ -13,6 +13,7 @@ require 'gollum/ruby1.8'
 # internal
 require 'gollum/pagination'
 require 'gollum/blob_entry'
+require 'gollum/tree_cache'
 require 'gollum/wiki'
 require 'gollum/page'
 require 'gollum/file'
