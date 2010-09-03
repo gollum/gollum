@@ -297,14 +297,13 @@ module Gollum
     #
     # tag - The String tag contents (the stuff inside the double brackets).
     #
-    # Returns the String HTML if the tag is a valid page link tag or nil
-    #   if it is not.
+    # Returns the String HTML of Pages as an unordered list, with page links.
     def process_pages_tag(tag)
       if tag == ':pages'
-	pages = @wiki.size()
-	pages_li = pages.join('</li><li>')
-	if pages:
-	  pages_li = %{<li>#{pages_li}</li>}
+	pages = @wiki.pages
+	pages_li = ''
+	if pages.size > 0:
+	  pages_li = pages.map { |p| %{<li>#{process_page_link_tag(p.name)}</li>} }
         end
         %{<ul id="pages">#{pages_li}</ul>}
       end
