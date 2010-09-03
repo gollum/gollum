@@ -224,11 +224,11 @@ module Gollum
       tree_list(treeish || 'master')
     end
 
-    # Fill an array with a list of pages.
+    # Public: Returns the number of pages accessible from a commit 
     #
     # ref - A String ref that is either a commit SHA or references one.
     #
-    # Returns a flat Array of Gollum::Page instances.
+    # Returns a Fixnum
     def size(ref = nil)
       tree_map_for(ref || 'master').inject(0) do |num, entry|
         num + (@page_class.valid_page_name?(entry.name) ? 1 : 0)
