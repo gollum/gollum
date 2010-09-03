@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '1.0.1'
-  s.date              = '2010-08-12'
+  s.date              = '2010-09-03'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -48,6 +48,7 @@ Gem::Specification.new do |s|
     gollum.gemspec
     lib/gollum.rb
     lib/gollum/albino.rb
+    lib/gollum/blob_entry.rb
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
     lib/gollum/frontend/public/css/editbar.css
@@ -445,6 +446,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/templates/create.mustache
     lib/gollum/frontend/templates/edit.mustache
     lib/gollum/frontend/templates/editbar.mustache
+    lib/gollum/frontend/templates/error.mustache
     lib/gollum/frontend/templates/history.mustache
     lib/gollum/frontend/templates/layout.mustache
     lib/gollum/frontend/templates/page.mustache
@@ -452,12 +454,14 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/views/create.rb
     lib/gollum/frontend/views/edit.rb
     lib/gollum/frontend/views/editable.rb
+    lib/gollum/frontend/views/error.rb
     lib/gollum/frontend/views/history.rb
     lib/gollum/frontend/views/layout.rb
     lib/gollum/frontend/views/page.rb
     lib/gollum/markup.rb
     lib/gollum/page.rb
     lib/gollum/pagination.rb
+    lib/gollum/ruby1.8.rb
     lib/gollum/wiki.rb
     templates/formatting.html
     test/examples/lotr.git/HEAD

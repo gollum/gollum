@@ -130,7 +130,9 @@ module Gollum
     #
     # Returns the String HTML version of the tag.
     def process_tag(tag)
-      if html = process_image_tag(tag)
+      if html = process_pages_tag(tag)
+	return html
+      elsif html = process_image_tag(tag)
         return html
       elsif html = process_file_link_tag(tag)
         return html
@@ -288,6 +290,22 @@ module Gollum
       else
         path = @dir == '.' ? name : ::File.join(@dir, name)
         @wiki.file(path, @version)
+      end
+    end
+
+    # Attempt to process the tag as a pages list tag.
+    #
+    # tag - The String tag contents (the stuff inside the double brackets).
+    #
+    # Returns the String HTML if the tag is a valid page link tag or nil
+    #   if it is not.
+    def process_pages_tag(tag)
+      if tag == ':pages'
+	pages = @wiki.size()
+	pages_li = pages.join('</li><li>')
+	if pages:
+	  pages_li = %{<li>#{pages_li}</li>}
+        %{<ul id="pages">#{pages_li}</ul>}
       end
     end
 
