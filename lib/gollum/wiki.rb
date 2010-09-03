@@ -65,6 +65,7 @@ module Gollum
       @page_class = options[:page_class] || self.class.page_class
       @file_class = options[:file_class] || self.class.file_class
       clear_cache
+      @tree_cache.prefetch(options[:refs_to_prefetch])
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.

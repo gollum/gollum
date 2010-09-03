@@ -84,5 +84,15 @@ module Gollum
       path.gsub!(/\\[rn"\\]/) { |m| eval(%("#{m.to_s}")) }
       path
     end
+
+    # Load a set of trees into the cache.
+    #
+    # refs - Array of ref names to pre-fetch
+    #
+    # Returns nothing.
+    def prefetch(refs)
+      refs = [refs] if refs.kind_of?(String)
+      refs && refs.each { |ref| tree_for(ref) }
+    end
   end
 end
