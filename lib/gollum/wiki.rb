@@ -121,13 +121,15 @@ module Gollum
     #          :message - The String commit message.
     #          :name    - The String author full name.
     #          :email   - The String email address.
+    # treeish - The String commit ID or ref to use as
+    #           the parent commit (default: master)
     #
     # Returns the String SHA1 of the newly written version.
-    def write_page(name, format, data, commit = {})
+    def write_page(name, format, data, commit = {}, treeish = 'master')
       commit = normalize_commit(commit)
       index  = self.repo.index
 
-      if pcommit = @repo.commit('master')
+      if pcommit = @repo.commit(treeish)
         index.read_tree(pcommit.tree.id)
       end
 
@@ -156,11 +158,13 @@ module Gollum
     #          :message - The String commit message.
     #          :name    - The String author full name.
     #          :email   - The String email address.
+    # treeish - The String commit ID or ref to use as
+    #           the parent commit (default: master)
     #
     # Returns the String SHA1 of the newly written version.
-    def update_page(page, name, format, data, commit = {})
+    def update_page(page, name, format, data, commit = {}, treeish = 'master')
       commit   = normalize_commit(commit)
-      pcommit  = @repo.commit('master')
+      pcommit  = @repo.commit(treeish)
       name   ||= page.name
       format ||= page.format
       index    = self.repo.index
@@ -189,15 +193,17 @@ module Gollum
 
     # Public: Delete a page.
     #
-    # page   - The Gollum::Page to delete.
-    # commit - The commit Hash details:
-    #          :message - The String commit message.
-    #          :name    - The String author full name.
-    #          :email   - The String email address.
+    # page    - The Gollum::Page to delete.
+    # commit  - The commit Hash details:
+    #           :message - The String commit message.
+    #           :name    - The String author full name.
+    #           :email   - The String email address.
+    # treeish - The String commit ID or ref to use as
+    #           the parent commit (default: master)
     #
     # Returns the String SHA1 of the newly written version.
-    def delete_page(page, commit)
-      pcommit = @repo.commit('master')
+    def delete_page(page, commit, treeish = 'master')
+      pcommit = @repo.commit(treeish)
 
       index = self.repo.index
       index.read_tree(pcommit.tree.id)
