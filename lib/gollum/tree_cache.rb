@@ -35,11 +35,10 @@ module Gollum
     #
     # Returns an Array of BlobEntry instances.
     def tree_for(ref)
-      sha = @ref_map[ref] || ref
+      sha = @repo.git.rev_list({:max_count=>1}, ref)
       @tree_map[sha] || begin
-        real_sha              = ref_map[ref] || sha_for(ref)
-        @ref_map[ref]       ||= real_sha if real_sha != ref
-        @tree_map[real_sha] ||= parse_tree_for(real_sha)
+        @ref_map[ref]  = sha if sha != ref
+        @tree_map[sha] = parse_tree_for(sha)
       end
     end
 
@@ -140,15 +139,6 @@ module Gollum
       else # if this is a new page, just insert it at the end
         tree.push(BlobEntry.new new_sha, new_path)
       end
-    end
-
-    # Get the sha1 id of the commit pointed to by a ref.
-    #
-    # ref - A String ref that is either a commit SHA or references one.
-    #
-    # Returns the sha1 id of the commit.
-    def sha_for(ref)
-      @repo.git.rev_list({:max_count=>1}, ref)
     end
   end
 end
