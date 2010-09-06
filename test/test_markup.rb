@@ -217,6 +217,41 @@ context "Markup" do
     relative_image(content, output)
   end
 
+  test "normal gist" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234]]", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "gist with file" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234?file=some.ext]]", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js?file=some.ext" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "gist with extension" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234.js]]", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "gist without http" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[gist.github.com/1234]]", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "non-gist link" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[http://gist.github.com/]] b", @commit)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal "<p>a <a href=\"http://gist.github.com/\">http://gist.github.com/</a> b</p>", page.formatted_data
+  end
+
   test "file link with absolute path" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
