@@ -264,11 +264,13 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find_page_in_tree(map, name, checked_dir = nil)
+      return nil if name.blank?
       if checked_dir = BlobEntry.normalize_dir(checked_dir)
         checked_dir.downcase!
       end
 
       map.each do |entry|
+        next if entry.name.blank?
         next unless checked_dir.nil? || entry.dir.downcase == checked_dir
         next unless page_match(name, entry.name)
         return entry.page(@wiki, @version)
