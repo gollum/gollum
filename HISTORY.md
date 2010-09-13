@@ -19,6 +19,7 @@
     anonymous info.
   * Prevent `Gollum::Wiki#write_page` from clobbering existing pages.
   * Handle duplicate page errors in frontend.
+  * Fix bugs trying to retrieve pages with invalid names.
 
 # 1.0.1 / 2010-08-12
 
