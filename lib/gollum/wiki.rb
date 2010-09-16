@@ -221,7 +221,9 @@ module Gollum
     #
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
-      tree_list(treeish || 'master')
+      tree_list(treeish || 'master').sort! do |x, y| 
+        x.title.downcase <=> y.title.downcase
+      end
     end
 
     # Public: Returns the number of pages accessible from a commit 
