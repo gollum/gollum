@@ -10,6 +10,7 @@
   * Add Wiki#size to efficiently count pages without loading them.
   * Add the correct content type when serving files from the frontend.
   * Wiki#pages come back sorted by Page#title.
+  * Add --host option and default it to 127.0.0.1.
 * Bug Fixes
   * Increase minimum Sanitize version requirement to 1.1.0.
     1.0.x versions of Sanitize require Hpricot instead of Nokogiri

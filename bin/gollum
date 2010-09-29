@@ -18,7 +18,7 @@ require 'rubygems'
 require 'gollum'
 
 exec = {}
-options = {}
+options = { 'bind' => '127.0.0.1' }
 opts = OptionParser.new do |opts|
   opts.banner = help
 
@@ -26,7 +26,7 @@ opts = OptionParser.new do |opts|
     options['port'] = port.to_i
   end
 
-  opts.on("--bind [HOST]", "Hostname or IP address to listen on (default 0.0.0.0).") do |host|
+  opts.on("--host [HOST]", "Hostname or IP address to listen on (default 0.0.0.0).") do |host|
     options['bind'] = host
   end
 
