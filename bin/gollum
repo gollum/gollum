@@ -8,7 +8,7 @@ Gollum is a multi-format Wiki Engine/API/Frontend.
 Basic Command Line Usage:
   gollum [OPTIONS] [PATH]
 
-        PATH                         The path to the Gollum repository.
+        PATH                         The path to the Gollum repository (default .).
 
 Options:
 HELP
@@ -18,7 +18,7 @@ require 'rubygems'
 require 'gollum'
 
 exec = {}
-options = { 'bind' => '127.0.0.1' }
+options = { 'port' => 4567, 'bind' => '127.0.0.1' }
 opts = OptionParser.new do |opts|
   opts.banner = help
 
