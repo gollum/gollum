@@ -202,7 +202,9 @@ module Gollum
     #
     # Returns the String canonical name.
     def self.cname(name)
-      name.gsub(%r{[ /<>]}, '-')
+      name.respond_to?(:gsub)      ?
+        name.gsub(%r{[ /<>]}, '-') :
+        ''
     end
 
     # Convert a format Symbol into an extension String.
@@ -264,11 +266,13 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find_page_in_tree(map, name, checked_dir = nil)
+      return nil if name.to_s.empty?
       if checked_dir = BlobEntry.normalize_dir(checked_dir)
         checked_dir.downcase!
       end
 
       map.each do |entry|
+        next if entry.name.to_s.empty?
         next unless checked_dir.nil? || entry.dir.downcase == checked_dir
         next unless page_match(name, entry.name)
         return entry.page(@wiki, @version)

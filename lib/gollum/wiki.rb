@@ -221,14 +221,16 @@ module Gollum
     #
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
-      tree_list(treeish || 'master')
+      tree_list(treeish || 'master').sort! do |x, y| 
+        x.title.downcase <=> y.title.downcase
+      end
     end
 
-    # Fill an array with a list of pages.
+    # Public: Returns the number of pages accessible from a commit 
     #
     # ref - A String ref that is either a commit SHA or references one.
     #
-    # Returns a flat Array of Gollum::Page instances.
+    # Returns a Fixnum
     def size(ref = nil)
       tree_map_for(ref || 'master').inject(0) do |num, entry|
         num + (@page_class.valid_page_name?(entry.name) ? 1 : 0)
@@ -471,6 +473,8 @@ module Gollum
         @ref_map[ref]         = real_sha if real_sha != ref
         @tree_map[real_sha] ||= parse_tree_for(real_sha)
       end
+    rescue Grit::GitRuby::Repository::NoSuchShaFound
+      []
     end
 
     # Finds the full listing of files and their blob SHA for a given commit
