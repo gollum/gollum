@@ -5,6 +5,7 @@
     of manually recreating entire index contents.
   * Added --irb option for the gollum command.
   * Update working dir (if present) when edited via the API (#6)
+  * Add basic `git grep` based search for repos.
 * Minor Enhancements
   * Support a `:gollum_path` Sinatra setting for `Precious::App`
   * Add Wiki#size to efficiently count pages without loading them.
@@ -22,6 +23,7 @@
   * Prevent `Gollum::Wiki#write_page` from clobbering existing pages.
   * Handle duplicate page errors in frontend.
   * Fix bugs trying to retrieve pages with invalid names.
+  * CGI escape page names in links and redirects.
 
 # 1.0.1 / 2010-08-12
 
