@@ -267,14 +267,24 @@ module Gollum
       if name =~ %r{^https?://} && parts[1].nil?
         %{<a href="#{name}">#{name}</a>}
       else
-        if page = @wiki.page(cname)
-          link = ::File.join(@wiki.base_path, CGI.escape(Page.cname(page.name)))
-          presence = "present"
-        else
-          link = ::File.join(@wiki.base_path, CGI.escape(cname))
-          presence = "absent"
+        presence    = "absent"
+        link_name   = cname
+        page, extra = find_page_from_name(cname)
+        if page
+          link_name = Page.cname(page.name)
+          presence  = "present"
         end
-        %{<a class="internal #{presence}" href="#{link}">#{name}</a>}
+        link = ::File.join(@wiki.base_path, CGI.escape(link_name))
+        %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
+      end
+    end
+
+    def find_page_from_name(cname)
+      if page = @wiki.page(cname)
+        return page
+      end
+      if pos = cname.index('#')
+        [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
     end
 

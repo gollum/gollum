@@ -89,10 +89,26 @@ context "Markup" do
 
       page = @wiki.page(name)
       output = page.formatted_data
-      assert_match /class="internal present"/,     output
+      assert_match /class="internal present"/,        output
       assert_match /href="\/wiki\/Bilbo-Baggins-\d"/, output
       assert_match /\>Bilbo Baggins \d\</,            output
     end
+  end
+
+  test "page link with included #" do
+    @wiki.write_page("Precious #1", :markdown, "a [[Precious #1]] b", commit_details)
+    page   = @wiki.page('Precious #1')
+    output = page.formatted_data
+    assert_match /class="internal present"/, output
+    assert_match /href="\/Precious-%231"/,   output
+  end
+
+  test "page link with extra #" do
+    @wiki.write_page("Potato", :markdown, "a [[Potato#1]] b", commit_details)
+    page   = @wiki.page('Potato')
+    output = page.formatted_data
+    assert_match /class="internal present"/, output
+    assert_match /href="\/Potato#1"/,        output
   end
 
   test "external page link" do
