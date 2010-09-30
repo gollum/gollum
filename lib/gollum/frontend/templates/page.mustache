@@ -2,7 +2,11 @@
   <div class="main">
     <div class="actions">
       <form action="/search" method="get">
-        <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a> | <input type="search" name="q" size="10" /> <input type="submit" value="search" />
+        <div>
+          <a href="/">Home</a> | 
+          <a href="/edit/{{escaped_name}}">Edit</a> | 
+          <input type="search" name="q" size="10" /> <input type="submit" value="search" />
+        </div>
       </form>
     </div>
     <h1>{{title}}</h1>
@@ -20,10 +24,10 @@
   <div style="float: left;">
     <small>Last edited by <b>{{author}}</b>, {{date}}</small>
     <div class="actions">
-      <a href="/">Home</a> | <a href="/edit/{{name}}">Edit</a>
+      <a href="/">Home</a> | <a href="/edit/{{escaped_name}}">Edit</a>
     </div>
   </div>
   <div style="float: right;">
-    <a href="/history/{{name}}">View Revision History</a>
+    <a href="/history/{{escaped_name}}">View Revision History</a>
   </div>
 </div>

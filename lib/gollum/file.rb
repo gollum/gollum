@@ -33,6 +33,11 @@ module Gollum
     # Public: The String path of the file.
     attr_reader :path
 
+    # Public: The String mime type of the file.
+    def mime_type
+      @blob.mime_type
+    end
+
     #########################################################################
     #
     # Internal Methods
@@ -46,13 +51,14 @@ module Gollum
     #
     # Returns a Gollum::File or nil if the file could not be found.
     def find(name, version)
-      if commit = @wiki.repo.commit(version)
-        if (blob = commit.tree / name) && blob.is_a?(Grit::Blob)
-          @blob    = blob
-          @path    = name
-          @version = commit
-          self
-        end
+      checked = name.downcase
+      map     = @wiki.tree_map_for(version)
+      sha     = @wiki.ref_map[version] || version
+      if entry = map.detect { |entry| entry.path.downcase == checked }
+        @path    = name
+        @blob    = Grit::Blob.create(@wiki.repo,   :id => entry.sha, :name => entry.name)
+        @version = Grit::Commit.create(@wiki.repo, :id => sha)
+        self
       end
     end
   end

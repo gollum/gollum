@@ -1,3 +1,4 @@
+require 'cgi'
 require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
@@ -12,6 +13,7 @@ module Precious
     dir = File.dirname(File.expand_path(__FILE__))
 
     # We want to serve public assets for now
+
     set :public,    "#{dir}/public"
     set :static,    true
 
@@ -38,9 +40,9 @@ module Precious
       show_page_or_file('Home')
     end
 
-    get '/edit/:name' do
-      @name = params[:name]
-      wiki = Gollum::Wiki.new($path)
+    get '/edit/*' do
+      @name = params[:splat].first
+      wiki = Gollum::Wiki.new(settings.gollum_path)
       if page = wiki.page(@name)
         @page = page
         @content = page.raw_data
@@ -50,27 +52,27 @@ module Precious
       end
     end
 
-    post '/edit/:name' do
-      name   = params[:name]
-      wiki   = Gollum::Wiki.new($path)
+    post '/edit/*' do
+      name   = params[:splat].first
+      wiki   = Gollum::Wiki.new(settings.gollum_path)
       page   = wiki.page(name)
       format = params[:format].intern
       name   = params[:rename] if params[:rename]
 
       wiki.update_page(page, name, format, params[:content], commit_message)
 
-      redirect "/#{Gollum::Page.cname name}"
+      redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
 
-    post '/create/:name' do
+    post '/create/*' do
       name = params[:page]
-      wiki = Gollum::Wiki.new($path)
+      wiki = Gollum::Wiki.new(settings.gollum_path)
 
       format = params[:format].intern
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect "/#{name}"
+        redirect "/#{CGI.escape(name)}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -80,13 +82,13 @@ module Precious
     post '/preview' do
       format = params['wiki_format']
       data = params['text']
-      wiki = Gollum::Wiki.new($path)
+      wiki = Gollum::Wiki.new(settings.gollum_path)
       wiki.preview_page("Preview", data, format).formatted_data
     end
 
     get '/history/:name' do
       @name     = params[:name]
-      wiki      = Gollum::Wiki.new($path)
+      wiki      = Gollum::Wiki.new(settings.gollum_path)
       @page     = wiki.page(@name)
       @page_num = [params[:page].to_i, 1].max
       @versions = @page.versions :page => @page_num
@@ -96,10 +98,10 @@ module Precious
     post '/compare/:name' do
       @versions = params[:versions] || []
       if @versions.size < 2
-        redirect "/history/#{params[:name]}"
+        redirect "/history/#{CGI.escape(params[:name])}"
       else
         redirect "/compare/%s/%s...%s" % [
-          params[:name],
+          CGI.escape(params[:name]),
           @versions.last,
           @versions.first]
       end
@@ -108,7 +110,7 @@ module Precious
     get '/compare/:name/:version_list' do
       @name     = params[:name]
       @versions = params[:version_list].split(/\.{2,3}/)
-      wiki      = Gollum::Wiki.new($path)
+      wiki      = Gollum::Wiki.new(settings.gollum_path)
       @page     = wiki.page(@name)
       diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
       @diff     = diffs.first
@@ -117,7 +119,7 @@ module Precious
 
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
-      wiki = Gollum::Wiki.new($path)
+      wiki = Gollum::Wiki.new(settings.gollum_path)
       if page = wiki.page(name, params[:captures][1])
         @page = page
         @name = name
@@ -130,7 +132,7 @@ module Precious
 
     get '/search' do
       @query = params[:q]
-      wiki = Gollum::Wiki.new($path)
+      wiki = Gollum::Wiki.new(settings.gollum_path)
       @results = wiki.search @query
       mustache :search
     end
@@ -140,13 +142,14 @@ module Precious
     end
 
     def show_page_or_file(name)
-      wiki = Gollum::Wiki.new($path)
+      wiki = Gollum::Wiki.new(settings.gollum_path)
       if page = wiki.page(name)
         @page = page
         @name = name
         @content = page.formatted_data
         mustache :page
       elsif file = wiki.file(name)
+        content_type file.mime_type
         file.raw_data
       else
         @name = name
@@ -155,9 +158,7 @@ module Precious
     end
 
     def commit_message
-      { :message => params[:message],
-        :name    => `git config --get user.name `.strip,
-        :email   => `git config --get user.email`.strip }
+      { :message => params[:message] }
     end
   end
 end

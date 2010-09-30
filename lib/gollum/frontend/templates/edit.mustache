@@ -1,8 +1,8 @@
 <div class="write">
-  <a href="/{{name}}">&laquo; Back</a>
+  <a href="/{{escaped_name}}">&laquo; Back</a>
   <h1>{{title}}</h1>
 
-  <form class="edit_wiki" method="post" action="/edit/{{name}}">
+  <form class="edit_wiki" method="post" action="/edit/{{escaped_name}}">
     <div>
       <label>
         Title<br />

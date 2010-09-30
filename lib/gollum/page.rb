@@ -182,20 +182,15 @@ module Gollum
 
       dirs = self.path.split('/')
       dirs.pop
+      map = @wiki.tree_map_for(self.version.id)
       while !dirs.empty?
-        tree = self.version.tree / dirs.join('/')
-        if page = find_page_in_this_tree(tree, dirs.join('/'), '_Footer')
+        if page = find_page_in_tree(map, '_Footer', dirs.join('/'))
           return page
         end
         dirs.pop
       end
 
-      tree = self.version.tree
-      if page = find_page_in_this_tree(tree, '', '_Footer')
-        return page
-      end
-
-      return nil
+      find_page_in_tree(map, '_Footer', '')
     end
 
     #########################################################################
@@ -215,7 +210,9 @@ module Gollum
     #
     # Returns the String canonical name.
     def self.cname(name)
-      name.gsub(%r{[ /<>]}, '-')
+      name.respond_to?(:gsub)      ?
+        name.gsub(%r{[ /<>]}, '-') :
+        ''
     end
 
     # Convert a format Symbol into an extension String.
@@ -259,61 +256,34 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name, version)
-      if commit = @wiki.repo.commit(version)
-        if page = find_page_in_tree(commit.tree, name)
-          page.version = commit
-          page
-        end
+      map = @wiki.tree_map_for(version)
+      if page = find_page_in_tree(map, name)
+        sha = @wiki.ref_map[version] || version
+        page.version = Grit::Commit.create(@wiki.repo, :id => sha)
+        page
       end
+    rescue Grit::GitRuby::Repository::NoSuchShaFound
     end
 
     # Find a page in a given tree.
     #
-    # tree - The Grit::Tree in which to look.
-    # name - The canonical String page name.
+    # map         - The Array tree map from Wiki#tree_map.
+    # name        - The canonical String page name.
+    # checked_dir - Optional String of the directory a matching page needs
+    #               to be in.  The string should 
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_tree(tree, name)
-      treemap = {}
-      trees = [tree]
-
-      while !trees.empty?
-        ptree = trees.shift
-        ptree.contents.each do |item|
-          case item
-            when Grit::Blob
-              if page_match(name, item.name)
-                return self.class.new(@wiki).populate(item, tree_path(treemap, ptree))
-              end
-            when Grit::Tree
-              treemap[item] = ptree
-              trees << item
-          end
-        end
+    def find_page_in_tree(map, name, checked_dir = nil)
+      return nil if name.to_s.empty?
+      if checked_dir = BlobEntry.normalize_dir(checked_dir)
+        checked_dir.downcase!
       end
 
-      return nil # nothing was found
-    end
-
-    # Find a page in a given tree without recursing into subtrees.
-    #
-    # tree - The Grit::Tree in which to look.
-    # dir  - The String path of the given Grit::Tree.
-    # name - The canonical String page name.
-    #
-    # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_this_tree(tree, dir, name)
-      treemap = {}
-      tree.contents.each do |item|
-        case item
-          when Grit::Blob
-            if page_match(name, item.name)
-              path = dir == '' ? '' : ::File.join('/', dir)
-              page = self.class.new(@wiki).populate(item, path)
-              page.version = self.version
-              return page
-            end
-        end
+      map.each do |entry|
+        next if entry.name.to_s.empty?
+        next unless checked_dir.nil? || entry.dir.downcase == checked_dir
+        next unless page_match(name, entry.name)
+        return entry.page(@wiki, @version)
       end
 
       return nil # nothing was found

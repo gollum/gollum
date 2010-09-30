@@ -8,18 +8,17 @@ Gollum is a multi-format Wiki Engine/API/Frontend.
 Basic Command Line Usage:
   gollum [OPTIONS] [PATH]
 
-        PATH                         The path to the Gollum repository.
+        PATH                         The path to the Gollum repository (default .).
 
 Options:
 HELP
 
 require 'optparse'
-
 require 'rubygems'
-require 'gollum/frontend/app'
+require 'gollum'
 
 exec = {}
-options = {}
+options = { 'port' => 4567, 'bind' => '127.0.0.1' }
 opts = OptionParser.new do |opts|
   opts.banner = help
 
@@ -27,15 +26,78 @@ opts = OptionParser.new do |opts|
     options['port'] = port.to_i
   end
 
+  opts.on("--host [HOST]", "Hostname or IP address to listen on (default 0.0.0.0).") do |host|
+    options['bind'] = host
+  end
+
   opts.on("--version", "Display current version.") do
     puts "Gollum " + Gollum::VERSION
     exit 0
   end
+
+  opts.on("--irb", "Start an irb process with gollum loaded for the current wiki.") do
+    options['irb'] = true
+  end
 end
 
 # Read command line options into `options` hash
-opts.parse!
+begin
+  opts.parse!
+rescue OptionParser::InvalidOption
+  puts "gollum: #{$!.message}"
+  puts "gollum: try 'gollum --help' for more information"
+  exit
+end
 
-$path = ARGV[0] || Dir.pwd
+gollum_path = ARGV[0] || Dir.pwd
 
-Precious::App.run!(options)
+if options['irb']
+  require 'irb'
+  # http://jameskilton.com/2009/04/02/embedding-irb-into-your-ruby-application/
+  module IRB # :nodoc:
+    def self.start_session(binding)
+      unless @__initialized
+        args = ARGV
+        ARGV.replace(ARGV.dup)
+        IRB.setup(nil)
+        ARGV.replace(args)
+        @__initialized = true
+      end
+ 
+      ws  = WorkSpace.new(binding)
+      irb = Irb.new(ws)
+ 
+      @CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC]
+      @CONF[:MAIN_CONTEXT] = irb.context
+ 
+      catch(:IRB_EXIT) do
+        irb.eval_input
+      end
+    end
+  end
+
+  begin
+    wiki = Gollum::Wiki.new(gollum_path)
+    if !wiki.exist? then raise Grit::InvalidGitRepositoryError end
+    puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
+    puts 
+    puts %(    page = wiki.page('page-name'))
+    puts %(    # => <Gollum::Page>)
+    puts
+    puts %(    page.raw_data)
+    puts %(    # => "# My wiki page")
+    puts
+    puts %(    page.formatted_data)
+    puts %(    # => "<h1>My wiki page</h1>")
+    puts
+    puts "Check out the Gollum README for more."
+    IRB.start_session(binding)
+  rescue Grit::InvalidGitRepositoryError, Grit::NoSuchPathError
+    puts "Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}"
+    exit 0
+  end
+else
+  require 'gollum/frontend/app'
+  Precious::App.set(:gollum_path, gollum_path)
+  Precious::App.run!(options)
+end
