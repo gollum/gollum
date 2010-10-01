@@ -307,6 +307,19 @@ Gollum uses [MathJax](http://www.mathjax.org/) to convert the TeX syntax into
 output suitable for display in web browsers.
 
 
+## SEQUENCE DIAGRAMS
+
+You may imbed sequence diagrams into your wiki page (rendered by
+[WebSequenceDiagrams](http://www.websequencediagrams.com) by using the 
+following syntax:
+
+    {{{ blue-modern
+      alice->bob: Test
+      bob->alice: Test response
+    }}}
+
+You can replace the string "blue-modern" with any supported style.
+
 ## API DOCUMENTATION
 
 The Gollum API allows you to retrieve raw or formatted wiki content from a Git
