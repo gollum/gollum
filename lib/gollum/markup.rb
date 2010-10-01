@@ -381,6 +381,12 @@ module Gollum
     #
     #########################################################################
 
+    # Extract all sequence diagram blocks into the wsdmap and replace with 
+    # placeholders.
+    #
+    # data - The raw String data.
+    #
+    # Returns the placeholder'd String data.
     def extract_wsd(data)
       data.gsub(/^\{\{\{ ?(.+?)\r?\n(.+?)\r?\n\}\}\}\r?$/m) do
         id = Digest::SHA1.hexdigest($2)
@@ -389,6 +395,12 @@ module Gollum
       end
     end
 
+    # Process all diagrams from the wsdmap and replace the placeholders with 
+    # the final HTML.
+    #
+    # data - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
     def process_wsd(data)
       @wsdmap.each do |id, spec|
         style = spec[:style]
