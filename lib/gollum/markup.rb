@@ -17,6 +17,7 @@ module Gollum
       @tagmap  = {}
       @codemap = {}
       @texmap  = {}
+      @wsdmap  = {}
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -32,6 +33,7 @@ module Gollum
         SANITIZATION_OPTIONS
       data = extract_tex(@data)
       data = extract_code(data)
+      data = extract_wsd(data)
       data = extract_tags(data)
       begin
         data = GitHub::Markup.render(@name, data)
@@ -43,6 +45,7 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
+      data = process_wsd(data)
       data = Sanitize.clean(data, sanitize_options)
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
@@ -368,6 +371,29 @@ module Gollum
           code.gsub!(/^(  |\t)/m, '')
         end
         data.gsub!(id, Gollum::Albino.new(code, lang).colorize)
+      end
+      data
+    end
+
+    #########################################################################
+    #
+    # Sequence Diagrams
+    #
+    #########################################################################
+
+    def extract_wsd(data)
+      data.gsub(/^\{\{\{ ?(.+?)\r?\n(.+?)\r?\n\}\}\}\r?$/m) do
+        id = Digest::SHA1.hexdigest($2)
+        @wsdmap[id] = { :style => $1, :code => $2 }
+        id
+      end
+    end
+
+    def process_wsd(data)
+      @wsdmap.each do |id, spec|
+        style = spec[:style]
+        code = spec[:code]
+        data.gsub!(id, Gollum::WebSequenceDiagram.new(code, style).to_tag)
       end
       data
     end
