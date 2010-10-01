@@ -344,6 +344,25 @@ context "Markup" do
 
   #########################################################################
   #
+  # Web Sequence Diagrams
+  #
+  #########################################################################
+
+  test "sequence diagram blocks" do
+    content = "a\n\n{{{default\nalice->bob: Test\n}}}\n\nb"
+    output = /.*<img src="http:\/\/www\.websequencediagrams\.com\/\?img=\w{9}" \/>.*/
+    
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add sequence diagram")
+    
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_not_nil rendered.match(output)
+  end
+
+  #########################################################################
+  #
   # Various
   #
   #########################################################################
