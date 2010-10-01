@@ -13,6 +13,8 @@
   * Wiki#pages come back sorted by Page#title.
   * Add --host option and default it to 127.0.0.1.
   * Allow anchors in page links, such as `[[Abc#header]]`.
+  * All pages retrieved with a SHA add `rel="nofollow"` to all
+    page links.
 * Bug Fixes
   * Increase minimum Sanitize version requirement to 1.1.0.
     1.0.x versions of Sanitize require Hpricot instead of Nokogiri
