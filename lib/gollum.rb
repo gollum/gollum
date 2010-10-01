@@ -59,6 +59,11 @@ module Gollum
       'img' => {'href' => ['http', 'https', :relative]}
     }
   }
+  HISTORY_SANITIZATION_OPTIONS = SANITIZATION_OPTIONS.merge(
+    :add_attributes => {
+      'a' => {'rel' => 'nofollow'}
+    }
+  )
 
   class Error < StandardError; end
   class DuplicatePageError < Error

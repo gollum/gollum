@@ -14,6 +14,11 @@ module Gollum
                      :asciidoc => "AsciiDoc",
                      :pod      => "Pod" }
 
+    # Sets a Boolean determing whether this page is a historical version.
+    #
+    # Returns nothing.
+    attr_writer :historical
+
     # Checks if a filename has a valid extension understood by GitHub::Markup.
     #
     # filename - String filename, like "Home.md".
@@ -115,7 +120,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data
-      @blob && Gollum::Markup.new(self).render
+      @blob && Gollum::Markup.new(self).render(historical?)
     end
 
     # Public: The format of the page.
@@ -193,6 +198,15 @@ module Gollum
       find_page_in_tree(map, '_Footer', '')
     end
 
+    # Gets a Boolean determining whether this page is a historical version.  
+    # Historical pages are pulled using exact SHA hashes and format all links
+    # with rel="nofollow"
+    #
+    # Returns true if the page is pulled from a named branch or tag, or false.
+    def historical?
+      !!@historical
+    end
+
     #########################################################################
     #
     # Class Methods
@@ -259,7 +273,8 @@ module Gollum
       map = @wiki.tree_map_for(version)
       if page = find_page_in_tree(map, name)
         sha = @wiki.ref_map[version] || version
-        page.version = Grit::Commit.create(@wiki.repo, :id => sha)
+        page.version    = Grit::Commit.create(@wiki.repo, :id => sha)
+        page.historical = sha == version
         page
       end
     rescue Grit::GitRuby::Repository::NoSuchShaFound

@@ -22,8 +22,14 @@ module Gollum
     # Render the content with Gollum wiki syntax on top of the file's own
     # markup language.
     #
+    # no_follow - Boolean that determines if rel="nofollow" is added to all
+    #             <a> tags.
+    #
     # Returns the formatted String content.
-    def render
+    def render(no_follow = false)
+      sanitize_options = no_follow   ? 
+        HISTORY_SANITIZATION_OPTIONS : 
+        SANITIZATION_OPTIONS
       data = extract_tex(@data)
       data = extract_code(data)
       data = extract_tags(data)
@@ -37,9 +43,9 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = Sanitize.clean(data, SANITIZATION_OPTIONS)
+      data = Sanitize.clean(data, sanitize_options)
       data = process_tex(data)
-      data = data.gsub(/<p><\/p>/, '')
+      data.gsub!(/<p><\/p>/, '')
       data
     end
 
@@ -115,28 +121,33 @@ module Gollum
     # Process all tags from the tagmap and replace the placeholders with the
     # final markup.
     #
-    # data - The String data (with placeholders).
+    # data      - The String data (with placeholders).
+    # no_follow - Boolean that determines if rel="nofollow" is added to all
+    #             <a> tags.
     #
     # Returns the marked up String data.
-    def process_tags(data)
+    def process_tags(data, no_follow = false)
       @tagmap.each do |id, tag|
-        data.gsub!(id, process_tag(tag))
+        data.gsub!(id, process_tag(tag, no_follow))
       end
       data
     end
 
     # Process a single tag into its final HTML form.
     #
-    # tag - The String tag contents (the stuff inside the double brackets).
+    # tag       - The String tag contents (the stuff inside the double 
+    #             brackets).
+    # no_follow - Boolean that determines if rel="nofollow" is added to all
+    #             <a> tags.
     #
     # Returns the String HTML version of the tag.
-    def process_tag(tag)
+    def process_tag(tag, no_follow = false)
       if html = process_image_tag(tag)
-        return html
-      elsif html = process_file_link_tag(tag)
-        return html
+        html
+      elsif html = process_file_link_tag(tag, no_follow)
+        html
       else
-        return process_page_link_tag(tag)
+        process_page_link_tag(tag, no_follow)
       end
     end
 
@@ -229,11 +240,14 @@ module Gollum
 
     # Attempt to process the tag as a file link tag.
     #
-    # tag - The String tag contents (the stuff inside the double brackets).
+    # tag       - The String tag contents (the stuff inside the double 
+    #             brackets).
+    # no_follow - Boolean that determines if rel="nofollow" is added to all
+    #             <a> tags.
     #
     # Returns the String HTML if the tag is a valid file link tag or nil
     #   if it is not.
-    def process_file_link_tag(tag)
+    def process_file_link_tag(tag, no_follow = false)
       parts = tag.split('|')
       name  = parts[0].strip
       path  = parts[1] && parts[1].strip
@@ -245,26 +259,33 @@ module Gollum
         nil
       end
 
-      if name && path && file
+      tag = if name && path && file
         %{<a href="#{::File.join @wiki.base_path, file.path}">#{name}</a>}
       elsif name && path
         %{<a href="#{path}">#{name}</a>}
       else
         nil
       end
+      if tag && no_follow
+        tag.sub! /^<a/, '<a ref="nofollow"'
+      end
+      tag
     end
 
     # Attempt to process the tag as a page link tag.
     #
-    # tag - The String tag contents (the stuff inside the double brackets).
+    # tag       - The String tag contents (the stuff inside the double 
+    #             brackets).
+    # no_follow - Boolean that determines if rel="nofollow" is added to all
+    #             <a> tags.
     #
     # Returns the String HTML if the tag is a valid page link tag or nil
     #   if it is not.
-    def process_page_link_tag(tag)
+    def process_page_link_tag(tag, no_follow = false)
       parts = tag.split('|')
       name  = parts[0].strip
       cname = Page.cname((parts[1] || parts[0]).strip)
-      if name =~ %r{^https?://} && parts[1].nil?
+      tag = if name =~ %r{^https?://} && parts[1].nil?
         %{<a href="#{name}">#{name}</a>}
       else
         presence    = "absent"
@@ -277,6 +298,10 @@ module Gollum
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
+      if tag && no_follow
+        tag.sub! /^<a/, '<a ref="nofollow"'
+      end
+      tag
     end
 
     # Find the given file in the repo.

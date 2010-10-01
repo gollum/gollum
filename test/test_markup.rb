@@ -71,6 +71,16 @@ context "Markup" do
     assert_match /\>Bilbo Baggins\</,        output
   end
 
+  test "adds nofollow to links on historical pages" do
+    sha1 = @wiki.write_page("Sauron", :markdown, "a [[b]] c", commit_details)
+    page = @wiki.page("Sauron")
+    sha2 = @wiki.update_page(page, page.name, :markdown, "c [[b]] a", commit_details)
+    regx = /rel="nofollow"/
+    assert_no_match regx, page.formatted_data
+    assert_match    regx, @wiki.page(page.name, sha1).formatted_data
+    assert_match    regx, @wiki.page(page.name, sha2).formatted_data
+  end
+
   test "absent page link" do
     @wiki.write_page("Tolkien", :markdown, "a [[J. R. R. Tolkien]]'s b", commit_details)
 
