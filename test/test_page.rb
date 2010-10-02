@@ -110,4 +110,9 @@ context "Page" do
     footer = @wiki.page("_Footer")
     assert_nil footer.footer
   end
+
+  test "cannot convert non string to human readable page title" do
+    assert_equal '', Gollum::Page.cname(nil)
+    assert_equal '', Gollum::Page.cname(3)
+  end
 end

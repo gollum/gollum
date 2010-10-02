@@ -241,17 +241,39 @@ module Gollum
     #
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
-      tree_list(treeish || 'master')
+      tree_list(treeish || 'master').sort! do |x, y| 
+        x.title.downcase <=> y.title.downcase
+      end
     end
 
-    # Fill an array with a list of pages.
+    # Public: Returns the number of pages accessible from a commit 
     #
     # ref - A String ref that is either a commit SHA or references one.
     #
-    # Returns a flat Array of Gollum::Page instances.
+    # Returns a Fixnum
     def size(ref = nil)
       tree_map_for(ref || 'master').inject(0) do |num, entry|
         num + (@page_class.valid_page_name?(entry.name) ? 1 : 0)
+      end
+    end
+
+    # Public: Search all pages for this wiki.
+    #
+    # query - The string to search for
+    #
+    # Returns an Array with Objects of page name and count of matches
+    def search(query)
+      # See: http://github.com/Sirupsen/gollum/commit/f0a6f52bdaf6bee8253ca33bb3fceaeb27bfb87e
+      search_output = @repo.git.grep({:c => query}, 'master')
+
+      search_output.split("\n").collect do |line|
+        result = line.split(':')
+        file_name = Gollum::Page.canonicalize_filename(::File.basename(result[1]))
+
+        {
+          :count  => result[2].to_i,
+          :name   => file_name
+        }
       end
     end
 

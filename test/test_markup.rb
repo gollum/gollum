@@ -17,6 +17,12 @@ context "Markup" do
     assert @wiki.pages[0].formatted_data
   end
 
+  #########################################################################
+  #
+  # Links
+  #
+  #########################################################################
+
   test "double page links no space" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", commit_details)
 
@@ -65,6 +71,16 @@ context "Markup" do
     assert_match /\>Bilbo Baggins\</,        output
   end
 
+  test "adds nofollow to links on historical pages" do
+    sha1 = @wiki.write_page("Sauron", :markdown, "a [[b]] c", commit_details)
+    page = @wiki.page("Sauron")
+    sha2 = @wiki.update_page(page, page.name, :markdown, "c [[b]] a", commit_details)
+    regx = /rel="nofollow"/
+    assert_no_match regx, page.formatted_data
+    assert_match    regx, @wiki.page(page.name, sha1).formatted_data
+    assert_match    regx, @wiki.page(page.name, sha2).formatted_data
+  end
+
   test "absent page link" do
     @wiki.write_page("Tolkien", :markdown, "a [[J. R. R. Tolkien]]'s b", commit_details)
 
@@ -83,10 +99,26 @@ context "Markup" do
 
       page = @wiki.page(name)
       output = page.formatted_data
-      assert_match /class="internal present"/,     output
+      assert_match /class="internal present"/,        output
       assert_match /href="\/wiki\/Bilbo-Baggins-\d"/, output
       assert_match /\>Bilbo Baggins \d\</,            output
     end
+  end
+
+  test "page link with included #" do
+    @wiki.write_page("Precious #1", :markdown, "a [[Precious #1]] b", commit_details)
+    page   = @wiki.page('Precious #1')
+    output = page.formatted_data
+    assert_match /class="internal present"/, output
+    assert_match /href="\/Precious-%231"/,   output
+  end
+
+  test "page link with extra #" do
+    @wiki.write_page("Potato", :markdown, "a [[Potato#1]] b", commit_details)
+    page   = @wiki.page('Potato')
+    output = page.formatted_data
+    assert_match /class="internal present"/, output
+    assert_match /href="\/Potato#1"/,        output
   end
 
   test "external page link" do
@@ -95,6 +127,12 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     assert_equal "<p>a <a href=\"http://example.com\">http://example.com</a> b</p>", page.formatted_data
   end
+
+  #########################################################################
+  #
+  # Images
+  #
+  #########################################################################
 
   test "image with http url" do
     ['http', 'https'].each do |scheme|
@@ -213,6 +251,12 @@ context "Markup" do
     relative_image(content, output)
   end
 
+  #########################################################################
+  #
+  # File links
+  #
+  #########################################################################
+
   test "file link with absolute path" do
     index = @wiki.repo.index
     index.add("alpha.jpg", "hi")
@@ -243,6 +287,12 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     assert_equal %{<p>a <a href="http://example.com/alpha.jpg">Alpha</a> b</p>}, page.formatted_data
   end
+
+  #########################################################################
+  #
+  # Code
+  #
+  #########################################################################
 
   test "code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
@@ -292,6 +342,12 @@ context "Markup" do
     compare(content, output)
   end
 
+  #########################################################################
+  #
+  # Various
+  #
+  #########################################################################
+
   test "escaped wiki link" do
     content = "a '[[Foo]], b"
     output = "<p>a [[Foo]], b</p>"
@@ -313,17 +369,29 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
-  test "tex block syntax" do
+  #########################################################################
+  #
+  # TeX
+  #
+  #########################################################################
+
+  test "TeX block syntax" do
     content = 'a \[ a^2 \] b'
     output = "<p>a <script type=\"math/tex; mode=display\">a^2</script> b</p>"
     compare(content, output, 'md')
   end
 
-  test "tex inline syntax" do
+  test "TeX inline syntax" do
     content = 'a \( a^2 \) b'
     output = "<p>a <script type=\"math/tex\">a^2</script> b</p>"
     compare(content, output, 'md')
   end
+
+  #########################################################################
+  #
+  # Helpers
+  #
+  #########################################################################
 
   def compare(content, output, ext = "md", regexes = [])
     index = @wiki.repo.index

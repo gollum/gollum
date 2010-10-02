@@ -40,6 +40,8 @@ module Gollum
         @ref_map[ref]  = sha if sha != ref
         @tree_map[sha] = parse_tree_for(sha)
       end
+      rescue Grit::GitRuby::Repository::NoSuchShaFound
+        []
     end
 
     # Finds the full listing of files and their blob SHA for a given commit
