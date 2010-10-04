@@ -18,6 +18,12 @@ context "Site" do
                  Dir[@site.output_path + "/**/*"].map { |f| f.sub(@site.output_path, "") })
   end
 
+  test "render page with layout.html template" do
+    @site.generate("master")
+    home_path = File.join(@site.output_path, "Home")
+    assert_equal(["<html><p>Site test</p></html>\n"], File.open(home_path).readlines)
+  end
+
   teardown do
     FileUtils.rm_r(@site.output_path)
   end

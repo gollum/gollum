@@ -6,6 +6,7 @@ require 'ostruct'
 require 'grit'
 require 'github/markup'
 require 'sanitize'
+require 'liquid'
 
 # ruby 1.8 compatibility
 require 'gollum/ruby1.8'
