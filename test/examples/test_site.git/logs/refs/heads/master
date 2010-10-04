@@ -1,1 +1,3 @@
 0000000000000000000000000000000000000000 71bb02bb7d563e86a558a0040d77f3cfc82dc4fd Daniel Reverri <reverri@gmail.com> 1286172883 -0700	commit (initial): Initial commit of site test repo
+71bb02bb7d563e86a558a0040d77f3cfc82dc4fd 9b3d7fbc0ed4fc1db28f361729e4396208e6f846 Daniel Reverri <reverri@gmail.com> 1286175131 -0700	commit: Added _Layout.html
+9b3d7fbc0ed4fc1db28f361729e4396208e6f846 ddd9974bd919e3601cc015ee36d524f18b4b2df5 Daniel Reverri <reverri@gmail.com> 1286177868 -0700	commit: Added _Layout to sub_dir2

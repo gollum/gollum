@@ -49,7 +49,7 @@ module Gollum
 
     def get_layout(layouts, path)
       if path == ""
-        nil
+        layouts["."]
       else
         layouts[path] or get_layout(layouts, path.split("/")[0..-2].join("/"))
       end
