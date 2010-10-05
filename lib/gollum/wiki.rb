@@ -221,6 +221,15 @@ module Gollum
     #
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
+      tree_list(treeish || 'master')
+    end
+
+    # Public: Lists all pages for this wiki sorted by title.
+    #
+    # treeish - The String commit ID or ref to find  (default: master)
+    #
+    # Returns an Array of Gollum::Page instances.
+    def pages_sorted_by_title(treeish = nil)
       tree_list(treeish || 'master').sort! do |x, y| 
         x.title.downcase <=> y.title.downcase
       end
