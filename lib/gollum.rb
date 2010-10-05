@@ -19,6 +19,8 @@ require 'gollum/file'
 require 'gollum/markup'
 require 'gollum/albino'
 
+require 'gollum/pagelist'
+
 module Gollum
   VERSION = '1.0.1'
 
