@@ -14,7 +14,7 @@ module Gollum
     #             tag  - The entire content of the tag (everything in
     #                    between {{}})
     def self.register_extension_tag(tag, extension)
-      extensions[tag] = extension
+        extensions[tag] = extension if extension.new(nil,nil).respond_to? :render
     end
 
     # Returns all of the currently registrated extensions
