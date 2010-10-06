@@ -10,9 +10,11 @@ module Gollum
     #             The class constructor must take two arguments:
     #               wiki and tag
     #
-    #             wiki - The wiki class of Gollum (use it to find pages)
-    #             tag  - The entire content of the tag (everything in
-    #                    between {{}})
+    #             wiki      - The wiki class of Gollum (use it to find
+    #                         pages)
+    #             tag       - The name of the tag
+    #             arguments - A string with everything after the first
+    #                         space in the {{}}-tag
     def self.register_extension_tag(tag, extension)
         extensions[tag] = extension if extension.new(nil,nil).respond_to? :render
     end
@@ -23,9 +25,10 @@ module Gollum
     end
 
     # Standard way of initializing a class
-    def initialize(wiki, tag)
+    def initialize(wiki, tag, arguments)
       @wiki = wiki
       @tag = tag
+      @arguments = arguments
     end
   end
 end
