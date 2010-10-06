@@ -382,20 +382,7 @@ module Gollum
     #
     # Returns the String HTML version of the tag.
     def process_dynamic_tag(tag)
-      if html = process_dynamic_pages_tag(tag)
-        return html
-      end
-    end
-
-    # Attempt to process the tag as a pages list tag.
-    #
-    # tag - The String tag contents (the stuff inside the double brackets).
-    #
-    # Returns the String HTML of Pages as an unordered list, with page links.
-    def process_dynamic_pages_tag(tag)
-      if tag == 'pages'
-        Gollum::PageList.new(@wiki).render
-      end
+      Gollum::ExtensionTag.extensions[tag].new(@wiki, tag).render
     end
     
     #########################################################################

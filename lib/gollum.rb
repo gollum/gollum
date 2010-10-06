@@ -19,6 +19,7 @@ require 'gollum/file'
 require 'gollum/markup'
 require 'gollum/albino'
 
+require 'gollum/extension.rb'
 require 'gollum/extensions/pagelist'
 
 module Gollum

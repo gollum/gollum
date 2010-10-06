@@ -1,9 +1,5 @@
 module Gollum
-  class PageList
-    def initialize(wiki)
-      @wiki = wiki
-    end
-
+  class PageList < Gollum::ExtensionTag
     def render
       pages = @wiki.pages
       pages_li_html = ''
@@ -14,3 +10,5 @@ module Gollum
     end
   end
 end
+
+Gollum::ExtensionTag.register_dynamic_tag('pages', Gollum::PageList)
