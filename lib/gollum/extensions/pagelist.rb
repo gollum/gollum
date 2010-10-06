@@ -11,4 +11,4 @@ module Gollum
   end
 end
 
-Gollum::ExtensionTag.register_dynamic_tag('pages', Gollum::PageList)
+Gollum::ExtensionTag.register_extension_tag('pages', Gollum::PageList)

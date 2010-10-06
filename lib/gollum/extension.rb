@@ -13,7 +13,7 @@ module Gollum
     #             wiki - The wiki class of Gollum (use it to find pages)
     #             tag  - The entire content of the tag (everything in
     #                    between {{}})
-    def self.register_dynamic_tag(tag, extension)
+    def self.register_extension_tag(tag, extension)
       extensions[tag] = extension
     end
 
