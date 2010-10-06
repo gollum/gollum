@@ -12,7 +12,6 @@ module Gollum
     #
     #             wiki      - The wiki class of Gollum (use it to find
     #                         pages)
-    #             tag       - The name of the tag
     #             arguments - A string with everything after the first
     #                         space in the {{}}-tag
     def self.register_extension_tag(tag, extension)
@@ -25,9 +24,8 @@ module Gollum
     end
 
     # Standard way of initializing a class
-    def initialize(wiki, tag, arguments)
+    def initialize(wiki, arguments)
       @wiki = wiki
-      @tag = tag
       @arguments = arguments
     end
   end
