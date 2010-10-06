@@ -1,3 +1,15 @@
+# Require all of the Ruby files in the given directory. (Taken from Jekyll)
+#
+# path - The String relative path from here to the directory.
+#
+# Returns nothing.
+def require_all(path)
+  glob = File.join(File.dirname(__FILE__), path, '*.rb')
+  Dir[glob].each do |f|
+    require f
+  end
+end
+
 # stdlib
 require 'digest/md5'
 require 'ostruct'
@@ -20,7 +32,7 @@ require 'gollum/markup'
 require 'gollum/albino'
 
 require 'gollum/extension.rb'
-require 'gollum/extensions/pagelist'
+require_all 'gollum/extensions'
 
 module Gollum
   VERSION = '1.0.1'
