@@ -19,7 +19,7 @@ require 'gollum/file'
 require 'gollum/markup'
 require 'gollum/albino'
 
-require 'gollum/pagelist'
+require 'gollum/extensions/pagelist'
 
 module Gollum
   VERSION = '1.0.1'
