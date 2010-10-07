@@ -442,12 +442,12 @@ directory with a base path of `/site_v1.0.1` for all Wiki links.
 A layout is a Liquid template applied to a wiki page during static site generation with the
 following data made available to it:
 
-  page
-        content         The formatted content of the page
-        title           The title of the page
-        format          The format of the page (textile, org, etc.)
-        author          The author of the last edit
-        date            The date of the last edit
+`wiki.base_path`       The base path of the Wiki to which this page belongs
+`page.content`         The formatted content of the page
+`page.title`           The title of the page
+`page.format`          The format of the page (textile, org, etc.)
+`page.author`          The author of the last edit
+`page.date`            The date of the last edit
 
 ## CONTRIBUTE
 

@@ -59,7 +59,8 @@ module Gollum
       if layout.nil?
         return page.formatted_data
       else
-        return layout.render( 'page' => page_to_liquid(page))
+        return layout.render( 'page' => page_to_liquid(page),
+                              'wiki' => wiki_to_liquid(page.wiki))
       end
     end
 
@@ -69,6 +70,10 @@ module Gollum
         "format" => page.format.to_s,
         "author" => page.version.author.name,
         "date" => page.version.authored_date.strftime("%Y-%m-%d %H:%M:%S")}
+    end
+
+    def wiki_to_liquid(wiki)
+      {"base_path" => wiki.base_path}
     end
   end
 end
