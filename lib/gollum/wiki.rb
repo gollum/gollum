@@ -246,7 +246,11 @@ module Gollum
     # Returns an Array with Objects of page name and count of matches
     def search(query)
       # See: http://github.com/Sirupsen/gollum/commit/f0a6f52bdaf6bee8253ca33bb3fceaeb27bfb87e
-      search_output = @repo.git.grep({:c => query}, 'master')
+      if @page_file_dir
+        search_output = @repo.git.grep({:c => query}, 'master', '--', @page_file_dir)
+      else
+        search_output = @repo.git.grep({:c => query}, 'master')
+      end
 
       search_output.split("\n").collect do |line|
         result = line.split(':')

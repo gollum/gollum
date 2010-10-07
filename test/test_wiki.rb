@@ -314,6 +314,12 @@ context "page_file_dir option" do
     assert !@wiki.page("bar")
   end
 
+  test "search results should be restricted in page filer dir" do
+    results = @wiki.search("Hello")
+    assert_equal 1, results.size
+    assert_equal "foo", results[0][:name]
+  end
+
   teardown do
     FileUtils.rm_r(@path)
   end
