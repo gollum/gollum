@@ -42,7 +42,7 @@ module Precious
 
     get '/edit/*' do
       @name = params[:splat].first
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
         @page = page
         @content = page.raw_data
@@ -54,7 +54,7 @@ module Precious
 
     post '/edit/*' do
       name   = params[:splat].first
-      wiki   = Gollum::Wiki.new(settings.gollum_path)
+      wiki   = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       page   = wiki.page(name)
       format = params[:format].intern
       name   = params[:rename] if params[:rename]
@@ -66,7 +66,7 @@ module Precious
 
     post '/create/*' do
       name = params[:page]
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
 
       format = params[:format].intern
 
@@ -82,13 +82,13 @@ module Precious
     post '/preview' do
       format = params['wiki_format']
       data = params['text']
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       wiki.preview_page("Preview", data, format).formatted_data
     end
 
     get '/history/:name' do
       @name     = params[:name]
-      wiki      = Gollum::Wiki.new(settings.gollum_path)
+      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @page     = wiki.page(@name)
       @page_num = [params[:page].to_i, 1].max
       @versions = @page.versions :page => @page_num
@@ -110,7 +110,7 @@ module Precious
     get '/compare/:name/:version_list' do
       @name     = params[:name]
       @versions = params[:version_list].split(/\.{2,3}/)
-      wiki      = Gollum::Wiki.new(settings.gollum_path)
+      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @page     = wiki.page(@name)
       diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
       @diff     = diffs.first
@@ -119,7 +119,7 @@ module Precious
 
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(name, params[:captures][1])
         @page = page
         @name = name
@@ -132,7 +132,7 @@ module Precious
 
     get '/search' do
       @query = params[:q]
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @results = wiki.search @query
       mustache :search
     end
@@ -142,7 +142,7 @@ module Precious
     end
 
     def show_page_or_file(name)
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(name)
         @page = page
         @name = name

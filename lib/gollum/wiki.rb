@@ -46,6 +46,8 @@ module Gollum
     # to "/".
     attr_reader :base_path
 
+    attr_reader :page_file_dir
+
     # Public: Initialize a new Gollum Repo.
     #
     # repo    - The String path to the Git repository that holds the Gollum
@@ -55,6 +57,7 @@ module Gollum
     #                         Default: "/"
     #           :page_class - The page Class. Default: Gollum::Page
     #           :file_class - The file Class. Default: Gollum::File
+    #           :page_file_dir - String the directory in which all page files reside
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -63,6 +66,7 @@ module Gollum
       @base_path  = options[:base_path]  || "/"
       @page_class = options[:page_class] || self.class.page_class
       @file_class = options[:file_class] || self.class.file_class
+      @page_file_dir = options[:page_file_dir]
       clear_cache
     end
 
@@ -339,6 +343,9 @@ module Gollum
         else
           ::File.join(dir, page_file_name(name, format))
         end
+        if @page_file_dir
+          path = ::File.join(@page_file_dir, path)
+        end
 
         Dir.chdir(::File.join(@repo.path, '..')) do
           if file_path_scheduled_for_deletion?(index.tree, path)
@@ -433,7 +440,7 @@ module Gollum
 
       dir = '/' if dir.strip.empty?
 
-      fullpath = ::File.join(dir, path)
+      fullpath = ::File.join(*[@page_file_dir, dir, path].compact)
       fullpath = fullpath[1..-1] if fullpath =~ /^\//
 
       if index.current_tree && tree = index.current_tree / dir
@@ -507,7 +514,11 @@ module Gollum
       tree.split("\0").each do |line|
         items << parse_tree_line(line)
       end
-      items
+      if dir = @page_file_dir
+        items.select{|i| i.path =~ /^#{dir}\// }
+      else
+        items
+      end
     end
 
     # Parses a line of output from the `ls-tree` command.

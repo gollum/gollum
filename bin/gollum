@@ -19,6 +19,7 @@ require 'gollum'
 
 exec = {}
 options = { 'port' => 4567, 'bind' => '127.0.0.1' }
+wiki_options = {}
 opts = OptionParser.new do |opts|
   opts.banner = help
 
@@ -37,6 +38,10 @@ opts = OptionParser.new do |opts|
 
   opts.on("--irb", "Start an irb process with gollum loaded for the current wiki.") do
     options['irb'] = true
+  end
+
+  opts.on("--page-file-dir [PATH]", "Specify the sub directory for all page files (default: repository root).") do |path|
+    wiki_options[:page_file_dir] = path
   end
 end
 
@@ -77,7 +82,7 @@ if options['irb']
   end
 
   begin
-    wiki = Gollum::Wiki.new(gollum_path)
+    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
     if !wiki.exist? then raise Grit::InvalidGitRepositoryError end
     puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
     puts 
@@ -99,5 +104,6 @@ if options['irb']
 else
   require 'gollum/frontend/app'
   Precious::App.set(:gollum_path, gollum_path)
+  Precious::App.set(:wiki_options, wiki_options)
   Precious::App.run!(options)
 end
