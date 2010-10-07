@@ -18,7 +18,7 @@ require 'rubygems'
 require 'gollum'
 
 exec = {}
-options = { 'port' => 4567, 'bind' => '127.0.0.1' }
+options = { 'port' => 4567, 'bind' => '127.0.0.1', 'ref' => 'master' }
 opts = OptionParser.new do |opts|
   opts.banner = help
 
@@ -37,6 +37,22 @@ opts = OptionParser.new do |opts|
 
   opts.on("--irb", "Start an irb process with gollum loaded for the current wiki.") do
     options['irb'] = true
+  end
+
+  opts.on("--generate", "Generate a static site from the current wiki.") do
+    options['generate'] = true
+  end
+
+  opts.on("--ref [REF]", "Branch, tag, or commit from which to generate static site (default \"master\").") do |ref|
+    options['ref'] = ref
+  end
+
+  opts.on("--output_path [PATH]", "Path to output static site (default \"_site\").") do |path|
+    options['output_path'] = path
+  end
+
+  opts.on("--base_path [PATH]", "String base path for all Wiki links (default \"/\").") do |base_path|
+    options['base_path'] = base_path
   end
 end
 
@@ -96,6 +112,10 @@ if options['irb']
     puts "Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}"
     exit 0
   end
+elsif options['generate']
+  wiki = Gollum::Wiki.new(gollum_path, {:base_path => options['base_path']})
+  site = Gollum::Site.new(wiki, {:output_path => options['output_path']})
+  site.generate(options['ref'])
 else
   require 'gollum/frontend/app'
   Precious::App.set(:gollum_path, gollum_path)
