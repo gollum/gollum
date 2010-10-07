@@ -33,7 +33,7 @@ module Gollum
 
       items.each do |item|
         if item.is_a?(@wiki.page_class)
-          path = ::File.join(@output_path, item.name)
+          path = ::File.join(@output_path, @wiki.page_class.cname(item.name))
           layout = get_layout(layouts, ::File.dirname(item.path))
           data = render_page(item, layout)
         else
