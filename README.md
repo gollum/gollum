@@ -414,6 +414,40 @@ To delete a page and commit the change:
 
     wiki.delete_page(page, commit)
 
+## STATIC SITE GENERATOR
+
+The gollum executable provides a "--generate" option which allows you to
+generate a static site from your wiki. To generate a static site run:
+
+    $ gollum --generate
+
+The static site generator uses the [Liquid templating system](http://github.com/tobi/liquid/wiki)
+to render wiki pages. The generator looks for `_Layout.html` files to use as
+templates. Layouts affect all pages in their directory and any subdirectories that
+do not have a layout file of their own.
+
+The generate option accepts the following arguments:
+
+    --ref           Branch, tag, or commit from which to generate the site.
+    --output_path   Path to output site.
+    --base_path     Base path for all Wiki links.
+
+For example, the following would generate a static site for the `v1.0.1` tag in the `site_v1.0.1`
+directory with a base path of `/site_v1.0.1` for all Wiki links.
+
+    $ gollum --generate --ref v1.0.1 --output_path site_v1.0.1 --base_path /site_v1.0.1
+
+## STATIC SITE LAYOUTS
+
+A layout is a Liquid template applied to a wiki page during static site generation with the
+following data made available to it:
+
+  page
+        content         The formatted content of the page
+        title           The title of the page
+        format          The format of the page (textile, org, etc.)
+        author          The author of the last edit
+        date            The date of the last edit
 
 ## CONTRIBUTE
 
