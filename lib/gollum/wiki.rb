@@ -59,7 +59,8 @@ module Gollum
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
       @path       = path
-      @repo       = Grit::Repo.new(path)
+      @access     = options[:access] || GitAccess.new(path)
+      @repo       = @access.repo
       @base_path  = options[:base_path]  || "/"
       @page_class = options[:page_class] || self.class.page_class
       @file_class = options[:file_class] || self.class.file_class
@@ -70,7 +71,7 @@ module Gollum
     #
     # Returns true if the repo exists, and false if it does not.
     def exist?
-      @repo.git.exist?
+      @access.exist?
     end
 
     # Public: Get the formatted page for a given page name.
@@ -520,7 +521,7 @@ module Gollum
       data, name = line.split("\t")
       mode, type, sha = data.split(' ')
       name = decode_git_path(name)
-      BlobEntry.new sha, name
+      BlobEntry.new(sha, name)
     end
 
     # Decode octal sequences (\NNN) in tree path names.

@@ -11,6 +11,7 @@ require 'sanitize'
 require 'gollum/ruby1.8'
 
 # internal
+require 'gollum/git_access'
 require 'gollum/pagination'
 require 'gollum/blob_entry'
 require 'gollum/wiki'
