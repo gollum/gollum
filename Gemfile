@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem "github-markup"
+gem "sinatra"
 gem "sanitize"
 gem "albino"
 gem "rdiscount"

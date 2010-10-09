@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     RedCloth (4.2.3)
+    albino (1.0)
     creole (0.3.7)
     diff-lcs (1.1.2)
     github-markup (0.5.0)
@@ -12,17 +13,21 @@ GEM
     nokogiri (1.4.3.1)
     org-ruby (0.5.3)
       rubypants (>= 0.2.0)
+    rack (1.2.1)
     rdiscount (1.6.5)
     rdoc (2.5.11)
     rubypants (0.2.0)
     sanitize (1.2.1)
       nokogiri (~> 1.4.1)
+    sinatra (1.0)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   RedCloth
+  albino
   creole
   github-markup
   grit
@@ -30,3 +35,4 @@ DEPENDENCIES
   rdiscount
   rdoc
   sanitize
+  sinatra
