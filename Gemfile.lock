@@ -1,0 +1,32 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    RedCloth (4.2.3)
+    creole (0.3.7)
+    diff-lcs (1.1.2)
+    github-markup (0.5.0)
+    grit (2.3.0)
+      diff-lcs (~> 1.1)
+      mime-types (~> 1.15)
+    mime-types (1.16)
+    nokogiri (1.4.3.1)
+    org-ruby (0.5.3)
+      rubypants (>= 0.2.0)
+    rdiscount (1.6.5)
+    rdoc (2.5.11)
+    rubypants (0.2.0)
+    sanitize (1.2.1)
+      nokogiri (~> 1.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  RedCloth
+  creole
+  github-markup
+  grit
+  org-ruby
+  rdiscount
+  rdoc
+  sanitize

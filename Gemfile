@@ -1,0 +1,11 @@
+source "http://rubygems.org"
+
+gem "github-markup"
+gem "sanitize"
+gem "albino"
+gem "rdiscount"
+gem "org-ruby"
+gem "creole"
+gem "rdoc"
+gem "RedCloth"
+gem "grit"
