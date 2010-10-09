@@ -2,6 +2,7 @@ source "http://rubygems.org"
 
 gem "github-markup"
 gem "sinatra"
+gem "mustache"
 gem "sanitize"
 gem "albino"
 gem "rdiscount"

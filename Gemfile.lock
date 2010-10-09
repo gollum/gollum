@@ -10,6 +10,7 @@ GEM
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
     mime-types (1.16)
+    mustache (0.11.2)
     nokogiri (1.4.3.1)
     org-ruby (0.5.3)
       rubypants (>= 0.2.0)
@@ -31,6 +32,7 @@ DEPENDENCIES
   creole
   github-markup
   grit
+  mustache
   org-ruby
   rdiscount
   rdoc
