@@ -39,7 +39,11 @@ module Gollum
     end
 
     def ref_to_sha(ref)
-      @ref_map[ref] ||= ref_to_sha!(ref)
+      if ref =~ /^[0-9a-f]{40}$/
+        ref
+      else
+        @ref_map[ref] ||= ref_to_sha!(ref)
+      end
     end
 
     def tree(ref)
