@@ -39,7 +39,7 @@ module Gollum
     end
 
     def ref_to_sha(ref)
-      if ref =~ /^[0-9a-f]{40}$/
+      if sha?(ref)
         ref
       else
         @ref_map[ref] ||= ref_to_sha!(ref)
@@ -56,13 +56,44 @@ module Gollum
     end
 
     def commit(ref)
-      if sha = @ref_map[ref]
+      ref_is_sha = sha?(ref)
+      if sha = (!ref_is_sha && @ref_map[ref])
         @commit_map[sha] ||= commit!(sha)
       else
         cm = commit!(ref)
-        @ref_map[ref]      = cm.id
+        @ref_map[ref]      = cm.id if !ref_is_sha
         @commit_map[cm.id] = cm
       end
+    end
+
+    def commits(*shas)
+      shas.flatten!
+      cached_commits = multi_get(:commit_map, shas)
+      missing_shas   = shas.select do |sha|
+        !cached_commits.key?(sha)
+      end
+      if !missing_shas.empty?
+        missing_shas.each_slice(500) do |slice|
+          @repo.batch(slice).each do |commit|
+            cached_commits[commit.id] = commit
+          end
+        end
+      end
+      shas.map { |sha| cached_commits[sha] }
+    end
+
+    def multi_get(name, keys)
+      value = instance_variable_get("@#{name}")
+      keys.inject({}) do |memo, key|
+        if v = value[key]
+          memo[key] = v
+        end
+        memo
+      end
+    end
+
+    def sha?(str)
+      str =~ /^[0-9a-f]{40}$/
     end
 
     def ref_to_sha!(ref)

@@ -5,6 +5,23 @@ context "GitAccess" do
     @access = Gollum::GitAccess.new(testpath("examples/lotr.git"))
   end
 
+  test "#commit fills commit_map cache" do
+    assert @access.commit_map.empty?
+    actual   = @access.repo.commits.first
+    expected = @access.commit(actual.id)
+    assert_equal actual.message, expected.message
+    assert_equal actual.message, @access.commit_map[actual.id].message
+  end
+
+  test "#commits uses commit_map" do
+    actual = @access.repo.commits.first
+    #@access.commit actual.id
+    @access.commit_map['abc'] = 1
+    commits = @access.commits('abc', actual.id)
+    assert_equal 1, commits[0]
+    assert_equal actual.message, commits[1].message
+  end
+
   test "#tree_map_for caches ref and tree" do
     assert @access.ref_map.empty?
     assert @access.tree_map.empty?
