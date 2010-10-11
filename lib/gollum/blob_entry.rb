@@ -6,10 +6,13 @@ module Gollum
     # Gets the String full path for this blob.
     attr_reader :path
 
-    def initialize(sha, path)
+    attr_reader :size
+
+    def initialize(sha, path, size = nil)
       @sha  = sha
       @path = path
-      @dir = @name = @blob = nil
+      @size = size
+      @dir  = @name = @blob = nil
     end
 
     # Gets the normalized directory path for this blob.
@@ -28,7 +31,8 @@ module Gollum
     #
     # Returns an unbaked Grit::Blob instance.
     def blob(repo)
-      @blob ||= Grit::Blob.create(repo, :id => @sha, :name => @name)
+      @blob ||= Grit::Blob.create(repo, 
+        :id => @sha, :name => name, :size => @size)
     end
 
     # Gets a Page instance for this blob.

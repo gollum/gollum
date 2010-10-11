@@ -58,13 +58,16 @@ module Gollum
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
+      if path.is_a?(GitAccess)
+        options[:access] = path
+        path             = path.path
+      end
       @path       = path
-      @access     = options[:access] || GitAccess.new(path)
-      @repo       = @access.repo
+      @access     = options[:access]     || GitAccess.new(path)
       @base_path  = options[:base_path]  || "/"
       @page_class = options[:page_class] || self.class.page_class
       @file_class = options[:file_class] || self.class.file_class
-      clear_cache
+      @repo       = @access.repo
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -109,7 +112,7 @@ module Gollum
       path = @page_class.cname(name) + '.' + ext
       blob = OpenStruct.new(:name => path, :data => data)
       page.populate(blob, path)
-      page.version = self.repo.commit("HEAD")
+      page.version = @access.commit('HEAD')
       page
     end
 
@@ -138,7 +141,7 @@ module Gollum
       actor   = Grit::Actor.new(commit[:name], commit[:email])
       sha1    = index.commit(commit[:message], parents, actor)
 
-      @ref_map.clear
+      @access.refresh
       update_working_dir(index, '', name, format)
 
       sha1
@@ -181,7 +184,7 @@ module Gollum
       actor = Grit::Actor.new(commit[:name], commit[:email])
       sha1  = index.commit(commit[:message], [pcommit], actor)
 
-      @ref_map.clear
+      @access.refresh
       update_working_dir(index, dir, page.name, page.format)
       update_working_dir(index, dir, name, format)
 
@@ -210,7 +213,7 @@ module Gollum
       actor = Grit::Actor.new(commit[:name], commit[:email])
       sha1  = index.commit(commit[:message], [pcommit], actor)
 
-      @ref_map.clear
+      @access.refresh
       update_working_dir(index, dir, page.name, page.format)
 
       sha1
@@ -267,6 +270,10 @@ module Gollum
       @repo.log('master', nil, log_pagination_options(options))
     end
 
+    def clear_cache
+      @access.refresh
+    end
+
     #########################################################################
     #
     # Internal Methods
@@ -282,20 +289,6 @@ module Gollum
     #
     # Returns the String path.
     attr_reader :path
-
-    # Gets a Hash cache of refs to commit SHAs.
-    #
-    #   {"master" => "abc123", ...}
-    #
-    # Returns the Hash cache.
-    attr_reader :ref_map
-
-    # Gets a Hash cache of commit SHAs to a recursive tree of blobs.
-    #
-    #   {"abc123" => [["lib/foo.rb", "blob-sha"], [file, sha], ...], ...}
-    #
-    # Returns the Hash cache.
-    attr_reader :tree_map
 
     # Gets the page class used by all instances of this Wiki.
     attr_reader :page_class
@@ -359,8 +352,7 @@ module Gollum
     def tree_list(ref)
       tree_map_for(ref).inject([]) do |list, entry|
         next list unless @page_class.valid_page_name?(entry.name)
-        sha   = ref_map[ref]
-        list << entry.page(self, @repo.commit(sha))
+        list << entry.page(self, @access.commit(ref))
       end
     end
 
@@ -479,6 +471,11 @@ module Gollum
         @repo.config['user.email'] || self.class.default_committer_email
     end
 
+    def commit_for(ref)
+      @access.commit(ref)
+    rescue Grit::GitRuby::Repository::NoSuchShaFound
+    end
+
     # Finds a full listing of files and their blob SHA for a given ref.  Each
     # listing is cached based on its actual commit SHA.
     #
@@ -486,62 +483,9 @@ module Gollum
     #
     # Returns an Array of BlobEntry instances.
     def tree_map_for(ref)
-      sha = @ref_map[ref] || ref
-      @tree_map[sha] || begin
-        real_sha              = @repo.git.rev_list({:max_count=>1}, ref)
-        @ref_map[ref]         = real_sha if real_sha != ref
-        @tree_map[real_sha] ||= parse_tree_for(real_sha)
-      end
+      @access.tree(ref)
     rescue Grit::GitRuby::Repository::NoSuchShaFound
       []
-    end
-
-    # Finds the full listing of files and their blob SHA for a given commit
-    # SHA.  No caching or ref lookups are performed.
-    #
-    # sha - String commit SHA.
-    #
-    # Returns an Array of BlobEntry instances.
-    def parse_tree_for(sha)
-      tree  = @repo.git.native(:ls_tree, {:r => true, :z => true}, sha)
-      items = []
-      tree.split("\0").each do |line|
-        items << parse_tree_line(line)
-      end
-      items
-    end
-
-    # Parses a line of output from the `ls-tree` command.
-    #
-    # line - A String line of output:
-    #          "100644 blob 839c2291b30495b9a882c17d08254d3c90d8fb53	Home.md"
-    #
-    # Returns an Array of BlobEntry instances.
-    def parse_tree_line(line)
-      data, name = line.split("\t")
-      mode, type, sha = data.split(' ')
-      name = decode_git_path(name)
-      BlobEntry.new(sha, name)
-    end
-
-    # Decode octal sequences (\NNN) in tree path names.
-    #
-    # path - String path name.
-    #
-    # Returns a decoded String.
-    def decode_git_path(path)
-      if path[0] == ?" && path[-1] == ?"
-        path = path[1...-1]
-        path.gsub!(/\\\d{3}/)   { |m| m[1..-1].to_i(8).chr }
-      end
-      path.gsub!(/\\[rn"\\]/) { |m| eval(%("#{m.to_s}")) }
-      path
-    end
-
-    # Resets the ref and tree caches for this wiki.
-    def clear_cache
-      @ref_map  = {}
-      @tree_map = {}
     end
   end
 end

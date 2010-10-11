@@ -53,11 +53,10 @@ module Gollum
     def find(name, version)
       checked = name.downcase
       map     = @wiki.tree_map_for(version)
-      sha     = @wiki.ref_map[version] || version
       if entry = map.detect { |entry| entry.path.downcase == checked }
         @path    = name
-        @blob    = Grit::Blob.create(@wiki.repo,   :id => entry.sha, :name => entry.name)
-        @version = Grit::Commit.create(@wiki.repo, :id => sha)
+        @blob    = entry.blob(@wiki.repo)
+        @version = @wiki.commit_for(version)
         self
       end
     end

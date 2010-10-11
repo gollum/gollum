@@ -272,9 +272,8 @@ module Gollum
     def find(name, version)
       map = @wiki.tree_map_for(version)
       if page = find_page_in_tree(map, name)
-        sha = @wiki.ref_map[version] || version
-        page.version    = Grit::Commit.create(@wiki.repo, :id => sha)
-        page.historical = sha == version
+        page.version    = @wiki.commit_for(version)
+        page.historical = page.version.id == version
         page
       end
     rescue Grit::GitRuby::Repository::NoSuchShaFound
