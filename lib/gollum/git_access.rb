@@ -56,13 +56,16 @@ module Gollum
     end
 
     def commit(ref)
-      ref_is_sha = sha?(ref)
-      if sha = (!ref_is_sha && @ref_map[ref])
-        @commit_map[sha] ||= commit!(sha)
+      if sha?(ref)
+        @commit_map[ref] ||= commit!(ref)
       else
-        cm = commit!(ref)
-        @ref_map[ref]      = cm.id if !ref_is_sha
-        @commit_map[cm.id] = cm
+        if sha = @ref_map[ref]
+          commit(sha)
+        else
+          cm = commit!(ref)
+          @ref_map[ref]      = cm.id
+          @commit_map[cm.id] = cm
+        end
       end
     end
 

@@ -350,9 +350,11 @@ module Gollum
     #
     # Returns a flat Array of Gollum::Page instances.
     def tree_list(ref)
-      tree_map_for(ref).inject([]) do |list, entry|
+      sha    = @access.ref_to_sha(ref)
+      commit = @access.commit(sha)
+      tree_map_for(sha).inject([]) do |list, entry|
         next list unless @page_class.valid_page_name?(entry.name)
-        list << entry.page(self, @access.commit(ref))
+        list << entry.page(self, commit)
       end
     end
 

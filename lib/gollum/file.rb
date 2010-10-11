@@ -56,7 +56,7 @@ module Gollum
       if entry = map.detect { |entry| entry.path.downcase == checked }
         @path    = name
         @blob    = entry.blob(@wiki.repo)
-        @version = @wiki.commit_for(version)
+        @version = version.is_a?(Grit::Commit) ? version : @wiki.commit_for(version)
         self
       end
     end

@@ -270,10 +270,11 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name, version)
-      map = @wiki.tree_map_for(version)
+      map = @wiki.tree_map_for(version.to_s)
       if page = find_page_in_tree(map, name)
-        page.version    = @wiki.commit_for(version)
-        page.historical = page.version.id == version
+        page.version    = version.is_a?(Grit::Commit) ? 
+          version : @wiki.commit_for(version)
+        page.historical = page.version.to_s == version.to_s
         page
       end
     rescue Grit::GitRuby::Repository::NoSuchShaFound
