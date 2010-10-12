@@ -145,6 +145,17 @@ context "Markup" do
     end
   end
 
+  test "image with extension in caps with http url" do
+    ['http', 'https'].each do |scheme|
+      name = "Bilbo Baggins #{scheme}"
+      @wiki.write_page(name, :markdown, "a [[#{scheme}://example.com/bilbo.JPG]] b", commit_details)
+
+      page = @wiki.page(name)
+      output = page.formatted_data
+      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.JPG" /> b</p>}, output
+    end
+  end
+
   test "image with absolute path" do
     @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
     index = @wiki.repo.index
