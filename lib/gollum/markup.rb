@@ -349,7 +349,7 @@ module Gollum
     def extract_code(data)
       data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
         id     = Digest::SHA1.hexdigest($2)
-        cached = check_cache(id)
+        cached = check_cache(:code, id)
         @codemap[id] = cached   ? 
           { :output => cached } : 
           { :lang => $1, :code => $2 }
@@ -372,7 +372,7 @@ module Gollum
             code.gsub!(/^(  |\t)/m, '')
           end
           formatted = Gollum::Albino.new(code, lang).colorize
-          update_cache(id, formatted)
+          update_cache(:code, id, formatted)
           formatted
         end
         data.gsub!(id, formatted)
@@ -382,19 +382,21 @@ module Gollum
 
     # Hook for getting the formatted value of extracted tag data.  
     #
-    # id - String SHA1 hash of original extracted tag data.
+    # type - Symbol value identifying what type of data is being extracted.
+    # id   - String SHA1 hash of original extracted tag data.
     #
     # Returns the String cached formatted data, or nil.
-    def check_cache(id)
+    def check_cache(type, id)
     end
 
     # Hook for caching the formatted value of extracted tag data.
     #
+    # type - Symbol value identifying what type of data is being extracted.
     # id   - String SHA1 hash of original extracted tag data.
     # data - The String formatted value to be cached.
     #
     # Returns nothing.
-    def update_cache(id, data)
+    def update_cache(type, id, data)
     end
   end
 end
