@@ -9,6 +9,9 @@ module Gollum
       # Sets the file class used by all instances of this Wiki.
       attr_writer :file_class
 
+      # Sets the markup class used by all instances of this Wiki.
+      attr_writer :markup_class
+
       # Sets the default name for commits.
       attr_accessor :default_committer_name
 
@@ -36,6 +39,17 @@ module Gollum
             ::Gollum::File
           end
       end
+
+      # Gets the markup class used by all instances of this Wiki.
+      # Default: Gollum::Markup
+      def markup_class
+        @markup_class ||
+          if superclass.respond_to?(:markup_class)
+            superclass.markup_class
+          else
+            ::Gollum::Markup
+          end
+      end
     end
 
     self.default_committer_name  = 'Anonymous'
@@ -51,10 +65,11 @@ module Gollum
     # repo    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
-    #           :base_path  - String base path for all Wiki links.
-    #                         Default: "/"
-    #           :page_class - The page Class. Default: Gollum::Page
-    #           :file_class - The file Class. Default: Gollum::File
+    #           :base_path    - String base path for all Wiki links.
+    #                           Default: "/"
+    #           :page_class   - The page Class. Default: Gollum::Page
+    #           :file_class   - The file Class. Default: Gollum::File
+    #           :markup_class - The markup Class. Default: Gollum::Markup
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -62,12 +77,13 @@ module Gollum
         options[:access] = path
         path             = path.path
       end
-      @path       = path
-      @access     = options[:access]     || GitAccess.new(path)
-      @base_path  = options[:base_path]  || "/"
-      @page_class = options[:page_class] || self.class.page_class
-      @file_class = options[:file_class] || self.class.file_class
-      @repo       = @access.repo
+      @path         = path
+      @access       = options[:access]       || GitAccess.new(path)
+      @base_path    = options[:base_path]    || "/"
+      @page_class   = options[:page_class]   || self.class.page_class
+      @file_class   = options[:file_class]   || self.class.file_class
+      @markup_class = options[:markup_class] || self.class.markup_class
+      @repo         = @access.repo
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -297,6 +313,9 @@ module Gollum
 
     # Gets the file class used by all instances of this Wiki.
     attr_reader :file_class
+
+    # Gets the markup class used by all instances of this Wiki.
+    attr_reader :markup_class
 
     # Normalize the data.
     #

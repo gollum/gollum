@@ -120,7 +120,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data
-      @blob && Gollum::Markup.new(self).render(historical?)
+      @blob && @wiki.markup_class.new(self).render(historical?)
     end
 
     # Public: The format of the page.
