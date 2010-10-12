@@ -460,6 +460,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/views/layout.rb
     lib/gollum/frontend/views/page.rb
     lib/gollum/frontend/views/search.rb
+    lib/gollum/git_access.rb
     lib/gollum/markup.rb
     lib/gollum/page.rb
     lib/gollum/pagination.rb
@@ -504,6 +505,7 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/refs/heads/master
     test/helper.rb
     test/test_file.rb
+    test/test_git_access.rb
     test/test_markup.rb
     test/test_page.rb
     test/test_wiki.rb
