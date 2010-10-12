@@ -233,6 +233,8 @@ module Gollum
       tree_map_for(ref || 'master').inject(0) do |num, entry|
         num + (@page_class.valid_page_name?(entry.name) ? 1 : 0)
       end
+    rescue Grit::GitRuby::Repository::NoSuchShaFound
+      0
     end
 
     # Public: Search all pages for this wiki.
