@@ -75,14 +75,18 @@ module Gollum
       missing_shas   = shas.select do |sha|
         !cached_commits.key?(sha)
       end
-      if !missing_shas.empty?
-        missing_shas.each_slice(500) do |slice|
-          @repo.batch(slice).each do |commit|
-            cached_commits[commit.id] = commit
-          end
+
+      multi_commit!(missing_shas, cached_commits) if !missing_shas.empty?
+
+      shas.map { |sha| cached_commits[sha] }
+    end
+
+    def multi_commit!(shas, hash)
+      shas.each_slice(500) do |slice|
+        @repo.batch(slice).each do |commit|
+          hash[commit.id] = commit
         end
       end
-      shas.map { |sha| cached_commits[sha] }
     end
 
     def sha?(str)
