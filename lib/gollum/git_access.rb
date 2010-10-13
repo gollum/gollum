@@ -49,6 +49,8 @@ module Gollum
     def tree(ref)
       if sha = ref_to_sha(ref)
         get_cache(:tree, sha) { tree!(sha) }
+      else
+        []
       end
     end
 
