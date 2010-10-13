@@ -15,7 +15,6 @@ context "GitAccess" do
 
   test "#commits uses commit_map" do
     actual = @access.repo.commits.first
-    #@access.commit actual.id
     @access.commit_map['abc'] = 1
     commits = @access.commits('abc', actual.id)
     assert_equal 1, commits[0]
@@ -27,7 +26,7 @@ context "GitAccess" do
     assert @access.tree_map.empty?
     @access.tree 'master'
     assert_equal({"master"=>"60f12f4254f58801b9ee7db7bca5fa8aeefaa56b"}, @access.ref_map)
-  
+
     map = @access.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b']
     assert_equal 'Bilbo-Baggins.md',        map[0].path
     assert_equal '',                        map[0].dir
@@ -44,5 +43,17 @@ context "GitAccess" do
 
     entry = @access.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0]
     assert_equal 'Bilbo-Baggins.md', entry.path
+  end
+
+  test "cannot access commit from invalid ref" do
+    assert_nil @access.commit('foo')
+  end
+
+  test "cannot access sha from invalid ref" do
+    assert_nil @access.ref_to_sha('foo')
+  end
+
+  test "cannot access tree from invalid ref" do
+    assert_nil @access.tree('foo')
   end
 end

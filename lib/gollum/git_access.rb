@@ -47,8 +47,9 @@ module Gollum
     end
 
     def tree(ref)
-      sha = ref_to_sha(ref)
-      get_cache(:tree, sha) { tree!(sha) }
+      if sha = ref_to_sha(ref)
+        get_cache(:tree, sha) { tree!(sha) }
+      end
     end
 
     def blob(sha)
@@ -62,9 +63,10 @@ module Gollum
         if sha = get_cache(:ref, ref)
           commit(sha)
         else
-          cm = commit!(ref)
-          set_cache(:ref,    ref,   cm.id)
-          set_cache(:commit, cm.id, cm)
+          if cm = commit!(ref)
+            set_cache(:ref,    ref,   cm.id)
+            set_cache(:commit, cm.id, cm)
+          end
         end
       end
     end
@@ -95,6 +97,7 @@ module Gollum
 
     def ref_to_sha!(ref)
       @repo.git.rev_list({:max_count=>1}, ref)
+    rescue Grit::GitRuby::Repository::NoSuchShaFound
     end
 
     def tree!(sha)
@@ -119,12 +122,12 @@ module Gollum
       if value.nil? && block_given?
         set_cache(name, key, value = yield)
       end
-      value
+      value == :_nil ? nil : value
     end
 
     def set_cache(name, key, value)
       cache      = instance_variable_get("@#{name}_map")
-      cache[key] = value
+      cache[key] = value || :_nil
     end
 
     def multi_get(name, keys)
