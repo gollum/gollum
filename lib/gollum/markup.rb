@@ -162,7 +162,7 @@ module Gollum
       name  = parts[0].strip
       path  = if file = find_file(name)
         ::File.join @wiki.base_path, file.path
-      elsif name =~ /^https?:\/\/.+(jpg|png|gif|svg|bmp)$/
+      elsif name =~ /^https?:\/\/.+(jpg|png|gif|svg|bmp)$/i
         name
       end
 

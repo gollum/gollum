@@ -10,7 +10,6 @@
   * Support a `:gollum_path` Sinatra setting for `Precious::App`
   * Add Wiki#size to efficiently count pages without loading them.
   * Add the correct content type when serving files from the frontend.
-  * Wiki#pages come back sorted by Page#title.
   * Add --host option and default it to 127.0.0.1.
   * Allow anchors in page links, such as `[[Abc#header]]`.
   * All pages retrieved with a SHA add `rel="nofollow"` to all

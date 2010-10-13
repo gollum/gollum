@@ -32,15 +32,15 @@ context "Wiki" do
     assert_equal commits, @wiki.log(:page => 2).map { |c| c.id }
   end
 
-  test "list pages, sorted by title" do
+  test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      %w(bilbo.md Bilbo-Baggins.md Eye-Of-Sauron.md My-Precious.md Home.textile),
-      pages.map { |p| p.filename }
+      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-Precious.md),
+      pages.map { |p| p.filename }.sort
   end
 
   test "counts pages" do
-    assert_equal 5, @wiki.size
+    assert_equal 4, @wiki.size
   end
 
   test "normalizes commit hash" do
@@ -64,9 +64,9 @@ context "Wiki" do
     assert @wiki.ref_map.empty?
     assert @wiki.tree_map.empty?
     @wiki.tree_map_for 'master'
-    assert_equal({"master"=>"308fdf72d89351bf53fa6eeb00884273047e07fa"}, @wiki.ref_map)
+    assert_equal({"master"=>"60f12f4254f58801b9ee7db7bca5fa8aeefaa56b"}, @wiki.ref_map)
 
-    map = @wiki.tree_map['308fdf72d89351bf53fa6eeb00884273047e07fa']
+    map = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b']
     assert_equal 'Bilbo-Baggins.md',        map[0].path
     assert_equal '',                        map[0].dir
     assert_equal map[0].path,               map[0].name
@@ -77,10 +77,10 @@ context "Wiki" do
 
   test "#tree_map_for only caches tree for commit" do
     assert @wiki.tree_map.empty?
-    @wiki.tree_map_for '308fdf72d89351bf53fa6eeb00884273047e07fa'
+    @wiki.tree_map_for '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
     assert @wiki.ref_map.empty?
 
-    entry = @wiki.tree_map['308fdf72d89351bf53fa6eeb00884273047e07fa'][0]
+    entry = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0]
     assert_equal 'Bilbo-Baggins.md', entry.path
   end
 end
