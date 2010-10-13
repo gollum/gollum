@@ -221,28 +221,28 @@ context "Markup" do
     @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234]]", @commit)
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"></script></p>', page.formatted_data
   end
 
   test "gist with file" do
     @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234?file=some.ext]]", @commit)
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal '<p><script src="http://gist.github.com/1234.js?file=some.ext" type="text/javascript"><\script></p>', page.formatted_data
+    assert_equal '<p><script src="http://gist.github.com/1234.js?file=some.ext" type="text/javascript"></script></p>', page.formatted_data
   end
 
   test "gist with extension" do
     @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234.js]]", @commit)
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"></script></p>', page.formatted_data
   end
 
   test "gist without http" do
     @wiki.write_page("Bilbo Baggins", :markdown, "[[gist.github.com/1234]]", @commit)
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"></script></p>', page.formatted_data
   end
 
   test "non-gist link" do
