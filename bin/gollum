@@ -35,6 +35,10 @@ opts = OptionParser.new do |opts|
     exit 0
   end
 
+  opts.on("--config [CONFIG]", "Path to additional configuration file") do |config|
+    options['config'] = config
+  end
+
   opts.on("--irb", "Start an irb process with gollum loaded for the current wiki.") do
     options['irb'] = true
   end
@@ -99,5 +103,11 @@ if options['irb']
 else
   require 'gollum/frontend/app'
   Precious::App.set(:gollum_path, gollum_path)
+  if cfg = options['config']
+    # If the path begins with a '/' it will be considered an absolute path,
+    # otherwise it will be relative to the CWD
+    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR 
+    require cfg
+  end
   Precious::App.run!(options)
 end
