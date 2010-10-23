@@ -5,12 +5,16 @@
   <title>Page Name &mdash; Site Name</title>
 </head>
 <body>
+<div id="wiki-wrapper" class="page">
 <div id="head">
   <h1>Page Title</h1>
   <ul class="actions">
-    <li class="minibutton"><a href="javascript:void(0);">Edit Page</a></li>
-    <li class="minibutton"><a href="javascript:void(0);">Page History</a></li>
-    <li class="minibutton"><a href="javascript:void(0);">Discussion <span>(10)<span></a></li>
+    <li class="minibutton"><a href="javascript:void(0);"
+       class="action-edit-page">Edit Page</a></li>
+    <li class="minibutton"><a href="javascript:void(0);"
+       class="action-page-history">Page History</a></li>
+    <li class="minibutton" class="action-discussion">
+      <a href="javascript:void(0);">Discussion <span>(10)<span></a></li>
   </ul>
 </div>
 <div id="wiki-content">
@@ -68,6 +72,8 @@
 <div id="footer">
   <p id="last-edit">Last edited by <span>username</span>, 13:20:21 GMT</p>
 </div>
+</div>
+
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/gollum.editor.js"></script>
 </body>
