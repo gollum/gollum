@@ -24,7 +24,15 @@
     content: " ❈";
     font-size: 0.8em;
   }
-  
+
+#template a:link {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+#template a:hover, #template a:visited {
+  text-decoration: underline;
+}
   
 #template ul, #template ol {
   margin: 1.0em 0;

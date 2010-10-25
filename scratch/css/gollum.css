@@ -17,6 +17,15 @@ body, html {
   width: 80%;
 }
 
+a:link {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+a:hover, a:visited {
+  text-decoration: underline;
+}
+
 
 /* @section head */
 #head {
@@ -31,7 +40,7 @@ body, html {
     float: left;
     line-height: normal;
     margin: 0;
-    padding: 0;
+    padding: 0.08em 0 0 0;
   }
 
   #head ul.actions {
@@ -39,13 +48,46 @@ body, html {
     float: right;
     list-style-type: none;
     overflow: hidden;
-    padding: 0.6em 0 0;
+    padding: 0;
   }
   
   #head ul.actions li {
     float: left;
     font-size: 1.2em;
     margin-left: 0.6em;
+  }
+  
+  /* @control minibutton */
+  .minibutton a {
+    background-color: #f7f7f7;
+    border: 1px solid #d4d4d4;
+    color: #333;
+    display: block;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.4em 1em;
+    
+    text-shadow: 0 1px 0 #fff;
+    
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
+    background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
+    background: -moz-linear-gradient(top, #f4f4f4, #ececec);
+    
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+  }
+  
+  .minibutton a:hover {
+    background: #3072b3;
+    border-color: #518cc6 #518cc6 #2a65a0;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
+    background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
+    background: -moz-linear-gradient(top, #599bdc, #3072b3);
   }
   
   
@@ -63,6 +105,86 @@ body, html {
   /* @section body */
   #wiki-body {
     float: left;
-    margin-right: 5%;
+    margin-right: 3%;
     width: 70%;
+  }
+  
+  /* @section rightbar */
+  #wiki-rightbar {
+    float: right;
+    width: 27%;
+  }
+  
+  #wiki-rightbar #nav {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    margin-top: 1.5em;
+    padding: 1em;
+    
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+  }
+  
+    #wiki-rightbar #nav {
+      font-size: 1.2em;
+      line-height: 1.5em;
+    }
+    
+    #wiki-rightbar #nav p.parent {
+      border-bottom: 1px solid #bbb;
+      font-weight: bold;
+      margin: 0 0 0.5em 0;
+      padding: 0 0 0.5em 0;
+      text-shadow: 0 1px 0 #fff;
+    }
+    
+    /* Back arrow */
+    #wiki-rightbar #nav p.parent:before {
+      color: #666;
+      content: "← ";
+    }
+    
+    #wiki-rightbar #nav h3 {
+      font-size: 1.2em;
+      color: #333;
+      margin: 1.2em 0 0;
+      padding: 0;
+      text-shadow: 0 1px 0 #fff;
+    }
+    
+    #wiki-rightbar #nav ul {
+      margin: 0.5em 0 1em;
+      padding: 0;
+    }
+    
+    #wiki-rightbar #nav ul li {
+      list-style-position: inside;
+      list-style-type: none;
+      margin: 0;
+      padding: 0 0 0 1em;
+      line-height: 1.75em;
+    }
+    
+    #wiki-rightbar #nav ul li a {
+      font-weight: bold;
+      text-shadow: 0 1px 0 #fff;
+    }
+    
+  /* @section footer */
+  #wiki-footer {
+    clear: both;
+  }
+  
+  
+  /* @section page-footer */
+  #footer {
+    border-top: 1px solid #ccc;
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin: 1em 0 7em;
+  }
+  
+  #footer p#last-edit {
+    color: #999;
   }
