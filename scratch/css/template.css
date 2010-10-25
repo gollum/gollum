@@ -7,6 +7,10 @@
   margin-bottom: 4em; /* Give it some breathing room */
 }
 
+.has-footer #template {
+  margin: 0;
+}
+
 #template p {
   font-size: 1.4em;
   line-height: 1.6em;
