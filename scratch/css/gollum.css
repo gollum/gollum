@@ -159,11 +159,16 @@ a:hover, a:visited {
     }
     
     #wiki-rightbar #nav ul li {
-      list-style-position: inside;
+      color: #bbb;
+      list-style-position: outside;
       list-style-type: none;
-      margin: 0;
-      padding: 0 0 0 1em;
+      margin: 0 0 0 1em;
+      padding: 0;
       line-height: 1.75em;
+    }
+    
+    #wiki-rightbar #nav ul li:hover {
+      list-style-type: square;
     }
     
     #wiki-rightbar #nav ul li a {
