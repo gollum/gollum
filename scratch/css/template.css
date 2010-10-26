@@ -1,6 +1,8 @@
 /*
   template.css
   Wiki content formatting
+  Keeping this file separate so it can be easily swapped out if you 
+  want to format your wiki content differently from the default.
 */
 
 #template {

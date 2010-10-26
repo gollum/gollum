@@ -24,4 +24,38 @@ $(document).ready(function() {
     );
   }
   
+  if ($('#wiki-wrapper').hasClass('history')) {
+    $('#wiki-history td.checkbox input').each(highlightChecked);
+    $('#wiki-history td.checkbox input').click(highlightChecked);
+  
+    $('#wiki-history td.revert-action a').mouseenter(highlightOn);
+    $('#wiki-history td.revert-action a').mouseleave(highlightOff);
+  };
+  
 });
+
+function highlightOn() {
+  $(this).parent().parent().animate({
+                                      backgroundColor: '#ffffea',
+                                      duration: 400
+                                    });
+}
+
+function highlightOff() {
+  var color = '#ebf2f6';
+  if ($(this).parent().parent().hasClass('alt-row')) {
+    color = '#f3f7fa';
+  }
+  $(this).parent().parent().animate({
+                                      backgroundColor: color,
+                                      duration: 400
+                                    });
+}
+
+function highlightChecked() {
+ if ($(this).is(':checked')) {
+    $(this).parent().parent().addClass('selected');
+  } else {
+    $(this).parent().parent().removeClass('selected');
+ }
+}

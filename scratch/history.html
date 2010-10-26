@@ -22,32 +22,31 @@
   <ul class="actions">
     <li class="minibutton"><a href="javascript:void(0);"
        class="action-compare-revision">Compare Revisions</a></li>
-    <li class="minibutton"><a href="javascript:void(0);"
-       class="action-back-to-top">Back to Top</a></li>
   </ul>
   
   <form name="compare-versions" method="post" action="#">
   <fieldset>
   <table>
-    <tr>
-      <td class="checkbox">
-        <input type="checkbox" name="revision" value="sha1">
-      </td>
-      <td class="author">
-        <a href="javascript:void(0)">
-          <img src="" alt="avatar: username" class="mini-gravatar">
-          username
-        </a>
-      </td>
-      <td class="commit-name">
-        <span class="time-elapsed">3 days ago:</span>&nbsp;
-        Rewrote home page as Markdown&hellip;
-        [<a href="javascript:void(0);" title="View commit">a45719f&hellip;</a>]
-      </td>
-      <td class="revert-action">
-        <a href="javascript:void(0);">Revert to <span>a45719f&hellip;</span></a>
-      </td>
-    </tr>
+    <tbody>
+      <tr>
+        <td class="checkbox">
+          <input type="checkbox" name="revision" value="sha1">
+        </td>
+        <td class="author">
+          <a href="javascript:void(0)">
+            <img src="" alt="avatar: username" class="mini-gravatar">
+            <span class="username">username</span>
+          </a>
+        </td>
+        <td class="commit-name">
+          <span class="time-elapsed">3 days ago:</span>&nbsp;
+          Rewrote home page as Markdown&hellip;
+          [<a href="javascript:void(0);" title="View commit">a45719f&hellip;</a>]
+        </td>
+        <td class="revert-action">
+          <a href="javascript:void(0);" title="Revert to this change">Revert to <span>a45719f&hellip;</span></a>
+        </td>
+      </tr>
     
     <tr class="alt-row">
       <td class="checkbox">
@@ -56,7 +55,7 @@
       <td class="author">
         <a href="javascript:void(0)">
           <img src="" alt="avatar: username" class="mini-gravatar">
-          username
+          <span class="username">username</span>
         </a>
       </td>
       <td class="commit-name">
@@ -76,7 +75,7 @@
       <td class="author">
         <a href="javascript:void(0)">
           <img src="" alt="avatar: username" class="mini-gravatar">
-          username
+          <span class="username">username</span>
         </a>
       </td>
       <td class="commit-name">
@@ -88,6 +87,7 @@
         <a href="javascript:void(0);">Revert to <span>a45719f&hellip;</span></a>
       </td>
     </tr>
+    </tbody>
   </table>
   </fieldset>
   </form>
@@ -103,6 +103,8 @@
 </div>
 
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.color.js"></script>
+<script type="text/javascript" src="js/gollum.js"></script>
 <script type="text/javascript" src="js/gollum.editor.js"></script>
 </body>
 </html>
