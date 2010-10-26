@@ -233,7 +233,7 @@ a:hover, a:visited {
 
   #wiki-history fieldset {
     border: 0;
-    margin: 0;
+    margin: 2em 0;
     padding: 0;
   }
   
@@ -258,7 +258,11 @@ a:hover, a:visited {
     font-size: 1.2em;
     line-height: 1.6em;
     margin: 0;
-    padding: 0.6em;
+    padding: 0.3em 0.7em;
+  }
+  
+  #wiki-history table tr td.checkbox {
+    padding: 0.3em;
   }
   
   #wiki-history table tr td.checkbox input {
@@ -266,7 +270,7 @@ a:hover, a:visited {
     display: block;
     padding-right: 0;
     padding-top: 0.4em;
-    margin-right: -0.3em;
+    margin-right: -0.2em;
   }
   
   #wiki-history table tr:nth-child(2n),
@@ -281,7 +285,6 @@ a:hover, a:visited {
   
   #wiki-history table tr td.commit-name {
     border-right: none;
-    padding-left: 1.2em;
   }
   
   #wiki-history table tr td.commit-name span.time-elapsed {
@@ -323,7 +326,6 @@ a:hover, a:visited {
   #wiki-history table tr td.revert-action {
     border-left: 0;
     text-align: right;
-    padding-right: 1.2em;
   }
   
   #wiki-history table tr td.revert-action a {
