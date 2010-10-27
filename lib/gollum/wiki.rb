@@ -88,8 +88,8 @@ module Gollum
     #
     # Returns a Sanitization instance.
     def history_sanitization
-      return @history_sanitiazation unless @history_sanitiazation.nil?
-      @history_sanitiazation = (
+      return @history_sanitization unless @history_sanitization.nil?
+      @history_sanitization = (
         if sanitization
           sanitization.merge(Sanitization::HISTORY_OPTIONS)
         else
