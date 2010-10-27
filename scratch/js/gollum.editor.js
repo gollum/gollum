@@ -50,6 +50,14 @@
     }
   };
   
+  $.GollumEditor.defineLanguage = function( language_name, languageObject ) {
+    if ( typeof languageObject == 'object' )
+      LanguageDefinition.define( language_name, languageObject );
+    else 
+      debug('GollumEditor.defineLanguage: definition for ' + language_name 
+            + ' is not an object');
+  };
+  
   
   
   /**
@@ -75,7 +83,15 @@
   **/
   var LanguageDefinition = {
      
-    _LOADED_LANGS: [],  
+    _LOADED_LANGS: [],
+    _LANG: {},
+    
+    /** 
+     *  Defines a language 
+     **/
+    define: function( name, definitionObject ) {
+      LanguageDefinition._LANG[name] = definitionObject;
+    },
     
     /**
      *  loadFor
@@ -162,7 +178,8 @@
       },
       
       evtFunctionButtonClick: function(e) {
-        alert('eee');
+        e.preventDefault();
+        alert($(this).attr('id'));
       }
       
    };
