@@ -29,7 +29,7 @@ module Gollum
     def render(no_follow = false)
       sanitize_options = (
         no_follow ? @wiki.history_sanitization : @wiki.sanitization
-      ).to_h
+      )
       data = extract_tex(@data)
       data = extract_code(data)
       data = extract_tags(data)
@@ -43,7 +43,7 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = Sanitize.clean(data, sanitize_options)
+      data = Sanitize.clean(data, sanitize_options.to_h) if sanitize_options
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data

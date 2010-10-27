@@ -15,11 +15,9 @@ module Gollum
       # Sets the default email for commits.
       attr_accessor :default_committer_email
 
-      #
-      attr_writer :sanitization_options
-
-      #
-      attr_writer :history_sanitization_options
+      # Sets sanitization options. Set to false to deactivate
+      # sanitization altogether.
+      attr_writer :sanitization
 
       # Gets the page class used by all instances of this Wiki.
       # Default: Gollum::Page.
@@ -45,7 +43,8 @@ module Gollum
 
       #
       def sanitization
-        @sanitization ||= Sanitization.new
+        return @sanitization unless @sanitization.nil?
+        @sanitization = Sanitization.new
       end
 
     end
@@ -89,7 +88,14 @@ module Gollum
     #
     # Returns a Sanitization instance.
     def history_sanitization
-      @history_sanitiazation ||= sanitization.merge(Sanitization::HISTORY_OPTIONS)
+      return @history_sanitiazation unless @history_sanitiazation.nil?
+      @history_sanitiazation = (
+        if sanitization
+          sanitization.merge(Sanitization::HISTORY_OPTIONS)
+        else
+          false
+        end
+      )
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
