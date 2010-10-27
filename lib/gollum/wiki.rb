@@ -15,6 +15,12 @@ module Gollum
       # Sets the default email for commits.
       attr_accessor :default_committer_email
 
+      #
+      attr_writer :sanitization_options
+
+      #
+      attr_writer :history_sanitization_options
+
       # Gets the page class used by all instances of this Wiki.
       # Default: Gollum::Page.
       def page_class
@@ -36,6 +42,12 @@ module Gollum
             ::Gollum::File
           end
       end
+
+      #
+      def sanitization
+        @sanitization ||= Sanitization.new
+      end
+
     end
 
     self.default_committer_name  = 'Anonymous'
@@ -51,19 +63,33 @@ module Gollum
     # repo    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
-    #           :base_path  - String base path for all Wiki links.
-    #                         Default: "/"
-    #           :page_class - The page Class. Default: Gollum::Page
-    #           :file_class - The file Class. Default: Gollum::File
+    #           :base_path    - String base path for all Wiki links.
+    #                           Default: "/"
+    #           :page_class   - The page Class. Default: Gollum::Page
+    #           :file_class   - The file Class. Default: Gollum::File
+    #           :sanitization - An instance of Santitization.
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
-      @path       = path
-      @repo       = Grit::Repo.new(path)
-      @base_path  = options[:base_path]  || "/"
-      @page_class = options[:page_class] || self.class.page_class
-      @file_class = options[:file_class] || self.class.file_class
+      @path         = path
+      @repo         = Grit::Repo.new(path)
+      @base_path    = options[:base_path]    || "/"
+      @page_class   = options[:page_class]   || self.class.page_class
+      @file_class   = options[:file_class]   || self.class.file_class
+      @sanitization = options[:sanitization] || self.class.sanitization
+
       clear_cache
+    end
+
+    # Public: Instance of Sanitization class.
+    attr :sanitization
+
+    # Public: Return a new sanitization instance combining #sanitiazation
+    # and additional history sanitization options.
+    #
+    # Returns a Sanitization instance.
+    def history_sanitization
+      @history_sanitiazation ||= sanitization.merge(Sanitization::HISTORY_OPTIONS)
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.

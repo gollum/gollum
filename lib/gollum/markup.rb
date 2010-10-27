@@ -27,9 +27,9 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize_options = no_follow   ? 
-        HISTORY_SANITIZATION_OPTIONS : 
-        SANITIZATION_OPTIONS
+      sanitize_options = (
+        no_follow ? @wiki.history_sanitization : @wiki.sanitization
+      ).to_h
       data = extract_tex(@data)
       data = extract_code(data)
       data = extract_tags(data)
