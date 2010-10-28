@@ -1,4 +1,4 @@
-# HEAD
+# 1.1.0 / 2010-10-28
 
 * Major Enhancements
   * Optimize page write/update/delete to use Grit::Index::read_tree instead
