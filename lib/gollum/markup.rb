@@ -284,7 +284,7 @@ module Gollum
     def process_page_link_tag(tag, no_follow = false)
       parts = tag.split('|')
       name  = parts[0].strip
-      cname = Page.cname((parts[1] || parts[0]).strip)
+      cname = @wiki.page_class.cname((parts[1] || parts[0]).strip)
       tag = if name =~ %r{^https?://} && parts[1].nil?
         %{<a href="#{name}">#{name}</a>}
       else
@@ -292,7 +292,7 @@ module Gollum
         link_name   = cname
         page, extra = find_page_from_name(cname)
         if page
-          link_name = Page.cname(page.name)
+          link_name = @wiki.page_class.cname(page.name)
           presence  = "present"
         end
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))

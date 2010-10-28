@@ -1,3 +1,8 @@
+# HEAD
+
+* Bug Fixes
+  * Use @wiki.page_class in Gollum::Markup where appropriate (#63).
+
 # 1.1.0 / 2010-10-28
 
 * Major Enhancements
