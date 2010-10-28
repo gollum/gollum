@@ -83,6 +83,7 @@
   **/
   var LanguageDefinition = {
      
+    _ACTIVE_LANG: '',
     _LOADED_LANGS: [],
     _LANG: {},
     
@@ -91,7 +92,31 @@
      **/
     define: function( name, definitionObject ) {
       LanguageDefinition._LANG[name] = definitionObject;
+      LanguageDefinition._ACTIVE_LANG = name;
     },
+    
+    
+    /**
+     *  gets a definition object for a specified attribute
+     *  
+     *  @param  string  attr    The specified attribute.
+     *  @param  string  specified_lang  The language to pull a definition for.
+     *  @return object if exists, null otherwise
+    **/
+    getDefinitionFor: function( attr, specified_lang ) {
+      if ( !specified_lang ) {
+        specified_lang = LanguageDefinition._ACTIVE_LANG;
+      }
+      
+      if ( LanguageDefinition.isLoadedFor(specified_lang) &&
+           LanguageDefinition._LANG[specified_lang][attr] && 
+           typeof LanguageDefinition_LANG[specified_lang][attr] == 'object' ) {
+        return LanguageDefinition._LANG[specified_lang][attr];
+      }
+      
+      return null;
+    },
+    
     
     /**
      *  loadFor
@@ -174,14 +199,58 @@
           .click(FunctionBar.evtFunctionButtonClick);
         // show bar as active
         $('#gollum-editor-function-bar').addClass('active');
-        this.isActive = true;
+        FunctionBar.isActive = true;
       },
       
       evtFunctionButtonClick: function(e) {
         e.preventDefault();
-        alert($(this).attr('id'));
-      }
+        var def = LanguageDefinition.getDefinitionFor( $(this).attr() );
+        if ( def ) {
+          FunctionBar.executeAction( def );
+        }
+      },
       
+      executeAction: function( definitionObject ) {
+        // get the selected text from the textarea
+        var txt = $('#gollum-editor-body').val();
+        // hmm, I'm not sure this will work in a textarea
+        var selText = $('#gollum-editor-body').getSelection();
+        var repText = null;
+        
+        // exec a function if it exists first             
+        if ( definitionObject.exec &&
+             typeof definitionObject.exec == 'function' ) {
+          definitionObject(txt, selText, $('#gollum-editor-body'));
+        }
+        
+        // exec search/replace if both exist
+        if ( definitionObject.replace &&
+             typeof definitionObject.replace == 'string' ) {
+        
+          var searchRegex = /(.*)/gi;
+          if ( definitionObject.search &&
+               ( typeof definitionObject.search == 'string' ||
+                 typeof definitionObject.search == 'regexp' )) {
+            searchRegex = definitionObject.search;
+          } else {
+            debug('Invalid search regex, using default');
+          }
+          
+          repText = selText.replace(searchRegex, definitionObject.replace);
+        } else {
+          debug('Invalid replacement string');
+        }
+        
+        // now, add append if it exists
+        if ( definitionObject.append &&
+             typeof definitionObject.append == 'string' ) {
+          repText += definitionObject.append;
+        }
+        
+        if (repText)
+          $('#gollum-editor-body').replaceSelection(repText);
+        
+      } 
    };
   
 /* })(jQuery); */
