@@ -343,6 +343,18 @@ a:hover, a:visited {
 }
 
 
+/* @section edit */
+.edit h1 {
+  color: #999;
+  font-weight: normal;
+}
+
+  .edit h1 strong {
+    color: #000;
+    font-weight: bold;
+  }
+
+
 
 /* @control minibutton */
 ul.actions {
