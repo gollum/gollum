@@ -42,7 +42,6 @@
           debug('Loading language definition for ' + ActiveOptions.MarkupType);
           LanguageDefinition.loadFor( ActiveOptions.MarkupType, 
             function(data, textStatus) { 
-              console.log( data, textStatus );
               if ( textStatus != 'success' ) {
                 debug('Language definition could not be loaded for markup '
                       + 'type ' + ActiveOptions.MarkupType);
@@ -72,7 +71,6 @@
    *  Used by the definitions in langs/ to register language definitions.
    */
   $.GollumEditor.defineLanguage = function( language_name, languageObject ) {
-    console.log('Defining language for ' + language_name);
     if ( typeof languageObject == 'object' )
       LanguageDefinition.define( language_name, languageObject );
     else 
@@ -288,6 +286,7 @@
                       .getFieldSelectionPosition( $('#gollum-editor-body') );
         var selText = FunctionBar.getFieldSelection( $('#gollum-editor-body') );
         var repText = selText;
+        var reselect = true;
         
         // execute a replacement function if one exists
         if ( definitionObject.exec && 
@@ -315,12 +314,16 @@
         // append if necessary
         if ( definitionObject.append && 
              typeof definitionObject.append == 'string' ) {
+          if ( repText == selText ) {
+            reselect = false;
+          }
           repText += definitionObject.append;
+          
         }
         
         if (repText)
           FunctionBar.replaceFieldSelection( $('#gollum-editor-body'), 
-                                             repText );
+                                             repText, reselect );
         
       },
       
@@ -370,15 +373,20 @@
        *
        *  @param  jQuery  A jQuery object for the textarea.
        *  @param  string  The string to replace the current selection with.
+       *  @param  boolean Reselect the new text range.
        */
-      replaceFieldSelection: function( $field, replaceText ) {
+      replaceFieldSelection: function( $field, replaceText, reselect ) {
         var selPos = FunctionBar.getFieldSelectionPosition( $field );
         var fullStr = $field.val();
+        var selectNew = true;
+        if ( reselect === false) {
+          var selectNew = false;
+        }
         
         $field.val( fullStr.substring(0, selPos.start) + replaceText + 
                     fullStr.substring(selPos.end));
         
-        if ( $field[0].setSelectionRange ) {
+        if ( selectNew && $field[0].setSelectionRange ) {
           $field[0].focus();
           $field[0].setSelectionRange( selPos.start, 
                                        selPos.start + replaceText.length ); 
