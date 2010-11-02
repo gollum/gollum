@@ -39,12 +39,58 @@ var MarkDown = {
                               append: "\n***\n"
                             },
   
-  'function-ul'   :         { 
+  'function-ul'     :       { 
                               search: /(.+)([\n]?)/gi,
                               replace: "* $1$2"
+                            },
+  
+  /* This looks silly but is completely valid Markdown */                     
+  'function-ol'   :         {
+                              search: /(.+)([\n]?)/gi,
+                              replace: "1. $1$2"
+                            },
+                            
+  'function-blockquote' :   {
+                              search: /(.+)([\n]?)/gi,
+                              replace: "> $1$2"
+                            },
+                            
+  'function-link'       :   {
+                              exec: function( txt, selText, $field ) {
+                                var results = null;
+                                res = $.GollumEditor.Dialog({
+                                  title: '',
+                                  fields: [
+                                    {
+                                      id:   'text',
+                                      name: 'Link Text',
+                                      type: 'text',
+                                      help: 'The text to display to the user.'
+                                    },
+                                    {
+                                      id:   'href',
+                                      name: 'URL',
+                                      type: 'text',
+                                      help: 'The URL to link to.'
+                                    }
+                                  ]
+                                });
+                                
+                                if ( res['text'] && res['href'] ) {
+                                  return '[' + res['text'] + '](' 
+                                         + res['href'] + ')';
+                                }
+                                else
+                                  return '';
+                              }
+                            },
+                     
+  'function-image'      :   {
+                              /* Stub */
                             }
-
+                            
 };
+
 
 // this is necessary for GollumEditor to pick this up
 jQuery.GollumEditor.defineLanguage('markdown', MarkDown);

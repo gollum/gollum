@@ -41,12 +41,20 @@
         <span class="function-divider">&nbsp;</span>
         <a href="#" id="function-link" class="function-button">Link</a>
         <a href="#" id="function-image" class="function-button">Image</a>
+      
+        <div id="gollum-editor-format-selector">
+          <select name="gollum-editor-format-select"
+           id="gollum-editor-format-select" disabled>
+           <option name="Markdown" value="markdown" selected>
+             Markdown</option>
+          </select>
+        </div>
       </div>
       <fieldset id="gollum-editor-fields">
         <textarea id="gollum-editor-body"
          data-markup-lang="markdown"></textarea>
         <span class="aural"><br></span>
-        <input type="submit" id="gollum-editor-submit" value="Save">
+        <input type="submit" id="gollum-editor-submit" value="Save" title="Save current changes">
       </fieldset>
     </form>
     </div>

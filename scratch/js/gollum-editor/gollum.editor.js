@@ -60,7 +60,6 @@
       // EditorHas.functionBar
     } 
     // EditorHas.baseEditorMarkup
-    
   };
   
   
@@ -88,7 +87,8 @@
    *  @return void
    */
   var debug = function(m) {
-    if ( ActiveOptions.Debug && console 
+    if ( ActiveOptions.Debug 
+         && typeof console != 'undefined'
          && typeof console.log == 'function' ) {
       console.log( m );
     }
