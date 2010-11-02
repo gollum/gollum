@@ -85,7 +85,7 @@
    *
    */
   $.GollumEditor.Dialog = function( argObject ) {
-    return Dialog.init( argObject );
+    Dialog.init( argObject );
   };
   
   
@@ -414,7 +414,52 @@
     *
     */
    var Dialog = {
-     //TODO
+     
+     markupCreated = false,
+     
+     createMarkup: function( title, body ) {
+       return  '<div id="gollum-editor-dialog">' +
+               '<div id="gollum-editor-title"><h4>' + title + '</h4></div>' +
+               '<div id="gollum-editor-body">' + body + '</div>'
+               '<div id="gollum-editor-buttons">' + 
+               '<a href="#" title="OK" id="gollum-editor-action-ok">OK</a>' +
+               '<a href="#" title="Cancel" id="gollum-editor-action-cancel">' +
+               'Cancel</a>' +
+               '</div>';
+     },
+     
+     hide: function() {
+       $('#gollum-editor-dialog')
+     },
+     
+     init: function( argObject ) {
+       
+     },
+     
+     show: function( title, body ) {
+        if ( Dialog.markupCreated ) {
+          $('#gollum-editor-dialog').remove();
+        }
+        var $dialog = $( Dialog.createMarkup( title, body ) );
+        $('body').append( $dialog );
+        Dialog.position(); // position this thing
+        Dialog.attachEvents();
+        $('#gollum-editor-dialog').animate({ opacity: 0 }, {
+          duration: 1,
+          complete: function() {
+            $('#gollum-editor-dialog').addClass('active');
+            $('#gollum-editor-dialog').animate({ opacity: 100 }, {
+              duration: 700
+            });
+          }
+        });
+
+     },
+     
+     position: function() {
+       
+     }
+     
    };
   
 })(jQuery); 
