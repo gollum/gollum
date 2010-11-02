@@ -80,6 +80,17 @@
   
   
   /**
+   *  $.GollumEditor.Dialog
+   *  Used in exec() to display dialogs with dynamic fields.
+   *
+   */
+  $.GollumEditor.Dialog = function( argObject ) {
+    return Dialog.init( argObject );
+  };
+  
+  
+  
+  /**
    *  debug
    *  Prints debug information to console.log if debug output is enabled.
    *  
@@ -385,13 +396,25 @@
         
         $field.val( fullStr.substring(0, selPos.start) + replaceText + 
                     fullStr.substring(selPos.end));
+        $field[0].focus();
         
         if ( selectNew && $field[0].setSelectionRange ) {
-          $field[0].focus();
           $field[0].setSelectionRange( selPos.start, 
                                        selPos.start + replaceText.length ); 
         }
       }
+   };
+   
+   
+   
+   /**
+    *  Dialog
+    *  Used by FunctionBar & internally to display editor-specific messages,
+    *  inputs and more.
+    *
+    */
+   var Dialog = {
+     //TODO
    };
   
 })(jQuery); 

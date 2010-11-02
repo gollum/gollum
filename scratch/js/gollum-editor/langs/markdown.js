@@ -58,7 +58,7 @@ var MarkDown = {
   'function-link'       :   {
                               exec: function( txt, selText, $field ) {
                                 var results = null;
-                                res = $.GollumEditor.Dialog({
+                                $.GollumEditor.Dialog({
                                   title: '',
                                   fields: [
                                     {
@@ -73,15 +73,18 @@ var MarkDown = {
                                       type: 'text',
                                       help: 'The URL to link to.'
                                     }
-                                  ]
+                                  ],
+                                  OK: function( res ) {
+                                   if ( res['text'] && res['href'] ) {
+                                      return '[' + res['text'] + '](' 
+                                             + res['href'] + ')';
+                                    }
+                                    else
+                                      return '';
+                                  }
                                 });
                                 
-                                if ( res['text'] && res['href'] ) {
-                                  return '[' + res['text'] + '](' 
-                                         + res['href'] + ')';
-                                }
-                                else
-                                  return '';
+                               
                               }
                             },
                      
