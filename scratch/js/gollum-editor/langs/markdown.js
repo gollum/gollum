@@ -56,6 +56,21 @@ var MarkDown = {
                               replace: "> $1$2"
                             }, 
                             
+  'function-h1'         :   {
+                              search: /(.+)([\n]?)/gi,
+                              replace: "# $1$2"
+                            },
+                            
+  'function-h2'         :   {
+                              search: /(.+)([\n]?)/gi,
+                              replace: "## $1$2"
+                            },
+                            
+  'function-h3'         :   {
+                              search: /(.+)([\n]?)/gi,
+                              replace: "### $1$2"
+                            },
+                            
   'function-link'       :   {
                               exec: function( txt, selText, $field ) {
                                 var results = null;

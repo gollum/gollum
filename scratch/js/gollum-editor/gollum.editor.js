@@ -474,7 +474,8 @@
      createMarkup: function( title, body ) {
        Dialog.markupCreated = true;
        return  '<div id="gollum-editor-dialog">' +
-               '<div id="gollum-editor-dialog-title"><h4>' + title + '</h4></div>' +
+               '<div id="gollum-editor-dialog-title"><h4>' + 
+                 title +'</h4></div>' +
                '<div id="gollum-editor-dialog-body">' + body + '</div>' + 
                '<div id="gollum-editor-dialog-buttons">' + 
                '<a href="#" title="OK" id="gollum-editor-action-ok">OK</a>' +
