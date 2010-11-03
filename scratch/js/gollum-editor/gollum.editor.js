@@ -78,16 +78,6 @@
   };
   
   
-  
-  /**
-   *  $.GollumEditor.Dialog
-   *  Used in exec() to display dialogs with dynamic fields.
-   *
-   */
-  $.GollumEditor.Dialog = Dialog;
-  
-  
-  
   /**
    *  debug
    *  Prints debug information to console.log if debug output is enabled.
@@ -306,8 +296,8 @@
         // execute a replacement function if one exists
         if ( definitionObject.exec && 
              typeof definitionObject.exec == 'function' ) {
-          repText = definitionObject.exec ( 
-                      txt, selText, $('#gollum-editor-body') );
+          definitionObject.exec ( txt, selText, $('#gollum-editor-body') );
+          return;
         }
         
         // execute a search/replace if they exist
@@ -431,39 +421,94 @@
      markupCreated: false,
      
      attachEvents: function( evtOK ) {
-       $('#gollum-editor-action-ok').click( Dialog.eventOK( evtOK ) );
+       $('#gollum-editor-action-ok').click(function( e ) {
+        Dialog.eventOK( e, evtOK );
+       });
        $('#gollum-editor-action-cancel').click( Dialog.eventCancel );
+     },
+     
+     createFieldMarkup: function( fieldArray ) {
+       var fieldMarkup = '<fieldset>';
+       for ( var i=0; i < fieldArray.length; i++ ) {
+         if ( typeof fieldArray[i] == 'object' ) {
+           fieldMarkup += '<div class="field">';
+           switch ( fieldArray[i].type ) {
+             
+             // only text is supported for now
+             case 'text':
+             default:
+              fieldMarkup += Dialog.createFieldText( fieldArray[i] );
+              break;
+             
+           }
+           fieldMarkup += '</div>';
+         }
+         
+       }
+       fieldMarkup += '</fieldset>';
+       return fieldMarkup;
+     },
+     
+     createFieldText: function( fieldAttributes ) {
+       var html = '';
+       
+       if ( fieldAttributes.name ) {
+         html += '<label';
+         if ( fieldAttributes.id ) {
+           html += ' for="' + fieldAttributes.name + '"';
+         }
+         html += '>' + fieldAttributes.name + '</label>';
+       }
+       
+       html += '<input type="text"';
+       
+       if ( fieldAttributes.id ) {
+         html += ' name="' + fieldAttributes.id + '"'
+         html += ' id="gollum-editor-dialog-generated-field-' +
+                 fieldAttributes.id + '">';
+       }
+       
+       return html;
      },
      
      createMarkup: function( title, body ) {
        Dialog.markupCreated = true;
        return  '<div id="gollum-editor-dialog">' +
-               '<div id="gollum-editor-title"><h4>' + title + '</h4></div>' +
-               '<div id="gollum-editor-body">' + body + '</div>'
-               '<div id="gollum-editor-buttons">' + 
+               '<div id="gollum-editor-dialog-title"><h4>' + title + '</h4></div>' +
+               '<div id="gollum-editor-dialog-body">' + body + '</div>' + 
+               '<div id="gollum-editor-dialog-buttons">' + 
                '<a href="#" title="OK" id="gollum-editor-action-ok">OK</a>' +
                '<a href="#" title="Cancel" id="gollum-editor-action-cancel">' +
                'Cancel</a>' +
                '</div>';
      },
      
-     eventCancel: function() {
+     eventCancel: function( e ) {
+       e.preventDefault();
+       debug('Cancelled dialog.');
        Dialog.hide();
      },
      
-     eventOK: function( evtOK ) {
-       var results = {};
+     eventOK: function( e, evtOK ) {
+       e.preventDefault();
+       
+       var results = [];
+       // get the results from each field and build them into the object
+       $('#gollum-editor-dialog-body input').each(function() {
+         results[$(this).attr('name')] = $(this).val();
+       });
        
        // pass them to evtOK if it exists (which it should)
        if ( evtOK &&
             typeof evtOK == 'function' ) {
          evtOK( results );
        }
+       Dialog.hide();
      },
 
      hide: function() {
        $('#gollum-editor-dialog').animate({ opacity: 0 }, {
-          duration: 700,
+          duration: 300,
           complete: function() {
             $('#gollum-editor-dialog').removeClass('active');
           }
@@ -481,12 +526,24 @@
          return;
        }
        
+       // alright, build out fields
+       if ( argObject.fields && typeof argObject.fields == 'object' ) {
+         body = Dialog.createFieldMarkup( argObject.fields );
+       }
+       
+       if ( argObject.title && typeof argObject.title == 'string' ) {
+         title = argObject.title;
+       }
+       
        if ( Dialog.markupCreated ) {
          $('#gollum-editor-dialog').remove();
        }
        var $dialog = $( Dialog.createMarkup( title, body ) );
        $('body').append( $dialog );
-       Dialog.attachEvents( evtOK );
+       if ( argObject.OK &&
+            typeof argObject.OK == 'function' ) {
+         Dialog.attachEvents( argObject.OK );
+       }
      },
      
      show: function() {
@@ -511,6 +568,17 @@
      }
      
    };
+   
+   
+   /**
+    *  $.GollumEditor.Dialog
+    *  Used in exec() to display dialogs with dynamic fields.
+    *
+    */
+   $.GollumEditor.Dialog = Dialog;
+   $.GollumEditor.replaceSelection = function( repText ) {
+     FunctionBar.replaceFieldSelection( $('#gollum-editor-body'), repText );
+   }
   
 // })(jQuery); 
 

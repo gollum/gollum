@@ -83,9 +83,7 @@ var MarkDown = {
                                     else
                                       return '';
                                   }
-                                });
-                                
-                               
+                                }); 
                               }
                             },
                      
@@ -107,11 +105,12 @@ var MarkDown = {
                                     }
                                   ],
                                   OK: function( res ) {
+                                    var rep = '';
                                     if ( res['url'] && res['alt'] ) {
-                                      return '![' + res['alt'] + ']' +
-                                             '(' + res['url'] + ')';
-                                    } else
-                                      return '';
+                                      rep = '![' + res['alt'] + ']' +
+                                            '(' + res['url'] + ')';
+                                    }
+                                    $.GollumEditor.replaceSelection( rep );
                                   }
                                 });
                               }
