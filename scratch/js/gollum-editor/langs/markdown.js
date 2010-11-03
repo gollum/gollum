@@ -54,7 +54,7 @@ var MarkDown = {
   'function-blockquote' :   {
                               search: /(.+)([\n]?)/gi,
                               replace: "> $1$2"
-                            },
+                            }, 
                             
   'function-link'       :   {
                               exec: function( txt, selText, $field ) {

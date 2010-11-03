@@ -103,6 +103,6 @@ var ASCIIDoc = {
 
 
 // this is necessary for GollumEditor to pick this up
-jQuery.GollumEditor.defineLanguage('markdown', ASCIIDoc);
+jQuery.GollumEditor.defineLanguage('asciidoc', ASCIIDoc);
 
 })();

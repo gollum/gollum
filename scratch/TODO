@@ -1,6 +1,5 @@
 Gollum Editor
   - Style / Generate dialogs
-  - Dynamically show/hide different function bar buttons based on active language capabilities
   - Def: Org
   - Def: Pod
   - Def: RDoc

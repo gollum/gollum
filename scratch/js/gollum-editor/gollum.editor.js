@@ -5,7 +5,7 @@
  *  Usage:
  *  $.GollumEditor(); on DOM ready.
  */
-(function($) {
+// (function($) {
   
   // Editor options
   var DefaultOptions = {
@@ -258,8 +258,14 @@
        *
        */
       activate: function() {
-        $('#gollum-editor-function-bar a.function-button')
-          .click( FunctionBar.evtFunctionButtonClick );
+        // check these out
+        $('#gollum-editor-function-bar a.function-button').each(function() {
+          if ( LanguageDefinition.getDefinitionFor( $(this).attr('id') ) )
+            $(this).click( FunctionBar.evtFunctionButtonClick );
+          else 
+            $(this).addClass('disabled');
+        });
+
         // show bar as active
         $('#gollum-editor-function-bar').addClass( 'active' );
         FunctionBar.isActive = true;
@@ -422,7 +428,7 @@
     */
    var Dialog = {
      
-     markupCreated = false,
+     markupCreated: false,
      
      attachEvents: function( evtOK ) {
        $('#gollum-editor-action-ok').click( Dialog.eventOK( evtOK ) );
@@ -457,7 +463,7 @@
 
      hide: function() {
        $('#gollum-editor-dialog').animate({ opacity: 0 }, {
-          duration: 700 
+          duration: 700,
           complete: function() {
             $('#gollum-editor-dialog').removeClass('active');
           }
@@ -506,7 +512,7 @@
      
    };
   
-})(jQuery); 
+// })(jQuery); 
 
 jQuery(document).ready(function() {
   $.GollumEditor();

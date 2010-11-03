@@ -106,6 +106,6 @@ var Textile = {
                             
 };
 
-jQuery.GollumEditor.defineLanguage('markdown', Textile);
+jQuery.GollumEditor.defineLanguage('textile', Textile);
 
 })();
