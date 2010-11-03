@@ -58,12 +58,12 @@ var ASCIIDoc = {
                                     }
                                   ],
                                   OK: function( res ) {
+                                   var h = '';
                                    if ( res['text'] && res['href'] ) {
-                                      return res['href'] + '[' + 
-                                             res['text'] + ']';
+                                      h = res['href'] + '[' + 
+                                          res['text'] + ']';
                                     }
-                                    else
-                                      return '';
+                                    $.GollumEditor.replaceSelection( h );
                                   }
                                 });
                                 
@@ -89,11 +89,12 @@ var ASCIIDoc = {
                                     }
                                   ],
                                   OK: function( res ) {
+                                    var h = '';
                                     if ( res['url'] && res['alt'] ) {
-                                      return 'image::' + res['url'] +
-                                             '[' + res['alt'] + ']';
-                                    } else
-                                      return '';
+                                      h = 'image::' + res['url'] +
+                                          '[' + res['alt'] + ']';
+                                    }
+                                    $.GollumEditor.replaceSelection( h );
                                   }
                                 });
                               }
@@ -101,8 +102,6 @@ var ASCIIDoc = {
                             
 };
 
-
-// this is necessary for GollumEditor to pick this up
 jQuery.GollumEditor.defineLanguage('asciidoc', ASCIIDoc);
 
 })();

@@ -60,12 +60,12 @@ var Textile = {
                                     }
                                   ],
                                   OK: function( res ) {
+                                   var h = '';
                                    if ( res['text'] && res['href'] ) {
-                                      return '"' + res['text'] + '":' +
-                                             res['href'];
-                                    }
-                                    else
-                                      return '';
+                                      h = '"' + res['text'] + '":' +
+                                          res['href'];
+                                   }
+                                   $.GollumEditor.replaceSelection( h );
                                   }
                                 });
                                 
@@ -97,7 +97,7 @@ var Textile = {
                                         h += '(' + res['alt'] + ')';
                                       }
                                       h += '!';
-                                      return h;
+                                      %.GollumEditor.replaceSelection( h );
                                     }
                                   }
                                 });

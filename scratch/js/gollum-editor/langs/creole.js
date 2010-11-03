@@ -56,12 +56,9 @@ var Creole = {
                                     }
                                   ],
                                   OK: function( res ) {
-                                   if ( res['text'] && res['href'] ) {
-                                      return '[[' + res['href'] + '|' + 
-                                             res['text'] + ']]';
-                                    }
-                                    else
-                                      return '';
+                                   var h = '[[' + res['href'] + '|' + 
+                                           res['text'] + ']]';
+                                   $.GollumEditor.replaceSelection( h );
                                   }
                                 });
                                 
@@ -92,9 +89,8 @@ var Creole = {
                                       if ( res['alt'] != '' ) {
                                         h += '|' + res['alt'] + '}}';
                                       }
-                                      return h;
-                                    } else
-                                      return '';
+                                    }
+                                    $.GollumEditor.replaceSelection( h );
                                   }
                                 });
                               }

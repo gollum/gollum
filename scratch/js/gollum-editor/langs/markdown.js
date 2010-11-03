@@ -76,12 +76,12 @@ var MarkDown = {
                                     }
                                   ],
                                   OK: function( res ) {
+                                   var rep = '';
                                    if ( res['text'] && res['href'] ) {
-                                      return '[' + res['text'] + '](' 
+                                      rep = '[' + res['text'] + '](' 
                                              + res['href'] + ')';
                                     }
-                                    else
-                                      return '';
+                                    $.GollumEditor.replaceSelection( rep );
                                   }
                                 }); 
                               }
@@ -118,8 +118,6 @@ var MarkDown = {
                             
 };
 
-
-// this is necessary for GollumEditor to pick this up
 jQuery.GollumEditor.defineLanguage('markdown', MarkDown);
 
 })();
