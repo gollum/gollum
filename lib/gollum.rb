@@ -36,29 +36,32 @@ module Gollum
       'thead', 'tr', 'tt', 'u', 'ul', 'var'
     ],
     :attributes => {
+      'a'   => ['href'],
+      'img' => ['src'],
       :all => ['abbr', 'accept', 'accept-charset',
                'accesskey', 'action', 'align', 'alt', 'axis',
                'border', 'cellpadding', 'cellspacing', 'char',
                'charoff', 'charset', 'checked', 'cite',
-               'class', 'clear', 'cols', 'colspan', 'color',
+               'clear', 'cols', 'colspan', 'color',
                'compact', 'coords', 'datetime', 'dir',
                'disabled', 'enctype', 'for', 'frame',
-               'headers', 'height', 'href', 'hreflang',
-               'hspace', 'id', 'ismap', 'label', 'lang',
+               'headers', 'height', 'hreflang',
+               'hspace', 'ismap', 'label', 'lang',
                'longdesc', 'maxlength', 'media', 'method',
                'multiple', 'name', 'nohref', 'noshade',
                'nowrap', 'prompt', 'readonly', 'rel', 'rev',
                'rows', 'rowspan', 'rules', 'scope',
-               'selected', 'shape', 'size', 'span', 'src',
+               'selected', 'shape', 'size', 'span',
                'start', 'summary', 'tabindex', 'target',
                'title', 'type', 'usemap', 'valign', 'value',
                'vspace', 'width']
     },
     :protocols => {
-      'a' => {'href' => ['http', 'https', 'mailto', :relative]},
-      'img' => {'href' => ['http', 'https', :relative]}
+      'a'   => {'href' => ['http', 'https', 'mailto', :relative]},
+      'img' => {'src'  => ['http', 'https', :relative]}
     }
   }
+
   HISTORY_SANITIZATION_OPTIONS = SANITIZATION_OPTIONS.merge(
     :add_attributes => {
       'a' => {'rel' => 'nofollow'}
