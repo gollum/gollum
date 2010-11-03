@@ -1,25 +1,10 @@
 /**
- *  Markdown Language Definition
- *  
- *  A language definition for string manipulation operations, in this case 
- *  for the Markdown, uh, markup language. Uses regexes for various functions
- *  by default. If regexes won't do and you need to do some serious 
- *  manipulation, you can declare a function in the object instead.
+ *  Creole Language Definition
  *
- *  Code example:
- *  'functionbar-id'  :   {
- *                          exec: function(text, selectedText) {
- *                                   functionStuffHere();
- *                                },
- *                          search: /somesearchregex/gi,
- *                          replace: 'replace text for RegExp.replace',
- *                          append: "just add this where the cursor is"
- *                         }  
- *
-**/
+ */
 (function() {
 
-var MarkDown = {
+var Creole = {
   
   'function-bold' :         {
                               search: /([^\n]+)([\n]*)/gi,
@@ -28,16 +13,16 @@ var MarkDown = {
   
   'function-italic' :       {
                               search: /([^\n]+)([\n]*)/gi,
-                              replace: "_$1_$2"
+                              replace: "//$1//$2"
                             },
   
   'function-code'   :       {
                               search: /([^\n]+)([\n]*)/gi,
-                              replace: "`$1`$2"
+                              replace: "{{{$1}}}$2"
                             },
                             
   'function-hr'     :       {
-                              append: "\n***\n"
+                              append: "\n\n----\n\n";
                             },
   
   'function-ul'     :       { 
@@ -48,12 +33,7 @@ var MarkDown = {
   /* This looks silly but is completely valid Markdown */                     
   'function-ol'   :         {
                               search: /(.+)([\n]?)/gi,
-                              replace: "1. $1$2"
-                            },
-                            
-  'function-blockquote' :   {
-                              search: /(.+)([\n]?)/gi,
-                              replace: "> $1$2"
+                              replace: "# $1$2"
                             },
                             
   'function-link'       :   {
@@ -77,8 +57,8 @@ var MarkDown = {
                                   ],
                                   OK: function( res ) {
                                    if ( res['text'] && res['href'] ) {
-                                      return '[' + res['text'] + '](' 
-                                             + res['href'] + ')';
+                                      return '[[' + res['href'] + '|' + 
+                                             res['text'] + ']]';
                                     }
                                     else
                                       return '';
@@ -108,8 +88,11 @@ var MarkDown = {
                                   ],
                                   OK: function( res ) {
                                     if ( res['url'] && res['alt'] ) {
-                                      return '![' + res['alt'] + ']' +
-                                             '(' + res['url'] + ')';
+                                      var h = '{{' + res['url'];
+                                      if ( res['alt'] != '' ) {
+                                        h += '|' + res['alt'] + '}}';
+                                      }
+                                      return h;
                                     } else
                                       return '';
                                   }
@@ -119,8 +102,6 @@ var MarkDown = {
                             
 };
 
-
-// this is necessary for GollumEditor to pick this up
-jQuery.GollumEditor.defineLanguage('markdown', MarkDown);
+jQuery.GollumEditor.defineLanguage('creole', Creole);
 
 })();

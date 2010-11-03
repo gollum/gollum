@@ -84,9 +84,7 @@
    *  Used in exec() to display dialogs with dynamic fields.
    *
    */
-  $.GollumEditor.Dialog = function( argObject ) {
-    Dialog.init( argObject );
-  };
+  $.GollumEditor.Dialog = Dialog;
   
   
   
@@ -329,7 +327,6 @@
             reselect = false;
           }
           repText += definitionObject.append;
-          
         }
         
         if (repText)
@@ -394,6 +391,11 @@
           var selectNew = false;
         }
         
+        var scrollTop = null;
+        if ( $field[0].scrollTop ) {
+          scrollTop = $field[0].scrollTop;
+        }
+        
         $field.val( fullStr.substring(0, selPos.start) + replaceText + 
                     fullStr.substring(selPos.end));
         $field[0].focus();
@@ -401,6 +403,11 @@
         if ( selectNew && $field[0].setSelectionRange ) {
           $field[0].setSelectionRange( selPos.start, 
                                        selPos.start + replaceText.length ); 
+        }
+        
+        if ( scrollTop ) {
+          // this jumps sometimes in FF
+          $field[0].scrollTop = scrollTop;
         }
       }
    };
@@ -417,7 +424,13 @@
      
      markupCreated = false,
      
+     attachEvents: function( evtOK ) {
+       $('#gollum-editor-action-ok').click( Dialog.eventOK( evtOK ) );
+       $('#gollum-editor-action-cancel').click( Dialog.eventCancel );
+     },
+     
      createMarkup: function( title, body ) {
+       Dialog.markupCreated = true;
        return  '<div id="gollum-editor-dialog">' +
                '<div id="gollum-editor-title"><h4>' + title + '</h4></div>' +
                '<div id="gollum-editor-body">' + body + '</div>'
@@ -428,32 +441,63 @@
                '</div>';
      },
      
+     eventCancel: function() {
+       Dialog.hide();
+     },
+     
+     eventOK: function( evtOK ) {
+       var results = {};
+       
+       // pass them to evtOK if it exists (which it should)
+       if ( evtOK &&
+            typeof evtOK == 'function' ) {
+         evtOK( results );
+       }
+     },
+
      hide: function() {
-       $('#gollum-editor-dialog')
+       $('#gollum-editor-dialog').animate({ opacity: 0 }, {
+          duration: 700 
+          complete: function() {
+            $('#gollum-editor-dialog').removeClass('active');
+          }
+        });
      },
      
      init: function( argObject ) {
+       var title = '';
+       var body = '';
        
+       // bail out if necessary
+       if ( !argObject || 
+            typeof argObject != 'object' ) {
+         debug('Editor Dialog: Cannot init; invalid init object');
+         return;
+       }
+       
+       if ( Dialog.markupCreated ) {
+         $('#gollum-editor-dialog').remove();
+       }
+       var $dialog = $( Dialog.createMarkup( title, body ) );
+       $('body').append( $dialog );
+       Dialog.attachEvents( evtOK );
      },
      
-     show: function( title, body ) {
-        if ( Dialog.markupCreated ) {
-          $('#gollum-editor-dialog').remove();
-        }
-        var $dialog = $( Dialog.createMarkup( title, body ) );
-        $('body').append( $dialog );
-        Dialog.position(); // position this thing
-        Dialog.attachEvents();
-        $('#gollum-editor-dialog').animate({ opacity: 0 }, {
-          duration: 1,
-          complete: function() {
-            $('#gollum-editor-dialog').addClass('active');
-            $('#gollum-editor-dialog').animate({ opacity: 100 }, {
-              duration: 700
-            });
-          }
-        });
-
+     show: function() {
+       if ( !Dialog.markupCreated ) {
+         debug('Dialog: No markup to show. Please use init first.')
+       } else {
+          Dialog.position(); // position this thing
+          $('#gollum-editor-dialog').animate({ opacity: 0 }, {
+            duration: 1,
+            complete: function() {
+              $('#gollum-editor-dialog').addClass('active');
+              $('#gollum-editor-dialog').animate({ opacity: 100 }, {
+                duration: 700
+              });
+            }
+          });
+       }
      },
      
      position: function() {
