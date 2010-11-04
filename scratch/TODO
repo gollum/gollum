@@ -1,9 +1,9 @@
-Gollum Editor
-  - Style / Generate dialogs
-  - Def: Org
-  - Def: Pod
-  - Def: RDoc
-  - Def: Restructured Text
-
-Make function bar button sprite
-Roll scratch/ design into Mustache
+* Editor
+  * Add sidebar field
+  * Add footer field
+  * Add edit summary field
+  * Create rest of markup lang definitions
+* Create Error Page
+* Create Compare Revisions Page
+* Create Search Results Page
+* Write Editor/Sidebar implementation notes for Rick

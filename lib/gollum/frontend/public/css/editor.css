@@ -22,6 +22,46 @@
   width: 100%;
 }
 
+/* @control title */
+#gollum-editor-title-field {
+  display: none;
+}
+
+#gollum-editor-title-field.active {
+  border-bottom: 1px solid #ddd;
+  display: block;
+  margin: 0 0 0.3em 0;
+  padding: 0 0 0.5em 0;
+}
+
+#gollum-editor-title-field label {
+  /* JAWS should see it, but you can't */
+  display: block;
+  height: 1px;
+  left: -5000px;
+  overflow: hidden;
+  position: absolute;
+  top: -5000px;
+  width: 1px;
+}
+
+#gollum-editor-title-field input {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #000;
+  font-size: 1.3em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  line-height: 1.8em;
+  margin: 0;
+  padding: 0.5em;
+  width: 40%;
+}
+
+#gollum-editor-title-field input.ph {
+  color: #999;
+}
+
 /* @control editor-view-tab */
 #gollum-editor #gollum-editor-type-switcher {
   display: none;

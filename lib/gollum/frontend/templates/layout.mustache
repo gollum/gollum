@@ -5,19 +5,21 @@
   <link rel="stylesheet" type="text/css" href="/css/gollum.css" media="all">
   <link rel="stylesheet" type="text/css" href="/css/editor.css" media="all">
   <link rel="stylesheet" type="text/css" href="/css/template.css" media="all">
+  
+  <script type="text/javascript" src="/javascript/jquery.js"></script>
+  <script type="text/javascript" src="/javascript/gollum.js"></script>
+  <script type="text/javascript" src="/javascript/gollum.fx.js"></script>
+  <!-- TODO: only load this on the edit page -->
+  <script type="text/javascript" 
+    src="/javascript/gollum-editor/gollum.editor.js"></script>
+  <script type="text/javascript" 
+    src="/javascript/gollum-editor/langs/markdown.js"></script>
+    
   <title>{{title}}</title>
 </head>
 <body>
 
 {{{yield}}}
 
-<script type="text/javascript" src="/javascript/jquery.js"></script>
-<script type="text/javascript" src="/javascript/gollum.js"></script>
-<script type="text/javascript" src="/javascript/gollum.fx.js"></script>
-<!-- TODO: only load this on the edit page -->
-<script type="text/javascript" 
-  src="/javascript/gollum-editor/gollum.editor.js"></script>
-<script type="text/javascript" 
-  src="/javascript/gollum-editor/langs/markdown.js"></script>
 </body>
 </html>
