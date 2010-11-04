@@ -30,6 +30,15 @@ $(document).ready(function() {
   
     $('#wiki-history td.revert-action a').mouseenter(highlightOn);
     $('#wiki-history td.revert-action a').mouseleave(highlightOff);
+    
+    $('li.minibutton a.action-compare-revision').click(function( e ) {
+      e.preventDefault();
+      $('#version-form').submit();
+    }); 
+    $('li.minibutton a.action-back-to-top').click(function( e ) {
+      e.preventDefault();
+      $('body').scrollTop = 0;
+    });
   };
   
 });
