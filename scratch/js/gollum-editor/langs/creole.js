@@ -39,7 +39,7 @@ var Creole = {
   'function-link'       :   {
                               exec: function( txt, selText, $field ) {
                                 var results = null;
-                                $.GollumEditor.Dialog({
+                                $.GollumEditor.Dialog.init({
                                   title: 'Insert Link',
                                   fields: [
                                     {

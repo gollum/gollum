@@ -74,20 +74,18 @@ var MarkDown = {
   'function-link'       :   {
                               exec: function( txt, selText, $field ) {
                                 var results = null;
-                                $.GollumEditor.Dialog({
+                                $.GollumEditor.Dialog.init({
                                   title: 'Insert Link',
                                   fields: [
                                     {
                                       id:   'text',
                                       name: 'Link Text',
-                                      type: 'text',
-                                      help: 'The text to display to the user.'
+                                      type: 'text'
                                     },
                                     {
                                       id:   'href',
                                       name: 'URL',
-                                      type: 'text',
-                                      help: 'The URL to link to.'
+                                      type: 'text'
                                     }
                                   ],
                                   OK: function( res ) {

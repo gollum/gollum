@@ -561,6 +561,7 @@
        if ( !Dialog.markupCreated ) {
          debug('Dialog: No markup to show. Please use init first.')
        } else {
+         debug('Showing dialog');
           $('#gollum-editor-dialog').animate({ opacity: 0 }, {
             duration: 1,
             complete: function() {

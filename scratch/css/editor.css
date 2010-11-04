@@ -71,6 +71,45 @@
   background: -moz-linear-gradient(top, #599bdc, #3072b3);
 }
 
+#gollum-editor #gollum-editor-function-bar a span {
+  background-image: url(../images/icon-sprite.png);
+  background-repeat: no-repeat;
+  display: block;
+  height: 25px;
+  overflow: hidden;
+  text-indent: -5000px;
+  width: 25px;
+}
+
+a#function-bold span { background-position: 0 0; }
+a#function-italic span { background-position: -27px 0; }
+a#function-underline span { background-position: -54px 0; }
+a#function-code span { background-position: -82px 0; }
+a#function-ul span { background-position: -109px 0; }
+a#function-ol span { background-position: -136px 0; }
+a#function-blockquote span { background-position: -163px 0; }
+a#function-hr span { background-position: -190px 0; }
+a#function-h1 span { background-position: -217px 0; }
+a#function-h2 span { background-position: -244px 0; }
+a#function-h3 span { background-position: -271px 0; }
+a#function-link span { background-position: -298px 0; }
+a#function-image span { background-position: -324px 0; }
+
+a#function-bold:hover span { background-position: 0 -28px; }
+a#function-italic:hover span { background-position: -27px -28px; }
+a#function-underline:hover span { background-position: -54px -28px; }
+a#function-code:hover span { background-position: -82px -28px; }
+a#function-ul:hover span { background-position: -109px -28px; }
+a#function-ol:hover span { background-position: -136px -28px; }
+a#function-blockquote:hover span { background-position: -163px -28px; }
+a#function-hr:hover span { background-position: -190px -28px; }
+a#function-h1:hover span { background-position: -217px -28px; }
+a#function-h2:hover span { background-position: -244px -28px; }
+a#function-h3:hover span { background-position: -271px -28px; }
+a#function-link:hover span { background-position: -298px -28px; }
+a#function-image:hover span { background-position: -324px -28px; }
+
+
 #gollum-editor #gollum-editor-function-bar a.disabled {
   display: none;
 }
