@@ -436,6 +436,7 @@
              
              // only text is supported for now
              case 'text':
+             case 'code':
              default:
               fieldMarkup += Dialog.createFieldText( fieldArray[i] );
               break;
@@ -464,6 +465,9 @@
        
        if ( fieldAttributes.id ) {
          html += ' name="' + fieldAttributes.id + '"'
+         if ( fieldAttributes.type == 'code' ) {
+           html+= ' class="code"';
+         }
          html += ' id="gollum-editor-dialog-generated-field-' +
                  fieldAttributes.id + '">';
        }
@@ -474,13 +478,18 @@
      createMarkup: function( title, body ) {
        Dialog.markupCreated = true;
        return  '<div id="gollum-editor-dialog">' +
+               '<div id="gollum-editor-dialog-inner">' +
+               '<div id="gollum-editor-dialog-bg">' +
                '<div id="gollum-editor-dialog-title"><h4>' + 
                  title +'</h4></div>' +
                '<div id="gollum-editor-dialog-body">' + body + '</div>' + 
                '<div id="gollum-editor-dialog-buttons">' + 
-               '<a href="#" title="OK" id="gollum-editor-action-ok">OK</a>' +
-               '<a href="#" title="Cancel" id="gollum-editor-action-cancel">' +
-               'Cancel</a>' +
+               '<a href="#" title="Cancel" id="gollum-editor-action-cancel" ' + 
+               'class="minibutton">Cancel</a>' +
+               '<a href="#" title="OK" id="gollum-editor-action-ok" '+ 
+               'class="minibutton">OK</a>' +
+               '</div>' + 
+               '</div>' + 
                '</div>';
      },
      
@@ -509,7 +518,7 @@
 
      hide: function() {
        $('#gollum-editor-dialog').animate({ opacity: 0 }, {
-          duration: 300,
+          duration: 200,
           complete: function() {
             $('#gollum-editor-dialog').removeClass('active');
           }
@@ -545,19 +554,20 @@
             typeof argObject.OK == 'function' ) {
          Dialog.attachEvents( argObject.OK );
        }
+       Dialog.show();
      },
      
      show: function() {
        if ( !Dialog.markupCreated ) {
          debug('Dialog: No markup to show. Please use init first.')
        } else {
-          Dialog.position(); // position this thing
           $('#gollum-editor-dialog').animate({ opacity: 0 }, {
             duration: 1,
             complete: function() {
               $('#gollum-editor-dialog').addClass('active');
-              $('#gollum-editor-dialog').animate({ opacity: 100 }, {
-                duration: 700
+              Dialog.position(); // position this thing
+              $('#gollum-editor-dialog').animate({ opacity: 1 }, {
+                duration: 500
               });
             }
           });
@@ -565,7 +575,11 @@
      },
      
      position: function() {
-       
+       var dialogHeight = $('#gollum-editor-dialog-inner').height();
+       debug(dialogHeight);
+       $('#gollum-editor-dialog-inner')
+         .css('height', dialogHeight + 'px')
+         .css('margin-top', -1 * parseInt( dialogHeight / 2 )); 
      }
      
    };

@@ -111,7 +111,7 @@ var MarkDown = {
                                     {
                                       id: 'url',
                                       name: 'Image URL',
-                                      type: 'text'
+                                      type: 'code'
                                     },
                                     {
                                       id: 'alt',
