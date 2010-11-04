@@ -1,7 +1,7 @@
 <div id="gollum-editor">
 <form name="gollum-editor" action="/create/{{escaped_name}}" method="post">
-  <div id="gollum-editor-title-field">
-    <label for="page">Page Title</label>
+  <div id="gollum-editor-title-field" class="singleline">
+    <label for="page" class="jaws">Page Title</label>
     <input type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
   </div>
   <div id="gollum-editor-function-bar">
@@ -37,7 +37,13 @@
   <fieldset id="gollum-editor-fields">
     <textarea id="gollum-editor-body"
      data-markup-lang="markdown" name="content">{{content}}</textarea>
-    <span class="br"><br></span>
+    
+    <div id="gollum-editor-edit-summary" class="singleline">
+      <label for="message" class="jaws">Edit message:</label>
+      <input type="text" name="message" id="gollum-editor-message-field" value="Write a small message here explaining this change. (Optional)">
+    </div>
+    
+    <span class="jaws"><br></span>
     <input type="submit" id="gollum-editor-submit" value="Save" title="Save current changes">
   </fieldset>
 </form>

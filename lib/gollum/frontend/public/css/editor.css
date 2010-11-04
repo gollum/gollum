@@ -3,6 +3,17 @@
   Wiki editor formatting
 */
 
+.jaws {
+  /* JAWS should see it, but you can't */
+  display: block;
+  height: 1px;
+  left: -5000px;
+  overflow: hidden;
+  position: absolute;
+  top: -5000px;
+  width: 1px;
+}
+
 #gollum-editor {
   border: 1px solid #e4e4e4;
   background: #f9f9f9;
@@ -22,9 +33,8 @@
   width: 100%;
 }
 
-/* @control title */
-#gollum-editor-title-field {
-  display: none;
+#gollum-editor-title-field input {
+  font-weight: bold;
 }
 
 #gollum-editor-title-field.active {
@@ -34,31 +44,25 @@
   padding: 0 0 0.5em 0;
 }
 
-#gollum-editor-title-field label {
-  /* JAWS should see it, but you can't */
+#gollum-editor .singleline {
   display: block;
-  height: 1px;
-  left: -5000px;
+  margin: 0 0 0.7em 0;
   overflow: hidden;
-  position: absolute;
-  top: -5000px;
-  width: 1px;
 }
 
-#gollum-editor-title-field input {
+#gollum-editor .singleline input {
   background: #fff;
   border: 1px solid #ddd;
   color: #000;
   font-size: 1.3em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: bold;
   line-height: 1.8em;
   margin: 0;
   padding: 0.5em;
-  width: 40%;
+  width: 98%;
 }
 
-#gollum-editor-title-field input.ph {
+#gollum-editor .singleline input.ph {
   color: #999;
 }
 
