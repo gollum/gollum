@@ -33,17 +33,6 @@
   width: 100%;
 }
 
-#gollum-editor-title-field input {
-  font-weight: bold;
-}
-
-#gollum-editor-title-field.active {
-  border-bottom: 1px solid #ddd;
-  display: block;
-  margin: 0 0 0.3em 0;
-  padding: 0 0 0.5em 0;
-}
-
 #gollum-editor .singleline {
   display: block;
   margin: 0 0 0.7em 0;
@@ -64,6 +53,21 @@
 
 #gollum-editor .singleline input.ph {
   color: #999;
+}
+
+#gollum-editor-title-field input {
+  font-weight: bold;
+}
+
+#gollum-editor-title-field.active {
+  border-bottom: 1px solid #ddd;
+  display: block;
+  margin: 0 0 0.3em 0;
+  padding: 0 0 0.5em 0;
+}
+
+#gollum-editor-title-field input#gollum-editor-page-title.ph {
+  color: #000;
 }
 
 /* @control editor-view-tab */
