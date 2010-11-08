@@ -46,7 +46,7 @@
   font-size: 1.3em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.8em;
-  margin: 0;
+  margin: 1em 0 0.4em;
   padding: 0.5em;
   width: 98%;
 }
@@ -55,8 +55,9 @@
   color: #999;
 }
 
-#gollum-editor-title-field input {
+#gollum-editor-title-field input#gollum-editor-page-title {
   font-weight: bold;
+  margin-top: 0;
 }
 
 #gollum-editor-title-field.active {
@@ -79,7 +80,7 @@
 #gollum-editor #gollum-editor-function-bar {
   border-bottom: 1px solid #ddd;
   overflow: hidden;
-  padding: 0 0 0.5em 0;
+  padding: 0.6em 0 1.1em 0;
   display: none;
 }
 
@@ -204,7 +205,7 @@ a#function-image:hover span { background-position: -324px -28px; }
   font-size: 1.3em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.8em;
-  margin: 0.5em 0;
+  margin: 1em 0 0.4em;
   padding: 0.5em; /* I don't really like mixing pct & em here… */
   width: 98%;
   height: 20em;
@@ -246,6 +247,103 @@ a#function-image:hover span { background-position: -324px -28px; }
   filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
   background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
   background: -moz-linear-gradient(top, #599bdc, #3072b3);
+}
+
+#gollum-editor .collapsed,
+#gollum-editor .expanded {
+  border-bottom: 1px solid #ddd;
+  display: block;
+  overflow: hidden;
+  padding: 1em 0 0.5em;
+}
+
+#gollum-editor #gollum-editor-body + .collapsed,
+#gollum-editor #gollum-editor-body + .expanded {
+  border-top: 1px solid #ddd;
+  margin-top: 0.7em;
+}
+
+#gollum-editor .collapsed a.button,
+#gollum-editor .expanded a.button {
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  color: #333;
+  display: block;
+  float: left;
+  height: 25px;
+  overflow: hidden;
+  margin: 0.2em 0.5em 0.75em 0;
+  text-shadow: 0 1px 0 #fff;
+  width: 25px;
+  
+  border-radius: 0.3em;
+  -moz-border-radius: 0.3em;
+  -webkit-border-radius: 0.3em;
+  
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
+  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
+}
+
+#gollum-editor .collapsed h4,
+#gollum-editor .expanded h4 {
+  font-size: 1.6em;
+  float: left;
+  margin: 0;
+  padding: 0.4em 0 0 0.3em;
+  text-shadow: 0 -1px 0 #fff;
+}
+
+#gollum-editor .collapsed a.button:hover,
+#gollum-editor .expanded h4 a.button:hover {
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
+  background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
+  background: -moz-linear-gradient(top, #599bdc, #3072b3);
+}
+
+#gollum-editor .collapsed a span,
+#gollum-editor .expanded a span {
+  background-image: url(../images/icon-sprite.png);
+  background-position: -351px -1px;
+  background-repeat: no-repeat;
+  display: block;
+  height: 25px;
+  overflow: hidden;
+  text-indent: -5000px;
+  width: 25px;
+}
+
+#gollum-editor .collapsed a:hover span {
+  background-position: -351px -28px;
+}
+
+#gollum-editor .expanded a span {
+  background-position: -378px 0;
+}
+
+#gollum-editor .expanded a:hover span {
+  background-position: -378px -28px;
+}
+
+#gollum-editor .collapsed textarea {
+  display: none;
+}
+
+#gollum-editor .expanded textarea {
+  border: 1px solid #ddd;
+  clear: both;
+  display: block;
+  font-size: 1.3em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  height: 7em;
+  line-height: 1.8em;
+  margin: 0.7em 0;
+  padding: 0.5em;
+  width: 98%;
 }
 
 
