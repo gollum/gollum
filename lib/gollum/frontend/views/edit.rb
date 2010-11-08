@@ -5,9 +5,22 @@ module Precious
 
       attr_reader :page, :content
 
-      def title
-        "Editing #{@page.title}"
+      def page_name
+        @name.gsub('-', ' ')
       end
+
+      def edit_title
+        false
+      end
+      
+      def hidden_title
+        true
+      end
+
+      def title
+        "#{@page.title}"
+      end
+      
     end
   end
 end

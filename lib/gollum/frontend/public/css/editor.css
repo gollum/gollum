@@ -77,11 +77,15 @@
 }
 
 /* @control function-bar */
-#gollum-editor #gollum-editor-function-bar {
+#gollum-editor #gollum-editor-function-bar  {
   border-bottom: 1px solid #ddd;
   overflow: hidden;
-  padding: 0.6em 0 1.1em 0;
+  padding: 0 0 1.1em 0;
   display: none;
+}
+
+#gollum-editor-title-field + #gollum-editor-function-bar {
+  margin-top: 0.6em;
 }
 
 #gollum-editor #gollum-editor-function-bar.active {
