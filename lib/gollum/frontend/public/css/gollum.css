@@ -54,6 +54,11 @@ a:hover, a:visited {
   overflow: visible;
 }
 
+  #wiki-content .wrap {
+    height: 1%;
+    overflow: auto;
+  }
+
   /* @section comments */
   #wiki-body #inline-comment {
     display: none; /* todo */

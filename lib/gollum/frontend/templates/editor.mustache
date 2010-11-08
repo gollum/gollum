@@ -1,5 +1,6 @@
 <div id="gollum-editor">
 <form name="gollum-editor" action="/create/{{escaped_name}}" method="post">
+  <fieldset id="gollum-editor-fields">
   <div id="gollum-editor-title-field" class="singleline">
     <label for="page" class="jaws">Page Title</label>
     <input type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
@@ -33,8 +34,17 @@
       <span>Link</span></a>
     <a href="#" id="function-image" class="function-button">
       <span>Image</span></a>
+      
+    <div id="gollum-editor-format-selector">
+      <select id="wiki_format" name="format">
+      {{#formats}}
+        <option {{#selected}}selected="selected" {{/selected}}value="{{id}}">
+          {{name}}
+        </option>
+      {{/formats}}
+     </select>
+    </div>
   </div>
-  <fieldset id="gollum-editor-fields">
     <textarea id="gollum-editor-body"
      data-markup-lang="markdown" name="content">{{content}}</textarea>
      
