@@ -27,9 +27,10 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize_options = no_follow   ? 
-        HISTORY_SANITIZATION_OPTIONS : 
-        SANITIZATION_OPTIONS
+      sanitize_options = no_follow ? 
+        @wiki.history_sanitization : 
+        @wiki.sanitization
+
       data = extract_tex(@data)
       data = extract_code(data)
       data = extract_tags(data)
@@ -43,7 +44,7 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = Sanitize.clean(data, sanitize_options)
+      data = Sanitize.clean(data, sanitize_options.to_hash) if sanitize_options
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data

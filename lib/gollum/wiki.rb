@@ -15,6 +15,14 @@ module Gollum
       # Sets the default email for commits.
       attr_accessor :default_committer_email
 
+      # Sets sanitization options. Set to false to deactivate
+      # sanitization altogether.
+      attr_writer :sanitization
+
+      # Sets sanitization options. Set to false to deactivate
+      # sanitization altogether.
+      attr_writer :history_sanitization
+
       # Gets the page class used by all instances of this Wiki.
       # Default: Gollum::Page.
       def page_class
@@ -36,6 +44,26 @@ module Gollum
             ::Gollum::File
           end
       end
+
+      # Gets the default sanitization options for current pages used by 
+      # instances of this Wiki.
+      def sanitization
+        if @sanitization.nil?
+          @sanitization = Sanitization.new
+        end
+        @sanitization
+      end
+
+      # Gets the default sanitization options for older page revisions used by 
+      # instances of this Wiki.
+      def history_sanitization
+        if @history_sanitization.nil?
+          @history_sanitization = sanitization ?
+            sanitization.history_sanitization  :
+            false
+        end
+        @history_sanitization
+      end
     end
 
     self.default_committer_name  = 'Anonymous'
@@ -46,23 +74,34 @@ module Gollum
     # to "/".
     attr_reader :base_path
 
+    # Gets the sanitization options for current pages used by this Wiki.
+    attr_reader :sanitization
+
+    # Gets the sanitization options for older page revisions used by this Wiki.
+    attr_reader :history_sanitization
+
     # Public: Initialize a new Gollum Repo.
     #
     # repo    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
-    #           :base_path  - String base path for all Wiki links.
-    #                         Default: "/"
-    #           :page_class - The page Class. Default: Gollum::Page
-    #           :file_class - The file Class. Default: Gollum::File
+    #           :base_path    - String base path for all Wiki links.
+    #                           Default: "/"
+    #           :page_class   - The page Class. Default: Gollum::Page
+    #           :file_class   - The file Class. Default: Gollum::File
+    #           :sanitization - An instance of Sanitization.
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
-      @path       = path
-      @repo       = Grit::Repo.new(path)
-      @base_path  = options[:base_path]  || "/"
-      @page_class = options[:page_class] || self.class.page_class
-      @file_class = options[:file_class] || self.class.file_class
+      @path         = path
+      @repo         = Grit::Repo.new(path)
+      @base_path    = options[:base_path]    || "/"
+      @page_class   = options[:page_class]   || self.class.page_class
+      @file_class   = options[:file_class]   || self.class.file_class
+      @sanitization = options[:sanitization] || self.class.sanitization
+      @history_sanitization = options[:history_sanitization] || 
+        self.class.history_sanitization
+
       clear_cache
     end
 
