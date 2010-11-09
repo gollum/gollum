@@ -11,7 +11,7 @@ module Gollum
     def initialize(page)
       @wiki    = page.wiki
       @name    = page.filename
-      @data    = page.raw_data
+      @data    = page.text_data
       @version = page.version.id
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}

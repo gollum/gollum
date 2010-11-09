@@ -83,6 +83,19 @@ context "Wiki" do
     entry = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0]
     assert_equal 'Bilbo-Baggins.md', entry.path
   end
+
+  test "text_data" do
+    wiki = Gollum::Wiki.new(testpath("examples/yubiwa.git"))
+    if String.instance_methods.include?(:encoding)
+      utf8 = wiki.page("strider").text_data
+      assert_equal Encoding::UTF_8, utf8.encoding
+      sjis = wiki.page("sjis").text_data(Encoding::SHIFT_JIS)
+      assert_equal Encoding::SHIFT_JIS, sjis.encoding
+    else
+      page = wiki.page("strider")
+      assert_equal page.raw_data, page.text_data
+    end
+  end
 end
 
 context "Wiki page previewing" do
