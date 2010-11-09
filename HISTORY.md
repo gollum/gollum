@@ -1,7 +1,10 @@
 # HEAD
 
+* Minor Enhancements
+  * Add `:sanitization` and `:history_sanitization` options for customizing 
+    how `Sanitize.clean` modifies formatted wiki content.
 * Bug Fixes
-  * Use @wiki.page_class in Gollum::Markup where appropriate (#63).
+  * Use `@wiki.page_class` in Gollum::Markup where appropriate (#63).
 
 # 1.1.0 / 2010-10-28
 
