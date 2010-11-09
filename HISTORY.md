@@ -3,6 +3,8 @@
 * Minor Enhancements
   * Add `:sanitization` and `:history_sanitization` options for customizing 
     how `Sanitize.clean` modifies formatted wiki content.
+  * Add `--config` option for the command line, to specify a ruby file that is
+    run during startup.
 * Bug Fixes
   * Use `@wiki.page_class` in Gollum::Markup where appropriate (#63).
 
