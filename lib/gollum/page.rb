@@ -116,6 +116,19 @@ module Gollum
       @blob && @blob.data
     end
 
+    # Public: A text data encoded in specified encoding.
+    #
+    # encoding - An Encoding or nil
+    #
+    # Returns a character encoding aware String.
+    def text_data(encoding=nil)
+      if raw_data.respond_to?(:encoding)
+        raw_data.force_encoding(encoding || Encoding::UTF_8)
+      else
+        raw_data
+      end
+    end
+
     # Public: The formatted contents of the page.
     #
     # Returns the String data.

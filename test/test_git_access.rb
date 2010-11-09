@@ -54,6 +54,6 @@ context "GitAccess" do
   end
 
   test "cannot access tree from invalid ref" do
-    assert_nil @access.tree('foo')
+    assert_equal [], @access.tree('foo')
   end
 end

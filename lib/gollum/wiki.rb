@@ -18,6 +18,14 @@ module Gollum
       # Sets the default email for commits.
       attr_accessor :default_committer_email
 
+      # Sets sanitization options. Set to false to deactivate
+      # sanitization altogether.
+      attr_writer :sanitization
+
+      # Sets sanitization options. Set to false to deactivate
+      # sanitization altogether.
+      attr_writer :history_sanitization
+
       # Gets the page class used by all instances of this Wiki.
       # Default: Gollum::Page.
       def page_class
@@ -50,6 +58,26 @@ module Gollum
             ::Gollum::Markup
           end
       end
+
+      # Gets the default sanitization options for current pages used by 
+      # instances of this Wiki.
+      def sanitization
+        if @sanitization.nil?
+          @sanitization = Sanitization.new
+        end
+        @sanitization
+      end
+
+      # Gets the default sanitization options for older page revisions used by 
+      # instances of this Wiki.
+      def history_sanitization
+        if @history_sanitization.nil?
+          @history_sanitization = sanitization ?
+            sanitization.history_sanitization  :
+            false
+        end
+        @history_sanitization
+      end
     end
 
     self.default_committer_name  = 'Anonymous'
@@ -59,6 +87,12 @@ module Gollum
     # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
     # to "/".
     attr_reader :base_path
+
+    # Gets the sanitization options for current pages used by this Wiki.
+    attr_reader :sanitization
+
+    # Gets the sanitization options for older page revisions used by this Wiki.
+    attr_reader :history_sanitization
 
     # Public: Initialize a new Gollum Repo.
     #
@@ -70,6 +104,7 @@ module Gollum
     #           :page_class   - The page Class. Default: Gollum::Page
     #           :file_class   - The file Class. Default: Gollum::File
     #           :markup_class - The markup Class. Default: Gollum::Markup
+    #           :sanitization - An instance of Sanitization.
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -84,6 +119,9 @@ module Gollum
       @file_class   = options[:file_class]   || self.class.file_class
       @markup_class = options[:markup_class] || self.class.markup_class
       @repo         = @access.repo
+      @sanitization = options[:sanitization] || self.class.sanitization
+      @history_sanitization = options[:history_sanitization] || 
+        self.class.history_sanitization
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
