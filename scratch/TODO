@@ -1,7 +1,7 @@
 * Editor
   * Create rest of markup lang definitions
   * Hook up format selector
-* Create Error Page
+  * Get edit to work and not give me a duplicate page error
 * Create Compare Revisions Page (like, when comparing the two)
 * Create Search Results Page
 * Create Revert page
