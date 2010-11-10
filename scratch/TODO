@@ -1,7 +1,6 @@
 * Editor
   * Create rest of markup lang definitions
   * Hook up format selector
-  * Get edit to work and not give me a duplicate page error
 * Create Compare Revisions Page (like, when comparing the two)
 * Create Search Results Page
 * Create Revert page
@@ -10,10 +9,6 @@
 * Re-add inline help for more obscure syntax rules.
 * Find some clever way to represent page hierarchy.
 * Inline preview?
-
-BUGS
-* You should only be able to compare 2 revisions at once.  All revisions
-  between them should be highlighted though.  See http://img.skitch.com/20101109-jqaeqd4gef83cq2sbeseexhaa2.png
 
 HIERARCHY
   _Footer.md
