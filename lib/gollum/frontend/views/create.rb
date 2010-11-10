@@ -9,11 +9,11 @@ module Precious
         "Create a new page"
       end
       
-      def show_title 
+      def is_create_page
         true
       end
       
-      def hidden_title
+      def is_edit_page
         false
       end
 

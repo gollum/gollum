@@ -1,15 +1,20 @@
 <div id="gollum-editor">
+{{#is_create_page}}
 <form name="gollum-editor" action="/create/{{escaped_name}}" method="post">
+{{/is_create_page}}
+{{#is_edit_page}}
+<form name="gollum-editor" action="/edit/{{escaped_name}}" method="post">
+{{/is_edit_page}}
   <fieldset id="gollum-editor-fields">
-  {{#show_title}}
+  {{#is_create_page}}
   <div id="gollum-editor-title-field" class="singleline">
     <label for="page" class="jaws">Page Title</label>
     <input type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
   </div>
-  {{/show_title}}
-  {{#hidden_title}}
+  {{/is_create_page}}
+  {{#is_edit_page}}
   <input type="hidden" name="page" id="gollum-editor-page-title" value="{{page_name}}">
-  {{/hidden_title}}
+  {{/is_edit_page}}
   <div id="gollum-editor-function-bar">
     <a href="#" id="function-bold" class="function-button">
       <span>Bold</span></a>
