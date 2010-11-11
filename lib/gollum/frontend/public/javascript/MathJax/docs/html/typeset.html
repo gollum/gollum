@@ -1,0 +1,318 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Modifying Math on the Page &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="The MathJax API" href="api/index.html" />
+    <link rel="prev" title="Loading MathJax Dynamically" href="dynamic.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api/index.html" title="The MathJax API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dynamic.html" title="Loading MathJax Dynamically"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="modifying-math-on-the-page">
+<span id="typeset-math"></span><h1>Modifying Math on the Page<a class="headerlink" href="#modifying-math-on-the-page" title="Permalink to this headline">¶</a></h1>
+<p>If you are writing a dynamic web page where content containing
+mathematics may appear after MathJax has already typeset the rest of
+the page, then you will need to tell MathJax to look for mathematics
+in the page again when that new content is produced.  To do that, you
+need to use the <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Typeset()</span></tt> method.  This will cause
+the preprocessors (if any were loaded) to run over the page again, and
+then MathJax will look for unprocessed mathematics on the page and
+typeset it, leaving unchanged any math that has already been typeset.</p>
+<p>You should not simply call this method directly, however.  Because
+MathJax operates asynchonously (see <a class="reference internal" href="synchronize.html#synchronization"><em>Synchronizing with MathJax</em></a> for details), you need to be sure that
+your call to <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Typeset()</span></tt> is synchronized with the
+other actions that MathJax is taking.  For example, it may already be
+typesetting portions of the page, or it may be waiting for an output
+jax to load, etc., and so you need to queue to typeset action to be
+performed after MathJax has finished whatever else it may be doing.
+That may be immediately, but it may not, and there is no way to tell.</p>
+<p>To queue the typeset action, use the command</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Queue</span><span class="p">([</span><span class="s2">&quot;Typeset&quot;</span><span class="p">,</span><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">]);</span>
+</pre></div>
+</div>
+<p>This will cause MathJax to typeset the page when it is next able to do
+so.  It guarantees that the typesetting will synchronize properly
+with the loading of jax, extensions, fonts, stylesheets, and other
+asynchornous activity, and is the only truely safe way to ask MathJax
+to process additional material.</p>
+<p>The <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Typeset()</span></tt> command also accepts a parameter
+that is a DOM element whose contents is to be typeset.  That could be
+a paragraph, or a <tt class="docutils literal"><span class="pre">&lt;div&gt;</span></tt> element, or even a MathJax math
+<tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag.  It could also be a the DOM <cite>id</cite> of such an object, in
+which case, MathJax will look up the DOM element for you.  So</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Queue</span><span class="p">([</span><span class="s2">&quot;Typeset&quot;</span><span class="p">,</span><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">,</span><span class="s2">&quot;MathExample&quot;</span><span class="p">]);</span>
+</pre></div>
+</div>
+<p>would typeset the mathematics contained in the element whose <cite>id</cite> is
+<tt class="docutils literal"><span class="pre">MathExample</span></tt>.  This is equivalent to</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">math</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;MathExample&quot;</span><span class="p">);</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Queue</span><span class="p">([</span><span class="s2">&quot;Typeset&quot;</span><span class="p">,</span><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">,</span><span class="nx">math</span><span class="p">]);</span>
+</pre></div>
+</div>
+<p>If no element or element <cite>id</cite> is provided, the whole document is
+typeset.</p>
+<p>Note that the <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Queue()</span></tt> method will return
+immediately, regardless of whether the typesetting has taken place or
+not, so you can not assume that the mathematics is visible after you
+make this call.  That means that things like the size of the container
+for the mathematics may not yet reflect the size of the typeet
+mathematics.  If you need to perform actions that depend on the
+mathematics being typeset, you should push <em>those</em> actions onto the
+<tt class="docutils literal"><span class="pre">MathJax.Hub.queue</span></tt> as well.</p>
+<p>This can be quite subtle, so you have to think carefully about the
+structure of your code that works with the typeset mathematics.  Also,
+the things you push onto the queue should be <cite>Callback</cite> objects that
+perform the actions you want when they are called, not the <em>results</em>
+of calling the functions that do what you want.</p>
+<div class="section" id="manipulating-individual-math-elements">
+<h2>Manipulating Individual Math Elements<a class="headerlink" href="#manipulating-individual-math-elements" title="Permalink to this headline">¶</a></h2>
+<p>If you are not changing a complete DOM structure, but simply want to
+update the contents of a single mathematical equation, you do not need
+to use <tt class="docutils literal"><span class="pre">innerHTML</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Typeset()</span></tt> to preprocess
+and process an elements new content.  Instead, you can ask MathJax to
+find the <cite>element jax</cite> for the math element on the page, and use its
+methods to modify and update the mathematics that it displays.</p>
+<p>For example, suppose you have the following HTML in your document</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;MathDiv&quot;</span><span class="nt">&gt;</span>
+  The answer you provided is: ${}$.
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>and MathJax has already preprocessed and typeset the mathematics
+within dollar signs (it will be blank).  A student has typed
+something elsewhere on the page, and you want to typeset their answer
+in the location of the mathematics that is already there.  You could
+replace the entire contents of the <cite>MathDiv</cite> element and call
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Typeset()</span></tt> as described above, but there is more
+efficient approach, which is to ask MathJax for the element jax for
+the mathematics, and call its method for replacing the formula shown
+by that element.  For example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">math</span> <span class="o">=</span> <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">getAllJax</span><span class="p">(</span><span class="s2">&quot;MathDiv&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Queue</span><span class="p">([</span><span class="s2">&quot;Text&quot;</span><span class="p">,</span><span class="nx">math</span><span class="p">,</span><span class="s2">&quot;x+1&quot;</span><span class="p">]);</span>
+</pre></div>
+</div>
+<p>This looks up the list of math elements in <cite>MathDiv</cite> element (there is
+only one) and takes the first one (element 0) and stores it in
+<tt class="docutils literal"><span class="pre">math</span></tt>.  This is an <cite>element jax</cite> object (see the <a class="reference internal" href="api/elementjax.html#api-element-jax"><em>Element Jax</em></a> specification for details), which has a
+<a class="reference internal" href="api/elementjax.html#Text" title="Text"><tt class="xref py py-meth docutils literal"><span class="pre">Text()</span></tt></a> method that can be used to set the input text of the
+math element, and retypeset it.</p>
+<p>Again, since the typesetting should be synchronized with other actions
+of MathJax, the call should be pushed onto the <tt class="docutils literal"><span class="pre">MathJax.Hub.queue</span></tt>,
+as shown above, rather than called directly.  The example above
+performs the equivalent of <tt class="docutils literal"><span class="pre">math.Text(&quot;x+1&quot;)</span></tt> as soon as MathJax is
+able to do so.  Any additional actions the rely on the equation
+<tt class="docutils literal"><span class="pre">x+1</span></tt> actually showing on screen should also be pushed onto the
+queue so that they will not occur before the math is typeset.</p>
+<p>The actions you can perform on an element jax include:</p>
+<blockquote>
+<dl class="describe">
+<dt>
+<tt class="descname">Text(newmath)</tt></dt>
+<dd><p>to set the math text of the element to <cite>newmath</cite> and typeset.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">Reprocess()</tt></dt>
+<dd><p>to remove the output and reproduce it again (for
+example, if CSS has changed that would alter the spacing of the
+mathematics).</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">Remove()</tt></dt>
+<dd><p>to remove the output for this math element (but not
+the original <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag).</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">SourceElement()</tt></dt>
+<dd><p>to obtain a reference to the original
+<tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> object that is assocaited with this element jax.</p>
+</dd></dl>
+
+</blockquote>
+<p>Note that once you have located an element jax, you can keep using it
+and don&#8217;t have to look it up again.  So for the example above, if the
+student is going to be able to type several different answers that you
+will want to typeset, you can look up the element jax once at the
+beginning after MathJax has processed the page the first time, and
+then use that result each time you adjust the mathematics to be
+displayed.</p>
+<p>To get the element jax the first time, you need to be sure that you
+ask MathJax for it <strong>after</strong> MathJax has processed the page the first
+time.  This is another sitaution where you want to use the MathJax
+queue.  If your startup code performs the commands</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">studentDisplay</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Queue</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">studentDisplay</span> <span class="o">=</span> <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">getAllJax</span><span class="p">(</span><span class="s2">&quot;MathDiv&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>then you can use</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Queue</span><span class="p">([</span><span class="s2">&quot;Text&quot;</span><span class="p">,</span><span class="nx">studentDisplay</span><span class="p">,</span><span class="nx">studentAnswer</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>to change the student&#8217;s answer to be the typeset version of whatever
+is in the <tt class="docutils literal"><span class="pre">studentAnswer</span></tt> variable.</p>
+<p>Here is a complete example that illustrates this approach</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>MathJax Dynamic Math Test Page<span class="nt">&lt;/title&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/MathJax/MathJax.js&quot;</span><span class="nt">&gt;</span>
+  <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+    <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tex2jax.js&quot;</span><span class="p">],</span>
+    <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span><span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">],</span>
+    <span class="nx">tex2jax</span><span class="o">:</span> <span class="p">{</span><span class="nx">inlineMath</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;$&quot;</span><span class="p">,</span><span class="s2">&quot;$&quot;</span><span class="p">],[</span><span class="s2">&quot;\\(&quot;</span><span class="p">,</span><span class="s2">&quot;\\)&quot;</span><span class="p">]]}</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+<span class="nt">&lt;script&gt;</span>
+  <span class="c1">//</span>
+  <span class="c1">//  Use a closure to hide the local variables from the</span>
+  <span class="c1">//  global namespace</span>
+  <span class="c1">//</span>
+  <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">QUEUE</span> <span class="o">=</span> <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">queue</span><span class="p">;</span>  <span class="c1">// shorthand for the queue</span>
+    <span class="kd">var</span> <span class="nx">math</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>                <span class="c1">// the element jax for the math output.</span>
+
+    <span class="c1">//</span>
+    <span class="c1">//  Get the element jax when MathJax has produced it.</span>
+    <span class="c1">//</span>
+    <span class="nx">QUEUE</span><span class="p">.</span><span class="nx">Push</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">math</span> <span class="o">=</span> <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">getAllJax</span><span class="p">(</span><span class="s2">&quot;MathOutput&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">});</span>
+
+    <span class="c1">//</span>
+    <span class="c1">//  The onchange event handler that typesets the</span>
+    <span class="c1">//  math entered by the user</span>
+    <span class="c1">//</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">UpdateMath</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">TeX</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">QUEUE</span><span class="p">.</span><span class="nx">Push</span><span class="p">([</span><span class="s2">&quot;Text&quot;</span><span class="p">,</span><span class="nx">math</span><span class="p">,</span><span class="s2">&quot;\\displaystyle{&quot;</span><span class="o">+</span><span class="nx">TeX</span><span class="o">+</span><span class="s2">&quot;}&quot;</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">})();</span>
+<span class="nt">&lt;/script&gt;</span>
+
+Type some TeX code:
+<span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;MathInput&quot;</span> <span class="na">size=</span><span class="s">&quot;50&quot;</span> <span class="na">onchange=</span><span class="s">&quot;UpdateMath(this.value)&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;p&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;MathOutput&quot;</span><span class="nt">&gt;</span>
+You typed: ${}$
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Modifying Math on the Page</a><ul>
+<li><a class="reference internal" href="#manipulating-individual-math-elements">Manipulating Individual Math Elements</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dynamic.html"
+                        title="previous chapter">Loading MathJax Dynamically</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api/index.html"
+                        title="next chapter">The MathJax API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/typeset.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api/index.html" title="The MathJax API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dynamic.html" title="Loading MathJax Dynamically"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>MathJax TeX input with MathML output Test Page</title>
+<!-- Copyright (c) 2010 Design Science, Inc. -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" >
+
+<script src="../MathJax.js">
+  MathJax.Hub.Config({
+    config: ["MMLorHTML.js"],
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+</head>
+<body>
+
+When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+
+</body>
+</html>

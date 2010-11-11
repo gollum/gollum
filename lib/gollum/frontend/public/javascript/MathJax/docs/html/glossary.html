@@ -1,0 +1,160 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Glossary &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="prev" title="CSS Style Objects" href="CSS-styles.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CSS-styles.html" title="CSS Style Objects"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="glossary">
+<span id="id1"></span><h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h1>
+<dl class="glossary docutils">
+<dt id="term-callback">Callback</dt>
+<dd>A JavaScript function that is used to perform actions that
+must wait for other actions to complete before they are
+performed.</dd>
+<dt id="term-callback-queue">Callback Queue</dt>
+<dd>MathJax uses <cite>Queues</cite> to synchronize its activity so that
+actions that operate asynchronously (like loading files) will
+be performed in the right order.  <a class="reference internal" href="#term-callback"><em class="xref std std-term">Callback</em></a> functions
+are pushed onto the queue, and are performed in order, with
+MathJax handling the synchronization if operations need to
+wait for other actions to finish.</dd>
+<dt id="term-callback-signal">Callback Signal</dt>
+<dd>A JavaScript object that acts as a mailbox for MathJax events.
+Like an event handler, but it also keeps a history of
+messages.  Your code can register an &#8220;interest&#8221; in a signal,
+or can register a <a class="reference internal" href="#term-callback"><em class="xref std std-term">callback</em></a> to be called when a
+particular message is sent along the signal channel.</dd>
+<dt id="term-html-css">HTML-CSS</dt>
+<dd>MathJax output form that employs only on HTML and CSS 2.1,
+allowing MathJax to remain compatible across all browsers.</dd>
+<dt id="term-jax">jax</dt>
+<dd>MathJax&#8217;s input and output processors are called &#8220;jax&#8221;, as is
+its internal format manager.  The code for the jax are in the
+<tt class="docutils literal"><span class="pre">MathJax/jax</span></tt> directory.</dd>
+<dt id="term-latex">LaTeX</dt>
+<dd><p class="first">LaTeX is a variant of <a class="reference internal" href="#term-tex"><em class="xref std std-term">TeX</em></a> that is now the dominant TeX style.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/LaTeX">LaTeX Wikipedia entry</a></p>
+</div>
+</dd>
+<dt id="term-mathml">MathML</dt>
+<dd><p class="first">An XML specification created to describe mathematical
+notations and capture both its structure and content. MathML
+is much more verbose than <a class="reference internal" href="#term-tex"><em class="xref std std-term">TeX</em></a>, but is much more
+machine-readable.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/MathML">MathML Wikipedia entry</a></p>
+</div>
+</dd>
+<dt id="term-stix">STIX</dt>
+<dd><p class="first">The Scientific and Technical Information Exchange font
+package. A comprehensive set of scientific glyphs.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://stixfonts.org/">STIX project</a></p>
+</div>
+</dd>
+<dt id="term-tex">TeX</dt>
+<dd><p class="first">A document markup language with robust math markup commands
+developed by Donald Knuth in the late 1970&#8217;s, but still in
+extensive use today.  It became the industry standard for
+typesetting of mathematics, and is one of the most common
+formats for mathematical journals, articles, and books.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/TeX">TeX Wikipedia entry</a></p>
+</div>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="CSS-styles.html"
+                        title="previous chapter">CSS Style Objects</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/glossary.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CSS-styles.html" title="CSS Style Objects"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

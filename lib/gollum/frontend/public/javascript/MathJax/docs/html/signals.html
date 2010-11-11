@@ -1,0 +1,257 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using Signals &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="up" title="Synchronizing your code with MathJax" href="synchronize.html" />
+    <link rel="next" title="Loading MathJax Dynamically" href="dynamic.html" />
+    <link rel="prev" title="Using Queues" href="queues.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dynamic.html" title="Loading MathJax Dynamically"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="queues.html" title="Using Queues"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="synchronize.html" accesskey="U">Synchronizing your code with MathJax</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-signals">
+<span id="id1"></span><h1>Using Signals<a class="headerlink" href="#using-signals" title="Permalink to this headline">¶</a></h1>
+<p>Because much of MathJax operates asynchronously, it is important for
+MathJax to be able to indicated to other components operating on the
+page that certain actions have been taken.  For example, as MathJax is
+starting up, it loads external files such as its configuration files
+and the various input and output <a class="reference internal" href="glossary.html#term-jax"><em class="xref std std-term">jax</em></a> that are used on the
+page.  This means that MathJax may not be ready to run until well
+after the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag that loads <tt class="docutils literal"><span class="pre">MathJax.js</span></tt> has executed.  If
+another component on the page needs to call MathJax to process some
+mathematics, it will need to know when MathJax is ready to do that.
+Thus MathJax needs a way to signal other components that it is
+initialized and ready to process mathematics.  Other events that might
+need to be signaled include the appearance of newly processed
+mathematics on the web page, the loading of a new extension, and so
+on.</p>
+<p>The mechanism provided by MathJax for handling this type of
+communication is the <a class="reference internal" href="glossary.html#term-callback-signal"><em class="xref std std-term">Callback Signal</em></a>.  The <cite>Callback Signal</cite>
+object provides a standardized mechanism for sending and receiving
+messages between MathJax and other code on the page.  A signal acts
+like a mailbox where MathJax places messages for others to read.
+Those interested in seeing the messages can register an interest in
+receiving a given signal, and when MathJax posts a message on that
+signal, all the interested parties will be notified.  No new posts to
+the signal will be allowed until everyone who is listening to the
+signal has had a chance to receive the first one.  If a signal causes
+a listener to begin an asynchronous operation (such as loading a
+file), the listener can indicate that its reply to the signal is going
+to be delayed, and MathJax will wait until the asynchronous action is
+complete before allowing additional messages to be posted to this
+signal.  In this way, posting a signal may itself be an asynchronous
+action.</p>
+<p>The posts to a signal are cached so that if a new listener expresses
+an interest in the signal, it will receive all the past posts as well
+as any future ones.  For example, if a component on the page needs to
+know when MathJax is set up, it can express an interest in the startup
+signal&#8217;s <tt class="docutils literal"><span class="pre">End</span></tt> message.  If MathJax is not yet set up, the component
+will be signaled when MathJax is ready to begin, but if MathJax is
+already set up, the component will receive the <tt class="docutils literal"><span class="pre">End</span></tt> message
+immediately, since that message was cached and is available to any new
+listeners.  In this way, signals can be used to pass messages without
+worrying about the timing of when the signaler and listener are ready
+to send or receive signals:  a listener will receive messages even if
+it starts listening after they were sent.</p>
+<p>One way that MathJax makes use of this feature is in configuring its
+various extensions.  The extension may not be loaded when the user&#8217;s
+configuration code runs, so the configuration code can&#8217;t modify the
+extension because it isn&#8217;t there yet.  Fortunately, most extensions
+signal when they are set up via an <tt class="docutils literal"><span class="pre">Extension</span> <span class="pre">[name]</span> <span class="pre">Ready</span></tt> message,
+so the configuration code can set up a listener for that message, and
+have the listener perform the configuration when the message arrives.
+But even if the extension <em>has</em> already been loaded, this will still
+work, because the listener will receive the ready signal even if it
+has already been posted.  In this way, listening for signals is a
+robust method of synchonizing code components no matter when they are
+loaded and run.</p>
+<p>In some cases, it may be inappropriate for a new listener to receive
+past messages that were sent to a signal object. There are two ways to
+handle this: first, a new listener can indicate that it doesn&#8217;t want
+to hear old messages when it attaches itself to a signal object.  The
+sender can also indicate that past messages are not appropriate for
+new listeners.  It does this by clearing the message history so that
+new listeners have no old posts to hear.</p>
+<p>The actual message passed along the signal can be anything, but is
+frequently a string constant indicating the message value.  It could
+also be a JavaScript array containing data, or an object containing
+<cite>key:value</cite> pairs.  All the listeners receive the data as part of the
+message, and can act on it in whatever ways they see fit.</p>
+<div class="section" id="creating-a-listener">
+<h2>Creating a Listener<a class="headerlink" href="#creating-a-listener" title="Permalink to this headline">¶</a></h2>
+<p>MathJax maintains two separate signal channels: the <cite>startup signal</cite>
+and the <cite>processing signal</cite> (or the <cite>hub signal</cite>).  The startup signal
+is where the messages about different components startup up and
+becoming ready appear.  The processing signal is where the messages
+are sent about processing mathematics, like the <tt class="docutils literal"><span class="pre">New</span> <span class="pre">Math</span></tt> messages
+for when newly typeset mathematics appears on the page.  The latter is
+cleared when a new processing pass is started (so messages from past
+processing runs are not kept).</p>
+<p>The easiest way to create a listener is to use either
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Register.StartupHook()</span></tt> or
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Register.MessageHook()</span></tt>.  The first sets a listener
+on the startup signal, and the latter on the hub processing signal.
+You specify the message you want to listen for, and a callback to be
+called when it arrives.  For example</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Register</span><span class="p">.</span><span class="nx">StartupHook</span><span class="p">(</span><span class="s2">&quot;TeX Jax Ready &quot;</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;The TeX input jax is loaded and ready!&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="startup.html#startup-sequence"><em>MathJax Startup Sequence</em></a> page for
+details of the messages sent during startup.  See also the
+<tt class="docutils literal"><span class="pre">test/sample-signals.html</span></tt> file (and its source) for examples of
+using signals.  This example lists all the signals that occur while
+MathJax is processing that page, so it gives useful information about
+the details of the signals produced by variuous components.</p>
+<p>In this example, the listener starts loading an extra configuration
+file (from the same directory as the web page).  Since it returns
+the callback from that request, the signal processing will wait until
+that file is completely loaded before it continues; that is, the
+configuration process is suspended until the extra configuration file
+has loaded.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Register</span><span class="p">.</span><span class="nx">StartupHook</span><span class="p">(</span><span class="s2">&quot;Begin Config&quot;</span><span class="p">,</span>
+  <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">Require</span><span class="p">(</span><span class="s2">&quot;myConfig.js&quot;</span><span class="p">)}</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>Here is an example that produces an alert each time new mathematics
+is typeset on the page.  The message includes the DOM <cite>id</cite> of the
+element on the page that contains the newly typeset mathematics as its
+second element, so this listener locates the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag
+for the math, and displays the original source mathematics for it.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Register</span><span class="p">.</span><span class="nx">MessageHook</span><span class="p">(</span><span class="s2">&quot;New Math&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">getJaxFor</span><span class="p">(</span><span class="nx">message</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="nx">SourceElement</span><span class="p">();</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;: &#39;&quot;</span><span class="o">+</span><span class="nx">script</span><span class="p">.</span><span class="nx">text</span><span class="o">+</span><span class="s2">&quot;&#39;&quot;</span><span class="p">);</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="listening-for-all-messages">
+<h2>Listening for All Messages<a class="headerlink" href="#listening-for-all-messages" title="Permalink to this headline">¶</a></h2>
+<p>If you want to process <em>every</em> message that passes through a signal
+channel, you can do that by registering an interest in the signal
+rather than registering a message hook.  You do this by calling the
+signal&#8217;s <a class="reference internal" href="api/signal.html#Interest" title="Interest"><tt class="xref py py-meth docutils literal"><span class="pre">Interest()</span></tt></a> method, as in the following example.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Startup</span><span class="p">.</span><span class="nx">signal</span><span class="p">.</span><span class="nx">Interest</span><span class="p">(</span>
+  <span class="kd">function</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Startup: &quot;</span><span class="o">+</span><span class="nx">message</span><span class="p">)}</span>
+<span class="p">);</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">signal</span><span class="p">.</span><span class="nx">Interest</span><span class="p">(</span>
+  <span class="kd">function</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Hub: &quot;</span><span class="o">+</span><span class="nx">message</span><span class="p">)}</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>This will cause an alert for every signal that MathJax produces.  You
+probably don&#8217;t want to try this out, since it will produce a <em>lot</em> of
+them; instead, use the <tt class="docutils literal"><span class="pre">test/sample-signals.html</span></tt> file, which
+displays them in the web page.</p>
+<p>See the <a class="reference internal" href="api/signal.html#api-signal"><em>Signal Object</em></a> reference page for details on the
+structure and methods of the signal object.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using Signals</a><ul>
+<li><a class="reference internal" href="#creating-a-listener">Creating a Listener</a></li>
+<li><a class="reference internal" href="#listening-for-all-messages">Listening for All Messages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="queues.html"
+                        title="previous chapter">Using Queues</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dynamic.html"
+                        title="next chapter">Loading MathJax Dynamically</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/signals.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dynamic.html" title="Loading MathJax Dynamically"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="queues.html" title="Using Queues"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="synchronize.html" >Synchronizing your code with MathJax</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,170 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Describing HTML snippets &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="CSS Style Objects" href="CSS-styles.html" />
+    <link rel="prev" title="Converting to MathJax from jsMath" href="jsMath.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CSS-styles.html" title="CSS Style Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="jsMath.html" title="Converting to MathJax from jsMath"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="describing-html-snippets">
+<span id="html-snippets"></span><h1>Describing HTML snippets<a class="headerlink" href="#describing-html-snippets" title="Permalink to this headline">¶</a></h1>
+<p>A number of MathJax configuration options allow you to specify an HTML
+snippet using a JavaScript object.  This lets you include HTML in your
+configutation files even though they are not HTML files themselves.
+The format is fairly simple, but flexible enough to let you represent
+complicated HTML trees.</p>
+<p>An HTML snippet is an array consisting of a series elements that formt
+he HTML tree.  Those elements are one of two things: either a string,
+which represents text to be included in the snippet, or an array,
+which represents an HTML tag to be included.  In the latter case, the
+array consists of three items: a string that is the tag name (e.g.,
+&#8220;img&#8221;), an optional object that gives attributes for the tag (as
+described below), and an optional HTML snippet array that gives the
+contents of the tag.</p>
+<p>When attributes are provided, they are given as <cite>name:value</cite> pairs,
+with the <cite>name</cite> giving the attribute name, and <cite>value</cite> giving its
+value.  For example</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">[[</span><span class="s2">&quot;img&quot;</span><span class="p">,{</span><span class="nx">src</span><span class="o">:</span><span class="s2">&quot;/images/mypic.jpg&quot;</span><span class="p">}]]</span>
+</pre></div>
+</div>
+<p>represents an HTML snippet that includes one element: an <tt class="docutils literal"><span class="pre">&lt;img&gt;</span></tt> tag
+with <tt class="docutils literal"><span class="pre">src</span></tt> set to <tt class="docutils literal"><span class="pre">/images/mypic.jpg</span></tt>.  That is, this is
+equivalent to</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/images/mypic.jpg&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<p>Note that the snippet has two sets of square brackets.  The outermost
+one is for the array that holds the snippet, and the innermost set is
+because the first (and only) element in the snippet is a tag, not
+text.  Note that the code <tt class="docutils literal"><span class="pre">[&quot;img&quot;,{src:&quot;/images/mypic.jpg&quot;}]</span></tt>
+is invalid as an HTML snippet.  It would represent a snippet that
+starts with &#8220;img&#8221; as text in the snippet (not a tag), but the second
+item is neither a string nor an array, and so is illegal.  This is a
+common mistake that should be avoided.</p>
+<p>A more complex example is the following:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">[</span>
+  <span class="s2">&quot;Please read the &quot;</span><span class="p">,</span>
+  <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,{</span><span class="nx">href</span><span class="o">:</span><span class="s2">&quot;instructions.html&quot;</span><span class="p">},[</span><span class="s2">&quot;instructions&quot;</span><span class="p">]],</span>
+  <span class="s2">&quot; carefully before proceeding&quot;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>which is equivalent to</p>
+<div class="highlight-html"><div class="highlight"><pre>please read the <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;instructions.html&quot;</span><span class="nt">&gt;</span>instructions<span class="nt">&lt;/a&gt;</span> carefully
+before proceeding.
+</pre></div>
+</div>
+<p>A final example shows how to set style attributes on an object:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">[[</span><span class="s2">&quot;span&quot;</span><span class="p">,</span>
+  <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;mySpan&quot;</span><span class="p">,</span>
+    <span class="nx">style</span><span class="o">:</span> <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;font-weight&quot;</span><span class="o">:</span><span class="s2">&quot;bold&quot;</span><span class="p">}</span>
+  <span class="p">},</span>
+  <span class="p">[</span><span class="s2">&quot; This is bold text shown in red &quot;</span><span class="p">]</span>
+<span class="p">]]</span>
+</pre></div>
+</div>
+<p>which is equivalent to</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;mySpan&quot;</span> <span class="na">style=</span><span class="s">&quot;color: red; font-weight: bold;&quot;</span><span class="nt">&gt;</span>
+This is bold text shown in red
+<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jsMath.html"
+                        title="previous chapter">Converting to MathJax from jsMath</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CSS-styles.html"
+                        title="next chapter">CSS Style Objects</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/HTML-snippets.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CSS-styles.html" title="CSS Style Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="jsMath.html" title="Converting to MathJax from jsMath"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

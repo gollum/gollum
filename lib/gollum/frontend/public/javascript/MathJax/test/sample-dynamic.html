@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>MathJax Dynamic Math Test Page</title>
+<!-- Copyright (c) 2010 Design Science, Inc. -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" >
+
+<script src="../MathJax.js">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+
+</head>
+<body>
+
+<script>
+  //
+  //  Use a closure to hide the local variables from the
+  //  global namespace
+  //
+  (function () {
+    var QUEUE = MathJax.Hub.queue;  // shorthand for the queue
+    var math = null;                // the element jax for the math output.
+
+    //
+    //  Get the element jax when MathJax has produced it.
+    //
+    QUEUE.Push(function () {
+      math = MathJax.Hub.getAllJax("MathOutput")[0];
+    });
+
+    //
+    //  The onchange event handler that typesets the
+    //  math entered by the user
+    //
+    window.UpdateMath = function (TeX) {
+      QUEUE.Push(["Text",math,"\\displaystyle{"+TeX+"}"]);
+    }
+  })();
+</script>
+
+Type some TeX code and press RETURN:<br/> 
+<input id="MathInput" size="50" onchange="UpdateMath(this.value)" />
+<p>
+
+<div id="MathOutput">
+You typed: ${}$
+</div>
+
+</body>
+</html>
