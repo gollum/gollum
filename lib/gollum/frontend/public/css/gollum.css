@@ -48,7 +48,6 @@ a:hover, a:visited {
     float: right;
   }
   
-  
 /* @section content */
 #wiki-content {
   height: 1%;
@@ -378,7 +377,8 @@ ul.actions {
    margin-left: 0.6em;
  }
 
-.minibutton a {
+.minibutton a,
+#search-submit {
   background-color: #f7f7f7;
   border: 1px solid #d4d4d4;
   color: #333;
@@ -398,7 +398,8 @@ ul.actions {
   -webkit-border-radius: 3px;
 }
 
-.minibutton a:hover {
+.minibutton a:hover,
+#search-submit:hover {
   background: #3072b3;
   border-color: #518cc6 #518cc6 #2a65a0;
   color: #fff;
@@ -448,6 +449,64 @@ ul.actions {
   margin: 1em 0 0.5em;
   padding: 0;
 }
+
+
+/* @control searchbar */
+#head #searchbar {
+  float: right;
+  margin: 1em 0 0 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+  #head #searchbar #searchbar-fauxtext {
+    background: #fff;
+    border: 1px solid #d4d4d4;
+    overflow: hidden;
+    
+    border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+  }
+
+  #head #searchbar #searchbar-fauxtext input#search-query {
+    border: 0;
+    color: #000;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    line-height: 1.6em;
+    padding: 0.4em 0.6em;
+  }
+  
+  #head #searchbar #searchbar-fauxtext #search-submit {
+    border: 0;
+    border-left: 1px solid #d4d4d4;
+    cursor: pointer;
+    margin: 0 !important;
+    padding: 0;
+    float: right;
+    font-size: 1.2em;
+    
+    border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    -webkit-border-radius: 0 3px 3px 0;
+  }
+  
+  #head #searchbar #searchbar-fauxtext #search-submit span {
+    background-image: url(/images/icon-sprite.png);
+    background-position: -405px 0;
+    background-repeat: no-repeat;
+    display: block;
+    height: 25px;
+    overflow: hidden;
+    text-indent: -5000px;
+    width: 28px;
+  }
+  
+  #head #searchbar #searchbar-fauxtext #search-submit:hover span {
+    background-position: -405px -27px;
+    padding: 0;
+  }
 
 
 #MathJax_Message {
