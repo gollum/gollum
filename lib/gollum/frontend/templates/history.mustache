@@ -7,6 +7,7 @@
     <li class="minibutton"><a href="/edit/{{escaped_name}}"
        class="action-edit-page">Edit Page</a></li>
   </ul>
+  {{>searchbar}}
 </div>
 <div id="wiki-history">
   
@@ -39,7 +40,7 @@
           [<a href="/{{escaped_name}}/{{id}}" title="View commit">{{id7}}&hellip;</a>]
         </td>
         <td class="revert-action">
-          <a href="javascript:void(0);" title="Revert to this change">Revert to <span>{{id7}}&hellip;</span></a>
+          <a href="#" title="Revert to this change" rel="{{id}}">Revert to <span>{{id7}}&hellip;</span></a>
         </td>
       </tr>
       {{/versions}}
@@ -55,7 +56,7 @@
        class="action-compare-revision">Compare Revisions</a></li>
        
     <!-- only show this button if we have more than 20 revisions -->
-    <li class="minibutton"><a href="javascript:void(0);"
+    <li class="minibutton"><a href="#"
        class="action-back-to-top">Back to Top</a></li>
   </ul>
 </div>
