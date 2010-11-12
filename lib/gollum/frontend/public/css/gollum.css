@@ -331,6 +331,7 @@ a:hover, a:visited {
   
   #wiki-history table tr td.revert-action {
     border-left: 0;
+    min-width: 10em;
     text-align: right;
   }
   
@@ -445,4 +446,9 @@ ul.actions {
   line-height: 1.6em;
   margin: 1em 0 0.5em;
   padding: 0;
+}
+
+
+#MathJax_Message {
+  display: none;
 }
