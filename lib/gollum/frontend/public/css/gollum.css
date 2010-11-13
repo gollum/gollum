@@ -42,6 +42,7 @@ a:hover, a:visited {
     line-height: normal;
     margin: 0;
     padding: 0.08em 0 0 0;
+    width: 50%;
   }
   
   #head ul.actions {
@@ -362,6 +363,45 @@ a:hover, a:visited {
   }
 
 
+/* @section search */
+.results h1 {
+  color: #999;
+  font-weight: normal;
+}
+
+  .results h1 strong {
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .results #results {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 2em;
+    padding-bottom: 2em;
+  }
+  
+  .results #results ul {
+    margin: 2em 0 0 0;
+    padding: 0;
+  }
+  
+    .results #results ul li {
+      font-size: 1.2em;
+      line-height: 1.6em;
+      list-style-position: outside;
+      padding: 0.2em 0;
+    }
+    
+    .results #results ul li span.count {
+      color: #999;
+    }
+
+  .results p#no-results {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin-top: 2em;
+  }
+
 
 /* @control minibutton */
 ul.actions {
@@ -476,6 +516,10 @@ ul.actions {
     font-size: 1.2em;
     line-height: 1.6em;
     padding: 0.4em 0.6em;
+  }
+  
+  #head #searchbar #searchbar-fauxtext input#search-query.ph {
+    color: #999;
   }
   
   #head #searchbar #searchbar-fauxtext #search-submit {

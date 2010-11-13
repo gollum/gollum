@@ -134,6 +134,7 @@ module Precious
       @query = params[:q]
       wiki = Gollum::Wiki.new(settings.gollum_path)
       @results = wiki.search @query
+      @name = @query
       mustache :search
     end
 
