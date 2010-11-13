@@ -401,6 +401,10 @@ a:hover, a:visited {
     line-height: 1.6em;
     margin-top: 2em;
   }
+  
+  .results #footer ul.actions li {
+    margin: 0 1em 0 0;
+  }
 
 
 /* @control minibutton */
