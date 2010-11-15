@@ -45,7 +45,7 @@
     <a href="#" id="function-image" class="function-button">
       <span>Image</span></a>
       
-    <div id="gollum-editor-format-selector">
+    <div id="gollum-editor-format-selector"> 
       <select id="wiki_format" name="format">
       {{#formats}}
         <option {{#selected}}selected="selected" {{/selected}}value="{{id}}">
@@ -53,6 +53,7 @@
         </option>
       {{/formats}}
      </select>
+      <label for="format">Edit Mode</label>
     </div>
   </div>
     <textarea id="gollum-editor-body"

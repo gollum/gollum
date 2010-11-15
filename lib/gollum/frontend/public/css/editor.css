@@ -180,6 +180,7 @@ a#function-image:hover span { background-position: -324px -28px; }
   
   float: right;
   font-size: 1.1em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
   line-height: 1.6em;
   padding: 0.5em 0.7em;
@@ -189,7 +190,6 @@ a#function-image:hover span { background-position: -324px -28px; }
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em; 
-  
   -moz-outline: none;
 }
 
@@ -200,7 +200,22 @@ a#function-image:hover span { background-position: -324px -28px; }
   -moz-outline: none;
 }
 
-
+#gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector label {
+  color: #999;
+  float: right;
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 1.6em;
+  padding: 0.6em 0.5em 0 0;
+}
+  
+#gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector label:after {
+  content: ':';
+}
+  
+  
 /* @section form-fields */
 
 #gollum-editor textarea#gollum-editor-body {
