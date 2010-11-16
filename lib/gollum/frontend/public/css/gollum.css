@@ -417,6 +417,65 @@ a:hover, a:visited {
     color: #000;
     font-weight: bold;
   }
+  
+  .compare .data {
+    border: 1px solid #ddd;
+    margin-top: 1em;
+  }
+  
+  .compare .data pre {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .compare .data pre div {
+    padding: 0 0 0 1em;
+  }
+  
+  .compare .data tr td {
+    font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
+    font-size: 1.2em;
+    line-height: 1.8em;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .compare .data td.line_numbers {
+    background: #f7f7f7;
+    border-right: 1px solid #999;
+    color: #999; 
+    padding: 0 0 0 0.5em;
+  }
+  
+.compare #footer ul.actions li {
+  margin-left: 0;
+}
+  
+  
+  
+/* @control syntax */
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } 
+.highlight .err { color: #a61717; background-color: #e3d2d2 } 
+.highlight .k { font-weight: bold } 
+.highlight .o { font-weight: bold } 
+.highlight .cm { color: #999988; font-style: italic } 
+.highlight .cp { color: #999999; font-weight: bold } 
+.highlight .c1 { color: #999988; font-style: italic } 
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } 
+.highlight .gd { color: #000000; background-color: #ffdddd } 
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } 
+.highlight .ge { font-style: italic } 
+.highlight .gr { color: #aa0000 } 
+.highlight .gh { color: #999999 } 
+.highlight .gi { color: #000000; background-color: #ddffdd } 
+.highlight .gi .x { color: #000000; background-color: #aaffaa } 
+.highlight .gc { color: #999; background-color: #EAF2F5 }
+.highlight .go { color: #888888 } 
+.highlight .gp { color: #555555 } 
+.highlight .gs { font-weight: bold } 
+.highlight .gu { color: #aaaaaa } 
+.highlight .gt { color: #aa0000 } 
 
 
 /* @control minibutton */
