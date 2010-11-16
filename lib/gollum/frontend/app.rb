@@ -80,10 +80,13 @@ module Precious
     end
 
     post '/preview' do
-      format = params['wiki_format']
-      data = params['text']
+      @name = params['page']
+      format = params['format']
+      data = params['content']
       wiki = Gollum::Wiki.new(settings.gollum_path)
-      wiki.preview_page("Preview", data, format).formatted_data
+      @page = wiki.preview_page("Preview", data, format)
+      @content = @page.formatted_data
+      mustache :page
     end
 
     get '/history/:name' do
