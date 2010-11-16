@@ -405,6 +405,18 @@ a:hover, a:visited {
   .results #footer ul.actions li {
     margin: 0 1em 0 0;
   }
+  
+
+/* @section compare */
+.compare h1 {
+  color: #999;
+  font-weight: normal;
+}
+
+  .compare h1 strong {
+    color: #000;
+    font-weight: bold;
+  }
 
 
 /* @control minibutton */
@@ -542,7 +554,7 @@ ul.actions {
   
   #head #searchbar #searchbar-fauxtext #search-submit span {
     background-image: url(/images/icon-sprite.png);
-    background-position: -405px 0;
+    background-position: -431px -1px;
     background-repeat: no-repeat;
     display: block;
     height: 25px;
@@ -552,7 +564,7 @@ ul.actions {
   }
   
   #head #searchbar #searchbar-fauxtext #search-submit:hover span {
-    background-position: -405px -27px;
+    background-position: -431px -28px;
     padding: 0;
   }
 
