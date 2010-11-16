@@ -1,14 +1,12 @@
 * Editor
   * Create rest of markup lang definitions
-  * Hook up format selector
+    * Finish RDoc
+    * Finish rst
+    * Org-mode
 * Create Compare Revisions Page (like, when comparing the two)
-* Create Search Results Page
-* Create Revert page
 * Write Editor/Sidebar implementation notes for Rick
-* Write print.css
 * Re-add inline help for more obscure syntax rules.
 * Find some clever way to represent page hierarchy.
-* Inline preview?
 
 HIERARCHY
   _Footer.md
