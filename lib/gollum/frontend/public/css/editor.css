@@ -147,6 +147,7 @@ a#function-h2 span { background-position: -244px 0; }
 a#function-h3 span { background-position: -271px 0; }
 a#function-link span { background-position: -298px 0; }
 a#function-image span { background-position: -324px 0; }
+a#function-help span { background-position: -405px 0; } 
 
 a#function-bold:hover span { background-position: 0 -28px; }
 a#function-italic:hover span { background-position: -27px -28px; }
@@ -161,6 +162,7 @@ a#function-h2:hover span { background-position: -244px -28px; }
 a#function-h3:hover span { background-position: -271px -28px; }
 a#function-link:hover span { background-position: -298px -28px; }
 a#function-image:hover span { background-position: -324px -28px; }
+a#function-help:hover span { background-position: -405px -28px; } 
 
 
 #gollum-editor #gollum-editor-function-bar a.disabled {
