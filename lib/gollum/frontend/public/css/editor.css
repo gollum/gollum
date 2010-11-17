@@ -3,6 +3,10 @@
   Wiki editor formatting
 */
 
+a {
+  -moz-outline: none !important;
+}
+
 .jaws {
   /* JAWS should see it, but you can't */
   display: block;
