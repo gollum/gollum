@@ -455,6 +455,7 @@ a#function-help:hover span { background-position: -405px -28px; }
       border: 1px solid #eee;
       border-width: 1px 0;
       background: #fff;
+      color: #000;
     }
     
     #gollum-editor-help-parent li a,
