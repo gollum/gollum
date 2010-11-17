@@ -449,14 +449,6 @@ a#function-help:hover span { background-position: -405px -28px; }
     margin: 0;
     padding: 0;
   }
-  
-    #gollum-editor-help-parent li a.selected,
-    #gollum-editor-help-list li a.selected {
-      border: 1px solid #eee;
-      border-width: 1px 0;
-      background: #fff;
-      color: #000;
-    }
     
     #gollum-editor-help-parent li a,
     #gollum-editor-help-list li a {
@@ -475,6 +467,19 @@ a#function-help:hover span { background-position: -405px -28px; }
       background: #fff;
       border-color: #f0f0f0;
       text-decoration: none;
+      
+      box-shadow: none;
+    }
+    
+    #gollum-editor-help-parent li a.selected,
+    #gollum-editor-help-list li a.selected {
+      border: 1px solid #eee;
+      border-bottom-color: #e7e7e7;
+      border-width: 1px 0;
+      background: #fff;
+      color: #000;
+      
+      box-shadow: 0 1px 2px #f0f0f0;
     }
     
   #gollum-editor-help-wrapper {
