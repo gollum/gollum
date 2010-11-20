@@ -38,5 +38,7 @@ module Gollum
       super(message || "Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.")
     end
   end
+
+  autoload :PageBuilder, 'gollum/page_builder'
 end
 

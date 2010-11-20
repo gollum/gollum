@@ -1,0 +1,22 @@
+<div id="wiki-wrapper" class="page">
+<div id="wiki-content">
+  <div class="wrap{{#has_footer}} has-footer{{/has_footer}}{{#has_sidebar}}has-rightbar{{/has_sidebar}}">
+  <div id="wiki-body">
+    <div id="template">
+      {{{content}}}
+    </div>
+  </div>
+  {{#has_footer}}
+  <div id="wiki-footer">
+    <div id="footer-content">
+      {{{footer_content}}}
+    </div>
+  </div>
+  {{/has_footer}}
+  </div>
+
+</div>
+<div id="footer">
+  <p id="last-edit">Last edited by <b>{{author}}</b>, {{date}}</p>
+</div>
+</div>

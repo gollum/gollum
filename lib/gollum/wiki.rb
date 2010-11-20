@@ -326,6 +326,13 @@ module Gollum
       @repo.log('master', nil, log_pagination_options(options))
     end
 
+    # Public: Creates and caches a PageBuilder instance for this Wiki.
+    #
+    # Returns a PageBuilder instance.
+    def builder
+      @builder ||= PageBuilder.new(self)
+    end
+
     # Public: Refreshes just the cached Git reference data.  This should
     # be called after every Gollum update.
     #

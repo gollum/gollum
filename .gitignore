@@ -2,3 +2,4 @@ coverage
 pkg
 .DS_Store
 .bundle
+test/static
