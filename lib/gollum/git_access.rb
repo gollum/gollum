@@ -2,30 +2,6 @@ module Gollum
   # Controls all access to the Git objects from Gollum.  Extend this class to
   # add custom caching for special cases.
   class GitAccess
-    # Gets the String path to the Git repository.
-    attr_reader :path
-
-    # Gets the Grit::Repo instance for the Git repository.
-    attr_reader :repo
-
-    # Gets a Hash cache of refs to commit SHAs.
-    #
-    #   {"master" => "abc123", ...}
-    #
-    attr_reader :ref_map
-
-    # Gets a Hash cache of commit SHAs to a recursive tree of blobs.
-    #
-    #   {"abc123" => [<BlobEntry>, <BlobEntry>]}
-    #
-    attr_reader :tree_map
-
-    # Gets a Hash cache of commit SHAs to the Grit::Commit instance.
-    #
-    #     {"abcd123" => <Grit::Commit>}
-    #
-    attr_reader :commit_map
-
     def initialize(path)
       @path = path
       @repo = Grit::Repo.new(path)
@@ -129,6 +105,36 @@ module Gollum
     def refresh
       @ref_map.clear
     end
+
+    #########################################################################
+    #
+    # Internal Methods
+    #
+    #########################################################################
+
+    # Gets the String path to the Git repository.
+    attr_reader :path
+
+    # Gets the Grit::Repo instance for the Git repository.
+    attr_reader :repo
+
+    # Gets a Hash cache of refs to commit SHAs.
+    #
+    #   {"master" => "abc123", ...}
+    #
+    attr_reader :ref_map
+
+    # Gets a Hash cache of commit SHAs to a recursive tree of blobs.
+    #
+    #   {"abc123" => [<BlobEntry>, <BlobEntry>]}
+    #
+    attr_reader :tree_map
+
+    # Gets a Hash cache of commit SHAs to the Grit::Commit instance.
+    #
+    #     {"abcd123" => <Grit::Commit>}
+    #
+    attr_reader :commit_map
 
     # Raw method for fetching a list of Git commits.
     #

@@ -326,6 +326,10 @@ module Gollum
       @repo.log('master', nil, log_pagination_options(options))
     end
 
+    # Public: Refreshes just the cached Git reference data.  This should
+    # be called after every Gollum update.
+    #
+    # Returns nothing.
     def clear_cache
       @access.refresh
     end
