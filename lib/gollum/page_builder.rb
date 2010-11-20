@@ -2,6 +2,17 @@ require 'mustache'
 
 module Gollum
   class PageBuilder
+    class Markup < Gollum::Markup
+      # Generate a page link for an anchor tag.
+      #
+      # link_name - CGI-escaped String name of the link.
+      #
+      # Returns a String link.
+      def build_page_link(link_name)
+        link_name << ".html"
+      end
+    end
+
     def initialize(wiki)
       @wiki = wiki
     end
@@ -13,6 +24,9 @@ module Gollum
     #
     # Returns nothing.
     def publish_to(destination)
+      old_markup_class   = @wiki.markup_class
+      @wiki.markup_class = Gollum::PageBuilder::Markup
+
       FileUtils.mkdir_p(destination)
       layout    = Mustache.templateify \
                     IO.read("#{DEFAULT_TEMPLATES_PATH}/layout.mustache")
@@ -28,13 +42,15 @@ module Gollum
         layout_html = Mustache.render layout,
           :title => page.title,
           :yield => page_html
-        filename = "#{page.name =~ /^home$/i ? :index : Page.cname(page.name)}.html"
+        filename = "#{page.name =~ /^home$/i ? :index : @wiki.page_class.cname(page.name)}.html"
         fullpath = ::File.join(destination, filename)
         ::File.open fullpath, 'w' do |f|
           f << layout_html
         end
       end
       copy_assets_to(destination)
+    ensure
+      @wiki.markup_class = old_markup_class
     end
 
     # Copies the default CSS files to the given destination.

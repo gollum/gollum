@@ -358,13 +358,13 @@ module Gollum
     attr_reader :path
 
     # Gets the page class used by all instances of this Wiki.
-    attr_reader :page_class
+    attr_accessor :page_class
 
     # Gets the file class used by all instances of this Wiki.
-    attr_reader :file_class
+    attr_accessor :file_class
 
-    # Gets the markup class used by all instances of this Wiki.
-    attr_reader :markup_class
+    # Gets or Sets the markup class used by all instances of this Wiki.
+    attr_accessor :markup_class
 
     # Normalize the data.
     #

@@ -296,13 +296,23 @@ module Gollum
           link_name = @wiki.page_class.cname(page.name)
           presence  = "present"
         end
-        link = ::File.join(@wiki.base_path, CGI.escape(link_name))
+        link_name = CGI.escape(link_name)
+        link = build_page_link(link_name)
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
       if tag && no_follow
         tag.sub! /^<a/, '<a ref="nofollow"'
       end
       tag
+    end
+
+    # Generate a page link for an anchor tag.
+    #
+    # link_name - CGI-escaped String name of the link.
+    #
+    # Returns a String link.
+    def build_page_link(link_name)
+      ::File.join(@wiki.base_path, link_name)
     end
 
     # Find the given file in the repo.
