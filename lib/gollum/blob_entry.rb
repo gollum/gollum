@@ -3,9 +3,10 @@ module Gollum
     # Gets the String SHA for this blob.
     attr_reader :sha
 
-    # Gets the String full path for this blob.
+    # Gets the full path String for this blob.
     attr_reader :path
 
+    # Gets the Fixnum size of this blob.
     attr_reader :size
 
     def initialize(sha, path, size = nil)
@@ -15,12 +16,12 @@ module Gollum
       @dir  = @name = @blob = nil
     end
 
-    # Gets the normalized directory path for this blob.
+    # Gets the normalized directory path String for this blob.
     def dir
       @dir ||= self.class.normalize_dir(::File.dirname(@path))
     end
 
-    # Gets the String file base name for this blob.
+    # Gets the file base name String for this blob.
     def name
       @name ||= ::File.basename(@path)
     end

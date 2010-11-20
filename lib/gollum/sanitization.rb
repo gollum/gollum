@@ -1,5 +1,4 @@
 module Gollum
-
   # Encapsulate sanitization options.
   #
   # This class does not yet support all options of Sanitize library.
