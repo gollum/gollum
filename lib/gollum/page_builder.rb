@@ -53,6 +53,10 @@ module Gollum
       @wiki.markup_class = old_markup_class
     end
 
+    def inspect
+      %(#<#{self.class} @wiki=#{@wiki.inspect}>)
+    end
+
     # Copies the default CSS files to the given destination.
     #
     # destination - Optional String path to the directory that the files 

@@ -341,6 +341,10 @@ module Gollum
       @access.refresh
     end
 
+    def inspect
+      %(#<#{self.class} @repo=#{@repo.inspect}>)
+    end
+
     #########################################################################
     #
     # Internal Methods
