@@ -1,12 +1,13 @@
 <div id="wiki-wrapper" class="page">
 <div id="head">
-  <h1>Page Title</h1>
+  <h1>{{title}}</h1>
   <ul class="actions">
     <li class="minibutton"><a href="/edit/{{escaped_name}}"
        class="action-edit-page">Edit Page</a></li>
     <li class="minibutton"><a href="/history/{{escaped_name}}"
        class="action-page-history">Page History</a></li>
   </ul>
+  {{>searchbar}}
 </div>
 <div id="wiki-content">
   <div class="wrap{{#has_footer}} has-footer{{/has_footer}}{{#has_sidebar}}has-rightbar{{/has_sidebar}}">
@@ -47,3 +48,5 @@
   <p id="last-edit">Last edited by <b>{{author}}</b>, {{date}}</p>
 </div>
 </div>
+
+<script type="text/javascript" src="/javascript/MathJax/MathJax.js"></script>

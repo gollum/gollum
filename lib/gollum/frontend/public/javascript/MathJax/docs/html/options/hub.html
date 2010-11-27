@@ -1,0 +1,342 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Core Configuration Options &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Loading and Configuring MathJax" href="../configuration.html" />
+    <link rel="next" title="The tex2jax Preprocessor" href="tex2jax.html" />
+    <link rel="prev" title="Loading and Configuring MathJax" href="../configuration.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tex2jax.html" title="The tex2jax Preprocessor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../configuration.html" title="Loading and Configuring MathJax"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="../configuration.html" accesskey="U">Loading and Configuring MathJax</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-core-configuration-options">
+<span id="configure-hub"></span><h1>The Core Configuration Options<a class="headerlink" href="#the-core-configuration-options" title="Permalink to this headline">¶</a></h1>
+<p>The options below control the MathJax Hub, and so determine the code
+behavior of MathJax.  They are given with their default values.</p>
+<dl class="describe">
+<dt>
+<tt class="descname">jax: [&quot;input/TeX&quot;,&quot;output/HTML-CSS&quot;]</tt></dt>
+<dd><p>A comma-separated list of input and output jax to initialize at
+startup.  Their main code is loaded only when they are actually
+used, so it is not inefficient to include jax that may not
+actually be used on the page. These are found in the <tt class="docutils literal"><span class="pre">MathJax/jax</span></tt>
+directory.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">extensions: []</tt></dt>
+<dd><p>A comma-separated list of extensions to load at startup. The
+default directory is <tt class="docutils literal"><span class="pre">MathJax/extensions</span></tt>.  The <tt class="docutils literal"><span class="pre">tex2jax</span></tt> and
+<tt class="docutils literal"><span class="pre">mml2jax</span></tt> preprocessors can be listed here, as well as a number
+of TeX-specific extensions (see the <a class="reference internal" href="../start.html#tex-and-latex-input"><em>TeX and LaTeX input</em></a> section of the <a class="reference internal" href="../start.html#getting-started"><em>Getting Started</em></a> document for more details).  There is also a
+<tt class="docutils literal"><span class="pre">FontWarnings</span></tt> extension that you can use to inform your user
+that mathematics fonts are available that they can download to
+improve their experience of your site.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">config: []</tt></dt>
+<dd><p>A comma-separated list of configuration files to load when MathJax
+starts up, e.g., to define local macros, etc., and there is a
+sample config file named <tt class="docutils literal"><span class="pre">config/local/local.js</span></tt>.  The default
+directory is the <cite>MathJax/config</cite> directory.  The <tt class="docutils literal"><span class="pre">MMLorHTML.js</span></tt>
+configuration is the only other predefined configuration file.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">styleSheets: []</tt></dt>
+<dd><p>A comma-separated list of CSS stylesheet files to be loaded when
+MathJax starts up.  The default directory is the <cite>MathJax/config</cite>
+directory.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">styles: {}</tt></dt>
+<dd><p>CSS <cite>selector: rules;</cite> styles to be defined dynamically at startup
+time.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">preJax: null and postJax: null</tt></dt>
+<dd><p>Patterns to remove from before and after math script tags. If you
+are not using one of the preprocessors, you need to insert
+something extra into your HTML file in order to avoid a bug in
+Internet Explorer.  IE removes spaces from the DOM that it thinks
+are redundent, and since a <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag usually doesn&#8217;t add
+content to the page, if there is a space before and after a
+MathJax <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag, IE will remove the first space.  When
+MathJax inserts the typeset mathematics, this means there will be
+no space before it and the preceeding text.  In order to avoid
+this, you should include some &#8220;guard characters&#8221; before or after
+the math SCRIPT tag; define the patterns you want to use below.
+Note that these are used as regular expressions, so you will need
+to quote special characters.  Furthermore, since they are
+javascript strings, you must quote javascript special characters
+as well.  So to obtain a backslash, you must use <tt class="docutils literal"><span class="pre">\\</span></tt> (doubled
+for javascript).  For example, <tt class="docutils literal"><span class="pre">&quot;\\[&quot;</span></tt> represents the pattern
+<tt class="docutils literal"><span class="pre">\[</span></tt> in the regular expression.  That means that if you want an
+actual backslash in your guard characters, you need to use
+<tt class="docutils literal"><span class="pre">&quot;\\\\&quot;</span></tt> in order to get <tt class="docutils literal"><span class="pre">\\</span></tt> in the regular expression, and
+<tt class="docutils literal"><span class="pre">\</span></tt> in the actual text.  If both preJax and postJax are defined,
+both must be present in order to be removed.</p>
+<p>See also the <tt class="docutils literal"><span class="pre">preRemoveClass</span></tt> comments below.</p>
+<p>Examples:</p>
+<blockquote>
+<p><tt class="docutils literal"><span class="pre">preJax:</span> <span class="pre">&quot;\\\\\\\\\&quot;</span></tt> makes a double backslash the preJax text</p>
+<p><tt class="docutils literal"><span class="pre">preJax:</span> <span class="pre">&quot;\\[\\[&quot;,</span> <span class="pre">postJax:</span> <span class="pre">&quot;\\]\\]&quot;</span></tt> makes it so jax
+scripts must be enclosed in double brackets.</p>
+</blockquote>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">preRemoveClass: &quot;MathJax_Preview&quot;</tt></dt>
+<dd><p>The CSS class for a math preview to be removed preceeding a
+MathJax SCRIPT tag.  If the tag just before the MathJax
+<tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag is of this class, its contents are removed when
+MathJax processes the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag.  This allows you to
+include a math preview in a form that will be displayed prior to
+MathJax performing its typesetting.  It also avoids the Internet
+Explorer space-removal bug, and can be used in place of <tt class="docutils literal"><span class="pre">preJax</span></tt>
+and <tt class="docutils literal"><span class="pre">postJax</span></tt> if that is more convenient.</p>
+<p>For example</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;MathJax_Preview&quot;</span><span class="nt">&gt;</span>[math]<span class="nt">&lt;/span&gt;&lt;script  </span><span class="na">type=</span><span class="s">&quot;math/tex&quot;</span><span class="nt">&gt;</span><span class="p">...</span><span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>would display &#8220;[math]&#8221; in place of the math until MathJax is able
+to typeset it.</p>
+<p>See also the <tt class="docutils literal"><span class="pre">preJax</span></tt> and <tt class="docutils literal"><span class="pre">postJax</span></tt> comments above.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">showProcessingMessages: true</tt></dt>
+<dd><p>This value controls whether the <cite>Processing Math: nn%</cite> message are
+displayed in the lower left-hand corner. Set to <tt class="docutils literal"><span class="pre">false</span></tt> to
+prevent those messages (though file loading and other messages
+will still be shown).</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">messageStyle: &quot;normal&quot;</tt></dt>
+<dd><p>This value controls the verbosity of the messages in the lower
+left-hand corner.  Set it to <tt class="docutils literal"><span class="pre">&quot;none&quot;</span></tt> to eliminate all messages,
+or set it to <tt class="docutils literal"><span class="pre">&quot;simple&quot;</span></tt> to show &#8220;Loading...&#8221; and &#8220;Processing...&#8221;
+rather than showing the full file name or the percentage of the
+mathematics processed.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">displayAlign: &quot;center&quot; and displayIndent: &quot;0em&quot;</tt></dt>
+<dd><p>These two parameters control the alignment and shifting of
+displayed equations.  The first can be <tt class="docutils literal"><span class="pre">&quot;left&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;center&quot;</span></tt>,
+or <tt class="docutils literal"><span class="pre">&quot;right&quot;</span></tt>, and determines the alignment of displayed
+equations.  When the alignment is not <tt class="docutils literal"><span class="pre">&quot;center&quot;</span></tt>, the second
+determines an indentation from the left or right side for the
+displayed equations.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">delayStartupUntil: &quot;none&quot;</tt></dt>
+<dd><p>Normally MathJax will perform its starup commands (loading of
+configuration, styles, jax, and so on) as soon as it can.  If you
+expect to be doing additional configuration on the page, however,
+you may want to have it wait until the page&#8217;s onload hander is
+called.  If so, set this to <tt class="docutils literal"><span class="pre">&quot;onload&quot;</span></tt>.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">skipStartupTypeset: false</tt></dt>
+<dd><p>Normally MathJax will typeset the mathematics on the page as soon
+as the page is loaded.  If you want to delay that process, in
+which case you will need to call <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Typeset()</span></tt>
+yourself by hand, set this value to <tt class="docutils literal"><span class="pre">true</span></tt>.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">menuSettings: { ... }</tt></dt>
+<dd><p>This block contains settings for the mathematics contextual menu
+that act as the defaults for the user&#8217;s settings in that menu.
+The possible values are:</p>
+<dl class="describe">
+<dt>
+<tt class="descname">zoom: &quot;none&quot;</tt></dt>
+<dd><p>This indicates when typeset mathematics should be zoomed.  It
+can be set to <tt class="docutils literal"><span class="pre">&quot;None&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;Hover&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;Click&quot;</span></tt>, or
+<tt class="docutils literal"><span class="pre">&quot;Double-Click&quot;</span></tt> to set the zoom trigger.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">CTRL: false, ALT: false, CMD: false, Shift: false</tt></dt>
+<dd><p>These values indicate which keys must be pressed in order for
+math zoom to be triggered.  For example, if <tt class="docutils literal"><span class="pre">CTRL</span></tt> is set to
+<tt class="docutils literal"><span class="pre">true</span></tt> and <tt class="docutils literal"><span class="pre">zoom</span></tt> is <tt class="docutils literal"><span class="pre">&quot;Click&quot;</span></tt>, then math will be zoomed
+only when the user control-clicks on mathematics (i.e., clicks
+while holding down the <cite>CTRL</cite> key).  If more than one is
+<tt class="docutils literal"><span class="pre">true</span></tt>, then all the indicated keys must be pressed for the
+zoom to occur.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">zscale: &quot;200%&quot;</tt></dt>
+<dd><p>This is the zoom scaling factor, and it can be set to any of
+the values available in the <cite>Zoom Factor</cite> menu of the
+<cite>Settings</cite> submenu of the contextual menu.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">context: &quot;MathJax&quot;</tt></dt>
+<dd><p>This controls what contextual menu will be presented when a
+right click (on a PC) or CTRL-click (on the Mac) occurs over a
+typeset equation.  When set to <tt class="docutils literal"><span class="pre">&quot;MathJax&quot;</span></tt>, the MathJax
+contextual menu will appear; when set to <tt class="docutils literal"><span class="pre">&quot;Browser&quot;</span></tt>, the
+browser&#8217;s contextual menu will be used.  For example, in
+Internet Explorer with the MathPlayer plugin, if this is set
+to <tt class="docutils literal"><span class="pre">&quot;Browser&quot;</span></tt>, you will get the MathPlayer contextual menu
+rather than the MathJax menu.</p>
+</dd></dl>
+
+<p>There are also settings for <tt class="docutils literal"><span class="pre">format</span></tt>, <tt class="docutils literal"><span class="pre">renderer</span></tt>, and <tt class="docutils literal"><span class="pre">font</span></tt>,
+but these are maintained by MathJax and should not be set by the
+page author.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">errorSettings: { ... }</tt></dt>
+<dd><p>This block contains settings that control how MathJax responds to
+unexpected errors while processing mathematical equations.  Rather
+than simply crash, MathJax can report an error and go on.  The
+options you can set include:</p>
+<dl class="describe">
+<dt>
+<tt class="descname">message: [&quot;[Math Processing Error&quot;]]</tt></dt>
+<dd><p>This is an HTML snippet that will be inserted at the location
+of the mathematics for any formula that causes MathJax to
+produce an internal error (i.e., an error in the MathJax code
+itself).  See the <a class="reference internal" href="../HTML-snippets.html#html-snippets"><em>description of HTML snippets</em></a> for details on how to represent HTML code in
+this way.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">style: {color:&quot;#CC0000&quot;, &quot;font-style&quot;:&quot;italic&quot;}</tt></dt>
+<dd><p>This is the CSS style description to use for the error
+messages produced by internal MathJax errors.  See the section
+on <a class="reference internal" href="../CSS-styles.html#css-style-objects"><em>CSS style objects</em></a> for details on
+how these are specified in JavaScript.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../configuration.html"
+                        title="previous chapter">Loading and Configuring MathJax</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tex2jax.html"
+                        title="next chapter">The tex2jax Preprocessor</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/options/hub.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tex2jax.html" title="The tex2jax Preprocessor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../configuration.html" title="Loading and Configuring MathJax"
+             >previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="../configuration.html" >Loading and Configuring MathJax</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

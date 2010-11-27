@@ -1,0 +1,161 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Synchronizing your code with MathJax &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="Using Callbacks" href="callbacks.html" />
+    <link rel="prev" title="The MathJax Startup Sequence" href="startup.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="callbacks.html" title="Using Callbacks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="startup.html" title="The MathJax Startup Sequence"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="synchronizing-your-code-with-mathjax">
+<span id="synchronization"></span><h1>Synchronizing your code with MathJax<a class="headerlink" href="#synchronizing-your-code-with-mathjax" title="Permalink to this headline">¶</a></h1>
+<p>MathJax performs much of its activity asynchronously, meaning that
+the calls that you make to initiate these actions will return before
+the actions are completed, and your code will continue to run even
+though the actions have not been finished (and may not even be started
+yet).  Actions such as loading files, loading web-based fonts, and
+creating stylesheets all happen asynchronously within the browser, and
+since JavaScript has no method of halting a program while waiting for
+an action to complete, synchronizing your code with these types of
+actions is made much more difficult.  MathJax used three mechanisms to
+overcome this language shortcoming: callbacks, queues, and signals.</p>
+<p><strong>Callbacks</strong> are functions that are called when an action is
+completed, so that your code can continue where it left off when the
+action was initiated.  Rather than have a single routine that
+initiates an action, waits for it to complete, and then goes on, you
+break the function into two parts: a first part that sets up and
+initiates the action, and a second that runs after the action is
+finished.  Callbacks are similar to event handlers that you attach to
+DOM elements, and are called when an certain action occurs.  See the
+<a class="reference internal" href="api/callback.html#api-callback"><em>Callback Object</em></a> reference page for details of
+how to specify a callback.</p>
+<p><strong>Queues</strong> are MathJax&#8217;s means of synchronizing actions that must be
+performed sequentially, even when they involve asynchronous events
+like loading files or dynamically creating stylesheets.  The actions
+that you put in the queue are <cite>Callback</cite> objects that will be perfomed
+in sequence, with MathJax handling the linking of one action to the
+next.  MathJax maintains a master queue that you can use to
+synchronize with MathJax, but you can also create your own private
+queues for actions that need to be synchronized with each other, but
+not to MathJax as a whole.  See the <a class="reference internal" href="api/queue.html#api-queue"><em>Queue Object</em></a>
+reference page for more details.</p>
+<p><strong>Signals</strong> are another means of synchronizing your own code with
+MathJax.  Many of the important actions that MathJax takes (like
+typesetting new math on the page, or loading an external component)
+are &#8220;announced&#8221; by posting a message to a special object called a
+<cite>Signal</cite>.  Your code can register an interest in receiving one or more
+of these signals by providing a callback to be called when the signal
+is posted.  When the signal arrives, MathJax will call your code.
+This works somewhat like an event handler, except that many different
+types of events can go through the same signal, and the signals have a
+&#8220;memory&#8221;, meaning that if you register an interest in a particular
+type of signal and that signal has already occurred, you will be told
+about the past occurrances as well as any future ones.  See the
+<a class="reference internal" href="api/signal.html#api-signal"><em>Signal Object</em></a> reference page for more details.
+See also the <tt class="docutils literal"><span class="pre">test/sample-signals.html</span></tt> file in the MathJax <tt class="docutils literal"><span class="pre">test</span></tt>
+directory for a working example of using signals.</p>
+<p>Each of these is explained in more detail in the links below:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Using Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queues.html">Using Queues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signals.html">Using Signals</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="startup.html"
+                        title="previous chapter">The MathJax Startup Sequence</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="callbacks.html"
+                        title="next chapter">Using Callbacks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/synchronize.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="callbacks.html" title="Using Callbacks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="startup.html" title="The MathJax Startup Sequence"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

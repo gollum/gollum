@@ -1,0 +1,283 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The MathJax.ElementJax Class &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="../index.html" />
+    <link rel="up" title="The MathJax API" href="index.html" />
+    <link rel="next" title="The Base Jax Class" href="jax.html" />
+    <link rel="prev" title="The MathJax.OutputJax Class" href="outputjax.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="jax.html" title="The Base Jax Class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="outputjax.html" title="The MathJax.OutputJax Class"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">The MathJax API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-mathjax-elementjax-class">
+<span id="api-element-jax"></span><h1>The MathJax.ElementJax Class<a class="headerlink" href="#the-mathjax-elementjax-class" title="Permalink to this headline">¶</a></h1>
+<p>The element jax is the bridge between the input and output jax, and
+contains the data produced by the input jax needed by the output jax
+to display the results.  It is tied to the individual <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag
+that produced it, and is the object used by JavaScript programs to
+interact with the mathematics on the page.</p>
+<p>An element jax is stored in the <tt class="docutils literal"><span class="pre">jax.js</span></tt> file in a subdirectory of
+the <tt class="docutils literal"><span class="pre">jax/element</span></tt> directory, with the subdirectory name being the
+name of the element jax.  Currently, there is only one element jax
+class, the <cite>mml</cite> element jax, and it is stored in <tt class="docutils literal"><span class="pre">jax/element/mml</span></tt>.</p>
+<p>The <cite>MathJax.ElementJax</cite> class is a subclass of the <a class="reference internal" href="jax.html#api-jax"><em>MathJax Jax</em></a> class, and inherits the properties and methods of that
+class.  Those listed below are the additional or overridden ones from
+that class.</p>
+<div class="section" id="class-properties">
+<h2>Class Properties<a class="headerlink" href="#class-properties" title="Permalink to this headline">¶</a></h2>
+<dl class="describe">
+<dt>
+<tt class="descname">name</tt></dt>
+<dd><p>The name of the jax.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">version</tt></dt>
+<dd><p>The version number of the jax.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">directory</tt></dt>
+<dd><p>The directory where the jax files are stored (e.g., <tt class="docutils literal"><span class="pre">&quot;[MathJax]/jax/element/mml&quot;</span></tt>);</p>
+</dd></dl>
+
+</div>
+<div class="section" id="instance-properties">
+<h2>Instance Properties<a class="headerlink" href="#instance-properties" title="Permalink to this headline">¶</a></h2>
+<dl class="describe">
+<dt>
+<tt class="descname">inputJax</tt></dt>
+<dd><p>A reference to the input jax that created the element.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">outputJax</tt></dt>
+<dd><p>A reference to the output jax that has processed this element.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">inputID</tt></dt>
+<dd><p>The DOM <cite>id</cite> of the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag that generated this element
+(if it doesn&#8217;t have one initially, the MathJax hub will supply
+one).  Note that this is not a reference to the element itself;
+that element will have a reference to this element jax, and if
+<cite>inputID</cite> were a reference back, that would cause a reference
+loop, which some browsers would not free properly during trash
+collection, thus causing a memory leak.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">originalText</tt></dt>
+<dd><p>A string indicating the original input text that was processed for
+this element.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">mimeType</tt></dt>
+<dd><p>The MIME-type of the element jax (<cite>jax/mml</cite> in the case of an
+<cite>mml</cite> element jax).</p>
+</dd></dl>
+
+<p>Other data specific to the element jax subclass may also appear here.</p>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="Text">
+<tt class="descname">Text</tt><big>(</big><em>text</em><span class="optional">[</span>, <em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the input text for this element to the given text and
+reprocesses the mathematics.  (I.e., update the equation to the
+new one given by <cite>text</cite>).  When the processing is complete, the
+<cite>callback</cite>, if any, is called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> &#8212; the new mathematic source string for the element</li>
+<li><strong>callback</strong> &#8212; the callback specification</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last">the callback object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">Reprocess</tt><big>(</big><span class="optional">[</span><em>callback</em><span class="optional">]</span><big>)</big></dt>
+<dd><p>Remove the output and produce it again.  This may be necessary if
+there are changes to the CSS styles that would affect the layout
+of the mathematics, for example.  The <cite>callback</cite>, if any, is
+called when the process completes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><ul class="first simple">
+<li><strong>callback</strong> &#8212; the callback specification</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last">the callback object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">Remove</tt><big>(</big><big>)</big></dt>
+<dd><p>Removes the output for this element from the web page (but does
+not remove the original <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt>).  The <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> will be
+considered unprocessed, and the next call to
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.hub.Typeset()</span></tt> will re-display it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><tt class="docutils literal"><span class="pre">null</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SourceElement">
+<tt class="descname">SourceElement</tt><big>(</big><big>)</big><a class="headerlink" href="#SourceElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reference to the original <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> DOM element
+associated to this element jax.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body">the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> element</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Output jax may add new methods to the base element jax class to
+perform exporting to other formats.  For example, a MathML output jax
+could add <tt class="docutils literal"><span class="pre">toMathML()</span></tt>, or an accessibility output jax could add
+<tt class="docutils literal"><span class="pre">toAudible()</span></tt>.  These could be made available via the MathJax
+contextual menu.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The MathJax.ElementJax Class</a><ul>
+<li><a class="reference internal" href="#class-properties">Class Properties</a></li>
+<li><a class="reference internal" href="#instance-properties">Instance Properties</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="outputjax.html"
+                        title="previous chapter">The MathJax.OutputJax Class</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jax.html"
+                        title="next chapter">The Base Jax Class</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/elementjax.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="jax.html" title="The Base Jax Class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="outputjax.html" title="The MathJax.OutputJax Class"
+             >previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >The MathJax API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

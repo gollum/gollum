@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.0.1'
-  s.date              = '2010-10-11'
+  s.version           = '1.1.0'
+  s.date              = '2010-10-28'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."

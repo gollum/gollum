@@ -11,7 +11,7 @@ module Gollum
     def initialize(page)
       @wiki    = page.wiki
       @name    = page.filename
-      @data    = page.raw_data
+      @data    = page.text_data
       @version = page.version.id
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
@@ -27,9 +27,10 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize_options = no_follow   ? 
-        HISTORY_SANITIZATION_OPTIONS : 
-        SANITIZATION_OPTIONS
+      sanitize_options = no_follow ? 
+        @wiki.history_sanitization : 
+        @wiki.sanitization
+
       data = extract_tex(@data)
       data = extract_code(data)
       data = extract_tags(data)
@@ -43,7 +44,7 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = Sanitize.clean(data, sanitize_options)
+      data = Sanitize.clean(data, sanitize_options.to_hash) if sanitize_options
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
@@ -284,7 +285,7 @@ module Gollum
     def process_page_link_tag(tag, no_follow = false)
       parts = tag.split('|')
       name  = parts[0].strip
-      cname = Page.cname((parts[1] || parts[0]).strip)
+      cname = @wiki.page_class.cname((parts[1] || parts[0]).strip)
       tag = if name =~ %r{^https?://} && parts[1].nil?
         %{<a href="#{name}">#{name}</a>}
       else
@@ -292,7 +293,7 @@ module Gollum
         link_name   = cname
         page, extra = find_page_from_name(cname)
         if page
-          link_name = Page.cname(page.name)
+          link_name = @wiki.page_class.cname(page.name)
           presence  = "present"
         end
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))

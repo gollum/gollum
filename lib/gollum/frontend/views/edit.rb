@@ -9,11 +9,11 @@ module Precious
         @name.gsub('-', ' ')
       end
 
-      def edit_title
+      def is_create_page
         false
       end
       
-      def hidden_title
+      def is_edit_page
         true
       end
 

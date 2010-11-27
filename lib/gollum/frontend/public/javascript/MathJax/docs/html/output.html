@@ -1,0 +1,218 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MathJax Output Formats &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="“Powered by MathJax”" href="badge.html" />
+    <link rel="prev" title="MathJax MathML Support" href="mathml.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="badge.html" title="“Powered by MathJax”"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mathml.html" title="MathJax MathML Support"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="mathjax-output-formats">
+<span id="output-formats"></span><h1>MathJax Output Formats<a class="headerlink" href="#mathjax-output-formats" title="Permalink to this headline">¶</a></h1>
+<p>Currently, MathJax can render math in two ways:</p>
+<ul class="simple">
+<li>Using HTML-with-CSS to lay out the mathematics, or</li>
+<li>Using a browser&#8217;s native MathML support.</li>
+</ul>
+<p>These are implemented by the <cite>HTML-CSS</cite> and <cite>NativeMML</cite> output
+processors.  You select which one you want to use by including either
+<tt class="docutils literal"><span class="pre">&quot;output/HTML-CSS&quot;</span></tt> or <tt class="docutils literal"><span class="pre">&quot;output/NativeMML&quot;</span></tt> in the <cite>jax</cite> array of
+your MathJax configuration.  For example</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span><span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>would specify TeX input and HTML-with-CSS output for the mathematics
+in your document.</p>
+<p>The HTML-CSS output processor produces high-quality output in all
+major browsers, with results that are consistent across browsers and
+operating systems.  This is MathJax&#8217;s primary output mode.  It&#8217;s major
+advantage is its quality and consistency; it&#8217;s drawback is that it is
+slower that the NativeMML mode at rendering the mathematics.  (The
+HTML-CSS processor has not yet been optimized for speed, so you can
+expect some improvement in the future.  Note that IE8 in &#8220;IE8
+standards mode&#8221; is an order of magnitude slower than any other browser
+when processing math through the HTML-CSS output processor; see
+<a class="reference internal" href="#html-css-with-ie8"><em>HTML-CSS with IE8</em></a> below for some strategies
+to deal with this.)</p>
+<p>The NativeMML output processor uses the browser&#8217;s internal MathML support (if
+any) to render the mathematics.  Currently, Firefox has native support
+for MathML, and IE has the <a class="reference external" href="http://www.dessci.com/en/products/mathplayer/">MathPlayer plugin</a> for rendering
+MathML.  Opera has some built-in support for MathML that works well
+with simple equations, but fails with more complex formulas, so we
+don&#8217;t recommend using the NativeMML output processor with Opera.  Safari,
+Chrome, Konqueror, and most other browsers don&#8217;t support MathML
+natively.</p>
+<p>The advantage of the NativeMML output Processor is its speed, since
+native MathML support is much faster than using complicated HTML and
+CSS to lay out mathematics via an interpreted language like JavaScript
+(as the HTML-CSS output processor does).  The disadvantage is that you
+are dependent on the browser&#8217;s MathML implementation for your
+rendering, and these vary in quality of output and completeness of
+implementation.  MathJax may rely on features that are not available
+in some renderers (for example, Firefox&#8217;s MathML support does not
+implement some of the named widths, such as
+<tt class="docutils literal"><span class="pre">negativethinmathspace</span></tt>).  The results using the NativeMML output
+processor may have spacing or other rendering problems that are
+outside of MathJax&#8217;s control.</p>
+<div class="section" id="automatic-selection-of-the-output-processor">
+<h2>Automatic Selection of the Output Processor<a class="headerlink" href="#automatic-selection-of-the-output-processor" title="Permalink to this headline">¶</a></h2>
+<p>Since not all browsers support MathML natively, it would be unwise to
+choose the NativeMML output processor unless you are sure of your
+audience&#8217;s browser capabilities.  MathJax can help with that, however,
+since there is a special configuration file that will choose between
+NativeMML and HTML-CSS depending on the browser in use.  To invoke it,
+add <tt class="docutils literal"><span class="pre">&quot;MMLorHTML.js&quot;</span></tt> to your configurations <cite>config</cite> array, and <strong>do
+not</strong> include an output processor in your <cite>jax</cite> array; MathJax will
+fill that in for you based on the abilities of your user&#8217;s browser.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">config</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;MMLorHTML.js&quot;</span><span class="p">],</span>
+<span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You can customize which choice to make on a browser-by-browser basis
+or a global basis.  See the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file or the
+<a class="reference internal" href="configuration.html#configuration"><em>Configuring MathJax</em></a> section for futher
+details.</p>
+<p>MathJax produces MathML that models the underlying mathematics as best
+it can, rather than using complicated hacks to improve output for a
+particular MathML implementation.  When you make the choice to use the
+NativeMML output processor, you are making a trade-off: gaining speed
+at the expense of quality and reliability, a decision that should not
+be taken lightly.  Note, however, that a user can employ the MathJax
+contectual menu to select the other other renderer if he or she
+wishes.</p>
+</div>
+<div class="section" id="html-css-with-ie8">
+<span id="id1"></span><h2>HTML-CSS with IE8<a class="headerlink" href="#html-css-with-ie8" title="Permalink to this headline">¶</a></h2>
+<p>Internet Explorer 8 has at least eight different rendering modes in
+which can operate, and that are triggered by the <cite>DOCTYPE</cite> of the
+document being viewed.  It&#8217;s &#8220;quirks&#8221; mode is its fasted mode, and its
+&#8220;IE8 standards&#8221; mode is its slowest.  This is the mode triggered by
+strict HTML document types, and since most modern content management
+systems now include a <cite>DOCTYPE</cite> that activates &#8220;standards&#8221; mode, IE8
+will operate in its slowest manner.  This is particularly apparent
+when MathJax is used, since IE8 in standards mode runs 20 to 30 times
+slower than its does in its IE7 emulation mode, and 60 times slower
+than in quirks mode.</p>
+<p>Most users find this speed reduction unacceptable when there is much
+mathematics on the page.  To overcome this problem, you may wish to
+tell IE8 to use its IE7 emulation mode rather than its IE8 standards
+mode.  You can accomplish this by including the line</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;IE=EmulateIE7&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<p>at the top of the <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> section of your HTML documents.  This
+lets you keep the strict <cite>DOCTYPE</cite> for validation purposes, while
+still managing to get reasonable perforance from Internext Explorer
+8.  Note that this line must come at the beginning of the <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt>,
+before any stylesheets or other content are loaded.</p>
+<p>Altertnatively, you can use the <cite>MMLorHTML</cite> configuration file
+described above to select NativeMML output when possible, and request
+that your users install the <a class="reference external" href="http://www.dessci.com/en/products/mathplayer/">MathPlayer plugin</a>, which will render
+the mathematics much more quickly.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">MathJax Output Formats</a><ul>
+<li><a class="reference internal" href="#automatic-selection-of-the-output-processor">Automatic Selection of the Output Processor</a></li>
+<li><a class="reference internal" href="#html-css-with-ie8">HTML-CSS with IE8</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mathml.html"
+                        title="previous chapter">MathJax MathML Support</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="badge.html"
+                        title="next chapter">&#8220;Powered by MathJax&#8221;</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/output.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="badge.html" title="“Powered by MathJax”"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mathml.html" title="MathJax MathML Support"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

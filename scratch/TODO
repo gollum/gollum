@@ -1,8 +1,23 @@
 * Editor
   * Create rest of markup lang definitions
-  * Hook up format selector
-* Create Error Page
-* Create Compare Revisions Page (like, when comparing the two)
-* Create Search Results Page
+    * Finish RDoc
+    * Finish rst
+    * Org-mode
+  * Create inline help for langs
+  * Create mathjax inline help
+  
 * Write Editor/Sidebar implementation notes for Rick
-* Write print.css
+* Find some clever way to represent page hierarchy.
+
+HIERARCHY
+  _Footer.md
+  _Sidebar.md
+  Page1.md
+  projects/
+    Page2.md (uses root sidebar)
+    _Footer.md
+  experiments/
+    _Sidebar.md
+    Page3.md (uses footer.md)
+
+Images work the same way.  You can keep similar pages in a directory with their own images.

@@ -1,0 +1,274 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Loading MathJax Dynamically &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="Modifying Math on the Page" href="typeset.html" />
+    <link rel="prev" title="Using Signals" href="signals.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="typeset.html" title="Modifying Math on the Page"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="signals.html" title="Using Signals"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="loading-mathjax-dynamically">
+<span id="ajax-mathjax"></span><h1>Loading MathJax Dynamically<a class="headerlink" href="#loading-mathjax-dynamically" title="Permalink to this headline">¶</a></h1>
+<p>MathJax is designed to be included via a <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag in the
+<tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> section of your HTML document, and it does rely on being
+part of the original document in that it uses an <tt class="docutils literal"><span class="pre">onload</span></tt> event
+handler to synchronize its actions with the loading of the page.
+If you wish to insert MathJax into a document after it has
+been loaded, that will normally occur <em>after</em> the page&#8217;s <tt class="docutils literal"><span class="pre">onload</span></tt>
+handler has fired, and so MathJax will not be able to tell if it is
+safe for it to process the contents of the page.  Indeed, it will wait
+forever for its <tt class="docutils literal"><span class="pre">onload</span></tt> handler to fire, and so will never process
+the page.</p>
+<p>To solve this problem, you will need to call MathJax&#8217;s <tt class="docutils literal"><span class="pre">onload</span></tt>
+handler yourself, to let it know that it is OK to typeset the
+mathematics on the page.  You accomplish this by calling the
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Startup.onload()</span></tt> method as part of your MathJax
+startup script.  To do this, you will need to give MathJax an in-line
+configuration, so you will not be able to use the
+<tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file (though you can add it to your in-line
+configuration&#8217;s <cite>config</cite> array).</p>
+<p>Here is an example of how to load and configure MathJax dynamically:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">);</span>
+  <span class="nx">script</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text/javascript&quot;</span><span class="p">;</span>
+  <span class="nx">script</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;/MathJax/MathJax.js&quot;</span><span class="p">;</span>   <span class="c1">// use the location of your MathJax</span>
+
+  <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="s1">&#39;MathJax.Hub.Config({&#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;extensions: [&quot;tex2jax.js&quot;],&#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;jax: [&quot;input/TeX&quot;,&quot;output/HTML-CSS&quot;]&#39;</span> <span class="o">+</span>
+               <span class="s1">&#39;});&#39;</span> <span class="o">+</span>
+               <span class="s1">&#39;MathJax.Hub.Startup.onload();&#39;</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">opera</span><span class="p">)</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span>
+               <span class="k">else</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span>
+
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">script</span><span class="p">);</span>
+<span class="p">})();</span>
+</pre></div>
+</div>
+<p>Be sure to set the <tt class="docutils literal"><span class="pre">src</span></tt> to the correct URL for your copy of
+MathJax.  You can adjust the <tt class="docutils literal"><span class="pre">config</span></tt> variable to your needs, but be
+careful to get the commas right.  The <tt class="docutils literal"><span class="pre">window.opera</span></tt> test is because
+Opera doesn&#8217;t handle setting <tt class="docutils literal"><span class="pre">script.text</span></tt> properly, while Internet
+Explorer doesn&#8217;t handle setting the <tt class="docutils literal"><span class="pre">innerHTML</span></tt> of a script tag.</p>
+<p>Here is a version that uses the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file to
+configure MathJax:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">);</span>
+  <span class="nx">script</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;text/javascript&quot;</span><span class="p">;</span>
+  <span class="nx">script</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;/MathJax/MathJax.js&quot;</span><span class="p">;</span>   <span class="c1">// use the location of your MathJax</span>
+
+  <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="s1">&#39;MathJax.Hub.Config({ config: &quot;MathJax.js&quot; }); &#39;</span> <span class="o">+</span>
+               <span class="s1">&#39;MathJax.Hub.Startup.onload();&#39;</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">opera</span><span class="p">)</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span>
+               <span class="k">else</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span>
+
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">script</span><span class="p">);</span>
+<span class="p">})();</span>
+</pre></div>
+</div>
+<p>Note that the <strong>only</strong> reliable way to configure MathJax is to use an
+in-line configuration of the type discussed above.  You should <strong>not</strong>
+call <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Config()</span></tt> directly in your code, as it will
+not run at the correct time &#8212; it will either run too soon, in which
+case <tt class="docutils literal"><span class="pre">MathJax</span></tt> may not be defined and the function will throw an
+error, or it will run too late, after MathJax has already finished its
+configuration process, so your changes will not have the desired
+effect.</p>
+<div class="section" id="mathjax-and-greasemonkey">
+<h2>MathJax and GreaseMonkey<a class="headerlink" href="#mathjax-and-greasemonkey" title="Permalink to this headline">¶</a></h2>
+<p>You can use techniques like the ones discussed above to good effect in
+GreaseMonkey scripts.  There are GreaseMonkey work-alikes for all the
+major browsers:</p>
+<ul class="simple">
+<li>Firefox: <a class="reference external" href="http://addons.mozilla.org/firefox/addon/748">GreaseMonkey</a></li>
+<li>Safari: <a class="reference external" href="http://8-p.info/greasekit/">GreaseKit</a> (also requires <a class="reference external" href="http://www.culater.net/software/SIMBL/SIMBL.php">SIMBL</a>)</li>
+<li>Opera: Built-in (<a class="reference external" href="http://www.ghacks.net/2008/08/10/greasemonkey-in-opera/">instructions</a>)</li>
+<li>Internet Explorer: <a class="reference external" href="http://www.ie7pro.com/">IEPro7</a></li>
+<li>Chrome: Built-in for recent releases</li>
+</ul>
+<p>Note, however, that most browsers don&#8217;t allow you to insert a script
+that loads a <tt class="docutils literal"><span class="pre">file://</span></tt> URL into a page that comes from the web (for
+security reasons).  That means that you can&#8217;t have your GreaseMonkey
+script load a local copy of MathJax, so you have to refer to a
+server-based copy.  In the scripts below, you need to insert the URL
+of a copy of MathJax from your own server.</p>
+<hr class="docutils" />
+<p>Here is a script that runs MathJax in any document that contains
+MathML (whether its includes MathJax or not).  That allows
+browsers that don&#8217;t have native MathML support to view any web pages
+with MathML, even if they say it only works in Forefox and
+IE+MathPlayer.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="c1">// ==UserScript==</span>
+<span class="c1">// @name           MathJax MathML</span>
+<span class="c1">// @namespace      http://www.mathjax.org/</span>
+<span class="c1">// @description    Insert MathJax into pages containing MathML</span>
+<span class="c1">// @include        *</span>
+<span class="c1">// ==/UserScript==</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="nb">window</span><span class="p">.</span><span class="nx">unsafeWindow</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="nb">window</span> <span class="o">:</span> <span class="nx">unsafeWindow</span><span class="p">).</span><span class="nx">MathJax</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">((</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;math&quot;</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span>
+      <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span>
+      <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span><span class="p">(</span><span class="s2">&quot;http://www.w3.org/1998/Math/MathML&quot;</span><span class="p">,</span><span class="s2">&quot;math&quot;</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)))</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">);</span>
+    <span class="nx">script</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;http://www.yoursite.edu/MathJax/MathJax.js&quot;</span><span class="p">;</span>  <span class="c1">// put your URL here</span>
+    <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="s1">&#39;MathJax.Hub.Config({&#39;</span> <span class="o">+</span>
+                   <span class="s1">&#39;extensions:[&quot;mml2jax.js&quot;],&#39;</span> <span class="o">+</span>
+                   <span class="s1">&#39;jax:[&quot;input/MathML&quot;,&quot;output/HTML-CSS&quot;]&#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;});&#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;MathJax.Hub.Startup.onload()&#39;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">opera</span><span class="p">)</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">script</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Source</strong>: <a class="reference external" href="_statis/mathjax_mathml.user.js">mathjax_mathml.user.js</a></p>
+<hr class="docutils" />
+<p>Here is a script that runs MathJax in Wikipedia pages after first
+converting the math images to their original TeX code.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="c1">// ==UserScript==</span>
+<span class="c1">// @name           MathJax in Wikipedia</span>
+<span class="c1">// @namespace      http://www.mathjax.org/</span>
+<span class="c1">// @description    Insert MathJax into Wikipedia pages</span>
+<span class="c1">// @include        http://en.wikipedia.org/wiki/*</span>
+<span class="c1">// ==/UserScript==</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="nb">window</span><span class="p">.</span><span class="nx">unsafeWindow</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="nb">window</span> <span class="o">:</span> <span class="nx">unsafeWindow</span><span class="p">).</span><span class="nx">MathJax</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//</span>
+  <span class="c1">//  Replace the images with MathJax scripts of type math/tex</span>
+  <span class="c1">//</span>
+  <span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">images</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">img</span><span class="p">.</span><span class="nx">className</span> <span class="o">===</span> <span class="s2">&quot;tex&quot;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">);</span> <span class="nx">script</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;math/tex&quot;</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">opera</span><span class="p">)</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">alt</span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">alt</span><span class="p">}</span>
+      <span class="nx">img</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">replaceChild</span><span class="p">(</span><span class="nx">script</span><span class="p">,</span><span class="nx">img</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">//</span>
+  <span class="c1">//  Load MathJax and have it process the page</span>
+  <span class="c1">//</span>
+  <span class="kd">var</span> <span class="nx">script</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">);</span>
+  <span class="nx">script</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;http://www.yoursite.edu/MathJax/MathJax.js&quot;</span><span class="p">;</span>  <span class="c1">// put your URL here</span>
+  <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="s1">&#39;MathJax.Hub.Config({&#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;config: [&quot;MMLorHTML.js&quot;],&#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;extensions:[&quot;TeX/noErrors.js&quot;,&quot;TeX/noUndefined.js&quot;,&#39;</span> <span class="o">+</span>
+                             <span class="s1">&#39;&quot;TeX/AMSmath.js&quot;,&quot;TeX/AMSsymbols.js&quot;],&#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;jax:[&quot;input/TeX&quot;]&#39;</span> <span class="o">+</span>
+               <span class="s1">&#39;});&#39;</span> <span class="o">+</span>
+               <span class="s1">&#39;MathJax.Hub.Startup.onload()&#39;</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">opera</span><span class="p">)</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span><span class="nx">script</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">config</span><span class="p">}</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">script</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Source</strong>: <a class="reference external" href="_statis/mathjax_wikipedia.user.js">mathjax_wikipedia.user.js</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Loading MathJax Dynamically</a><ul>
+<li><a class="reference internal" href="#mathjax-and-greasemonkey">MathJax and GreaseMonkey</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="signals.html"
+                        title="previous chapter">Using Signals</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="typeset.html"
+                        title="next chapter">Modifying Math on the Page</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/dynamic.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="typeset.html" title="Modifying Math on the Page"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="signals.html" title="Using Signals"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

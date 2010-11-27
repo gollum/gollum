@@ -1,0 +1,168 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using MathJax in popular web platforms &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="../index.html" />
+    <link rel="next" title="Installing MathJax in WordPress" href="wordpress.html" />
+    <link rel="prev" title="The FontWarnings extension" href="../options/FontWarnings.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wordpress.html" title="Installing MathJax in WordPress"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../options/FontWarnings.html" title="The FontWarnings extension"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-mathjax-in-popular-web-platforms">
+<span id="platforms"></span><h1>Using MathJax in popular web platforms<a class="headerlink" href="#using-mathjax-in-popular-web-platforms" title="Permalink to this headline">¶</a></h1>
+<p>Most web-based content-management systems include a theme or template
+layer that determines how the pages look, and that loads information
+common to all pages.  Such theme files provide one popular way to
+include MathJax in your web templates in the absense of
+MathJax-specific plugins for the system you are using.  To take
+advantage of this approach, you will need access to your theme files,
+which probably means you need to be an administrator for the site; if
+you are not, you may need to have an administrator do these steps for
+you.</p>
+<p>To enable MathJax in your web platform, add the line:</p>
+<div class="highlight-python"><pre>&lt;script type="text/javascript" src="path-to-MathJax/MathJax.js"&gt;&lt;/script&gt;</pre>
+</div>
+<p>(where <tt class="docutils literal"><span class="pre">path-to-MathJax</span></tt> is the web-address of the main MathJax
+directory for your server) either just before the <tt class="docutils literal"><span class="pre">&lt;/head&gt;</span></tt> tag in
+your theme file, or at the end of the file if it contains no
+<tt class="docutils literal"><span class="pre">&lt;/head&gt;</span></tt>.</p>
+<p>The theme files for various popular platforms are:</p>
+<blockquote>
+<dl class="docutils">
+<dt><a class="reference external" href="http://wordpress.org/">WordPress</a></dt>
+<dd><tt class="docutils literal"><span class="pre">wp-content/themes/[current_theme]/header.php</span></tt></dd>
+<dt><a class="reference external" href="http://www.movabletype.org/">Movable Type</a></dt>
+<dd><tt class="docutils literal"><span class="pre">[current_theme_templates]/html_head.mhtml</span></tt></dd>
+<dt><a class="reference external" href="http://drupal.org/">Drupal</a></dt>
+<dd><tt class="docutils literal"><span class="pre">themes/[current_theme]/page.tpl.php</span></tt></dd>
+<dt><a class="reference external" href="http://www.joomla.org/">Joomla</a></dt>
+<dd><tt class="docutils literal"><span class="pre">templates/[current_theme]/index.php</span></tt></dd>
+<dt><a class="reference external" href="http://www.mediawiki.org/">MediaWiki</a></dt>
+<dd><tt class="docutils literal"><span class="pre">skins/[current_skin].php</span></tt></dd>
+<dt><a class="reference external" href="http://www.tiddlywiki.com/">TiddlyWiki</a></dt>
+<dd><tt class="docutils literal"><span class="pre">*.php</span></tt> (Whatever you call your TiddlyWiki php file)</dd>
+<dt><a class="reference external" href="http://moodle.org/">Moodle</a></dt>
+<dd><tt class="docutils literal"><span class="pre">theme/[current_theme]/header.html</span></tt></dd>
+</dl>
+</blockquote>
+<p>Keep in mind that this will enable MathJax for your current
+theme/template only.  If you change themes or update your theme, you
+will have to repeat these steps.</p>
+<div class="section" id="insructions-for-specific-platforms">
+<h2>Insructions for Specific Platforms<a class="headerlink" href="#insructions-for-specific-platforms" title="Permalink to this headline">¶</a></h2>
+<p>Some programs, such as WordPress and Moveable Type, allow you to edit
+template files from inside their administrator interfaces.  Specific
+instructions for these are given via the links below.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wordpress.html">Wordpress</a></li>
+<li class="toctree-l1"><a class="reference internal" href="movable-type.html">Movable Type</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using MathJax in popular web platforms</a><ul>
+<li><a class="reference internal" href="#insructions-for-specific-platforms">Insructions for Specific Platforms</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../options/FontWarnings.html"
+                        title="previous chapter">The FontWarnings extension</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wordpress.html"
+                        title="next chapter">Installing MathJax in WordPress</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/platforms/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="wordpress.html" title="Installing MathJax in WordPress"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../options/FontWarnings.html" title="The FontWarnings extension"
+             >previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

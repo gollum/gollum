@@ -1,15 +1,20 @@
-<div id="gollum-editor">
+<div id="gollum-editor" data-escaped-name="{{escaped_name}}" class="{{#is_create_page}}create{{/is_create_page}}{{#is_edit_page}}edit{{/is_edit_page}}">
+{{#is_create_page}}
 <form name="gollum-editor" action="/create/{{escaped_name}}" method="post">
+{{/is_create_page}}
+{{#is_edit_page}}
+<form name="gollum-editor" action="/edit/{{escaped_name}}" method="post">
+{{/is_edit_page}}
   <fieldset id="gollum-editor-fields">
-  {{#show_title}}
+  {{#is_create_page}}
   <div id="gollum-editor-title-field" class="singleline">
     <label for="page" class="jaws">Page Title</label>
     <input type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
   </div>
-  {{/show_title}}
-  {{#hidden_title}}
+  {{/is_create_page}}
+  {{#is_edit_page}}
   <input type="hidden" name="page" id="gollum-editor-page-title" value="{{page_name}}">
-  {{/hidden_title}}
+  {{/is_edit_page}}
   <div id="gollum-editor-function-bar">
     <a href="#" id="function-bold" class="function-button">
       <span>Bold</span></a>
@@ -39,8 +44,11 @@
       <span>Link</span></a>
     <a href="#" id="function-image" class="function-button">
       <span>Image</span></a>
+    <span class="function-divider">&nbsp;</span>
+    <a href="#" id="function-help" class="function-button">
+      <span>Help</span></a>
       
-    <div id="gollum-editor-format-selector">
+    <div id="gollum-editor-format-selector"> 
       <select id="wiki_format" name="format">
       {{#formats}}
         <option {{#selected}}selected="selected" {{/selected}}value="{{id}}">
@@ -48,6 +56,30 @@
         </option>
       {{/formats}}
      </select>
+      <label for="format">Edit Mode</label>
+    </div>
+  </div>
+  <div id="gollum-editor-help" class="jaws">
+    <ul id="gollum-editor-help-parent">
+      <li><a href="javascript:void(0);" class="selected">Help 1</a></li>
+      <li><a href="javascript:void(0);">Help 1</a></li>
+      <li><a href="javascript:void(0);">Help 1</a></li>
+    </ul>
+    <ul id="gollum-editor-help-list">
+      <li><a href="javascript:void(0);">Help 2</a></li>
+      <li><a href="javascript:void(0);">Help 3</a></li>
+      <li><a href="javascript:void(0);">Help 4</a></li>
+      <li><a href="javascript:void(0);">Help 5</a></li>
+      <li><a href="javascript:void(0);">Help 6</a></li>
+      <li><a href="javascript:void(0);">Help 7</a></li>
+      <li><a href="javascript:void(0);">Help 8</a></li>
+    </ul>
+    <div id="gollum-editor-help-wrapper">
+      <div id="gollum-editor-help-content">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam et nibh a lacus egestas blandit. Maecenas felis tortor, mattis quis venenatis in, dictum ut diam. Sed nisi massa, accumsan vel sodales a, pharetra vel tellus. Integer quis metus at erat hendrerit egestas eget et sem. Donec elit nunc, accumsan sed fermentum eget, consectetur non enim. Duis ut risus odio. Pellentesque tristique augue iaculis libero interdum quis fermentum sapien cursus. Quisque justo sapien, molestie non convallis ut, convallis a massa. Nam congue ipsum at turpis semper non bibendum diam pellentesque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent euismod, ligula nec sagittis volutpat, ante dolor porttitor turpis, vel convallis velit elit et ipsum. Aenean sit amet purus odio. Fusce fermentum lorem sit amet tortor laoreet a sollicitudin nisl tempor. Maecenas tempus tortor eget libero varius ullamcorper. Donec a felis a sapien venenatis mattis. 
+      </p>
+      </div>
     </div>
   </div>
     <textarea id="gollum-editor-body"
@@ -74,6 +106,7 @@
     
     <span class="jaws"><br></span>
     <input type="submit" id="gollum-editor-submit" value="Save" title="Save current changes">
+    <a href="javascript:void(0)" id="gollum-editor-preview" class="minibutton" title="Preview this Page">Preview</a>
   </fieldset>
 </form>
 </div>
