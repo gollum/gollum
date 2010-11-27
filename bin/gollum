@@ -18,7 +18,7 @@ require 'rubygems'
 require 'gollum'
 
 exec = {}
-options = { 'port' => 4567, 'bind' => '127.0.0.1' }
+options = { 'port' => 4567, 'bind' => '0.0.0.0' }
 opts = OptionParser.new do |opts|
   opts.banner = help
 
