@@ -504,3 +504,9 @@ a#function-help:hover span { background-position: -405px -28px; }
       margin: 0 0 1em 0;
       padding: 0;
     }
+    
+/* IE */
+.ie #gollum-editor .singleline input {
+  padding-top: 0.25em;
+  padding-bottom: 0.75em;
+}

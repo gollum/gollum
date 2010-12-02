@@ -527,6 +527,10 @@ ul.actions {
   background: -moz-linear-gradient(top, #599bdc, #3072b3);
 }
 
+.minibutton a:visited {
+  text-decoration: none;
+}
+
 
 /* @special error */
 #wiki-wrapper.error {

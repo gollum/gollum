@@ -1,10 +1,8 @@
 * Editor
-  * Create rest of markup lang definitions
-    * Finish RDoc
-    * Finish rst
-    * Org-mode
-  * Create inline help for langs
-  * Create mathjax inline help
+  * Get MathJax running
+* IE7 Styles
+* Fix how text selections occur in IE7/8 so we actually get the right text
+* Figure out why Dialogs won't fire in IE7 (likely a css issue)
   
 * Write Editor/Sidebar implementation notes for Rick
 * Find some clever way to represent page hierarchy.

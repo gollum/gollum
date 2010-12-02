@@ -4,7 +4,9 @@
   display: none;
   top: 50%;
   left: 50%;
+  overflow: visible;
   position: absolute;
+  z-index: 1000;
 }
 
 #gollum-dialog-dialog.active {
@@ -14,10 +16,11 @@
 #gollum-dialog-dialog-inner {
   background: transparent;
   margin: 0 0 0 -225px;
-  overflow: hidden;
   position: relative;
   width: 450px;
+  z-index: 1000;
 
+  border: 7px solid #999;
   border: 7px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   -moz-border-radius: 5px;
