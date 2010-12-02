@@ -84,16 +84,23 @@ a {
 #gollum-editor #gollum-editor-function-bar  {
   border-bottom: 1px solid #ddd;
   overflow: hidden;
-  padding: 0 0 1.1em 0;
-  display: none;
+  padding: 0;
 }
+
 
 #gollum-editor-title-field + #gollum-editor-function-bar {
   margin-top: 0.6em;
 }
 
-#gollum-editor #gollum-editor-function-bar.active {
+#gollum-editor #gollum-editor-function-bar #gollum-editor-function-buttons {
+  display: none;
+}
+
+#gollum-editor #gollum-editor-function-bar.active #gollum-editor-function-buttons {
   display: block;
+  float: left;
+  overflow: hidden;
+  padding: 0 0 1.1em 0;
 }
 
 #gollum-editor #gollum-editor-function-bar a.function-button {
@@ -177,6 +184,11 @@ a#function-help:hover span { background-position: -405px -28px; }
   display: block;
   float: left;
   width: 0.5em;
+}
+
+#gollum-editor #gollum-editor-function-bar #gollum-editor-format-selector {
+  overflow: hidden;
+  padding: 0 0 1.1em 0;
 }
 
 #gollum-editor #gollum-editor-function-bar 
