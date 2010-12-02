@@ -44,7 +44,12 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = sanitize.clean!(data) if sanitize
+      if sanitize || block_given?
+        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
+        doc  = sanitize.clean_node!(doc) if sanitize
+        yield doc if block_given?
+        data = doc_to_html(doc)
+      end
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
