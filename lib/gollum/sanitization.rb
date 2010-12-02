@@ -103,6 +103,13 @@ module Gollum
         :allow_comments => allow_comments?
       }
     end
+
+    # Builds a Sanitize instance from the current options.
+    #
+    # Returns a Sanitize instance.
+    def to_sanitize
+      Sanitize.new(to_hash)
+    end
   end
 end
 
