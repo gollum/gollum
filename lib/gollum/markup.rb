@@ -27,9 +27,9 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize_options = no_follow ? 
-        @wiki.history_sanitization : 
-        @wiki.sanitization
+      sanitize = no_follow ? 
+        @wiki.history_sanitizer : 
+        @wiki.sanitizer
 
       data = extract_tex(@data)
       data = extract_code(data)
@@ -44,10 +44,19 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = Sanitize.clean(data, sanitize_options.to_hash) if sanitize_options
+      if sanitize || block_given?
+        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
+        doc  = sanitize.clean_node!(doc) if sanitize
+        yield doc if block_given?
+        data = doc_to_html(doc)
+      end
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
+    end
+
+    def doc_to_html(doc)
+      doc.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
     end
 
     #########################################################################

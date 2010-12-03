@@ -345,6 +345,26 @@ module Gollum
       %(#<#{self.class} @repo=#{@repo.inspect}>)
     end
 
+    # Public: Creates a Sanitize instance using the Wiki's sanitization 
+    # options.
+    #
+    # Returns a Sanitize instance.
+    def sanitizer
+      if options = sanitization
+        @sanitizer ||= options.to_sanitize
+      end
+    end
+
+    # Public: Creates a Sanitize instance using the Wiki's history sanitization 
+    # options.
+    #
+    # Returns a Sanitize instance.
+    def history_sanitizer
+      if options = history_sanitization
+        @history_sanitizer ||= options.to_sanitize
+      end
+    end
+
     #########################################################################
     #
     # Internal Methods
