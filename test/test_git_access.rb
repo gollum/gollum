@@ -25,9 +25,9 @@ context "GitAccess" do
     assert @access.ref_map.empty?
     assert @access.tree_map.empty?
     @access.tree 'master'
-    assert_equal({"master"=>"60f12f4254f58801b9ee7db7bca5fa8aeefaa56b"}, @access.ref_map)
+    assert_equal({"master"=>"a8ad3c09dd842a3517085bfadd37718856dee813"}, @access.ref_map)
 
-    map = @access.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b']
+    map = @access.tree_map['a8ad3c09dd842a3517085bfadd37718856dee813']
     assert_equal 'Bilbo-Baggins.md',        map[0].path
     assert_equal '',                        map[0].dir
     assert_equal map[0].path,               map[0].name

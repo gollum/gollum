@@ -1,5 +1,7 @@
 # HEAD
 
+* Major Enhancements
+  * Add Page sidebars, similar to Page footers.
 * Minor Enhancements
   * Add `:sanitization` and `:history_sanitization` options for customizing 
     how `Sanitize.clean` modifies formatted wiki content.

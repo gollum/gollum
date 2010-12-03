@@ -55,7 +55,7 @@ module Gollum
     # Returns a newly initialized Gollum::Page.
     def initialize(wiki)
       @wiki = wiki
-      @blob = nil
+      @blob = @footer = @sidebar = nil
     end
 
     # Public: The on-disk filename of the page including extension.
@@ -196,7 +196,14 @@ module Gollum
     #
     # Returns the footer Page or nil if none exists.
     def footer
-      find_sub_page :footer
+      @footer ||= find_sub_page(:footer)
+    end
+
+    # Public: The sidebar Page.
+    #
+    # Returns the sidebar Page or nil if none exists.
+    def sidebar
+      @sidebar ||= find_sub_page(:sidebar)
     end
 
     # Gets a Boolean determining whether this page is a historical version.  
@@ -352,6 +359,7 @@ module Gollum
     #
     # Returns the Page or nil if none exists.
     def find_sub_page(name)
+      return nil if self.filename =~ /^_/
       name = "_#{name.to_s.capitalize}"
       return nil if page_match(name, self.filename)
 
