@@ -34,7 +34,7 @@ module Precious
 
       def has_sidebar
         @sidebar = (@page.sidebar || false) if @sidebar.nil?
-        !@sidebar
+        !!@sidebar
       end
 
       def sidebar_content
