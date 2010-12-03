@@ -9,6 +9,7 @@
     rendering for added customization.
 * Bug Fixes
   * Use `@wiki.page_class` in Gollum::Markup where appropriate (#63).
+  * Don't modify content inside <pre> tags during rendering.
 
 # 1.1.0 / 2010-10-28
 

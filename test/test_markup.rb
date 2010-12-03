@@ -50,6 +50,16 @@ context "Markup" do
     assert yielded
   end
 
+  test "does not modify content in pre tags" do
+    @wiki.write_page("Pre", :markdown, 
+      "abc [[a]]\n\n<pre > [[b]] </pre>\n\n``` ruby\n[[c]]\n```\n[[d]]", 
+      commit_details)
+    page = @wiki.page("Pre")
+    html = page.formatted_data
+    assert html['[[b]]']
+    assert html[%([[</span><span class="n">c)]
+  end
+
   #########################################################################
   #
   # Links

@@ -17,6 +17,7 @@ module Gollum
       @tagmap  = {}
       @codemap = {}
       @texmap  = {}
+      @premap  = {}
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -31,7 +32,8 @@ module Gollum
         @wiki.history_sanitizer : 
         @wiki.sanitizer
 
-      data = extract_tex(@data)
+      data = extract_tex(@data.dup)
+      data = extract_pre(data)
       data = extract_code(data)
       data = extract_tags(data)
       begin
@@ -44,6 +46,7 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
+      data = process_pre(data)
       if sanitize || block_given?
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
         doc  = sanitize.clean_node!(doc) if sanitize
@@ -115,7 +118,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
-      data.gsub(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
+      data.gsub!(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
         elsif $2.include?('][')
@@ -126,6 +129,7 @@ module Gollum
           "#{$1}#{id}#{$3}"
         end
       end
+      data
     end
 
     # Process all tags from the tagmap and replace the placeholders with the
@@ -357,7 +361,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
+      data.gsub!(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
         id     = Digest::SHA1.hexdigest($2)
         cached = check_cache(:code, id)
         @codemap[id] = cached   ? 
@@ -365,6 +369,7 @@ module Gollum
           { :lang => $1, :code => $2 }
         id
       end
+      data
     end
 
     # Process all code from the codemap and replace the placeholders with the
@@ -407,6 +412,41 @@ module Gollum
     #
     # Returns nothing.
     def update_cache(type, id, data)
+    end
+
+    #########################################################################
+    #
+    # Code
+    #
+    #########################################################################
+
+    # Extract all code blocks into the codemap and replace with placeholders.
+    #
+    # data - The raw String data.
+    #
+    # Returns the placeholder'd String data.
+    def extract_pre(data)
+      data.gsub! /\r/, '' # \r gets encoded to &#xD;
+      doc = Nokogiri::HTML::DocumentFragment.parse(data)
+      doc.search('pre').each do |element|
+        id = Digest::SHA1.hexdigest(element.inner_html)
+        @premap[id] = element.inner_html
+        element.inner_html = id
+      end
+      doc_to_html(doc)
+    end
+
+    # Process all code from the codemap and replace the placeholders with the
+    # final HTML.
+    #
+    # data - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
+    def process_pre(data)
+      @premap.each do |id, content|
+        data.gsub!(id, content)
+      end
+      data
     end
   end
 end
