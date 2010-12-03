@@ -132,8 +132,8 @@ module Gollum
     # Public: The formatted contents of the page.
     #
     # Returns the String data.
-    def formatted_data
-      @blob && Gollum::Markup.new(self).render(historical?)
+    def formatted_data(&block)
+      @blob && @wiki.markup_class.new(self).render(historical?, &block)
     end
 
     # Public: The format of the page.
@@ -196,19 +196,7 @@ module Gollum
     #
     # Returns the footer Page or nil if none exists.
     def footer
-      return nil if page_match('_Footer', self.filename)
-
-      dirs = self.path.split('/')
-      dirs.pop
-      map = @wiki.tree_map_for(self.version.id)
-      while !dirs.empty?
-        if page = find_page_in_tree(map, '_Footer', dirs.join('/'))
-          return page
-        end
-        dirs.pop
-      end
-
-      find_page_in_tree(map, '_Footer', '')
+      find_sub_page :footer
     end
 
     # Gets a Boolean determining whether this page is a historical version.  
@@ -283,11 +271,11 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find(name, version)
-      map = @wiki.tree_map_for(version)
+      map = @wiki.tree_map_for(version.to_s)
       if page = find_page_in_tree(map, name)
-        sha = @wiki.ref_map[version] || version
-        page.version    = Grit::Commit.create(@wiki.repo, :id => sha)
-        page.historical = sha == version
+        page.version    = version.is_a?(Grit::Commit) ? 
+          version : @wiki.commit_for(version)
+        page.historical = page.version.to_s == version.to_s
         page
       end
     rescue Grit::GitRuby::Repository::NoSuchShaFound
@@ -302,7 +290,7 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find_page_in_tree(map, name, checked_dir = nil)
-      return nil if name.to_s.empty?
+      return nil if !map || name.to_s.empty?
       if checked_dir = BlobEntry.normalize_dir(checked_dir)
         checked_dir.downcase!
       end
@@ -355,6 +343,29 @@ module Gollum
       else
         false
       end
+    end
+
+    # Loads a sub page.  Sub page nanes (footers) are prefixed with 
+    # an underscore to distinguish them from other Pages.
+    #
+    # name - String page name.
+    #
+    # Returns the Page or nil if none exists.
+    def find_sub_page(name)
+      name = "_#{name.to_s.capitalize}"
+      return nil if page_match(name, self.filename)
+
+      dirs = self.path.split('/')
+      dirs.pop
+      map = @wiki.tree_map_for(self.version.id)
+      while !dirs.empty?
+        if page = find_page_in_tree(map, name, dirs.join('/'))
+          return page
+        end
+        dirs.pop
+      end
+
+      find_page_in_tree(map, name, '')
     end
   end
 end

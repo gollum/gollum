@@ -5,6 +5,8 @@
     how `Sanitize.clean` modifies formatted wiki content.
   * Add `--config` option for the command line, to specify a ruby file that is
     run during startup.
+  * Provide access to a parsed Nokogiri::DocumentFragment during markup 
+    rendering for added customization.
 * Bug Fixes
   * Use `@wiki.page_class` in Gollum::Markup where appropriate (#63).
 

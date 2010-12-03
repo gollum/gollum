@@ -27,9 +27,9 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize_options = no_follow ? 
-        @wiki.history_sanitization : 
-        @wiki.sanitization
+      sanitize = no_follow ? 
+        @wiki.history_sanitizer : 
+        @wiki.sanitizer
 
       data = extract_tex(@data)
       data = extract_code(data)
@@ -44,10 +44,19 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = Sanitize.clean(data, sanitize_options.to_hash) if sanitize_options
+      if sanitize || block_given?
+        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
+        doc  = sanitize.clean_node!(doc) if sanitize
+        yield doc if block_given?
+        data = doc_to_html(doc)
+      end
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
+    end
+
+    def doc_to_html(doc)
+      doc.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
     end
 
     #########################################################################
@@ -349,8 +358,11 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_code(data)
       data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
-        id = Digest::SHA1.hexdigest($2)
-        @codemap[id] = { :lang => $1, :code => $2 }
+        id     = Digest::SHA1.hexdigest($2)
+        cached = check_cache(:code, id)
+        @codemap[id] = cached   ? 
+          { :output => cached } : 
+          { :lang => $1, :code => $2 }
         id
       end
     end
@@ -363,14 +375,38 @@ module Gollum
     # Returns the marked up String data.
     def process_code(data)
       @codemap.each do |id, spec|
-        lang = spec[:lang]
-        code = spec[:code]
-        if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
-          code.gsub!(/^(  |\t)/m, '')
+        formatted = spec[:output] || begin
+          lang = spec[:lang]
+          code = spec[:code]
+          if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
+            code.gsub!(/^(  |\t)/m, '')
+          end
+          formatted = Gollum::Albino.new(code, lang).colorize
+          update_cache(:code, id, formatted)
+          formatted
         end
-        data.gsub!(id, Gollum::Albino.new(code, lang).colorize)
+        data.gsub!(id, formatted)
       end
       data
+    end
+
+    # Hook for getting the formatted value of extracted tag data.  
+    #
+    # type - Symbol value identifying what type of data is being extracted.
+    # id   - String SHA1 hash of original extracted tag data.
+    #
+    # Returns the String cached formatted data, or nil.
+    def check_cache(type, id)
+    end
+
+    # Hook for caching the formatted value of extracted tag data.
+    #
+    # type - Symbol value identifying what type of data is being extracted.
+    # id   - String SHA1 hash of original extracted tag data.
+    # data - The String formatted value to be cached.
+    #
+    # Returns nothing.
+    def update_cache(type, id, data)
     end
   end
 end

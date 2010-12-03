@@ -25,6 +25,31 @@ context "Markup" do
     end
   end
 
+  test "Gollum::Markup#render yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    markup = Gollum::Markup.new(page)
+    markup.render do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
+  end
+
+  test "Gollum::Page#formatted_data yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    page.formatted_data do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
+  end
+
   #########################################################################
   #
   # Links
