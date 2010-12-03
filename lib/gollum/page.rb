@@ -196,19 +196,7 @@ module Gollum
     #
     # Returns the footer Page or nil if none exists.
     def footer
-      return nil if page_match('_Footer', self.filename)
-
-      dirs = self.path.split('/')
-      dirs.pop
-      map = @wiki.tree_map_for(self.version.id)
-      while !dirs.empty?
-        if page = find_page_in_tree(map, '_Footer', dirs.join('/'))
-          return page
-        end
-        dirs.pop
-      end
-
-      find_page_in_tree(map, '_Footer', '')
+      find_sub_page :footer
     end
 
     # Gets a Boolean determining whether this page is a historical version.  
@@ -355,6 +343,29 @@ module Gollum
       else
         false
       end
+    end
+
+    # Loads a sub page.  Sub page nanes (footers) are prefixed with 
+    # an underscore to distinguish them from other Pages.
+    #
+    # name - String page name.
+    #
+    # Returns the Page or nil if none exists.
+    def find_sub_page(name)
+      name = "_#{name.to_s.capitalize}"
+      return nil if page_match(name, self.filename)
+
+      dirs = self.path.split('/')
+      dirs.pop
+      map = @wiki.tree_map_for(self.version.id)
+      while !dirs.empty?
+        if page = find_page_in_tree(map, name, dirs.join('/'))
+          return page
+        end
+        dirs.pop
+      end
+
+      find_page_in_tree(map, name, '')
     end
   end
 end
