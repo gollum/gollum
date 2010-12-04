@@ -1,5 +1,4 @@
 module Gollum
-
   # Encapsulate sanitization options.
   #
   # This class does not yet support all options of Sanitize library.
@@ -103,6 +102,13 @@ module Gollum
         :add_attributes => add_attributes,
         :allow_comments => allow_comments?
       }
+    end
+
+    # Builds a Sanitize instance from the current options.
+    #
+    # Returns a Sanitize instance.
+    def to_sanitize
+      Sanitize.new(to_hash)
     end
   end
 end

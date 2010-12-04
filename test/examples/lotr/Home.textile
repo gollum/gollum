@@ -1,0 +1,3 @@
+h1. The LOTR Wiki
+
+This wiki is awesome. You can learn about [[Bilbo Baggins]] or some [[evil|Eye Of Sauron]] stuff.

@@ -109,6 +109,25 @@ context "Page" do
   test "footer itself" do
     footer = @wiki.page("_Footer")
     assert_nil footer.footer
+    assert_nil footer.sidebar
+  end
+
+  test "top level sidebar" do
+    sidebar = @wiki.page('Home').sidebar
+    assert_equal 'Lord of the Rings wiki', sidebar.raw_data
+    assert_equal '_Sidebar.md', sidebar.path
+  end
+
+  test "nested sidebar" do
+    sidebar = @wiki.page('Eye Of Sauron').sidebar
+    assert_equal "Ones does not simply **walk** into Mordor!\n", sidebar.raw_data
+    assert_equal "Mordor/_Sidebar.md", sidebar.path
+  end
+
+  test "sidebar itself" do
+    sidebar = @wiki.page("_Sidebar")
+    assert_nil sidebar.footer
+    assert_nil sidebar.sidebar
   end
 
   test "cannot convert non string to human readable page title" do
