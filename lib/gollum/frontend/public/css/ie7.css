@@ -1,7 +1,13 @@
 /* IE7-specific styles */
 
-#head #searchbar #searchbar-fauxtext input#search-query {
+.ie #head #searchbar #searchbar-fauxtext input#search-query {
+  border: 0;
   float: left;
+  padding: 0.4em 0 0 0.5em;
+}
+
+.ie #head #searchbar #searchbar-fauxtext #search-submit span {
+  height: 2.25em;
 }
 
 #head #searchbar,
@@ -15,6 +21,10 @@ ul.actions {
 
 .compare #footer ul.actions {
   margin-top: 1em;
+}
+
+.compare div.data {
+  overflow: auto;
 }
 
 .history #version-form {

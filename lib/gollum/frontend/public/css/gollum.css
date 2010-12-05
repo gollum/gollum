@@ -421,6 +421,7 @@ a:hover, a:visited {
   .compare .data {
     border: 1px solid #ddd;
     margin-top: 1em;
+    overflow: auto;
   }
   
   .compare .data pre {
@@ -493,7 +494,27 @@ ul.actions {
    margin-left: 0.6em;
  }
 
-.minibutton a,
+.minibutton a {
+  background-color: #f7f7f7;
+  border: 1px solid #d4d4d4;
+  color: #333;
+  display: block;
+  font-weight: bold;
+  margin: 0;
+  padding: 0.4em 1em;
+  height: 1.4em;
+
+  text-shadow: 0 1px 0 #fff;
+
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
+  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
+
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
 #search-submit {
   background-color: #f7f7f7;
   border: 1px solid #d4d4d4;
@@ -590,12 +611,22 @@ ul.actions {
   }
 
   #head #searchbar #searchbar-fauxtext input#search-query {
-    border: 0;
+    border: none;
     color: #000;
+    float: left;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 1.2em;
-    line-height: 1.6em;
-    padding: 0.4em 0.6em;
+    height: 1.8em;
+    
+    -webkit-focus-ring: none;
+  }
+
+  .ff #head #searchbar #searchbar-fauxtext input#search-query {
+    padding: 0.2em 0 0.2em 0.5em;
+  }
+  
+  .ie #head #searchbar #searchbar-fauxtext input#search-query {
+    padding: 0.4em 0 0 0.5em;
   }
   
   #head #searchbar #searchbar-fauxtext input#search-query.ph {
@@ -621,10 +652,15 @@ ul.actions {
     background-position: -431px -1px;
     background-repeat: no-repeat;
     display: block;
-    height: 25px;
+    height: 2em;
     overflow: hidden;
     text-indent: -5000px;
     width: 28px;
+  }
+  
+  .ff #head #searchbar #searchbar-fauxtext #search-submit span,
+  .ie #head #searchbar #searchbar-fauxtext #search-submit span {
+    height: 2.2em;
   }
   
   #head #searchbar #searchbar-fauxtext #search-submit:hover span {
