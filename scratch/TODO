@@ -1,5 +1,6 @@
 * Editor
   * Get MathJax running
+  * Fix up regexes
 * Figure out why Dialogs won't fire in IE7 (likely a css issue)
   
 
