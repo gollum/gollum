@@ -18,17 +18,17 @@ module Precious
       end
       
       def format
-        @format = (@page.format || false) if @format.nil?
+        @format = (@page.format || false) if @format.nil? && @page
         @format.to_s.downcase
       end
-    
-      def has_footer 
-        @footer = (@page.footer || false) if @footer.nil?
+
+      def has_footer
+        @footer = (@page.footer || false) if @footer.nil? && @page
         !!@footer
       end
-        
+
       def has_sidebar
-        @sidebar = (@page.sidebar || false) if @sidebar.nil?
+        @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
         !!@sidebar
       end
 
