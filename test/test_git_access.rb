@@ -13,14 +13,6 @@ context "GitAccess" do
     assert_equal actual.message, @access.commit_map[actual.id].message
   end
 
-  test "#commits uses commit_map" do
-    actual = @access.repo.commits.first
-    @access.commit_map['abc'] = 1
-    commits = @access.commits('abc', actual.id)
-    assert_equal 1, commits[0]
-    assert_equal actual.message, commits[1].message
-  end
-
   test "#tree_map_for caches ref and tree" do
     assert @access.ref_map.empty?
     assert @access.tree_map.empty?
