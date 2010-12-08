@@ -138,7 +138,12 @@ end
 
 context "Page Reverting" do
   setup do
-    @wiki = Gollum::Wiki.new(cloned_testpath("examples/revert.git"))
+    @path = cloned_testpath("examples/revert.git")
+    @wiki = Gollum::Wiki.new(@path)
+  end
+
+  teardown do
+    FileUtils.rm_rf @path
   end
 
   test "reverts single commit" do
