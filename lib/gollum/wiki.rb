@@ -245,7 +245,7 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def delete_page(page, commit)
       index = nil
-      sha1  = commit_index(commit) |idx|
+      sha1  = commit_index(commit) do |idx|
         index = idx
         index.delete(page.path)
       end
