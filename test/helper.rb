@@ -18,6 +18,16 @@ def testpath(path)
   File.join(TEST_DIR, path)
 end
 
+def cloned_testpath(path)
+  path   = testpath(path)
+  cloned = path.chomp('.git')
+  FileUtils.rm_rf cloned
+  Dir.chdir(File.expand_path(File.dirname(path))) do
+    %x{git clone #{File.basename(path)}}
+  end
+  cloned
+end
+
 def commit_details
   { :message => "Did something at #{Time.now}",
     :name => "Tom Preston-Werner",

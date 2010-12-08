@@ -182,7 +182,6 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
-      commit = normalize_commit(commit)
       index  = nil
       sha1   = commit_index(commit) do |idx|
         index = idx
@@ -211,7 +210,6 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def update_page(page, name, format, data, commit = {})
-      commit   = normalize_commit(commit)
       name   ||= page.name
       format ||= page.format
       dir      = ::File.dirname(page.path)
@@ -310,6 +308,32 @@ module Gollum
     # Returns an Array of Grit::Commit.
     def log(options = {})
       @repo.log('master', nil, log_pagination_options(options))
+    end
+
+    def revert_page(page, sha1, sha2 = nil, commit = {})
+      if sha2.is_a?(Hash)
+        commit = sha2
+        sha2   = nil
+      end
+
+      pcommit         = @repo.commit('master')
+      commit[:parent] = [pcommit]
+      commit[:tree]   = write_to_real_index(pcommit.sha) do
+        options = {:reverse => true, :cached => true}
+        @repo.git.native(:apply, options) do |stdin|
+          stdin << full_diff_for(page, sha1, sha2)
+          stdin.close
+        end
+      end
+
+      index = nil
+      sha1  = commit_index(commit) { |i| index = i }
+      dir   = ::File.dirname(page.path)
+      dir   = '' if dir == '.'
+
+      @access.refresh
+      update_working_dir(index, dir, page.name, page.format)
+      sha1
     end
 
     # Public: Refreshes just the cached Git reference data.  This should
@@ -517,16 +541,31 @@ module Gollum
     end
 
     def commit_index(options = {})
+      normalize_commit(options)
       options[:parent] ||= [@repo.commit('master')]
       options[:parent].compact!
       index = self.repo.index
-      if parent = options[:parent][0]
+      if tree   = options[:tree]
+        index.read_tree(tree)
+      elsif parent = options[:parent][0]
         index.read_tree(parent.tree.id)
       end
       yield index if block_given?
 
       actor = Grit::Actor.new(options[:name], options[:email])
       index.commit(options[:message], options[:parent], actor)
+    end
+
+    def write_to_real_index(head_sha)
+      @repo.git.native('read-tree', {}, head_sha)
+      if yield
+        @repo.git.native('write-tree')
+      end
+    end
+
+    def full_diff_for(page, sha1, sha2 = nil)
+      sha1, sha2 = "#{sha1}^", sha1 if sha2.nil?
+      repo.git.native(:diff, {}, sha1, sha2, '--', page.path)
     end
 
     # Ensures a commit hash has all the required fields for a commit.
