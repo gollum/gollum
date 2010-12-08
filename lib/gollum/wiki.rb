@@ -317,7 +317,7 @@ module Gollum
       end
 
       pcommit = @repo.commit('master')
-      patch   = full_diff_for(page, sha1, sha2)
+      patch   = full_reverse_diff_for(page, sha1, sha2)
       commit[:parent] = [pcommit]
       commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
 
@@ -551,7 +551,7 @@ module Gollum
       index.commit(options[:message], options[:parent], actor)
     end
 
-    def full_diff_for(page, sha1, sha2 = nil)
+    def full_reverse_diff_for(page, sha1, sha2 = nil)
       sha1, sha2 = "#{sha1}^", sha1 if sha2.nil?
       repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
     end
