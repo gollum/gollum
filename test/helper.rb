@@ -30,8 +30,8 @@ end
 
 def commit_details
   { :message => "Did something at #{Time.now}",
-    :name => "Tom Preston-Werner",
-    :email => "tom@github.com" }
+    :name    => "Tom Preston-Werner",
+    :email   => "tom@github.com" }
 end
 
 # test/spec/mini 3

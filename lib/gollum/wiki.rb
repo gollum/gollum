@@ -557,10 +557,20 @@ module Gollum
     end
 
     def write_to_real_index(head_sha)
+      old_index  = ENV['GIT_INDEX_FILE']
+      temp_index = @repo.git.create_tempfile('index', :clean)
+      ENV['GIT_INDEX_FILE'] = temp_index
       @repo.git.native('read-tree', {}, head_sha)
       if yield
-        @repo.git.native('write-tree')
+        tree_sha    = @repo.git.native('write-tree')
+        after_index = ENV['GIT_INDEX_FILE']
+        if after_index != temp_index
+          raise 'environment was changed for the git call'
+        end
+        tree_sha
       end
+    ensure
+      ENV['GIT_INDEX_FILE'] = old_index
     end
 
     def full_diff_for(page, sha1, sha2 = nil)
