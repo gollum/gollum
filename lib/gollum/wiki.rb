@@ -182,9 +182,9 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
-      commit = normalize_commit(commit)
       index  = nil
-      sha1   = commit_index(commit) do |index|
+      sha1   = commit_index(commit) do |idx|
+        index = idx
         add_to_index(index, '', name, format, data)
       end
 
@@ -210,13 +210,13 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def update_page(page, name, format, data, commit = {})
-      commit   = normalize_commit(commit)
       name   ||= page.name
       format ||= page.format
       dir      = ::File.dirname(page.path)
       dir      = '' if dir == '.'
       index    = nil
-      sha1     = commit_index(commit) do |index|
+      sha1     = commit_index(commit) do |idx|
+        index = idx
         if page.name == name && page.format == format
           index.add(page.path, normalize(data))
         else
@@ -243,7 +243,8 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def delete_page(page, commit)
       index = nil
-      sha1 = commit_index(commit) do |index|
+      sha1  = commit_index(commit) do |idx|
+        index = idx
         index.delete(page.path)
       end
 
@@ -307,6 +308,28 @@ module Gollum
     # Returns an Array of Grit::Commit.
     def log(options = {})
       @repo.log('master', nil, log_pagination_options(options))
+    end
+
+    def revert_page(page, sha1, sha2 = nil, commit = {})
+      if sha2.is_a?(Hash)
+        commit = sha2
+        sha2   = nil
+      end
+
+      pcommit = @repo.commit('master')
+      patch   = full_reverse_diff_for(page, sha1, sha2)
+      commit[:parent] = [pcommit]
+      commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
+      return false unless commit[:tree]
+
+      index = nil
+      sha1  = commit_index(commit) { |i| index = i }
+      dir   = ::File.dirname(page.path)
+      dir   = '' if dir == '.'
+
+      @access.refresh
+      update_working_dir(index, dir, page.name, page.format)
+      sha1
     end
 
     # Public: Refreshes just the cached Git reference data.  This should
@@ -514,16 +537,24 @@ module Gollum
     end
 
     def commit_index(options = {})
+      normalize_commit(options)
       options[:parent] ||= [@repo.commit('master')]
       options[:parent].compact!
       index = self.repo.index
-      if parent = options[:parent][0]
+      if tree   = options[:tree]
+        index.read_tree(tree)
+      elsif parent = options[:parent][0]
         index.read_tree(parent.tree.id)
       end
       yield index if block_given?
 
       actor = Grit::Actor.new(options[:name], options[:email])
       index.commit(options[:message], options[:parent], actor)
+    end
+
+    def full_reverse_diff_for(page, sha1, sha2 = nil)
+      sha1, sha2 = "#{sha1}^", sha1 if sha2.nil?
+      repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
     end
 
     # Ensures a commit hash has all the required fields for a commit.
