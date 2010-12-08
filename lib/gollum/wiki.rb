@@ -316,15 +316,10 @@ module Gollum
         sha2   = nil
       end
 
-      pcommit         = @repo.commit('master')
+      pcommit = @repo.commit('master')
+      patch   = full_diff_for(page, sha1, sha2)
       commit[:parent] = [pcommit]
-      commit[:tree]   = write_to_real_index(pcommit.sha) do
-        options = {:reverse => true, :cached => true}
-        @repo.git.native(:apply, options) do |stdin|
-          stdin << full_diff_for(page, sha1, sha2)
-          stdin.close
-        end
-      end
+      commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
 
       index = nil
       sha1  = commit_index(commit) { |i| index = i }
@@ -556,26 +551,9 @@ module Gollum
       index.commit(options[:message], options[:parent], actor)
     end
 
-    def write_to_real_index(head_sha)
-      old_index  = ENV['GIT_INDEX_FILE']
-      temp_index = @repo.git.create_tempfile('index', :clean)
-      ENV['GIT_INDEX_FILE'] = temp_index
-      @repo.git.native('read-tree', {}, head_sha)
-      if yield
-        tree_sha    = @repo.git.native('write-tree')
-        after_index = ENV['GIT_INDEX_FILE']
-        if after_index != temp_index
-          raise 'environment was changed for the git call'
-        end
-        tree_sha
-      end
-    ensure
-      ENV['GIT_INDEX_FILE'] = old_index
-    end
-
     def full_diff_for(page, sha1, sha2 = nil)
       sha1, sha2 = "#{sha1}^", sha1 if sha2.nil?
-      repo.git.native(:diff, {}, sha1, sha2, '--', page.path)
+      repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
     end
 
     # Ensures a commit hash has all the required fields for a commit.
