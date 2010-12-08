@@ -161,4 +161,9 @@ context "Page Reverting" do
     assert_equal sha,       page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
   end
+
+  test "cannot revert conflicting commit" do
+    page1 = @wiki.page('A')
+    assert_equal false, @wiki.revert_page(page1, '302a5491a9a5ba12c7652ac831a44961afa312d2')
+  end
 end

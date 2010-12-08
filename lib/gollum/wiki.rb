@@ -320,6 +320,7 @@ module Gollum
       patch   = full_reverse_diff_for(page, sha1, sha2)
       commit[:parent] = [pcommit]
       commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
+      return false unless commit[:tree]
 
       index = nil
       sha1  = commit_index(commit) { |i| index = i }
