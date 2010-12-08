@@ -31,6 +31,10 @@ ul.actions {
   margin: -0.5em 0 -0.5em !important;
 }
 
+#gollum-editor {
+  padding-bottom: 0;
+}
+
 #gollum-editor-help-parent li a,
 #gollum-editor-help-list li a {
   height: auto;
@@ -54,6 +58,10 @@ ul.actions {
 
 #gollum-editor #gollum-editor-preview {
   line-height: 1.3em;
+}
+
+#gollum-editor form {
+  margin: 0;
 }
 
 #gollum-editor #gollum-editor-format-selector label {

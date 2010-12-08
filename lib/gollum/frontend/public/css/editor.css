@@ -23,11 +23,15 @@ a {
   background: #f9f9f9;
   margin: 1em 0 5em;
   overflow: hidden;
-  padding: 1em;
+  padding: 1em 1em 0.4em;
 
   border-radius: 1em;
   -moz-border-radius: 1em;
   -webkit-border-radius: 1em;
+}
+
+.ie #gollum-editor {
+  padding-bottom: 1em;  
 }
 
 #gollum-editor form fieldset {
@@ -270,6 +274,14 @@ a#function-help:hover span { background-position: -405px -28px; }
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+}
+
+.webkit #gollum-editor input#gollum-editor-submit {
+  padding: 0.5em 1em 0.45em;
+}
+
+.ie #gollum-editor input#gollum-editor-submit {
+  padding: 0.4em 1em 0.5em;
 }
 
 #gollum-editor input#gollum-editor-submit:hover {
