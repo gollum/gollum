@@ -184,7 +184,8 @@ module Gollum
     def write_page(name, format, data, commit = {})
       commit = normalize_commit(commit)
       index  = nil
-      sha1   = commit_index(commit) do |index|
+      sha1   = commit_index(commit) do |idx|
+        index = idx
         add_to_index(index, '', name, format, data)
       end
 
@@ -216,7 +217,8 @@ module Gollum
       dir      = ::File.dirname(page.path)
       dir      = '' if dir == '.'
       index    = nil
-      sha1     = commit_index(commit) do |index|
+      sha1     = commit_index(commit) do |idx|
+        index = idx
         if page.name == name && page.format == format
           index.add(page.path, normalize(data))
         else
@@ -243,7 +245,8 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def delete_page(page, commit)
       index = nil
-      sha1 = commit_index(commit) do |index|
+      sha1  = commit_index(commit) |idx|
+        index = idx
         index.delete(page.path)
       end
 
