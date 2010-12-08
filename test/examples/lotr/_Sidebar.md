@@ -1,1 +1,0 @@
-Lord of the Rings wiki
