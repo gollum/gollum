@@ -183,17 +183,10 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def write_page(name, format, data, commit = {})
       commit = normalize_commit(commit)
-      index  = self.repo.index
-
-      if pcommit = @repo.commit('master')
-        index.read_tree(pcommit.tree.id)
+      index  = nil
+      sha1   = commit_index(commit) do |index|
+        add_to_index(index, '', name, format, data)
       end
-
-      add_to_index(index, '', name, format, data)
-
-      parents = pcommit ? [pcommit] : []
-      actor   = Grit::Actor.new(commit[:name], commit[:email])
-      sha1    = index.commit(commit[:message], parents, actor)
 
       @access.refresh
       update_working_dir(index, '', name, format)
@@ -218,25 +211,19 @@ module Gollum
     # Returns the String SHA1 of the newly written version.
     def update_page(page, name, format, data, commit = {})
       commit   = normalize_commit(commit)
-      pcommit  = @repo.commit('master')
       name   ||= page.name
       format ||= page.format
-      index    = self.repo.index
-
-      dir = ::File.dirname(page.path)
-      dir = '' if dir == '.'
-
-      index.read_tree(pcommit.tree.id)
-
-      if page.name == name && page.format == format
-        index.add(page.path, normalize(data))
-      else
-        index.delete(page.path)
-        add_to_index(index, dir, name, format, data, :allow_same_ext)
+      dir      = ::File.dirname(page.path)
+      dir      = '' if dir == '.'
+      index    = nil
+      sha1     = commit_index(commit) do |index|
+        if page.name == name && page.format == format
+          index.add(page.path, normalize(data))
+        else
+          index.delete(page.path)
+          add_to_index(index, dir, name, format, data, :allow_same_ext)
+        end
       end
-
-      actor = Grit::Actor.new(commit[:name], commit[:email])
-      sha1  = index.commit(commit[:message], [pcommit], actor)
 
       @access.refresh
       update_working_dir(index, dir, page.name, page.format)
@@ -255,17 +242,13 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version.
     def delete_page(page, commit)
-      pcommit = @repo.commit('master')
-
-      index = self.repo.index
-      index.read_tree(pcommit.tree.id)
-      index.delete(page.path)
+      index = nil
+      sha1 = commit_index(commit) do |index|
+        index.delete(page.path)
+      end
 
       dir = ::File.dirname(page.path)
       dir = '' if dir == '.'
-
-      actor = Grit::Actor.new(commit[:name], commit[:email])
-      sha1  = index.commit(commit[:message], [pcommit], actor)
 
       @access.refresh
       update_working_dir(index, dir, page.name, page.format)
@@ -528,6 +511,19 @@ module Gollum
       end
 
       index.add(fullpath, normalize(data))
+    end
+
+    def commit_index(options = {})
+      options[:parent] ||= [@repo.commit('master')]
+      options[:parent].compact!
+      index = self.repo.index
+      if parent = options[:parent][0]
+        index.read_tree(parent.tree.id)
+      end
+      yield index if block_given?
+
+      actor = Grit::Actor.new(options[:name], options[:email])
+      index.commit(options[:message], options[:parent], actor)
     end
 
     # Ensures a commit hash has all the required fields for a commit.
