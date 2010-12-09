@@ -228,6 +228,36 @@
 }
 
 /* @control syntax */
+#template .data {
+  border: 1px solid #ddd;
+  margin-top: 1em;
+  overflow: auto;
+}
+
+#template .data pre {
+  margin: 0;
+  padding: 0;
+}
+
+#template .data pre div {
+  padding: 0 0 0 1em;
+}
+
+#template .data tr td {
+  font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
+  font-size: 1.2em;
+  line-height: 1.8em;
+  margin: 0;
+  padding: 0;
+}
+
+#template .data td.line_numbers {
+  background: #f7f7f7;
+  border-right: 1px solid #999;
+  color: #999; 
+  padding: 0 0 0 0.5em;
+}
+
 #template .highlight  { background: #ffffff; }
 #template .highlight .c { color: #999988; font-style: italic } 
 #template .highlight .err { color: #a61717; background-color: #e3d2d2 } 
