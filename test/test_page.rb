@@ -1,5 +1,5 @@
 # ~*~ encoding: utf-8 ~*~
-require File.join(File.dirname(__FILE__), *%w[helper])
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Page" do
   setup do
