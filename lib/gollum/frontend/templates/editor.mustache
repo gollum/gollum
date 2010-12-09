@@ -86,21 +86,21 @@
     <textarea id="gollum-editor-body"
      data-markup-lang="{{format}}" name="content">{{content}}</textarea>
      
-    {{#has_footer}}
+    {{#footer}}
     <div id="gollum-editor-edit-footer" class="collapsed">
       <a href="#" class="button"><span>Expand/Collapse</span></a>
       <h4>Footer</h4>
-      <textarea id="gollum-editor-footer" name="footer"></textarea>
+      <textarea id="gollum-editor-footer" name="footer">{{footer}}</textarea>
     </div>
-    {{/has_footer}}
+    {{/footer}}
     
-    {{#has_sidebar}}
+    {{#sidebar}}
     <div id="gollum-editor-edit-sidebar" class="collapsed">
       <a href="#" class="button"><span>Expand/Collapse</span></a>
       <h4>Sidebar</h4>
-      <textarea id="gollum-editor-sidebar" name="sidebar"></textarea>
+      <textarea id="gollum-editor-sidebar" name="sidebar">{{sidebar}}</textarea>
     </div>
-    {{/has_sidebar}}
+    {{/sidebar}}
     
     <div id="gollum-editor-edit-summary" class="singleline">
       <label for="message" class="jaws">Edit message:</label>
