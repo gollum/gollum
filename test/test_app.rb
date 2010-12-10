@@ -39,6 +39,10 @@ context "Frontend" do
     assert_equal 'def', page.version.message
   end
 
+  test "previews content" do
+    post "/preview", :content => 'abc', :format => 'markdown'
+  end
+
   def app
     Precious::App
   end
