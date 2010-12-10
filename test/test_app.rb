@@ -28,6 +28,22 @@ context "Frontend" do
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
+  test "renames page" do
+    page_1 = @wiki.page('Bilbo Baggins')
+    post "/edit/#{Gollum::Page.cname page_1.name}", :content => 'abc', 
+      :rename => "Bilbo Whatever",
+      :format => page_1.format, :message => 'def'
+    follow_redirect!
+    assert last_response.ok?
+
+    @wiki.clear_cache
+    assert_nil @wiki.page(page_1.name)
+    page_2 = @wiki.page('Bilbo Whatever')
+    assert_equal 'abc', page_2.raw_data
+    assert_equal 'def', page_2.version.message
+    assert_not_equal page_1.version.sha, page_2.version.sha
+  end
+
   test "creates page" do
     post "/create", :content => 'abc', :page => "Newbie",
       :format => 'markdown', :message => 'def'
