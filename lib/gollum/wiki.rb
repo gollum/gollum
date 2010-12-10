@@ -538,18 +538,19 @@ module Gollum
 
     def commit_index(options = {})
       normalize_commit(options)
-      options[:parent] ||= [@repo.commit('master')]
-      options[:parent].compact!
+      parents = [options[:parent] || @repo.commit('master')]
+      parents.flatten!
+      parents.compact!
       index = self.repo.index
       if tree   = options[:tree]
         index.read_tree(tree)
-      elsif parent = options[:parent][0]
+      elsif parent = parents[0]
         index.read_tree(parent.tree.id)
       end
       yield index if block_given?
 
       actor = Grit::Actor.new(options[:name], options[:email])
-      index.commit(options[:message], options[:parent], actor)
+      index.commit(options[:message], parents, actor)
     end
 
     def full_reverse_diff_for(page, sha1, sha2 = nil)

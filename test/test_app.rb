@@ -28,6 +28,32 @@ context "Frontend" do
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
+  test "edits page footer and sidebar" do
+    page_1 = @wiki.page('Bilbo Baggins')
+    foot_1 = page_1.footer
+    side_1 = page_1.sidebar
+
+    post "/edit/#{Gollum::Page.cname page_1.name}",
+      :footer => 'footer', :sidebar => 'sidebar',
+      :format => page_1.format, :message => 'def'
+    follow_redirect!
+    assert last_response.ok?
+
+    @wiki.clear_cache
+    page_2 = @wiki.page(page_1.name)
+    foot_2 = page_2.footer
+    side_2 = page_2.sidebar
+    assert_equal page_1.raw_data, page_2.raw_data
+
+    assert_equal 'footer', foot_2.raw_data
+    assert_equal 'def',    foot_2.version.message
+    assert_not_equal foot_1.version.sha, foot_2.version.sha
+
+    assert_equal 'sidebar', side_2.raw_data
+    assert_equal 'def',     side_2.version.message
+    assert_not_equal side_1.version.sha, side_2.version.sha
+  end
+
   test "renames page" do
     page_1 = @wiki.page('Bilbo Baggins')
     post "/edit/#{Gollum::Page.cname page_1.name}", :content => 'abc', 

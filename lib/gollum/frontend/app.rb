@@ -58,8 +58,11 @@ module Precious
       wiki = Gollum::Wiki.new(settings.gollum_path)
       page = wiki.page(params[:splat].first)
       name = params[:rename] || page.name
-      update_wiki_page(wiki, page, params[:content], commit_message, 
-        name, params[:format])
+      msg  = commit_message
+      update_wiki_page(wiki, page, params[:content], msg, name, 
+        params[:format])
+      update_wiki_page(wiki, page.footer,  params[:footer],  msg) if params[:footer]
+      update_wiki_page(wiki, page.sidebar, params[:sidebar], msg) if params[:sidebar]
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
@@ -160,8 +163,7 @@ module Precious
     end
 
     def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
-      return if !page
-      return if page.raw_data == content
+      return if !page || !content || page.raw_data == content
       name ||= page.name
       format = (format || page.format).to_sym
       wiki.update_page(page, name, format, content, commit_message)
