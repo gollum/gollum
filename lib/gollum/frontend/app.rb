@@ -55,12 +55,11 @@ module Precious
     end
 
     post '/edit/*' do
-      wiki   = Gollum::Wiki.new(settings.gollum_path)
-      page   = wiki.page(params[:splat].first)
-      name   = params[:rename] || page.name
-      format = params[:format].intern
-
-      wiki.update_page(page, name, format, params[:content], commit_message)
+      wiki = Gollum::Wiki.new(settings.gollum_path)
+      page = wiki.page(params[:splat].first)
+      name = params[:rename] || page.name
+      update_wiki_page(wiki, page, params[:content], commit_message, 
+        name, params[:format])
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
@@ -158,6 +157,14 @@ module Precious
         @name = name
         mustache :create
       end
+    end
+
+    def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
+      return if !page
+      return if page.raw_data == content
+      name ||= page.name
+      format = (format || page.format).to_sym
+      wiki.update_page(page, name, format, content, commit_message)
     end
 
     def commit_message
