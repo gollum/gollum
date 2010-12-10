@@ -39,6 +39,17 @@ context "Frontend" do
     assert_equal 'def', page.version.message
   end
 
+  test "guards against creation of existing page" do
+    name = "Bilbo Baggins"
+    post "/create", :content => 'abc', :page => name,
+      :format => 'markdown', :message => 'def'
+    assert last_response.ok?
+
+    @wiki.clear_cache
+    page = @wiki.page(name)
+    assert_not_equal 'abc', page.raw_data
+  end
+
   test "previews content" do
     post "/preview", :content => 'abc', :format => 'markdown'
   end
