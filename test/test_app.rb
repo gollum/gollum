@@ -113,7 +113,7 @@ context "Frontend" do
   test "reverts multiple commits" do
     page1 = @wiki.page('A')
 
-    post "/revert/A/302a5491a9a5ba12c7652ac831a44961afa312d2/b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f"
+    post "/revert/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac/b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f"
     follow_redirect!
     assert last_response.ok?
 
