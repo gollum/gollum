@@ -82,6 +82,30 @@ module Precious
       end
     end
 
+    post '/revert/:page/*' do
+      wiki  = Gollum::Wiki.new(settings.gollum_path)
+      @name = params[:page]
+      @page = wiki.page(@name)
+      shas  = params[:splat].first.split("/")
+      sha1  = shas.shift
+      sha2  = shas.shift
+      sha1  = "#{sha1}^" if sha2
+
+      if wiki.revert_page(@page, sha1, sha2, commit_message)
+        redirect "/#{CGI.escape(@name)}"
+      else
+        if sha2
+          sha1.chomp!('^')
+        else
+          sha2, sha1 = sha1, "#{sha1}^"
+        end
+        @versions = [sha1, sha2]
+        diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+        @diff     = diffs.first
+        mustache :compare
+      end
+    end
+
     post '/preview' do
       wiki     = Gollum::Wiki.new(settings.gollum_path)
       @name    = "Preview"
