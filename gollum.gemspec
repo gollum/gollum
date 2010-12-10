@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('org-ruby')
   s.add_development_dependency('rdiscount')
   s.add_development_dependency('shoulda')
+  s.add_development_dependency('rack-test')
 
   # = MANIFEST =
   s.files = %w[

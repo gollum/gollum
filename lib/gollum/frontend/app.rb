@@ -30,10 +30,12 @@ module Precious
 
     # Sinatra error handling
     configure :development, :staging do
-      set :raise_errors, false
-      set :show_exceptions, true
-      set :dump_errors, true
-      set :clean_trace, false
+      enable :show_exceptions, :dump_errors
+      disable :raise_errors, :clean_trace
+    end
+
+    configure :test do
+      enable :logging, :raise_errors, :dump_errors
     end
 
     get '/' do
@@ -53,18 +55,17 @@ module Precious
     end
 
     post '/edit/*' do
-      name   = params[:splat].first
       wiki   = Gollum::Wiki.new(settings.gollum_path)
-      page   = wiki.page(name)
+      page   = wiki.page(params[:splat].first)
+      name   = params[:rename] || page.name
       format = params[:format].intern
-      name   = params[:rename] if params[:rename]
 
       wiki.update_page(page, name, format, params[:content], commit_message)
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
 
-    post '/create/*' do
+    post '/create' do
       name = params[:page]
       wiki = Gollum::Wiki.new(settings.gollum_path)
 
