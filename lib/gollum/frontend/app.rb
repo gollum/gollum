@@ -97,6 +97,7 @@ module Precious
         @versions = [sha1, sha2]
         diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
         @diff     = diffs.first
+        @message  = "The patch does not apply."
         mustache :compare
       end
     end

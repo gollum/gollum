@@ -1,7 +1,7 @@
 module Precious
   module Views
     class Compare < Layout
-      attr_reader :page, :diff, :versions
+      attr_reader :page, :diff, :versions, :message
 
       def title
         "Comparison of #{@page.title}"
@@ -28,6 +28,10 @@ module Precious
                      :rdln  => right_diff_line_number(0, line) }
         end if @diff
         lines
+      end
+
+      def show_revert
+        !@message
       end
 
       # private

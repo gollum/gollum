@@ -7,13 +7,20 @@
     <ul class="actions">
       <li class="minibutton"><a href="/history/{{escaped_name}}"
          class="action-page-history">Back to Page History</a></li>
+    {{#show_revert}}
       <li class="minibutton">
         <input type="submit" id="gollum-editor-submit" value="Revert" title="Save current changes">
       </li>
+    {{/show_revert}}
     </ul></div>
   </form>
   {{>searchbar}}
 </div>
+
+{{#message}}
+<p>{{message}}</p>
+{{/message}}
+
 <div id="compare-content">
   <div class="data highlight">
     <table cellpadding="0" cellspacing="0">
