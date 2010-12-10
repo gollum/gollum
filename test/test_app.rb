@@ -5,7 +5,7 @@ context "Frontend" do
   include Rack::Test::Methods
 
   setup do
-    @path = cloned_testpath("examples/lotr.git")
+    @path = cloned_testpath("examples/revert.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
   end
@@ -15,8 +15,8 @@ context "Frontend" do
   end
 
   test "edits page" do
-    page_1 = @wiki.page('Bilbo Baggins')
-    post "/edit/#{Gollum::Page.cname page_1.name}", :content => 'abc', 
+    page_1 = @wiki.page('A')
+    post "/edit/A", :content => 'abc', 
       :format => page_1.format, :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -29,11 +29,11 @@ context "Frontend" do
   end
 
   test "edits page footer and sidebar" do
-    page_1 = @wiki.page('Bilbo Baggins')
+    page_1 = @wiki.page('A')
     foot_1 = page_1.footer
     side_1 = page_1.sidebar
 
-    post "/edit/#{Gollum::Page.cname page_1.name}",
+    post "/edit/A",
       :footer => 'footer', :sidebar => 'sidebar',
       :format => page_1.format, :message => 'def'
     follow_redirect!
@@ -55,34 +55,34 @@ context "Frontend" do
   end
 
   test "renames page" do
-    page_1 = @wiki.page('Bilbo Baggins')
-    post "/edit/#{Gollum::Page.cname page_1.name}", :content => 'abc', 
-      :rename => "Bilbo Whatever",
+    page_1 = @wiki.page('B')
+    post "/edit/B", :content => 'abc', 
+      :rename => "C",
       :format => page_1.format, :message => 'def'
     follow_redirect!
     assert last_response.ok?
 
     @wiki.clear_cache
-    assert_nil @wiki.page(page_1.name)
-    page_2 = @wiki.page('Bilbo Whatever')
+    assert_nil @wiki.page("B")
+    page_2 = @wiki.page('C')
     assert_equal 'abc', page_2.raw_data
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
   test "creates page" do
-    post "/create", :content => 'abc', :page => "Newbie",
+    post "/create", :content => 'abc', :page => "D",
       :format => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
 
-    page = @wiki.page('Newbie')
+    page = @wiki.page('D')
     assert_equal 'abc', page.raw_data
     assert_equal 'def', page.version.message
   end
 
   test "guards against creation of existing page" do
-    name = "Bilbo Baggins"
+    name = "A"
     post "/create", :content => 'abc', :page => name,
       :format => 'markdown', :message => 'def'
     assert last_response.ok?
