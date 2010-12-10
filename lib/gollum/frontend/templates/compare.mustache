@@ -1,10 +1,17 @@
 <div id="wiki-wrapper" class="compare">
 <div id="head">
   <h1>History for <strong>{{path}}</strong></h1>
-  <ul class="actions">
-    <li class="minibutton"><a href="/history/{{escaped_name}}"
-       class="action-page-history">Back to Page History</a></li>
-  </ul>
+  
+  <form name="gollum-revert" action="/revert/{{escaped_name}}/{{before}}/{{after}}" method="post">
+    <div id="gollum-editor">
+    <ul class="actions">
+      <li class="minibutton"><a href="/history/{{escaped_name}}"
+         class="action-page-history">Back to Page History</a></li>
+      <li class="minibutton">
+        <input type="submit" id="gollum-editor-submit" value="Revert" title="Save current changes">
+      </li>
+    </ul></div>
+  </form>
   {{>searchbar}}
 </div>
 <div id="compare-content">

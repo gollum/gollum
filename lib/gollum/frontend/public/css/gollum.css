@@ -291,7 +291,7 @@ a:hover, a:visited {
   }
   
   #wiki-history table tr td.commit-name {
-    border-right: none;
+    border-left: 0;
   }
   
   #wiki-history table tr td.commit-name span.time-elapsed {
@@ -328,21 +328,6 @@ a:hover, a:visited {
     font-size: 0.9em;
     font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
     padding: 0 0.2em;
-  }
-  
-  #wiki-history table tr td.revert-action {
-    border-left: 0;
-    min-width: 10em;
-    text-align: right;
-  }
-  
-  #wiki-history table tr td.revert-action a {
-    font-weight: bold;
-  }
-  
-  #wiki-history table tr td.revert-action a span {
-    font-size: 0.9em;
-    font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
   }
 
 .history #wiki-history ul.actions li,
