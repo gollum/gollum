@@ -26,7 +26,7 @@ module Precious
                      :class => line_class(line),
                      :ldln => left_diff_line_number(0, line),
                      :rdln => right_diff_line_number(0, line) }
-        end
+        end if @diff
         lines
       end
 
