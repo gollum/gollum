@@ -52,6 +52,7 @@ context "Frontend" do
 
   test "previews content" do
     post "/preview", :content => 'abc', :format => 'markdown'
+    assert last_response.ok?
   end
 
   def app
