@@ -403,6 +403,10 @@ a:hover, a:visited {
     font-weight: bold;
   }
   
+  .compare #compare-content {
+    margin-top: 3em;
+  }
+  
   .compare .data {
     border: 1px solid #ddd;
     margin-top: 1em;
@@ -432,7 +436,8 @@ a:hover, a:visited {
     color: #999; 
     padding: 0 0 0 0.5em;
   }
-  
+
+.compare #compare-content ul.actions li,
 .compare #footer ul.actions li {
   margin-left: 0;
   margin-right: 0.6em;
