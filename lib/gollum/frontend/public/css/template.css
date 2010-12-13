@@ -24,6 +24,16 @@
   text-decoration: none;
 }
 
+/*
+  Link classes available:
+  .absent - for internal links that do not yet exist 
+  .internal - for internal links (links that link to other wiki pages)
+  .present - for internal links that exist (normal color)
+*/
+#template a.absent {
+  color: #d00 !important;
+}
+
 #template a:hover, #template a:visited {
   text-decoration: underline;
 }
