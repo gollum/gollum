@@ -236,8 +236,9 @@
 }
   
   #template .frame span {
-    display: block;
     color: #888;
+    display: block;
+    line-height: normal;
   }
   
   #template .frame img {
@@ -290,6 +291,7 @@
 #template .align-center span {
   color: #888;
   display: block;
+  line-height: normal;
 }
 
 
