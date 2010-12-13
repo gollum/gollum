@@ -227,6 +227,72 @@
   background-color: #f9f9f9;
 }
 
+
+/* Generic align commands (deprecated) */
+#template .frame {
+  display: block;
+  overflow: hidden;
+  padding: 1em 0;
+}
+  
+  #template .frame span {
+    display: block;
+    color: #888;
+  }
+  
+  #template .frame img {
+    border: 1px solid #ddd;
+    padding: 1em;    
+  }
+
+#template .float-left {
+  display: block;
+  float: left;
+  margin-right: 1em;
+  padding: 1em 0;
+  overflow: hidden;
+}
+
+#template .float-right {
+  display: block;
+  float: right;
+  margin-left: 1em;
+  padding: 1em 0;
+  overflow: hidden;
+}
+
+#template .align-left,
+#template .align-left img {
+  display: block;
+  text-align: left;
+}
+
+#template .align-center,
+#template .align-center img {
+  display: block;
+  margin: 0 auto;
+}
+
+#template .align-right,
+#template .align-right img {
+  display: block;
+  overflow: hidden;
+}
+
+  #template .align-right img, 
+  #template .align-right span {
+    display: block;
+    float: right;
+  }
+
+#template .align-left span,
+#template .align-right span,
+#template .align-center span {
+  color: #888;
+  display: block;
+}
+
+
 /* @control syntax */
 #template .data {
   border: 1px solid #ddd;
