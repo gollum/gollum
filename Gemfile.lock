@@ -1,0 +1,58 @@
+PATH
+  remote: .
+  specs:
+    gollum (1.1.0)
+      albino (~> 1.0)
+      github-markup (>= 0.4.0, < 1.0.0)
+      grit (~> 2.3)
+      mustache (>= 0.11.2, < 1.0.0)
+      nokogiri (~> 1.4)
+      sanitize (~> 1.1)
+      sinatra (~> 1.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    RedCloth (4.2.3)
+    albino (1.0)
+    diff-lcs (1.1.2)
+    github-markup (0.5.0)
+    grit (2.3.0)
+      diff-lcs (~> 1.1)
+      mime-types (~> 1.15)
+    mime-types (1.16)
+    mocha (0.9.9)
+      rake
+    mustache (0.11.2)
+    nokogiri (1.4.3.1)
+    org-ruby (0.5.3)
+      rubypants (>= 0.2.0)
+    rack (1.2.1)
+    rake (0.8.7)
+    rdiscount (1.6.5)
+    rubypants (0.2.0)
+    sanitize (1.2.1)
+      nokogiri (~> 1.4.1)
+    shoulda (2.11.3)
+    sinatra (1.1.0)
+      rack (~> 1.1)
+      tilt (~> 1.1)
+    tilt (1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  RedCloth
+  albino (~> 1.0)
+  github-markup (>= 0.4.0, < 1.0.0)
+  gollum!
+  grit (~> 2.3)
+  mocha
+  mustache (>= 0.11.2, < 1.0.0)
+  nokogiri (~> 1.4)
+  org-ruby
+  rdiscount
+  sanitize (~> 1.1)
+  shoulda
+  sinatra (~> 1.0)

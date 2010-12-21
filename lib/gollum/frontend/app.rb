@@ -30,10 +30,12 @@ module Precious
 
     # Sinatra error handling
     configure :development, :staging do
-      set :raise_errors, false
-      set :show_exceptions, true
-      set :dump_errors, true
-      set :clean_trace, false
+      enable :show_exceptions, :dump_errors
+      disable :raise_errors, :clean_trace
+    end
+
+    configure :test do
+      enable :logging, :raise_errors, :dump_errors
     end
 
     get '/' do
@@ -53,18 +55,19 @@ module Precious
     end
 
     post '/edit/*' do
-      name   = params[:splat].first
-      wiki   = Gollum::Wiki.new(settings.gollum_path)
-      page   = wiki.page(name)
-      format = params[:format].intern
-      name   = params[:rename] if params[:rename]
-
-      wiki.update_page(page, name, format, params[:content], commit_message)
+      wiki = Gollum::Wiki.new(settings.gollum_path)
+      page = wiki.page(params[:splat].first)
+      name = params[:rename] || page.name
+      msg  = commit_message
+      update_wiki_page(wiki, page, params[:content], msg, name, 
+        params[:format])
+      update_wiki_page(wiki, page.footer,  params[:footer],  msg) if params[:footer]
+      update_wiki_page(wiki, page.sidebar, params[:sidebar], msg) if params[:sidebar]
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
 
-    post '/create/*' do
+    post '/create' do
       name = params[:page]
       wiki = Gollum::Wiki.new(settings.gollum_path)
 
@@ -79,11 +82,32 @@ module Precious
       end
     end
 
+    post '/revert/:page/*' do
+      wiki  = Gollum::Wiki.new(settings.gollum_path)
+      @name = params[:page]
+      @page = wiki.page(@name)
+      shas  = params[:splat].first.split("/")
+      sha1  = shas.shift
+      sha2  = shas.shift
+
+      if wiki.revert_page(@page, sha1, sha2, commit_message)
+        redirect "/#{CGI.escape(@name)}"
+      else
+        sha2, sha1 = sha1, "#{sha1}^" if !sha2
+        @versions = [sha1, sha2]
+        diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+        @diff     = diffs.first
+        @message  = "The patch does not apply."
+        mustache :compare
+      end
+    end
+
     post '/preview' do
-      format = params['wiki_format']
-      data = params['text']
-      wiki = Gollum::Wiki.new(settings.gollum_path)
-      wiki.preview_page("Preview", data, format).formatted_data
+      wiki     = Gollum::Wiki.new(settings.gollum_path)
+      @name    = "Preview"
+      @page    = wiki.preview_page(@name, params[:content], params[:format])
+      @content = @page.formatted_data
+      mustache :page
     end
 
     get '/history/:name' do
@@ -134,6 +158,7 @@ module Precious
       @query = params[:q]
       wiki = Gollum::Wiki.new(settings.gollum_path)
       @results = wiki.search @query
+      @name = @query
       mustache :search
     end
 
@@ -155,6 +180,13 @@ module Precious
         @name = name
         mustache :create
       end
+    end
+
+    def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
+      return if !page || !content || page.raw_data == content
+      name ||= page.name
+      format = (format || page.format).to_sym
+      wiki.update_page(page, name, format, content, commit_message)
     end
 
     def commit_message

@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.0.1'
-  s.date              = '2010-10-11'
+  s.version           = '1.1.0'
+  s.date              = '2010-10-28'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('org-ruby')
   s.add_development_dependency('rdiscount')
   s.add_development_dependency('shoulda')
+  s.add_development_dependency('rack-test')
 
   # = MANIFEST =
   s.files = %w[
@@ -460,6 +461,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/views/layout.rb
     lib/gollum/frontend/views/page.rb
     lib/gollum/frontend/views/search.rb
+    lib/gollum/git_access.rb
     lib/gollum/markup.rb
     lib/gollum/page.rb
     lib/gollum/pagination.rb
@@ -504,6 +506,7 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/refs/heads/master
     test/helper.rb
     test/test_file.rb
+    test/test_git_access.rb
     test/test_markup.rb
     test/test_page.rb
     test/test_wiki.rb

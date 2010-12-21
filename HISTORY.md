@@ -1,6 +1,20 @@
 # HEAD
 
 * Major Enhancements
+  * Add Page sidebars, similar to Page footers.
+* Minor Enhancements
+  * Add `:sanitization` and `:history_sanitization` options for customizing 
+    how `Sanitize.clean` modifies formatted wiki content.
+  * Add `--config` option for the command line, to specify a ruby file that is
+    run during startup.
+  * Provide access to a parsed Nokogiri::DocumentFragment during markup 
+    rendering for added customization.
+* Bug Fixes
+  * Use `@wiki.page_class` in Gollum::Markup where appropriate (#63).
+
+# 1.1.0 / 2010-10-28
+
+* Major Enhancements
   * Optimize page write/update/delete to use Grit::Index::read_tree instead
     of manually recreating entire index contents.
   * Added --irb option for the gollum command.

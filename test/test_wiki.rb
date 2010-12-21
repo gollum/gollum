@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), *%w[helper])
+# ~*~ encoding: utf-8 ~*~
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Wiki" do
   setup do
@@ -60,28 +61,41 @@ context "Wiki" do
       @wiki.normalize_commit(commit.dup))
   end
 
-  test "#tree_map_for caches ref and tree" do
-    assert @wiki.ref_map.empty?
-    assert @wiki.tree_map.empty?
-    @wiki.tree_map_for 'master'
-    assert_equal({"master"=>"60f12f4254f58801b9ee7db7bca5fa8aeefaa56b"}, @wiki.ref_map)
+  #test "#tree_map_for caches ref and tree" do
+  #  assert @wiki.ref_map.empty?
+  #  assert @wiki.tree_map.empty?
+  #  @wiki.tree_map_for 'master'
+  #  assert_equal({"master"=>"60f12f4254f58801b9ee7db7bca5fa8aeefaa56b"}, @wiki.ref_map)
+  #
+  #  map = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b']
+  #  assert_equal 'Bilbo-Baggins.md',        map[0].path
+  #  assert_equal '',                        map[0].dir
+  #  assert_equal map[0].path,               map[0].name
+  #  assert_equal 'Mordor/Eye-Of-Sauron.md', map[3].path
+  #  assert_equal '/Mordor',                 map[3].dir
+  #  assert_equal 'Eye-Of-Sauron.md',        map[3].name
+  #end
+  #
+  #test "#tree_map_for only caches tree for commit" do
+  #  assert @wiki.tree_map.empty?
+  #  @wiki.tree_map_for '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
+  #  assert @wiki.ref_map.empty?
+  #
+  #  entry = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0]
+  #  assert_equal 'Bilbo-Baggins.md', entry.path
+  #end
 
-    map = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b']
-    assert_equal 'Bilbo-Baggins.md',        map[0].path
-    assert_equal '',                        map[0].dir
-    assert_equal map[0].path,               map[0].name
-    assert_equal 'Mordor/Eye-Of-Sauron.md', map[3].path
-    assert_equal '/Mordor',                 map[3].dir
-    assert_equal 'Eye-Of-Sauron.md',        map[3].name
-  end
-
-  test "#tree_map_for only caches tree for commit" do
-    assert @wiki.tree_map.empty?
-    @wiki.tree_map_for '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
-    assert @wiki.ref_map.empty?
-
-    entry = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0]
-    assert_equal 'Bilbo-Baggins.md', entry.path
+  test "text_data" do
+    wiki = Gollum::Wiki.new(testpath("examples/yubiwa.git"))
+    if String.instance_methods.include?(:encoding)
+      utf8 = wiki.page("strider").text_data
+      assert_equal Encoding::UTF_8, utf8.encoding
+      sjis = wiki.page("sjis").text_data(Encoding::SHIFT_JIS)
+      assert_equal Encoding::SHIFT_JIS, sjis.encoding
+    else
+      page = wiki.page("strider")
+      assert_equal page.raw_data, page.text_data
+    end
   end
 end
 

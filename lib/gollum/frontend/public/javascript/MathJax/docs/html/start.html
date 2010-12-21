@@ -1,0 +1,374 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="Installing and Testing MathJax" href="installation.html" />
+    <link rel="prev" title="What is MathJax?" href="mathjax.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installing and Testing MathJax"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mathjax.html" title="What is MathJax?"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>MathJax allows you to include mathematics in your web pages, either
+using TeX and LaTeX notation, or as MathML.  To use MathJax, you will
+need to do the following things:</p>
+<ol class="arabic simple">
+<li>Obtain a copy of MathJax and make it available on your server.</li>
+<li>Configure MathJax to suit the needs of your site.</li>
+<li>Link MathJax into the web pages that are to include mathematics.</li>
+<li>Put mathematics into your web pages so that MathJax can display
+it.</li>
+</ol>
+<p>Each of these steps is described briefly below, with links to more
+detailed explanations.  This page gives the quickest and easiest ways
+to get MathJax up and running on your web site, but you may want to
+read the details in order to customize the setup for your pages.</p>
+<div class="section" id="obtaining-and-installing-mathjax">
+<h2>Obtaining and Installing MathJax<a class="headerlink" href="#obtaining-and-installing-mathjax" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to set up MathJax is to obtain the
+<tt class="docutils literal"><span class="pre">MathJax-v1.0.zip</span></tt> archive from the <a class="reference external" href="http://www.mathjax.org/download/">MathJax download page</a>.  This includes both the MathJax code
+and the MathJax webfonts, so this is the only file you need.  (This is
+different from the beta releases, which had the fonts separate from
+the rest of the code).</p>
+<p>Unpack the <tt class="docutils literal"><span class="pre">MathJax-v1.0.zip</span></tt> archive and place the
+resulting MathJax folder onto your web server at a convenient
+location where you can include it into your web pages.  For example,
+making <tt class="docutils literal"><span class="pre">MathJax</span></tt> a top-level directory on your server would be
+one natural way to do this.  That would let you refer to the main
+MathJax file via the URL <tt class="docutils literal"><span class="pre">/MathJax/MathJax.js</span></tt> from within any page
+on your server.</p>
+<p>Note: While this is the easiest way to set up MathJax initially, there
+is a better way to do it if you want to be able to keep your copy of
+MathJax up-to-date easily.  That uses the <a class="reference external" href="http://subversion.apache.org/">subversion</a> program, and is described in the
+<a class="reference internal" href="installation.html#getting-mathjax-svn"><em>Installing MathJax</em></a> document.</p>
+<p>Once you have MathJax set up on your server, you can test it using the
+files in the <tt class="docutils literal"><span class="pre">MathJax/test</span></tt> directory.  Load them in your browser
+using its web address rather than opening them locally (i.e., use an
+<tt class="docutils literal"><span class="pre">http://</span></tt> URL rather than a <tt class="docutils literal"><span class="pre">file://</span></tt> URL).  When you view the
+<tt class="docutils literal"><span class="pre">index.html</span></tt> file, after a few moments you should see a message that
+MathJax appears to be working.  If not, check that the files have been
+transferred to the server completely and that the permissions allow
+the server to access the files and folders that are part of the
+MathJax directory.  (Be sure to verify the MathJax folder&#8217;s permissions
+as well.)  Check the server log files for any errors that pertain to
+the MathJax installation; this may help locate problems in the
+permission or locations of files.</p>
+</div>
+<div class="section" id="configuring-mathjax">
+<h2>Configuring MathJax<a class="headerlink" href="#configuring-mathjax" title="Permalink to this headline">¶</a></h2>
+<p>When you include MathJax into your web pages as described below, it
+will load the file <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> (i.e., the file named
+<tt class="docutils literal"><span class="pre">MathJax.js</span></tt> in the <tt class="docutils literal"><span class="pre">config</span></tt> folder of the main <tt class="docutils literal"><span class="pre">MathJax</span></tt>
+folder).  This file contains the configuration parameters that
+control how MathJax operates.  There are comments in it that
+explain each of the parameters, and you can edit the file to suit
+your needs.</p>
+<p>The default settings are appropriate for pages that use TeX as the
+input language, but you might still want to adjust some settings; for
+example, you might want to include some additional extensions such as
+the <tt class="docutils literal"><span class="pre">AMSmath</span></tt> and <tt class="docutils literal"><span class="pre">AMSsymbols</span></tt> extensions.  The comments in the
+file should help you do this, but more detailed instructions are
+included in the <a class="reference internal" href="configuration.html#configuration"><em>Configuring MathJax</em></a> document.
+There are also ways to configure MathJax other than by using the
+<tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file; these are descibed on that page as well.</p>
+</div>
+<div class="section" id="linking-mathjax-into-a-web-page">
+<h2>Linking MathJax into a web page<a class="headerlink" href="#linking-mathjax-into-a-web-page" title="Permalink to this headline">¶</a></h2>
+<p>You can include MathJax in your web page by putting</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path-to-MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>in your document&#8217;s <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> block.  Here, <tt class="docutils literal"><span class="pre">path-to-MathJax</span></tt> should
+be replaced by the URL for the main MathJax directory, so if you have
+put the <tt class="docutils literal"><span class="pre">MathJax</span></tt> directory at the top level of you server&#8217;s web
+site, you could use</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>to load MathJax in your page.  For example, your page could look like</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        ...
+        <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        ...
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Although it is possible to load MathJax from a site other than your
+own web server, there are issues involved in doing so that you need to
+take into consideration.  See the <a class="reference internal" href="installation.html#cross-domain-linking"><em>Notes About Shared Servers</em></a> for more details.  Please do <strong>not</strong> link to
+the copy of MathJax at <tt class="docutils literal"><span class="pre">www.mathjax.org</span></tt>, as we do not have the
+resources to act as a web service for all the sites on the web that
+would like to display mathematics.  If you are able to run MathJax
+from your own server, please do so (this will probably give you better
+response time in any case).</p>
+</div>
+<div class="section" id="putting-mathematics-in-a-web-page">
+<h2>Putting mathematics in a web page<a class="headerlink" href="#putting-mathematics-in-a-web-page" title="Permalink to this headline">¶</a></h2>
+<p>To put mathematics in your web page, you can use either TeX and LaTeX
+notation, or MathML notation (or both); the configuration file tells
+MathJax which you want to use, and how you plan to indicate the
+mathematics when you are using TeX notation.  The following sections
+tell you how to use each of these formats.</p>
+<div class="section" id="tex-and-latex-input">
+<span id="id2"></span><h3>TeX and LaTeX input<a class="headerlink" href="#tex-and-latex-input" title="Permalink to this headline">¶</a></h3>
+<p>To process mathematics that is written in <a class="reference internal" href="glossary.html#term-tex"><em class="xref std std-term">TeX</em></a> or <a class="reference internal" href="glossary.html#term-latex"><em class="xref std std-term">LaTeX</em></a>
+format, include <tt class="docutils literal"><span class="pre">&quot;input/TeX&quot;</span></tt> in your configuration&#8217;s <cite>jax</cite> array,
+and add <tt class="docutils literal"><span class="pre">&quot;tex2jax.js&quot;</span></tt> to the <cite>extensions</cite> array so that MathJax
+will look for TeX-style math delimiters to identify the mathematics on
+the page.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tex2math.js&quot;</span><span class="p">],</span>
+<span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span> <span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that the default math delimiters are <tt class="docutils literal"><span class="pre">$$...$$</span></tt> and <tt class="docutils literal"><span class="pre">\[...\]</span></tt>
+for displayed mathematics, and <tt class="docutils literal"><span class="pre">\(...\)</span></tt> for in-line mathematics.
+In particular, the <tt class="docutils literal"><span class="pre">$...$</span></tt> in-line delimiters are <strong>not</strong> used by
+default.  That is because dollar signs appear too often in
+non-mathematical settings, which could cause some text to be treated
+as mathematics unexpectedly.  For example, with single-dollar
+delimiters, &#8220;... the cost is $2.50 for the first one, and $2.00 for
+each additional one ...&#8221; would cause the phrase &#8220;2.50 for the first
+one, and&#8221; to be treated as mathematics since it falls between dollar
+signs.  For this reason, if you want to use single-dollars for in-line
+math mode, you must enable that explicitly in your configuration:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">tex2jax</span><span class="o">:</span> <span class="p">{</span><span class="nx">inlineMath</span><span class="o">:</span> <span class="p">[[</span><span class="s1">&#39;$&#39;</span><span class="p">,</span><span class="s1">&#39;$&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;\\(&#39;</span><span class="p">,</span><span class="s1">&#39;\\)&#39;</span><span class="p">]]}</span>
+</pre></div>
+</div>
+<p>See the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file, or the <a class="reference internal" href="options/tex2jax.html#configure-tex2jax"><em>tex2jax configuration
+options</em></a> page, for additional configuration
+parameters that you can specify for the <tt class="docutils literal"><span class="pre">tex2jax</span></tt> preprocessor.</p>
+<p>Here is a complete sample page containing TeX mathematics (which
+assumes that <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> is configured as described above):</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>MathJax TeX Test Page<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>There are a number of extensions for the TeX input processor that you
+might want to add to the <cite>extensions</cite> array.  These include:</p>
+<ul class="simple">
+<li><cite>TeX/AMSmath.js</cite>, which defines the AMS math environments and
+macros,</li>
+<li><cite>TeX/AMSsymbols.js</cite>, which defines the macros for the symbols in
+the msam10 and msbm10 fonts,</li>
+<li><cite>TeX/noErrors.js</cite>, which shows the original TeX code rather than
+an error message when there is a problem processing the TeX, and</li>
+<li><cite>TeX/noUndefined.js</cite>, which prevents undefined macros from
+producing an error message, and instead shows the macro name in red.</li>
+</ul>
+<p>For example,</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tex2math.js&quot;</span><span class="p">,</span><span class="s2">&quot;TeX/noErrors.js&quot;</span><span class="p">,</span><span class="s2">&quot;TeX/noUndefined.js&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;TeX/AMSmath.js&quot;</span><span class="p">,</span><span class="s2">&quot;TeX/AMSsymbols.js&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>loads all four extensions, in addition to the <tt class="docutils literal"><span class="pre">tex2math</span></tt>
+preprocessor.</p>
+</div>
+<div class="section" id="mathml-input">
+<h3>MathML input<a class="headerlink" href="#mathml-input" title="Permalink to this headline">¶</a></h3>
+<p>To process mathematics written in <a class="reference internal" href="glossary.html#term-mathml"><em class="xref std std-term">MathML</em></a>, include
+<tt class="docutils literal"><span class="pre">&quot;input/MathML&quot;</span></tt> in your configuration&#8217;s <cite>jax</cite> array, and add
+<tt class="docutils literal"><span class="pre">&quot;mml2jax.js&quot;</span></tt> to the <cite>extensions</cite> array so that MathJax will
+locate the <tt class="docutils literal"><span class="pre">&lt;math&gt;</span></tt> elements in the page automatically.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mml2jax.js&quot;</span><span class="p">],</span>
+<span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/MathML&quot;</span><span class="p">,</span> <span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>With this configuration, you would mark your mathematics using
+standard <tt class="docutils literal"><span class="pre">&lt;math&gt;</span></tt> tags, where <tt class="docutils literal"><span class="pre">&lt;math</span> <span class="pre">display=&quot;block&quot;&gt;</span></tt> represents
+displayed mathematics and <tt class="docutils literal"><span class="pre">&lt;math</span> <span class="pre">display=&quot;inline&quot;&gt;</span></tt> or just
+<tt class="docutils literal"><span class="pre">&lt;math&gt;</span></tt> represents in-line mathematics.</p>
+<p>Note that this will work in HTML files, not just XHTML files (MathJax
+works with both), and that the web page need not be served with any
+special MIME-type.  Also note that, unless you are using XHTML rather
+than HTML, you should not include a namespace prefix for your
+<tt class="docutils literal"><span class="pre">&lt;math&gt;</span></tt> tags; for example, you should not use <tt class="docutils literal"><span class="pre">&lt;m:math&gt;</span></tt> except
+in a file where you have tied the <tt class="docutils literal"><span class="pre">m</span></tt> namespace to the MathML DTD.</p>
+<p>Here is a complete sample page containing MathML mathematics (which
+assumes that <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> is configured as described above):</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>MathJax MathML Test Page<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+When <span class="nt">&lt;math&gt;&lt;mi&gt;</span>a<span class="nt">&lt;/mi&gt;&lt;mo&gt;</span><span class="ni">&amp;#x2260;</span><span class="nt">&lt;/mo&gt;&lt;mn&gt;</span>0<span class="nt">&lt;/mn&gt;&lt;/math&gt;</span>,
+there are two solutions to <span class="nt">&lt;math&gt;</span>
+  <span class="nt">&lt;mi&gt;</span>a<span class="nt">&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;</span>x<span class="nt">&lt;/mi&gt;&lt;mn&gt;</span>2<span class="nt">&lt;/mn&gt;&lt;/msup&gt;</span>
+  <span class="nt">&lt;mo&gt;</span>+<span class="nt">&lt;/mo&gt;</span> <span class="nt">&lt;mi&gt;</span>b<span class="nt">&lt;/mi&gt;&lt;mi&gt;</span>x<span class="nt">&lt;/mi&gt;</span>
+  <span class="nt">&lt;mo&gt;</span>+<span class="nt">&lt;/mo&gt;</span> <span class="nt">&lt;mi&gt;</span>c<span class="nt">&lt;/mi&gt;</span> <span class="nt">&lt;mo&gt;</span>=<span class="nt">&lt;/mo&gt;</span> <span class="nt">&lt;mn&gt;</span>0<span class="nt">&lt;/mn&gt;</span>
+<span class="nt">&lt;/math&gt;</span> and they are
+<span class="nt">&lt;math</span> <span class="na">mode=</span><span class="s">&quot;display&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;mi&gt;</span>x<span class="nt">&lt;/mi&gt;</span> <span class="nt">&lt;mo&gt;</span>=<span class="nt">&lt;/mo&gt;</span>
+  <span class="nt">&lt;mrow&gt;</span>
+    <span class="nt">&lt;mfrac&gt;</span>
+      <span class="nt">&lt;mrow&gt;</span>
+        <span class="nt">&lt;mo&gt;</span><span class="ni">&amp;#x2212;</span><span class="nt">&lt;/mo&gt;</span>
+        <span class="nt">&lt;mi&gt;</span>b<span class="nt">&lt;/mi&gt;</span>
+        <span class="nt">&lt;mo&gt;</span><span class="ni">&amp;#x00B1;</span><span class="nt">&lt;/mo&gt;</span>
+        <span class="nt">&lt;msqrt&gt;</span>
+          <span class="nt">&lt;msup&gt;&lt;mi&gt;</span>b<span class="nt">&lt;/mi&gt;&lt;mn&gt;</span>2<span class="nt">&lt;/mn&gt;&lt;/msup&gt;</span>
+          <span class="nt">&lt;mo&gt;</span><span class="ni">&amp;#x2212;</span><span class="nt">&lt;/mo&gt;</span>
+          <span class="nt">&lt;mn&gt;</span>4<span class="nt">&lt;/mn&gt;&lt;mi&gt;</span>a<span class="nt">&lt;/mi&gt;&lt;mi&gt;</span>c<span class="nt">&lt;/mi&gt;</span>
+        <span class="nt">&lt;/msqrt&gt;</span>
+      <span class="nt">&lt;/mrow&gt;</span>
+      <span class="nt">&lt;mrow&gt;</span> <span class="nt">&lt;mn&gt;</span>2<span class="nt">&lt;/mn&gt;&lt;mi&gt;</span>a<span class="nt">&lt;/mi&gt;</span> <span class="nt">&lt;/mrow&gt;</span>
+    <span class="nt">&lt;/mfrac&gt;</span>
+  <span class="nt">&lt;/mrow&gt;</span>
+  <span class="nt">&lt;mtext&gt;</span>.<span class="nt">&lt;/mtext&gt;</span>
+<span class="nt">&lt;/math&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">mml2jax</span></tt> has only a few configuration options; see the
+<tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file or the <a class="reference internal" href="options/mml2jax.html#configure-mml2jax"><em>mml2jax configuration options</em></a> page for more details.</p>
+</div>
+</div>
+<div class="section" id="where-to-go-from-here">
+<h2>Where to go from here?<a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
+<p>If you have followed the instructions above, you should now have
+MathJax installed and configured on your web server, and you should be
+able to use it to write web pages that include mathematics.  At this
+point, you can start making pages that contain mathematical content!</p>
+<p>You could also read more about the details of how to <a class="reference internal" href="configuration.html#configuration"><em>customize
+MathJax</em></a>.</p>
+<p>If you are trying to use MathJax in blog or wiki software or in some
+other content-management system, you might want to read about <a class="reference internal" href="platforms/index.html#platforms"><em>using
+MathJax in popular platforms</em></a>.</p>
+<p>If you are working on dynamic pages that include mathematics, you
+might want to read about the <a class="reference internal" href="api/index.html#mathjax-api"><em>MathJax Application Programming
+Interface</em></a> (its API), so you know how to include
+mathematics in your interactive pages.</p>
+<p>If you are having trouble getting MathJax to work, you can read more
+about <a class="reference internal" href="installation.html#installation"><em>installing MathJax</em></a>, or <a class="reference internal" href="configuration.html#loading"><em>loading and
+configuring MathJax</em></a>.</p>
+<p>Finally, if you have questions or comments, or want to help support
+MathJax, you could visit the <a class="reference internal" href="community.html#community-forums"><em>MathJax community forums</em></a> or the <a class="reference internal" href="community.html#community-tracker"><em>MathJax bug tracker</em></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#obtaining-and-installing-mathjax">Obtaining and Installing MathJax</a></li>
+<li><a class="reference internal" href="#configuring-mathjax">Configuring MathJax</a></li>
+<li><a class="reference internal" href="#linking-mathjax-into-a-web-page">Linking MathJax into a web page</a></li>
+<li><a class="reference internal" href="#putting-mathematics-in-a-web-page">Putting mathematics in a web page</a><ul>
+<li><a class="reference internal" href="#tex-and-latex-input">TeX and LaTeX input</a></li>
+<li><a class="reference internal" href="#mathml-input">MathML input</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#where-to-go-from-here">Where to go from here?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mathjax.html"
+                        title="previous chapter">What is MathJax?</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installing and Testing MathJax</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/start.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installing and Testing MathJax"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mathjax.html" title="What is MathJax?"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

@@ -3,6 +3,10 @@
   Wiki editor formatting
 */
 
+a {
+  -moz-outline: none !important;
+}
+
 .jaws {
   /* JAWS should see it, but you can't */
   display: block;
@@ -19,11 +23,15 @@
   background: #f9f9f9;
   margin: 1em 0 5em;
   overflow: hidden;
-  padding: 1em;
+  padding: 1em 1em 0.4em;
 
   border-radius: 1em;
   -moz-border-radius: 1em;
   -webkit-border-radius: 1em;
+}
+
+.ie #gollum-editor {
+  padding-bottom: 1em;  
 }
 
 #gollum-editor form fieldset {
@@ -80,16 +88,23 @@
 #gollum-editor #gollum-editor-function-bar  {
   border-bottom: 1px solid #ddd;
   overflow: hidden;
-  padding: 0 0 1.1em 0;
-  display: none;
+  padding: 0;
 }
+
 
 #gollum-editor-title-field + #gollum-editor-function-bar {
   margin-top: 0.6em;
 }
 
-#gollum-editor #gollum-editor-function-bar.active {
+#gollum-editor #gollum-editor-function-bar #gollum-editor-function-buttons {
+  display: none;
+}
+
+#gollum-editor #gollum-editor-function-bar.active #gollum-editor-function-buttons {
   display: block;
+  float: left;
+  overflow: hidden;
+  padding: 0 0 1.1em 0;
 }
 
 #gollum-editor #gollum-editor-function-bar a.function-button {
@@ -147,6 +162,7 @@ a#function-h2 span { background-position: -244px 0; }
 a#function-h3 span { background-position: -271px 0; }
 a#function-link span { background-position: -298px 0; }
 a#function-image span { background-position: -324px 0; }
+a#function-help span { background-position: -405px 0; } 
 
 a#function-bold:hover span { background-position: 0 -28px; }
 a#function-italic:hover span { background-position: -27px -28px; }
@@ -161,6 +177,7 @@ a#function-h2:hover span { background-position: -244px -28px; }
 a#function-h3:hover span { background-position: -271px -28px; }
 a#function-link:hover span { background-position: -298px -28px; }
 a#function-image:hover span { background-position: -324px -28px; }
+a#function-help:hover span { background-position: -405px -28px; } 
 
 
 #gollum-editor #gollum-editor-function-bar a.disabled {
@@ -173,6 +190,11 @@ a#function-image:hover span { background-position: -324px -28px; }
   width: 0.5em;
 }
 
+#gollum-editor #gollum-editor-function-bar #gollum-editor-format-selector {
+  overflow: hidden;
+  padding: 0 0 1.1em 0;
+}
+
 #gollum-editor #gollum-editor-function-bar 
   #gollum-editor-format-selector select {  
   background-color: #f9f9f9;
@@ -180,6 +202,7 @@ a#function-image:hover span { background-position: -324px -28px; }
   
   float: right;
   font-size: 1.1em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
   line-height: 1.6em;
   padding: 0.5em 0.7em;
@@ -189,7 +212,6 @@ a#function-image:hover span { background-position: -324px -28px; }
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em; 
-  
   -moz-outline: none;
 }
 
@@ -200,7 +222,22 @@ a#function-image:hover span { background-position: -324px -28px; }
   -moz-outline: none;
 }
 
-
+#gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector label {
+  color: #999;
+  float: right;
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 1.6em;
+  padding: 0.6em 0.5em 0 0;
+}
+  
+#gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector label:after {
+  content: ':';
+}
+  
+  
 /* @section form-fields */
 
 #gollum-editor textarea#gollum-editor-body {
@@ -215,14 +252,13 @@ a#function-image:hover span { background-position: -324px -28px; }
   height: 20em;
 }
 
-#gollum-editor input#gollum-editor-submit,
-#gollum-editor-dialog a.minibutton,
-#gollum-editor-dialog a.minibutton:visited {
+#gollum-editor input#gollum-editor-submit {
   background-color: #f7f7f7;
   border: 1px solid #d4d4d4;
   color: #333;
   cursor: pointer;
   display: block;
+  float: left;
   font-size: 1.2em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
@@ -240,8 +276,15 @@ a#function-image:hover span { background-position: -324px -28px; }
   -webkit-border-radius: 3px;
 }
 
-#gollum-editor input#gollum-editor-submit:hover,
-#gollum-editor-dialog a.minibutton:hover {
+.webkit #gollum-editor input#gollum-editor-submit {
+  padding: 0.5em 1em 0.45em;
+}
+
+.ie #gollum-editor input#gollum-editor-submit {
+  padding: 0.4em 1em 0.5em;
+}
+
+#gollum-editor input#gollum-editor-submit:hover {
   background: #3072b3;
   border-color: #518cc6 #518cc6 #2a65a0;
   color: #fff;
@@ -350,104 +393,144 @@ a#function-image:hover span { background-position: -324px -28px; }
   width: 98%;
 }
 
+/* @control minibutton */
 
-
-/* @control dialog */
-
-#gollum-editor-dialog {
-  display: none;
-  top: 50%;
-  left: 50%;
-  position: absolute;
-}
-
-#gollum-editor-dialog.active {
+#gollum-editor a.minibutton,
+#gollum-editor a.minibutton:visited {
+  background-color: #f7f7f7;
+  border: 1px solid #d4d4d4;
+  color: #333;
+  cursor: pointer;
   display: block;
-}
-
-#gollum-editor-dialog-inner {
-  background: transparent;
-  margin: 0 0 0 -225px;
-  overflow: hidden;
-  position: relative;
-  width: 450px;
-
-  border: 7px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-}
-
-#gollum-editor-dialog-bg {
-  background-color: #fff;
-  overflow: hidden;
-  padding: 1em;
-  
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f7f7f7', endColorstr='#ffffff');
-  background: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#ffffff));
-  background: -moz-linear-gradient(top, #f7f7f7, #ffffff);
-}
-
-#gollum-editor-dialog-inner h4 {
-  border-bottom: 1px solid #ddd;
-  color: #000;
-  font-size: 1.8em;
-  line-height: normal;
+  font-size: 1.2em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
-  margin: 0 0 0.75em 0;
-  padding: 0 0 0.3em 0;
+  line-height: 1.2em;
+  margin: 0 0 0 0.8em;
+  padding: 0.5em 1em;
+
+  text-shadow: 0 1px 0 #fff;
+
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
+  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
+
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 
-#gollum-editor-dialog-body fieldset {
-  border: 0;
+#gollum-editor a.minibutton:hover {
+  background: #3072b3;
+  border-color: #518cc6 #518cc6 #2a65a0;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
+  background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
+  background: -moz-linear-gradient(top, #599bdc, #3072b3);
+}
+
+
+#gollum-editor #gollum-editor-preview {
+  float: left;
+  font-weight: normal;
+  padding: left;
+}
+
+
+/* @section help */
+#gollum-editor-help {
   margin: 0;
+  overflow: hidden;
   padding: 0;
+  border: 1px solid #ddd;
+  border-width: 0 1px 1px 1px;
 }
 
-#gollum-editor-dialog-body fieldset .field {
-  margin: 0 0 1.5em 0;
-  padding: 0;
-}
-
-  #gollum-editor-dialog-body fieldset .field label {
-    color: #000;
+  #gollum-editor-help-parent,
+  #gollum-editor-help-list {
     display: block;
+    float: left;
+    height: 17em;
+    list-style-type: none;
+    overflow: auto;
+    margin: 0;
+    padding: 1em 0;
+    width: 18%;
+  }
+  
+  #gollum-editor-help-parent {
+    border-right: 1px solid #eee;
+  }
+  
+  #gollum-editor-help-list {
+    background: #fafafa;
+    border-right: 1px solid #eee;
+  }
+  
+  #gollum-editor-help-parent li,
+  #gollum-editor-help-list li {
     font-size: 1.2em;
-    font-weight: bold;
     line-height: 1.6em;
     margin: 0;
     padding: 0;
-    min-width: 80px;
+  }
+    
+    #gollum-editor-help-parent li a,
+    #gollum-editor-help-list li a {
+      border: 1px solid transparent;
+      border-width: 1px 0;
+      display: block;
+      font-weight: bold;
+      height: 100%;
+      width: auto;
+      padding: 0.2em 1em;
+      text-shadow: 0 -1px 0 #fff;
+    }
+    
+    #gollum-editor-help-parent li a:hover,
+    #gollum-editor-help-list li a:hover {
+      background: #fff;
+      border-color: #f0f0f0;
+      text-decoration: none;
+      
+      box-shadow: none;
+    }
+    
+    #gollum-editor-help-parent li a.selected,
+    #gollum-editor-help-list li a.selected {
+      border: 1px solid #eee;
+      border-bottom-color: #e7e7e7;
+      border-width: 1px 0;
+      background: #fff;
+      color: #000;
+      
+      box-shadow: 0 1px 2px #f0f0f0;
+    }
+    
+  #gollum-editor-help-wrapper {
+    background: #fff;
+    overflow: auto;
+    height: 17em;
+    padding: 1em;
   }
   
-  #gollum-editor-dialog-body fieldset .field input[type="text"] {
-    border: 1px solid #ddd;
-    display: block;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 1.2em;
-    line-height: 1.6em;
-    margin: 0.3em 0 0 0;
-    padding: 0.3em 0.5em;
-    width: 96.5%;
-  }
-  
-  #gollum-editor-dialog-body fieldset .field input.code {
-    font-family: 'Monaco', 'Courier New', Courier, monospace;
-  }
-  
-#gollum-editor-dialog-body fieldset .field:last-child {
-  margin: 0 0 1em 0;
-}
-
-#gollum-editor-dialog-buttons {
-  border-top: 1px solid #ddd;
-  overflow: hidden;
-  margin: 1.5em 0 0 0;
-  padding: 1em 0 0 0;
-}
-
-#gollum-editor-dialog a.minibutton {
-  float: right;
-  margin-right: 0.5em;
-  width: auto;
+    #gollum-editor-help-content {
+      font-size: 1.2em;
+      margin: 0 1em 0 0.5em;
+      padding: 0;
+      line-height: 1.8em;
+    }
+    
+    #gollum-editor-help-content p {
+      margin: 0 0 1em 0;
+      padding: 0;
+    }
+    
+/* IE */
+.ie #gollum-editor .singleline input {
+  padding-top: 0.25em;
+  padding-bottom: 0.75em;
 }

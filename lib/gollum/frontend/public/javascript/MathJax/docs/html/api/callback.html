@@ -1,0 +1,435 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The MathJax.Callback Class &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="../index.html" />
+    <link rel="up" title="The MathJax API" href="index.html" />
+    <link rel="next" title="The MathJax.Callback.Queue Class" href="queue.html" />
+    <link rel="prev" title="The MathJax.HTML Object" href="html.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="queue.html" title="The MathJax.Callback.Queue Class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="html.html" title="The MathJax.HTML Object"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">The MathJax API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-mathjax-callback-class">
+<span id="api-callback"></span><h1>The MathJax.Callback Class<a class="headerlink" href="#the-mathjax-callback-class" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">MathJax.Callback</span></tt> object is one of the key mechanisms used by
+MathJax to synchronize its actions with those that occur
+asynchronously, like loading files and stylesheets.  A <cite>Callback</cite>
+object is used to tie the execution of a function to the completion of
+an asynchronous action.  See <a class="reference internal" href="../synchronize.html#synchronization"><em>Synchronizing with MathJax</em></a> for more details, and <a class="reference internal" href="../callbacks.html#using-callbacks"><em>Using Callbacks</em></a> in particular for examples of how to specify and
+use MathJax <cite>Callback</cite> objects.</p>
+<div class="section" id="specifying-a-callback">
+<h2>Specifying a callback<a class="headerlink" href="#specifying-a-callback" title="Permalink to this headline">¶</a></h2>
+<p>When a method includes a callback as one of its arguments, that
+callback can be specified in a number of different ways, depending on
+the functionality that is required of the callback.  The easiest case
+is to simply provide a function to be called, but it is also possible
+to include data to pass to the function when it is executed, and even
+the object that will be used as the javascript <cite>this</cite> object when the
+function is called.</p>
+<p>Most functions that take callbacks as arguments accept a <cite>callback
+specification</cite> rather than an actual callback object, though you can
+use the <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Callback()</span></tt> function to convert a callback
+specification into a Callback object if needed.</p>
+<p>A callback specification is any one of the following:</p>
+<blockquote>
+<dl class="describe">
+<dt>
+<tt class="descname">fn</tt></dt>
+<dd><p>A function that is to be called when the callback is executed.
+No additional data is passed to it (other that what it is
+called with at the time the callback is executed), and <cite>this</cite>
+will be the window object.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">[fn]</tt></dt>
+<dd><p>An array containing a function to be called when the callback
+is executed (as above).</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">[fn, data...]</tt></dt>
+<dd><p>An array containing a function together with data to be passed
+to that function when the callback is executed; <cite>this</cite> is still
+the window object. For example,</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">[</span><span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="nx">x</span><span class="o">+</span><span class="nx">y</span><span class="p">},</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>would specify a callback that would pass <tt class="docutils literal"><span class="pre">2</span></tt> and <tt class="docutils literal"><span class="pre">3</span></tt> to
+the given function, and it would return their sum, <tt class="docutils literal"><span class="pre">5</span></tt>, when
+the callback is executed.</p>
+<dl class="describe">
+<dt>
+<tt class="descname">[object, fn]</tt></dt>
+<dd></dd></dl>
+
+<p>An array containing an object to use as <cite>this</cite> and a function to
+call for the callback.  For example,</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">[{</span><span class="nx">x</span><span class="o">:</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="s1">&#39;bar&#39;</span><span class="p">},</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>would produce a callback that returns the string <tt class="docutils literal"><span class="pre">&quot;foo&quot;</span></tt>
+when it is called.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">[object, fn, data...]</tt></dt>
+<dd><p>Similar to the previous case, but with data that is passed to
+the function as well.</p>
+</dd></dl>
+
+<p>..describe:: [&#8220;method&#8221;, object]</p>
+<blockquote>
+<p>Here, <cite>object</cite> is an object that has a method called <cite>method</cite>, and
+the callback will execute that method (with the object as
+<cite>this</cite>) when it is called.  For example,</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>would call the <cite>length</cite> method on the array <tt class="docutils literal"><span class="pre">[1,2,3,4]</span></tt> when
+the callback is called, returning <tt class="docutils literal"><span class="pre">4</span></tt>.</p>
+</blockquote>
+<dl class="describe">
+<dt>
+<tt class="descname">[&quot;method&quot;, object, data...]</tt></dt>
+<dd><p>Similar to the previous case, but with data that is passed to
+the method. E.g.,</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">[</span><span class="s2">&quot;slice&quot;</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>would perform the equivalent of <tt class="docutils literal"><span class="pre">[1,2,3,4].slice(1,3)</span></tt>,
+which returns the array <tt class="docutils literal"><span class="pre">[2,3]</span></tt> as a result.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">{hook: fn, data: [...], object: this}</tt></dt>
+<dd><p>Here the data for the callback are given in an associative
+array of <cite>key:value</cite> pairs.  The value of <cite>hook</cite> is the
+function to call, the value of <cite>data</cite> is an array of the
+arguments to pass to the function, and the value of <cite>object</cite>
+is the object to use as <cite>this</cite> in the function call.  The
+specification need not include all three <cite>key:value</cite> pairs; any
+that are missing get default values (a function that does
+nothing, an empty array, and the window object, respectively).</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">&quot;string&quot;</tt></dt>
+<dd><p>This specifies a callback where the string is executed via an
+<tt class="docutils literal"><span class="pre">eval()</span></tt> statement.  The code is run in the global context,
+so any variables or functions created by the string become
+part of the global namespace.  The return value is the value of
+the last statement executed in the string.</p>
+</dd></dl>
+
+</blockquote>
+<div class="section" id="executing-a-callback-object">
+<h3>Executing a Callback Object<a class="headerlink" href="#executing-a-callback-object" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>Callback</cite> object is itself a function, and calling that function
+executes the callback.  You can pass the callback additional
+parameters, just as you can any function, and these will be added to
+the callback function&#8217;s argument list following any data that was
+supplied at the time the callback was created.  For example</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot; and &quot;</span> <span class="o">+</span><span class="nx">y</span><span class="p">}</span>
+<span class="kd">var</span> <span class="nx">cb</span> <span class="o">=</span> <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Callback</span><span class="p">([</span><span class="nx">f</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">]);</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">cb</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">);</span>  <span class="c1">// sets result to &quot;foo and bar&quot;</span>
+</pre></div>
+</div>
+<p>Usually, the callback is not executed by the code that creates it (as
+it is in the example above), but by some other code that runs at a
+later time at the completion of some other activity (say the loading
+of a file), or in response to a user action.  For example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">f</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;x contains &quot;</span><span class="o">+</span><span class="nx">x</span><span class="p">)};</span>
+<span class="kd">function</span> <span class="nx">DelayedX</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="s2">&quot;hi&quot;</span><span class="p">;</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Callback</span><span class="p">([</span><span class="nx">f</span><span class="p">,</span> <span class="nx">x</span><span class="p">],</span> <span class="nx">time</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">DelayedX</span></tt> function arranges for the function <tt class="docutils literal"><span class="pre">f</span></tt> to be called at
+a later time, passing it the value of a local variable, <tt class="docutils literal"><span class="pre">x</span></tt>. Normally,
+this would require the use of a closure, but that is not needed when a
+<cite>MathJax.Callback</cite> object is used.</p>
+</div>
+</div>
+<div class="section" id="callback-object-properties">
+<h2>Callback Object Properties<a class="headerlink" href="#callback-object-properties" title="Permalink to this headline">¶</a></h2>
+<dl class="describe">
+<dt>
+<tt class="descname">hook</tt></dt>
+<dd><p>The function to be called when the callback is executed.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">data</tt></dt>
+<dd><p>An array containing the arguments to pass to the callback
+function when it is executed.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">object</tt></dt>
+<dd><p>The object to use as <cite>this</cite> during the call to the callback
+function.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">called</tt></dt>
+<dd><p>Set to <tt class="docutils literal"><span class="pre">true</span></tt> after the callback has been called, and undefined
+otherwise.  A callback will not be exectued a second time unless
+the callback&#8217;s <a class="reference internal" href="#reset" title="reset"><tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt></a> method is called first, or its
+<tt class="docutils literal"><span class="pre">autoReset</span></tt> property is set to <tt class="docutils literal"><span class="pre">true</span></tt>.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">autoReset</tt></dt>
+<dd><p>Set this to <tt class="docutils literal"><span class="pre">true</span></tt> if you want to be able to call the callback
+more than once.  (This is the case for signal listeners, for example).</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">isCallback</tt></dt>
+<dd><p>Always set to <tt class="docutils literal"><span class="pre">true</span></tt> (used to detect if an object is a callback
+or not).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="callback-object-methods">
+<h2>Callback Object Methods<a class="headerlink" href="#callback-object-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the callback&#8217;s <cite>called</cite> property.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="mathjax-callback-methods">
+<h2>MathJax.Callback Methods<a class="headerlink" href="#mathjax-callback-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="Delay">
+<tt class="descname">Delay</tt><big>(</big><em>time</em><span class="optional">[</span>, <em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Waits for the specified time (given in milliseconds) and then
+performs the callback.  It returns the Callback object (or a blank
+one if none was supplied).  The returned callback structure has a
+<cite>timeout</cite> property set to the result of the <tt class="docutils literal"><span class="pre">setTimeout()</span></tt> call
+that was used to perform the wait so that you can cancel the wait,
+if needed.  Thus <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Callback.Delay()</span></tt> can be used to
+start a timeout delay that executes the callback if an action
+doesn&#8217;t occur within the given time (and if the action does occur,
+the timeout can be canceled).  Since
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Callback.Delay()</span></tt> returns a callback structure, it
+can be used in a callback queue to insert a delay between queued
+commands.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><ul class="first simple">
+<li><strong>time</strong> &#8212; the amount of time to wait</li>
+<li><strong>callback</strong> &#8212; the callback specification</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last">the callback object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="executeHooks">
+<tt class="descname">executeHooks</tt><big>(</big><em>hooks</em><span class="optional">[</span>, <em>data</em><span class="optional">[</span>, <em>reset</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#executeHooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls each callback in the <cite>hooks</cite> array (or the single hook if it
+is not an array), passing it the arguments stored in the data
+array.  It <cite>reset</cite> is <tt class="docutils literal"><span class="pre">true</span></tt>, then the callback&#8217;s
+<a class="reference internal" href="#reset" title="reset"><tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt></a> method will be called before each hook is
+executed.  If any of the hooks returns a <cite>Callback</cite> object, then
+it collects those callbacks and returns a new callback that will
+execute when all the ones returned by the hooks have been
+completed.  Otherwise, <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Callback.executeHooks()</span></tt>
+returns <tt class="docutils literal"><span class="pre">null</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><ul class="first simple">
+<li><strong>hooks</strong> &#8212; array of hooks to be called, or a hook</li>
+<li><strong>data</strong> &#8212; array of arguments to pass to each hook in turn</li>
+<li><strong>reset</strong> &#8212; <tt class="docutils literal"><span class="pre">true</span></tt> if the <a class="reference internal" href="#reset" title="reset"><tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt></a> method should be called</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last">callback that waits for all the hooks to complete, or <tt class="docutils literal"><span class="pre">null</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Queue">
+<tt class="descname">Queue</tt><big>(</big><span class="optional">[</span><em>callback</em>, <em>...</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <cite>MathJax.CallBack.Queue</cite> object and pushes the given
+callbacks into the queue.  See <a class="reference internal" href="../queues.html#using-queues"><em>Using Queues</em></a>
+for more details about MathJax queues.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><ul class="first simple">
+<li><strong>callback</strong> &#8212; one or more callback specifications</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last">the <cite>Queue</cite> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Signal">
+<tt class="descname">Signal</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks for a named signal, creates it if it doesn&#8217;t already exist,
+and returns the signal object.  See
+<a class="reference internal" href="../signals.html#using-signals"><em>Using Signals</em></a> for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> &#8212; name of the signal to get or create</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last">the <cite>Signal</cite> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The MathJax.Callback Class</a><ul>
+<li><a class="reference internal" href="#specifying-a-callback">Specifying a callback</a><ul>
+<li><a class="reference internal" href="#executing-a-callback-object">Executing a Callback Object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#callback-object-properties">Callback Object Properties</a></li>
+<li><a class="reference internal" href="#callback-object-methods">Callback Object Methods</a></li>
+<li><a class="reference internal" href="#mathjax-callback-methods">MathJax.Callback Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="html.html"
+                        title="previous chapter">The MathJax.HTML Object</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="queue.html"
+                        title="next chapter">The MathJax.Callback.Queue Class</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/callback.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="queue.html" title="The MathJax.Callback.Queue Class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="html.html" title="The MathJax.HTML Object"
+             >previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >The MathJax API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

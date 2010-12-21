@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), *%w[helper])
+# ~*~ encoding: utf-8 ~*~
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Markup" do
   setup do
@@ -15,6 +16,39 @@ context "Markup" do
   test "formats page from Wiki#pages" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", commit_details)
     assert @wiki.pages[0].formatted_data
+  end
+
+  # This test is to assume that Sanitize.clean doesn't raise Encoding::CompatibilityError on ruby 1.9
+  test "formats non ASCII-7 character page from Wiki#pages" do
+    wiki = Gollum::Wiki.new(testpath("examples/yubiwa.git"))
+    assert_nothing_raised(defined?(Encoding) && Encoding::CompatibilityError) do
+      assert wiki.page("strider").formatted_data
+    end
+  end
+
+  test "Gollum::Markup#render yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    markup = Gollum::Markup.new(page)
+    markup.render do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
+  end
+
+  test "Gollum::Page#formatted_data yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    page.formatted_data do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
   end
 
   #########################################################################
