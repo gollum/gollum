@@ -72,23 +72,6 @@ module Gollum
       end
     end
 
-    # Public: Gets a list of Git commits.
-    #
-    # *shas - An Array of String SHAs.
-    #
-    # Returns an Array of Grit::Commit instances.
-    def commits(*shas)
-      shas.flatten!
-      cached_commits = multi_get(:commit, shas)
-      missing_shas   = shas.select do |sha|
-        !cached_commits.key?(sha)
-      end
-
-      multi_commit!(missing_shas, cached_commits) if !missing_shas.empty?
-
-      shas.map { |sha| cached_commits[sha] }
-    end
-
     # Public: Clears all of the cached data that this GitAccess is tracking.
     #
     # Returns nothing.
@@ -135,21 +118,6 @@ module Gollum
     #     {"abcd123" => <Grit::Commit>}
     #
     attr_reader :commit_map
-
-    # Raw method for fetching a list of Git commits.
-    #
-    # shas - An Array of String SHAs.
-    # hash - Optional Hash to store the found commits, indexed by their SHA.
-    #
-    # Returns the same Hash instance.
-    def multi_commit!(shas, hash = {})
-      shas.each_slice(500) do |slice|
-        @repo.batch(slice).each do |commit|
-          hash[commit.id] = commit
-        end
-      end
-      hash
-    end
 
     # Checks to see if the given String is a 40 character hex SHA.
     #
@@ -228,23 +196,6 @@ module Gollum
     def set_cache(name, key, value)
       cache      = instance_variable_get("@#{name}_map")
       cache[key] = value || :_nil
-    end
-
-    # Gets multiple values from the cache in a single call.
-    #
-    # name - The cache prefix used in building the full cache key.
-    # keys - Array of cache key names to fetch.
-    #
-    # Returns a Hash of the objects that were found in the cache, indexed by
-    # the cache key.
-    def multi_get(name, keys)
-      value = instance_variable_get("@#{name}_map")
-      keys.inject({}) do |memo, key|
-        if v = value[key]
-          memo[key] = v
-        end
-        memo
-      end
     end
 
     # Parses a line of output from the `ls-tree` command.

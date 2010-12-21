@@ -17,6 +17,7 @@ module Gollum
       @tagmap  = {}
       @codemap = {}
       @texmap  = {}
+      @premap  = {}
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -31,7 +32,7 @@ module Gollum
         @wiki.history_sanitizer : 
         @wiki.sanitizer
 
-      data = extract_tex(@data)
+      data = extract_tex(@data.dup)
       data = extract_code(data)
       data = extract_tags(data)
       begin
@@ -115,7 +116,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
-      data.gsub(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
+      data.gsub!(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
         elsif $2.include?('][')
@@ -126,6 +127,7 @@ module Gollum
           "#{$1}#{id}#{$3}"
         end
       end
+      data
     end
 
     # Process all tags from the tagmap and replace the placeholders with the
@@ -357,7 +359,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
+      data.gsub!(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
         id     = Digest::SHA1.hexdigest($2)
         cached = check_cache(:code, id)
         @codemap[id] = cached   ? 
@@ -365,6 +367,7 @@ module Gollum
           { :lang => $1, :code => $2 }
         id
       end
+      data
     end
 
     # Process all code from the codemap and replace the placeholders with the
