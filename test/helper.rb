@@ -22,11 +22,12 @@ def testpath(path)
 end
 
 def cloned_testpath(path)
-  path   = testpath(path)
-  cloned = path.chomp('.git')
-  FileUtils.rm_rf cloned
-  Dir.chdir(File.expand_path(File.dirname(path))) do
-    %x{git clone #{File.basename(path)}}
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name}}
   end
   cloned
 end
