@@ -139,6 +139,11 @@ a:hover, a:visited {
       text-shadow: 0 1px 0 #fff;
     }
     
+  #wiki-rightbar p {
+    font-size: 1.2em;
+    line-height: 1.6em;
+  }
+    
   /* @section footer */
   #wiki-footer {
     clear: both;
