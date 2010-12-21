@@ -323,7 +323,7 @@
 
 #template .data tr td {
   font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
-  font-size: 1.2em;
+  font-size: 1.0em; /* reset size */
   line-height: 1.8em;
   margin: 0;
   padding: 0;
