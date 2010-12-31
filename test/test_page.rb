@@ -134,4 +134,12 @@ context "Page" do
     assert_equal '', Gollum::Page.cname(nil)
     assert_equal '', Gollum::Page.cname(3)
   end
+
+  test "normalize_dir" do
+    assert_equal "", Gollum::BlobEntry.normalize_dir("")
+    assert_equal "", Gollum::BlobEntry.normalize_dir(".")
+    assert_equal "", Gollum::BlobEntry.normalize_dir("/")
+    assert_equal "/foo", Gollum::BlobEntry.normalize_dir("foo")
+    assert_equal "/foo", Gollum::BlobEntry.normalize_dir("/foo")
+  end
 end
