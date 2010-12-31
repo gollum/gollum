@@ -60,6 +60,7 @@ module Gollum
     #   normalize_dir("foo")   # => "/foo"
     #   normalize_dir("/foo/") # => "/foo"
     #   normalize_dir("/")     # => ""
+    #   normalize_dir("c:/")   # => ""
     #
     # dir - String directory name.
     #
@@ -68,7 +69,7 @@ module Gollum
     def self.normalize_dir(dir)
       if dir
         dir = ::File.expand_path(dir, '/')
-        dir = '' if dir == '/'
+        dir = '' if (dir == '/' || dir =~ /^.:\/$/)
       end
       dir
     end
