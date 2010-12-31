@@ -139,6 +139,7 @@ context "Page" do
     assert_equal "", Gollum::BlobEntry.normalize_dir("")
     assert_equal "", Gollum::BlobEntry.normalize_dir(".")
     assert_equal "", Gollum::BlobEntry.normalize_dir("/")
+    assert_equal "", Gollum::BlobEntry.normalize_dir("c:/")
     assert_equal "/foo", Gollum::BlobEntry.normalize_dir("foo")
     assert_equal "/foo", Gollum::BlobEntry.normalize_dir("/foo")
   end
