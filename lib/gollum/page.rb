@@ -4,15 +4,16 @@ module Gollum
 
     Wiki.page_class = self
 
-    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod)$/i
-    FORMAT_NAMES = { :markdown => "Markdown",
-                     :textile  => "Textile",
-                     :rdoc     => "RDoc",
-                     :org      => "Org-mode",
-                     :creole   => "Creole",
-                     :rest     => "reStructuredText",
-                     :asciidoc => "AsciiDoc",
-                     :pod      => "Pod" }
+    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|(media)?wiki)$/i
+    FORMAT_NAMES = { :markdown  => "Markdown",
+                     :textile   => "Textile",
+                     :rdoc      => "RDoc",
+                     :org       => "Org-mode",
+                     :creole    => "Creole",
+                     :rest      => "reStructuredText",
+                     :asciidoc  => "AsciiDoc",
+                     :mediawiki => "MediaWiki",
+                     :pod       => "Pod" }
 
     # Sets a Boolean determing whether this page is a historical version.
     #
@@ -161,6 +162,8 @@ module Gollum
           :pod
         when /\.(\d)$/i
           :roff
+        when /\.(media)?wiki$/i
+          :mediawiki
         else
           nil
       end
@@ -244,14 +247,15 @@ module Gollum
     # Returns the String extension (no leading period).
     def self.format_to_ext(format)
       case format
-        when :markdown then 'md'
-        when :textile  then 'textile'
-        when :rdoc     then 'rdoc'
-        when :org      then 'org'
-        when :creole   then 'creole'
-        when :rest     then 'rest'
-        when :asciidoc then 'asciidoc'
-        when :pod      then 'pod'
+        when :markdown  then 'md'
+        when :textile   then 'textile'
+        when :rdoc      then 'rdoc'
+        when :org       then 'org'
+        when :creole    then 'creole'
+        when :rest      then 'rest'
+        when :asciidoc  then 'asciidoc'
+        when :pod       then 'pod'
+        when :mediawiki then 'mediawiki'
       end
     end
 
