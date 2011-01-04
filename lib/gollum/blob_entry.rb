@@ -32,7 +32,7 @@ module Gollum
     #
     # Returns an unbaked Grit::Blob instance.
     def blob(repo)
-      @blob ||= Grit::Blob.create(repo, 
+      @blob ||= Grit::Blob.create(repo,
         :id => @sha, :name => name, :size => @size)
     end
 
@@ -53,19 +53,21 @@ module Gollum
     end
 
     # Normalizes a given directory name for searching through tree paths.
-    # Ensures that a directory begins with a slash, or 
+    # Ensures that a directory begins with a slash, or
     #
     #   normalize_dir("")      # => ""
     #   normalize_dir(".")     # => ""
     #   normalize_dir("foo")   # => "/foo"
     #   normalize_dir("/foo/") # => "/foo"
     #   normalize_dir("/")     # => ""
+    #   normalize_dir("c:/")   # => ""
     #
     # dir - String directory name.
     #
-    # Returns a normalized String directory name, or nil if no directory 
+    # Returns a normalized String directory name, or nil if no directory
     # is given.
     def self.normalize_dir(dir)
+      return '' if dir =~ /^.:\/$/
       if dir
         dir = ::File.expand_path(dir, '/')
         dir = '' if dir == '/'

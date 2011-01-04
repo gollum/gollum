@@ -8,7 +8,7 @@ context "Page Reverting" do
   end
 
   teardown do
-    FileUtils.rm_rf @path
+    FileUtils.rm_rf(@path)
   end
 
   test "reverts single commit" do
