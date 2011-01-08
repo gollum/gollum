@@ -120,7 +120,18 @@ module Gollum
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
         elsif $2.include?('][')
-          $&
+          if $2[0..4] == 'file:'
+            pre = $1
+            post = $3
+            parts = $2.split('][')
+            parts[0][0..4] = ""
+            link = "#{parts[1]}|#{parts[0].sub(/\.org/,'')}"
+            id = Digest::SHA1.hexdigest(link)
+            @tagmap[id] = link
+            "#{pre}#{id}#{post}"
+          else
+            $&
+          end
         else
           id = Digest::SHA1.hexdigest($2)
           @tagmap[id] = $2

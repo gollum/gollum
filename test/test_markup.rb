@@ -414,6 +414,12 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
+  test "org mode style double file links" do
+    content = "a [[file:f.org][Google]] b"
+    output = "<p class=\"title\">a <a class=\"internal absent\" href=\"/f\">Google</a> b</p>"
+    compare(content, output, 'org')
+  end
+
   #########################################################################
   #
   # TeX
