@@ -141,6 +141,10 @@ module Precious
       mustache :compare
     end
 
+    get %r{^/(javascript|css|images)} do
+      halt 404
+    end
+
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
       wiki = Gollum::Wiki.new(settings.gollum_path)
