@@ -59,7 +59,7 @@ module Gollum
           end
       end
 
-      # Gets the default sanitization options for current pages used by 
+      # Gets the default sanitization options for current pages used by
       # instances of this Wiki.
       def sanitization
         if @sanitization.nil?
@@ -68,7 +68,7 @@ module Gollum
         @sanitization
       end
 
-      # Gets the default sanitization options for older page revisions used by 
+      # Gets the default sanitization options for older page revisions used by
       # instances of this Wiki.
       def history_sanitization
         if @history_sanitization.nil?
@@ -120,7 +120,7 @@ module Gollum
       @markup_class = options[:markup_class] || self.class.markup_class
       @repo         = @access.repo
       @sanitization = options[:sanitization] || self.class.sanitization
-      @history_sanitization = options[:history_sanitization] || 
+      @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
     end
 
@@ -266,7 +266,7 @@ module Gollum
       tree_list(treeish || 'master')
     end
 
-    # Public: Returns the number of pages accessible from a commit 
+    # Public: Returns the number of pages accessible from a commit
     #
     # ref - A String ref that is either a commit SHA or references one.
     #
@@ -340,7 +340,7 @@ module Gollum
       @access.refresh
     end
 
-    # Public: Creates a Sanitize instance using the Wiki's sanitization 
+    # Public: Creates a Sanitize instance using the Wiki's sanitization
     # options.
     #
     # Returns a Sanitize instance.
@@ -350,7 +350,7 @@ module Gollum
       end
     end
 
-    # Public: Creates a Sanitize instance using the Wiki's history sanitization 
+    # Public: Creates a Sanitize instance using the Wiki's history sanitization
     # options.
     #
     # Returns a Sanitize instance.
@@ -536,6 +536,12 @@ module Gollum
       index.add(fullpath, normalize(data))
     end
 
+    # Commits to the repo.  This is a common method used by Gollum for
+    # creating, updating, and deleting pages.  There are typically three steps:
+    # building an index with the current tree, yielding the index for
+    # modification, and then writing the commit.
+    #
+    # options - Hash of option
     def commit_index(options = {})
       normalize_commit(options)
       parents = [options[:parent] || @repo.commit('master')]
@@ -549,6 +555,8 @@ module Gollum
       end
       yield index if block_given?
 
+      options[:name]  = default_committer_name  if options[:name].to_s.empty?
+      options[:email] = default_committer_email if options[:email].to_s.empty?
       actor = Grit::Actor.new(options[:name], options[:email])
       index.commit(options[:message], parents, actor)
     end
@@ -558,32 +566,27 @@ module Gollum
       repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
     end
 
-    # Ensures a commit hash has all the required fields for a commit.
-    #
-    # commit - The commit Hash details:
-    #          :message - The String commit message.
-    #          :name    - The String author full name.
-    #          :email   - The String email address.
-    #
-    # Returns the commit Hash
-    def normalize_commit(commit = {})
-      commit[:name]  = default_committer_name  if commit[:name].to_s.empty?
-      commit[:email] = default_committer_email if commit[:email].to_s.empty?
-      commit
-    end
-
     # Gets the default name for commits.
+    #
+    # Returns the String name.
     def default_committer_name
       @default_committer_name ||= \
         @repo.config['user.name'] || self.class.default_committer_name
     end
 
     # Gets the default email for commits.
+    #
+    # Returns the String email address.
     def default_committer_email
       @default_committer_email ||= \
         @repo.config['user.email'] || self.class.default_committer_email
     end
 
+    # Gets the commit object for the given ref or sha.
+    #
+    # ref - A string ref or SHA pointing to a valid commit.
+    #
+    # Returns a Grit::Commit instance.
     def commit_for(ref)
       @access.commit(ref)
     rescue Grit::GitRuby::Repository::NoSuchShaFound

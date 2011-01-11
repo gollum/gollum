@@ -59,7 +59,7 @@ module Precious
       page = wiki.page(params[:splat].first)
       name = params[:rename] || page.name
       msg  = commit_message
-      update_wiki_page(wiki, page, params[:content], msg, name, 
+      update_wiki_page(wiki, page, params[:content], msg, name,
         params[:format])
       update_wiki_page(wiki, page.footer,  params[:footer],  msg) if params[:footer]
       update_wiki_page(wiki, page.sidebar, params[:sidebar], msg) if params[:sidebar]

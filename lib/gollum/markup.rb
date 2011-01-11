@@ -28,8 +28,8 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize = no_follow ? 
-        @wiki.history_sanitizer : 
+      sanitize = no_follow ?
+        @wiki.history_sanitizer :
         @wiki.sanitizer
 
       data = extract_tex(@data.dup)
@@ -147,7 +147,7 @@ module Gollum
 
     # Process a single tag into its final HTML form.
     #
-    # tag       - The String tag contents (the stuff inside the double 
+    # tag       - The String tag contents (the stuff inside the double
     #             brackets).
     # no_follow - Boolean that determines if rel="nofollow" is added to all
     #             <a> tags.
@@ -252,7 +252,7 @@ module Gollum
 
     # Attempt to process the tag as a file link tag.
     #
-    # tag       - The String tag contents (the stuff inside the double 
+    # tag       - The String tag contents (the stuff inside the double
     #             brackets).
     # no_follow - Boolean that determines if rel="nofollow" is added to all
     #             <a> tags.
@@ -286,7 +286,7 @@ module Gollum
 
     # Attempt to process the tag as a page link tag.
     #
-    # tag       - The String tag contents (the stuff inside the double 
+    # tag       - The String tag contents (the stuff inside the double
     #             brackets).
     # no_follow - Boolean that determines if rel="nofollow" is added to all
     #             <a> tags.
@@ -335,7 +335,7 @@ module Gollum
     #
     # cname - The String canonical page name.
     #
-    # Returns a Gollum::Page instance if a page is found, or an Array of 
+    # Returns a Gollum::Page instance if a page is found, or an Array of
     # [Gollum::Page, String extra] if a page without the extra anchor data
     # is found.
     def find_page_from_name(cname)
@@ -362,8 +362,8 @@ module Gollum
       data.gsub!(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
         id     = Digest::SHA1.hexdigest($2)
         cached = check_cache(:code, id)
-        @codemap[id] = cached   ? 
-          { :output => cached } : 
+        @codemap[id] = cached   ?
+          { :output => cached } :
           { :lang => $1, :code => $2 }
         id
       end
@@ -393,7 +393,7 @@ module Gollum
       data
     end
 
-    # Hook for getting the formatted value of extracted tag data.  
+    # Hook for getting the formatted value of extracted tag data.
     #
     # type - Symbol value identifying what type of data is being extracted.
     # id   - String SHA1 hash of original extracted tag data.
