@@ -1,3 +1,8 @@
+# 1.1.1 / 2011-1-11
+
+* Bug Fixes
+  * Critical shell escaping bug with syntax highlighting fixed.
+
 # 1.1.0 / 2010-10-28
 
 * Major Enhancements
