@@ -347,7 +347,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
+      data.gsub(/^``` ?([^\r\n]+)?\r?\n(.+?)\r?\n```\r?$/m) do
         id = Digest::SHA1.hexdigest($2)
         @codemap[id] = { :lang => $1, :code => $2 }
         id
@@ -362,12 +362,15 @@ module Gollum
     # Returns the marked up String data.
     def process_code(data)
       @codemap.each do |id, spec|
-        lang = spec[:lang]
         code = spec[:code]
         if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
           code.gsub!(/^(  |\t)/m, '')
         end
-        data.gsub!(id, Gollum::Albino.new(code, lang).colorize)
+        if lang = spec[:lang]
+          data.gsub!(id, Gollum::Albino.new(code, lang).colorize)
+        else
+          data.gsub!(id, "<pre><code>#{CGI.escapeHTML(code)}</code></pre>")
+        end
       end
       data
     end
