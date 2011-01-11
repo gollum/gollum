@@ -566,6 +566,20 @@ module Gollum
       repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
     end
 
+    # Ensures a commit hash has all the required fields for a commit.
+    #
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :name    - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns the commit Hash
+    def normalize_commit(commit = {})
+      commit[:name]  = default_committer_name  if commit[:name].to_s.empty?
+      commit[:email] = default_committer_email if commit[:email].to_s.empty?
+      commit
+    end
+
     # Gets the default name for commits.
     #
     # Returns the String name.
