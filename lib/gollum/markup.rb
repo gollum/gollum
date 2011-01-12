@@ -380,14 +380,18 @@ module Gollum
       @codemap.each do |id, spec|
         formatted = spec[:output] || begin
           code = spec[:code]
+          lang = spec[:lang]
+
           if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
             code.gsub!(/^(  |\t)/m, '')
           end
-          formatted = if lang = spec[:lang]
-            Gollum::Albino.new(code, lang).colorize
-          else
-            "<pre><code>#{CGI.escapeHTML(code)}</code></pre>"
+
+          formatted = begin
+            lang && Gollum::Albino.colorize(code, lang)
+          rescue ::Albino::ShellArgumentError, ::Albino::Process::TimeoutExceeded, 
+              ::Albino::Process::MaximumOutputExceeded
           end
+          formatted ||= "<pre><code>#{CGI.escapeHTML(code)}</code></pre>"
           update_cache(:code, id, formatted)
           formatted
         end

@@ -343,7 +343,7 @@ context "Markup" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -358,7 +358,7 @@ context "Markup" do
     content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -374,7 +374,7 @@ context "Markup" do
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
              "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
              "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
-             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     compare(content, output)
   end
 
@@ -383,13 +383,13 @@ context "Markup" do
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
              "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
              "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
-             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     compare(content, output)
   end
 
   test "code block with invalid lang" do
     content = "a\n\n``` ls -al;\n\tbooya\n\tboom\n```\n\nb"
-    output = "<p>a</p>\n\n\n\n<p>b</p>"
+    output  = "<p>a</p>\n\n<pre><code>booya\nboom</code></pre>\n\n<p>b</p>"
     compare(content, output)
   end
 
