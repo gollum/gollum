@@ -162,6 +162,13 @@ context "Markup" do
     assert_equal "<p>a <a href=\"http://example.com\">http://example.com</a> b</p>", page.formatted_data
   end
 
+  test "page link with different text" do
+    @wiki.write_page("Potato", :markdown, "a [[Potato Heaad|Potato]] ", commit_details)
+    page = @wiki.page("Potato")
+    output = page.formatted_data
+    assert_equal "<p>a <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a></p>", output
+  end
+
   #########################################################################
   #
   # Images
