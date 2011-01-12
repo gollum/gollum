@@ -316,7 +316,7 @@ module Gollum
               %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
             end
       if tag && no_follow
-        tag.sub! /^<a/, '<a ref="nofollow"'
+        tag.sub! /^<a/, '<a rel="nofollow"'
       end
       tag
     end
