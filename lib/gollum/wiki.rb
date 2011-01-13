@@ -257,7 +257,7 @@ module Gollum
       sha1
     end
 
-    # Public: Reverts a reverse diff for a given page.  If only 1 SHA is given,
+    # Public: Applies a reverse diff for a given page.  If only 1 SHA is given,
     # the reverse diff will be taken from its parent (^SHA...SHA).  If two SHAs
     # are given, the reverse diff is taken from SHA1...SHA2.
     #
@@ -286,12 +286,51 @@ module Gollum
 
       index = nil
       sha1  = commit_index(commit) { |i| index = i }
-      dir   = ::File.dirname(page.path)
-      dir   = '' if dir == '.'
-
       @access.refresh
-      update_working_dir(index, dir, page.name, page.format)
+
+      files = []
+      if page
+        files << [page.path, page.name, page.format]
+      else
+        # Grit::Diff can't parse reverse diffs.... yet
+        lines = patch.split("\n")
+        while line = lines.shift
+          if line =~ %r{^diff --git b/.+? a/(.+)$}
+            path = $1
+            ext  = ::File.extname(path)
+            name = ::File.basename(path, ext)
+            if format = ::Gollum::Page.format_for(ext)
+              files << [path, name, format]
+            end
+          end
+        end
+      end
+
+      files.each do |(path, name, format)|
+        dir = ::File.dirname(path)
+        dir = '' if dir == '.'
+        update_working_dir(index, dir, name, format)
+      end
+
       sha1
+    end
+
+    # Public: Applies a reverse diff to the repo.  If only 1 SHA is given,
+    # the reverse diff will be taken from its parent (^SHA...SHA).  If two SHAs
+    # are given, the reverse diff is taken from SHA1...SHA2.
+    #
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :name    - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns a String SHA1 of the new commit, or nil if the reverse diff does
+    # not apply.
+    def revert_commit(sha1, sha2 = nil, commit = {})
+      revert_page(nil, sha1, sha2, commit)
     end
 
     # Public: Lists all pages for this wiki.

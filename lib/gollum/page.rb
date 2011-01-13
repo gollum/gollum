@@ -41,6 +41,40 @@ module Gollum
       filename =~ /^_/ ? false : match
     end
 
+    # Public: The format of a given filename.
+    #
+    # filename - The String filename.
+    #
+    # Returns the Symbol format of the page. One of:
+    #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
+    #     :roff ]
+    def self.format_for(filename)
+      case filename.to_s
+        when /\.(md|mkdn?|mdown|markdown)$/i
+          :markdown
+        when /\.(textile)$/i
+          :textile
+        when /\.(rdoc)$/i
+          :rdoc
+        when /\.(org)$/i
+          :org
+        when /\.(creole)$/i
+          :creole
+        when /\.(re?st(\.txt)?)$/i
+          :rest
+        when /\.(asciidoc)$/i
+          :asciidoc
+        when /\.(pod)$/i
+          :pod
+        when /\.(\d)$/i
+          :roff
+        when /\.(media)?wiki$/i
+          :mediawiki
+        else
+          nil
+      end
+    end
+
     # Reusable filter to turn a filename (without path) into a canonical name.
     # Strips extension, converts spaces to dashes.
     #
@@ -143,30 +177,7 @@ module Gollum
     #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
     #     :roff ]
     def format
-      case @blob.name
-        when /\.(md|mkdn?|mdown|markdown)$/i
-          :markdown
-        when /\.(textile)$/i
-          :textile
-        when /\.(rdoc)$/i
-          :rdoc
-        when /\.(org)$/i
-          :org
-        when /\.(creole)$/i
-          :creole
-        when /\.(re?st(\.txt)?)$/i
-          :rest
-        when /\.(asciidoc)$/i
-          :asciidoc
-        when /\.(pod)$/i
-          :pod
-        when /\.(\d)$/i
-          :roff
-        when /\.(media)?wiki$/i
-          :mediawiki
-        else
-          nil
-      end
+      self.class.format_for(@blob.name)
     end
 
     # Public: The current version of the page.
