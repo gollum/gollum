@@ -257,6 +257,43 @@ module Gollum
       sha1
     end
 
+    # Public: Reverts a reverse diff for a given page.  If only 1 SHA is given,
+    # the reverse diff will be taken from its parent (^SHA...SHA).  If two SHAs
+    # are given, the reverse diff is taken from SHA1...SHA2.
+    #
+    # page   - The Gollum::Page to delete.
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :name    - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns a String SHA1 of the new commit, or nil if the reverse diff does
+    # not apply.
+    def revert_page(page, sha1, sha2 = nil, commit = {})
+      if sha2.is_a?(Hash)
+        commit = sha2
+        sha2   = nil
+      end
+
+      pcommit = @repo.commit('master')
+      patch   = full_reverse_diff_for(page, sha1, sha2)
+      commit[:parent] = [pcommit]
+      commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
+      return false unless commit[:tree]
+
+      index = nil
+      sha1  = commit_index(commit) { |i| index = i }
+      dir   = ::File.dirname(page.path)
+      dir   = '' if dir == '.'
+
+      @access.refresh
+      update_working_dir(index, dir, page.name, page.format)
+      sha1
+    end
+
     # Public: Lists all pages for this wiki.
     #
     # treeish - The String commit ID or ref to find  (default: master)
@@ -308,28 +345,6 @@ module Gollum
     # Returns an Array of Grit::Commit.
     def log(options = {})
       @repo.log('master', nil, log_pagination_options(options))
-    end
-
-    def revert_page(page, sha1, sha2 = nil, commit = {})
-      if sha2.is_a?(Hash)
-        commit = sha2
-        sha2   = nil
-      end
-
-      pcommit = @repo.commit('master')
-      patch   = full_reverse_diff_for(page, sha1, sha2)
-      commit[:parent] = [pcommit]
-      commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
-      return false unless commit[:tree]
-
-      index = nil
-      sha1  = commit_index(commit) { |i| index = i }
-      dir   = ::File.dirname(page.path)
-      dir   = '' if dir == '.'
-
-      @access.refresh
-      update_working_dir(index, dir, page.name, page.format)
-      sha1
     end
 
     # Public: Refreshes just the cached Git reference data.  This should
@@ -542,6 +557,8 @@ module Gollum
     # modification, and then writing the commit.
     #
     # options - Hash of option
+    #
+    # Returns the String SHA of the new Commit.
     def commit_index(options = {})
       normalize_commit(options)
       parents = [options[:parent] || @repo.commit('master')]
@@ -561,6 +578,14 @@ module Gollum
       index.commit(options[:message], parents, actor)
     end
 
+    # Creates a reverse diff for the given SHAs on the given Gollum::Page.
+    #
+    # page   - The Gollum::Page to scope the patch to.
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    #
+    # Returns a String of the reverse Diff to apply.
     def full_reverse_diff_for(page, sha1, sha2 = nil)
       sha1, sha2 = "#{sha1}^", sha1 if sha2.nil?
       repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
