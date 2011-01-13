@@ -61,30 +61,6 @@ context "Wiki" do
       @wiki.normalize_commit(commit.dup))
   end
 
-  #test "#tree_map_for caches ref and tree" do
-  #  assert @wiki.ref_map.empty?
-  #  assert @wiki.tree_map.empty?
-  #  @wiki.tree_map_for 'master'
-  #  assert_equal({"master"=>"60f12f4254f58801b9ee7db7bca5fa8aeefaa56b"}, @wiki.ref_map)
-  #
-  #  map = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b']
-  #  assert_equal 'Bilbo-Baggins.md',        map[0].path
-  #  assert_equal '',                        map[0].dir
-  #  assert_equal map[0].path,               map[0].name
-  #  assert_equal 'Mordor/Eye-Of-Sauron.md', map[3].path
-  #  assert_equal '/Mordor',                 map[3].dir
-  #  assert_equal 'Eye-Of-Sauron.md',        map[3].name
-  #end
-  #
-  #test "#tree_map_for only caches tree for commit" do
-  #  assert @wiki.tree_map.empty?
-  #  @wiki.tree_map_for '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
-  #  assert @wiki.ref_map.empty?
-  #
-  #  entry = @wiki.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0]
-  #  assert_equal 'Bilbo-Baggins.md', entry.path
-  #end
-
   test "text_data" do
     wiki = Gollum::Wiki.new(testpath("examples/yubiwa.git"))
     if String.instance_methods.include?(:encoding)
@@ -96,6 +72,19 @@ context "Wiki" do
       page = wiki.page("strider")
       assert_equal page.raw_data, page.text_data
     end
+  end
+
+  test "gets reverse diff" do
+    diff = @wiki.full_reverse_diff('a8ad3c09dd842a3517085bfadd37718856dee813')
+    assert_match "b/Mordor/_Sidebar.md", diff
+    assert_match "b/_Sidebar.md", diff
+  end
+
+  test "gets reverse diff for a page" do
+    diff  = @wiki.full_reverse_diff_for('_Sidebar.md', 'a8ad3c09dd842a3517085bfadd37718856dee813')
+    regex = /b\/Mordor\/\_Sidebar\.md/
+    assert_match    "b/_Sidebar.md", diff
+    assert_no_match regex, diff
   end
 end
 

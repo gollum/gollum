@@ -580,7 +580,7 @@ module Gollum
 
     # Creates a reverse diff for the given SHAs on the given Gollum::Page.
     #
-    # page   - The Gollum::Page to scope the patch to.
+    # page   - The Gollum::Page to scope the patch to, or a String Path.
     # sha1   - String SHA1 of the earlier parent if two SHAs are given,
     #          or the child.
     # sha2   - Optional String SHA1 of the child.
@@ -588,7 +588,22 @@ module Gollum
     # Returns a String of the reverse Diff to apply.
     def full_reverse_diff_for(page, sha1, sha2 = nil)
       sha1, sha2 = "#{sha1}^", sha1 if sha2.nil?
-      repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
+      args = [{:R => true}, sha1, sha2]
+      if page
+        args << '--' << (page.respond_to?(:path) ? page.path : page.to_s)
+      end
+      repo.git.native(:diff, *args)
+    end
+
+    # Creates a reverse diff for the given SHAs.
+    #
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    #
+    # Returns a String of the reverse Diff to apply.
+    def full_reverse_diff(sha1, sha2 = nil)
+      full_reverse_diff_for(nil, sha1, sha2)
     end
 
     # Ensures a commit hash has all the required fields for a commit.
