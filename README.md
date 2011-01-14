@@ -9,8 +9,7 @@ Gollum wikis are simply Git repositories that adhere to a specific format.
 Gollum pages may be written in a variety of formats and can be edited in a
 number of ways depending on your needs. You can edit your wiki locally:
 
-* With your favorite text editor or IDE (changes will be visible after
-* committing).
+* With your favorite text editor or IDE (changes will be visible after committing).
 * With the built-in web interface.
 * With the Gollum Ruby API.
 
