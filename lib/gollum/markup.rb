@@ -13,6 +13,7 @@ module Gollum
       @name    = page.filename
       @data    = page.text_data
       @version = page.version.id
+      @format  = page.format
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
       @codemap = {}
@@ -294,24 +295,28 @@ module Gollum
     # Returns the String HTML if the tag is a valid page link tag or nil
     #   if it is not.
     def process_page_link_tag(tag, no_follow = false)
-      parts = tag.split('|')
-      name  = parts[0].strip
-      cname = @wiki.page_class.cname((parts[1] || parts[0]).strip)
-      tag = if name =~ %r{^https?://} && parts[1].nil?
-        %{<a href="#{name}">#{name}</a>}
-      else
-        presence    = "absent"
-        link_name   = cname
-        page, extra = find_page_from_name(cname)
-        if page
-          link_name = @wiki.page_class.cname(page.name)
-          presence  = "present"
-        end
-        link = ::File.join(@wiki.base_path, CGI.escape(link_name))
-        %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
-      end
+      parts = if @format == :mediawiki
+                tag.split('|').reverse
+              else
+                tag.split('|')
+              end
+      name, page_name = *parts.compact.map(&:strip)
+      cname = @wiki.page_class.cname(page_name || name)
+      tag = if name =~ %r{^https?://} && page_name.nil?
+              %{<a href="#{name}">#{name}</a>}
+            else
+              presence    = "absent"
+              link_name   = cname
+              page, extra = find_page_from_name(cname)
+              if page
+                link_name = @wiki.page_class.cname(page.name)
+                presence  = "present"
+              end
+              link = ::File.join(@wiki.base_path, CGI.escape(link_name))
+              %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
+            end
       if tag && no_follow
-        tag.sub! /^<a/, '<a ref="nofollow"'
+        tag.sub! /^<a/, '<a rel="nofollow"'
       end
       tag
     end
