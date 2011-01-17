@@ -135,13 +135,11 @@ module Gollum
     # final markup.
     #
     # data      - The String data (with placeholders).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the marked up String data.
-    def process_tags(data, no_follow = false)
+    def process_tags(data)
       @tagmap.each do |id, tag|
-        data.gsub!(id, process_tag(tag, no_follow))
+        data.gsub!(id, process_tag(tag))
       end
       data
     end
@@ -150,17 +148,15 @@ module Gollum
     #
     # tag       - The String tag contents (the stuff inside the double
     #             brackets).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the String HTML version of the tag.
-    def process_tag(tag, no_follow = false)
+    def process_tag(tag)
       if html = process_image_tag(tag)
         html
-      elsif html = process_file_link_tag(tag, no_follow)
+      elsif html = process_file_link_tag(tag)
         html
       else
-        process_page_link_tag(tag, no_follow)
+        process_page_link_tag(tag)
       end
     end
 
@@ -255,12 +251,10 @@ module Gollum
     #
     # tag       - The String tag contents (the stuff inside the double
     #             brackets).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the String HTML if the tag is a valid file link tag or nil
     #   if it is not.
-    def process_file_link_tag(tag, no_follow = false)
+    def process_file_link_tag(tag)
       parts = tag.split('|')
       name  = parts[0].strip
       path  = parts[1] && parts[1].strip
@@ -272,53 +266,42 @@ module Gollum
         nil
       end
 
-      tag = if name && path && file
+      if name && path && file
         %{<a href="#{::File.join @wiki.base_path, file.path}">#{name}</a>}
       elsif name && path
         %{<a href="#{path}">#{name}</a>}
       else
         nil
       end
-      if tag && no_follow
-        tag.sub! /^<a/, '<a ref="nofollow"'
-      end
-      tag
     end
 
     # Attempt to process the tag as a page link tag.
     #
     # tag       - The String tag contents (the stuff inside the double
     #             brackets).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the String HTML if the tag is a valid page link tag or nil
     #   if it is not.
-    def process_page_link_tag(tag, no_follow = false)
-      parts = if @format == :mediawiki
-                tag.split('|').reverse
-              else
-                tag.split('|')
-              end
+    def process_page_link_tag(tag)
+      parts = tag.split('|')
+      parts.reverse! if @format == :mediawiki
+
       name, page_name = *parts.compact.map(&:strip)
       cname = @wiki.page_class.cname(page_name || name)
-      tag = if name =~ %r{^https?://} && page_name.nil?
-              %{<a href="#{name}">#{name}</a>}
-            else
-              presence    = "absent"
-              link_name   = cname
-              page, extra = find_page_from_name(cname)
-              if page
-                link_name = @wiki.page_class.cname(page.name)
-                presence  = "present"
-              end
-              link = ::File.join(@wiki.base_path, CGI.escape(link_name))
-              %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
-            end
-      if tag && no_follow
-        tag.sub! /^<a/, '<a rel="nofollow"'
+
+      if name =~ %r{^https?://} && page_name.nil?
+        %{<a href="#{name}">#{name}</a>}
+      else
+        presence    = "absent"
+        link_name   = cname
+        page, extra = find_page_from_name(cname)
+        if page
+          link_name = @wiki.page_class.cname(page.name)
+          presence  = "present"
+        end
+        link = ::File.join(@wiki.base_path, CGI.escape(link_name))
+        %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
-      tag
     end
 
     # Find the given file in the repo.
@@ -393,7 +376,7 @@ module Gollum
 
           formatted = begin
             lang && Gollum::Albino.colorize(code, lang)
-          rescue ::Albino::ShellArgumentError, ::Albino::Process::TimeoutExceeded, 
+          rescue ::Albino::ShellArgumentError, ::Albino::Process::TimeoutExceeded,
               ::Albino::Process::MaximumOutputExceeded
           end
           formatted ||= "<pre><code>#{CGI.escapeHTML(code)}</code></pre>"
