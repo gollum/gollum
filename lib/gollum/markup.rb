@@ -179,6 +179,8 @@ module Gollum
     #   if it is not.
     def process_image_tag(tag)
       parts = tag.split('|')
+      return if parts.size.zero?
+
       name  = parts[0].strip
       path  = if file = find_file(name)
         ::File.join @wiki.base_path, file.path
@@ -267,6 +269,8 @@ module Gollum
     #   if it is not.
     def process_file_link_tag(tag)
       parts = tag.split('|')
+      return if parts.size.zero?
+
       name  = parts[0].strip
       path  = parts[1] && parts[1].strip
       path  = if path && file = find_file(path)

@@ -446,6 +446,18 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
+  test "short double links" do
+    content = "a [[b]] c"
+    output  = %(<p class="title">a <a class="internal absent" href="/b">b</a> c</p>)
+    compare(content, output, 'org')
+  end
+
+  test "double linked pipe" do
+    content = "a [[|]] b"
+    output  = %(<p class="title">a <a class="internal absent" href="/"></a> b</p>)
+    compare(content, output, 'org')
+  end
+
   #########################################################################
   #
   # TeX
