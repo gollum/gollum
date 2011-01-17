@@ -288,18 +288,9 @@ end
 
 context "page_file_dir option" do
   setup do
-    @path = testpath('examples/pfdtest')
+    @path = cloned_testpath('examples/page_file_dir')
     @repo = Grit::Repo.init(@path)
     @page_file_dir = 'docs'
-    Dir.chdir(@path) do
-      Dir.mkdir(@page_file_dir)
-      File.open("docs/foo.md", "w"){|f| f.print "Hello foo" }
-      @repo.add("docs/foo.md")
-      File.open("bar.md", "w"){|f| f.print "Hello bar" }
-      @repo.add("bar.md")
-      @repo.commit_index("Added docs/foo.md and bar.md")
-    end
-
     @wiki = Gollum::Wiki.new(@path, :page_file_dir => @page_file_dir)
   end
 
@@ -318,7 +309,7 @@ context "page_file_dir option" do
   end
 
   test "search results should be restricted in page filer dir" do
-    results = @wiki.search("Hello")
+    results = @wiki.search("foo")
     assert_equal 1, results.size
     assert_equal "foo", results[0][:name]
   end
