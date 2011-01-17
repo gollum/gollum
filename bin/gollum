@@ -19,6 +19,8 @@ require 'gollum'
 
 exec = {}
 options = { 'port' => 4567, 'bind' => '0.0.0.0' }
+wiki_options = {}
+
 opts = OptionParser.new do |opts|
   opts.banner = help
 
@@ -41,6 +43,10 @@ opts = OptionParser.new do |opts|
 
   opts.on("--irb", "Start an irb process with gollum loaded for the current wiki.") do
     options['irb'] = true
+  end
+
+  opts.on("--page-file-dir [PATH]", "Specify the sub directory for all page files (default: repository root).") do |path|
+    wiki_options[:page_file_dir] = path
   end
 end
 
@@ -67,13 +73,13 @@ if options['irb']
         ARGV.replace(args)
         @__initialized = true
       end
- 
+
       ws  = WorkSpace.new(binding)
       irb = Irb.new(ws)
- 
+
       @CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC]
       @CONF[:MAIN_CONTEXT] = irb.context
- 
+
       catch(:IRB_EXIT) do
         irb.eval_input
       end
@@ -81,10 +87,10 @@ if options['irb']
   end
 
   begin
-    wiki = Gollum::Wiki.new(gollum_path)
+    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
     if !wiki.exist? then raise Grit::InvalidGitRepositoryError end
     puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
-    puts 
+    puts
     puts %(    page = wiki.page('page-name'))
     puts %(    # => <Gollum::Page>)
     puts
@@ -103,11 +109,14 @@ if options['irb']
 else
   require 'gollum/frontend/app'
   Precious::App.set(:gollum_path, gollum_path)
+  Precious::App.set(:wiki_options, wiki_options)
+
   if cfg = options['config']
     # If the path begins with a '/' it will be considered an absolute path,
     # otherwise it will be relative to the CWD
-    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR 
+    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
     require cfg
   end
+
   Precious::App.run!(options)
 end

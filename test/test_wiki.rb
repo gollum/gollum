@@ -285,3 +285,45 @@ context "Wiki sync with working directory" do
     FileUtils.rm_r(@path)
   end
 end
+
+context "page_file_dir option" do
+  setup do
+    @path = testpath('examples/pfdtest')
+    @repo = Grit::Repo.init(@path)
+    @page_file_dir = 'docs'
+    Dir.chdir(@path) do
+      Dir.mkdir(@page_file_dir)
+      File.open("docs/foo.md", "w"){|f| f.print "Hello foo" }
+      @repo.add("docs/foo.md")
+      File.open("bar.md", "w"){|f| f.print "Hello bar" }
+      @repo.add("bar.md")
+      @repo.commit_index("Added docs/foo.md and bar.md")
+    end
+
+    @wiki = Gollum::Wiki.new(@path, :page_file_dir => @page_file_dir)
+  end
+
+  test "write a page in sub directory" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    assert_equal "Hi", File.read(File.join(@path, @page_file_dir, "New-Page.md"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+
+  test "a file in page file dir should be found" do
+    assert @wiki.page("foo")
+  end
+
+  test "a file out of page file dir should not be found" do
+    assert !@wiki.page("bar")
+  end
+
+  test "search results should be restricted in page filer dir" do
+    results = @wiki.search("Hello")
+    assert_equal 1, results.size
+    assert_equal "foo", results[0][:name]
+  end
+
+  teardown do
+    FileUtils.rm_r(@path)
+  end
+end

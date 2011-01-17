@@ -2,7 +2,15 @@ module Gollum
   # Controls all access to the Git objects from Gollum.  Extend this class to
   # add custom caching for special cases.
   class GitAccess
-    def initialize(path)
+    # Initializes the GitAccess instance.
+    #
+    # path          - The String path to the Git repository that holds the
+    #                 Gollum site.
+    # page_file_dir - String the directory in which all page files reside
+    #
+    # Returns this instance.
+    def initialize(path, page_file_dir = nil)
+      @page_file_dir = page_file_dir
       @path = path
       @repo = Grit::Repo.new(path)
       clear
@@ -15,7 +23,7 @@ module Gollum
       @repo.git.exist?
     end
 
-    # Public: Converts a given Git reference to a SHA, using the cache if 
+    # Public: Converts a given Git reference to a SHA, using the cache if
     # available.
     #
     # ref - a String Git reference (ex: "master")
@@ -29,7 +37,7 @@ module Gollum
       end
     end
 
-    # Public: Gets a recursive list of Git blobs for the whole tree at the 
+    # Public: Gets a recursive list of Git blobs for the whole tree at the
     # given commit.
     #
     # ref - A String Git reference or Git SHA to a commit.
@@ -144,10 +152,17 @@ module Gollum
     #
     # Returns an Array of BlobEntry instances.
     def tree!(sha)
-      tree  = @repo.git.native(:ls_tree, 
+      tree  = @repo.git.native(:ls_tree,
         {:r => true, :l => true, :z => true}, sha)
-      tree.split("\0").inject([]) do |items, line|
-        items << parse_tree_line(line)
+      items = tree.split("\0").inject([]) do |memo, line|
+        memo << parse_tree_line(line)
+      end
+
+      if dir = @page_file_dir
+        regex = /^#{dir}\//
+        items.select { |i| i.path =~ regex }
+      else
+        items
       end
     end
 
@@ -201,7 +216,7 @@ module Gollum
     # Parses a line of output from the `ls-tree` command.
     #
     # line - A String line of output:
-    #          "100644 blob 839c2291b30495b9a882c17d08254d3c90d8fb53	Home.md"
+    #          "100644 blob 839c2291b30495b9a882c17d08254d3c90d8fb53  Home.md"
     #
     # Returns an Array of BlobEntry instances.
     def parse_tree_line(line)

@@ -94,17 +94,21 @@ module Gollum
     # Gets the sanitization options for older page revisions used by this Wiki.
     attr_reader :history_sanitization
 
+    # Gets the String directory in which all page files reside.
+    attr_reader :page_file_dir
+
     # Public: Initialize a new Gollum Repo.
     #
-    # repo    - The String path to the Git repository that holds the Gollum
+    # path    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
-    #           :base_path    - String base path for all Wiki links.
-    #                           Default: "/"
-    #           :page_class   - The page Class. Default: Gollum::Page
-    #           :file_class   - The file Class. Default: Gollum::File
-    #           :markup_class - The markup Class. Default: Gollum::Markup
-    #           :sanitization - An instance of Sanitization.
+    #           :base_path     - String base path for all Wiki links.
+    #                            Default: "/"
+    #           :page_class    - The page Class. Default: Gollum::Page
+    #           :file_class    - The file Class. Default: Gollum::File
+    #           :markup_class  - The markup Class. Default: Gollum::Markup
+    #           :sanitization  - An instance of Sanitization.
+    #           :page_file_dir - String the directory in which all page files reside
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -112,14 +116,15 @@ module Gollum
         options[:access] = path
         path             = path.path
       end
-      @path         = path
-      @access       = options[:access]       || GitAccess.new(path)
-      @base_path    = options[:base_path]    || "/"
-      @page_class   = options[:page_class]   || self.class.page_class
-      @file_class   = options[:file_class]   || self.class.file_class
-      @markup_class = options[:markup_class] || self.class.markup_class
-      @repo         = @access.repo
-      @sanitization = options[:sanitization] || self.class.sanitization
+      @path          = path
+      @page_file_dir = options[:page_file_dir]
+      @access        = options[:access]       || GitAccess.new(path, @page_file_dir)
+      @base_path     = options[:base_path]    || "/"
+      @page_class    = options[:page_class]   || self.class.page_class
+      @file_class    = options[:file_class]   || self.class.file_class
+      @markup_class  = options[:markup_class] || self.class.markup_class
+      @repo          = @access.repo
+      @sanitization  = options[:sanitization] || self.class.sanitization
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
     end
@@ -361,10 +366,10 @@ module Gollum
     #
     # Returns an Array with Objects of page name and count of matches
     def search(query)
-      # See: http://github.com/Sirupsen/gollum/commit/f0a6f52bdaf6bee8253ca33bb3fceaeb27bfb87e
-      search_output = @repo.git.grep({:c => query}, 'master')
+      args = [{:c => query}, 'master', '--']
+      args << '--' << @page_file_dir if @page_file_dir
 
-      search_output.split("\n").collect do |line|
+      @repo.git.grep(*args).split("\n").map! do |line|
         result = line.split(':')
         file_name = Gollum::Page.canonicalize_filename(::File.basename(result[1]))
 
@@ -470,12 +475,16 @@ module Gollum
     # Returns nothing.
     def update_working_dir(index, dir, name, format)
       unless @repo.bare
-        path =
-        if dir == ''
-          page_file_name(name, format)
-        else
-          ::File.join(dir, page_file_name(name, format))
+        if @page_file_dir
+          dir = dir.size.zero? ? @page_file_dir : File.join(dir, @page_file_dir)
         end
+
+        path =
+          if dir == ''
+            page_file_name(name, format)
+          else
+            ::File.join(dir, page_file_name(name, format))
+          end
 
         Dir.chdir(::File.join(@repo.path, '..')) do
           if file_path_scheduled_for_deletion?(index.tree, path)
@@ -571,7 +580,7 @@ module Gollum
 
       dir = '/' if dir.strip.empty?
 
-      fullpath = ::File.join(dir, path)
+      fullpath = ::File.join(*[@page_file_dir, dir, path].compact)
       fullpath = fullpath[1..-1] if fullpath =~ /^\//
 
       if index.current_tree && tree = index.current_tree / dir

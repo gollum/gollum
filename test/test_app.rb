@@ -8,6 +8,7 @@ context "Frontend" do
     @path = cloned_testpath("examples/revert.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {})
   end
 
   teardown do
@@ -16,7 +17,7 @@ context "Frontend" do
 
   test "edits page" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc', 
+    post "/edit/A", :content => 'abc',
       :format => page_1.format, :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -56,7 +57,7 @@ context "Frontend" do
 
   test "renames page" do
     page_1 = @wiki.page('B')
-    post "/edit/B", :content => 'abc', 
+    post "/edit/B", :content => 'abc',
       :rename => "C",
       :format => page_1.format, :message => 'def'
     follow_redirect!
