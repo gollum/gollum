@@ -3,6 +3,7 @@
 * Major Enhancements
   * Add Page sidebars, similar to Page footers.
   * Add the ability to revert commits to the wiki.
+  * Add MediaWiki support.
 * Minor Enhancements
   * Add `:sanitization` and `:history_sanitization` options for customizing
     how `Sanitize.clean` modifies formatted wiki content.
@@ -12,6 +13,7 @@
     rendering for added customization.
 * Bug Fixes
   * Use `@wiki.page_class` in Gollum::Markup where appropriate (#63).
+  * Fix parsing of Org mode file links (#87).
 
 # 1.1.0 / 2010-10-28
 
