@@ -1,0 +1,128 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Converting to MathJax from jsMath &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="Describing HTML snippets" href="HTML-snippets.html" />
+    <link rel="prev" title="The MathJax Object-Oriented Programming Model" href="api/object.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="HTML-snippets.html" title="Describing HTML snippets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api/object.html" title="The MathJax Object-Oriented Programming Model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="converting-to-mathjax-from-jsmath">
+<span id="jsmath-support"></span><h1>Converting to MathJax from jsMath<a class="headerlink" href="#converting-to-mathjax-from-jsmath" title="Permalink to this headline">¶</a></h1>
+<p>MathJax is the successor to the popular <a class="reference external" href="http://www.math.union.edu/locate/jsMath/">jsMath</a> package for rendering
+mathematics in web pages.  Like jsMath, MathJax works by locating and
+processing the mathematics within the webpage once it has been loaded
+in the browser by a user viewing your web pages.  If you are using
+jsMath with its <tt class="docutils literal"><span class="pre">tex2math</span></tt> preprocessor, then switching to MathJax
+should be easy, and is simply a matter of configuring MathJax
+appropriately.  See the section on <a class="reference internal" href="configuration.html#configuration"><em>Configuring MathJax</em></a> for details about loading and configuring MathJax.</p>
+<p>On the other hand, if you are using jsMath&#8217;s <tt class="docutils literal"><span class="pre">&lt;span</span>
+<span class="pre">class=&quot;math&quot;&gt;...&lt;/span&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;div</span> <span class="pre">class=&quot;math&quot;&gt;...&lt;/div&gt;</span></tt> tags to
+mark the mathematics in your document, then you should use MathJax&#8217;s
+<tt class="docutils literal"><span class="pre">jsMath2jax</span></tt> preprocessor when you switch to MathJax.  To do this,
+include <tt class="docutils literal"><span class="pre">&quot;jsMath2jax.js&quot;</span></tt> in the <cite>extensions</cite> array of your
+configuration, with the <cite>jax</cite> array set to include <tt class="docutils literal"><span class="pre">&quot;input/TeX&quot;</span></tt>.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;jsMath2jax.js&quot;</span><span class="p">],</span>
+<span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span> <span class="p">...]</span>
+</pre></div>
+</div>
+<p>There are a few configuration options for <tt class="docutils literal"><span class="pre">jsMath2jax</span></tt>, which you
+can find in the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file, or in the <a class="reference internal" href="options/jsMath2jax.html#configure-jsmath2jax"><em>jsMath
+configuration options</em></a> section.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api/object.html"
+                        title="previous chapter">The MathJax Object-Oriented Programming Model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="HTML-snippets.html"
+                        title="next chapter">Describing HTML snippets</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/jsMath.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="HTML-snippets.html" title="Describing HTML snippets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api/object.html" title="The MathJax Object-Oriented Programming Model"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

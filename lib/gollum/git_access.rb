@@ -2,7 +2,15 @@ module Gollum
   # Controls all access to the Git objects from Gollum.  Extend this class to
   # add custom caching for special cases.
   class GitAccess
-    def initialize(path)
+    # Initializes the GitAccess instance.
+    #
+    # path          - The String path to the Git repository that holds the
+    #                 Gollum site.
+    # page_file_dir - String the directory in which all page files reside
+    #
+    # Returns this instance.
+    def initialize(path, page_file_dir = nil)
+      @page_file_dir = page_file_dir
       @path = path
       @repo = Grit::Repo.new(path)
       clear
@@ -15,7 +23,7 @@ module Gollum
       @repo.git.exist?
     end
 
-    # Public: Converts a given Git reference to a SHA, using the cache if 
+    # Public: Converts a given Git reference to a SHA, using the cache if
     # available.
     #
     # ref - a String Git reference (ex: "master")
@@ -29,7 +37,7 @@ module Gollum
       end
     end
 
-    # Public: Gets a recursive list of Git blobs for the whole tree at the 
+    # Public: Gets a recursive list of Git blobs for the whole tree at the
     # given commit.
     #
     # ref - A String Git reference or Git SHA to a commit.
@@ -70,23 +78,6 @@ module Gollum
           end
         end
       end
-    end
-
-    # Public: Gets a list of Git commits.
-    #
-    # *shas - An Array of String SHAs.
-    #
-    # Returns an Array of Grit::Commit instances.
-    def commits(*shas)
-      shas.flatten!
-      cached_commits = multi_get(:commit, shas)
-      missing_shas   = shas.select do |sha|
-        !cached_commits.key?(sha)
-      end
-
-      multi_commit!(missing_shas, cached_commits) if !missing_shas.empty?
-
-      shas.map { |sha| cached_commits[sha] }
     end
 
     # Public: Clears all of the cached data that this GitAccess is tracking.
@@ -136,21 +127,6 @@ module Gollum
     #
     attr_reader :commit_map
 
-    # Raw method for fetching a list of Git commits.
-    #
-    # shas - An Array of String SHAs.
-    # hash - Optional Hash to store the found commits, indexed by their SHA.
-    #
-    # Returns the same Hash instance.
-    def multi_commit!(shas, hash = {})
-      shas.each_slice(500) do |slice|
-        @repo.batch(slice).each do |commit|
-          hash[commit.id] = commit
-        end
-      end
-      hash
-    end
-
     # Checks to see if the given String is a 40 character hex SHA.
     #
     # str - Possible String SHA.
@@ -176,10 +152,17 @@ module Gollum
     #
     # Returns an Array of BlobEntry instances.
     def tree!(sha)
-      tree  = @repo.git.native(:ls_tree, 
+      tree  = @repo.git.native(:ls_tree,
         {:r => true, :l => true, :z => true}, sha)
-      tree.split("\0").inject([]) do |items, line|
-        items << parse_tree_line(line)
+      items = tree.split("\0").inject([]) do |memo, line|
+        memo << parse_tree_line(line)
+      end
+
+      if dir = @page_file_dir
+        regex = /^#{dir}\//
+        items.select { |i| i.path =~ regex }
+      else
+        items
       end
     end
 
@@ -230,27 +213,10 @@ module Gollum
       cache[key] = value || :_nil
     end
 
-    # Gets multiple values from the cache in a single call.
-    #
-    # name - The cache prefix used in building the full cache key.
-    # keys - Array of cache key names to fetch.
-    #
-    # Returns a Hash of the objects that were found in the cache, indexed by
-    # the cache key.
-    def multi_get(name, keys)
-      value = instance_variable_get("@#{name}_map")
-      keys.inject({}) do |memo, key|
-        if v = value[key]
-          memo[key] = v
-        end
-        memo
-      end
-    end
-
     # Parses a line of output from the `ls-tree` command.
     #
     # line - A String line of output:
-    #          "100644 blob 839c2291b30495b9a882c17d08254d3c90d8fb53	Home.md"
+    #          "100644 blob 839c2291b30495b9a882c17d08254d3c90d8fb53  Home.md"
     #
     # Returns an Array of BlobEntry instances.
     def parse_tree_line(line)

@@ -3,3 +3,4 @@ pkg
 .DS_Store
 .bundle
 test/static
+Gemfile.lock

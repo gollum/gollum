@@ -1,0 +1,69 @@
+/* IE7-specific styles */
+
+.ie #head #searchbar #searchbar-fauxtext input#search-query {
+  border: 0;
+  float: left;
+  padding: 0.4em 0 0 0.5em;
+}
+
+.ie #head #searchbar #searchbar-fauxtext #search-submit span {
+  height: 2.25em;
+}
+
+#head #searchbar,
+#head ul.actions {
+  margin: 1em 0 0 0;
+}
+
+ul.actions {
+  margin-left: 0;
+}
+
+.compare #footer ul.actions {
+  margin-top: 1em;
+}
+
+.compare div.data {
+  overflow: auto;
+}
+
+.history #version-form {
+  margin: -0.5em 0 -0.5em !important;
+}
+
+#gollum-editor {
+  padding-bottom: 0;
+}
+
+#gollum-editor-help-parent li a,
+#gollum-editor-help-list li a {
+  height: auto;
+}
+
+#gollum-editor #gollum-editor-format-selector {
+  margin-top: 6px;
+}
+
+#gollum-editor .singleline input {
+  padding-top: 0.25em;
+}
+
+#gollum-editor .collapsed {
+  padding-bottom: 1.1em;
+}
+
+#gollum-editor #gollum-editor-submit {
+  padding: 0.5em 1em 0.3em !important;
+}
+
+#gollum-editor #gollum-editor-preview {
+  line-height: 1.3em;
+}
+
+#gollum-editor form {
+  margin: 0;
+}
+
+#gollum-editor #gollum-editor-format-selector label {
+  padding-top: 0.1em !important;
+}

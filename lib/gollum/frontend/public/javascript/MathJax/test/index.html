@@ -7,21 +7,34 @@
 <META HTTP-EQUIV="X-UA-Compatible" CONTENT="IE=EmulateIE7" >
 
 <SCRIPT SRC="../MathJax.js">
+//
+//  Do NOT use this page as a template for your own pages.  It includes 
+//  code that is needed for testing your site's installation of MathJax,
+//  and that should not be used in normal web pages.  Use sample.html as
+//  the example for how to call MathJax in your own pages.
+//
+  MathJax.HTML.Cookie.Set("menu",{});
   MathJax.Hub.Config({
     extensions: ["tex2jax.js"],
     jax: ["input/TeX","output/HTML-CSS"],
     "HTML-CSS": {
       availableFonts:[],
-      styles: {".MathJax_Preview": {visibility: "hidden"}}
+      styles: {".MathJax_Preview": {visibility: "hidden"}},
+      Augment: {
+        Font: {
+          loadError: function (font) {
+            MathJax.Message.Set("Can't load web font TeX/"+font.directory,null,2000);
+            document.getElementById("noWebFont").style.display = "";
+          },
+          firefoxFontError: function (font) {
+            MathJax.Message.Set("Firefox can't load web fonts from a remote host",null,3000);
+            document.getElementById("ffWebFont").style.display = "";
+          }
+        }
+      }
     }
   });
 
-//
-//  Do NOT include the following in your own pages.  This is only here to
-//  provide an alert rather than MathJax's usual small message in the lower
-//  left-hand corner.  Use sample.html as the example for how to call 
-//  MathJax in your own pages.
-//
 (function (HUB) {
   
   var MINVERSION = {
@@ -50,6 +63,11 @@ MathJax.Hub.Register.StartupHook("End",function () {
   if (MAIN.version < 2) {
     document.getElementById("version").innerHTML = MAIN.version;
     document.getElementById("webfonts").style.display="";
+  } else if (HTMLCSS.imgFonts) {
+    alert("The browser you are using does not seem to support web-based " +
+          "fonts, so we can't test the MathJax web fonts with this browser " +
+          "(image fonts have been used instead)\n\n" +
+          "Please try a different browser, or a newer version of your browser.");
   }
 });
 </SCRIPT>
@@ -99,7 +117,26 @@ MathJax is not working!
 <HR>
 <p>
 
-<DIV ID="webfonts" STYLE="display:none; color:red">
+<DIV ID="noWebFont" STYLE="display:none; color:red">
+<B>WARNING</B>: The web fonts don't seem to be available.  Be sure you have
+downloaded and installed the latest MathJax-webfonts ZIP file from
+<p>
+<BLOCKQUOTE>
+<A HREF="http://sourceforge.net/projects/mathjax/files/">http://sourceforge.net/projects/mathjax/files/</A>
+</BLOCKQUOTE>
+before continuing.  If you fail to install these fonts, MathJax will not 
+work properly with some browsers.  If you can't install the image fonts, 
+be sure to set the noImageFonts parameter in your MathJax configuration 
+(either MathJax/config/MathJax.js, or the MathJax.Hub.Config() call in 
+your web page).
+<p>
+<HR>
+</DIV>
+<p>
+
+<!------------------------------------------------------------------------>
+
+<DIV ID="ffWebFont" STYLE="display:none; color:red">
 <B>WARNING</B>: Your MathJax web fonts seem to be version <SPAN ID="version">1</SPAN>
 rather than version 2.  Be sure you have downloaded and installed the latest
 MathJax-webfonts ZIP file from
@@ -114,8 +151,21 @@ above: the radial will be out of place.
 <p>
 <HR>
 </DIV>
-
 <p>
+
+<!------------------------------------------------------------------------>
+
+<DIV ID="webfonts" STYLE="display:none; color:red">
+<B>WARNING</B>: You are trying to load MathJax from a remote site where the
+web-based fonts are not set up to be shipped to Firefox properly.  See the
+<A HREF="http://sourceforge.net/projects/mathjax/forums/forum/948701/topic/3527522?message=8016693">discussion
+of Firefox's same-origin policy</A> on the MathJax SourceForge site.
+<p>
+<HR>
+</DIV>
+<p>
+
+<!------------------------------------------------------------------------>
 
 Once you have MathJax working properly, view the <A
 HREF="index-images.html">image mode test page</A> to make sure that the

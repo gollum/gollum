@@ -1,38 +1,19 @@
-<div class="write">
-  <a href="/{{escaped_name}}">&laquo; Back</a>
-  <h1>{{title}}</h1>
-
-  <form class="edit_wiki" method="post" action="/edit/{{escaped_name}}">
-    <div>
-      <label>
-        Title<br />
-        <input class="text" type="text" name="rename" value="{{name}}" />
-      </label>
-      <br />
-
-      <div id="wiki-form" class="comment-form wiki-form">
-        <ul class="tabs inline-tabs">
-          <li><a href="#write_bucket" action="write">Write</a></li>
-          <li><a href="#preview_bucket" action="preview">Preview</a></li>
-        </ul>
-        <div id="write_bucket" class="tab-content">
-          {{>editbar}}
-          <div class="inner">
-            <textarea name="content">{{content}}</textarea>
-          </div>
-        </div>
-        <div id="preview_bucket" class="tab-content content-body content wikistyle gollum">
-          <p>Loading content...</p>
-        </div>
-      </div>
-
-      <label>
-        Edit Summary <small>(Briefly describe the changes you have made)</small><br />
-        <input type="text" class="text" name="message" />
-      </label>
-      <div class="actions">
-        <input type="submit" value="Save page" />
-      </div>
-    </div>
-  </form>
+<div id="wiki-wrapper" class="edit">
+<div id="head">
+  <h1>Editing <strong>{{title}}</strong></h1>
+  <ul class="actions">
+    <li class="minibutton"><a href="/{{escaped_name}}"
+       class="action-view-page">View Page</a></li>
+    <li class="minibutton"><a href="/history/{{escaped_name}}"
+       class="action-page-history">Page History</a></li>
+  </ul>
 </div>
+<div id="wiki-content"> 
+  {{>editor}}
+</div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $.GollumEditor();
+});
+</script>

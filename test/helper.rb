@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'rack/test'
 require 'test/unit'
 require 'shoulda'
 require 'mocha'
@@ -8,7 +9,9 @@ dir = File.dirname(File.expand_path(__FILE__))
 $LOAD_PATH.unshift(File.join(dir, '..', 'lib'))
 $LOAD_PATH.unshift(dir)
 
+ENV['RACK_ENV'] = 'test'
 require 'gollum'
+require 'gollum/frontend/app'
 
 # Make sure we're in the test dir, the tests expect that to be the current
 # directory.
@@ -18,10 +21,21 @@ def testpath(path)
   File.join(TEST_DIR, path)
 end
 
+def cloned_testpath(path)
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name}}
+  end
+  cloned
+end
+
 def commit_details
   { :message => "Did something at #{Time.now}",
-    :name => "Tom Preston-Werner",
-    :email => "tom@github.com" }
+    :name    => "Tom Preston-Werner",
+    :email   => "tom@github.com" }
 end
 
 # test/spec/mini 3

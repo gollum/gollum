@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing and Testing MathJax &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="Loading and Configuring MathJax" href="configuration.html" />
+    <link rel="prev" title="Getting Started" href="start.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Loading and Configuring MathJax"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="start.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-and-testing-mathjax">
+<span id="installation"></span><h1>Installing and Testing MathJax<a class="headerlink" href="#installing-and-testing-mathjax" title="Permalink to this headline">¶</a></h1>
+<p>MathJax can be loaded from a public web server or privately from your
+hard drive or other local media.  To use MathJax in either way, you
+will need to obtain a copy of MathJax and its font package.  There are
+two main ways to do this:  via <tt class="docutils literal"><span class="pre">svn</span></tt> or via a pre-packaged archive.
+We recommend the former, as it is easier to keep your installation up
+to date using <tt class="docutils literal"><span class="pre">svn</span></tt>.</p>
+<div class="section" id="obtaining-mathjax-via-svn">
+<span id="getting-mathjax-svn"></span><h2>Obtaining MathJax via SVN<a class="headerlink" href="#obtaining-mathjax-via-svn" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to get MathJax and keep it up to date is to use the
+<a class="reference external" href="http://subversion.apache.org/">subversion</a>  source control system,
+<tt class="docutils literal"><span class="pre">svn</span></tt>.  Use the commands</p>
+<div class="highlight-sh"><div class="highlight"><pre>svn co http://mathjax.svn.sourceforge.net/svnroot/mathjax/trunk/mathjax mathjax
+<span class="nb">cd </span>mathjax
+unzip fonts.zip
+</pre></div>
+</div>
+<p>to obtain and set up a copy of MathJax.  (The <a class="reference external" href="http://sourceforge.net/projects/mathjax/develop">SourceForge development
+page</a> also shows
+how to do this.)</p>
+<p>Whenever you want to update MathJax, you can now use</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nb">cd </span>mathjax
+svn status
+</pre></div>
+</div>
+<p>to check if there are updates to MathJax.  If MathJax needs updating,
+use</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nb">cd </span>mathjax
+svn update
+<span class="c">#  if fonts.zip is updated, do the following as well:</span>
+rm -rf fonts
+unzip fonts.zip
+</pre></div>
+</div>
+<p>to udpate your copy of MathJax to the current release version.  If the
+<tt class="docutils literal"><span class="pre">fonts.zip</span></tt> file has been updated, you will need to remove the old
+fonts directory and unpack the new one bring your installation up to
+date.  If you keep MathJax updated in this way, you will be sure that
+you have the latest bug fixes and new features as they become
+available.</p>
+<p>This gets you the current development copy of MathJax, which is the
+&#8220;bleeding-edge&#8221; version that contains all the latest changes to
+MathJax.  At times, however, these may be less stable than the
+&#8220;release&#8221; version.  If you prefer to use the most stable version (that
+may not include all the latest patches and features), use</p>
+<div class="highlight-sh"><div class="highlight"><pre>svn co http://mathjax.svn.sourcesforge.net/svnroot/mathjax/tags/mathjax-1.0 mathajx
+<span class="nb">cd </span>mathjax
+unzip fonts.zip
+</pre></div>
+</div>
+<p>to obtain the version 1.0 release.  When you wish to update to a new
+release, you will need to check out a new copy of MathJax with the new
+release number.</p>
+</div>
+<div class="section" id="obtaining-mathjax-via-an-archive">
+<span id="getting-mathjax-zip"></span><h2>Obtaining MathJax via an archive<a class="headerlink" href="#obtaining-mathjax-via-an-archive" title="Permalink to this headline">¶</a></h2>
+<p>Release versions of MathJax are available in archive files from the
+<a class="reference external" href="http://www.mathjax.org/download/">MathJax download page</a> or the
+<a class="reference external" href="http://sourceforge.net/projects/mathjax/files/">SourceForge files page</a>, where you can
+download the archives that you need.</p>
+<p>You should download the <tt class="docutils literal"><span class="pre">MathJax-v1.0.zip</span></tt> file, then simply unzip
+it. Once the MathJax directory is unpacked, you should move it to the
+desired location on your server (or your hard disk, if you are using
+it locally rather then through a web server).  One natural location is
+to put it at the top level of your web server&#8217;s hierarchy.  That would
+let you refer to the main MathJax file as <tt class="docutils literal"><span class="pre">/MathJax/MathJax.js</span></tt> from
+within any page on your server.</p>
+</div>
+<div class="section" id="testing-your-installation">
+<h2>Testing your installation<a class="headerlink" href="#testing-your-installation" title="Permalink to this headline">¶</a></h2>
+<p>Use the HTML files in the <tt class="docutils literal"><span class="pre">test</span></tt> directory to see if your
+installation is working properly:</p>
+<div class="highlight-python"><pre>test/
+    index.html          # Tests default configuration
+    index-images.html   # Tests image-font fallback display
+    sample.html         # Sample page with lots of pretty equations</pre>
+</div>
+<p>Open these files in your browser to see that they appear to be working
+properly.  If you have installed MathJax on a server, use the web
+address for those files rather than opening them locally.  When you
+view the <tt class="docutils literal"><span class="pre">index.html</span></tt> file, you should see (after a few moments) a
+message that MathJax appears to be working.  If not, you should check
+that the files have been transferred to the server completely, that
+the fonts archive has been unpacked in the correct location, and that
+the permissions allow the server to access the files and folders that
+are part of the MathJax directory (be sure to verify the MathJax
+folder&#8217;s permissions as well).  Checking the server logs may help
+locate problems with the installation.</p>
+</div>
+<div class="section" id="notes-about-shared-installations">
+<span id="cross-domain-linking"></span><h2>Notes about shared installations<a class="headerlink" href="#notes-about-shared-installations" title="Permalink to this headline">¶</a></h2>
+<p>Typically, you want to have MathJax installed on the same server as
+your web pages that use MathJax.  There are times, however, when that
+may be impractical, or when you want to use a MathJax installation at
+a different site.  For example, a departmental server at
+<tt class="docutils literal"><span class="pre">www.math.yourcollege.edu</span></tt> might like to use a college-wide
+installation at <tt class="docutils literal"><span class="pre">www.yourcollege.edu</span></tt> rather than installing a
+separate copy on the departmental machine.  MathJax can certainly
+be loaded from another server, but there is one imporant caveat &#8212;
+Firefox&#8217;s same-origin security policy for cross-domain scripting.</p>
+<p>Firefox’s interpretation of the same-origin policy is more strict than
+most other browsers, and it affects how fonts are loaded with the
+<cite>&#64;font-face</cite> CSS directive.  MathJax uses this directory to load
+web-based math fonts into a page when the user doesn&#8217;t have them
+installed locally on their own computer.  Firefox&#8217;s security policy,
+however, only allows this when the fonts come from the same server as
+the web page itself, so if you load MathJax (and hence its web fonts)
+from a different server, Firefox won&#8217;t be able to access those web
+fonts.  In this case, MathJax will pause while waiting for the font to
+download (which will never happen) and will time out after about 15
+seconds for each font it tries to access.  Typically that is three or
+four fonts, so your Foirefox users will experience a minute or so
+delay before mathematics is displayed, and then it will probably
+display incorrectly because the browser doesn&#8217;t have access to the
+correct fonts.</p>
+<p>There is a solution to this, however, if you manage the server where
+MathJax is installed, and if that server is running the <a class="reference external" href="http://www.apache.org/">Apache web
+server</a>.  In the remote server&#8217;s
+<tt class="docutils literal"><span class="pre">MathJax/fonts/HTML-CSS/TeX/otf</span></tt> folder, create a file called
+<tt class="docutils literal"><span class="pre">.htaccess</span></tt> that contains the following lines:</p>
+<div class="highlight-python"><pre>&lt;FilesMatch "\.(ttf|otf|eot)$"&gt;
+&lt;IfModule mod_headers.c&gt;
+Header set Access-Control-Allow-Origin "*"
+&lt;/IfModule&gt;
+&lt;/FilesMatch&gt;</pre>
+</div>
+<p>and make sure the permissions allow the server to read this file.
+(The file&#8217;s name starts with a period, which causes it to be an
+&#8220;invisible&#8221; file on unix-based operating systems.  Some systems,
+particularly graphic user interfaces, may not allow you to create such
+files, so you might need to use the command-line interface to
+accomplish this.)</p>
+<p>This file should make it possible for pages at other sites to load
+MathJax from this server in such a way that Firefox will be able to
+download the web-based fonts.  If you want to restrict the sites that
+can access the web fonts, change the <tt class="docutils literal"><span class="pre">Access-Control-Allow-Origin</span></tt>
+line to something like:</p>
+<div class="highlight-python"><pre>Header set Access-Control-Allow-Origin "http://www.math.yourcollege.edu"</pre>
+</div>
+<p>so that only pages at <tt class="docutils literal"><span class="pre">www.math.yourcollege.edu</span></tt> will be able to
+download the fonts from this site.  See the open font library
+discussion of <a class="reference external" href="http://openfontlibrary.org/wiki/Web_Font_linking_and_Cross-Origin_Resource_Sharing">web-font linking</a>
+for more details.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing and Testing MathJax</a><ul>
+<li><a class="reference internal" href="#obtaining-mathjax-via-svn">Obtaining MathJax via SVN</a></li>
+<li><a class="reference internal" href="#obtaining-mathjax-via-an-archive">Obtaining MathJax via an archive</a></li>
+<li><a class="reference internal" href="#testing-your-installation">Testing your installation</a></li>
+<li><a class="reference internal" href="#notes-about-shared-installations">Notes about shared installations</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="start.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configuration.html"
+                        title="next chapter">Loading and Configuring MathJax</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/installation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Loading and Configuring MathJax"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="start.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

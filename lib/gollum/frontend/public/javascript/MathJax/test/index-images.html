@@ -7,18 +7,22 @@
 <META HTTP-EQUIV="X-UA-Compatible" CONTENT="IE=EmulateIE7" >
 
 <SCRIPT SRC="../MathJax.js">
+//
+//  Do NOT use this page as a template for your own pages.  It includes 
+//  code that is needed for testing your site's installation of MathJax,
+//  and that should not be used in normal web pages.  Use sample.html as
+//  the example for how to call MathJax in your own pages.
+//
+  MathJax.HTML.Cookie.Set("menu",{});
   MathJax.Hub.Config({
     extensions: ["tex2jax.js"],
     jax: ["input/TeX","output/HTML-CSS"],
-    "HTML-CSS": {availableFonts:[], preferredFont: null, webFont: null} 
+    "HTML-CSS": {
+      availableFonts:[], preferredFont: null, webFont: null,
+      styles: {".MathJax_Preview": {visibility: "hidden"}}
+    } 
   });
 
-//
-//  Do NOT include the following in your own pages.  This is only here to
-//  provide an alert rather than MathJax's usual small message in the lower
-//  left-hand corner.  Use sample.html as the example for how to call 
-//  MathJax in your own pages.
-//
 (function (HUB) {
   
   var MINVERSION = {
@@ -89,16 +93,18 @@ MathJax is not working!
 <p>
 
 If the mathematics does not show up properly, you may not have not
-installed the MathJax web fonts correctly.  Follow the instructions in the 
-<A HREF="../README.txt">README file</A>.
+installed the MathJax web fonts correctly.  Follow the steps in the 
+<A HREF="../docs/html/installation.html">installation instructions</A>.
 <p>
 
-The MathJax-webfonts archive is available from the <A 
-HREF="http://sourceforge.net/projects/mathjax/files/">MathJax SourceForge 
-project</A>.  Unpack the archive in the MathJax directory; you should 
-obtain a fonts directory, with a hierarchy of:
+If you obtained MathJax via an archive (<code>.zip</code>) file, the fonts are included 
+and should not need any special installation.  If you obtained MathJax via 
+svn, the distribution includes a <code>fonts.zip</code> file that you will 
+need to unpack before the image fonts will work.  Once unpacked, you 
+should have a directory with the following hierarchy:
 <PRE>
-    MathJax/
+    mathjax/
+      ...
       fonts/
         HTML-CSS/
           TeX/
@@ -111,6 +117,8 @@ obtain a fonts directory, with a hierarchy of:
               ...
             svg/
               ...
+      fonts.zip
+      ...
 </PRE>
 
 </BLOCKQUOTE>

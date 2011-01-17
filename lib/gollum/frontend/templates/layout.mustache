@@ -1,33 +1,28 @@
 <!DOCTYPE html>
-
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="/css/screen.css" type="text/css" charset="utf-8" />
-    <link rel="stylesheet" href="/css/gollum.css" type="text/css" charset="utf-8" />
-    <link rel="stylesheet" href="/css/syntax.css" type="text/css" charset="utf-8" />
-    <link rel="stylesheet" href="/css/editbar.css" type="text/css" charset="utf-8" />
-    <script src="/javascript/jquery-1.4.2.min.js" type="text/javascript"></script>
-    <script src="/javascript/jquery.text_selection-1.0.0.min.js" type="text/javascript"></script>
-    <script src="/javascript/jquery.previewable_comment_form.js" type="text/javascript"></script>
-    <script src="/javascript/jquery.tabs.js" type="text/javascript"></script>
-    <script src="/javascript/gollum.js" type="text/javascript"></script>
-    <script src="/javascript/MathJax/MathJax.js" type="text/javascript">
-      MathJax.OutputJax.fontDir = "http://github-assets.s3.amazonaws.com/javascripts/MathJax/fonts"
-      MathJax.Hub.Config({
-        jax: ["input/TeX", "output/HTML-CSS"]
-      })
-    </script>
-  </head>
+<head>
+  <meta http-equiv="Content-type" content="text/html;charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="/css/gollum.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/editor.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/dialog.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/template.css" media="all">
+  
+  <!--[if IE 7]>
+  <link rel="stylesheet" type="text/css" href="/css/ie7.css" media="all">
+  <![endif]-->
+  
+  <script type="text/javascript" src="/javascript/jquery.js"></script>
+  <script type="text/javascript" src="/javascript/gollum.js"></script>
+  <script type="text/javascript" src="/javascript/gollum.dialog.js"></script>
+  <script type="text/javascript" src="/javascript/gollum.placeholder.js"></script>
+  
+  <script type="text/javascript" 
+    src="/javascript/gollum-editor/gollum.editor.js"></script>
+  <title>{{title}}</title>
+</head>
+<body>
 
-  <body>
-    <div id="main">
-      <div class="site">
-        <div id="guides">
-          {{{yield}}}
-        </div>
-      </div>
-    </div>
-  </body>
+{{{yield}}}
+
+</body>
 </html>

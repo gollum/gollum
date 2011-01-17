@@ -1,4 +1,6 @@
-require File.join(File.dirname(__FILE__), *%w[helper])
+# ~*~ encoding: utf-8 ~*~
+path = File.join(File.dirname(__FILE__), "helper") 
+require File.expand_path(path)
 
 context "File" do
   setup do

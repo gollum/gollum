@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using MathJax in WordPress &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Using MathJax in popular web platforms" href="index.html" />
+    <link rel="next" title="MathJax TeX and LaTeX Support" href="../tex.html" />
+    <link rel="prev" title="Installing MathJax in WordPress" href="wordpress.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../tex.html" title="MathJax TeX and LaTeX Support"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="wordpress.html" title="Installing MathJax in WordPress"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Using MathJax in popular web platforms</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-mathjax-in-wordpress">
+<span id="platform-movable-type"></span><h1>Using MathJax in WordPress<a class="headerlink" href="#using-mathjax-in-wordpress" title="Permalink to this headline">¶</a></h1>
+<p>These instructions assume you already have placed the MathJax files on
+your server (see <a class="reference internal" href="../installation.html#installation"><em>Installing and Testing MathJax</em></a>).</p>
+<ol class="arabic">
+<li><p class="first">Open Moveable Type Admin interface for the site on which you want to enable
+MathJax.</p>
+</li>
+<li><p class="first">In the dashboard menu on the left, open up the Design menu. This
+should show you the templates you are currently using on the site.</p>
+<blockquote>
+<img alt="../_images/mt_menu.png" src="../_images/mt_menu.png" />
+</blockquote>
+</li>
+<li><p class="first">Scroll down to the Template Modules section in the template list
+and open the <cite>HTML Head</cite> template.</p>
+<blockquote>
+<img alt="../_images/mt_templates.png" src="../_images/mt_templates.png" />
+</blockquote>
+</li>
+<li><p class="first">At the end of the file, insert</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span>  <span class="na">src=</span><span class="s">&quot;path-to-MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">path-to-MathJax</span></tt> is replaced by the web-address of the
+main MathJax dorectory on your server.</p>
+<blockquote>
+<img alt="../_images/mt_head.png" src="../_images/mt_head.png" />
+</blockquote>
+</li>
+<li><p class="first">Save the file.  This should enable MathJax, so you should be able
+to start adding mathematical content to your pages.  Use the
+<tt class="docutils literal"><span class="pre">config/MathJas.js</span></tt> file in the MathJax directory to configure
+MathJax to your needs (see <a class="reference internal" href="../configuration.html#configuration"><em>Configuring MathJax</em></a> for details).</p>
+</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="wordpress.html"
+                        title="previous chapter">Installing MathJax in WordPress</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../tex.html"
+                        title="next chapter">MathJax TeX and LaTeX Support</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/platforms/movable-type.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../tex.html" title="MathJax TeX and LaTeX Support"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="wordpress.html" title="Installing MathJax in WordPress"
+             >previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Using MathJax in popular web platforms</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

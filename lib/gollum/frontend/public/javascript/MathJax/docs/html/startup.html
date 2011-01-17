@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The MathJax Startup Sequence &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="Synchronizing your code with MathJax" href="synchronize.html" />
+    <link rel="prev" title="The MathJax Processing Model" href="model.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="synchronize.html" title="Synchronizing your code with MathJax"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="The MathJax Processing Model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-mathjax-startup-sequence">
+<span id="startup-sequence"></span><h1>The MathJax Startup Sequence<a class="headerlink" href="#the-mathjax-startup-sequence" title="Permalink to this headline">¶</a></h1>
+<p>When you load <tt class="docutils literal"><span class="pre">MathJax.js</span></tt> into a web page, it configures itself and
+immediately begins loading the components it needs.  As MathJax starts
+up, it uses its <a class="reference internal" href="synchronize.html#synchronization"><em>signaling mechanism</em></a>
+to indicate the actions that it is taking so that MathJax extensions
+can tie into the initialization process, and so other applications
+within the page can synchronize their actions with MathJax.</p>
+<p>The startup process performs the following actions:</p>
+<ul class="simple">
+<li>It creates the <tt class="docutils literal"><span class="pre">MathJax</span></tt> variable, and defines the following
+subsystems:<ul>
+<li><tt class="docutils literal"><span class="pre">MathJax.Object</span></tt> (object-oriented programming model)</li>
+<li><tt class="docutils literal"><span class="pre">MathJax.Callback</span></tt> (callbacks, signals, and queues)</li>
+<li><tt class="docutils literal"><span class="pre">MathJax.Ajax</span></tt> (file-loading and style-creation code)</li>
+<li><tt class="docutils literal"><span class="pre">MathJax.HTML</span></tt> (support code for creating HTML elements)</li>
+<li><tt class="docutils literal"><span class="pre">MathJax.Message</span></tt> (manages the menu line in the lower left)</li>
+<li><tt class="docutils literal"><span class="pre">MathJax.Hub</span></tt> (the core MathJax functions)</li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+<li>It then creates the base <tt class="docutils literal"><span class="pre">MathJax.InputJax</span></tt>,
+<tt class="docutils literal"><span class="pre">MathJax.OutputJax</span></tt>, and <tt class="docutils literal"><span class="pre">MathJax.ElementJax</span></tt> objects.</li>
+</ul>
+<ul class="simple">
+<li>MathJax sets up the default configuration, and creates the
+signal objects used for the startup and hub actions.</li>
+</ul>
+<ul class="simple">
+<li>MathJax locates the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag that loaded the <tt class="docutils literal"><span class="pre">MathJax.js</span></tt>
+file, and sets the <tt class="docutils literal"><span class="pre">MathJax.Hub.config.root</span></tt> value to reflect the
+location of the MathJax root directory.</li>
+</ul>
+<ul class="simple">
+<li>MathJax determines the browser being used and its version.  It sets
+up the <tt class="docutils literal"><span class="pre">MathJax.Hub.Browser</span></tt> object, which includes the browser
+name and version, plus <tt class="docutils literal"><span class="pre">isMac</span></tt>, <tt class="docutils literal"><span class="pre">isPC</span></tt>, <tt class="docutils literal"><span class="pre">isMSIE</span></tt>, and so on.</li>
+</ul>
+<ul class="simple">
+<li>MathJax set up the <tt class="docutils literal"><span class="pre">MathJax.Hub.queue</span></tt> command queue, and
+populates it with the commands MathJax runs at startup.  This
+includes creating the <tt class="docutils literal"><span class="pre">MathJax.Hub.Startup.onload</span></tt> onload
+handler that is used to synchronize MathJax&#8217;s action with the
+loading of the page.</li>
+</ul>
+<p>Once the <tt class="docutils literal"><span class="pre">MathJax.Hub.queue</span></tt> is created, the following actions are
+pushed into the queue:</p>
+<ol class="arabic simple">
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span></tt> startup signal</li>
+</ol>
+<ol class="arabic simple" start="2">
+<li>Perform the configuration actions:<ul>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">Config</span></tt> startup signal</li>
+<li>Execute the content of the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> that loaded MathJax,
+or load the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file if the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt>
+is empty</li>
+<li>If the <tt class="docutils literal"><span class="pre">MathJax.Hub.config.delayStartupUntil</span></tt> value is set,
+wait until its condition is met</li>
+<li>load the files listed in the <tt class="docutils literal"><span class="pre">MathJax.Hub.config.config</span></tt> array</li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">Config</span></tt> startup signal</li>
+</ul>
+</li>
+</ol>
+<ol class="arabic simple" start="3">
+<li>Load the cookie values:<ul>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">Cookie</span></tt> startup signal</li>
+<li>Load the menu cookie values</li>
+<li>Use the cookie to set the renderer, if it is set</li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">Cookie</span></tt> startup signal</li>
+</ul>
+</li>
+</ol>
+<ol class="arabic simple" start="4">
+<li>Define the MathJax styles:<ul>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">Styles</span></tt> startup signal</li>
+<li>Load the stylesheet files from the <tt class="docutils literal"><span class="pre">MathJax.Hub.config.stylesheets</span></tt> array</li>
+<li>Define the stylesheet described in <tt class="docutils literal"><span class="pre">MathJax.Hub.config.styles</span></tt></li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">Styles</span></tt> startup signal</li>
+</ul>
+</li>
+</ol>
+<ol class="arabic simple" start="5">
+<li>Load the jax configuration files:<ul>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">Jax</span></tt> startup signal</li>
+<li>Load the jax config files from the <tt class="docutils literal"><span class="pre">MathJax.Hub.config.jax</span></tt> array<ul>
+<li>The jax will register themselves when they are loaded</li>
+</ul>
+</li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">Jax</span></tt> startup signal</li>
+</ul>
+</li>
+</ol>
+<ol class="arabic simple" start="6">
+<li>Load the extension files:<ul>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">Extension</span></tt> startup signal</li>
+<li>Load the files from the <tt class="docutils literal"><span class="pre">MathJax.Hub.config.extensions</span></tt> array<ul>
+<li>Most extensions will post a <tt class="docutils literal"><span class="pre">Extension</span> <span class="pre">[name]</span> <span class="pre">Ready</span></tt>
+startup message when they are loaded (where <tt class="docutils literal"><span class="pre">[name]</span></tt> is
+the name of the extension)</li>
+</ul>
+</li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">Extension</span></tt> startup signal</li>
+</ul>
+</li>
+</ol>
+<ol class="arabic simple" start="7">
+<li>Wait for the onload handler to fire</li>
+</ol>
+<ol class="arabic simple" start="8">
+<li>Set <tt class="docutils literal"><span class="pre">MathJax.isReady</span></tt> to <tt class="docutils literal"><span class="pre">true</span></tt></li>
+</ol>
+<ol class="arabic simple" start="9">
+<li>Perform the typesetting pass (preprocessors and processors)<ul>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">Typeset</span></tt> startup signal</li>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">PreProcess</span></tt> hub signal</li>
+<li>Run the registered preprocessors</li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">PreProcess</span></tt> hub signal</li>
+<li>Clear the hub signal history</li>
+<li>Post the <tt class="docutils literal"><span class="pre">Begin</span> <span class="pre">Process</span></tt> hub signal</li>
+<li>Process the math script elements on the page<ul>
+<li>Each new math element generates a <tt class="docutils literal"><span class="pre">New</span> <span class="pre">Math</span></tt> hub signal
+with the math element&#8217;s ID</li>
+</ul>
+</li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">Process</span></tt> hub signal</li>
+<li>Post the <tt class="docutils literal"><span class="pre">End</span> <span class="pre">Typeset</span></tt> startup signal</li>
+</ul>
+</li>
+</ol>
+<ol class="arabic simple" start="10">
+<li>Post the <tt class="docutils literal"><span class="pre">End</span></tt> startup signal</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="previous chapter">The MathJax Processing Model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="synchronize.html"
+                        title="next chapter">Synchronizing your code with MathJax</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/startup.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="synchronize.html" title="Synchronizing your code with MathJax"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="The MathJax Processing Model"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

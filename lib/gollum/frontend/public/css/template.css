@@ -1,0 +1,360 @@
+/*
+  template.css
+  Wiki content formatting
+  Keeping this file separate so it can be easily swapped out if you 
+  want to format your wiki content differently from the default.
+*/
+
+#template {
+  margin-bottom: 4em; /* Give it some breathing room */
+}
+
+.has-footer #template {
+  margin: 0;
+}
+
+#template p {
+  font-size: 1.4em;
+  line-height: 1.6em;
+  margin: 0.5em 0 0.5em 0;
+}
+
+#template a:link {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+/*
+  Link classes available:
+  .absent - for internal links that do not yet exist 
+  .internal - for internal links (links that link to other wiki pages)
+  .present - for internal links that exist (normal color)
+*/
+#template a.absent {
+  color: #d00 !important;
+}
+
+#template a:hover, #template a:visited {
+  text-decoration: underline;
+}
+  
+#template ul, #template ol {
+  margin: 1.0em 0 0 2.0em;
+  list-style-position: outside;
+  padding: 0;
+}
+
+#template dl {
+  margin: 1.0em 0 0 0.5em;
+}
+
+  #template dl * dl {
+    margin: 0.5em 0 0 0.5em;
+  }
+
+#template p + ul, #template p + ol,
+#template ul li > ul, #template ol li > ol,
+#template ul > ul, #template ol > ol {
+  margin-top: 0;
+}
+
+#template ul li > ul, #template ol li > ol,
+#template ul > ul, #template ol > ol {
+  margin-left: 0;
+}
+
+  #template ul {
+    list-style-type: square;
+  }
+  
+  #template ul li > ul,
+  #template ul > ul {
+    padding-left: 1em;
+  }
+  
+  #template ul li > ul li,
+  #template ul li > ol li,
+  #template ol li > ol li,
+  #template ol li > ul li {
+    font-size: 1.0em !important;
+  }
+  
+  #template ol li > ol li,
+  #template ol > ol li {
+    list-style-type: lower-roman;
+    list-style-position: inside;
+  }
+  
+  #template ol li > ol li > ol li,
+  #template ol > ol > ol li {
+    list-style-type: lower-alpha;
+  }
+  
+  #template ol li > ol li > ol li > ol li,
+  #template ol > ol > ol > ol li {
+    list-style-type: lower-greek;
+  }
+
+#template ul li, #template ol li, #template dl dt, #template dl dd {
+  font-size: 1.4em;
+  line-height: 1.6em;
+  padding-top: 0.1em; /* Line up ordinals */
+}
+
+#template dl dt {
+  font-weight: bold;
+}
+
+#template dl dd {
+  padding: 1em 0;
+}
+
+#template ul li p, #template ol li p {
+  font-size: 1.0em;
+}
+
+#template blockquote {
+  font-size: 1.4em;
+  line-height: 1.6em;
+  margin: 0 4.0em 0 2.0em;
+  padding: 0;
+}
+
+  #template blockquote p,
+  #template blockquote > blockquote {
+    color: #888;
+    font-size: 1.0em;
+    line-height: 1.0em;
+    font-style: italic;
+  }
+  
+  #template blockquote pre {
+    font-size: 1.0em;
+    line-height: 1.0em;
+  }
+  
+  #template blockquote > blockquote {
+    margin: 1em 4em 1em 2em;
+  }
+
+
+/* Headings */
+#template h1, #template h2, #template h3,
+#template h4, #template h5, #template h6 {
+  margin: 0;
+  padding: 0.5em 0 0;
+}
+
+#template h1 {
+  font-size: 2.6em;
+  font-weight: bold;
+}
+
+#template h2 {
+  font-size: 2.2em;
+  font-weight: bold;
+}
+
+#template h3 {
+  font-size: 2.0em;
+  font-weight: bold;
+}
+
+#template h4 {
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+#template h5 {
+  font-size: 1.6em;
+  font-weight: bold;
+
+}
+
+#template h6 {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  text-transform: uppercase; /* all caps */
+}
+
+
+/* Code-related */
+#template p code, #template p tt,
+#template dl dt tt, #template ul li tt, #template ol li tt {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  color: #222; /* This is a little heavy when #000 */
+  font-size: 1.0em;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  padding: 0.15em 0.3em;
+}
+
+#template pre {
+  padding-left: 0.5em;
+}
+
+#template tt, #template pre {
+  color: #222;
+  font-size: 1.5em;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+}
+
+#template dl dt tt, #template dl dd tt, 
+#template ul li tt, #template ol li tt,
+#template dl dt p, #template dl dd p,
+#template dl dt pre, #template dl dd pre,
+#template ul li pre, #template ol li pre,
+#template ul li > dl dt, #template ol li > dl dt,
+#template ul li > dl dd, #template ol li > dl dd,
+#template dl dd > * li, #template dl dt > * li,
+#template dl dd > * dd, #template dl dt > * dt, 
+#template dl * dt, #template dl * dd,
+#template pre tt {
+  font-size: 1.0em;
+}
+
+#template table {
+  margin: 1em 0;
+  padding: 0.5em;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+#template table tr {
+  margin: 0;
+}
+
+#template table tr td,
+#template table tr th {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.4em; 
+  padding: 0.5em 0.5em;
+}
+
+#template table tr:nth-child(2n) {
+  background-color: #f9f9f9;
+}
+
+
+/* Generic align commands (deprecated) */
+#template .frame {
+  display: block;
+  overflow: hidden;
+  padding: 1em 0;
+}
+  
+  #template .frame span {
+    color: #888;
+    display: block;
+    line-height: normal;
+  }
+  
+  #template .frame img {
+    border: 1px solid #ddd;
+    padding: 1em;    
+  }
+
+#template .float-left {
+  display: block;
+  float: left;
+  margin-right: 1em;
+  padding: 1em 0;
+  overflow: hidden;
+}
+
+#template .float-right {
+  display: block;
+  float: right;
+  margin-left: 1em;
+  padding: 1em 0;
+  overflow: hidden;
+}
+
+#template .align-left,
+#template .align-left img {
+  display: block;
+  text-align: left;
+}
+
+#template .align-center,
+#template .align-center img {
+  display: block;
+  margin: 0 auto;
+}
+
+#template .align-right,
+#template .align-right img {
+  display: block;
+  overflow: hidden;
+}
+
+  #template .align-right img, 
+  #template .align-right span {
+    display: block;
+    float: right;
+  }
+
+#template .align-left span,
+#template .align-right span,
+#template .align-center span {
+  color: #888;
+  display: block;
+  line-height: normal;
+}
+
+
+/* @control syntax */
+#template .data {
+  border: 1px solid #ddd;
+  margin-top: 1em;
+  overflow: auto;
+}
+
+#template .data pre {
+  margin: 0;
+  padding: 0;
+}
+
+#template .data pre div {
+  padding: 0 0 0 1em;
+}
+
+#template .data tr td {
+  font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
+  font-size: 1.0em; /* reset size */
+  line-height: 1.8em;
+  margin: 0;
+  padding: 0;
+}
+
+#template .data td.line_numbers {
+  background: #f7f7f7;
+  border-right: 1px solid #999;
+  color: #999; 
+  padding: 0 0 0 0.5em;
+}
+
+#template .highlight  { background: #ffffff; }
+#template .highlight .c { color: #999988; font-style: italic } 
+#template .highlight .err { color: #a61717; background-color: #e3d2d2 } 
+#template .highlight .k { font-weight: bold } 
+#template .highlight .o { font-weight: bold } 
+#template .highlight .cm { color: #999988; font-style: italic } 
+#template .highlight .cp { color: #999999; font-weight: bold } 
+#template .highlight .c1 { color: #999988; font-style: italic } 
+#template .highlight .cs { color: #999999; font-weight: bold; font-style: italic } 
+#template .highlight .gd { color: #000000; background-color: #ffdddd } 
+#template .highlight .gd .x { color: #000000; background-color: #ffaaaa } 
+#template .highlight .ge { font-style: italic } 
+#template .highlight .gr { color: #aa0000 } 
+#template .highlight .gh { color: #999999 } 
+#template .highlight .gi { color: #000000; background-color: #ddffdd } 
+#template .highlight .gi .x { color: #000000; background-color: #aaffaa } 
+#template .highlight .gc { color: #999; background-color: #EAF2F5 }
+#template .highlight .go { color: #888888 } 
+#template .highlight .gp { color: #555555 } 
+#template .highlight .gs { font-weight: bold } 
+#template .highlight .gu { color: #aaaaaa } 
+#template .highlight .gt { color: #aa0000 } 

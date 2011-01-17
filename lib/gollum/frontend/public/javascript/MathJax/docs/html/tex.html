@@ -1,0 +1,1152 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MathJax TeX and LaTeX Support &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="MathJax MathML Support" href="mathml.html" />
+    <link rel="prev" title="Using MathJax in WordPress" href="platforms/movable-type.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mathml.html" title="MathJax MathML Support"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="platforms/movable-type.html" title="Using MathJax in WordPress"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="mathjax-tex-and-latex-support">
+<span id="tex-support"></span><h1>MathJax TeX and LaTeX Support<a class="headerlink" href="#mathjax-tex-and-latex-support" title="Permalink to this headline">¶</a></h1>
+<p>The support for TeX and LaTeX in MathJax consists of two parts:  the
+<cite>tex2jax</cite> preprocessor, and the TeX input processor.  The first of
+these looks for mathematics within your web page (indicated by math
+delimiters like <tt class="docutils literal"><span class="pre">$$...$$</span></tt>) and marks the mathematics for later
+processing by MathJax.  The TeX input processor is what converts the
+TeX notation into MathJax&#8217;s internal format, where on of MathJax&#8217;s
+output processors then displays is in the web page.</p>
+<p>The <cite>tex2jax</cite> preprocessor can be configured to look for whatever
+markers you want to use for your math delimiters.  See the
+<a class="reference internal" href="options/tex2jax.html#configure-tex2jax"><em>tex2jax configuration options</em></a> section for
+details on how to customize the action of <cite>tex2jax</cite>.</p>
+<p>The TeX input processor handles conversion of your mathematical
+notation into MathJax&#8217;s internal format (which is essentially MathML),
+and so acts as a TeX to MathML converter.  The TeX input processor has
+few configuration options (see the <a class="reference internal" href="options/TeX.html#configure-tex"><em>TeX options</em></a> section for details), but it can also be customized
+through the use of extensions that define additional functionality
+(see the <a class="reference internal" href="#tex-extensions"><em>TeX and LaTeX extensions</em></a> below).</p>
+<p>Note that the TeX input processor implements <strong>only</strong> the math-mode
+macros of TeX and LaTeX, not the text-mode macros.  MathJax expects
+that you will use standard HTML tags to handle formatting the text of
+your page; it only handles the mathematics.  So, for example, MathJax
+does not implement <tt class="docutils literal"><span class="pre">\emph</span></tt> or
+<tt class="docutils literal"><span class="pre">\begin{enumerate}...\end{enumerate}</span></tt> or other text-mode macros or
+environments.  You must use HTML to handle such formatting tasks.  If
+you need a LaTeX-to-HTML converter, you should consider <a class="reference external" href="http://www.google.com/search?q=latex+to+html+converter">other options</a>.</p>
+<div class="section" id="tex-and-latex-in-html-documents">
+<h2>TeX and LaTeX in HTML documents<a class="headerlink" href="#tex-and-latex-in-html-documents" title="Permalink to this headline">¶</a></h2>
+<p>Keep in mind that your mathematics is part of an HTML document, so you
+need to be aware of the special characters used by HTML as part of its
+markup.  There can not be HTML tags within the math delimiters (other
+than <tt class="docutils literal"><span class="pre">&lt;BR&gt;</span></tt>) as TeX-formatted math does not include HTML tags.
+Also, since the mathematics is initially given as text on the page,
+you need to be careful that your mathematics doesn&#8217;t look like HTML
+tags to the browser (which parses the page before MathJax gets to see
+it).  In particular, that means that you have to be careful about
+things like less-than and greater-than signs (<tt class="docutils literal"><span class="pre">&lt;``and</span> <span class="pre">``&gt;</span></tt>), and
+ampersands (<tt class="docutils literal"><span class="pre">&amp;</span></tt>), which have special meaning to the browsers.  For
+example,</p>
+<div class="highlight-latex"><div class="highlight"><pre>... when <span class="s">$</span><span class="nb">x&lt;y</span><span class="s">$</span> we have ...
+</pre></div>
+</div>
+<p>will cause a problem, because the brower will think <tt class="docutils literal"><span class="pre">&lt;y</span></tt> is the
+beginning of a tag named <tt class="docutils literal"><span class="pre">y</span></tt> (even though there is no such tag in
+HTML).  When this happens, the browser will think the tag continues up
+to the next <tt class="docutils literal"><span class="pre">&gt;</span></tt> in the document (typically the end of the next
+actual tag in the HTML file), and you may notice that you are missing
+part of the text of the document.  In the example above, the `` we
+have ...`` will not be displayed because the browsers thinks it is
+part of the tag starting at <tt class="docutils literal"><span class="pre">&lt;y</span></tt>.  This is one indication you can
+use to spot this prooblem; it is a common error and should be avoided.</p>
+<p>Usually, it is sufficient to simply put spaces around these symbols to
+cause the browser to avoid them, so</p>
+<div class="highlight-latex"><div class="highlight"><pre>... when <span class="s">$</span><span class="nb">x &lt; y</span><span class="s">$</span> we have ...
+</pre></div>
+</div>
+<p>should work.  Alternatively, you can use the HTML entities <tt class="docutils literal"><span class="pre">&amp;lt;</span></tt>,
+<tt class="docutils literal"><span class="pre">&amp;gt;</span></tt> and <tt class="docutils literal"><span class="pre">&amp;amp;</span></tt> to encode these characters so that the browser
+will not interpret them, but MathJax will.  E.g.,</p>
+<div class="highlight-latex"><div class="highlight"><pre>... when <span class="s">$</span><span class="nb">x &amp;lt; y</span><span class="s">$</span> we have ...
+</pre></div>
+</div>
+<p>Finally, there are <tt class="docutils literal"><span class="pre">\lt</span></tt> and <tt class="docutils literal"><span class="pre">\gt</span></tt> macros defined to make it
+easier to enter <tt class="docutils literal"><span class="pre">&lt;</span></tt> and <tt class="docutils literal"><span class="pre">&gt;</span></tt> using TeX-like syntax:</p>
+<div class="highlight-latex"><div class="highlight"><pre>... when <span class="s">$</span><span class="nb">x </span><span class="nv">\lt</span><span class="nb"> y</span><span class="s">$</span> we have ...
+</pre></div>
+</div>
+<p>Keep in mind that the browser interprets your text before MathJax
+does.</p>
+</div>
+<div class="section" id="tex-and-latex-extensions">
+<span id="tex-extensions"></span><h2>TeX and LaTeX extensions<a class="headerlink" href="#tex-and-latex-extensions" title="Permalink to this headline">¶</a></h2>
+<p>While MathJax includes nearly all of the Plain TeX math macros, and
+many of the LaTeX macros and environments, note everything is
+implemented in the core TeX input processor.  Some less-used commands
+are defined in extensions to the TeX processor.  MathJax will load
+some extensions automatically when you first use the commands they
+implement (for example, the <tt class="docutils literal"><span class="pre">\def</span></tt> and <tt class="docutils literal"><span class="pre">\newcommand</span></tt> macros are
+implemented in the <tt class="docutils literal"><span class="pre">TeX/newcommand.js</span></tt> extension, but MathJax loads
+this extension itself when you use those macros).  Not all extensions
+are set up to load automatically, however, so you may need to request
+some extensions explicitly yourself.</p>
+<p>To enable any of the TeX extensions, simply add the appropriate string
+(e.g., <cite>&#8220;TeX/AMSmath.js&#8221;</cite>) to your config&#8217;s <cite>extensions</cite> array.  The
+main extensions are described below.</p>
+<div class="section" id="amsmath-and-amssymbol">
+<h3>AMSmath and AMSsymbol<a class="headerlink" href="#amsmath-and-amssymbol" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>AMSmath</cite> extension implements AMS math environments and macros,
+and the <cite>AMSsymbol</cite> extension implements macros for accessing the AMS
+symbol fonts.  To use these extensions, add them to your <cite>extensions</cite> array.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;TeX/AMSmath.js&quot;</span><span class="p">,</span> <span class="s2">&quot;TeX/AMSsymbol.js&quot;</span><span class="p">,</span> <span class="p">...]</span>
+</pre></div>
+</div>
+<p>See the list of commands at the end of this document for details about
+what commands are implemented in these extensions.</p>
+<p>The <cite>AMSmath</cite> extension will be loaded automatically when you first
+use one of the math environments it defines, but you will have to load
+it explicitly if you want to use the other macros that it defines.
+The <cite>AMSsymbols</cite> extension is not loaded automatically, so you must
+include it explicitly if you want to use the macros it defines.</p>
+</div>
+<div class="section" id="autobold">
+<h3>Autobold<a class="headerlink" href="#autobold" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>autobold</cite> extension adds <tt class="docutils literal"><span class="pre">\boldsymbol{...}</span></tt> around mathematics that
+appears in a section of an HTML page that is in bold.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;TeX/autobold.js&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="noerrors">
+<h3>noErrors<a class="headerlink" href="#noerrors" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>noErrors</cite> extension prevents TeX error messages from being
+displayed and shows the original TeX code instead.  You can configure
+whether the dollar signs are shown or not for in-line math, and
+whether to put all the TeX on one line or use multiple lines (if the
+original text contained line breaks).</p>
+<p>To enable the <cite>noErrors</cite> extension and configure it, use</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;TeX/noErrors.js&quot;</span><span class="p">,</span> <span class="p">...],</span>
+<span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">noErrors</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">inlineDelimiters</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">],</span>   <span class="c1">// or [&quot;$&quot;,&quot;$&quot;] or [&quot;\\(&quot;,&quot;\\)&quot;]</span>
+        <span class="nx">multiLine</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>             <span class="c1">// false for TeX on all one line</span>
+        <span class="nx">style</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;font-family&quot;</span><span class="o">:</span> <span class="s2">&quot;serif&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;font-size&quot;</span><span class="o">:</span>   <span class="s2">&quot;80%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;color&quot;</span><span class="o">:</span>       <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;border&quot;</span><span class="o">:</span>      <span class="s2">&quot;1px solid&quot;</span>
+            <span class="c1">// add any additional CSS styles that you want</span>
+            <span class="c1">//  (be sure there is no extra comma at the end of the last item)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Display-style math is always shown in multi-line format, and without
+delimiters, as it will already be set off in its own centered
+paragraph, like standard display mathematics.</p>
+<p>The default settings place the invalid TeX in a multi-line box with a
+black border. If you want it to look as though the TeX is just part of
+the paragraph, use</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">noErrors</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">inlineDelimiters</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;$&quot;</span><span class="p">,</span><span class="s2">&quot;$&quot;</span><span class="p">],</span>   <span class="c1">// or [&quot;&quot;,&quot;&quot;] or [&quot;\\(&quot;,&quot;\\)&quot;]</span>
+        <span class="nx">multiLine</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">style</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;font-size&quot;</span><span class="o">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;border&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You may also wish to set the font family, as the default is &#8220;serif&#8221;</p>
+</div>
+<div class="section" id="noundefined">
+<h3>noUndefined<a class="headerlink" href="#noundefined" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>noUndefined</cite> extension causes undefined control sequences to be
+shown as their macro names rather than produce an error message. So
+$X_{xxx}$ would display as an &#8220;X&#8221; with a subscript consiting of the
+text <tt class="docutils literal"><span class="pre">\xxx</span></tt> in red.</p>
+<p>To enable and configure this extension, use for example</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;TeX/noUndefined.js&quot;</span><span class="p">,</span> <span class="p">...],</span>
+<span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">noUndefined</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">mathcolor</span><span class="o">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+            <span class="nx">mathbackground</span><span class="o">:</span> <span class="s2">&quot;#FFEEEE&quot;</span><span class="p">,</span>
+            <span class="nx">mathsize</span><span class="o">:</span> <span class="s2">&quot;90%&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">attributes</span></tt> setting specifies attributes to apply to the
+<tt class="docutils literal"><span class="pre">mtext</span></tt> element that encodes the name of the undefined macro.  The
+default settings set <tt class="docutils literal"><span class="pre">mathcolor</span></tt> to <tt class="docutils literal"><span class="pre">&quot;red&quot;</span></tt>, but do not set any
+other attributes.  This example sets the background to a light pink,
+and reduces the font size slightly.</p>
+</div>
+<div class="section" id="unicode-support">
+<h3>Unicode support<a class="headerlink" href="#unicode-support" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>unicode</cite> extension implements a <tt class="docutils literal"><span class="pre">\unicode{}</span></tt> extension to TeX
+that allows arbitrary unicode code points to be entered in your
+mathematics.  You can specify the height and depth of the character
+(the width is determined by the browser), and the default font from
+which to take the character.</p>
+<p>Examples:</p>
+<div class="highlight-latex"><div class="highlight"><pre><span class="k">\unicode</span><span class="nb">{</span>65<span class="nb">}</span>                        <span class="c">% the character &#39;A&#39;</span>
+<span class="k">\unicode</span><span class="nb">{</span>x41<span class="nb">}</span>                       <span class="c">% the character &#39;A&#39;</span>
+<span class="k">\unicode</span><span class="na">[.55,0.05]</span><span class="nb">{</span>x22D6<span class="nb">}</span>           <span class="c">% less-than with dot, with height .55em and depth 0.05em</span>
+<span class="k">\unicode</span><span class="na">[.55,0.05][Geramond]</span><span class="nb">{</span>x22D6<span class="nb">}</span> <span class="c">% same taken from Geramond font</span>
+<span class="k">\unicode</span><span class="na">[Garamond]</span><span class="nb">{</span>x22D6<span class="nb">}</span>           <span class="c">% same, but with default height, depth of .8em,.2em</span>
+</pre></div>
+</div>
+<p>Once a size and font are provided for a given unicode point, they need
+not be specified again in subsequent <tt class="docutils literal"><span class="pre">\unicode{}</span></tt> calls for that
+character.</p>
+<p>The result of <tt class="docutils literal"><span class="pre">\unicode{...}</span></tt> will have TeX class <cite>ORD</cite> (i.e., it
+will act like a variable).  Use <tt class="docutils literal"><span class="pre">\mathbin{...}</span></tt>, <tt class="docutils literal"><span class="pre">\mathrel{...}</span></tt>,
+etc., to specify a different class.</p>
+<p>Note that a font list can be given in the <tt class="docutils literal"><span class="pre">\unicode{}</span></tt> macro, but
+Internet Explorer has a buggy implementation of the <tt class="docutils literal"><span class="pre">font-family</span></tt>
+CSS attribute where it only looks in the first font in the list that
+is actually installed on the system, and if the required glyph is not
+in that font, it does not look at later fonts, but goes directly to
+the default font as set in the <cite>Internet-Options/Font</cite> panel.  For
+this reason, the default font list for the <tt class="docutils literal"><span class="pre">\unicode{}</span></tt> macro is
+<tt class="docutils literal"><span class="pre">STIXGeneral,</span> <span class="pre">'Arial</span> <span class="pre">Unicode</span> <span class="pre">MS'</span></tt>, so if the user has <a class="reference internal" href="glossary.html#term-stix"><em class="xref std std-term">STIX</em></a>
+fonts, the symbol will be taken from that (almost all the symbols are
+in <cite>STIXGeneral</cite>), otherwise MathJax tries <cite>Arial Unicode MS</cite>.</p>
+<p>The <cite>unicode</cite> extension is loaded automatically when you first use the
+<tt class="docutils literal"><span class="pre">\unicode{}</span></tt> macro, so you do not need to add it to the <cite>extensions</cite>
+array.  You can configure the extension as follows:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">unicode</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">fonts</span><span class="o">:</span> <span class="s2">&quot;STIXGeneral, &#39;Arial Unicode MS&#39;&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="supported-latex-commands">
+<span id="tex-commands"></span><h2>Supported LaTeX commands<a class="headerlink" href="#supported-latex-commands" title="Permalink to this headline">¶</a></h2>
+<p>This is a long list of the TeX macros supported by MathJax.  If the
+macro is defined in an extension, the name of the extension follows
+the macro name.</p>
+<div class="highlight-latex"><div class="highlight"><pre>#
+( )
+.
+/
+[ ]
+<span class="k">\!</span>
+<span class="k">\#</span>
+<span class="k">\$</span>
+<span class="k">\%</span>
+<span class="k">\&amp;</span>
+<span class="k">\:</span>
+<span class="k">\;</span>
+<span class="k">\\</span>
+<span class="k">\_</span>
+<span class="k">\{</span> <span class="k">\}</span>
+<span class="k">\|</span>
+
+A
+<span class="k">\above</span>
+<span class="k">\abovewithdelims</span>
+<span class="k">\acute</span>
+<span class="k">\aleph</span>
+<span class="k">\alpha</span>
+<span class="k">\amalg</span>
+<span class="k">\And</span>
+<span class="k">\angle</span>
+<span class="k">\approx</span>
+<span class="k">\approxeq</span> AMSsymbols
+<span class="k">\arccos</span>
+<span class="k">\arcsin</span>
+<span class="k">\arctan</span>
+<span class="k">\arg</span>
+<span class="k">\array</span>
+<span class="k">\Arrowvert</span>
+<span class="k">\arrowvert</span>
+<span class="k">\ast</span>
+<span class="k">\asymp</span>
+<span class="k">\atop</span>
+<span class="k">\atopwithdelims</span>
+
+B
+<span class="k">\backepsilon</span> AMSsymbols
+<span class="k">\backprime</span> AMSsymbols
+<span class="k">\backsim</span> AMSsymbols
+<span class="k">\backsimeq</span> AMSsymbols
+<span class="k">\backslash</span>
+<span class="k">\backslash</span>
+<span class="k">\bar</span>
+<span class="k">\barwedge</span> AMSsymbols
+<span class="k">\Bbb</span>
+<span class="k">\Bbbk</span> AMSsymbols
+<span class="k">\bbFont</span>
+<span class="k">\because</span> AMSsymbols
+<span class="k">\begin</span> ... <span class="k">\end</span>
+<span class="k">\begin</span><span class="nb">{</span>align*<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>align*<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>alignat*<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>alignat*<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>alignat<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>alignat<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>alignedat<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>alignedat<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>aligned<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>aligned<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>align<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>array<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>array<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>Bmatrix<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>Bmatrix<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>bmatrix<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>bmatrix<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>cases<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>cases<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>eqnarray*<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>eqnarray*<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>eqnarray<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>eqnarray<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>equation*<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>equation*<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>gather*<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>gather*<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>gathered<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>gathered<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>gather<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>gather<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>matrix<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>matrix<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>multline*<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>multline*<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>multline<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>multline<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>pmatrix<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>pmatrix<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>smallmatrix<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>smallmatrix<span class="nb">}</span> AMSmath
+<span class="k">\begin</span><span class="nb">{</span>split<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>split<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>subarray<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>subarray<span class="nb">}</span> AMSmath
+<span class="k">\begin</span><span class="nb">{</span>Vmatrix<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>Vmatrix<span class="nb">}</span>
+<span class="k">\begin</span><span class="nb">{</span>vmatrix<span class="nb">}</span> ... <span class="k">\end</span><span class="nb">{</span>vmatrix<span class="nb">}</span>
+<span class="k">\beta</span>
+<span class="k">\beth</span> AMSsymbols
+<span class="k">\between</span> AMSsymbols
+<span class="k">\bf</span>
+<span class="k">\Big</span>
+<span class="k">\big</span>
+<span class="k">\bigcap</span>
+<span class="k">\bigcirc</span>
+<span class="k">\bigcup</span>
+<span class="k">\Bigg</span>
+<span class="k">\bigg</span>
+<span class="k">\Biggl</span>
+<span class="k">\biggl</span>
+<span class="k">\Biggm</span>
+<span class="k">\biggm</span>
+<span class="k">\Biggr</span>
+<span class="k">\biggr</span>
+<span class="k">\Bigl</span>
+<span class="k">\bigl</span>
+<span class="k">\Bigm</span>
+<span class="k">\bigm</span>
+<span class="k">\bigodot</span>
+<span class="k">\bigoplus</span>
+<span class="k">\bigotimes</span>
+<span class="k">\Bigr</span>
+<span class="k">\bigr</span>
+<span class="k">\bigsqcup</span>
+<span class="k">\bigstar</span> AMSsymbols
+<span class="k">\bigtriangledown</span>
+<span class="k">\bigtriangleup</span>
+<span class="k">\biguplus</span>
+<span class="k">\bigvee</span>
+<span class="k">\bigwedge</span>
+<span class="k">\binom</span> AMSmath
+<span class="k">\blacklozenge</span> AMSsymbols
+<span class="k">\blacksquare</span> AMSsymbols
+<span class="k">\blacktriangle</span> AMSsymbols
+<span class="k">\blacktriangledown</span> AMSsymbols
+<span class="k">\blacktriangleleft</span> AMSsymbols
+<span class="k">\blacktriangleright</span> AMSsymbols
+<span class="k">\bmod</span>
+<span class="k">\boldsymbol</span>
+<span class="k">\bot</span>
+<span class="k">\bowtie</span>
+<span class="k">\Box</span> AMSsymbols
+<span class="k">\boxdot</span> AMSsymbols
+<span class="k">\boxed</span> AMSmath
+<span class="k">\boxminus</span> AMSsymbols
+<span class="k">\boxplus</span> AMSsymbols
+<span class="k">\boxtimes</span> AMSsymbols
+<span class="k">\brace</span>
+<span class="k">\bracevert</span>
+<span class="k">\brack</span>
+<span class="k">\breve</span>
+<span class="k">\buildrel</span>
+<span class="k">\bullet</span>
+<span class="k">\Bumpeq</span> AMSsymbols
+<span class="k">\bumpeq</span> AMSsymbols
+
+C
+<span class="k">\cal</span>
+<span class="k">\Cap</span> AMSsymbols
+<span class="k">\cap</span>
+<span class="k">\cases</span>
+<span class="k">\cdot</span>
+<span class="k">\cdotp</span>
+<span class="k">\cdots</span>
+<span class="k">\centerdot</span> AMSsymbols
+<span class="k">\cfrac</span> AMSmath
+<span class="k">\check</span>
+<span class="k">\checkmark</span> AMSsymbols
+<span class="k">\chi</span>
+<span class="k">\choose</span>
+<span class="k">\circ</span>
+<span class="k">\circeq</span> AMSsymbols
+<span class="k">\circlearrowleft</span> AMSsymbols
+<span class="k">\circlearrowright</span> AMSsymbols
+<span class="k">\circledast</span> AMSsymbols
+<span class="k">\circledcirc</span> AMSsymbols
+<span class="k">\circleddash</span> AMSsymbols
+<span class="k">\circledR</span> AMSsymbols
+<span class="k">\circledS</span> AMSsymbols
+<span class="k">\clubsuit</span>
+<span class="k">\colon</span>
+<span class="k">\color</span>
+<span class="k">\complement</span> AMSsymbols
+<span class="k">\cong</span>
+<span class="k">\coprod</span>
+<span class="k">\cos</span>
+<span class="k">\cosh</span>
+<span class="k">\cot</span>
+<span class="k">\coth</span>
+<span class="k">\cr</span>
+<span class="k">\csc</span>
+<span class="k">\Cup</span> AMSsymbols
+<span class="k">\cup</span>
+<span class="k">\curlyeqprec</span> AMSsymbols
+<span class="k">\curlyeqsucc</span> AMSsymbols
+<span class="k">\curlyvee</span> AMSsymbols
+<span class="k">\curlywedge</span> AMSsymbols
+<span class="k">\curvearrowleft</span>     AMSsymbols
+<span class="k">\curvearrowright</span> AMSsymbols
+
+D
+<span class="k">\dagger</span>
+<span class="k">\daleth</span> AMSsymbols
+<span class="k">\dashleftarrow</span> AMSsymbols
+<span class="k">\dashrightarrow</span> AMSsymbols
+<span class="k">\dashv</span>
+<span class="k">\dbinom</span> AMSmath
+<span class="k">\ddagger</span>
+<span class="k">\ddddot</span> AMSmath
+<span class="k">\dddot</span> AMSmath
+<span class="k">\ddot</span>
+<span class="k">\ddots</span>
+<span class="k">\DeclareMathOperator</span> AMSmath
+<span class="k">\def</span>
+<span class="k">\deg</span>
+<span class="k">\Delta</span>
+<span class="k">\delta</span>
+<span class="k">\det</span>
+<span class="k">\dfrac</span> AMSmath
+<span class="k">\diagdown</span> AMSsymbols
+<span class="k">\diagup</span> AMSsymbols
+<span class="k">\Diamond</span> AMSsymbols
+<span class="k">\diamond</span>
+<span class="k">\diamondsuit</span>
+<span class="k">\digamma</span> AMSsymbols
+<span class="k">\dim</span>
+<span class="k">\displaylines</span>
+<span class="k">\displaystyle</span>
+<span class="k">\div</span>
+<span class="k">\divideontimes</span> AMSsymbols
+<span class="k">\dot</span>
+<span class="k">\Doteq</span> AMSsymbols
+<span class="k">\doteq</span>
+<span class="k">\doteqdot</span> AMSsymbols
+<span class="k">\dotplus</span> AMSsymbols
+<span class="k">\dots</span>
+<span class="k">\dotsb</span>
+<span class="k">\dotsc</span>
+<span class="k">\dotsi</span>
+<span class="k">\dotsm</span>
+<span class="k">\dotso</span>
+<span class="k">\doublebarwedge</span> AMSsymbols
+<span class="k">\doublecap</span> AMSsymbols
+<span class="k">\doublecup</span> AMSsymbols
+<span class="k">\Downarrow</span>
+<span class="k">\downarrow</span>
+<span class="k">\downdownarrows</span> AMSsymbols
+<span class="k">\downharpoonleft</span> AMSsymbols
+<span class="k">\downharpoonright</span> AMSsymbols
+
+E
+<span class="k">\ell</span>
+<span class="k">\emptyset</span>
+<span class="k">\enspace</span>
+<span class="k">\epsilon</span>
+<span class="k">\eqalign</span>
+<span class="k">\eqalignno</span>
+<span class="k">\eqcirc</span> AMSsymbols
+<span class="k">\eqsim</span> AMSsymbols
+<span class="k">\eqslantgtr</span> AMSsymbols
+<span class="k">\eqslantless</span> AMSsymbols
+<span class="k">\equiv</span>
+<span class="k">\eta</span>
+<span class="k">\eth</span> AMSsymbols
+<span class="k">\exists</span>
+<span class="k">\exp</span>
+
+F
+<span class="k">\fallingdotseq</span> AMSsymbols
+<span class="k">\fbox</span>
+<span class="k">\Finv</span> AMSsymbols
+<span class="k">\flat</span>
+<span class="k">\forall</span>
+<span class="k">\frac</span>
+<span class="k">\frac</span> AMSmath
+<span class="k">\frak</span>
+<span class="k">\frown</span>
+
+G
+<span class="k">\Game</span> AMSsymbols
+<span class="k">\Gamma</span>
+<span class="k">\gamma</span>
+<span class="k">\gcd</span>
+<span class="k">\ge</span>
+<span class="k">\genfrac</span> AMSmath
+<span class="k">\geq</span>
+<span class="k">\geqq</span> AMSsymbols
+<span class="k">\geqslant</span> AMSsymbols
+<span class="k">\gets</span>
+<span class="k">\gg</span>
+<span class="k">\ggg</span> AMSsymbols
+<span class="k">\gggtr</span> AMSsymbols
+<span class="k">\gimel</span> AMSsymbols
+<span class="k">\gnapprox</span> AMSsymbols
+<span class="k">\gneq</span> AMSsymbols
+<span class="k">\gneqq</span> AMSsymbols
+<span class="k">\gnsim</span> AMSsymbols
+<span class="k">\grave</span>
+<span class="k">\gt</span>
+<span class="k">\gt</span>
+<span class="k">\gtrapprox</span> AMSsymbols
+<span class="k">\gtrdot</span> AMSsymbols
+<span class="k">\gtreqless</span> AMSsymbols
+<span class="k">\gtreqqless</span> AMSsymbols
+<span class="k">\gtrless</span> AMSsymbols
+<span class="k">\gtrsim</span> AMSsymbols
+<span class="k">\gvertneqq</span> AMSsymbols
+
+H
+<span class="k">\hat</span>
+<span class="k">\hbar</span>
+<span class="k">\hbox</span>
+<span class="k">\heartsuit</span>
+<span class="k">\hom</span>
+<span class="k">\hookleftarrow</span>
+<span class="k">\hookrightarrow</span>
+<span class="k">\hphantom</span>
+<span class="k">\hskip</span>
+<span class="k">\hslash</span> AMSsymbols
+<span class="k">\hspace</span>
+<span class="k">\Huge</span>
+<span class="k">\huge</span>
+
+I
+<span class="k">\idotsint</span> AMSmath
+<span class="k">\iff</span>
+<span class="k">\iiiint</span> AMSmath
+<span class="k">\iiint</span>
+<span class="k">\iint</span>
+<span class="k">\Im</span>
+<span class="k">\imath</span>
+<span class="k">\impliedby</span> AMSsymbols
+<span class="k">\implies</span> AMSsymbols
+<span class="k">\in</span>
+<span class="k">\inf</span>
+<span class="k">\infty</span>
+<span class="k">\injlim</span> AMSmath
+<span class="k">\int</span>
+<span class="k">\intercal</span> AMSsymbols
+<span class="k">\intop</span>
+<span class="k">\iota</span>
+<span class="k">\it</span>
+
+J
+<span class="k">\jmath</span>
+<span class="k">\Join</span> AMSsymbols
+
+K
+<span class="k">\kappa</span>
+<span class="k">\ker</span>
+<span class="k">\kern</span>
+
+L
+<span class="k">\label</span>
+<span class="k">\Lambda</span>
+<span class="k">\lambda</span>
+<span class="k">\land</span>
+<span class="k">\langle</span>
+<span class="k">\LARGE</span>
+<span class="k">\Large</span>
+<span class="k">\large</span>
+<span class="k">\LaTeX</span>
+<span class="k">\lbrace</span>
+<span class="k">\lbrack</span>
+<span class="k">\lceil</span>
+<span class="k">\ldotp</span>
+<span class="k">\ldots</span>
+<span class="k">\le</span>
+<span class="k">\leadsto</span> AMSsymbols
+<span class="k">\left</span>
+<span class="k">\Leftarrow</span>
+<span class="k">\leftarrow</span>
+<span class="k">\leftarrowtail</span> AMSsymbols
+<span class="k">\leftharpoondown</span>
+<span class="k">\leftharpoonup</span>
+<span class="k">\leftleftarrows</span> AMSsymbols
+<span class="k">\Leftrightarrow</span>
+<span class="k">\leftrightarrow</span>
+<span class="k">\leftrightarrows</span> AMSsymbols
+<span class="k">\leftrightharpoons</span> AMSsymbols
+<span class="k">\leftrightsquigarrow</span> AMSsymbols
+<span class="k">\leftroot</span>
+<span class="k">\leftthreetimes</span> AMSsymbols
+<span class="k">\leq</span>
+<span class="k">\leqalignno</span>
+<span class="k">\leqq</span> AMSsymbols
+<span class="k">\leqslant</span> AMSsymbols
+<span class="k">\lessapprox</span> AMSsymbols
+<span class="k">\lessdot</span> AMSsymbols
+<span class="k">\lesseqgtr</span> AMSsymbols
+<span class="k">\lesseqqgtr</span> AMSsymbols
+<span class="k">\lessgtr</span> AMSsymbols
+<span class="k">\lesssim</span> AMSsymbols
+<span class="k">\lfloor</span>
+<span class="k">\lg</span>
+<span class="k">\lgroup</span>
+<span class="k">\lhd</span> AMSsymbols
+<span class="k">\lim</span>
+<span class="k">\liminf</span>
+<span class="k">\limits</span>
+<span class="k">\limsup</span>
+<span class="k">\ll</span>
+<span class="k">\llap</span>
+<span class="k">\llcorner</span> AMSsymbols
+<span class="k">\Lleftarrow</span> AMSsymbols
+<span class="k">\lll</span> AMSsymbols
+<span class="k">\llless</span> AMSsymbols
+<span class="k">\lmoustache</span>
+<span class="k">\ln</span>
+<span class="k">\lnapprox</span> AMSsymbols
+<span class="k">\lneq</span> AMSsymbols
+<span class="k">\lneqq</span> AMSsymbols
+<span class="k">\lnot</span>
+<span class="k">\lnsim</span> AMSsymbols
+<span class="k">\log</span>
+<span class="k">\Longleftarrow</span>
+<span class="k">\longleftarrow</span>
+<span class="k">\Longleftrightarrow</span>
+<span class="k">\longleftrightarrow</span>
+<span class="k">\longmapsto</span>
+<span class="k">\Longrightarrow</span>
+<span class="k">\longrightarrow</span>
+<span class="k">\looparrowleft</span> AMSsymbols
+<span class="k">\looparrowright</span> AMSsymbols
+<span class="k">\lor</span>
+<span class="k">\lower</span>
+<span class="k">\lozenge</span> AMSsymbols
+<span class="k">\lrcorner</span> AMSsymbols
+<span class="k">\Lsh</span> AMSsymbols
+<span class="k">\lt</span>
+<span class="k">\ltimes</span> AMSsymbols
+<span class="k">\lVert</span> AMSmath
+<span class="k">\lvert</span> AMSmath
+<span class="k">\lvertneqq</span> AMSsymbols
+
+M
+<span class="k">\maltese</span> AMSsymbols
+<span class="k">\mapsto</span>
+<span class="k">\mathbb</span>
+<span class="k">\mathbf</span>
+<span class="k">\mathbin</span>
+<span class="k">\mathcal</span>
+<span class="k">\mathchoice</span>
+<span class="k">\mathclose</span>
+<span class="k">\mathfrak</span>
+<span class="k">\mathinner</span>
+<span class="k">\mathit</span>
+<span class="k">\mathop</span>
+<span class="k">\mathopen</span>
+<span class="k">\mathord</span>
+<span class="k">\mathpunct</span>
+<span class="k">\mathrel</span>
+<span class="k">\mathring</span> AMSmath
+<span class="k">\mathrm</span>
+<span class="k">\mathscr</span>
+<span class="k">\mathsf</span>
+<span class="k">\mathstrut</span>
+<span class="k">\mathtt</span>
+<span class="k">\matrix</span>
+<span class="k">\max</span>
+<span class="k">\mbox</span>
+<span class="k">\measuredangle</span> AMSsymbols
+<span class="k">\mho</span> AMSsymbols
+<span class="k">\mid</span>
+<span class="k">\min</span>
+<span class="k">\mit</span>
+<span class="k">\mkern</span>
+<span class="k">\mod</span>
+<span class="k">\models</span>
+<span class="k">\moveleft</span>
+<span class="k">\moveright</span>
+<span class="k">\mp</span>
+<span class="k">\mskip</span>
+<span class="k">\mspace</span>
+<span class="k">\mu</span>
+<span class="k">\multimap</span> AMSsymbols
+
+N
+<span class="k">\nabla</span>
+<span class="k">\natural</span>
+<span class="k">\ncong</span> AMSsymbols
+<span class="k">\ne</span>
+<span class="k">\nearrow</span>
+<span class="k">\neg</span>
+<span class="k">\negmedspace</span> AMSmath
+<span class="k">\negthickspace</span> AMSmath
+<span class="k">\negthinspace</span>
+<span class="k">\neq</span>
+<span class="k">\newcommand</span>
+<span class="k">\newenvironment</span>
+<span class="k">\newline</span>
+<span class="k">\nexists</span> AMSsymbols
+<span class="k">\ngeq</span> AMSsymbols
+<span class="k">\ngeqq</span> AMSsymbols
+<span class="k">\ngeqslant</span> AMSsymbols
+<span class="k">\ngtr</span> AMSsymbols
+<span class="k">\ni</span>
+<span class="k">\nLeftarrow</span> AMSsymbols
+<span class="k">\nleftarrow</span> AMSsymbols
+<span class="k">\nLeftrightarrow</span> AMSsymbols
+<span class="k">\nleftrightarrow</span> AMSsymbols
+<span class="k">\nleq</span> AMSsymbols
+<span class="k">\nleqq</span> AMSsymbols
+<span class="k">\nleqslant</span> AMSsymbols
+<span class="k">\nless</span> AMSsymbols
+<span class="k">\nmid</span> AMSsymbols
+<span class="k">\nobreakspace</span> AMSmath
+<span class="k">\nolimits</span>
+<span class="k">\nonumber</span>
+<span class="k">\normalsize</span>
+<span class="k">\not</span>
+<span class="k">\notag</span>
+<span class="k">\notin</span>
+<span class="k">\nparallel</span> AMSsymbols
+<span class="k">\nprec</span> AMSsymbols
+<span class="k">\npreceq</span> AMSsymbols
+<span class="k">\nRightarrow</span> AMSsymbols
+<span class="k">\nrightarrow</span> AMSsymbols
+<span class="k">\nshortmid</span> AMSsymbols
+<span class="k">\nshortparallel</span> AMSsymbols
+<span class="k">\nsim</span> AMSsymbols
+<span class="k">\nsucc</span> AMSsymbols
+<span class="k">\nsucceq</span> AMSsymbols
+<span class="k">\ntriangleleft</span> AMSsymbols
+<span class="k">\ntrianglelefteq</span> AMSsymbols
+<span class="k">\ntriangleright</span> AMSsymbols
+<span class="k">\ntrianglerighteq</span> AMSsymbols
+<span class="k">\nu</span>
+<span class="k">\nVDash</span> AMSsymbols
+<span class="k">\nVdash</span> AMSsymbols
+<span class="k">\nvDash</span> AMSsymbols
+<span class="k">\nvdash</span> AMSsymbols
+<span class="k">\nwarrow</span>
+
+O
+<span class="k">\odot</span>
+<span class="k">\oint</span>
+<span class="k">\oldstyle</span>
+<span class="k">\Omega</span>
+<span class="k">\omega</span>
+<span class="k">\omicron</span>
+<span class="k">\ominus</span>
+<span class="k">\operatorname</span> AMSmath
+<span class="k">\oplus</span>
+<span class="k">\oslash</span>
+<span class="k">\otimes</span>
+<span class="k">\over</span>
+<span class="k">\overbrace</span>
+<span class="k">\overleftarrow</span>
+<span class="k">\overleftrightarrow</span>
+<span class="k">\overline</span>
+<span class="k">\overrightarrow</span>
+<span class="k">\overset</span>
+<span class="k">\overwithdelims</span>
+<span class="k">\owns</span>
+
+P
+<span class="k">\parallel</span>
+<span class="k">\partial</span>
+<span class="k">\perp</span>
+<span class="k">\phantom</span>
+<span class="k">\Phi</span>
+<span class="k">\phi</span>
+<span class="k">\Pi</span>
+<span class="k">\pi</span>
+<span class="k">\pitchfork</span> AMSsymbols
+<span class="k">\pm</span>
+<span class="k">\pmatrix</span>
+<span class="k">\pmb</span>
+<span class="k">\pmod</span>
+<span class="k">\pod</span>
+<span class="k">\Pr</span>
+<span class="k">\prec</span>
+<span class="k">\precapprox</span> AMSsymbols
+<span class="k">\preccurlyeq</span> AMSsymbols
+<span class="k">\preceq</span>
+<span class="k">\precnapprox</span> AMSsymbols
+<span class="k">\precneqq</span> AMSsymbols
+<span class="k">\precnsim</span> AMSsymbols
+<span class="k">\precsim</span> AMSsymbols
+<span class="k">\prime</span>
+<span class="k">\prod</span>
+<span class="k">\projlim</span> AMSmath
+<span class="k">\propto</span>
+<span class="k">\Psi</span>
+<span class="k">\psi</span>
+
+Q
+<span class="k">\qquad</span>
+<span class="k">\quad</span>
+
+R
+<span class="k">\raise</span>
+<span class="k">\rangle</span>
+<span class="k">\rbrace</span>
+<span class="k">\rbrack</span>
+<span class="k">\rceil</span>
+<span class="k">\Re</span>
+<span class="k">\require</span>
+<span class="k">\restriction</span> AMSsymbols
+<span class="k">\rfloor</span>
+<span class="k">\rgroup</span>
+<span class="k">\rhd</span> AMSsymbols
+<span class="k">\rho</span>
+<span class="k">\right</span>
+<span class="k">\Rightarrow</span>
+<span class="k">\rightarrow</span>
+<span class="k">\rightarrowtail</span> AMSsymbols
+<span class="k">\rightharpoondown</span>
+<span class="k">\rightharpoonup</span>
+<span class="k">\rightleftarrows</span> AMSsymbols
+<span class="k">\rightleftharpoons</span>
+<span class="k">\rightleftharpoons</span> AMSsymbols
+<span class="k">\rightrightarrows</span> AMSsymbols
+<span class="k">\rightsquigarrow</span> AMSsymbols
+<span class="k">\rightthreetimes</span> AMSsymbols
+<span class="k">\risingdotseq</span> AMSsymbols
+<span class="k">\rlap</span>
+<span class="k">\rm</span>
+<span class="k">\rmoustache</span>
+<span class="k">\root</span>
+<span class="k">\Rrightarrow</span> AMSsymbols
+<span class="k">\Rsh</span> AMSsymbols
+<span class="k">\rtimes</span> AMSsymbols
+<span class="k">\Rule</span>
+<span class="k">\rVert</span> AMSmath
+<span class="k">\rvert</span> AMSmath
+
+S
+<span class="k">\S</span>
+<span class="k">\scr</span>
+<span class="k">\scriptscriptstyle</span>
+<span class="k">\scriptsize</span>
+<span class="k">\scriptstyle</span>
+<span class="k">\searrow</span>
+<span class="k">\sec</span>
+<span class="k">\setminus</span>
+<span class="k">\sf</span>
+<span class="k">\sharp</span>
+<span class="k">\shortmid</span> AMSsymbols
+<span class="k">\shortparallel</span> AMSsymbols
+<span class="k">\shoveleft</span> AMSmath
+<span class="k">\shoveright</span> AMSmath
+<span class="k">\sideset</span> AMSmath
+<span class="k">\Sigma</span>
+<span class="k">\sigma</span>
+<span class="k">\sim</span>
+<span class="k">\simeq</span>
+<span class="k">\sin</span>
+<span class="k">\sinh</span>
+<span class="k">\skew</span>
+<span class="k">\small</span>
+<span class="k">\smallfrown</span> AMSsymbols
+<span class="k">\smallint</span>
+<span class="k">\smallsetminus</span> AMSsymbols
+<span class="k">\smallsmile</span> AMSsymbols
+<span class="k">\smash</span>
+<span class="k">\smile</span>
+<span class="k">\Space</span>
+<span class="k">\space</span>
+<span class="k">\spadesuit</span>
+<span class="k">\sphericalangle</span> AMSsymbols
+<span class="k">\sqcap</span>
+<span class="k">\sqcup</span>
+<span class="k">\sqrt</span>
+<span class="k">\sqsubset</span> AMSsymbols
+<span class="k">\sqsubseteq</span>
+<span class="k">\sqsupset</span> AMSsymbols
+<span class="k">\sqsupseteq</span>
+<span class="k">\square</span> AMSsymbols
+<span class="k">\stackrel</span>
+<span class="k">\star</span>
+<span class="k">\strut</span>
+<span class="k">\Subset</span> AMSsymbols
+<span class="k">\subset</span>
+<span class="k">\subseteq</span>
+<span class="k">\subseteqq</span> AMSsymbols
+<span class="k">\substack</span> AMSmath
+<span class="k">\succ</span>
+<span class="k">\succapprox</span> AMSsymbols
+<span class="k">\succcurlyeq</span> AMSsymbols
+<span class="k">\succeq</span>
+<span class="k">\succnapprox</span> AMSsymbols
+<span class="k">\succneqq</span> AMSsymbols
+<span class="k">\succnsim</span> AMSsymbols
+<span class="k">\succsim</span> AMSsymbols
+<span class="k">\sum</span>
+<span class="k">\sup</span>
+<span class="k">\Supset</span> AMSsymbols
+<span class="k">\supset</span>
+<span class="k">\supseteq</span>
+<span class="k">\supseteqq</span> AMSsymbols
+<span class="k">\surd</span>
+<span class="k">\swarrow</span>
+
+T
+<span class="k">\tag</span>
+<span class="k">\tan</span>
+<span class="k">\tanh</span>
+<span class="k">\tau</span>
+<span class="k">\tbinom</span> AMSmath
+<span class="k">\TeX</span>
+<span class="k">\text</span>
+<span class="k">\textbf</span>
+<span class="k">\textit</span>
+<span class="k">\textrm</span>
+<span class="k">\textstyle</span>
+<span class="k">\tfrac</span> AMSmath
+<span class="k">\therefore</span> AMSsymbols
+<span class="k">\Theta</span>
+<span class="k">\theta</span>
+<span class="k">\thickapprox</span> AMSsymbols
+<span class="k">\thicksim</span> AMSsymbols
+<span class="k">\thinspace</span>
+<span class="k">\tilde</span>
+<span class="k">\times</span>
+<span class="k">\Tiny</span>
+<span class="k">\tiny</span>
+<span class="k">\to</span>
+<span class="k">\top</span>
+<span class="k">\triangle</span>
+<span class="k">\triangledown</span> AMSsymbols
+<span class="k">\triangleleft</span>
+<span class="k">\trianglelefteq</span> AMSsymbols
+<span class="k">\triangleq</span> AMSsymbols
+<span class="k">\triangleright</span>
+<span class="k">\trianglerighteq</span> AMSsymbols
+<span class="k">\tt</span>
+<span class="k">\twoheadleftarrow</span> AMSsymbols
+<span class="k">\twoheadrightarrow</span> AMSsymbols
+
+U
+<span class="k">\ulcorner</span> AMSsymbols
+<span class="k">\underbrace</span>
+<span class="k">\underleftarrow</span>
+<span class="k">\underleftrightarrow</span>
+<span class="k">\underline</span>
+<span class="k">\underrightarrow</span>
+<span class="k">\underset</span>
+<span class="k">\unicode</span>
+<span class="k">\unlhd</span> AMSsymbols
+<span class="k">\unrhd</span> AMSsymbols
+<span class="k">\Uparrow</span>
+<span class="k">\uparrow</span>
+<span class="k">\Updownarrow</span>
+<span class="k">\updownarrow</span>
+<span class="k">\upharpoonleft</span> AMSsymbols
+<span class="k">\upharpoonright</span> AMSsymbols
+<span class="k">\uplus</span>
+<span class="k">\uproot</span>
+<span class="k">\Upsilon</span>
+<span class="k">\upsilon</span>
+<span class="k">\upuparrows</span> AMSsymbols
+<span class="k">\urcorner</span> AMSsymbols
+
+V
+<span class="k">\varDelta</span> AMSsymbols
+<span class="k">\varepsilon</span>
+<span class="k">\varGamma</span> AMSsymbols
+<span class="k">\varinjlim</span> AMSmath
+<span class="k">\varkappa</span> AMSsymbols
+<span class="k">\varLambda</span> AMSsymbols
+<span class="k">\varliminf</span> AMSmath
+<span class="k">\varlimsup</span> AMSmath
+<span class="k">\varnothing</span> AMSsymbols
+<span class="k">\varOmega</span> AMSsymbols
+<span class="k">\varPhi</span> AMSsymbols
+<span class="k">\varphi</span>
+<span class="k">\varPi</span> AMSsymbols
+<span class="k">\varpi</span>
+<span class="k">\varprojlim</span> AMSmath
+<span class="k">\varpropto</span> AMSsymbols
+<span class="k">\varPsi</span> AMSsymbols
+<span class="k">\varrho</span>
+<span class="k">\varSigma</span> AMSsymbols
+<span class="k">\varsigma</span>
+<span class="k">\varTheta</span> AMSsymbols
+<span class="k">\vartheta</span>
+<span class="k">\vartriangle</span> AMSsymbols
+<span class="k">\vartriangleleft</span> AMSsymbols
+<span class="k">\vartriangleright</span> AMSsymbols
+<span class="k">\varUpsilon</span> AMSsymbols
+<span class="k">\varXi</span> AMSsymbols
+<span class="k">\vcenter</span>
+<span class="k">\Vdash</span> AMSsymbols
+<span class="k">\vDash</span> AMSsymbols
+<span class="k">\vdash</span>
+<span class="k">\vdots</span>
+<span class="k">\vec</span>
+<span class="k">\vee</span>
+<span class="k">\veebar</span> AMSsymbols
+<span class="k">\verb</span>
+<span class="k">\Vert</span>
+<span class="k">\vert</span>
+<span class="k">\vphantom</span>
+<span class="k">\Vvdash</span> AMSsymbols
+
+W
+<span class="k">\wedge</span>
+<span class="k">\widehat</span>
+<span class="k">\widetilde</span>
+<span class="k">\wp</span>
+<span class="k">\wr</span>
+
+X
+<span class="k">\Xi</span>
+<span class="k">\xi</span>
+<span class="k">\xleftarrow</span> AMSmath
+<span class="k">\xrightarrow</span> AMSmath
+
+Y
+<span class="k">\yen</span> AMSsymbols
+
+Z
+<span class="k">\zeta</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">MathJax TeX and LaTeX Support</a><ul>
+<li><a class="reference internal" href="#tex-and-latex-in-html-documents">TeX and LaTeX in HTML documents</a></li>
+<li><a class="reference internal" href="#tex-and-latex-extensions">TeX and LaTeX extensions</a><ul>
+<li><a class="reference internal" href="#amsmath-and-amssymbol">AMSmath and AMSsymbol</a></li>
+<li><a class="reference internal" href="#autobold">Autobold</a></li>
+<li><a class="reference internal" href="#noerrors">noErrors</a></li>
+<li><a class="reference internal" href="#noundefined">noUndefined</a></li>
+<li><a class="reference internal" href="#unicode-support">Unicode support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#supported-latex-commands">Supported LaTeX commands</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="platforms/movable-type.html"
+                        title="previous chapter">Using MathJax in WordPress</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mathml.html"
+                        title="next chapter">MathJax MathML Support</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tex.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mathml.html" title="MathJax MathML Support"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="platforms/movable-type.html" title="Using MathJax in WordPress"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

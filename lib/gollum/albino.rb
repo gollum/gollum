@@ -1,13 +1,8 @@
 require 'albino'
 
 class Gollum::Albino < Albino
-  def self.bin
-    Albino.bin
-  end
-
-  def bin
-    Albino.bin
-  end
+  self.bin              = ::Albino.bin
+  self.default_encoding = ::Albino.default_encoding
 
   def colorize(options = {})
     html = super.to_s

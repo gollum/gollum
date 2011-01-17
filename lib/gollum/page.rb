@@ -4,15 +4,16 @@ module Gollum
 
     Wiki.page_class = self
 
-    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod)$/i
-    FORMAT_NAMES = { :markdown => "Markdown",
-                     :textile  => "Textile",
-                     :rdoc     => "RDoc",
-                     :org      => "Org-mode",
-                     :creole   => "Creole",
-                     :rest     => "reStructuredText",
-                     :asciidoc => "AsciiDoc",
-                     :pod      => "Pod" }
+    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|(media)?wiki)$/i
+    FORMAT_NAMES = { :markdown  => "Markdown",
+                     :textile   => "Textile",
+                     :rdoc      => "RDoc",
+                     :org       => "Org-mode",
+                     :creole    => "Creole",
+                     :rest      => "reStructuredText",
+                     :asciidoc  => "AsciiDoc",
+                     :mediawiki => "MediaWiki",
+                     :pod       => "Pod" }
 
     # Sets a Boolean determing whether this page is a historical version.
     #
@@ -40,6 +41,40 @@ module Gollum
       filename =~ /^_/ ? false : match
     end
 
+    # Public: The format of a given filename.
+    #
+    # filename - The String filename.
+    #
+    # Returns the Symbol format of the page. One of:
+    #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
+    #     :roff ]
+    def self.format_for(filename)
+      case filename.to_s
+        when /\.(md|mkdn?|mdown|markdown)$/i
+          :markdown
+        when /\.(textile)$/i
+          :textile
+        when /\.(rdoc)$/i
+          :rdoc
+        when /\.(org)$/i
+          :org
+        when /\.(creole)$/i
+          :creole
+        when /\.(re?st(\.txt)?)$/i
+          :rest
+        when /\.(asciidoc)$/i
+          :asciidoc
+        when /\.(pod)$/i
+          :pod
+        when /\.(\d)$/i
+          :roff
+        when /\.(media)?wiki$/i
+          :mediawiki
+        else
+          nil
+      end
+    end
+
     # Reusable filter to turn a filename (without path) into a canonical name.
     # Strips extension, converts spaces to dashes.
     #
@@ -55,7 +90,7 @@ module Gollum
     # Returns a newly initialized Gollum::Page.
     def initialize(wiki)
       @wiki = wiki
-      @blob = nil
+      @blob = @footer = @sidebar = nil
     end
 
     # Public: The on-disk filename of the page including extension.
@@ -65,7 +100,7 @@ module Gollum
       @blob && @blob.name
     end
 
-    # Public: The canonical page name without extension, and dashes converted 
+    # Public: The canonical page name without extension, and dashes converted
     # to spaces.
     #
     # Returns the String name.
@@ -142,28 +177,7 @@ module Gollum
     #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
     #     :roff ]
     def format
-      case @blob.name
-        when /\.(md|mkdn?|mdown|markdown)$/i
-          :markdown
-        when /\.(textile)$/i
-          :textile
-        when /\.(rdoc)$/i
-          :rdoc
-        when /\.(org)$/i
-          :org
-        when /\.(creole)$/i
-          :creole
-        when /\.(re?st(\.txt)?)$/i
-          :rest
-        when /\.(asciidoc)$/i
-          :asciidoc
-        when /\.(pod)$/i
-          :pod
-        when /\.(\d)$/i
-          :roff
-        else
-          nil
-      end
+      self.class.format_for(@blob.name)
     end
 
     # Public: The current version of the page.
@@ -176,7 +190,7 @@ module Gollum
     # options - The options Hash:
     #           :page     - The Integer page number (default: 1).
     #           :per_page - The Integer max count of items to return.
-    #           :follow   - Follow's a file across renames, but falls back 
+    #           :follow   - Follow's a file across renames, but falls back
     #                       to a slower Grit native call.  (default: false)
     #
     # Returns an Array of Grit::Commit.
@@ -196,10 +210,17 @@ module Gollum
     #
     # Returns the footer Page or nil if none exists.
     def footer
-      find_sub_page :footer
+      @footer ||= find_sub_page(:footer)
     end
 
-    # Gets a Boolean determining whether this page is a historical version.  
+    # Public: The sidebar Page.
+    #
+    # Returns the sidebar Page or nil if none exists.
+    def sidebar
+      @sidebar ||= find_sub_page(:sidebar)
+    end
+
+    # Gets a Boolean determining whether this page is a historical version.
     # Historical pages are pulled using exact SHA hashes and format all links
     # with rel="nofollow"
     #
@@ -237,14 +258,15 @@ module Gollum
     # Returns the String extension (no leading period).
     def self.format_to_ext(format)
       case format
-        when :markdown then 'md'
-        when :textile  then 'textile'
-        when :rdoc     then 'rdoc'
-        when :org      then 'org'
-        when :creole   then 'creole'
-        when :rest     then 'rest'
-        when :asciidoc then 'asciidoc'
-        when :pod      then 'pod'
+        when :markdown  then 'md'
+        when :textile   then 'textile'
+        when :rdoc      then 'rdoc'
+        when :org       then 'org'
+        when :creole    then 'creole'
+        when :rest      then 'rest'
+        when :asciidoc  then 'asciidoc'
+        when :pod       then 'pod'
+        when :mediawiki then 'mediawiki'
       end
     end
 
@@ -273,7 +295,7 @@ module Gollum
     def find(name, version)
       map = @wiki.tree_map_for(version.to_s)
       if page = find_page_in_tree(map, name)
-        page.version    = version.is_a?(Grit::Commit) ? 
+        page.version    = version.is_a?(Grit::Commit) ?
           version : @wiki.commit_for(version)
         page.historical = page.version.to_s == version.to_s
         page
@@ -286,7 +308,7 @@ module Gollum
     # map         - The Array tree map from Wiki#tree_map.
     # name        - The canonical String page name.
     # checked_dir - Optional String of the directory a matching page needs
-    #               to be in.  The string should 
+    #               to be in.  The string should
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find_page_in_tree(map, name, checked_dir = nil)
@@ -345,13 +367,14 @@ module Gollum
       end
     end
 
-    # Loads a sub page.  Sub page nanes (footers) are prefixed with 
+    # Loads a sub page.  Sub page nanes (footers) are prefixed with
     # an underscore to distinguish them from other Pages.
     #
     # name - String page name.
     #
     # Returns the Page or nil if none exists.
     def find_sub_page(name)
+      return nil if self.filename =~ /^_/
       name = "_#{name.to_s.capitalize}"
       return nil if page_match(name, self.filename)
 

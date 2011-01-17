@@ -1,19 +1,36 @@
-<div class="guide">
-  <div class="main">
-    <div class="actions">
-      <form action="/search" method="get">
-        <a href="/">Home</a> | <input type="search" name="q" size="10" /> <input type="submit" value="search" />
-      </form>
-    </div>
-    <h1>Search for “{{query}}”</h1>
-    <div class="content wikistyle gollum">
-      {{#has_results}}
-        <ul>
-        {{#results}}
-            <li><a href="/{{name}}">{{name}} ({{count}})</a></li>
-        {{/results}}
-        </ul>
-      {{/has_results}}
-    </div>
-  </div>
+<div id="wiki-wrapper" class="results">
+<div id="head">
+  <h1>Search Results for <strong>{{query}}</strong></h1>
+  <ul class="actions">
+    <li class="minibutton"><a href="/"
+       class="action-edit-page">Home</a></li>
+  </ul>
+  {{>searchbar}}
 </div>
+<div id="results">
+
+{{#has_results}}
+  <ul>
+    {{#results}}
+    <li>
+      <a href="/{{name}}">{{name}}</a> 
+      <span class="count">({{count}} matches)</span>
+    </li>
+    {{/results}}
+  </ul>
+{{/has_results}}
+
+{{#no_results}}
+  <p id="no-results">
+    There are no results for your search <strong>{{query}}</strong>.
+  </p>
+{{/no_results}}
+
+</div>
+<div id="footer">
+  <ul class="actions">
+    <li class="minibutton"><a href="#">Back to Top</a></li>
+  </ul>
+</div>
+</div>
+

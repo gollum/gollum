@@ -1,0 +1,434 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Loading and Configuring MathJax &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="index.html" />
+    <link rel="next" title="The Core Configuration Options" href="options/hub.html" />
+    <link rel="prev" title="Installing and Testing MathJax" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="options/hub.html" title="The Core Configuration Options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installing and Testing MathJax"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="loading-and-configuring-mathjax">
+<span id="loading"></span><h1>Loading and Configuring MathJax<a class="headerlink" href="#loading-and-configuring-mathjax" title="Permalink to this headline">¶</a></h1>
+<p>You load MathJax into a web page by including its main JavaScript file
+into the page.  That is done via a <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag that links to the
+<tt class="docutils literal"><span class="pre">MathJax.js</span></tt> file.  Place the following line in the <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt>
+section of your document:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path-to-MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">path-to-MathJax</span></tt> is replaced by the URL of the MathJax
+directory on your server, or (if you are using MathJax locally rather
+than through a server) the location of that directory on your hard
+disk.  For example, if the MathJax directory is at the top level of
+your web server&#8217;s directory hierarchy, you might use</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>to load MathJax.</p>
+<p>Although it is possible to load MathJax from a site other than your
+own web server, there are issues involved in doing so that you need to
+take into consideration.  See the <a class="reference internal" href="installation.html#cross-domain-linking"><em>Notes About Shared Servers</em></a> for more details.  Please do <strong>not</strong> link to
+the copy of MathJax at <tt class="docutils literal"><span class="pre">www.mathjax.org</span></tt>, as we do not have the
+resources to act as a web service for all the sites on the web that
+would like to display mathematics.  If you are able to run MathJax
+from your own server, please do so (this will probably give you better
+response time in any case).</p>
+<p>It is best to load MathJax in the document&#8217;s <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> block, but it
+is also possible to load MathJax into the <tt class="docutils literal"><span class="pre">&lt;body&gt;</span></tt> section, if
+needed.  If you do this, load it as early as possible, as
+MathJax will begin to load its components as soon as it is included in
+the page, and that will help speed up the processing of the
+mathematics on your page.  MathJax does expect there to be a
+<tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> section to the document, however, so be sure there is one
+if you are loading MathJax in the <tt class="docutils literal"><span class="pre">&lt;body&gt;</span></tt>.</p>
+<p>It is also possible to load MathJax dynamically after the page has
+been prepared, for example, via a <a class="reference external" href="http://www.greasespot.net/">GreaseMonkey</a> script, or using a specially prepared
+<a class="reference external" href="http://en.wikipedia.org/wiki/Bookmarklet">bookmarklet</a>.  This is an
+advanced topic, however; see <a class="reference internal" href="dynamic.html#ajax-mathjax"><em>Loading MathJax Dynamically</em></a> for more details.</p>
+<div class="section" id="configuring-mathjax">
+<h2>Configuring MathJax<a class="headerlink" href="#configuring-mathjax" title="Permalink to this headline">¶</a></h2>
+<p>There are several ways to configure MathJax, but the easiest is to use
+the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file that comes with MathJax.  See the
+comments in that file, or the <a class="reference internal" href="#configuration"><em>configuration details</em></a> section, for explanations of the meanings of the various
+configuration options.  You can edit the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file to
+change any of the settings that you want to customize.  When you
+include MathJax in your page via</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path-to-MathJax/MathJax.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>it will load <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> automatically as one of its
+first actions.</p>
+<p>Alternatively, you can configure MathJax efficiently by calling
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Config()</span></tt> when you include MathJax in your page, as
+follows:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path-to-MathJax/MathJax.js&quot;</span><span class="nt">&gt;</span>
+    <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+        <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tex2jax.js&quot;</span><span class="p">],</span>
+        <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span> <span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">],</span>
+        <span class="nx">tex2jax</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">inlineMath</span><span class="o">:</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;$&#39;</span><span class="p">,</span><span class="s1">&#39;$&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;\\(&quot;</span><span class="p">,</span><span class="s2">&quot;\\)&quot;</span><span class="p">]</span> <span class="p">],</span>
+            <span class="nx">displayMath</span><span class="o">:</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;$$&#39;</span><span class="p">,</span><span class="s1">&#39;$$&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;\\[&quot;</span><span class="p">,</span><span class="s2">&quot;\\]&quot;</span><span class="p">]</span> <span class="p">],</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;HTML-CSS&quot;</span><span class="o">:</span> <span class="p">{</span> <span class="nx">availableFonts</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;TeX&quot;</span><span class="p">]</span> <span class="p">}</span>
+    <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>This example includes the <tt class="docutils literal"><span class="pre">tex2jax</span></tt> preprocessor and configures it
+to use both the standard TeX and LaTeX math delimiters.  It uses the
+TeX input processor and the HTML-CSS output processor, and forces the
+HTML-CSS processor to use the TeX fonts rather that other locally
+installed fonts (e.g., <a class="reference internal" href="glossary.html#term-stix"><em class="xref std std-term">STIX</em></a> fonts).  See the
+<a class="reference internal" href="#configuration"><em>configuration options</em></a> section (or the comments
+in the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file) for more information about the
+configuration options that you can include in the
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Config()</span></tt> call.  Note that if you configure MathJax
+using this in-line approach, the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file is <strong>not</strong>
+loaded.</p>
+<p>Finally, if you would like to use several different configuration
+files (like <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt>, but with different settings in each
+one), you can copy <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> to <tt class="docutils literal"><span class="pre">config/MathJax-2.js</span></tt>,
+or some other convenient name, and use</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path-to-MathJax/MathJax.js&quot;</span><span class="nt">&gt;</span>
+    <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span> <span class="nx">config</span><span class="o">:</span> <span class="s2">&quot;MathJax-2.js&quot;</span> <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>to load the alternative configuration file <tt class="docutils literal"><span class="pre">config/MathJax-2.js</span></tt>
+from the MathJax <tt class="docutils literal"><span class="pre">config</span></tt> directory.  In this way, you can have as
+many distinct configuration files as you need.</p>
+</div>
+<div class="section" id="common-configurations">
+<span id="id1"></span><h2>Common Configurations<a class="headerlink" href="#common-configurations" title="Permalink to this headline">¶</a></h2>
+<p>The following examples show configurations that are useful for some
+common situations.  This is certainly not an exhaustive list, and
+there are variations possible for any of them.  Again, the comments in
+the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file can help you decide what settings to
+include, even if you are using the in-line configuration method.</p>
+<div class="section" id="the-tex-setup">
+<h3>The TeX setup<a class="headerlink" href="#the-tex-setup" title="Permalink to this headline">¶</a></h3>
+<p>This example calls the <tt class="docutils literal"><span class="pre">tex2jax</span></tt> preprocessor to identify
+mathematics in the page by looking for TeX and LaTeX math delimiters.
+It uses <tt class="docutils literal"><span class="pre">$...$</span></tt> and <tt class="docutils literal"><span class="pre">\(...\)</span></tt> for in-line mathematics, while
+<tt class="docutils literal"><span class="pre">$$...$$</span></tt> and <tt class="docutils literal"><span class="pre">\[...\]</span></tt> mark displayed equations.  Because dollar
+signs are used to mark mathematics, if you want to produce an actual
+dollar sign in your document, you must &#8220;escape&#8221; it using a slash:
+<tt class="docutils literal"><span class="pre">\$</span></tt>.  This configuration also loads the <tt class="docutils literal"><span class="pre">AMSmath</span></tt> and
+<tt class="docutils literal"><span class="pre">AMSsymbols</span></tt> extensions so that the macros and environments they
+provide are defined for use on the page.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+    <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tex2jax.js&quot;</span><span class="p">,</span><span class="s2">&quot;TeX/AMSmath.js&quot;</span><span class="p">,</span><span class="s2">&quot;TeX/AMSsymbols.js&quot;</span><span class="p">],</span>
+    <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span><span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">],</span>
+    <span class="nx">tex2jax</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">inlineMath</span><span class="o">:</span> <span class="p">[[</span><span class="s1">&#39;$&#39;</span><span class="p">,</span><span class="s1">&#39;$&#39;</span><span class="p">],[</span><span class="s2">&quot;\\(&quot;</span><span class="p">,</span><span class="s2">&quot;\\)&quot;</span><span class="p">]],</span>
+        <span class="nx">processEscapes</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Other extensions that you may consider adding to the <cite>extensions</cite>
+array include:  <tt class="docutils literal"><span class="pre">TeX/noErrors.js</span></tt>, which shows the original TeX code
+if an error occurs while processing the mathematics (rather than an
+error message), <tt class="docutils literal"><span class="pre">TeX/noUndefined.js</span></tt>, which shows undefined
+macros names in red (rather than producing an error), and
+<tt class="docutils literal"><span class="pre">TeX/autobold.js</span></tt>, which automatically inserts <tt class="docutils literal"><span class="pre">\boldsymbol{...}</span></tt>
+around your mathematics when it appears in a section of your page that
+is in bold.  Most of the other TeX extensions are loaded automatically
+when needed, and so do not need to be included explicitly in your
+<cite>extensions</cite> array.</p>
+<p>See the <a class="reference internal" href="options/tex2jax.html#configure-tex2jax"><em>tex2jax configuration</em></a> section for
+other configuration options for the <tt class="docutils literal"><span class="pre">tex2jax</span></tt> preprocessor, and the
+<a class="reference internal" href="options/TeX.html#configure-tex"><em>TeX input jax configuration</em></a> section for options
+that control the TeX input processor.</p>
+</div>
+<div class="section" id="the-mathml-setup">
+<h3>The MathML setup<a class="headerlink" href="#the-mathml-setup" title="Permalink to this headline">¶</a></h3>
+<p>This example calls the <tt class="docutils literal"><span class="pre">mml2jax</span></tt> preprocessor to identify
+mathematics in the page that is in <a class="reference internal" href="glossary.html#term-mathml"><em class="xref std std-term">MathML</em></a> format, which uses
+<tt class="docutils literal"><span class="pre">&lt;math</span> <span class="pre">display=&quot;block&quot;&gt;</span></tt> to indicate displayed equations, and
+<tt class="docutils literal"><span class="pre">&lt;math</span> <span class="pre">display=&quot;inline&quot;&gt;</span></tt> or simply <tt class="docutils literal"><span class="pre">&lt;math&gt;</span></tt> to mark in-line
+formulas.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+    <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mml2jax.js&quot;</span><span class="p">],</span>
+    <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/MathML&quot;</span><span class="p">,</span><span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">]</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Note that this will work in HTML files, not just XHTML files (MathJax
+works with both), and that the web page need not be served with any
+special MIME-type.  Also note that, unless you are using XHTML rather
+than HTML, you should not include a namespace prefix for your
+<tt class="docutils literal"><span class="pre">&lt;math&gt;</span></tt> tags; for example, you should not use <tt class="docutils literal"><span class="pre">&lt;m:math&gt;</span></tt> except
+in a file where you have tied the <tt class="docutils literal"><span class="pre">m</span></tt> namespace to the MathML DTD.</p>
+<p>See the <a class="reference internal" href="options/mml2jax.html#configure-mml2jax"><em>mml2jax configuration</em></a> section for
+other configuration options for the <tt class="docutils literal"><span class="pre">mml2jax</span></tt> preprocessor, and the
+<a class="reference internal" href="options/MathML.html#configure-mathml"><em>MathML input jax configuration</em></a> section for
+options that control the MathML input processor.</p>
+</div>
+<div class="section" id="both-tex-and-mathml">
+<h3>Both TeX and MathML<a class="headerlink" href="#both-tex-and-mathml" title="Permalink to this headline">¶</a></h3>
+<p>This example provides for both TeX and MathML input in the same file.
+It calls on both the <tt class="docutils literal"><span class="pre">tex2jax</span></tt> and <tt class="docutils literal"><span class="pre">mml2jax</span></tt> preprocessors and the
+TeX and MathML input jax to do the job.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+    <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tex2jax.js&quot;</span><span class="p">,</span> <span class="s2">&quot;mml2jax.js&quot;</span><span class="p">],</span>
+    <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span> <span class="s2">&quot;input/MathML&quot;</span><span class="p">,</span> <span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">],</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Notice that no <tt class="docutils literal"><span class="pre">tex2jax</span></tt> configuration section is included, so it
+uses its default options (no single dollar signs for in-line math).</p>
+<p>The majority of the code for the TeX and MathML input processors are
+not loaded until they are actually needed by the mathematics on the
+page, so if this configuration is used on a page that include only
+MathML, the TeX input processor will not be loaded.  Thus it is
+reasonably efficient to specify both input processors even if only one
+(or neither one) is used.</p>
+</div>
+<div class="section" id="tex-input-with-mathml-output">
+<h3>TeX input with MathML output<a class="headerlink" href="#tex-input-with-mathml-output" title="Permalink to this headline">¶</a></h3>
+<p>This example configures MathJax to use the <tt class="docutils literal"><span class="pre">tex2jax</span></tt> preprocessor
+and TeX input processor, but the choice of output format is determined
+by MathJax depending on the capabilities of the users&#8217;s browser.  The
+is performed by the <tt class="docutils literal"><span class="pre">MMLorHTML.js</span></tt> configuration file that is loaded
+in the <cite>config`</cite> array.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+    <span class="nx">config</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;MMLorHTML.js&quot;</span><span class="p">],</span>
+    <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tex2jax.js&quot;</span><span class="p">],</span>
+    <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">]</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>With this setup, Firefox or Internet Explorer with the <a class="reference external" href="http://www.dessci.com/en/products/mathplayer/">MathPlayer
+plugin</a> installed
+will use the NativeMML output processor, while all other browsers will
+use the HTML-CSS output processor.  Since native MathML support is
+faster than MathJax&#8217;s HTML-CSS processor, this will mean that the web
+pages will display faster for Firefox and IE than they woudl
+otherwise.  This speed comes at the cost, however, as you are now
+relying on the native MathML support to render the mathematics, and
+that is outside of MathJax&#8217;s control.  There may be spacing or other
+display differences (compared to MathJax&#8217;s HTML-CSS output) when the
+NativeMML output processor is used.</p>
+<p>See <a class="reference internal" href="output.html#output-formats"><em>MathJax Output Formats</em></a> for more
+information on the NativeMML and HTML-CSS output processors.  See the
+<a class="reference internal" href="options/MMLorHTML.html#configure-mmlorhtml"><em>MMLorHTML configuration</em></a> section for
+details on the options that control the <tt class="docutils literal"><span class="pre">MMLorHTML</span></tt> configuration.</p>
+</div>
+<div class="section" id="mathml-input-and-output-in-all-browsers">
+<h3>MathML input and output in all browsers<a class="headerlink" href="#mathml-input-and-output-in-all-browsers" title="Permalink to this headline">¶</a></h3>
+<p>This example configures MathJax to look for MathML within your page,
+and to display it using the browser&#8217;s native MathML support, if
+possible, or its HTML-CSS output if not.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+    <span class="nx">config</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;MMLorHTML.js&quot;</span><span class="p">],</span>
+    <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mml2jax.js&quot;</span><span class="p">],</span>
+    <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/MathML&quot;</span><span class="p">]</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Using this configuration, MathJax finally makes MathML available in
+all modern browsers.</p>
+<p>See the <a class="reference internal" href="options/MMLorHTML.html#configure-mmlorhtml"><em>MMLorHTML configuration</em></a> section
+for details on the options that control the <tt class="docutils literal"><span class="pre">MMLorHTML</span></tt>
+configuration file, the <a class="reference internal" href="options/MathML.html#configure-mathml"><em>MathML configuration</em></a>
+section for the options that control the MathML output processor, and
+the <a class="reference internal" href="options/mml2jax.html#configure-mml2jax"><em>mml2jax configuration</em></a> section for the
+options that control the <tt class="docutils literal"><span class="pre">mml2jax</span></tt> preprocessor.</p>
+</div>
+</div>
+<div class="section" id="configuration-objects">
+<span id="configuration"></span><h2>Configuration Objects<a class="headerlink" href="#configuration-objects" title="Permalink to this headline">¶</a></h2>
+<p>The various components of MathJax, including its input and output
+processors, its preprocessors, its extensions, and the MathJax core,
+all can be configured through the <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file, or via a
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Config()</span></tt> call (indeed, if you look closely, you
+will see that <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> is itself one big call to
+<tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Config()</span></tt>).  Anything that is in
+<tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> can be included in-line to configure MathJax.</p>
+<p>The structure that you pass to <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Config()</span></tt> is a
+JavaScript object that includes name-value pairs giving the names of
+parameters and their values, with pairs separated by commas.  Be
+careful not to include a comma after the last value, however, as some
+browsers (namely Internet Explorer) will fail to process the
+configuration if you do.</p>
+<p>The MathJax components, like the TeX input processor, have their own
+sections in the configuration object, labeled by the component name,
+and using an configuration object as its value.  The object is itself
+a configuration object made up of name-value pairs that give the
+configuration options for the component.</p>
+<p>For example,</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+  <span class="nx">showProcessingMessages</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">jax</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;input/TeX&quot;</span><span class="p">,</span> <span class="s2">&quot;output/HTML-CSS&quot;</span><span class="p">],</span>
+  <span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">TagSide</span><span class="o">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+    <span class="nx">Macros</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">RR</span><span class="o">:</span> <span class="s1">&#39;{\\bf R}&#39;</span><span class="p">,</span>
+      <span class="nx">bold</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;{\\bf #1}&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>is a configration that includes two settings for the MathJax Hub (one
+for <cite>showProcessingMessages</cite> and one of the <cite>jax</cite> array), and a
+configuration object for the TeX input processor.  The latter includes
+a setting for the TeX input processor&#8217;s <cite>TagSide</cite> option (to set tags
+on the left rather than the right) and a setting for <cite>Macros</cite>, which
+defines new TeX macros (in this case, two macros, one called <tt class="docutils literal"><span class="pre">\RR</span></tt>
+that produces a bold &#8220;R&#8221;, and one called <tt class="docutils literal"><span class="pre">\bold</span></tt> that puts is
+argument in bold face).</p>
+<p>The <tt class="docutils literal"><span class="pre">config/MathJax.js</span></tt> file is another example that shows nearly
+all the configuration options for all of MathJax&#8217;s components.</p>
+</div>
+<div class="section" id="configuration-options-by-component">
+<h2>Configuration Options by Component<a class="headerlink" href="#configuration-options-by-component" title="Permalink to this headline">¶</a></h2>
+<p>The individual options are explained in the following sections, which
+are categorized by the component they affect.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="options/hub.html">The core options</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="options/tex2jax.html">The tex2jax preprocessor options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/mml2jax.html">The mml2jax preprocessor options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/jsMath2jax.html">The jsMath2jax preprocessor options</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="options/TeX.html">The TeX input processor options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/MathML.html">The MathML input processor options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/HTML-CSS.html">The HTML-CSS output processor options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/NativeMML.html">The NativeMML output processor options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/MMLorHTML.html">The MMLorHTML configuration options</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="options/MathMenu.html">The MathMenu options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/MathZoom.html">The MathZoom options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/FontWarnings.html">The FontWarnings options</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Loading and Configuring MathJax</a><ul>
+<li><a class="reference internal" href="#configuring-mathjax">Configuring MathJax</a></li>
+<li><a class="reference internal" href="#common-configurations">Common Configurations</a><ul>
+<li><a class="reference internal" href="#the-tex-setup">The TeX setup</a></li>
+<li><a class="reference internal" href="#the-mathml-setup">The MathML setup</a></li>
+<li><a class="reference internal" href="#both-tex-and-mathml">Both TeX and MathML</a></li>
+<li><a class="reference internal" href="#tex-input-with-mathml-output">TeX input with MathML output</a></li>
+<li><a class="reference internal" href="#mathml-input-and-output-in-all-browsers">MathML input and output in all browsers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-objects">Configuration Objects</a></li>
+<li><a class="reference internal" href="#configuration-options-by-component">Configuration Options by Component</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installing and Testing MathJax</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="options/hub.html"
+                        title="next chapter">The Core Configuration Options</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/configuration.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="options/hub.html" title="The Core Configuration Options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installing and Testing MathJax"
+             >previous</a> |</li>
+        <li><a href="index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>
