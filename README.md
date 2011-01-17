@@ -35,6 +35,7 @@ to install the dependencies for the formats that you plan to use.
 * [RDoc](http://rdoc.sourceforge.net/)
 * [ReStructuredText](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
 * [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
+* [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth`
 
 
 ## RUNNING
@@ -74,6 +75,7 @@ current list of formats and allowed extensions is:
 * RDoc: .rdoc
 * ReStructuredText: .rest.txt, .rst.txt, .rest, .rst
 * Textile: .textile
+* MediaWiki: .mediawiki, .wiki
 
 Gollum detects the page file format via the extension, so files must have one
 of the supported extensions in order to be converted.
@@ -90,13 +92,19 @@ The special page file `Home.ext` (where the extension is one of the supported
 formats) will be used as the entrance page to your wiki. If it is missing, an
 automatically generated table of contents will be shown instead.
 
+## SIDEBAR FILES
+
+Sidebar files allow you to add a simple sidebar to your wiki.  Sidebar files
+are named `_Sidebar.ext` where the extension is one of the supported formats.
+Sidebars affect all pages in their directory and any subdirectories that do not
+have a sidebar file of their own.
 
 ## FOOTER FILES
 
 Footer files allow you to add a simple footer to your wiki. Footer files must
 be named `_Footer.ext` where the extension is one of the supported formats.
-Footers affect all pages in their directory and any subdirectories that do not
-have a footer file of their own.
+Like sidebars, footers affect all pages in their directory and any
+subdirectories that do not have a footer file of their own.
 
 
 ## HTML SANITIZATION
@@ -124,6 +132,9 @@ the link text displayed on the page. If the tag is an embedded image, the
 first thing in the tag will be a path to an image file. Use this trick to
 easily remember which order things should appear in tags.
 
+Some formats, such as MediaWiki, support the opposite syntax:
+
+    [[Page Title|Link]]
 
 ## PAGE LINKS
 
@@ -210,7 +221,7 @@ the pipe.
 ## IMAGES
 
 To display images that are contained in the Gollum repository you should use
-the Gollum Image Tag. This will display the actual image on the page. 
+the Gollum Image Tag. This will display the actual image on the page.
 
     [[gollum.png]]
 
@@ -432,4 +443,4 @@ your changes merged back into core is as follows:
 1. Do not change the version number, I will do that on my end
 1. If necessary, rebase your commits into logical chunks, without errors
 1. Push the branch up to GitHub
-1. Send me (mojombo) a pull request for your branch
+1. Send a pull request to the github/gollum project.
