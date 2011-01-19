@@ -205,7 +205,7 @@ module Gollum
 
       committer.add_to_index('', name, format, data)
 
-      committer.after_commit do |index|
+      committer.after_commit do |index, sha|
         @access.refresh
         index.update_working_dir('', name, format)
       end
@@ -256,7 +256,7 @@ module Gollum
         committer.add_to_index(dir, name, format, data, :allow_same_ext)
       end
 
-      committer.after_commit do |index|
+      committer.after_commit do |index, sha|
         @access.refresh
         index.update_working_dir(dir, page.name, page.format)
         index.update_working_dir(dir, name, format)
@@ -293,7 +293,7 @@ module Gollum
       
       committer.delete(page.path)
 
-      committer.after_commit do |index|
+      committer.after_commit do |index, sha|
         dir = ::File.dirname(page.path)
         dir = '' if dir == '.'
 
@@ -331,7 +331,7 @@ module Gollum
       parent    = committer.parents[0]
       committer.options[:tree] = @repo.git.apply_patch(parent.sha, patch)
       return false unless committer.options[:tree]
-      committer.after_commit do |index|
+      committer.after_commit do |index, sha|
         @access.refresh
 
         files = []

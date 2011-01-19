@@ -144,14 +144,15 @@ module Gollum
     def commit
       sha1 = index.commit(@options[:message], parents, actor)
       @callbacks.each do |cb|
-        cb.call(self)
+        cb.call(self, sha1)
       end
       sha1
     end
 
     # Adds a callback to be fired after a commit.
     #
-    # block - A block that expects this Committer instance as the argument.
+    # block - A block that expects this Committer instance and the created 
+    #         commit's SHA1 as the arguments.
     #
     # Returns nothing.
     def after_commit(&block)

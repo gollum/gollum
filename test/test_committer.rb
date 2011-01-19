@@ -24,4 +24,27 @@ context "Wiki" do
     assert_equal 'bob',  committer.actor.name
     assert_equal 'foo@bar.com', committer.actor.email
   end
+
+  test "yield after_commit callback" do
+    @path = cloned_testpath('examples/lotr.git')
+    yielded = nil
+    begin
+      wiki = Gollum::Wiki.new(@path)
+      committer = Gollum::Committer.new(wiki)
+      committer.after_commit do |index, sha1|
+        yielded = sha1
+        assert_equal committer, index
+      end
+
+      res = wiki.write_page("Gollum", :markdown, "# Gollum", 
+        :committer => committer)
+
+      assert_equal committer, res
+
+      sha1 = committer.commit
+      assert_equal sha1, yielded
+    ensure
+      FileUtils.rm_rf(@path)
+    end
+  end
 end
