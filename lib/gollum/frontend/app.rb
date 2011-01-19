@@ -57,12 +57,15 @@ module Precious
     post '/edit/*' do
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       page = wiki.page(params[:splat].first)
-      name = params[:rename] || page.name
-      msg  = commit_message
-      update_wiki_page(wiki, page, params[:content], msg, name,
+      name = params[:rename]
+      committer = Gollum::Committer.new(wiki, commit_message)
+      commit    = {:committer => committer}
+
+      update_wiki_page(wiki, page, params[:content], commit, name,
         params[:format])
-      update_wiki_page(wiki, page.footer,  params[:footer],  msg) if params[:footer]
-      update_wiki_page(wiki, page.sidebar, params[:sidebar], msg) if params[:sidebar]
+      update_wiki_page(wiki, page.footer,  params[:footer],  commit) if params[:footer]
+      update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
+      committer.commit
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
@@ -187,10 +190,12 @@ module Precious
     end
 
     def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
-      return if !page || !content || page.raw_data == content
-      name ||= page.name
-      format = (format || page.format).to_sym
-      wiki.update_page(page, name, format, content, commit_message)
+      return if !page ||  
+        ((!content || page.raw_data == content) && page.format == format)
+      name    ||= page.name
+      format    = (format || page.format).to_sym
+      content ||= page.raw_data
+      wiki.update_page(page, name, format, content.to_s, commit_message)
     end
 
     def commit_message
