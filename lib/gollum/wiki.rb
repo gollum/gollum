@@ -59,7 +59,7 @@ module Gollum
           end
       end
 
-      # Gets the default sanitization options for current pages used by 
+      # Gets the default sanitization options for current pages used by
       # instances of this Wiki.
       def sanitization
         if @sanitization.nil?
@@ -68,7 +68,7 @@ module Gollum
         @sanitization
       end
 
-      # Gets the default sanitization options for older page revisions used by 
+      # Gets the default sanitization options for older page revisions used by
       # instances of this Wiki.
       def history_sanitization
         if @history_sanitization.nil?
@@ -94,17 +94,21 @@ module Gollum
     # Gets the sanitization options for older page revisions used by this Wiki.
     attr_reader :history_sanitization
 
+    # Gets the String directory in which all page files reside.
+    attr_reader :page_file_dir
+
     # Public: Initialize a new Gollum Repo.
     #
-    # repo    - The String path to the Git repository that holds the Gollum
+    # path    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
-    #           :base_path    - String base path for all Wiki links.
-    #                           Default: "/"
-    #           :page_class   - The page Class. Default: Gollum::Page
-    #           :file_class   - The file Class. Default: Gollum::File
-    #           :markup_class - The markup Class. Default: Gollum::Markup
-    #           :sanitization - An instance of Sanitization.
+    #           :base_path     - String base path for all Wiki links.
+    #                            Default: "/"
+    #           :page_class    - The page Class. Default: Gollum::Page
+    #           :file_class    - The file Class. Default: Gollum::File
+    #           :markup_class  - The markup Class. Default: Gollum::Markup
+    #           :sanitization  - An instance of Sanitization.
+    #           :page_file_dir - String the directory in which all page files reside
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -112,15 +116,16 @@ module Gollum
         options[:access] = path
         path             = path.path
       end
-      @path         = path
-      @access       = options[:access]       || GitAccess.new(path)
-      @base_path    = options[:base_path]    || "/"
-      @page_class   = options[:page_class]   || self.class.page_class
-      @file_class   = options[:file_class]   || self.class.file_class
-      @markup_class = options[:markup_class] || self.class.markup_class
-      @repo         = @access.repo
-      @sanitization = options[:sanitization] || self.class.sanitization
-      @history_sanitization = options[:history_sanitization] || 
+      @path          = path
+      @page_file_dir = options[:page_file_dir]
+      @access        = options[:access]       || GitAccess.new(path, @page_file_dir)
+      @base_path     = options[:base_path]    || "/"
+      @page_class    = options[:page_class]   || self.class.page_class
+      @file_class    = options[:file_class]   || self.class.file_class
+      @markup_class  = options[:markup_class] || self.class.markup_class
+      @repo          = @access.repo
+      @sanitization  = options[:sanitization] || self.class.sanitization
+      @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
     end
 
@@ -257,6 +262,82 @@ module Gollum
       sha1
     end
 
+    # Public: Applies a reverse diff for a given page.  If only 1 SHA is given,
+    # the reverse diff will be taken from its parent (^SHA...SHA).  If two SHAs
+    # are given, the reverse diff is taken from SHA1...SHA2.
+    #
+    # page   - The Gollum::Page to delete.
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :name    - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns a String SHA1 of the new commit, or nil if the reverse diff does
+    # not apply.
+    def revert_page(page, sha1, sha2 = nil, commit = {})
+      if sha2.is_a?(Hash)
+        commit = sha2
+        sha2   = nil
+      end
+
+      pcommit = @repo.commit('master')
+      patch   = full_reverse_diff_for(page, sha1, sha2)
+      commit[:parent] = [pcommit]
+      commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
+      return false unless commit[:tree]
+
+      index = nil
+      sha1  = commit_index(commit) { |i| index = i }
+      @access.refresh
+
+      files = []
+      if page
+        files << [page.path, page.name, page.format]
+      else
+        # Grit::Diff can't parse reverse diffs.... yet
+        lines = patch.split("\n")
+        while line = lines.shift
+          if line =~ %r{^diff --git b/.+? a/(.+)$}
+            path = $1
+            ext  = ::File.extname(path)
+            name = ::File.basename(path, ext)
+            if format = ::Gollum::Page.format_for(ext)
+              files << [path, name, format]
+            end
+          end
+        end
+      end
+
+      files.each do |(path, name, format)|
+        dir = ::File.dirname(path)
+        dir = '' if dir == '.'
+        update_working_dir(index, dir, name, format)
+      end
+
+      sha1
+    end
+
+    # Public: Applies a reverse diff to the repo.  If only 1 SHA is given,
+    # the reverse diff will be taken from its parent (^SHA...SHA).  If two SHAs
+    # are given, the reverse diff is taken from SHA1...SHA2.
+    #
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    # commit - The commit Hash details:
+    #          :message - The String commit message.
+    #          :name    - The String author full name.
+    #          :email   - The String email address.
+    #
+    # Returns a String SHA1 of the new commit, or nil if the reverse diff does
+    # not apply.
+    def revert_commit(sha1, sha2 = nil, commit = {})
+      revert_page(nil, sha1, sha2, commit)
+    end
+
     # Public: Lists all pages for this wiki.
     #
     # treeish - The String commit ID or ref to find  (default: master)
@@ -266,7 +347,7 @@ module Gollum
       tree_list(treeish || 'master')
     end
 
-    # Public: Returns the number of pages accessible from a commit 
+    # Public: Returns the number of pages accessible from a commit
     #
     # ref - A String ref that is either a commit SHA or references one.
     #
@@ -285,10 +366,10 @@ module Gollum
     #
     # Returns an Array with Objects of page name and count of matches
     def search(query)
-      # See: http://github.com/Sirupsen/gollum/commit/f0a6f52bdaf6bee8253ca33bb3fceaeb27bfb87e
-      search_output = @repo.git.grep({:c => query}, 'master')
+      args = [{:c => query}, 'master', '--']
+      args << '--' << @page_file_dir if @page_file_dir
 
-      search_output.split("\n").collect do |line|
+      @repo.git.grep(*args).split("\n").map! do |line|
         result = line.split(':')
         file_name = Gollum::Page.canonicalize_filename(::File.basename(result[1]))
 
@@ -310,28 +391,6 @@ module Gollum
       @repo.log('master', nil, log_pagination_options(options))
     end
 
-    def revert_page(page, sha1, sha2 = nil, commit = {})
-      if sha2.is_a?(Hash)
-        commit = sha2
-        sha2   = nil
-      end
-
-      pcommit = @repo.commit('master')
-      patch   = full_reverse_diff_for(page, sha1, sha2)
-      commit[:parent] = [pcommit]
-      commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
-      return false unless commit[:tree]
-
-      index = nil
-      sha1  = commit_index(commit) { |i| index = i }
-      dir   = ::File.dirname(page.path)
-      dir   = '' if dir == '.'
-
-      @access.refresh
-      update_working_dir(index, dir, page.name, page.format)
-      sha1
-    end
-
     # Public: Refreshes just the cached Git reference data.  This should
     # be called after every Gollum update.
     #
@@ -340,7 +399,7 @@ module Gollum
       @access.refresh
     end
 
-    # Public: Creates a Sanitize instance using the Wiki's sanitization 
+    # Public: Creates a Sanitize instance using the Wiki's sanitization
     # options.
     #
     # Returns a Sanitize instance.
@@ -350,7 +409,7 @@ module Gollum
       end
     end
 
-    # Public: Creates a Sanitize instance using the Wiki's history sanitization 
+    # Public: Creates a Sanitize instance using the Wiki's history sanitization
     # options.
     #
     # Returns a Sanitize instance.
@@ -416,12 +475,16 @@ module Gollum
     # Returns nothing.
     def update_working_dir(index, dir, name, format)
       unless @repo.bare
-        path =
-        if dir == ''
-          page_file_name(name, format)
-        else
-          ::File.join(dir, page_file_name(name, format))
+        if @page_file_dir
+          dir = dir.size.zero? ? @page_file_dir : File.join(dir, @page_file_dir)
         end
+
+        path =
+          if dir == ''
+            page_file_name(name, format)
+          else
+            ::File.join(dir, page_file_name(name, format))
+          end
 
         Dir.chdir(::File.join(@repo.path, '..')) do
           if file_path_scheduled_for_deletion?(index.tree, path)
@@ -517,7 +580,7 @@ module Gollum
 
       dir = '/' if dir.strip.empty?
 
-      fullpath = ::File.join(dir, path)
+      fullpath = ::File.join(*[@page_file_dir, dir, path].compact)
       fullpath = fullpath[1..-1] if fullpath =~ /^\//
 
       if index.current_tree && tree = index.current_tree / dir
@@ -536,6 +599,14 @@ module Gollum
       index.add(fullpath, normalize(data))
     end
 
+    # Commits to the repo.  This is a common method used by Gollum for
+    # creating, updating, and deleting pages.  There are typically three steps:
+    # building an index with the current tree, yielding the index for
+    # modification, and then writing the commit.
+    #
+    # options - Hash of option
+    #
+    # Returns the String SHA of the new Commit.
     def commit_index(options = {})
       normalize_commit(options)
       parents = [options[:parent] || @repo.commit('master')]
@@ -549,13 +620,38 @@ module Gollum
       end
       yield index if block_given?
 
+      options[:name]  = default_committer_name  if options[:name].to_s.empty?
+      options[:email] = default_committer_email if options[:email].to_s.empty?
       actor = Grit::Actor.new(options[:name], options[:email])
       index.commit(options[:message], parents, actor)
     end
 
+    # Creates a reverse diff for the given SHAs on the given Gollum::Page.
+    #
+    # page   - The Gollum::Page to scope the patch to, or a String Path.
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    #
+    # Returns a String of the reverse Diff to apply.
     def full_reverse_diff_for(page, sha1, sha2 = nil)
       sha1, sha2 = "#{sha1}^", sha1 if sha2.nil?
-      repo.git.native(:diff, {:R => true}, sha1, sha2, '--', page.path)
+      args = [{:R => true}, sha1, sha2]
+      if page
+        args << '--' << (page.respond_to?(:path) ? page.path : page.to_s)
+      end
+      repo.git.native(:diff, *args)
+    end
+
+    # Creates a reverse diff for the given SHAs.
+    #
+    # sha1   - String SHA1 of the earlier parent if two SHAs are given,
+    #          or the child.
+    # sha2   - Optional String SHA1 of the child.
+    #
+    # Returns a String of the reverse Diff to apply.
+    def full_reverse_diff(sha1, sha2 = nil)
+      full_reverse_diff_for(nil, sha1, sha2)
     end
 
     # Ensures a commit hash has all the required fields for a commit.
@@ -573,17 +669,26 @@ module Gollum
     end
 
     # Gets the default name for commits.
+    #
+    # Returns the String name.
     def default_committer_name
       @default_committer_name ||= \
         @repo.config['user.name'] || self.class.default_committer_name
     end
 
     # Gets the default email for commits.
+    #
+    # Returns the String email address.
     def default_committer_email
       @default_committer_email ||= \
         @repo.config['user.email'] || self.class.default_committer_email
     end
 
+    # Gets the commit object for the given ref or sha.
+    #
+    # ref - A string ref or SHA pointing to a valid commit.
+    #
+    # Returns a Grit::Commit instance.
     def commit_for(ref)
       @access.commit(ref)
     rescue Grit::GitRuby::Repository::NoSuchShaFound

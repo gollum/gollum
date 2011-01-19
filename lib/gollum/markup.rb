@@ -13,6 +13,7 @@ module Gollum
       @name    = page.filename
       @data    = page.text_data
       @version = page.version.id
+      @format  = page.format
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
       @codemap = {}
@@ -28,8 +29,8 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize = no_follow ? 
-        @wiki.history_sanitizer : 
+      sanitize = no_follow ?
+        @wiki.history_sanitizer :
         @wiki.sanitizer
 
       data = extract_tex(@data.dup)
@@ -120,7 +121,18 @@ module Gollum
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
         elsif $2.include?('][')
-          $&
+          if $2[0..4] == 'file:'
+            pre = $1
+            post = $3
+            parts = $2.split('][')
+            parts[0][0..4] = ""
+            link = "#{parts[1]}|#{parts[0].sub(/\.org/,'')}"
+            id = Digest::SHA1.hexdigest(link)
+            @tagmap[id] = link
+            "#{pre}#{id}#{post}"
+          else
+            $&
+          end
         else
           id = Digest::SHA1.hexdigest($2)
           @tagmap[id] = $2
@@ -134,32 +146,28 @@ module Gollum
     # final markup.
     #
     # data      - The String data (with placeholders).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the marked up String data.
-    def process_tags(data, no_follow = false)
+    def process_tags(data)
       @tagmap.each do |id, tag|
-        data.gsub!(id, process_tag(tag, no_follow))
+        data.gsub!(id, process_tag(tag))
       end
       data
     end
 
     # Process a single tag into its final HTML form.
     #
-    # tag       - The String tag contents (the stuff inside the double 
+    # tag       - The String tag contents (the stuff inside the double
     #             brackets).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the String HTML version of the tag.
-    def process_tag(tag, no_follow = false)
+    def process_tag(tag)
       if html = process_image_tag(tag)
         html
-      elsif html = process_file_link_tag(tag, no_follow)
+      elsif html = process_file_link_tag(tag)
         html
       else
-        process_page_link_tag(tag, no_follow)
+        process_page_link_tag(tag)
       end
     end
 
@@ -171,6 +179,8 @@ module Gollum
     #   if it is not.
     def process_image_tag(tag)
       parts = tag.split('|')
+      return if parts.size.zero?
+
       name  = parts[0].strip
       path  = if file = find_file(name)
         ::File.join @wiki.base_path, file.path
@@ -252,15 +262,15 @@ module Gollum
 
     # Attempt to process the tag as a file link tag.
     #
-    # tag       - The String tag contents (the stuff inside the double 
+    # tag       - The String tag contents (the stuff inside the double
     #             brackets).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the String HTML if the tag is a valid file link tag or nil
     #   if it is not.
-    def process_file_link_tag(tag, no_follow = false)
+    def process_file_link_tag(tag)
       parts = tag.split('|')
+      return if parts.size.zero?
+
       name  = parts[0].strip
       path  = parts[1] && parts[1].strip
       path  = if path && file = find_file(path)
@@ -271,33 +281,30 @@ module Gollum
         nil
       end
 
-      tag = if name && path && file
+      if name && path && file
         %{<a href="#{::File.join @wiki.base_path, file.path}">#{name}</a>}
       elsif name && path
         %{<a href="#{path}">#{name}</a>}
       else
         nil
       end
-      if tag && no_follow
-        tag.sub! /^<a/, '<a ref="nofollow"'
-      end
-      tag
     end
 
     # Attempt to process the tag as a page link tag.
     #
-    # tag       - The String tag contents (the stuff inside the double 
+    # tag       - The String tag contents (the stuff inside the double
     #             brackets).
-    # no_follow - Boolean that determines if rel="nofollow" is added to all
-    #             <a> tags.
     #
     # Returns the String HTML if the tag is a valid page link tag or nil
     #   if it is not.
-    def process_page_link_tag(tag, no_follow = false)
+    def process_page_link_tag(tag)
       parts = tag.split('|')
-      name  = parts[0].strip
-      cname = @wiki.page_class.cname((parts[1] || parts[0]).strip)
-      tag = if name =~ %r{^https?://} && parts[1].nil?
+      parts.reverse! if @format == :mediawiki
+
+      name, page_name = *parts.compact.map(&:strip)
+      cname = @wiki.page_class.cname(page_name || name)
+
+      if name =~ %r{^https?://} && page_name.nil?
         %{<a href="#{name}">#{name}</a>}
       else
         presence    = "absent"
@@ -310,10 +317,6 @@ module Gollum
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
-      if tag && no_follow
-        tag.sub! /^<a/, '<a ref="nofollow"'
-      end
-      tag
     end
 
     # Find the given file in the repo.
@@ -335,7 +338,7 @@ module Gollum
     #
     # cname - The String canonical page name.
     #
-    # Returns a Gollum::Page instance if a page is found, or an Array of 
+    # Returns a Gollum::Page instance if a page is found, or an Array of
     # [Gollum::Page, String extra] if a page without the extra anchor data
     # is found.
     def find_page_from_name(cname)
@@ -359,11 +362,11 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub!(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
+      data.gsub!(/^``` ?([^\r\n]+)?\r?\n(.+?)\r?\n```\r?$/m) do
         id     = Digest::SHA1.hexdigest($2)
         cached = check_cache(:code, id)
-        @codemap[id] = cached   ? 
-          { :output => cached } : 
+        @codemap[id] = cached   ?
+          { :output => cached } :
           { :lang => $1, :code => $2 }
         id
       end
@@ -379,12 +382,19 @@ module Gollum
     def process_code(data)
       @codemap.each do |id, spec|
         formatted = spec[:output] || begin
-          lang = spec[:lang]
           code = spec[:code]
+          lang = spec[:lang]
+
           if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
             code.gsub!(/^(  |\t)/m, '')
           end
-          formatted = Gollum::Albino.new(code, lang).colorize
+
+          formatted = begin
+            lang && Gollum::Albino.colorize(code, lang)
+          rescue ::Albino::ShellArgumentError, ::Albino::Process::TimeoutExceeded,
+              ::Albino::Process::MaximumOutputExceeded
+          end
+          formatted ||= "<pre><code>#{CGI.escapeHTML(code)}</code></pre>"
           update_cache(:code, id, formatted)
           formatted
         end
@@ -393,7 +403,7 @@ module Gollum
       data
     end
 
-    # Hook for getting the formatted value of extracted tag data.  
+    # Hook for getting the formatted value of extracted tag data.
     #
     # type - Symbol value identifying what type of data is being extracted.
     # id   - String SHA1 hash of original extracted tag data.

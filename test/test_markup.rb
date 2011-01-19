@@ -162,6 +162,20 @@ context "Markup" do
     assert_equal "<p>a <a href=\"http://example.com\">http://example.com</a> b</p>", page.formatted_data
   end
 
+  test "page link with different text" do
+    @wiki.write_page("Potato", :markdown, "a [[Potato Heaad|Potato]] ", commit_details)
+    page = @wiki.page("Potato")
+    output = page.formatted_data
+    assert_equal "<p>a <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a></p>", output
+  end
+
+  test "page link with different text on mediawiki" do
+    @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
+    page = @wiki.page("Potato")
+    output = page.formatted_data
+    assert_equal "<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> \n</p>", output
+  end
+
   #########################################################################
   #
   # Images
@@ -343,7 +357,7 @@ context "Markup" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -358,7 +372,7 @@ context "Markup" do
     content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -374,7 +388,7 @@ context "Markup" do
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
              "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
              "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
-             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     compare(content, output)
   end
 
@@ -383,7 +397,19 @@ context "Markup" do
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
              "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
              "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
-             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
+    compare(content, output)
+  end
+
+  test "code block with invalid lang" do
+    content = "a\n\n``` ls -al;\n\tbooya\n\tboom\n```\n\nb"
+    output  = "<p>a</p>\n\n<pre><code>booya\nboom</code></pre>\n\n<p>b</p>"
+    compare(content, output)
+  end
+
+  test "code block with no lang" do
+    content = "a\n\n```\n\tls -al;\n\t<booya>\n```\n\nb"
+    output = "<p>a</p>\n\n<pre><code>ls -al;\n&lt;booya&gt;</code></pre>\n\n<p>b</p>"
     compare(content, output)
   end
 
@@ -411,6 +437,24 @@ context "Markup" do
   test "org mode style double links" do
     content = "a [[http://google.com][Google]] b"
     output = "<p class=\"title\">a <a href=\"http://google.com\">Google</a> b</p>"
+    compare(content, output, 'org')
+  end
+
+  test "org mode style double file links" do
+    content = "a [[file:f.org][Google]] b"
+    output = "<p class=\"title\">a <a class=\"internal absent\" href=\"/f\">Google</a> b</p>"
+    compare(content, output, 'org')
+  end
+
+  test "short double links" do
+    content = "a [[b]] c"
+    output  = %(<p class="title">a <a class="internal absent" href="/b">b</a> c</p>)
+    compare(content, output, 'org')
+  end
+
+  test "double linked pipe" do
+    content = "a [[|]] b"
+    output  = %(<p class="title">a <a class="internal absent" href="/"></a> b</p>)
     compare(content, output, 'org')
   end
 
