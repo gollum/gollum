@@ -136,7 +136,7 @@ module Gollum
         Sanitize.clean(header.to_html)
       else
         Sanitize.clean(name)
-      end
+      end.strip
     end
 
     # Public: The path of the page within the repo.
