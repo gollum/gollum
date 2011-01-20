@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rdiscount')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('rack-test')
+  s.add_development_dependency('wikicloth')
 
   # = MANIFEST =
   s.files = %w[
