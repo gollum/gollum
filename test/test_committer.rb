@@ -47,4 +47,16 @@ context "Wiki" do
       FileUtils.rm_rf(@path)
     end
   end
+
+  test "parents with default wiki ref" do
+    ref = 'a8ad3c09dd842a3517085bfadd37718856dee813'
+    committer = Gollum::Committer.new(@wiki)
+    assert_equal ref,  committer.parents.first.sha
+  end
+
+  test "parents with custom ref" do
+    ref = '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
+    committer = Gollum::Committer.new(@wiki)
+    assert_equal ref,  committer.parents(ref).first.sha
+  end
 end
