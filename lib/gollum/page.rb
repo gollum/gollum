@@ -199,10 +199,10 @@ module Gollum
         options[:pretty] = 'raw'
         options.delete :max_count
         options.delete :skip
-        log = @wiki.repo.git.native "log", options, @wiki.branch, "--", @path
+        log = @wiki.repo.git.native "log", options, @wiki.ref, "--", @path
         Grit::Commit.list_from_string(@wiki.repo, log)
       else
-        @wiki.repo.log(@wiki.branch, @path, log_pagination_options(options))
+        @wiki.repo.log(@wiki.ref, @path, log_pagination_options(options))
       end
     end
 

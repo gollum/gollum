@@ -62,7 +62,7 @@ module Gollum
     # Returns an array of Grit::Commit instances.
     def parents
       @parents ||= begin
-        arr = [@options[:parent] || @wiki.repo.commit(@wiki.branch)]
+        arr = [@options[:parent] || @wiki.repo.commit(@wiki.ref)]
         arr.flatten!
         arr.compact!
         arr

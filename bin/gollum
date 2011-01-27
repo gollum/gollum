@@ -49,8 +49,8 @@ opts = OptionParser.new do |opts|
     wiki_options[:page_file_dir] = path
   end
 
-  opts.on("--branch [BRANCH]", "Specify the repository branch to use (default: master).") do |branch|
-    wiki_options[:branch] = branch
+  opts.on("--ref [REF]", "Specify the repository ref to use (default: master).") do |ref|
+    wiki_options[:ref] = ref
   end
 end
 
