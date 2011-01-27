@@ -60,9 +60,9 @@ module Gollum
     # Public: The parent commits to this pending commit.
     #
     # Returns an array of Grit::Commit instances.
-    def parents(ref = @wiki.ref)
+    def parents()
       @parents ||= begin
-        arr = [@options[:parent] || @wiki.repo.commit(ref)]
+        arr = [@options[:parent] || @wiki.repo.commit(@wiki.ref)]
         arr.flatten!
         arr.compact!
         arr

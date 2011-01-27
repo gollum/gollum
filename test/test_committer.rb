@@ -48,7 +48,7 @@ context "Wiki" do
     end
   end
 
-  test "parents with default wiki ref" do
+  test "parents with default master ref" do
     ref = 'a8ad3c09dd842a3517085bfadd37718856dee813'
     committer = Gollum::Committer.new(@wiki)
     assert_equal ref,  committer.parents.first.sha
@@ -56,7 +56,8 @@ context "Wiki" do
 
   test "parents with custom ref" do
     ref = '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
+    @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"), :ref => ref)
     committer = Gollum::Committer.new(@wiki)
-    assert_equal ref,  committer.parents(ref).first.sha
+    assert_equal ref,  committer.parents.first.sha
   end
 end
