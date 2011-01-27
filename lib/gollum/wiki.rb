@@ -12,6 +12,9 @@ module Gollum
       # Sets the markup class used by all instances of this Wiki.
       attr_writer :markup_class
 
+      # Sets the default branch for the wiki.
+      attr_accessor :default_branch
+
       # Sets the default name for commits.
       attr_accessor :default_committer_name
 
@@ -80,6 +83,7 @@ module Gollum
       end
     end
 
+    self.default_branch = 'master'
     self.default_committer_name  = 'Anonymous'
     self.default_committer_email = 'anon@anon.com'
 
@@ -93,6 +97,9 @@ module Gollum
 
     # Gets the sanitization options for older page revisions used by this Wiki.
     attr_reader :history_sanitization
+
+    # Gets the String branch in which all page files reside.
+    attr_reader :branch
 
     # Gets the String directory in which all page files reside.
     attr_reader :page_file_dir
@@ -109,6 +116,7 @@ module Gollum
     #           :markup_class  - The markup Class. Default: Gollum::Markup
     #           :sanitization  - An instance of Sanitization.
     #           :page_file_dir - String the directory in which all page files reside
+    #           :branch - String the repository branch to retrieve pages from
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -124,6 +132,7 @@ module Gollum
       @file_class    = options[:file_class]   || self.class.file_class
       @markup_class  = options[:markup_class] || self.class.markup_class
       @repo          = @access.repo
+      @branch        = options[:branch] || self.class.default_branch
       @sanitization  = options[:sanitization] || self.class.sanitization
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
@@ -139,20 +148,20 @@ module Gollum
     # Public: Get the formatted page for a given page name.
     #
     # name    - The human or canonical String page name of the wiki page.
-    # version - The String version ID to find (default: "master").
+    # version - The String version ID to find (default: @branch).
     #
     # Returns a Gollum::Page or nil if no matching page was found.
-    def page(name, version = 'master')
+    def page(name, version = @branch)
       @page_class.new(self).find(name, version)
     end
 
     # Public: Get the static file for a given name.
     #
     # name    - The full String pathname to the file.
-    # version - The String version ID to find (default: "master").
+    # version - The String version ID to find (default: @branch).
     #
     # Returns a Gollum::File or nil if no matching file was found.
-    def file(name, version = 'master')
+    def file(name, version = @branch)
       @file_class.new(self).find(name, version)
     end
 
@@ -381,11 +390,11 @@ module Gollum
 
     # Public: Lists all pages for this wiki.
     #
-    # treeish - The String commit ID or ref to find  (default: master)
+    # treeish - The String commit ID or ref to find  (default:  @branch)
     #
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
-      tree_list(treeish || 'master')
+      tree_list(treeish || @branch)
     end
 
     # Public: Returns the number of pages accessible from a commit
@@ -394,7 +403,7 @@ module Gollum
     #
     # Returns a Fixnum
     def size(ref = nil)
-      tree_map_for(ref || 'master').inject(0) do |num, entry|
+      tree_map_for(ref || @branch).inject(0) do |num, entry|
         num + (@page_class.valid_page_name?(entry.name) ? 1 : 0)
       end
     rescue Grit::GitRuby::Repository::NoSuchShaFound
@@ -407,7 +416,7 @@ module Gollum
     #
     # Returns an Array with Objects of page name and count of matches
     def search(query)
-      args = [{:c => query}, 'master', '--']
+      args = [{:c => query}, @branch, '--']
       args << '--' << @page_file_dir if @page_file_dir
 
       @repo.git.grep(*args).split("\n").map! do |line|
@@ -429,7 +438,7 @@ module Gollum
     #
     # Returns an Array of Grit::Commit.
     def log(options = {})
-      @repo.log('master', nil, log_pagination_options(options))
+      @repo.log(@branch, nil, log_pagination_options(options))
     end
 
     # Public: Refreshes just the cached Git reference data.  This should
@@ -545,6 +554,14 @@ module Gollum
     # Returns a String of the reverse Diff to apply.
     def full_reverse_diff(sha1, sha2 = nil)
       full_reverse_diff_for(nil, sha1, sha2)
+    end
+
+    # Gets the default branch for the wiki.
+    #
+    # Returns the String name.
+    def default_branch
+      @default_branch ||= \
+        self.class.default_branch
     end
 
     # Gets the default name for commits.

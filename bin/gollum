@@ -48,6 +48,10 @@ opts = OptionParser.new do |opts|
   opts.on("--page-file-dir [PATH]", "Specify the sub directory for all page files (default: repository root).") do |path|
     wiki_options[:page_file_dir] = path
   end
+
+  opts.on("--branch [BRANCH]", "Specify the repository branch to use (default: working branch).") do |branch|
+    wiki_options[:branch] = branch
+  end
 end
 
 # Read command line options into `options` hash
