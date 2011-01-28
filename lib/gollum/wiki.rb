@@ -168,10 +168,10 @@ module Gollum
     def preview_page(name, data, format)
       page = @page_class.new(self)
       ext  = @page_class.format_to_ext(format.to_sym)
-      path = @page_class.cname(name) + '.' + ext
-      blob = OpenStruct.new(:name => path, :data => data)
-      page.populate(blob, path)
-      page.version = @access.commit('HEAD')
+      name = @page_class.cname(name) + '.' + ext
+      blob = OpenStruct.new(:name => name, :data => data)
+      page.populate(blob)
+      page.version = @access.commit('master')
       page
     end
 
