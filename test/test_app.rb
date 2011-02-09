@@ -36,8 +36,9 @@ context "Frontend" do
     side_1  = page_1.sidebar
 
     post "/edit/A",
-      :footer => 'footer', :sidebar => 'sidebar', :message => 'def'
+      :footer => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
     follow_redirect!
+    assert_equal "/A", last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -62,6 +63,7 @@ context "Frontend" do
       :rename => "C",
       :format => page_1.format, :message => 'def'
     follow_redirect!
+    assert_equal "/C", last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
