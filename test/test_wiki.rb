@@ -301,3 +301,34 @@ context "page_file_dir option" do
     FileUtils.rm_r(@path)
   end
 end
+
+context "Wiki page writing with different branch" do
+  setup do
+    @path = testpath("examples/test.git")
+    FileUtils.rm_rf(@path)
+    @repo = Grit::Repo.init_bare(@path)
+    @wiki = Gollum::Wiki.new(@path)
+
+    # We need an initial commit to create the master branch
+    # before we can create new branches
+    cd = commit_details
+    @wiki.write_page("Gollum", :markdown, "# Gollum", cd)
+
+    # Create our test branch and check it out
+    @repo.update_ref("test", @repo.commits.first.id)
+    @branch = Gollum::Wiki.new(@path, :ref => "test")
+  end
+
+  test "write_page" do
+    cd = commit_details
+
+    @branch.write_page("Bilbo", :markdown, "# Bilbo", commit_details)
+    assert @branch.page("Bilbo")
+    assert @wiki.page("Gollum")
+
+    assert_equal 1, @wiki.repo.commits.size
+    assert_equal 1, @branch.repo.commits.size
+
+    assert_equal nil, @wiki.page("Bilbo")
+  end
+end
