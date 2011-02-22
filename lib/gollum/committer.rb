@@ -142,7 +142,7 @@ module Gollum
     #
     # Returns the String SHA1 of the new commit.
     def commit
-      sha1 = index.commit(@options[:message], parents, actor)
+      sha1 = index.commit(@options[:message], parents, actor, nil, @wiki.ref)
       @callbacks.each do |cb|
         cb.call(self, sha1)
       end
