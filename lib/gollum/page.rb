@@ -136,7 +136,7 @@ module Gollum
         Sanitize.clean(header.to_html)
       else
         Sanitize.clean(name)
-      end
+      end.strip
     end
 
     # Public: The path of the page within the repo.
@@ -333,9 +333,9 @@ module Gollum
     # path - The String directory path of the page file.
     #
     # Returns the populated Gollum::Page.
-    def populate(blob, path)
+    def populate(blob, path=nil)
       @blob = blob
-      @path = (path + '/' + blob.name)[1..-1]
+      @path = "#{path}/#{blob.name}"[1..-1]
       self
     end
 

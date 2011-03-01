@@ -23,12 +23,12 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('grit', "~> 2.4.0")
+  s.add_dependency('grit', "~> 2.4.1")
   s.add_dependency('github-markup', [">= 0.4.0", "< 1.0.0"])
   s.add_dependency('albino', "~> 1.2.3")
   s.add_dependency('sinatra', "~> 1.0")
   s.add_dependency('mustache', [">= 0.11.2", "< 1.0.0"])
-  s.add_dependency('sanitize', "~> 1.1")
+  s.add_dependency('sanitize', "~> 2.0.0")
   s.add_dependency('nokogiri', "~> 1.4")
 
   s.add_development_dependency('RedCloth')
@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rdiscount')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('rack-test')
+  s.add_development_dependency('wikicloth')
 
   # = MANIFEST =
   s.files = %w[

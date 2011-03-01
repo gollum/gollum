@@ -168,10 +168,10 @@ module Gollum
     def preview_page(name, data, format)
       page = @page_class.new(self)
       ext  = @page_class.format_to_ext(format.to_sym)
-      path = @page_class.cname(name) + '.' + ext
-      blob = OpenStruct.new(:name => path, :data => data)
-      page.populate(blob, path)
-      page.version = @access.commit('HEAD')
+      name = @page_class.cname(name) + '.' + ext
+      blob = OpenStruct.new(:name => name, :data => data)
+      page.populate(blob)
+      page.version = @access.commit('master')
       page
     end
 
@@ -181,22 +181,36 @@ module Gollum
     # format - The Symbol format of the page.
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
-    #          :message - The String commit message.
-    #          :name    - The String author full name.
-    #          :email   - The String email address.
+    #          :message   - The String commit message.
+    #          :name      - The String author full name.
+    #          :email     - The String email address.
+    #          :parent    - Optional Grit::Commit parent to this update.
+    #          :tree      - Optional String SHA of the tree to create the
+    #                       index from.
+    #          :committer - Optional Gollum::Committer instance.  If provided,
+    #                       assume that this operation is part of batch of 
+    #                       updates and the commit happens later.
     #
-    # Returns the String SHA1 of the newly written version.
+    # Returns the String SHA1 of the newly written version, or the 
+    # Gollum::Committer instance if this is part of a batch update.
     def write_page(name, format, data, commit = {})
-      index  = nil
-      sha1   = commit_index(commit) do |idx|
-        index = idx
-        add_to_index(index, '', name, format, data)
+      multi_commit = false
+
+      committer = if obj = commit[:committer]
+        multi_commit = true
+        obj
+      else
+        Committer.new(self, commit)
       end
 
-      @access.refresh
-      update_working_dir(index, '', name, format)
+      committer.add_to_index('', name, format, data)
 
-      sha1
+      committer.after_commit do |index, sha|
+        @access.refresh
+        index.update_working_dir('', name, format)
+      end
+
+      multi_commit ? committer : committer.commit
     end
 
     # Public: Update an existing page with new content. The location of the
@@ -209,57 +223,85 @@ module Gollum
     # format - The Symbol format of the page.
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
-    #          :message - The String commit message.
-    #          :name    - The String author full name.
-    #          :email   - The String email address.
+    #          :message   - The String commit message.
+    #          :name      - The String author full name.
+    #          :email     - The String email address.
+    #          :parent    - Optional Grit::Commit parent to this update.
+    #          :tree      - Optional String SHA of the tree to create the
+    #                       index from.
+    #          :committer - Optional Gollum::Committer instance.  If provided,
+    #                       assume that this operation is part of batch of 
+    #                       updates and the commit happens later.
     #
-    # Returns the String SHA1 of the newly written version.
+    # Returns the String SHA1 of the newly written version, or the 
+    # Gollum::Committer instance if this is part of a batch update.
     def update_page(page, name, format, data, commit = {})
       name   ||= page.name
       format ||= page.format
       dir      = ::File.dirname(page.path)
       dir      = '' if dir == '.'
-      index    = nil
-      sha1     = commit_index(commit) do |idx|
-        index = idx
-        if page.name == name && page.format == format
-          index.add(page.path, normalize(data))
-        else
-          index.delete(page.path)
-          add_to_index(index, dir, name, format, data, :allow_same_ext)
-        end
+      multi_commit = false
+
+      committer = if obj = commit[:committer]
+        multi_commit = true
+        obj
+      else
+        Committer.new(self, commit)
       end
 
-      @access.refresh
-      update_working_dir(index, dir, page.name, page.format)
-      update_working_dir(index, dir, name, format)
+      if page.name == name && page.format == format
+        committer.add(page.path, normalize(data))
+      else
+        committer.delete(page.path)
+        committer.add_to_index(dir, name, format, data, :allow_same_ext)
+      end
 
-      sha1
+      committer.after_commit do |index, sha|
+        @access.refresh
+        index.update_working_dir(dir, page.name, page.format)
+        index.update_working_dir(dir, name, format)
+      end
+
+      multi_commit ? committer : committer.commit
     end
 
     # Public: Delete a page.
     #
     # page   - The Gollum::Page to delete.
     # commit - The commit Hash details:
-    #          :message - The String commit message.
-    #          :name    - The String author full name.
-    #          :email   - The String email address.
+    #          :message   - The String commit message.
+    #          :name      - The String author full name.
+    #          :email     - The String email address.
+    #          :parent    - Optional Grit::Commit parent to this update.
+    #          :tree      - Optional String SHA of the tree to create the
+    #                       index from.
+    #          :committer - Optional Gollum::Committer instance.  If provided,
+    #                       assume that this operation is part of batch of 
+    #                       updates and the commit happens later.
     #
-    # Returns the String SHA1 of the newly written version.
+    # Returns the String SHA1 of the newly written version, or the 
+    # Gollum::Committer instance if this is part of a batch update.
     def delete_page(page, commit)
-      index = nil
-      sha1  = commit_index(commit) do |idx|
-        index = idx
-        index.delete(page.path)
+      multi_commit = false
+
+      committer = if obj = commit[:committer]
+        multi_commit = true
+        obj
+      else
+        Committer.new(self, commit)
+      end
+      
+      committer.delete(page.path)
+
+      committer.after_commit do |index, sha|
+        dir = ::File.dirname(page.path)
+        dir = '' if dir == '.'
+
+        @access.refresh
+        index.update_working_dir(dir, page.name, page.format)
       end
 
-      dir = ::File.dirname(page.path)
-      dir = '' if dir == '.'
-
-      @access.refresh
-      update_working_dir(index, dir, page.name, page.format)
-
-      sha1
+      multi_commit ? committer : committer.commit
     end
 
     # Public: Applies a reverse diff for a given page.  If only 1 SHA is given,
@@ -274,6 +316,7 @@ module Gollum
     #          :message - The String commit message.
     #          :name    - The String author full name.
     #          :email   - The String email address.
+    #          :parent  - Optional Grit::Commit parent to this update.
     #
     # Returns a String SHA1 of the new commit, or nil if the reverse diff does
     # not apply.
@@ -283,41 +326,39 @@ module Gollum
         sha2   = nil
       end
 
-      pcommit = @repo.commit('master')
-      patch   = full_reverse_diff_for(page, sha1, sha2)
-      commit[:parent] = [pcommit]
-      commit[:tree]   = @repo.git.apply_patch(pcommit.sha, patch)
-      return false unless commit[:tree]
+      patch     = full_reverse_diff_for(page, sha1, sha2)
+      committer = Committer.new(self, commit)
+      parent    = committer.parents[0]
+      committer.options[:tree] = @repo.git.apply_patch(parent.sha, patch)
+      return false unless committer.options[:tree]
+      committer.after_commit do |index, sha|
+        @access.refresh
 
-      index = nil
-      sha1  = commit_index(commit) { |i| index = i }
-      @access.refresh
-
-      files = []
-      if page
-        files << [page.path, page.name, page.format]
-      else
-        # Grit::Diff can't parse reverse diffs.... yet
-        lines = patch.split("\n")
-        while line = lines.shift
-          if line =~ %r{^diff --git b/.+? a/(.+)$}
-            path = $1
-            ext  = ::File.extname(path)
-            name = ::File.basename(path, ext)
-            if format = ::Gollum::Page.format_for(ext)
-              files << [path, name, format]
+        files = []
+        if page
+          files << [page.path, page.name, page.format]
+        else
+          # Grit::Diff can't parse reverse diffs.... yet
+          patch.each_line do |line|
+            if line =~ %r{^diff --git b/.+? a/(.+)$}
+              path = $1
+              ext  = ::File.extname(path)
+              name = ::File.basename(path, ext)
+              if format = ::Gollum::Page.format_for(ext)
+                files << [path, name, format]
+              end
             end
           end
         end
+
+        files.each do |(path, name, format)|
+          dir = ::File.dirname(path)
+          dir = '' if dir == '.'
+          index.update_working_dir(dir, name, format)
+        end
       end
 
-      files.each do |(path, name, format)|
-        dir = ::File.dirname(path)
-        dir = '' if dir == '.'
-        update_working_dir(index, dir, name, format)
-      end
-
-      sha1
+      committer.commit
     end
 
     # Public: Applies a reverse diff to the repo.  If only 1 SHA is given,
@@ -464,38 +505,6 @@ module Gollum
       @page_class.cname(name) + '.' + ext
     end
 
-    # Update the given file in the repository's working directory if there
-    # is a working directory present.
-    #
-    # index  - The Grit::Index with which to sync.
-    # dir    - The String directory in which the file lives.
-    # name   - The String name of the page (may be in human format).
-    # format - The Symbol format of the page.
-    #
-    # Returns nothing.
-    def update_working_dir(index, dir, name, format)
-      unless @repo.bare
-        if @page_file_dir
-          dir = dir.size.zero? ? @page_file_dir : File.join(dir, @page_file_dir)
-        end
-
-        path =
-          if dir == ''
-            page_file_name(name, format)
-          else
-            ::File.join(dir, page_file_name(name, format))
-          end
-
-        Dir.chdir(::File.join(@repo.path, '..')) do
-          if file_path_scheduled_for_deletion?(index.tree, path)
-            @repo.git.rm({'f' => true}, '--', path)
-          else
-            @repo.git.checkout({}, 'HEAD', '--', path)
-          end
-        end
-      end
-    end
-
     # Fill an array with a list of pages.
     #
     # ref - A String ref that is either a commit SHA or references one.
@@ -508,122 +517,6 @@ module Gollum
         next list unless @page_class.valid_page_name?(entry.name)
         list << entry.page(self, commit)
       end
-    end
-
-    # Determine if a given file is scheduled to be deleted in the next commit
-    # for the given Index.
-    #
-    # map   - The Hash map:
-    #         key - The String directory or filename.
-    #         val - The Hash submap or the String contents of the file.
-    # path - The String path of the file including extension.
-    #
-    # Returns the Boolean response.
-    def file_path_scheduled_for_deletion?(map, path)
-      parts = path.split('/')
-      if parts.size == 1
-        deletions = map.keys.select { |k| !map[k] }
-        deletions.any? { |d| d == parts.first }
-      else
-        part = parts.shift
-        if rest = map[part]
-          file_path_scheduled_for_deletion?(rest, parts.join('/'))
-        else
-          false
-        end
-      end
-    end
-
-    # Determine if a given page (regardless of format) is scheduled to be
-    # deleted in the next commit for the given Index.
-    #
-    # map   - The Hash map:
-    #         key - The String directory or filename.
-    #         val - The Hash submap or the String contents of the file.
-    # path - The String path of the page file. This may include the format
-    #         extension in which case it will be ignored.
-    #
-    # Returns the Boolean response.
-    def page_path_scheduled_for_deletion?(map, path)
-      parts = path.split('/')
-      if parts.size == 1
-        deletions = map.keys.select { |k| !map[k] }
-        downfile = parts.first.downcase.sub(/\.\w+$/, '')
-        deletions.any? { |d| d.downcase.sub(/\.\w+$/, '') == downfile }
-      else
-        part = parts.shift
-        if rest = map[part]
-          page_path_scheduled_for_deletion?(rest, parts.join('/'))
-        else
-          false
-        end
-      end
-    end
-
-    # Adds a page to the given Index.
-    #
-    # index  - The Grit::Index to which the page will be added.
-    # dir    - The String subdirectory of the Gollum::Page without any
-    #          prefix or suffix slashes (e.g. "foo/bar").
-    # name   - The String Gollum::Page name.
-    # format - The Symbol Gollum::Page format.
-    # data   - The String wiki data to store in the tree map.
-    # allow_same_ext - A Boolean determining if the tree map allows the same
-    #                  filename with the same extension.
-    #
-    # Raises Gollum::DuplicatePageError if a matching filename already exists.
-    # This way, pages are not inadvertently overwritten.
-    #
-    # Returns nothing (modifies the Index in place).
-    def add_to_index(index, dir, name, format, data, allow_same_ext = false)
-      path = page_file_name(name, format)
-
-      dir = '/' if dir.strip.empty?
-
-      fullpath = ::File.join(*[@page_file_dir, dir, path].compact)
-      fullpath = fullpath[1..-1] if fullpath =~ /^\//
-
-      if index.current_tree && tree = index.current_tree / dir
-        downpath = path.downcase.sub(/\.\w+$/, '')
-
-        tree.blobs.each do |blob|
-          next if page_path_scheduled_for_deletion?(index.tree, fullpath)
-          file = blob.name.downcase.sub(/\.\w+$/, '')
-          file_ext = ::File.extname(blob.name).sub(/^\./, '')
-          if downpath == file && !(allow_same_ext && file_ext == ext)
-            raise DuplicatePageError.new(dir, blob.name, path)
-          end
-        end
-      end
-
-      index.add(fullpath, normalize(data))
-    end
-
-    # Commits to the repo.  This is a common method used by Gollum for
-    # creating, updating, and deleting pages.  There are typically three steps:
-    # building an index with the current tree, yielding the index for
-    # modification, and then writing the commit.
-    #
-    # options - Hash of option
-    #
-    # Returns the String SHA of the new Commit.
-    def commit_index(options = {})
-      normalize_commit(options)
-      parents = [options[:parent] || @repo.commit('master')]
-      parents.flatten!
-      parents.compact!
-      index = self.repo.index
-      if tree   = options[:tree]
-        index.read_tree(tree)
-      elsif parent = parents[0]
-        index.read_tree(parent.tree.id)
-      end
-      yield index if block_given?
-
-      options[:name]  = default_committer_name  if options[:name].to_s.empty?
-      options[:email] = default_committer_email if options[:email].to_s.empty?
-      actor = Grit::Actor.new(options[:name], options[:email])
-      index.commit(options[:message], parents, actor)
     end
 
     # Creates a reverse diff for the given SHAs on the given Gollum::Page.
@@ -652,20 +545,6 @@ module Gollum
     # Returns a String of the reverse Diff to apply.
     def full_reverse_diff(sha1, sha2 = nil)
       full_reverse_diff_for(nil, sha1, sha2)
-    end
-
-    # Ensures a commit hash has all the required fields for a commit.
-    #
-    # commit - The commit Hash details:
-    #          :message - The String commit message.
-    #          :name    - The String author full name.
-    #          :email   - The String email address.
-    #
-    # Returns the commit Hash
-    def normalize_commit(commit = {})
-      commit[:name]  = default_committer_name  if commit[:name].to_s.empty?
-      commit[:email] = default_committer_email if commit[:email].to_s.empty?
-      commit
     end
 
     # Gets the default name for commits.

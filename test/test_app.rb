@@ -30,14 +30,15 @@ context "Frontend" do
   end
 
   test "edits page footer and sidebar" do
-    page_1 = @wiki.page('A')
-    foot_1 = page_1.footer
-    side_1 = page_1.sidebar
+    commits = @wiki.repo.commits('master').size
+    page_1  = @wiki.page('A')
+    foot_1  = page_1.footer
+    side_1  = page_1.sidebar
 
     post "/edit/A",
-      :footer => 'footer', :sidebar => 'sidebar',
-      :format => page_1.format, :message => 'def'
+      :footer => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
     follow_redirect!
+    assert_equal "/A", last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -53,6 +54,7 @@ context "Frontend" do
     assert_equal 'sidebar', side_2.raw_data
     assert_equal 'def',     side_2.version.message
     assert_not_equal side_1.version.sha, side_2.version.sha
+    assert_equal commits+1, @wiki.repo.commits('master').size
   end
 
   test "renames page" do
@@ -61,6 +63,7 @@ context "Frontend" do
       :rename => "C",
       :format => page_1.format, :message => 'def'
     follow_redirect!
+    assert_equal "/C", last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache

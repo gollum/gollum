@@ -44,23 +44,6 @@ context "Wiki" do
     assert_equal 4, @wiki.size
   end
 
-  test "normalizes commit hash" do
-    commit = {:message => 'abc'}
-    name  = @wiki.repo.config['user.name']
-    email = @wiki.repo.config['user.email']
-    assert_equal({:message => 'abc', :name => name, :email => email},
-      @wiki.normalize_commit(commit.dup))
-
-    commit[:name]  = 'bob'
-    commit[:email] = ''
-    assert_equal({:message => 'abc', :name => 'bob', :email => email},
-      @wiki.normalize_commit(commit.dup))
-
-    commit[:email] = 'foo@bar.com'
-    assert_equal({:message => 'abc', :name => 'bob', :email => 'foo@bar.com'},
-      @wiki.normalize_commit(commit.dup))
-  end
-
   test "text_data" do
     wiki = Gollum::Wiki.new(testpath("examples/yubiwa.git"))
     if String.instance_methods.include?(:encoding)
