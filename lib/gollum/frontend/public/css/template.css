@@ -29,15 +29,17 @@
 #template h1 {
   border-top: 4px solid #ccc;
   font-size: 32px;
-  padding: 32px 0 0;
-  margin: 22px 0 0;
+  line-height: normal;
+  padding: 10px 0 0;
+  margin: 30px 0 0;
 }
 
 #template h2 {
   border-top: 4px solid #ccc;
   font-size: 22px;
-  margin: 26px 0 0;
-  padding: 14px 0 0;
+  line-height: normal;
+  margin: 10px 0 0;
+  padding: 7px 0 0;
 }
 
 #template h3 {
