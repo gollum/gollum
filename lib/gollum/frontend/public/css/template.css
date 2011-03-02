@@ -29,8 +29,8 @@
 #template h1 {
   border-top: 4px solid #ccc;
   font-size: 32px;
-  padding: 10px 0 0;
-  margin: 12px 0 0;
+  padding: 32px 0 0;
+  margin: 22px 0 0;
 }
 
 #template h2 {
@@ -43,7 +43,7 @@
 #template h3 {
   font-size: 16px;
   line-height: 26px;
-  padding: 18px 0 0;
+  padding: 26px 0 0;
 }
 
 #template h4 {
@@ -73,10 +73,6 @@
   font-variant: italic;
 }
 
-#template h1:first-child {
-  border: 0;
-}
-
 #template hr {
   background-color: #ccc;
   color: #ccc;
@@ -84,6 +80,14 @@
   margin: 20px 0;
   padding: 0;
 }
+
+  /* Border Reset for headers with horizontal rules */ 
+  #template h1:first-child, 
+  #template h1:first-child {
+    border: 0;
+    margin: 12px 0 0;
+    padding: 10px 0 0;
+  }
 
 
 /* Lists, Blockquotes & Such */
@@ -98,6 +102,25 @@
   #template ul li ul, 
   #template ol li ol {
     padding: 0 0 0 14px;
+  }
+
+#template dl {
+  margin: 0;
+  padding: 20px 0 0;
+}
+
+  #template dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: normal;
+    margin: 0;
+    padding: 14px 0 0;
+  }
+
+  #template dl dd {
+    font-size: 13px;
+    margin: 0;
+    padding: 3px 0 0;
   }
 
 
@@ -132,6 +155,11 @@
   border-radius: 3px;
 }
 
+#template pre code {
+  background-color: transparent;
+  border: none;
+}
+
 #template .highlight { background: #ffffff; };
 #template .highlight .c { color: #999988; font-style: italic };
 #template .highlight .err { color: #a61717; background-color: #e3d2d2 };
@@ -153,4 +181,7 @@
 #template .highlight .gp { color: #555555 };
 #template .highlight .gs { font-weight: bold };
 #template .highlight .gu { color: #aaaaaa };
-#template .highlight .gt { color: #aa0000 }; 
+#template .highlight .gt { color: #aa0000 };
+
+/* Something goes here */
+
