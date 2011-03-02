@@ -102,7 +102,11 @@
 
   /* Nested Lists */
   #template ul li ul, 
-  #template ol li ol {
+  #template ol li ol,
+  #template ul li ol,
+  #template ol li ul,
+  #template ul ul, 
+  #template ol ol {
     padding: 0 0 0 14px;
   }
 
