@@ -120,8 +120,12 @@
     font-weight: bold;
     line-height: normal;
     margin: 0;
-    padding: 14px 0 0;
+    padding: 20px 0 0;
   }
+
+    #template dl dt:first-child {
+      padding: 0;
+    }
 
   #template dl dd {
     font-size: 13px;
@@ -187,7 +191,6 @@
     display: block;
     float: left;
   }
-
 
   #template span.frame span span {
     clear: both;
@@ -259,7 +262,7 @@
 
 
 /* Code */
-#template code {
+#template code, #template tt {
   background-color: #f8f8f8;
   border: 1px solid #dedede;
   font-size: 13px;
@@ -283,7 +286,7 @@
   border-radius: 3px;
 }
 
-#template pre code {
+#template pre code, #template pre tt {
   background-color: transparent;
   border: none;
 }
