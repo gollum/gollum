@@ -196,6 +196,67 @@
     padding: 5px 0 0;
   }
 
+#template span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+  #template span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center;
+  }
+
+  #template span.align-center span img {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+#template span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+  #template span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right;
+  }
+
+  #template span.align-right span img {
+    margin: 0;
+    text-align: right;
+  }
+
+#template span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left;
+}
+
+  #template span.float-left span {
+    margin: 13px 0 0;
+  }
+
+#template span.float-right {
+  display: block; 
+  margin-left: 13px;
+  overflow: hidden;
+  float: right;
+}
+
+  #template span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right;
+  }
+
 
 /* Code */
 #template code {
