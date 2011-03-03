@@ -38,7 +38,7 @@
   border-top: 4px solid #ccc;
   font-size: 22px;
   line-height: normal;
-  margin: 10px 0 0;
+  margin: 22px 0 0;
   padding: 7px 0 0;
 }
 
@@ -84,8 +84,8 @@
 }
 
   /* Border Reset for headers with horizontal rules */ 
-  #template h1:first-child, 
-  #template h1:first-child {
+  #template > h2:first-child, 
+  #template > h1:first-child {
     border: 0;
     margin: 12px 0 0;
     padding: 10px 0 0;
@@ -129,11 +129,72 @@
     padding: 3px 0 0;
   }
 
-
 /* Tables */
 #template table {
+  border-collapse: collapse;
   margin: 20px 0 0;
+  padding: 0;
 }
+
+#template table * tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+  #template table * tr:nth-child(2n) {
+    background-color: #f8f8f8;
+  }
+
+  #template table * tr th,
+  #template table * tr td {
+    border: 1px solid #ccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px; 
+  }
+
+
+/* Pygments-Processed Code Blocks */
+
+
+
+/* Images & Stuff */
+#template img {
+  max-width: 100%;
+}
+
+/* Gollum Image Tags */
+
+/* Framed */
+#template span.frame {
+  display: block;
+  overflow: hidden;
+}
+
+  #template span.frame > span {
+    border: 1px solid #ddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto;
+  }
+
+  #template span.frame span img {
+    display: block;
+    float: left;
+  }
+
+
+  #template span.frame span span {
+    clear: both;
+    color: #333;
+    display: block;
+    padding: 5px 0 0;
+  }
 
 
 /* Code */
@@ -188,6 +249,4 @@
 #template .highlight .gs { font-weight: bold };
 #template .highlight .gu { color: #aaaaaa };
 #template .highlight .gt { color: #aa0000 };
-
-/* Something goes here */
 

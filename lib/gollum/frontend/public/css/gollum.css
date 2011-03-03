@@ -67,6 +67,7 @@ a:hover, a:visited {
 
   /* @section body */
   #wiki-body {
+    display: block;
     float: left;
     margin-right: 3%;
     width: 70%;
