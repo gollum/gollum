@@ -286,26 +286,26 @@
   border: none;
 }
 
-#template .highlight { background: #ffffff; };
-#template .highlight .c { color: #999988; font-style: italic };
-#template .highlight .err { color: #a61717; background-color: #e3d2d2 };
-#template .highlight .k { font-weight: bold };
-#template .highlight .o { font-weight: bold };
-#template .highlight .cm { color: #999988; font-style: italic };
-#template .highlight .cp { color: #999999; font-weight: bold };
-#template .highlight .c1 { color: #999988; font-style: italic };
-#template .highlight .cs { color: #999999; font-weight: bold; font-style: italic };
-#template .highlight .gd { color: #000000; background-color: #ffdddd };
-#template .highlight .gd .x { color: #000000; background-color: #ffaaaa };
-#template .highlight .ge { font-style: italic };
-#template .highlight .gr { color: #aa0000 };
-#template .highlight .gh { color: #999999 };
-#template .highlight .gi { color: #000000; background-color: #ddffdd };
-#template .highlight .gi .x { color: #000000; background-color: #aaffaa };
-#template .highlight .gc { color: #999; background-color: #EAF2F5 };
-#template .highlight .go { color: #888888 };
-#template .highlight .gp { color: #555555 };
-#template .highlight .gs { font-weight: bold };
-#template .highlight .gu { color: #aaaaaa };
-#template .highlight .gt { color: #aa0000 };
+#template .highlight { background: #ffffff; }
+#template .highlight .c { color: #999988; font-style: italic }
+#template .highlight .err { color: #a61717; background-color: #e3d2d2 }
+#template .highlight .k { font-weight: bold }
+#template .highlight .o { font-weight: bold }
+#template .highlight .cm { color: #999988; font-style: italic }
+#template .highlight .cp { color: #999999; font-weight: bold }
+#template .highlight .c1 { color: #999988; font-style: italic }
+#template .highlight .cs { color: #999999; font-weight: bold; font-style: italic }
+#template .highlight .gd { color: #000000; background-color: #ffdddd }
+#template .highlight .gd .x { color: #000000; background-color: #ffaaaa }
+#template .highlight .ge { font-style: italic }
+#template .highlight .gr { color: #aa0000 }
+#template .highlight .gh { color: #999999 }
+#template .highlight .gi { color: #000000; background-color: #ddffdd }
+#template .highlight .gi .x { color: #000000; background-color: #aaffaa }
+#template .highlight .gc { color: #999; background-color: #EAF2F5 }
+#template .highlight .go { color: #888888 }
+#template .highlight .gp { color: #555555 }
+#template .highlight .gs { font-weight: bold }
+#template .highlight .gu { color: #aaaaaa }
+#template .highlight .gt { color: #aa0000 }
 
