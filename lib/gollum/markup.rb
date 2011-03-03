@@ -391,8 +391,8 @@ module Gollum
 
           formatted = begin
             lang && Gollum::Albino.colorize(code, lang)
-          rescue ::Albino::ShellArgumentError, ::Albino::Process::TimeoutExceeded,
-              ::Albino::Process::MaximumOutputExceeded
+          rescue ::Albino::ShellArgumentError, ::POSIX::Spawn::TimeoutExceeded,
+              ::POSIX::Spawn::MaximumOutputExceeded
           end
           formatted ||= "<pre><code>#{CGI.escapeHTML(code)}</code></pre>"
           update_cache(:code, id, formatted)
