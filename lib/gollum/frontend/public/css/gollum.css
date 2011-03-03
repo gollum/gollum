@@ -70,32 +70,40 @@ a:hover, a:visited {
     display: block;
     float: left;
     margin-right: 3%;
-    width: 70%;
+    width: 100%;
+  }
+
+  .has-rightbar #wiki-body {
+    width: 68%;
   }
   
   /* @section rightbar */
   #wiki-rightbar {
-    float: right;
-    width: 27%;
-  }
-  
-  #wiki-rightbar #nav {
     background-color: #f7f7f7;
     border: 1px solid #ddd;
-    margin-top: 1.5em;
-    padding: 1em;
+    float: right;
+    padding: 7px;
+    width: 25%;
     
     border-radius: 0.5em;
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
   }
   
-    #wiki-rightbar #nav {
-      font-size: 1.2em;
-      line-height: 1.5em;
+    #wiki-rightbar {
+      font-size: 1.0em;
+      line-height: 1.3em;
     }
     
-    #wiki-rightbar #nav p.parent {
+    #wiki-rightbar p {
+      margin: 13px 0 0;
+    }
+
+      #wiki-rightbar > p:first-child {
+        margin-top: 0;
+      }
+
+    #wiki-rightbar p.parent {
       border-bottom: 1px solid #bbb;
       font-weight: bold;
       margin: 0 0 0.5em 0;
@@ -104,12 +112,12 @@ a:hover, a:visited {
     }
     
     /* Back arrow */
-    #wiki-rightbar #nav p.parent:before {
+    #wiki-rightbar p.parent:before {
       color: #666;
       content: "← ";
     }
     
-    #wiki-rightbar #nav h3 {
+    #wiki-rightbar h3 {
       font-size: 1.2em;
       color: #333;
       margin: 1.2em 0 0;
@@ -117,23 +125,19 @@ a:hover, a:visited {
       text-shadow: 0 1px 0 #fff;
     }
     
-    #wiki-rightbar #nav ul {
+    #wiki-rightbar ul {
       margin: 0.5em 0 1em;
       padding: 0;
     }
     
-    #wiki-rightbar #nav ul li {
+    #wiki-rightbar ul li {
       color: #bbb;
-      list-style-position: outside;
-      list-style-type: none;
       margin: 0 0 0 1em;
       padding: 0;
       line-height: 1.75em;
-    }
-    
-    #wiki-rightbar #nav ul li:hover {
-      list-style-type: square;
-    }
+      list-style-position: inside;
+      list-style-type: round;
+    } 
     
     #wiki-rightbar #nav ul li a {
       font-weight: bold;
