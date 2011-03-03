@@ -8,6 +8,11 @@
   margin-bottom: 40px;
 }
 
+/* Link Colors */
+a.absent {
+  color: #c00;
+}
+
 /* Primary Body Copy */
 #template p {
   margin: 16px 0 0;
