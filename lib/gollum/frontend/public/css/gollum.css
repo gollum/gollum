@@ -81,6 +81,7 @@ a:hover, a:visited {
   #wiki-rightbar {
     background-color: #f7f7f7;
     border: 1px solid #ddd;
+    font-size: 13px;
     float: right;
     padding: 7px;
     width: 25%;
@@ -90,11 +91,6 @@ a:hover, a:visited {
     -webkit-border-radius: 0.5em;
   }
   
-    #wiki-rightbar {
-      font-size: 1.0em;
-      line-height: 1.3em;
-    }
-    
     #wiki-rightbar p {
       margin: 13px 0 0;
     }
@@ -143,11 +139,6 @@ a:hover, a:visited {
       font-weight: bold;
       text-shadow: 0 1px 0 #fff;
     }
-    
-  #wiki-rightbar p {
-    font-size: 1.2em;
-    line-height: 1.6em;
-  }
     
   /* @section footer */
   #wiki-footer {
