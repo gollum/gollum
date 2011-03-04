@@ -380,26 +380,39 @@ module Gollum
     #
     # Returns the marked up String data.
     def process_code(data)
+      return data if data.nil? || data.size.zero? || @codemap.size.zero?
+
+      blocks    = []
       @codemap.each do |id, spec|
-        formatted = spec[:output] || begin
-          code = spec[:code]
-          lang = spec[:lang]
+        next if spec[:output] # cached
 
-          if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
-            code.gsub!(/^(  |\t)/m, '')
-          end
-
-          formatted = begin
-            lang && Gollum::Albino.colorize(code, lang)
-          rescue ::Albino::ShellArgumentError, ::POSIX::Spawn::TimeoutExceeded,
-              ::POSIX::Spawn::MaximumOutputExceeded
-          end
-          formatted ||= "<pre><code>#{CGI.escapeHTML(code)}</code></pre>"
-          update_cache(:code, id, formatted)
-          formatted
+        code = spec[:code]
+        if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
+          code.gsub!(/^(  |\t)/m, '')
         end
-        data.gsub!(id, formatted)
+
+        blocks << [spec[:lang], code]
       end
+
+      highlighted = begin
+        blocks.size.zero? ? [] : Gollum::Albino.colorize(blocks)
+      rescue ::Albino::ShellArgumentError, ::POSIX::Spawn::TimeoutExceeded,
+               ::POSIX::Spawn::MaximumOutputExceeded
+        []
+      end
+
+      @codemap.each do |id, spec|
+        body = spec[:output] || begin
+          if (body = highlighted.shift.to_s).size > 0
+            update_cache(:code, id, body)
+            body
+          else
+            "<pre><code>#{CGI.escapeHTML(spec[:code])}</code></pre>"
+          end
+        end
+        data.gsub!(id, body)
+      end
+
       data
     end
 

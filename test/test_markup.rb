@@ -422,18 +422,6 @@ context "Markup" do
     compare(content, output)
   end
 
-  test "code block with invalid lang" do
-    content = "a\n\n``` ls -al;\n\tbooya\n\tboom\n```\n\nb"
-    output  = "<p>a</p>\n\n<pre><code>booya\nboom</code></pre>\n\n<p>b</p>"
-    compare(content, output)
-  end
-
-  test "code block with no lang" do
-    content = "a\n\n```\n\tls -al;\n\t<booya>\n```\n\nb"
-    output = "<p>a</p>\n\n<pre><code>ls -al;\n&lt;booya&gt;</code></pre>\n\n<p>b</p>"
-    compare(content, output)
-  end
-
   #########################################################################
   #
   # Various
