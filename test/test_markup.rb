@@ -173,7 +173,7 @@ context "Markup" do
     @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal "<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> \n</p>", output
+    assert_equal "<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>", output
   end
 
   #########################################################################
