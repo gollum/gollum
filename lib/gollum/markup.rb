@@ -396,8 +396,8 @@ module Gollum
 
       highlighted = begin
         blocks.size.zero? ? [] : Gollum::Albino.colorize(blocks)
-      rescue ::Albino::ShellArgumentError, ::POSIX::Spawn::TimeoutExceeded,
-               ::POSIX::Spawn::MaximumOutputExceeded
+      rescue ::Albino::ShellArgumentError, ::Albino::TimeoutExceeded,
+               ::Albino::MaximumOutputExceeded
         []
       end
 
