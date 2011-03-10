@@ -13,18 +13,18 @@
 </div>
 <div id="wiki-content">
   <div class="wrap{{#has_footer}} has-footer{{/has_footer}}{{#has_sidebar}} has-rightbar{{/has_sidebar}}">
-  <div id="wiki-body">
+  <div id="wiki-body" class="gollum-{{format}}-content">
     <div id="template">
       {{{content}}}
     </div>
   </div>
   {{#has_sidebar}}
-  <div id="wiki-rightbar">
+  <div id="wiki-rightbar" class="gollum-{{sidebar_format}}-content">
     {{{sidebar_content}}}
   </div>
   {{/has_sidebar}}
   {{#has_footer}}
-  <div id="wiki-footer">
+  <div id="wiki-footer" class="gollum-{{footer_format}}-content">
     <div id="footer-content">
       {{{footer_content}}}
     </div>
