@@ -23,6 +23,11 @@ The best way to install Gollum is with RubyGems:
 
     $ [sudo] gem install gollum
 
+If you're installing from source, you can use [Bundler][bundler] to pick up all the
+gems:
+
+    $ bundle install # ([more info](http://gembundler.com/bundle_install.html))
+
 In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
 to install the dependencies for the formats that you plan to use.
@@ -37,6 +42,7 @@ to install the dependencies for the formats that you plan to use.
 * [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
 * [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth`
 
+[bundler]: http://gembundler.com/
 
 ## RUNNING
 
