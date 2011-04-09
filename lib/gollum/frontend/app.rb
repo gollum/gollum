@@ -169,6 +169,13 @@ module Precious
       mustache :search
     end
 
+    get '/pages' do
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @results = wiki.pages
+      @ref = wiki.ref
+      mustache :pages
+    end
+
     get '/*' do
       show_page_or_file(params[:splat].first)
     end
