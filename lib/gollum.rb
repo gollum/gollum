@@ -7,9 +7,6 @@ require 'grit'
 require 'github/markup'
 require 'sanitize'
 
-# ruby 1.8 compatibility
-require 'gollum/ruby1.8'
-
 # internal
 require 'gollum/git_access'
 require 'gollum/committer'
