@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '1.2.0'
-  s.date              = '2011-03-31'
+  s.date              = '2011-04-15'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -697,6 +697,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/templates/history.mustache
     lib/gollum/frontend/templates/layout.mustache
     lib/gollum/frontend/templates/page.mustache
+    lib/gollum/frontend/templates/pages.mustache
     lib/gollum/frontend/templates/search.mustache
     lib/gollum/frontend/templates/searchbar.mustache
     lib/gollum/frontend/views/compare.rb
@@ -707,12 +708,12 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/views/history.rb
     lib/gollum/frontend/views/layout.rb
     lib/gollum/frontend/views/page.rb
+    lib/gollum/frontend/views/pages.rb
     lib/gollum/frontend/views/search.rb
     lib/gollum/git_access.rb
     lib/gollum/markup.rb
     lib/gollum/page.rb
     lib/gollum/pagination.rb
-    lib/gollum/ruby1.8.rb
     lib/gollum/sanitization.rb
     lib/gollum/wiki.rb
     templates/formatting.html
