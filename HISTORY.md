@@ -1,4 +1,21 @@
-# HEAD
+# 1.3.0 / 2011-04-25
+
+* Major Enhancements
+  * Listing of all Pages
+  * Support for running Gollum under a separate branch.
+* Minor Enhancements
+  * Fix a security issue with rendering Mathjax.
+
+# 1.2.0 / 2011-03-11
+
+* Major Enhancements
+  * Major HTML/CSS/JS overhaul.
+  * Add Sidebars (similar to Footers).
+  * Add commit reverts.
+* Minor Enhancements
+  * Optimization in source code highlighting, resulting in a huge
+    decrease in rendering time.
+  * Security fixes related to source code highlighting.
 
 * Major Enhancements
   * Add Page sidebars, similar to Page footers.

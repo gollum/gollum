@@ -20,7 +20,7 @@ require 'gollum/albino'
 require 'gollum/sanitization'
 
 module Gollum
-  VERSION = '1.2.0'
+  VERSION = '1.3.0'
 
   class Error < StandardError; end
 
