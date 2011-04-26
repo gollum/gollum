@@ -15,15 +15,17 @@ module Gollum
 
     attr_reader :assets,
       :layout_template,
-      :page_template
+      :page_template,
+      :dir
 
     def initialize(wiki, options = {})
       @wiki   = wiki
       @assets = %w(gollum.css template.css)
-      @layout_template = "#{DEFAULT_TEMPLATES_PATH}/layout.mustache"
-      @page_template   = "#{DEFAULT_TEMPLATES_PATH}/page.mustache"
-
       process_options(options)
+
+      @dir             ||= DEFAULT_TEMPLATES_PATH
+      @layout_template ||= "#{@dir}/layout.mustache"
+      @page_template   ||= "#{@dir}/page.mustache"
     end
 
     # Public: Publishes the wiki to the given filesystem path.
@@ -93,7 +95,7 @@ module Gollum
         asset_path = "#{destination}/#{ext}"
         FileUtils.mkdir(asset_path)
         files.each do |file|
-          file = "#{DEFAULT_TEMPLATES_PATH}/#{file}" unless file['/']
+          file = "#{@dir}/#{file}" unless file['/']
           FileUtils.cp file, "#{asset_path}/#{::File.basename(file)}"
         end
       end
@@ -123,6 +125,8 @@ module Gollum
       if page = options[:page_template]
         @page_template = ::File.expand_path(page)
       end
+
+      @dir = options[:dir]
     end
 
     DEFAULT_TEMPLATES_PATH = ::File.expand_path('../page_builder', __FILE__)
