@@ -456,8 +456,8 @@ module Gollum
     # Public: Creates and caches a PageBuilder instance for this Wiki.
     #
     # Returns a PageBuilder instance.
-    def builder
-      @builder ||= @page_builder_class.new(self)
+    def builder(options = {})
+      @page_builder_class.new(self, options)
     end
 
     # Public: Refreshes just the cached Git reference data.  This should
