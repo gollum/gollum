@@ -381,6 +381,7 @@ a#function-help:hover span { background-position: -405px -28px; }
 }
 
 #gollum-editor .expanded textarea {
+  background-color: #fff;
   border: 1px solid #ddd;
   clear: both;
   display: block;

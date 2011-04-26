@@ -74,12 +74,14 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_tex(data)
       data.gsub(/\\\[\s*(.*?)\s*\\\]/m) do
-        id = Digest::SHA1.hexdigest($1)
-        @texmap[id] = [:block, $1]
+        tag = CGI.escapeHTML($1)
+        id  = Digest::SHA1.hexdigest(tag)
+        @texmap[id] = [:block, tag]
         id
       end.gsub(/\\\(\s*(.*?)\s*\\\)/m) do
-        id = Digest::SHA1.hexdigest($1)
-        @texmap[id] = [:inline, $1]
+        tag = CGI.escapeHTML($1)
+        id  = Digest::SHA1.hexdigest(tag)
+        @texmap[id] = [:inline, tag]
         id
       end
     end
@@ -390,26 +392,39 @@ module Gollum
     #
     # Returns the marked up String data.
     def process_code(data)
+      return data if data.nil? || data.size.zero? || @codemap.size.zero?
+
+      blocks    = []
       @codemap.each do |id, spec|
-        formatted = spec[:output] || begin
-          code = spec[:code]
-          lang = spec[:lang]
+        next if spec[:output] # cached
 
-          if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
-            code.gsub!(/^(  |\t)/m, '')
-          end
-
-          formatted = begin
-            lang && Gollum::Albino.colorize(code, lang)
-          rescue ::Albino::ShellArgumentError, ::Albino::Process::TimeoutExceeded,
-              ::Albino::Process::MaximumOutputExceeded
-          end
-          formatted ||= "<pre><code>#{CGI.escapeHTML(code)}</code></pre>"
-          update_cache(:code, id, formatted)
-          formatted
+        code = spec[:code]
+        if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
+          code.gsub!(/^(  |\t)/m, '')
         end
-        data.gsub!(id, formatted)
+
+        blocks << [spec[:lang], code]
       end
+
+      highlighted = begin
+        blocks.size.zero? ? [] : Gollum::Albino.colorize(blocks)
+      rescue ::Albino::ShellArgumentError, ::Albino::TimeoutExceeded,
+               ::Albino::MaximumOutputExceeded
+        []
+      end
+
+      @codemap.each do |id, spec|
+        body = spec[:output] || begin
+          if (body = highlighted.shift.to_s).size > 0
+            update_cache(:code, id, body)
+            body
+          else
+            "<pre><code>#{CGI.escapeHTML(spec[:code])}</code></pre>"
+          end
+        end
+        data.gsub!(id, body)
+      end
+
       data
     end
 

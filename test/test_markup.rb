@@ -173,7 +173,7 @@ context "Markup" do
     @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal "<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> \n</p>", output
+    assert_equal "<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>", output
   end
 
   #########################################################################
@@ -236,6 +236,27 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     output = page.formatted_data
     assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /><a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
+  end
+
+  test "image with absolute path on a preview" do
+    @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
+    index = @wiki.repo.index
+    index.add("alpha.jpg", "hi")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.preview_page("Test", "a [[/alpha.jpg]] b", :markdown)
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> b</p>}, page.formatted_data
+  end
+
+  test "image with relative path on a preview" do
+    @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
+    index = @wiki.repo.index
+    index.add("alpha.jpg", "hi")
+    index.add("greek/alpha.jpg", "hi")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.preview_page("Test", "a [[alpha.jpg]] [[greek/alpha.jpg]] b", :markdown)
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><img src="/wiki/greek/alpha.jpg" /> b</p>}, page.formatted_data
   end
 
   test "image with alt" do
@@ -398,18 +419,6 @@ context "Markup" do
              "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
              "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
              "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
-    compare(content, output)
-  end
-
-  test "code block with invalid lang" do
-    content = "a\n\n``` ls -al;\n\tbooya\n\tboom\n```\n\nb"
-    output  = "<p>a</p>\n\n<pre><code>booya\nboom</code></pre>\n\n<p>b</p>"
-    compare(content, output)
-  end
-
-  test "code block with no lang" do
-    content = "a\n\n```\n\tls -al;\n\t<booya>\n```\n\nb"
-    output = "<p>a</p>\n\n<pre><code>ls -al;\n&lt;booya&gt;</code></pre>\n\n<p>b</p>"
     compare(content, output)
   end
 

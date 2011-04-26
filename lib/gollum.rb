@@ -7,11 +7,9 @@ require 'grit'
 require 'github/markup'
 require 'sanitize'
 
-# ruby 1.8 compatibility
-require 'gollum/ruby1.8'
-
 # internal
 require 'gollum/git_access'
+require 'gollum/committer'
 require 'gollum/pagination'
 require 'gollum/blob_entry'
 require 'gollum/wiki'
@@ -22,7 +20,7 @@ require 'gollum/albino'
 require 'gollum/sanitization'
 
 module Gollum
-  VERSION = '1.1.0'
+  VERSION = '1.3.0'
 
   class Error < StandardError; end
 

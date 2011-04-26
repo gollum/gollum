@@ -136,7 +136,7 @@ module Gollum
         Sanitize.clean(header.to_html)
       else
         Sanitize.clean(name)
-      end
+      end.strip
     end
 
     # Public: The path of the page within the repo.
@@ -199,10 +199,10 @@ module Gollum
         options[:pretty] = 'raw'
         options.delete :max_count
         options.delete :skip
-        log = @wiki.repo.git.native "log", options, "master", "--", @path
+        log = @wiki.repo.git.native "log", options, @wiki.ref, "--", @path
         Grit::Commit.list_from_string(@wiki.repo, log)
       else
-        @wiki.repo.log('master', @path, log_pagination_options(options))
+        @wiki.repo.log(@wiki.ref, @path, log_pagination_options(options))
       end
     end
 
@@ -333,9 +333,9 @@ module Gollum
     # path - The String directory path of the page file.
     #
     # Returns the populated Gollum::Page.
-    def populate(blob, path)
+    def populate(blob, path=nil)
       @blob = blob
-      @path = (path + '/' + blob.name)[1..-1]
+      @path = "#{path}/#{blob.name}"[1..-1]
       self
     end
 
