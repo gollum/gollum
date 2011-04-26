@@ -38,22 +38,9 @@ module Gollum
       @page_view = @layout_view = nil
 
       FileUtils.mkdir_p(destination)
-      @wiki.pages.each do |page|
-        page_html = Mustache.render page_view,
-          :title   => page.title,
-          :content => page.formatted_data,
-          :author  => page.version.author.name,
-          :date    => page.version.authored_date.strftime("%Y-%m-%d %H:%M:%S"),
-          :raw     => page.raw_data
-        layout_html = Mustache.render layout_view,
-          :title => page.title,
-          :yield => page_html
-        filename = "#{page.name =~ /^home$/i ? :index : @wiki.page_class.cname(page.name)}.html"
-        fullpath = ::File.join(destination, filename)
-        ::File.open fullpath, 'w' do |f|
-          f << layout_html
-        end
-      end
+
+      @wiki.pages.each { |page| publish_page(page, destination) }
+
       copy_assets_to(destination)
     ensure
       @wiki.markup_class = old_markup_class
@@ -61,6 +48,30 @@ module Gollum
 
     def inspect
       %(#<#{self.class} @wiki=#{@wiki.inspect}>)
+    end
+
+    def page_to_mustache(page)
+      {
+        :title   => page.title,
+        :content => page.formatted_data,
+        :author  => page.version.author.name,
+        :date    => page.version.authored_date.strftime("%Y-%m-%d %H:%M:%S"),
+        :raw     => page.raw_data
+      }
+    end
+
+    def publish_page(page, destination)
+      filename = "#{page.name =~ /^home$/i ? :index : @wiki.page_class.cname(page.name)}.html"
+      fullpath = ::File.join(destination, filename)
+      ::File.open fullpath, 'w' do |f|
+        f << render_page(page)
+      end
+    end
+
+    def render_page(page)
+      data = page_to_mustache(page)
+      page_html = Mustache.render(page_view, data)
+      Mustache.render(layout_view, data.update(:yield => page_html))
     end
 
     def layout_view
@@ -73,7 +84,7 @@ module Gollum
 
     # Copies the default CSS files to the given destination.
     #
-    # destination - Optional String path to the directory that the files 
+    # destination - Optional String path to the directory that the files
     #               should be written.
     #
     # Returns nothing.
