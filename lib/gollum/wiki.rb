@@ -62,6 +62,17 @@ module Gollum
           end
       end
 
+      # Gets the page builder class used by all instances of this Wiki.
+      # Default: Gollum::PageBuilder
+      def page_builder_class
+        @page_builder_class ||
+          if superclass.respond_to?(:page_builder_class)
+            superclass.page_builder_class
+          else
+            Gollum::PageBuilder
+          end
+      end
+
       # Gets the default sanitization options for current pages used by
       # instances of this Wiki.
       def sanitization
@@ -124,6 +135,7 @@ module Gollum
         options[:access] = path
         path             = path.path
       end
+      @page_builder_class = options[:page_builder_class] || self.class.page_builder_class
       @path          = path
       @page_file_dir = options[:page_file_dir]
       @access        = options[:access]       || GitAccess.new(path, @page_file_dir)
@@ -445,7 +457,7 @@ module Gollum
     #
     # Returns a PageBuilder instance.
     def builder
-      @builder ||= PageBuilder.new(self)
+      @builder ||= @page_builder_class.new(self)
     end
 
     # Public: Refreshes just the cached Git reference data.  This should
