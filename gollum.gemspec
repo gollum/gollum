@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.2.0'
-  s.date              = '2011-03-31'
+  s.version           = '1.2.1'
+  s.date              = '2011-04-25'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -712,7 +712,6 @@ Gem::Specification.new do |s|
     lib/gollum/markup.rb
     lib/gollum/page.rb
     lib/gollum/pagination.rb
-    lib/gollum/ruby1.8.rb
     lib/gollum/sanitization.rb
     lib/gollum/wiki.rb
     templates/formatting.html
