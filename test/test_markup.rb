@@ -467,6 +467,20 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
+  test "id with prefix ok" do
+    content = "h2(example#wiki-foo). xxxx"
+    output = %(<h2 class="example" id="wiki-foo">xxxx</h2>)
+    compare(content, output, :textile)
+  end
+
+  test "id prefix added" do
+    content = "h2(#foo). xxxx[1]\n\nfn1.footnote"
+    output = "<h2 id=\"wiki-foo\">xxxx" +
+             "<sup class=\"footnote\"><a href=\"#wiki-fn1\">1</a></sup></h2>" +
+             "\n<p class=\"footnote\" id=\"wiki-fn1\"><sup>1</sup> footnote</p>"
+    compare(content, output, :textile)
+  end
+
   #########################################################################
   #
   # TeX
