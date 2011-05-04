@@ -47,6 +47,25 @@ module Gollum
       'img' => {'src'  => ['http', 'https', :relative]}
     }.freeze
 
+    # Default transformers to force @id attributes with 'wiki-' prefix
+
+    TRANSFORMERS = [
+      lambda do |env|
+        node      = env[:node]
+        return if env[:is_whitelisted] || !node.element? || !node['id'] 
+        prefix = env[:config][:id_prefix]
+        node['id'] = node['id'].gsub(/\A(#{prefix})?/, prefix)
+
+        {:node_whitelist => [node]}
+      end,
+      lambda do |env|
+        node = env[:node]
+        return unless node['href']
+        prefix = env[:config][:id_prefix]
+        node['href'] = node['href'].gsub(/\A\#(#{prefix})?/, '#'+prefix)
+      end
+    ].freeze
+
     # Gets an Array of whitelisted HTML elements.  Default: ELEMENTS.
     attr_reader :elements
 
@@ -57,6 +76,13 @@ module Gollum
     # Gets a Hash describing which URI protocols are allowed in HTML 
     # attributes.  Default: PROTOCOLS
     attr_reader :protocols
+
+    # Gets a Hash describing which URI protocols are allowed in HTML 
+    # attributes.  Default: TRANSFORMERS
+    attr_reader :transformers
+
+    # Gets a String prefix which is added to ID attributes. Default: 'wiki-'
+    attr_reader :id_prefix
 
     # Gets a Hash describing HTML attributes that Sanitize should add.  
     # Default: {}
@@ -70,8 +96,10 @@ module Gollum
       @elements       = ELEMENTS
       @attributes     = ATTRIBUTES
       @protocols      = PROTOCOLS
+      @transformers   = TRANSFORMERS
       @add_attributes = {}
       @allow_comments = false
+      @id_prefix      = 'wiki-'
       yield self if block_given?
     end
 
@@ -100,7 +128,9 @@ module Gollum
         :attributes     => attributes,
         :protocols      => protocols,
         :add_attributes => add_attributes,
-        :allow_comments => allow_comments?
+        :allow_comments => allow_comments?,
+        :transformers   => transformers,
+        :id_prefix      => id_prefix
       }
     end
 
