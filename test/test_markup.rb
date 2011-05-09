@@ -414,6 +414,12 @@ context "Markup" do
     compare(content, output, 'org')
   end
 
+  test "org mode file: relative links" do
+    content = "a [[file:a/b/d.org][Google]] b"
+    output = "<p class=\"title\">a <a class=\"internal absent\" href=\"/d\">Google</a> b</p>"
+    compare(content, output, 'org')
+  end
+
   #########################################################################
   #
   # TeX

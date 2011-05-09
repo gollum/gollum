@@ -120,7 +120,24 @@ module Gollum
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
         elsif $2.include?('][')
-          $&
+          # flatten relative file names to single namespace
+          if $2[0..4] == 'file:' and $2[5]!="/"
+            # capture regex parts to prevent losing them in split
+            pre = $1
+            post = $3
+            # extract parts from the org-mode link
+            parts = $2.split('][')
+            # remove the 'file:' prefix
+            parts[0][0..4] = ""
+            # convert into gollum syntax
+            link = "#{parts[1]}|#{parts[0].split('/').last.sub(/\.org/,'').sub(/::.*/,'')}"
+            id = Digest::SHA1.hexdigest(link)
+            @tagmap[id] = link
+            "#{pre}#{id}#{post}"
+          else
+            # preserve the link for processing by org-mode parser
+            $&
+          end
         else
           id = Digest::SHA1.hexdigest($2)
           @tagmap[id] = $2
