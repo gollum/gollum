@@ -186,13 +186,22 @@ module Precious
         @page = page
         @name = name
         @content = page.formatted_data
-        mustache :page
+                
+        if settings.wiki_options[:readonly]
+          mustache :page_readonly
+        else
+          mustache :page
+        end
       elsif file = wiki.file(name)
         content_type file.mime_type
         file.raw_data
       else
-        @name = name
-        mustache :create
+        if settings.wiki_options[:readonly]
+          mustache :create_readonly
+        else
+        	 @name = name
+          mustache :create
+        end
       end
     end
 

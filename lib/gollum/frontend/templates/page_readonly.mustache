@@ -1,0 +1,39 @@
+<div id="wiki-wrapper" class="page">
+<div id="head">
+  <h1>{{title}}</h1>
+  <ul class="actions">
+    <li class="minibutton"><a href="/pages"
+      class="action-all-pages">All Pages</a></li>
+    <li class="minibutton"><a href="/history/{{escaped_name}}"
+       class="action-page-history">Page History</a></li>
+  </ul>
+  {{>searchbar}}
+</div>
+<div id="wiki-content">
+  <div class="wrap{{#has_footer}} has-footer{{/has_footer}}{{#has_sidebar}} has-rightbar{{/has_sidebar}}">
+  <div id="wiki-body" class="gollum-{{format}}-content">
+    <div id="template">
+      {{{content}}}
+    </div>
+  </div>
+  {{#has_sidebar}}
+  <div id="wiki-rightbar" class="gollum-{{sidebar_format}}-content">
+    {{{sidebar_content}}}
+  </div>
+  {{/has_sidebar}}
+  {{#has_footer}}
+  <div id="wiki-footer" class="gollum-{{footer_format}}-content">
+    <div id="footer-content">
+      {{{footer_content}}}
+    </div>
+  </div>
+  {{/has_footer}}
+  </div>
+
+</div>
+<div id="footer">
+  <p id="last-edit">Last edited by <b>{{author}}</b>, {{date}}</p>
+</div>
+</div>
+
+<script type="text/javascript" src="/javascript/MathJax/MathJax.js"></script>

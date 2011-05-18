@@ -19,7 +19,7 @@ require 'gollum'
 
 exec = {}
 options = { 'port' => 4567, 'bind' => '0.0.0.0' }
-wiki_options = {}
+wiki_options = { :readonly => false }
 
 opts = OptionParser.new do |opts|
   opts.banner = help
@@ -30,6 +30,11 @@ opts = OptionParser.new do |opts|
 
   opts.on("--host [HOST]", "Hostname or IP address to listen on (default 0.0.0.0).") do |host|
     options['bind'] = host
+  end
+
+  opts.on("--readonly", "Start gollum as a read only server") do
+    puts "Starting Gollum in readonly mode"
+    wiki_options[:readonly] = true;
   end
 
   opts.on("--version", "Display current version.") do
