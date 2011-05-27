@@ -106,10 +106,11 @@ module Precious
     end
 
     post '/preview' do
-      wiki     = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @name    = "Preview"
-      @page    = wiki.preview_page(@name, params[:content], params[:format])
-      @content = @page.formatted_data
+      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @name     = "Preview"
+      @page     = wiki.preview_page(@name, params[:content], params[:format])
+      @content  = @page.formatted_data
+      @editable = false
       mustache :page
     end
 
@@ -155,6 +156,7 @@ module Precious
         @page = page
         @name = name
         @content = page.formatted_data
+        @editable = true
         mustache :page
       else
         halt 404
@@ -186,6 +188,7 @@ module Precious
         @page = page
         @name = name
         @content = page.formatted_data
+        @editable = true
         mustache :page
       elsif file = wiki.file(name)
         content_type file.mime_type
