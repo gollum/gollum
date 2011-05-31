@@ -20,7 +20,10 @@ module Gollum
 
       # Sets the default email for commits.
       attr_accessor :default_committer_email
-
+      
+      # Array of chars to substitute whitespace for when trying to locate file in git repo.
+      attr_accessor :default_ws_subs
+      
       # Sets sanitization options. Set to false to deactivate
       # sanitization altogether.
       attr_writer :sanitization
@@ -86,6 +89,8 @@ module Gollum
     self.default_ref = 'master'
     self.default_committer_name  = 'Anonymous'
     self.default_committer_email = 'anon@anon.com'
+    
+    self.default_ws_subs = ['_','-']
 
     # The String base path to prefix to internal links. For example, when set
     # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
@@ -103,6 +108,9 @@ module Gollum
 
     # Gets the String directory in which all page files reside.
     attr_reader :page_file_dir
+    
+    # Gets the Array of chars to sub for ws in filenames.
+    attr_reader :ws_subs
 
     # Public: Initialize a new Gollum Repo.
     #
@@ -117,6 +125,7 @@ module Gollum
     #           :sanitization  - An instance of Sanitization.
     #           :page_file_dir - String the directory in which all page files reside
     #           :ref - String the repository ref to retrieve pages from
+    #           :ws_subs       - Array of chars to sub for ws in filenames.
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -134,6 +143,8 @@ module Gollum
       @repo          = @access.repo
       @ref           = options[:ref] || self.class.default_ref
       @sanitization  = options[:sanitization] || self.class.sanitization
+      @ws_subs       = options[:ws_subs] ||
+        self.class.default_ws_subs
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
     end

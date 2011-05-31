@@ -237,17 +237,22 @@ module Gollum
 
     # Convert a human page name into a canonical page name.
     #
-    # name - The String human page name.
+    # name           - The String human page name.
+    # char_white_sub - Substitution for whitespace
+    # char_other_sub - Substitution for other special chars
     #
     # Examples
     #
     #   Page.cname("Bilbo Baggins")
     #   # => 'Bilbo-Baggins'
     #
+    #   Page.cname("Bilbo Baggins",'_')
+    #   # => 'Bilbo_Baggins'
+    #
     # Returns the String canonical name.
-    def self.cname(name)
-      name.respond_to?(:gsub)      ?
-        name.gsub(%r{[ /<>]}, '-') :
+    def self.cname(name, char_white_sub = '-', char_other_sub = '-')
+      name.respond_to?(:gsub) ?
+        name.gsub(%r{\s},char_white_sub).gsub(%r{[/<>+]}, char_other_sub) :
         ''
     end
 
@@ -361,10 +366,11 @@ module Gollum
     # Returns a Boolean.
     def page_match(name, filename)
       if match = self.class.valid_filename?(filename)
-        Page.cname(name).downcase == Page.cname(match).downcase
-      else
-        false
+        @wiki.ws_subs.each do |sub|
+          return true if Page.cname(name).downcase == Page.cname(match, sub).downcase
+        end
       end
+      false
     end
 
     # Loads a sub page.  Sub page nanes (footers) are prefixed with
