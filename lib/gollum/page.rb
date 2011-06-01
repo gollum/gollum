@@ -76,11 +76,20 @@ module Gollum
     end
 
     # Reusable filter to turn a filename (without path) into a canonical name.
-    # Strips extension, converts spaces to dashes.
+    # Strips extension, converts dashes to spaces.
     #
     # Returns the filtered String.
     def self.canonicalize_filename(filename)
-      filename.split('.')[0..-2].join('.').gsub('-', ' ')
+      strip_filename(filename).gsub('-', ' ')
+    end
+
+    # Reusable filter to strip extension and path from filename
+    #
+    # filename - The string path or filename to strip
+    #
+    # Returns the stripped String. 
+    def self.strip_filename(filename)
+      ::File.basename(filename, ::File.extname(filename))
     end
 
     # Public: Initialize a page.
@@ -98,6 +107,13 @@ module Gollum
     # Returns the String name.
     def filename
       @blob && @blob.name
+    end
+
+    # Public: The on-disk filename of the page with extension stripped.
+    #
+    # Returns the String name.
+    def filename_stripped
+      self.class.strip_filename(filename)
     end
 
     # Public: The canonical page name without extension, and dashes converted

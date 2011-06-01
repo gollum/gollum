@@ -73,7 +73,7 @@ module Gollum
     #
     # dir    - The String subdirectory of the Gollum::Page without any
     #          prefix or suffix slashes (e.g. "foo/bar").
-    # name   - The String Gollum::Page name.
+    # name   - The String Gollum::Page filename_stripped.
     # format - The Symbol Gollum::Page format.
     # data   - The String wiki data to store in the tree map.
     # allow_same_ext - A Boolean determining if the tree map allows the same
@@ -111,7 +111,8 @@ module Gollum
     # is a working directory present.
     #
     # dir    - The String directory in which the file lives.
-    # name   - The String name of the page (may be in human format).
+    # name   - The String name of the page or the stripped filename
+    #          (should be pre-canonicalized if required).
     # format - The Symbol format of the page.
     #
     # Returns nothing.
