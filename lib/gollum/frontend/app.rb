@@ -30,10 +30,12 @@ module Precious
 
     # Sinatra error handling
     configure :development, :staging do
-      set :raise_errors, false
-      set :show_exceptions, true
-      set :dump_errors, true
-      set :clean_trace, false
+      enable :show_exceptions, :dump_errors
+      disable :raise_errors, :clean_trace
+    end
+
+    configure :test do
+      enable :logging, :raise_errors, :dump_errors
     end
 
     get '/' do
@@ -42,7 +44,7 @@ module Precious
 
     get '/edit/*' do
       @name = params[:splat].first
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
         @page = page
         @content = page.raw_data
@@ -53,20 +55,24 @@ module Precious
     end
 
     post '/edit/*' do
-      name   = params[:splat].first
-      wiki   = Gollum::Wiki.new(settings.gollum_path)
-      page   = wiki.page(name)
-      format = params[:format].intern
-      name   = params[:rename] if params[:rename]
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      page = wiki.page(params[:splat].first)
+      name = params[:rename] || page.name
+      committer = Gollum::Committer.new(wiki, commit_message)
+      commit    = {:committer => committer}
 
-      wiki.update_page(page, name, format, params[:content], commit_message)
+      update_wiki_page(wiki, page, params[:content], commit, name,
+        params[:format])
+      update_wiki_page(wiki, page.footer,  params[:footer],  commit) if params[:footer]
+      update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
+      committer.commit
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
 
-    post '/create/*' do
+    post '/create' do
       name = params[:page]
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
 
       format = params[:format].intern
 
@@ -79,16 +85,37 @@ module Precious
       end
     end
 
+    post '/revert/:page/*' do
+      wiki  = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @name = params[:page]
+      @page = wiki.page(@name)
+      shas  = params[:splat].first.split("/")
+      sha1  = shas.shift
+      sha2  = shas.shift
+
+      if wiki.revert_page(@page, sha1, sha2, commit_message)
+        redirect "/#{CGI.escape(@name)}"
+      else
+        sha2, sha1 = sha1, "#{sha1}^" if !sha2
+        @versions = [sha1, sha2]
+        diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+        @diff     = diffs.first
+        @message  = "The patch does not apply."
+        mustache :compare
+      end
+    end
+
     post '/preview' do
-      format = params['wiki_format']
-      data = params['text']
-      wiki = Gollum::Wiki.new(settings.gollum_path)
-      wiki.preview_page("Preview", data, format).formatted_data
+      wiki     = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @name    = "Preview"
+      @page    = wiki.preview_page(@name, params[:content], params[:format])
+      @content = @page.formatted_data
+      mustache :page
     end
 
     get '/history/:name' do
       @name     = params[:name]
-      wiki      = Gollum::Wiki.new(settings.gollum_path)
+      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @page     = wiki.page(@name)
       @page_num = [params[:page].to_i, 1].max
       @versions = @page.versions :page => @page_num
@@ -110,16 +137,20 @@ module Precious
     get '/compare/:name/:version_list' do
       @name     = params[:name]
       @versions = params[:version_list].split(/\.{2,3}/)
-      wiki      = Gollum::Wiki.new(settings.gollum_path)
+      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @page     = wiki.page(@name)
       diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
       @diff     = diffs.first
       mustache :compare
     end
 
+    get %r{^/(javascript|css|images)} do
+      halt 404
+    end
+
     get %r{/(.+?)/([0-9a-f]{40})} do
       name = params[:captures][0]
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(name, params[:captures][1])
         @page = page
         @name = name
@@ -132,9 +163,17 @@ module Precious
 
     get '/search' do
       @query = params[:q]
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @results = wiki.search @query
+      @name = @query
       mustache :search
+    end
+
+    get '/pages' do
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @results = wiki.pages
+      @ref = wiki.ref
+      mustache :pages
     end
 
     get '/*' do
@@ -142,7 +181,7 @@ module Precious
     end
 
     def show_page_or_file(name)
-      wiki = Gollum::Wiki.new(settings.gollum_path)
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(name)
         @page = page
         @name = name
@@ -155,6 +194,15 @@ module Precious
         @name = name
         mustache :create
       end
+    end
+
+    def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
+      return if !page ||  
+        ((!content || page.raw_data == content) && page.format == format)
+      name    ||= page.name
+      format    = (format || page.format).to_sym
+      content ||= page.raw_data
+      wiki.update_page(page, name, format, content.to_s, commit_message)
     end
 
     def commit_message

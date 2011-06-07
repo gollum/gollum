@@ -1,3 +1,5 @@
 coverage
 pkg
 .DS_Store
+.bundle
+Gemfile.lock

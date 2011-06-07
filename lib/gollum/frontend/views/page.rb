@@ -20,18 +20,29 @@ module Precious
       end
 
       def has_footer
-        @footer ||= @page.footer
-        !@footer.nil?
+        @footer = (@page.footer || false) if @footer.nil?
+        !!@footer
       end
 
       def footer_content
-        @footer ||= @page.footer
-        @footer.formatted_data
+        has_footer && @footer.formatted_data
       end
 
       def footer_format
-        @footer ||= @page.footer
-        @footer.format.to_s
+        has_footer && @footer.format.to_s
+      end
+
+      def has_sidebar
+        @sidebar = (@page.sidebar || false) if @sidebar.nil?
+        !!@sidebar
+      end
+
+      def sidebar_content
+        has_sidebar && @sidebar.formatted_data
+      end
+
+      def sidebar_format
+        has_sidebar && @sidebar.format.to_s
       end
     end
   end

@@ -1,37 +1,60 @@
-<div class="guide">
-  <div class="main">
-    <div class="actions">
-      <a href="/{{escaped_name}}">&laquo; Back</a>
-    </div>
-    <h1>{{title}}</h1>
-    <form id="history" method="post" action="/compare/{{escaped_name}}">
-      <table class="commits" cellpadding="0" cellspacing="0">
-        <tr>
-          <th colspan="5">
-            Select any two versions to <input type="submit" value="Compare" />
-          </th>
-        </tr>
-        {{#versions}}
-          <tr class="commit">
-            <td class="checkbox">
-              <input name="versions[]" type="checkbox" value="{{id}}" />
-            </td>
-            <td class="sha">
-              <a href="/{{escaped_name}}/{{id}}">{{id7}}</a>
-            </td>
-            <td nowrap class="author">
-              <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=16" alt="Gravatar" />
-              {{author}}
-            </td>
-            <td class="message">{{message}}</td>
-            <td nowrap class="date">{{date}}</td>
-          </tr>
-        {{/versions}}
-      </table>
-      <div class="pagination">
-        {{{previous_link}}}
-        {{{next_link}}}
-      </div>
-    </form>
-  </div>
+<div id="wiki-wrapper" class="history">
+<div id="head">
+  <h1>History for <strong>{{title}}</strong></h1>
+  <ul class="actions">
+    <li class="minibutton"><a href="/{{escaped_name}}"
+       class="action-view-page">View Page</a></li>
+    <li class="minibutton"><a href="/edit/{{escaped_name}}"
+       class="action-edit-page">Edit Page</a></li>
+  </ul>
+  {{>searchbar}}
+</div>
+<div id="wiki-history">
+  
+  <ul class="actions">
+    <li class="minibutton"><a href="javascript:void(0);"
+       class="action-compare-revision">Compare Revisions</a></li>
+  </ul>
+
+  <form name="compare-versions" id="version-form" method="post"
+   action="/compare/{{escaped_name}}">
+  <fieldset>
+  <table>
+    <tbody>
+      
+      {{#versions}}
+      <tr>
+        <td class="checkbox">
+          <input type="checkbox" name="versions[]" value="{{id}}">
+        </td>
+        <td class="author">
+          <a href="javascript:void(0)">
+            <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=16"
+             alt="avatar: {{author}}" class="mini-gravatar">
+            <span class="username">{{author}}</span>
+          </a>
+        </td>
+        <td class="commit-name">
+          <span class="time-elapsed">{{date}}:</span>&nbsp;
+          {{message}}
+          [<a href="/{{escaped_name}}/{{id}}" title="View commit">{{id7}}</a>]
+        </td>
+      </tr>
+      {{/versions}}
+      
+    </tbody>
+  </table>
+  </fieldset>
+  </form>
+</div>
+<div id="footer">
+  <ul class="actions">
+    <li class="minibutton"><a href="javascript:void(0);"
+       class="action-compare-revision">Compare Revisions</a></li>
+       
+    <!-- only show this button if we have more than 20 revisions -->
+    <li class="minibutton"><a href="#"
+       class="action-back-to-top">Back to Top</a></li>
+  </ul>
+</div>
 </div>

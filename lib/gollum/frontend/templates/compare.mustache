@@ -1,33 +1,53 @@
-<div class="guide">
-  <div class="main">
-    <div class="actions">
-      <a href="/{{escaped_name}}">&laquo; Back</a>
-    </div>
-    <h1>{{title}}: {{before}} &rarr; {{after}}</h1>
-    <div id="files">
-      <div class="file">
-        <div class="meta">
-          <div class="info">
-            <span class="icon">
-              <img alt="Txt" height="16" src="/images/txt.png" width="16">
-            </span>
-            {{path}}
-          </div>
-        </div>
-        <div class="data highlight">
-          <table cellpadding="0" cellspacing="0" width="100%">
-            {{#lines}}
-              <tr>
-                <td class="line_numbers">{{ldln}}</td>
-                <td class="line_numbers">{{rdln}}</td>
-                <td width="100%">
-                  <pre><div class="{{class}}">{{line}}</div></pre>
-                </td>
-              </tr>
-            {{/lines}}
-          </table>
-        </div>
-      </div>
-    </div>
+<div id="wiki-wrapper" class="compare">
+<div id="head">
+  <h1>History for <strong>{{path}}</strong></h1>
+  
+  <ul class="actions">
+    <li class="minibutton"><a href="/history/{{escaped_name}}"
+       class="action-page-history">Back to Page History</a></li>
+  </ul>
+  {{>searchbar}}
+</div>
+
+{{#message}}
+<p>{{message}}</p>
+{{/message}}
+
+<div id="compare-content">
+  
+  {{#show_revert}}
+  <ul class="actions">
+    <li class="minibutton">
+      <form name="gollum-revert" action="/revert/{{escaped_name}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
+      <a href="#" class="gollum-revert-button">Revert Changes</a>
+      </form>
+    </li>
+  </ul>
+  {{/show_revert}}
+  
+  <div class="data highlight">
+    <table cellpadding="0" cellspacing="0">
+      {{#lines}}
+        <tr>
+          <td class="line_numbers">{{ldln}}</td>
+          <td class="line_numbers">{{rdln}}</td>
+          <td>
+            <pre><div class="{{class}}">{{line}}</div></pre>
+          </td>
+        </tr>
+      {{/lines}}
+    </table>
   </div>
+</div>
+<div id="footer">
+  <ul class="actions">
+    {{#show_revert}}
+    <li class="minibutton">
+      <a href="#" class="gollum-revert-button">Revert Changes</a>
+    </li>
+    {{/show_revert}}
+    <li class="minibutton"><a href="#">Back to Top</a></li>
+  </ul>
+</div>
+</div>
 </div>

@@ -13,7 +13,7 @@ module Gollum
       # You work your magic...
       pages = @wiki.pages
       pages_li_html = ''
-      if pages.size > 0:
+      if pages.size > 0
         pages_li_html = pages.map { |p| %{<li>#{p.name}</li>} }
       end
       # Just remember to return a string

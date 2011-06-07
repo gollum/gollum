@@ -1,0 +1,144 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The MathJax API &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="../index.html" />
+    <link rel="next" title="The MathJax variable" href="variable.html" />
+    <link rel="prev" title="Modifying Math on the Page" href="../typeset.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="variable.html" title="The MathJax variable"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../typeset.html" title="Modifying Math on the Page"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-mathjax-api">
+<span id="mathjax-api"></span><h1>The MathJax API<a class="headerlink" href="#the-mathjax-api" title="Permalink to this headline">¶</a></h1>
+<p>The following links document the various components that make up
+MathJax.  These are implemented as JavaScript objects contained within
+the single global variable, <tt class="docutils literal"><span class="pre">MathJax</span></tt>.  Although JavaScript includes
+an objects with some inheritance capabilities, they do not constitute
+a full object-oriented programming model, so MathJax implements
+its own object library.  This means there is an ambiguity when we
+speak of an &#8220;object&#8221;, as it could be either a native JavaScript
+object, or a MathJax object.  We will use <cite>Object</cite> (capitalized) or
+<cite>MathJax.Object</cite> for, when the distinction is important.</p>
+<p>You may also want to view the <a class="reference internal" href="../index.html#advanced-topics"><em>advanced topics</em></a>
+on the main MathJax documentation page.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable.html">The MathJax variable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hub.html">The MathJax.Hub object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ajax.html">The MathJax.Ajax object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="message.html">The MathJax.Message object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">The MathJax.HTML object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callback.html">The MathJax.CallBack class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queue.html">The MathJax.CallBack.Queue class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signal.html">The MathJax.CallBack.Signal class</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="inputjax.html">The MathJax.InputJax class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="outputjax.html">The MathJax.OutputJax class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elementjax.html">The MathJax.ElementJax class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jax.html">The base Jax class</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="object.html">The MathJax Object-Oriented Programming Model</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../typeset.html"
+                        title="previous chapter">Modifying Math on the Page</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="variable.html"
+                        title="next chapter">The MathJax variable</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="variable.html" title="The MathJax variable"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../typeset.html" title="Modifying Math on the Page"
+             >previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

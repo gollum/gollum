@@ -1,0 +1,241 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The HTML-CSS output processor &mdash; MathJax v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/mj.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="MathJax v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Loading and Configuring MathJax" href="../configuration.html" />
+    <link rel="next" title="The NativeMML output processor" href="NativeMML.html" />
+    <link rel="prev" title="The MathML input processor" href="MathML.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="NativeMML.html" title="The NativeMML output processor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="MathML.html" title="The MathML input processor"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="../configuration.html" accesskey="U">Loading and Configuring MathJax</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-html-css-output-processor">
+<span id="configure-html-css"></span><h1>The HTML-CSS output processor<a class="headerlink" href="#the-html-css-output-processor" title="Permalink to this headline">¶</a></h1>
+<p>The options below control the operation of the HTML-CSS output
+processor that is run when you include <tt class="docutils literal"><span class="pre">&quot;output/HTML-CSS&quot;</span></tt> in the
+<cite>jax</cite> array of your configuration.  They are listed with their default
+values.  To set any of these options, include a <tt class="docutils literal"><span class="pre">&quot;HTML-CSS&quot;</span></tt> section
+in your <tt class="xref py py-meth docutils literal"><span class="pre">MathJax.Hub.Config()</span></tt> call.  Note that, because of the
+dash, you need to enclose the name in quotes.  For example</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+  <span class="s2">&quot;HTML-CSS&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">preferredFont</span><span class="o">:</span> <span class="s2">&quot;STIX&quot;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>would set the <tt class="docutils literal"><span class="pre">preferredFont</span></tt> option to the <a class="reference internal" href="../glossary.html#term-stix"><em class="xref std std-term">STIX</em></a> fonts.</p>
+<dl class="describe">
+<dt>
+<tt class="descname">scale: 100</tt></dt>
+<dd><p>The scaling factor (as a percentage) of math with respect to the
+surrounding text.  The <cite>HTML-CSS</cite> output processor tries to match
+the en-size of the mathematics with that of the text where it is
+placed, but you may want to adjust the results using this scaling
+factor.  The user can also adjust this value using the contextual
+menu item associated with the typeset mathematics.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">availableFonts: [&quot;STIX&quot;,&quot;TeX&quot;]</tt></dt>
+<dd><p>This is a list of the fonts to look for on a user&#8217;s computer in
+preference to using MathJax&#8217;s web-based fonts.  These must
+correspond to directories available in the
+<tt class="docutils literal"><span class="pre">jax/output/HTML-CSS/fonts</span></tt> directory, where MathJax stores data
+about the characters available in the fonts.  Set this to
+<tt class="docutils literal"><span class="pre">[&quot;TeX&quot;]</span></tt>, for example, to prevent the use of the <a class="reference internal" href="../glossary.html#term-stix"><em class="xref std std-term">STIX</em></a>
+fonts, or set it to an empty list, <cite>[]</cite>, if you want to force
+MathJax to use web-based or image fonts.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">preferredFont: &quot;TeX&quot;</tt></dt>
+<dd><p>Which font to prefer out of the <tt class="docutils literal"><span class="pre">availableFonts</span></tt> list, when more
+than one is available on the user&#8217;s computer.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">webFont: &quot;TeX&quot;</tt></dt>
+<dd><p>This is the web-based font to use when none of the fonts listed
+above are available on the user&#8217;s computer.  Note that currently
+only the <cite>TeX</cite> font is available in a web-based form (they are
+stored in the <tt class="docutils literal"><span class="pre">fonts/HTML-CSS</span></tt> folder in the MathJax directory.
+Set this to <tt class="docutils literal"><span class="pre">null</span></tt> to disable web fonts.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">imageFont: &quot;TeX&quot;</tt></dt>
+<dd><p>This is the font to use for image fallback mode (when none of the
+fonts listed above are available and the browser doesn&#8217;t support
+web-fonts via the <tt class="docutils literal"><span class="pre">&#64;font-face</span></tt> CSS directive).  Note that currently
+only the TeX font is available as an image font (they are stores
+in the <tt class="docutils literal"><span class="pre">fonts/HTML-CSS</span></tt> directory).</p>
+<p>Set this to <tt class="docutils literal"><span class="pre">null</span></tt> if you want to prevent the use of image fonts
+(e.g., you have deleted or not installed the image fonts on your
+server).  In this case, only browsers that support web-based fonts
+will be able to view your pages without having the fonts installed
+on the client computer.  The browsers that support web-based fonts
+include: IE6 and later, Chrome, Safari3.1 and above, Firefox3.5
+and later, and Opera10 and later.  Note that Firefox3.0 is <strong>not</strong>
+on this list.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">styles: {}</tt></dt>
+<dd><p>This is a list of CSS declarations for styling the HTML-CSS
+output.  See the definitions in <tt class="docutils literal"><span class="pre">jax/output/HTML-CSS/config.js</span></tt>
+for some examples of what are defined by default.  See <a class="reference internal" href="../CSS-styles.html#css-style-objects"><em>CSS
+Style Objects</em></a> for details on how to specify
+CSS style in a JavaScript object.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">showMathMenu: true</tt></dt>
+<dd><p>This controls whether the MathJax contextual menu will be
+available on the mathematics in the page.  If true, then
+right-clicking (on the PC) or control-clicking (on the Mac) will
+produce a MathJax menu that allows you to get the source of the
+mathematics in various formats, change the size of the mathematics
+relative to the surrounding text, get information about
+MathJax, and configure other MathJax settings.</p>
+<p>Set this to <tt class="docutils literal"><span class="pre">false</span></tt> to disable the menu.  When <tt class="docutils literal"><span class="pre">true</span></tt>, the
+<tt class="docutils literal"><span class="pre">MathMenu</span></tt> configuration block determines the operation of the
+menu.  See <a class="reference internal" href="MathMenu.html#configure-mathmenu"><em>the MathMenu options</em></a> for
+more details.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">tooltip: { ... }</tt></dt>
+<dd><p>This sets the configuration options for <tt class="docutils literal"><span class="pre">&lt;maction&gt;</span></tt> elements
+with <tt class="docutils literal"><span class="pre">actiontype=&quot;tooltip&quot;</span></tt>.  (See also the <tt class="docutils literal"><span class="pre">#MathJax_Tooltip</span></tt>
+style setting in <tt class="docutils literal"><span class="pre">jax/output/HTML-CSS/config.js</span></tt>, which can be
+overridden using the <tt class="docutils literal"><span class="pre">styles</span></tt> option above.)</p>
+<p>The <tt class="docutils literal"><span class="pre">tooltip</span></tt> section can contain the following options:</p>
+<dl class="describe">
+<dt>
+<tt class="descname">delayPost: 600</tt></dt>
+<dd><p>The delay (in milliseconds) before the tooltip is posted after
+the mouse is moved over the <tt class="docutils literal"><span class="pre">maction</span></tt> element.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">delayClear: 600</tt></dt>
+<dd><p>The delay (in milliseconds) before the tooltop is cleared
+after the mouse moves out of the <tt class="docutils literal"><span class="pre">maction</span></tt> element.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">offsetX: 10 and offsetY: 5</tt></dt>
+<dd><p>These are the offset from the mouse position (in pixels)
+where the tooltip will be placed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="MathML.html"
+                        title="previous chapter">The MathML input processor</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="NativeMML.html"
+                        title="next chapter">The NativeMML output processor</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/options/HTML-CSS.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="NativeMML.html" title="The NativeMML output processor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="MathML.html" title="The MathML input processor"
+             >previous</a> |</li>
+        <li><a href="../index.html">MathJax v1.0 documentation</a> &raquo;</li>
+          <li><a href="../configuration.html" >Loading and Configuring MathJax</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010 Design Science.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    </div>
+  </body>
+</html>

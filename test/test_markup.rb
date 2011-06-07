@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), *%w[helper])
+# ~*~ encoding: utf-8 ~*~
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Markup" do
   setup do
@@ -15,6 +16,39 @@ context "Markup" do
   test "formats page from Wiki#pages" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[Foo]][[Bar]] b", commit_details)
     assert @wiki.pages[0].formatted_data
+  end
+
+  # This test is to assume that Sanitize.clean doesn't raise Encoding::CompatibilityError on ruby 1.9
+  test "formats non ASCII-7 character page from Wiki#pages" do
+    wiki = Gollum::Wiki.new(testpath("examples/yubiwa.git"))
+    assert_nothing_raised(defined?(Encoding) && Encoding::CompatibilityError) do
+      assert wiki.page("strider").formatted_data
+    end
+  end
+
+  test "Gollum::Markup#render yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    markup = Gollum::Markup.new(page)
+    markup.render do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
+  end
+
+  test "Gollum::Page#formatted_data yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    page.formatted_data do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
   end
 
   #########################################################################
@@ -128,6 +162,20 @@ context "Markup" do
     assert_equal "<p>a <a href=\"http://example.com\">http://example.com</a> b</p>", page.formatted_data
   end
 
+  test "page link with different text" do
+    @wiki.write_page("Potato", :markdown, "a [[Potato Heaad|Potato]] ", commit_details)
+    page = @wiki.page("Potato")
+    output = page.formatted_data
+    assert_equal "<p>a <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a></p>", output
+  end
+
+  test "page link with different text on mediawiki" do
+    @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
+    page = @wiki.page("Potato")
+    output = page.formatted_data
+    assert_equal "<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>", output
+  end
+
   #########################################################################
   #
   # Images
@@ -142,6 +190,17 @@ context "Markup" do
       page = @wiki.page(name)
       output = page.formatted_data
       assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.jpg" /> b</p>}, output
+    end
+  end
+
+  test "image with extension in caps with http url" do
+    ['http', 'https'].each do |scheme|
+      name = "Bilbo Baggins #{scheme}"
+      @wiki.write_page(name, :markdown, "a [[#{scheme}://example.com/bilbo.JPG]] b", commit_details)
+
+      page = @wiki.page(name)
+      output = page.formatted_data
+      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.JPG" /> b</p>}, output
     end
   end
 
@@ -177,6 +236,27 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     output = page.formatted_data
     assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /><a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
+  end
+
+  test "image with absolute path on a preview" do
+    @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
+    index = @wiki.repo.index
+    index.add("alpha.jpg", "hi")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.preview_page("Test", "a [[/alpha.jpg]] b", :markdown)
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> b</p>}, page.formatted_data
+  end
+
+  test "image with relative path on a preview" do
+    @wiki = Gollum::Wiki.new(@path, :base_path => '/wiki')
+    index = @wiki.repo.index
+    index.add("alpha.jpg", "hi")
+    index.add("greek/alpha.jpg", "hi")
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.preview_page("Test", "a [[alpha.jpg]] [[greek/alpha.jpg]] b", :markdown)
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><img src="/wiki/greek/alpha.jpg" /> b</p>}, page.formatted_data
   end
 
   test "image with alt" do
@@ -298,7 +378,7 @@ context "Markup" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -313,7 +393,7 @@ context "Markup" do
     content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -329,7 +409,7 @@ context "Markup" do
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
              "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
              "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
-             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     compare(content, output)
   end
 
@@ -338,7 +418,7 @@ context "Markup" do
     output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
              "x</span> <span class=\"o\">=</span> <span class=\"mi\">1" +
              "</span>\n\n<span class=\"n\">y</span> <span class=\"o\">=" +
-             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n<p>b</p>"
+             "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     compare(content, output)
   end
 
@@ -367,6 +447,38 @@ context "Markup" do
     content = "a [[http://google.com][Google]] b"
     output = "<p class=\"title\">a <a href=\"http://google.com\">Google</a> b</p>"
     compare(content, output, 'org')
+  end
+
+  test "org mode style double file links" do
+    content = "a [[file:f.org][Google]] b"
+    output = "<p class=\"title\">a <a class=\"internal absent\" href=\"/f\">Google</a> b</p>"
+    compare(content, output, 'org')
+  end
+
+  test "short double links" do
+    content = "a [[b]] c"
+    output  = %(<p class="title">a <a class="internal absent" href="/b">b</a> c</p>)
+    compare(content, output, 'org')
+  end
+
+  test "double linked pipe" do
+    content = "a [[|]] b"
+    output  = %(<p class="title">a <a class="internal absent" href="/"></a> b</p>)
+    compare(content, output, 'org')
+  end
+
+  test "id with prefix ok" do
+    content = "h2(example#wiki-foo). xxxx"
+    output = %(<h2 class="example" id="wiki-foo">xxxx</h2>)
+    compare(content, output, :textile)
+  end
+
+  test "id prefix added" do
+    content = "h2(#foo). xxxx[1]\n\nfn1.footnote"
+    output = "<h2 id=\"wiki-foo\">xxxx" +
+             "<sup class=\"footnote\"><a href=\"#wiki-fn1\">1</a></sup></h2>" +
+             "\n<p class=\"footnote\" id=\"wiki-fn1\"><sup>1</sup> footnote</p>"
+    compare(content, output, :textile)
   end
 
   #########################################################################
