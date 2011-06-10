@@ -282,6 +282,11 @@ context "page_file_dir option" do
     assert_equal "Hi", File.read(File.join(@path, @page_file_dir, "New-Page.md"))
     assert !File.exist?(File.join(@path, "New-Page.md"))
   end
+  
+  test "edit a page in a sub directory" do
+    page = @wiki.page('foo')
+    @wiki.update_page(page, page.name, page.format, 'new contents', commit_details)
+  end
 
   test "a file in page file dir should be found" do
     assert @wiki.page("foo")
