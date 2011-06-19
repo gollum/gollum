@@ -101,7 +101,7 @@ module Precious
           mustache :edit
         end
       else
-        mustache :create
+        redirect "/create/#{CGI.escape(@name)}"
       end
     end
 
@@ -124,7 +124,17 @@ module Precious
 
       redirect "/#{page.escaped_url_path}"
     end
-
+    
+    get '/create/*' do
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @name = params[:splat].first
+      if wiki.page(@name)
+        redirect "/#{CGI.escape(@name)}"
+      else
+        mustache :create
+      end
+    end
+    
     post '/create' do
       name         = params[:page]
       path         = sanitize_empty_params(params[:path])
@@ -298,9 +308,7 @@ module Precious
         content_type file.mime_type
         file.raw_data
       else
-        @name = name
-        @path = path
-        mustache :create
+        redirect "/create/#{CGI.escape(name)}"
       end
     end
 
