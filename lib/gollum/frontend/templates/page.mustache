@@ -6,8 +6,10 @@
       class="action-all-pages">All Pages</a></li>
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-new-page">New Page</a></li>
+    {{#editable}}
     <li class="minibutton"><a href="/edit/{{escaped_name}}"
        class="action-edit-page">Edit Page</a></li>
+    {{/editable}}
     <li class="minibutton"><a href="/history/{{escaped_name}}"
        class="action-page-history">Page History</a></li>
   </ul>

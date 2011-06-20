@@ -18,6 +18,10 @@ module Precious
       def date
         @page.version.authored_date.strftime("%Y-%m-%d %H:%M:%S")
       end
+      
+      def editable
+        @editable
+      end
 
       def has_footer
         @footer = (@page.footer || false) if @footer.nil?
