@@ -2,6 +2,7 @@ require 'digest/sha1'
 require 'cgi'
 
 module Gollum
+
   class Markup
     # Initialize a new Markup object.
     #
@@ -436,5 +437,50 @@ module Gollum
     # Returns nothing.
     def update_cache(type, id, data)
     end
+  end
+
+  begin
+    require 'redcarpet'
+
+    class MarkupGFM < Markup
+      def render(no_follow = false)
+        sanitize = no_follow ?
+          @wiki.history_sanitizer :
+          @wiki.sanitizer
+
+        data = extract_tex(@data.dup)
+        data = extract_tags(data)
+
+        flags = [
+          :autolink,
+          :fenced_code,
+          :tables,
+          :strikethrough,
+          :lax_htmlblock,
+          :gh_blockcode,
+          :no_intraemphasis
+        ]
+        data = Redcarpet.new(data, *flags).to_html
+        data = process_tags(data)
+
+        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
+
+        doc.search('pre').each do |node|
+          next unless lang = node['lang']
+          text = node.inner_text
+          html = Gollum::Albino.colorize(text, lang)
+          node.replace(html)
+        end
+
+        doc  = sanitize.clean_node!(doc) if sanitize
+        yield doc if block_given?
+
+        data = doc_to_html(doc)
+        data = process_tex(data)
+        data
+      end
+    end
+  rescue LoadError
+    MarkupGFM = Markup
   end
 end

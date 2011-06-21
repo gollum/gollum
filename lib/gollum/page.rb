@@ -168,7 +168,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data(&block)
-      @blob && @wiki.markup_class.new(self).render(historical?, &block)
+      @blob && @wiki.markup_classes[format].new(self).render(historical?, &block)
     end
 
     # Public: The format of the page.
