@@ -25,7 +25,27 @@ context "Page" do
   test "get existing page case insensitive" do
     assert_equal @wiki.page('Bilbo Baggins').path, @wiki.page('bilbo baggins').path
   end
+  
+  test "get existing page with hyphen" do
+    assert_equal @wiki.page('Bilbo Baggins').path, @wiki.page('Bilbo-Baggins').path
+  end
 
+  test "get existing page with underscore" do
+    assert_nil @wiki.page('Bilbo_Baggins')
+  end
+  
+  test "get existing page where filename contains whitespace, with hypen" do
+    assert_equal @wiki.page('Samwise Gamgee').path, @wiki.page('Samwise-Gamgee').path
+  end
+  
+  test "get existing page where filename contains whitespace, with underscore" do
+    assert_equal @wiki.page('Samwise Gamgee').path, @wiki.page('Samwise_Gamgee').path
+  end
+  
+  test "get existing page where filename contains whitespace, with whitespace" do
+    assert_equal @wiki.page('Samwise Gamgee').path, @wiki.page('Samwise Gamgee').path
+  end
+  
   test "get nested page" do
     page = @wiki.page('Eye Of Sauron')
     assert_equal 'Mordor/Eye-Of-Sauron.md', page.path
