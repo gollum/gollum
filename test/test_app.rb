@@ -124,6 +124,30 @@ context "Frontend" do
     assert_match /ghi/, last_response.body
   end
 
+  test "redirects to create on non-existant page" do
+    name = "E"
+    get "/#{name}"
+    follow_redirect!
+    assert_equal "/create/#{name}", last_request.fullpath
+    assert last_response.ok?
+  end
+
+  test "edit redirects to create on non-existant page" do
+    name = "E"
+    get "/edit/#{name}"
+    follow_redirect!
+    assert_equal "/create/#{name}", last_request.fullpath
+    assert last_response.ok?
+  end  
+
+  test "create redirects to page if already exists" do
+    name = "A"
+    get "/create/#{name}"
+    follow_redirect!
+    assert_equal "/#{name}", last_request.fullpath
+    assert last_response.ok?
+  end
+ 
   test "guards against creation of existing page" do
     name = "A"
     post "/create", :content => 'abc', :page => name,
