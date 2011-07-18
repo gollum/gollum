@@ -10,7 +10,7 @@ module Gollum
       attr_writer :file_class
 
       # Sets the markup class used by all instances of this Wiki.
-      attr_writer :markup_class
+      attr_writer :markup_classes
 
       # Sets the default ref for the wiki.
       attr_accessor :default_ref
@@ -53,12 +53,16 @@ module Gollum
 
       # Gets the markup class used by all instances of this Wiki.
       # Default: Gollum::Markup
-      def markup_class
-        @markup_class ||
-          if superclass.respond_to?(:markup_class)
-            superclass.markup_class
+      def markup_classes
+        @markup_classes ||
+          if superclass.respond_to?(:markup_classes)
+            superclass.markup_classes
           else
-            ::Gollum::Markup
+            classes = Hash.new(::Gollum::Markup)
+
+            # Add custom markup classes for different languages
+            classes[:markdown] = ::Gollum::MarkupGFM
+            classes
           end
       end
 
@@ -113,7 +117,8 @@ module Gollum
     #                            Default: "/"
     #           :page_class    - The page Class. Default: Gollum::Page
     #           :file_class    - The file Class. Default: Gollum::File
-    #           :markup_class  - The markup Class. Default: Gollum::Markup
+    #           :markup_classes - A hash containing the markup Classes for each
+    #                             document type. Default: { Gollum::Markup }
     #           :sanitization  - An instance of Sanitization.
     #           :page_file_dir - String the directory in which all page files reside
     #           :ref - String the repository ref to retrieve pages from
@@ -130,7 +135,7 @@ module Gollum
       @base_path     = options[:base_path]    || "/"
       @page_class    = options[:page_class]   || self.class.page_class
       @file_class    = options[:file_class]   || self.class.file_class
-      @markup_class  = options[:markup_class] || self.class.markup_class
+      @markup_classes = options[:markup_classes] || self.class.markup_classes
       @repo          = @access.repo
       @ref           = options[:ref] || self.class.default_ref
       @sanitization  = options[:sanitization] || self.class.sanitization
@@ -492,7 +497,7 @@ module Gollum
     attr_reader :file_class
 
     # Gets the markup class used by all instances of this Wiki.
-    attr_reader :markup_class
+    attr_reader :markup_classes
 
     # Normalize the data.
     #
