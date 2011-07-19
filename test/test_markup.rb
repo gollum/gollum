@@ -173,7 +173,7 @@ context "Markup" do
     @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal "<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>", output
+    assert_equal normal("<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>"), normal(output)
   end
 
   #########################################################################
@@ -513,7 +513,7 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     rendered = Gollum::Markup.new(page).render
     if regexes.empty?
-      assert_equal output, rendered
+      assert_equal normal(output), normal(rendered)
     else
       regexes.each { |r| assert_match r, output }
     end
@@ -528,6 +528,6 @@ context "Markup" do
     @wiki.clear_cache
     page = @wiki.page("Bilbo Baggins")
     rendered = Gollum::Markup.new(page).render
-    assert_equal output, rendered
+    assert_equal normal(output), normal(rendered)
   end
 end
