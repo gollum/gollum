@@ -63,6 +63,8 @@ module Gollum
         return unless node['href']
         prefix = env[:config][:id_prefix]
         node['href'] = node['href'].gsub(/\A\#(#{prefix})?/, '#'+prefix)
+
+        {:node_whitelist => [node]}
       end
     ].freeze
 
