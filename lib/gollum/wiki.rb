@@ -601,5 +601,9 @@ module Gollum
     rescue Grit::GitRuby::Repository::NoSuchShaFound
       []
     end
+    
+    def inspect
+      %(#<#{self.class.name}:#{object_id} #{@repo.path}>)
+    end
   end
 end

@@ -390,5 +390,9 @@ module Gollum
 
       find_page_in_tree(map, name, '')
     end
+
+    def inspect
+      %(#<#{self.class.name}:#{object_id} #{name} (#{format}) @wiki=#{@wiki.repo.path.inspect}>)
+    end
   end
 end
