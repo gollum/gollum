@@ -4,6 +4,20 @@ require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 context "Wiki" do
   setup do
     @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"))
+    Gollum::Wiki.markup_classes = nil
+  end
+
+  test "#markup_class gets default markup" do
+    assert_equal Gollum::Markup, Gollum::Wiki.markup_class
+  end
+
+  test "#markup_class= doesn't clobber alternate markups" do
+    custom = Class.new(Gollum::Markup)
+    Gollum::Wiki.markup_class = custom
+
+    assert_equal custom, Gollum::Wiki.markup_class
+    assert_equal custom, Gollum::Wiki.markup_classes[:orgmode]
+    assert_equal Gollum::MarkupGFM, Gollum::Wiki.markup_classes[:markdown]
   end
 
   test "repo path" do

@@ -66,6 +66,16 @@ module Gollum
           end
       end
 
+      def markup_class
+        markup_classes[:default]
+      end
+
+      def markup_class=(default)
+        new_classes     = Hash.new default
+        @markup_classes = Hash.new(default).update(markup_classes)
+        default
+      end
+
       # Gets the default sanitization options for current pages used by
       # instances of this Wiki.
       def sanitization
