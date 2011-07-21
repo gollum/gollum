@@ -38,6 +38,12 @@ def commit_details
     :email   => "tom@github.com" }
 end
 
+def normal(text)
+  text.gsub!(' ', '')
+  text.gsub!("\n", '')
+  text
+end
+
 # test/spec/mini 3
 # http://gist.github.com/25455
 # chris@ozmm.org

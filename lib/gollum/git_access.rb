@@ -28,13 +28,17 @@ module Gollum
     #
     # ref - a String Git reference (ex: "master")
     #
-    # Returns a String.
+    # Returns a String, or nil if the ref isn't found.
     def ref_to_sha(ref)
-      if sha?(ref)
-        ref
-      else
-        get_cache(:ref, ref) { ref_to_sha!(ref) }
-      end
+      ref = ref.to_s
+      return if ref.empty?
+      sha =
+        if sha?(ref)
+          ref
+        else
+          get_cache(:ref, ref) { ref_to_sha!(ref) }
+        end.to_s
+      sha.empty? ? nil : sha
     end
 
     # Public: Gets a recursive list of Git blobs for the whole tree at the

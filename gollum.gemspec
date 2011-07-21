@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency('mustache', [">= 0.11.2", "< 1.0.0"])
   s.add_dependency('sanitize', "~> 2.0.0")
   s.add_dependency('nokogiri', "~> 1.4")
+  s.add_dependency('redcarpet')
 
   s.add_development_dependency('RedCloth')
   s.add_development_dependency('mocha')
@@ -38,7 +39,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rack-test')
   s.add_development_dependency('wikicloth')
   s.add_development_dependency('rake')
-  s.add_development_dependency('redcarpet')
 
   # = MANIFEST =
   s.files = %w[
