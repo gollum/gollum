@@ -66,10 +66,14 @@ module Gollum
           end
       end
 
+      # Gets the default markup class used by all instances of this Wiki.
+      # Kept for backwards compatibility until Gollum v2.x
       def markup_class
         markup_classes[:default]
       end
 
+      # Sets the default markup class used by all instances of this Wiki.
+      # Kept for backwards compatibility until Gollum v2.x
       def markup_class=(default)
         new_classes     = Hash.new default
         @markup_classes = Hash.new(default).update(markup_classes)
