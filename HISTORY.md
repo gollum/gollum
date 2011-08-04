@@ -1,3 +1,12 @@
+# git
+
+* Minor
+  * Add a way to configure the `#id_prefix` property of Sanitization
+    objects.
+* Bug Fixes
+  * Include the language of the code snippet when making a uniquely
+    identifiable sha of a code snippet while rendering a page.
+
 # 1.3.1 / 2011-07-21
 
 * Major Enhancements
