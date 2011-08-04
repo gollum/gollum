@@ -366,7 +366,7 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_code(data)
       data.gsub!(/^``` ?([^\r\n]+)?\r?\n(.+?)\r?\n```\r?$/m) do
-        id     = Digest::SHA1.hexdigest($2)
+        id     = Digest::SHA1.hexdigest("#{$1}.#{$2}")
         cached = check_cache(:code, id)
         @codemap[id] = cached   ?
           { :output => cached } :
