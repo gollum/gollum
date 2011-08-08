@@ -481,6 +481,16 @@ context "Markup" do
     compare(content, output, :textile)
   end
 
+  test "name prefix added" do
+    content = "abc\n\n__TOC__\n\n==Header==\n\nblah"
+    compare content, '', :mediawiki, [
+      /id="wiki-toc"/,
+      /href="#wiki-Header"/,
+      /id="wiki-Header"/,
+      /name="wiki-Header"/
+    ]
+  end
+
   #########################################################################
   #
   # TeX
@@ -515,6 +525,7 @@ context "Markup" do
     if regexes.empty?
       assert_equal normal(output), normal(rendered)
     else
+      output = page.formatted_data
       regexes.each { |r| assert_match r, output }
     end
   end

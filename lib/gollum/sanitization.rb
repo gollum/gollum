@@ -52,9 +52,13 @@ module Gollum
     TRANSFORMERS = [
       lambda do |env|
         node      = env[:node]
-        return if env[:is_whitelisted] || !node.element? || !node['id'] 
+        return if env[:is_whitelisted] || !node.element?
         prefix = env[:config][:id_prefix]
-        node['id'] = node['id'].gsub(/\A(#{prefix})?/, prefix)
+        %w(id name).each do |key|
+          if value = node[key]
+            node[key] = value.gsub(/\A(#{prefix})?/, prefix)
+          end
+        end
 
         {:node_whitelist => [node]}
       end,
