@@ -166,7 +166,7 @@ context "Markup" do
     @wiki.write_page("Potato", :markdown, "a [[Potato Heaad|Potato]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal "<p>a <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a></p>", output
+    assert_equal "<p>a<aclass=\"internalpresent\"href=\"/Potato\">PotatoHeaad</a></p>", normal(output)
   end
 
   test "page link with different text on mediawiki" do
