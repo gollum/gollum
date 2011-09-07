@@ -231,7 +231,7 @@ module Gollum
         Committer.new(self, commit)
       end
 
-      committer.add_to_index('', name, format, data)
+      committer.add_to_index('', name, format, data.force_encoding(encoding || Encoding::UTF_8))
 
       committer.after_commit do |index, sha|
         @access.refresh
