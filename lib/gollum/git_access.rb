@@ -158,6 +158,7 @@ module Gollum
     def tree!(sha)
       tree  = @repo.git.native(:ls_tree,
         {:r => true, :l => true, :z => true}, sha)
+      tree.force_encoding("UTF-8")
       items = tree.split("\0").inject([]) do |memo, line|
         memo << parse_tree_line(line)
       end
