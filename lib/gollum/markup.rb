@@ -1,5 +1,6 @@
 require 'digest/sha1'
 require 'cgi'
+require 'pygments'
 
 module Gollum
 
@@ -398,9 +399,8 @@ module Gollum
       end
 
       highlighted = begin
-        blocks.size.zero? ? [] : Gollum::Albino.colorize(blocks)
-      rescue ::Albino::ShellArgumentError, ::Albino::TimeoutExceeded,
-               ::Albino::MaximumOutputExceeded
+        blocks.map { |lang, code| Pygments.highlight(code, :lexer => lang) }
+      rescue ::RubyPython::PythonError
         []
       end
 
@@ -467,8 +467,9 @@ module Gollum
 
         doc.search('pre').each do |node|
           next unless lang = node['lang']
+          next unless lexer = Pygments::Lexer[lang]
           text = node.inner_text
-          html = Gollum::Albino.colorize(text, lang)
+          html = lexer.highlight(text)
           node.replace(html)
         end
 
