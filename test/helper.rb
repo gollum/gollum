@@ -27,7 +27,7 @@ def cloned_testpath(path)
   cloned = File.join(path, self.class.name)
   FileUtils.rm_rf(cloned)
   Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name}}
+    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
   end
   cloned
 end
