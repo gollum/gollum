@@ -2,6 +2,8 @@ module Precious
   module Views
     class Page < Layout
       attr_reader :content, :page, :footer
+      DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+      DEFAULT_AUTHOR = 'you'
 
       def title
         @page.title
@@ -12,13 +14,15 @@ module Precious
       end
 
       def author
+        return DEFAULT_AUTHOR unless @page.version
         @page.version.author.name
       end
 
       def date
-        @page.version.authored_date.strftime("%Y-%m-%d %H:%M:%S")
+        return Time.now.strftime(DATE_FORMAT) unless @page.version
+        @page.version.authored_date.strftime(DATE_FORMAT)
       end
-      
+
       def editable
         @editable
       end
