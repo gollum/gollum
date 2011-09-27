@@ -101,6 +101,17 @@ context "Frontend" do
     assert last_response.ok?
   end
 
+  test "previews content on the first page of an empty wiki" do
+    @path = cloned_testpath("examples/empty.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {})
+
+    post "/preview", :content => 'abc', :format => 'markdown'
+    assert last_response.ok?
+  end
+
+
   test "reverts single commit" do
     page1 = @wiki.page('B')
 
