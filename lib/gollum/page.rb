@@ -381,6 +381,7 @@ module Gollum
     #
     # Returns the Page or nil if none exists.
     def find_sub_page(name)
+      return nil unless self.version
       return nil if self.filename =~ /^_/
       name = "_#{name.to_s.capitalize}"
       return nil if page_match(name, self.filename)

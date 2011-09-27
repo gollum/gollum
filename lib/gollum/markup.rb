@@ -14,7 +14,7 @@ module Gollum
       @wiki    = page.wiki
       @name    = page.filename
       @data    = page.text_data
-      @version = page.version.id
+      @version = page.version.id if page.version
       @format  = page.format
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
