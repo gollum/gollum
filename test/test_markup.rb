@@ -421,6 +421,31 @@ context "Markup" do
              "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     compare(content, output)
   end
+  
+  test "code with wiki links" do
+    content = <<-END
+booya
+
+``` python
+np.array([[2,2],[1,3]],np.float)
+```
+    END
+
+    # rendered with Gollum::Markup
+    page, rendered = render_page(content)
+    assert_markup_highlights_code Gollum::Markup, rendered
+
+    if Gollum.const_defined?(:MarkupGFM)
+      rendered_gfm = Gollum::MarkupGFM.new(page).render
+      assert_markup_highlights_code Gollum::MarkupGFM, rendered_gfm
+    end
+  end
+
+  def assert_markup_highlights_code(markup_class, rendered)
+    assert_match /div class="highlight"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
+    assert_match /span class="n"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
+    assert_match /\(\[\[/, rendered, "#{markup_class} parses out wiki links\n#{rendered}"
+  end
 
   #########################################################################
   #
@@ -515,13 +540,18 @@ context "Markup" do
   #
   #########################################################################
 
-  def compare(content, output, ext = "md", regexes = [])
+  def render_page(content, ext = "md")
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.#{ext}", content)
     index.commit("Add baggins")
 
     page = @wiki.page("Bilbo Baggins")
-    rendered = Gollum::Markup.new(page).render
+    [page, Gollum::Markup.new(page).render]
+  end
+
+  def compare(content, output, ext = "md", regexes = [])
+    page, rendered = render_page(content, ext)
+
     if regexes.empty?
       assert_equal normal(output), normal(rendered)
     else

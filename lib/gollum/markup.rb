@@ -449,6 +449,7 @@ module Gollum
           @wiki.sanitizer
 
         data = extract_tex(@data.dup)
+        data = extract_code(data)
         data = extract_tags(data)
 
         flags = [
@@ -457,11 +458,11 @@ module Gollum
           :tables,
           :strikethrough,
           :lax_htmlblock,
-          :gh_blockcode,
           :no_intraemphasis
         ]
         data = Redcarpet.new(data, *flags).to_html
         data = process_tags(data)
+        data = process_code(data)
 
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
 
