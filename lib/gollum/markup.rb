@@ -1,6 +1,7 @@
 require 'digest/sha1'
 require 'cgi'
 require 'pygments'
+require 'base64'
 
 module Gollum
 
@@ -97,13 +98,7 @@ module Gollum
     def process_tex(data)
       @texmap.each do |id, spec|
         type, tex = *spec
-        out =
-        case type
-          when :block
-            %{<script type="math/tex; mode=display">#{tex}</script>}
-          when :inline
-            %{<script type="math/tex">#{tex}</script>}
-        end
+        out = %{<img src="/_tex.png?type=#{type}&data=#{Base64.encode64(tex).chomp}" alt="#{CGI.escapeHTML(tex)}">}
         data.gsub!(id, out)
       end
       data
