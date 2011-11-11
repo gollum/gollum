@@ -421,7 +421,21 @@ context "Markup" do
              "</span> <span class=\"mi\">2</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     compare(content, output)
   end
-  
+
+  test "code blocks with multibyte caracters indent" do
+    content = "a\n\n```ruby\ns = 'やくしまるえつこ'\n```\n\nb"
+    output = "<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">" +
+             "s</span> <span class=\"o\">=</span> <span class=\"s1\">'やくしまるえつこ'" +
+             "</span>\n</pre>\n</div>\n\n\n<p>b</p>"
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add alpha.jpg")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render(false, Encoding::UTF_8)
+    assert_equal output, rendered
+  end
+
   test "code with wiki links" do
     content = <<-END
 booya

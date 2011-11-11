@@ -28,9 +28,10 @@ module Gollum
     #
     # no_follow - Boolean that determines if rel="nofollow" is added to all
     #             <a> tags.
+    # encoding  - Encoding Constant or String.
     #
     # Returns the formatted String content.
-    def render(no_follow = false)
+    def render(no_follow = false, encoding = nil)
       sanitize = no_follow ?
         @wiki.history_sanitizer :
         @wiki.sanitizer
@@ -47,7 +48,7 @@ module Gollum
         data = %{<p class="gollum-error">#{e.message}</p>}
       end
       data = process_tags(data)
-      data = process_code(data)
+      data = process_code(data, encoding)
       if sanitize || block_given?
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
         doc  = sanitize.clean_node!(doc) if sanitize
@@ -380,10 +381,11 @@ module Gollum
     # Process all code from the codemap and replace the placeholders with the
     # final HTML.
     #
-    # data - The String data (with placeholders).
+    # data     - The String data (with placeholders).
+    # encoding - Encoding Constant or String.
     #
     # Returns the marked up String data.
-    def process_code(data)
+    def process_code(data, encoding = nil)
       return data if data.nil? || data.size.zero? || @codemap.size.zero?
 
       blocks    = []
@@ -399,7 +401,8 @@ module Gollum
       end
 
       highlighted = begin
-        blocks.map { |lang, code| Pygments.highlight(code, :lexer => lang) }
+        encoding ||= Encoding::UTF_8
+        blocks.map { |lang, code| Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s}) }
       rescue ::RubyPython::PythonError
         []
       end
@@ -443,7 +446,7 @@ module Gollum
     require 'redcarpet'
 
     class MarkupGFM < Markup
-      def render(no_follow = false)
+      def render(no_follow = false, encoding = nil)
         sanitize = no_follow ?
           @wiki.history_sanitizer :
           @wiki.sanitizer
@@ -462,7 +465,7 @@ module Gollum
         ]
         data = Redcarpet.new(data, *flags).to_html
         data = process_tags(data)
-        data = process_code(data)
+        data = process_code(data, encoding)
 
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
 
