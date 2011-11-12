@@ -432,7 +432,7 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.page("Bilbo Baggins")
-    rendered = Gollum::Markup.new(page).render(false, Encoding::UTF_8)
+    rendered = Gollum::Markup.new(page).render(false, 'utf-8')
     assert_equal output, rendered
   end
 

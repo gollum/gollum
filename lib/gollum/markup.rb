@@ -401,7 +401,7 @@ module Gollum
       end
 
       highlighted = begin
-        encoding ||= Encoding::UTF_8
+        encoding ||= 'utf-8'
         blocks.map { |lang, code| Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s}) }
       rescue ::RubyPython::PythonError
         []
