@@ -166,9 +166,11 @@ module Gollum
 
     # Public: The formatted contents of the page.
     #
+    # encoding - Encoding Constant or String.
+    #
     # Returns the String data.
-    def formatted_data(&block)
-      @blob && markup_class.render(historical?, &block)
+    def formatted_data(encoding = nil, &block)
+      @blob && markup_class.render(historical?, encoding, &block)
     end
 
     # Public: The format of the page.
