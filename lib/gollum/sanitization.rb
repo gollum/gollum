@@ -58,7 +58,7 @@ module Gollum
     # Default transformers to force @id attributes with 'wiki-' prefix
     TRANSFORMERS = [
       lambda do |env|
-        node      = env[:node]
+        node = env[:node]
         return if env[:is_whitelisted] || !node.element?
         prefix = env[:config][:id_prefix]
         found_attrs = %w(id name).select do |key|
@@ -68,7 +68,7 @@ module Gollum
         end
         if found_attrs.size > 0
           ADD_ATTRIBUTES.call(env, node)
-          {:node_whitelist => [node]}
+          {}
         end
       end,
       lambda do |env|
@@ -77,7 +77,7 @@ module Gollum
         prefix = env[:config][:id_prefix]
         node['href'] = value.gsub(/\A\#(#{prefix})?/, '#'+prefix)
         ADD_ATTRIBUTES.call(env, node)
-        {:node_whitelist => [node]}
+        {}
       end
     ].freeze
 
@@ -88,11 +88,11 @@ module Gollum
     # elements.  Default: ATTRIBUTES.
     attr_reader :attributes
 
-    # Gets a Hash describing which URI protocols are allowed in HTML 
+    # Gets a Hash describing which URI protocols are allowed in HTML
     # attributes.  Default: PROTOCOLS
     attr_reader :protocols
 
-    # Gets a Hash describing which URI protocols are allowed in HTML 
+    # Gets a Hash describing which URI protocols are allowed in HTML
     # attributes.  Default: TRANSFORMERS
     attr_reader :transformers
 
@@ -100,7 +100,7 @@ module Gollum
     # Default: 'wiki-'
     attr_accessor :id_prefix
 
-    # Gets a Hash describing HTML attributes that Sanitize should add.  
+    # Gets a Hash describing HTML attributes that Sanitize should add.
     # Default: {}
     attr_reader :add_attributes
 
