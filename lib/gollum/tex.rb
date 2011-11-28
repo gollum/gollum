@@ -54,10 +54,10 @@ module Gollum
         ::File.open(tex_path, 'w') { |f| f.write(Template % formula) }
 
         result = sh latex_path, '-interaction=batchmode', 'formula.tex', :cwd => path
-        raise Error, "`latex` command failed: #{result}" unless ::File.exist?(eps_path)
+        raise Error, "`latex` command failed: #{result}" unless ::File.exist?(dvi_path)
 
         result = sh dvips_path, '-o', eps_path, '-E', dvi_path
-        raise Error, "`dvips` command failed: #{result}" unless ::File.exist?(dvi_path)
+        raise Error, "`dvips` command failed: #{result}" unless ::File.exist?(eps_path)
         result = sh convert_path, '+adjoin',
           '-antialias',
           '-transparent', 'white',
