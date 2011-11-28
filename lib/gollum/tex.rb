@@ -40,6 +40,10 @@ module Gollum
       if `which convert` == ""
         raise Error, "`convert` command not found"
       end
+
+      if `which gs` == ""
+        raise Error, "`gs` command not found"
+      end
     end
 
     def self.render_formula(formula)
