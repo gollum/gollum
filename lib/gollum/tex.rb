@@ -4,6 +4,8 @@ require 'tmpdir'
 
 module Gollum
   module Tex
+    class Error < StandardError; end
+
     Template = <<-EOS
 \\documentclass[12pt]{article}
 \\usepackage{color}
@@ -28,15 +30,15 @@ module Gollum
 
     def self.check_dependencies!
       if `which latex` == ""
-        raise "`latex` command not found"
+        raise Error, "`latex` command not found"
       end
 
       if `which dvips` == ""
-        raise "`dvips` command not found"
+        raise Error, "`dvips` command not found"
       end
 
       if `which convert` == ""
-        raise "`convert` command not found"
+        raise Error, "`convert` command not found"
       end
     end
 
@@ -51,13 +53,17 @@ module Gollum
 
         ::File.open(tex_path, 'w') { |f| f.write(Template % formula) }
 
-        sh latex_path, '-interaction=batchmode', 'formula.tex', :cwd => path
-        sh dvips_path, '-o', eps_path, '-E', dvi_path
-        sh convert_path, '+adjoin',
+        result = sh latex_path, '-interaction=batchmode', 'formula.tex', :cwd => path
+        raise "`latex` command failed: #{result}" unless ::File.exist?(eps_path)
+
+        result = sh dvips_path, '-o', eps_path, '-E', dvi_path
+        raise "`dvips` command failed: #{result}" unless ::File.exist?(dvi_path)
+        result = sh convert_path, '+adjoin',
           '-antialias',
           '-transparent', 'white',
           '-density', '150x150',
           eps_path, png_path
+        raise "`convert` command failed: #{result}" unless ::File.exist?(png_path)
 
         ::File.read(png_path)
       end
