@@ -2,9 +2,29 @@
   Gollum v3 Template
 */
 
+/* margin & padding reset*/
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+html, body {
+  color: black;
+}
+
+body {
+  font: 13.34px helvetica,arial,freesans,clean,sans-serif;
+  line-height: 1.4;
+}
+
+img {
+  border: 0;
+}
+
 #template {
-  font-size: 13px;
-  line-height: 23px;
+  font-size: 14px;
+  line-height: 1.4;
   margin-bottom: 40px;
 }
 
@@ -15,7 +35,7 @@ a.absent {
 
 /* Primary Body Copy */
 #template p {
-  margin: 16px 0 0;
+  margin: 1em 0;
   padding: 0;
 }
   
@@ -32,15 +52,14 @@ a.absent {
 }
 
 #template h1 {
-  border-top: 4px solid #ccc;
-  font-size: 32px;
+  border-bottom: 1px solid #ccc;
+  font-size: 33px; /* was 32, GH is 33px */
   line-height: normal;
-  padding: 10px 0 0;
-  margin: 30px 0 0;
+  padding: .08em 0 0 0;
+  margin: 0;
 }
 
 #template h2 {
-  border-top: 4px solid #ccc;
   font-size: 22px;
   line-height: normal;
   margin: 22px 0 0;
@@ -91,7 +110,6 @@ a.absent {
   /* Border Reset for headers with horizontal rules */ 
   #template > h2:first-child, 
   #template > h1:first-child {
-    border: 0;
     margin: 12px 0 0;
     padding: 10px 0 0;
   }
@@ -100,19 +118,21 @@ a.absent {
 /* Lists, Blockquotes & Such */
 #template ul, 
 #template ol {
-  margin: 0;
-  padding: 20px 0 0;
-  list-style-position: inside;  
+  margin-top: 1.5em;
+  margin-left: 2.6em;
 }
 
   /* Nested Lists */
+  #template ul li, 
+  #template ol li, 
   #template ul li ul, 
   #template ol li ol,
   #template ul li ol,
   #template ol li ul,
   #template ul ul, 
   #template ol ol {
-    padding: 0 0 0 14px;
+    padding: 0;
+    margin: .5em 0;
   }
 
 #template dl {
@@ -266,7 +286,7 @@ a.absent {
   background-color: #f8f8f8;
   border: 1px solid #dedede;
   font-size: 13px;
-  padding: 1px 5px;
+  padding: 0;
 
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -279,11 +299,15 @@ a.absent {
   font-size: 13px;
   line-height: 19px;
   overflow: auto;
-  padding: 6px;
+  padding: 6px 10px;
 
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+}
+
+pre, code {
+  font: 12px 'Bitstream Vera Sans Mono','Courier',monospace
 }
 
 #template pre code, #template pre tt {
@@ -291,26 +315,67 @@ a.absent {
   border: none;
 }
 
-#template .highlight { background: #ffffff; }
-#template .highlight .c { color: #999988; font-style: italic }
-#template .highlight .err { color: #a61717; background-color: #e3d2d2 }
-#template .highlight .k { font-weight: bold }
-#template .highlight .o { font-weight: bold }
-#template .highlight .cm { color: #999988; font-style: italic }
-#template .highlight .cp { color: #999999; font-weight: bold }
-#template .highlight .c1 { color: #999988; font-style: italic }
-#template .highlight .cs { color: #999999; font-weight: bold; font-style: italic }
-#template .highlight .gd { color: #000000; background-color: #ffdddd }
-#template .highlight .gd .x { color: #000000; background-color: #ffaaaa }
-#template .highlight .ge { font-style: italic }
-#template .highlight .gr { color: #aa0000 }
-#template .highlight .gh { color: #999999 }
-#template .highlight .gi { color: #000000; background-color: #ddffdd }
-#template .highlight .gi .x { color: #000000; background-color: #aaffaa }
-#template .highlight .gc { color: #999; background-color: #EAF2F5 }
-#template .highlight .go { color: #888888 }
-#template .highlight .gp { color: #555555 }
-#template .highlight .gs { font-weight: bold }
-#template .highlight .gu { color: #aaaaaa }
-#template .highlight .gt { color: #aa0000 }
-
+/*
+  Highlight rules from pull req 191 
+  https://github.com/eboto/gollum/commit/5df09477abf4a04c82c7fcaa2bd7ee2a85e7ec82
+*/
+#template .highlight { background:#fff; }
+#template .highlight .c { color:#998;font-style:italic; }
+#template .highlight .err { color:#a61717;background-color:#e3d2d2; }
+#template .highlight .k { font-weight:bold; }
+#template .highlight .o { font-weight:bold; }
+#template .highlight .cm { color:#998;font-style:italic; }
+#template .highlight .cp { color:#999;font-weight:bold; }
+#template .highlight .c1 { color:#998;font-style:italic; }
+#template .highlight .cs { color:#999;font-weight:bold;font-style:italic; }
+#template .highlight .gd { color:#000;background-color:#fdd; }
+#template .highlight .gd .x { color:#000;background-color:#faa; }
+#template .highlight .ge { font-style:italic; }
+#template .highlight .gr { color:#a00; }
+#template .highlight .gh { color:#999; }
+#template .highlight .gi { color:#000;background-color:#dfd; }
+#template .highlight .gi .x { color:#000;background-color:#afa; }
+#template .highlight .go { color:#888; }
+#template .highlight .gp { color:#555; }
+#template .highlight .gs { font-weight:bold; }
+#template .highlight .gu { color:#800080;font-weight:bold; }
+#template .highlight .gt { color:#a00; }
+#template .highlight .kc { font-weight:bold; }
+#template .highlight .kd { font-weight:bold; }
+#template .highlight .kp { font-weight:bold; }
+#template .highlight .kr { font-weight:bold; }
+#template .highlight .kt { color:#458;font-weight:bold; }
+#template .highlight .m { color:#099; }
+#template .highlight .s { color:#d14; }
+#template .highlight .na { color:#008080; }
+#template .highlight .nb { color:#0086B3; }
+#template .highlight .nc { color:#458;font-weight:bold; }
+#template .highlight .no { color:#008080; }
+#template .highlight .ni { color:#800080; }
+#template .highlight .ne { color:#900;font-weight:bold; }
+#template .highlight .nf { color:#900;font-weight:bold; }
+#template .highlight .nn { color:#555; }
+#template .highlight .nt { color:#000080; }
+#template .highlight .nv { color:#008080; }
+#template .highlight .ow { font-weight:bold; }
+#template .highlight .w { color:#bbb; }
+#template .highlight .mf { color:#099; }
+#template .highlight .mh { color:#099; }
+#template .highlight .mi { color:#099; }
+#template .highlight .mo { color:#099; }
+#template .highlight .sb { color:#d14; }
+#template .highlight .sc { color:#d14; }
+#template .highlight .sd { color:#d14; }
+#template .highlight .s2 { color:#d14; }
+#template .highlight .se { color:#d14; }
+#template .highlight .sh { color:#d14; }
+#template .highlight .si { color:#d14; }
+#template .highlight .sx { color:#d14; }
+#template .highlight .sr { color:#009926; }
+#template .highlight .s1 { color:#d14; }
+#template .highlight .ss { color:#990073; }
+#template .highlight .bp { color:#999; }
+#template .highlight .vc { color:#008080; }
+#template .highlight .vg { color:#008080; }
+#template .highlight .vi { color:#008080; }
+#template .highlight .il { color:#099; }
