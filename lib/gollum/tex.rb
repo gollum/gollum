@@ -1,10 +1,13 @@
 require 'fileutils'
 require 'shellwords'
 require 'tmpdir'
+require 'posix/spawn'
 
 module Gollum
   module Tex
     class Error < StandardError; end
+
+    extend POSIX::Spawn
 
     Template = <<-EOS
 \\documentclass[12pt]{article}
@@ -29,6 +32,8 @@ module Gollum
     self.convert_path = 'convert'
 
     def self.check_dependencies!
+      return if @dependencies_available
+
       if `which latex` == ""
         raise Error, "`latex` command not found"
       end
@@ -44,6 +49,8 @@ module Gollum
       if `which gs` == ""
         raise Error, "`gs` command not found"
       end
+
+      @dependencies_available = true
     end
 
     def self.render_formula(formula)
@@ -57,7 +64,7 @@ module Gollum
 
         ::File.open(tex_path, 'w') { |f| f.write(Template % formula) }
 
-        result = sh latex_path, '-interaction=batchmode', 'formula.tex', :cwd => path
+        result = sh latex_path, '-interaction=batchmode', 'formula.tex', :chdir => path
         raise Error, "`latex` command failed: #{result}" unless ::File.exist?(dvi_path)
 
         result = sh dvips_path, '-o', eps_path, '-E', dvi_path
@@ -75,9 +82,8 @@ module Gollum
 
     private
       def self.sh(*args)
-        options = args.last.is_a?(Hash) ? args.pop : {}
-        cwd     = "cd \"#{options[:cwd]}\" && " if options[:cwd]
-        `#{cwd}#{Shellwords.join(args)} 2>&1`
+        pid = spawn *args
+        Process::waitpid(pid)
       end
   end
 end
