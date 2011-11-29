@@ -17,6 +17,7 @@ require File.expand_path('../gollum/page', __FILE__)
 require File.expand_path('../gollum/file', __FILE__)
 require File.expand_path('../gollum/markup', __FILE__)
 require File.expand_path('../gollum/sanitization', __FILE__)
+require File.expand_path('../gollum/tex', __FILE__)
 
 module Gollum
   VERSION = '1.3.1'
