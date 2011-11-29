@@ -320,9 +320,6 @@ inline with regular text. For example:
 
     The Pythagorean theorem is \( a^2 + b^2 = c^2 \).
 
-Gollum uses [MathJax](http://www.mathjax.org/) to convert the TeX syntax into
-output suitable for display in web browsers.
-
 
 ## API DOCUMENTATION
 

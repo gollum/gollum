@@ -648,18 +648,13 @@ ul.actions {
     text-indent: -5000px;
     width: 28px;
   }
-  
+
   .ff #head #searchbar #searchbar-fauxtext #search-submit span,
   .ie #head #searchbar #searchbar-fauxtext #search-submit span {
     height: 2.2em;
   }
-  
+
   #head #searchbar #searchbar-fauxtext #search-submit:hover span {
     background-position: -431px -28px;
     padding: 0;
   }
-
-
-#MathJax_Message {
-  display: none;
-}

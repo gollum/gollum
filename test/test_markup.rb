@@ -530,13 +530,13 @@ np.array([[2,2],[1,3]],np.float)
 
   test "TeX block syntax" do
     content = 'a \[ a^2 \] b'
-    output = "<p>a <script type=\"math/tex; mode=display\">a^2</script> b</p>"
+    output = "<p>a<imgsrc=\"/_tex.png?type=block&data=YV4y\"alt=\"a^2\">b</p>"
     compare(content, output, 'md')
   end
 
   test "TeX inline syntax" do
     content = 'a \( a^2 \) b'
-    output = "<p>a <script type=\"math/tex\">a^2</script> b</p>"
+    output = "<p>a<imgsrc=\"/_tex.png?type=inline&data=YV4y\"alt=\"a^2\">b</p>"
     compare(content, output, 'md')
   end
 
