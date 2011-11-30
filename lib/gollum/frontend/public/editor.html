@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Editor</title>
+  <style type="text/css" media="screen">
+  body {
+      overflow: hidden;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  #editor { 
+      margin: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+  }
+
+  #previewframe { 
+      margin: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+  }
+
+  /* -- Start from notepag.es -- */
+  #toolpanel {
+    position: fixed;
+    background: #666;
+    top: 0;
+    height: 30px;
+    margin: 0;
+    right: 20px;
+    width: 80px;
+    vertical-align: middle;
+    padding: 5px 0;
+    text-align: center;
+  }
+
+  #save {
+    opacity: 0.4;
+    /* Make it appear as a link even though save
+       doesn't have a href attribute. */
+    cursor: pointer;
+  }
+
+  #toolpanel.edit a.edit {
+    display: inline-block;
+  }
+
+  #toolpanel a {
+    color: white;
+    text-decoration: none;
+    margin: 0 5px;
+    display: none;
+    padding: 3px;
+    font-family: sans-serif;
+  }
+
+  #toolpanel a img {
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+
+  a img {
+    border: none;
+  }
+  /* -- End from notepag.es -- */
+  </style>
+
+  <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+  <script src="src/mode-markdown.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- load jquery -->
+  <script src="jquery-1.7.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+  window.onload = function() {
+    function resize() {
+      console.log("resized");
+      var ace = editor.container;//document.getElementById("editor");
+      var widthHalf = $(window).width() / 2;
+      var height = $(window).height();
+      ace.style.width = widthHalf + "px";
+      // Minus 50 so the end of document text doesn't flow off the page.
+      ace.style.height = height - 50 + "px";
+      ace.style.left = widthHalf + "px";
+      ace.style.top = "40px"; // use 40px for tool menu
+      ace.style.fontSize = 16 + "px";
+      editor.resize();
+
+      var previewFrame = document.getElementById("previewframe");
+      previewFrame.style.width = widthHalf - 2 + "px"; // -2 for scroll bar
+      previewFrame.style.height = height + "px";
+      previewFrame.style.left = 0;
+      previewFrame.style.top = "0px";
+
+      // Resize tool panel
+      document.getElementById("toolpanel").style.width = widthHalf + "px";
+    }
+
+    // RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
+    $.key = function(key){
+        var value = new RegExp('[\\?&]' + key + '=([^&#]*)').exec(window.location.href);
+        return  (!value) ? 0 : value[1] || 0;
+    }
+
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+
+    var MarkdownMode = require("ace/mode/markdown").Mode;
+    var session = editor.getSession();
+
+    session.setMode(new MarkdownMode());
+    // Gutter shows line numbers
+    editor.renderer.setShowGutter(true);
+    editor.renderer.setHScrollBarAlwaysVisible(false);
+    session.setUseSoftTabs(true);
+    session.setTabSize(2);
+    session.setUseWrapMode(true);
+    editor.setShowPrintMargin(false);
+    editor.setBehavioursEnabled(true);
+
+    var changed = false;
+
+    session.on("change", function() {
+      console.log("changed");
+      changed = true;
+    });
+
+    $(window).resize(function() {
+      resize();
+    });
+
+    // resize for the intial page load
+    resize();
+
+    // render result into iframe (some browsers require contentDocument instead of contentWindow)
+    var previewFrame = document.getElementById("previewframe");
+    var f = previewFrame.contentWindow.document;
+
+    $.save = function() {
+      // if &create=true then handle create instead of edit.
+      var create = $.key("create");
+
+      if (create) {
+            jQuery.ajax({
+            type: "POST",
+            url: "/create",
+            data:  { page: $.key("page"), format: "markdown", content: editor.getSession().getValue() },
+            success: function() {
+              // on success, load the new page.
+              window.location = window.location.origin + "/" + $.key("page");
+            }
+      });
+      } // end if
+      else {
+            jQuery.ajax({
+            type: "POST",
+            url: "/edit/" + $.key("page"),
+            data:  { format: "markdown", content: editor.getSession().getValue() },
+            success: function() {
+              // on success, load the new page.
+              window.location = window.location.origin + "/" + $.key("page");
+            }
+      });
+    } // end else
+    }
+
+    $('#save').click(function() {
+      console.log("save clicked!");
+      // Save page and navigate to the new page on success.
+      $.save();
+    });
+
+    function postMarkdown() {
+      console.log("preview!");
+      // post to http://localhost:4567/create when creating a new page
+      // page: pagename
+      // format: markdown
+      // content: the makrdown content
+      // message: the commit message (usually blank)
+      jQuery.ajax({
+        type: "POST",
+        url: "preview",
+        data:  { format: "markdown", content: editor.getSession().getValue() },
+        success: function(data) {
+          f.open(); f.write(data); f.close();
+
+          // Must get head again because the iframe was just rewritten.
+          // Remove header.
+          var idoc = document.getElementById("previewframe").contentWindow.document;
+          var head = idoc.getElementById("head");
+          head.parentNode.removeChild(head);
+  
+          // Remove footer.
+          var footer = idoc.getElementById("footer");
+          footer.parentNode.removeChild(footer);
+        }
+      });
+    }
+
+    function updateBody() {
+      var gollumBody = document.getElementById("previewframe").contentWindow.document.getElementById("gollum-editor-body");
+
+      // TODO:  Why is gollumBody sometimes null?
+      if ( gollumBody != null ) {
+        editor.getSession().setValue( gollumBody.textContent );
+        return true;
+      } else {
+        console.log("gollumBody is null!")
+        return false; 
+      }
+    }
+
+    /* Load markdown from /edit/page into the previewframe iframe.
+       Extract the markdown text and save it to the editor.
+       Now take the editor text and post it to gollum and save the rendered HTML in the iframe. */
+    jQuery.ajax({
+      type: "GET",
+      url: "/edit/" + $.key("page"),
+      success: function(data) {
+        f.open(); f.write(data); f.close();
+
+        // If gollum body is ready great, if not keep trying every 200 ms.
+        if (updateBody() === false) {
+          setTimeout(function() {
+              console.log("waiting.. 200");
+              if (updateBody() === false){
+                  setTimeout(arguments.callee, 200);
+              }
+          },200);
+        }
+
+       // editor will auto update because setValue triggers changed flag
+      }
+    });
+
+
+    // launch interval
+    setInterval(function() {
+      if (changed === true) {
+        changed = false;
+        postMarkdown();
+      }
+    }, 500); // end setInterval
+
+  };
+  </script>
+</head>
+<body bgcolor="#666">
+  <pre id="editor">Loading...</pre>
+
+  <iframe id="previewframe" style="background-color: white;">Loading...</iframe>
+
+  <!-- tool panel and save from notepage.es -->  
+  <div id="toolpanel" class="edit" style="width: 500px; right: 0px; ">
+    <a id="save" class="edit">save<img src="/images/save_24.png" alt="save" title="save"></a>
+  </div>
+</body>
+</html>

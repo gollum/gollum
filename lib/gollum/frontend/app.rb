@@ -77,7 +77,7 @@ module Precious
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect "/#{CGI.escape(name)}"
+        redirect "/#{CGI.escape(name.gsub(' ', '-'))}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -181,6 +181,13 @@ module Precious
       @results = wiki.pages
       @ref = wiki.ref
       mustache :pages
+    end
+
+    get '/pages2' do
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @results = Gollum::FileView.new(wiki.pages).render_files
+      @ref = wiki.ref
+      mustache :pages2
     end
 
     get '/*' do

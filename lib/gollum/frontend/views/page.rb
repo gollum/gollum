@@ -6,7 +6,7 @@ module Precious
       DEFAULT_AUTHOR = 'you'
 
       def title
-        @page.title
+        @page.title.gsub('-', ' ')
       end
 
       def format

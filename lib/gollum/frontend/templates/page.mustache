@@ -4,10 +4,12 @@
   <ul class="actions">
     <li class="minibutton"><a href="/pages"
       class="action-all-pages">All Pages</a></li>
+      <li class="minibutton"><a href="/pages2"
+        class="action-all-pages">File View</a></li>
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-new-page">New Page</a></li>
     {{#editable}}
-    <li class="minibutton"><a href="/edit/{{escaped_name}}"
+    <li class="minibutton"><a href="/editor.html?page={{escaped_name}}"
        class="action-edit-page">Edit Page</a></li>
     {{/editable}}
     <li class="minibutton"><a href="/history/{{escaped_name}}"
