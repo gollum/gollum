@@ -80,7 +80,7 @@ module Gollum
     #
     # Returns the filtered String.
     def self.canonicalize_filename(filename)
-      filename.split('.')[0..-2].join('.').gsub('-', ' ')
+      filename.split('.')[0..-2].join('.').gsub(' ', '-')
     end
 
     # Public: Initialize a page.
@@ -106,6 +106,11 @@ module Gollum
     # Returns the String name.
     def name
       self.class.canonicalize_filename(filename)
+    end
+
+    # For pages.mustache (no dashes)
+    def name2
+      self.class.canonicalize_filename(filename).gsub('-', ' ')
     end
 
     # Public: If the first element of a formatted page is an <h1> tag it can
