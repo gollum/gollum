@@ -447,15 +447,28 @@ module Gollum
         data = extract_code(data)
         data = extract_tags(data)
 
-        flags = [
-          :autolink,
-          :fenced_code,
-          :tables,
-          :strikethrough,
-          :lax_htmlblock,
-          :no_intraemphasis
-        ]
-        data = Redcarpet.new(data, *flags).to_html
+        if Gem::Version.new(Redcarpet::VERSION) > Gem::Version.new("1.17.2")
+          html_renderer = Redcarpet::Render::HTML.new({
+            :autolink => true,
+            :fenced_code_blocks => true, 
+            :tables => true,
+            :strikethrough => true,
+            :lax_htmlblock => true,
+            :no_intraemphasis => true
+          })
+          markdown = Redcarpet::Markdown.new(html_renderer)
+          data = markdown.render(data)
+        else
+          flags = [
+            :autolink,
+            :fenced_code,
+            :tables,
+            :strikethrough,
+            :lax_htmlblock,
+            :no_intraemphasis
+          ]
+          data = Redcarpet.new(data, *flags).to_html
+        end
         data = process_tags(data)
         data = process_code(data)
 
