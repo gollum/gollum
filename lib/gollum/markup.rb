@@ -53,15 +53,11 @@ module Gollum
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
         doc  = sanitize.clean_node!(doc) if sanitize
         yield doc if block_given?
-        data = doc_to_html(doc)
+        data = doc.to_html
       end
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
-    end
-
-    def doc_to_html(doc)
-      doc.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
     end
 
     #########################################################################
