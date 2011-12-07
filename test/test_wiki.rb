@@ -11,13 +11,17 @@ context "Wiki" do
     assert_equal Gollum::Markup, Gollum::Wiki.markup_class
   end
 
-  test "#markup_class= doesn't clobber alternate markups" do
+  test "#default_markup_class= doesn't clobber alternate markups" do
     custom = Class.new(Gollum::Markup)
-    Gollum::Wiki.markup_class = custom
+    custom_md = Class.new(Gollum::Markup)
 
-    assert_equal custom, Gollum::Wiki.markup_class
+    Gollum::Wiki.markup_classes = Hash.new Gollum::Markup
+    Gollum::Wiki.markup_classes[:markdown] = custom_md
+    Gollum::Wiki.default_markup_class = custom
+
+    assert_equal custom, Gollum::Wiki.default_markup_class
     assert_equal custom, Gollum::Wiki.markup_classes[:orgmode]
-    assert_equal Gollum::MarkupGFM, Gollum::Wiki.markup_classes[:markdown]
+    assert_equal custom_md, Gollum::Wiki.markup_classes[:markdown]
   end
 
   test "repo path" do
