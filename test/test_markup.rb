@@ -189,7 +189,7 @@ context "Markup" do
 
       page = @wiki.page(name)
       output = page.formatted_data
-      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.jpg" /> b</p>}, output
+      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.jpg"> b</p>}, output
     end
   end
 
@@ -200,7 +200,7 @@ context "Markup" do
 
       page = @wiki.page(name)
       output = page.formatted_data
-      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.JPG" /> b</p>}, output
+      assert_equal %{<p>a <img src="#{scheme}://example.com/bilbo.JPG"> b</p>}, output
     end
   end
 
@@ -212,7 +212,7 @@ context "Markup" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] [[a | /alpha.jpg]] b", commit_details)
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg"><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path on root" do
@@ -223,7 +223,7 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg"><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path" do
@@ -235,7 +235,7 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = page.formatted_data
-    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /><a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
+    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg"><a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
   end
 
   test "image with absolute path on a preview" do
@@ -245,7 +245,7 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.preview_page("Test", "a [[/alpha.jpg]] b", :markdown)
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg"> b</p>}, page.formatted_data
   end
 
   test "image with relative path on a preview" do
@@ -256,12 +256,12 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.preview_page("Test", "a [[alpha.jpg]] [[greek/alpha.jpg]] b", :markdown)
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><img src="/wiki/greek/alpha.jpg" /> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg"><img src="/wiki/greek/alpha.jpg"> b</p>}, page.formatted_data
   end
 
   test "image with alt" do
     content = "a [[alpha.jpg|alt=Alpha Dog]] b"
-    output = %{<p>a <img src="/greek/alpha.jpg" alt="Alpha Dog" /> b</p>}
+    output = %{<p>a <img src="/greek/alpha.jpg" alt="Alpha Dog"> b</p>}
     relative_image(content, output)
   end
 
@@ -269,7 +269,7 @@ context "Markup" do
     %w{em px}.each do |unit|
       %w{width height}.each do |dim|
         content = "a [[alpha.jpg|#{dim}=100#{unit}]] b"
-        output = "<p>a <img src=\"/greek/alpha.jpg\" #{dim}=\"100#{unit}\" /> b</p>"
+        output = "<p>a <img src=\"/greek/alpha.jpg\" #{dim}=\"100#{unit}\"> b</p>"
         relative_image(content, output)
       end
     end
@@ -278,7 +278,7 @@ context "Markup" do
   test "image with bogus dimension" do
     %w{width height}.each do |dim|
       content = "a [[alpha.jpg|#{dim}=100]] b"
-      output = "<p>a <img src=\"/greek/alpha.jpg\" /> b</p>"
+      output = "<p>a <img src=\"/greek/alpha.jpg\"> b</p>"
       relative_image(content, output)
     end
   end
@@ -286,7 +286,7 @@ context "Markup" do
   test "image with vertical align" do
     %w{top texttop middle absmiddle bottom absbottom baseline}.each do |align|
       content = "a [[alpha.jpg|align=#{align}]] b"
-      output = "<p>a <img src=\"/greek/alpha.jpg\" align=\"#{align}\" /> b</p>"
+      output = "<p>a <img src=\"/greek/alpha.jpg\" align=\"#{align}\"> b</p>"
       relative_image(content, output)
     end
   end
@@ -294,40 +294,40 @@ context "Markup" do
   test "image with horizontal align" do
     %w{left center right}.each do |align|
       content = "a [[alpha.jpg|align=#{align}]] b"
-      output = "<p>a <span class=\"align-#{align}\"><span><img src=\"/greek/alpha.jpg\" /></span></span> b</p>"
+      output = "<p>a <span class=\"align-#{align}\"><span><img src=\"/greek/alpha.jpg\"></span></span> b</p>"
       relative_image(content, output)
     end
   end
 
   test "image with float" do
     content = "a\n\n[[alpha.jpg|float]]\n\nb"
-    output = "<p>a</p>\n\n<p><span class=\"float-left\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>"
+    output = "<p>a</p>\n\n<p><span class=\"float-left\"><span><img src=\"/greek/alpha.jpg\"></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
   end
 
   test "image with float and align" do
     %w{left right}.each do |align|
       content = "a\n\n[[alpha.jpg|float|align=#{align}]]\n\nb"
-      output = "<p>a</p>\n\n<p><span class=\"float-#{align}\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>"
+      output = "<p>a</p>\n\n<p><span class=\"float-#{align}\"><span><img src=\"/greek/alpha.jpg\"></span></span></p>\n\n<p>b</p>"
       relative_image(content, output)
     end
   end
 
   test "image with frame" do
     content = "a\n\n[[alpha.jpg|frame]]\n\nb"
-    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" /></span></span></p>\n\n<p>b</p>"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\"></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
   end
 
   test "absolute image with frame" do
     content = "a\n\n[[http://example.com/bilbo.jpg|frame]]\n\nb"
-    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"http://example.com/bilbo.jpg\" /></span></span></p>\n\n<p>b</p>"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"http://example.com/bilbo.jpg\"></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
   end
 
   test "image with frame and alt" do
     content = "a\n\n[[alpha.jpg|frame|alt=Alpha]]\n\nb"
-    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><span>Alpha</span></span></span></p>\n\n<p>b</p>"
+    output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" alt=\"Alpha\"><span>Alpha</span></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
   end
 
