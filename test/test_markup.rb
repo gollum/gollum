@@ -376,7 +376,7 @@ context "Markup" do
 
   test "code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
+    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
              "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
@@ -391,7 +391,7 @@ context "Markup" do
 
   test "code blocks with carriage returns" do
     content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
+    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre>" +
              "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
              "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
