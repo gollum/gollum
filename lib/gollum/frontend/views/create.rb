@@ -39,6 +39,10 @@ module Precious
       def formats
         super(:markdown)
       end
+      
+      def default_markup
+        Precious::App.settings.default_markup
+      end 
     end
   end
 end
