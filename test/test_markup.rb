@@ -441,6 +441,12 @@ np.array([[2,2],[1,3]],np.float)
     end
   end
 
+  test "code blocks with utf-8 character" do
+    content = "```html\n恭喜发财\n```"
+    output = "<divclass=\"highlight\"><pre>恭喜发财</pre></div>"
+    compare(content, output)
+  end
+
   def assert_markup_highlights_code(markup_class, rendered)
     assert_match /div class="highlight"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
     assert_match /span class="n"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
