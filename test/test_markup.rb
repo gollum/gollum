@@ -422,6 +422,14 @@ context "Markup" do
     compare(content, output)
   end
 
+  test "code blocks with ascii characters" do
+    content = "a\n\n```\n├─foo\n```\n\nb"
+    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
+             "<span class=\"n\">├─foo</span>" +
+             "\n</pre>\n</div>\n\n<p>b</p>"
+    compare(content, output)
+  end
+
   test "code with wiki links" do
     content = <<-END
 booya
