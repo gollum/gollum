@@ -15,6 +15,10 @@ module Precious
       def title
         "Home"
       end
+      
+      def base_path
+        Precious::App.wiki_options[:base_path]
+      end
     end
   end
 end

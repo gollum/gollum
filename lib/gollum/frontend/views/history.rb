@@ -27,14 +27,14 @@ module Precious
         if @page_num == 1
           %(<span class="disabled">#{label}</span>)
         else
-          %(<a href="/history/#{@page.name}?page=#{@page_num-1}" hotkey="h">#{label}</a>)
+          %(<a href="{{base_path}}/history/#{@page.name}?page=#{@page_num-1}" hotkey="h">#{label}</a>)
         end
       end
 
       def next_link
         label = "Next &raquo;"
         if @versions.size == Gollum::Page.per_page
-          %(<a href="/history/#{@page.name}?page=#{@page_num+1}" hotkey="l">#{label}</a>)
+          %(<a href="{{base_path}}/history/#{@page.name}?page=#{@page_num+1}" hotkey="l">#{label}</a>)
         else
           %(<span class="disabled">#{label}</span>)
         end

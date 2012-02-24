@@ -18,7 +18,7 @@
   {{#show_revert}}
   <ul class="actions">
     <li class="minibutton">
-      <form name="gollum-revert" action="/revert/{{escaped_name}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
+      <form name="gollum-revert" action="{{base_path}}/revert/{{escaped_name}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
       <a href="#" class="gollum-revert-button">Revert Changes</a>
       </form>
     </li>

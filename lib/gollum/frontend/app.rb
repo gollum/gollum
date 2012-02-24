@@ -66,7 +66,7 @@ module Precious
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
 
-      redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
+      redirect "#{base_path}/#{CGI.escape(Gollum::Page.cname(name))}"
     end
 
     post '/create' do
@@ -77,7 +77,7 @@ module Precious
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect "/#{CGI.escape(name)}"
+        redirect "#{base_path}/#{CGI.escape(name)}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -93,7 +93,7 @@ module Precious
       sha2  = shas.shift
 
       if wiki.revert_page(@page, sha1, sha2, commit_message)
-        redirect "/#{CGI.escape(@name)}"
+        redirect "#{base_path}/#{CGI.escape(@name)}"
       else
         sha2, sha1 = sha1, "#{sha1}^" if !sha2
         @versions = [sha1, sha2]
@@ -125,9 +125,9 @@ module Precious
     post '/compare/:name' do
       @versions = params[:versions] || []
       if @versions.size < 2
-        redirect "/history/#{CGI.escape(params[:name])}"
+        redirect "#{base_path}/history/#{CGI.escape(params[:name])}"
       else
-        redirect "/compare/%s/%s...%s" % [
+        redirect "#{base_path}/compare/%s/%s...%s" % [
           CGI.escape(params[:name]),
           @versions.last,
           @versions.first]
@@ -216,5 +216,10 @@ module Precious
     def commit_message
       { :message => params[:message] }
     end
+    
+    def base_path
+      settings.wiki_options[:base_path]
+    end
+    
   end
 end
