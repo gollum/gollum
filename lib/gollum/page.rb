@@ -100,6 +100,16 @@ module Gollum
       @blob && @blob.name
     end
 
+    # Public: The path to the on-disk file.
+    #
+    # Returns the String dir.
+    def dir
+      return nil if path.scan(/\//).size == 0
+      path.split('/')[0..-2].join('/')+'/'
+    end
+
+
+
     # Public: The canonical page name without extension, and dashes converted
     # to spaces.
     #
@@ -254,7 +264,7 @@ module Gollum
     # Returns the String canonical name.
     def self.cname(name)
       name.respond_to?(:gsub)      ?
-        name.gsub(%r{[ /<>]}, '-') :
+        name.gsub(%r{[ <>]}, '-') :
         ''
     end
 
@@ -327,7 +337,7 @@ module Gollum
       map.each do |entry|
         next if entry.name.to_s.empty?
         next unless checked_dir.nil? || entry.dir.downcase == checked_dir
-        next unless page_match(name, entry.name)
+        next unless page_match("/"+name, entry.dir+"/"+entry.name)
         return entry.page(@wiki, @version)
       end
 

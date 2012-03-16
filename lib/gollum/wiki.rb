@@ -439,10 +439,12 @@ module Gollum
       @repo.git.grep(*args).split("\n").map! do |line|
         result = line.split(':')
         file_name = Gollum::Page.canonicalize_filename(::File.basename(result[1]))
-
+	dir_name = result[1].split('/')[0..-2].join('/')+'/'
+        dir_name = nil if result[1].scan(/\//).size == 0
         {
           :count  => result[2].to_i,
-          :name   => file_name
+          :name   => file_name,
+          :dir    => dir_name
         }
       end
     end
