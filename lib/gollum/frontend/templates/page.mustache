@@ -7,14 +7,15 @@
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-new-page">New Page</a></li>
     {{#editable}}
-    <li class="minibutton"><a href="{{base_path}}/edit/{{escaped_name}}"
+    <li class="minibutton"><a href="{{base_path}}/edit/{{page_url}}"
        class="action-edit-page">Edit Page</a></li>
     {{/editable}}
-    <li class="minibutton"><a href="{{base_path}}/history/{{escaped_name}}"
+    <li class="minibutton"><a href="{{base_path}}/history/{{page_url}}"
        class="action-page-history">Page History</a></li>
   </ul>
   {{>searchbar}}
 </div>
+
 <div id="wiki-content">
 <div class="wrap {{#has_footer}} has-footer {{/has_footer}} {{#has_sidebar}}  has-rightbar{{/has_sidebar}}">
   <div id="wiki-body" class="gollum-{{format}}-content">

@@ -66,7 +66,7 @@ module Precious
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
 
-      redirect "#{base_path}/#{CGI.escape(Gollum::Page.cname(name))}"
+      redirect "#{base_path}/#{page.url}"
     end
 
     post '/create' do
@@ -76,8 +76,9 @@ module Precious
       format = params[:format].intern
 
       begin
-        wiki.write_page(name, format, params[:content], commit_message)
-        redirect "#{base_path}/#{CGI.escape(name)}"
+        dir, filename = Gollum::split_url(name)
+        wiki.write_page(dir, filename, format, params[:content], commit_message)
+        redirect "#{base_path}/#{dir}#{Gollum::Page.cname(filename)}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -93,7 +94,7 @@ module Precious
       sha2  = shas.shift
 
       if wiki.revert_page(@page, sha1, sha2, commit_message)
-        redirect "#{base_path}/#{CGI.escape(@name)}"
+        redirect "#{base_path}/#{@page.url}"
       else
         sha2, sha1 = sha1, "#{sha1}^" if !sha2
         @versions = [sha1, sha2]
@@ -113,8 +114,8 @@ module Precious
       mustache :page
     end
 
-    get '/history/:name' do
-      @name     = params[:name]
+    get '/history/*' do
+      @name = params[:splat].first
       wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @page     = wiki.page(@name)
       @page_num = [params[:page].to_i, 1].max

@@ -83,6 +83,10 @@ module Gollum
       filename.split('.')[0..-2].join('.').gsub('-', ' ')
     end
 
+    def self.slugify(filename)
+        cname(filename.split('.')[0..-2].join('.'))
+    end
+
     # Public: Initialize a page.
     #
     # wiki - The Gollum::Wiki in question.
@@ -116,6 +120,16 @@ module Gollum
     # Returns the String name.
     def name
       self.class.canonicalize_filename(filename)
+    end
+
+    # Public: returns slug - name prepared for url
+    def slug
+      self.class.slugify(filename)
+    end
+
+    def url
+      return dir + slug if dir
+      slug
     end
 
     # Public: If the first element of a formatted page is an <h1> tag it can

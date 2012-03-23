@@ -36,5 +36,13 @@ module Gollum
       super(message || "Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.")
     end
   end
+
+  def Gollum.split_url(name)
+      #require 'ruby-debug/debugger'
+      pathlist = name.split(IO::File::SEPARATOR)
+      dir = pathlist[0..-2].join('/')
+      stripped_name = pathlist[-1]
+      return dir + '/', Gollum::Page.cname(stripped_name)
+  end
 end
 
