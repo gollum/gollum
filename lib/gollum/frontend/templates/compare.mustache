@@ -3,7 +3,7 @@
   <h1>History for <strong>{{path}}</strong></h1>
   
   <ul class="actions">
-    <li class="minibutton"><a href="/history/{{escaped_name}}"
+    <li class="minibutton"><a href="/history/{{page_url}}"
        class="action-page-history">Back to Page History</a></li>
   </ul>
   {{>searchbar}}
@@ -18,7 +18,7 @@
   {{#show_revert}}
   <ul class="actions">
     <li class="minibutton">
-      <form name="gollum-revert" action="{{base_path}}/revert/{{escaped_name}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
+      <form name="gollum-revert" action="{{base_path}}/revert/{{page_url}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
       <a href="#" class="gollum-revert-button">Revert Changes</a>
       </form>
     </li>

@@ -3,7 +3,7 @@
 <form name="gollum-editor" action="{{base_path}}/create" method="post">
 {{/is_create_page}}
 {{#is_edit_page}}
-<form name="gollum-editor" action="{{base_path}}/edit/{{escaped_name}}" method="post">
+<form name="gollum-editor" action="{{base_path}}/edit/{{page_url}}" method="post">
 {{/is_edit_page}}
   <fieldset id="gollum-editor-fields">
   {{#is_create_page}}

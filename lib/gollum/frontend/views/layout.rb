@@ -23,6 +23,10 @@ module Precious
       def base_path
         Precious::App.wiki_options[:base_path]
       end
+
+      def page_url
+        @page.url
+      end
     end
   end
 end

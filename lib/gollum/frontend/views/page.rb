@@ -51,11 +51,7 @@ module Precious
 
       def sidebar_format
         has_sidebar && @sidebar.format.to_s
-      end
-
-      def page_url
-        @page.url
-      end
+      end      
     end
   end
 end
