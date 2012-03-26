@@ -203,7 +203,8 @@ module Gollum
 
     # Public: Write a new version of a page to the Gollum repo root.
     #
-    # name   - The String name of the page.
+    # dir      - path to the page (subdirectories)
+    # filename - The String name of the page.
     # format - The Symbol format of the page.
     # data   - The new String contents of the page.
     # commit - The commit Hash details:
@@ -219,7 +220,7 @@ module Gollum
     #
     # Returns the String SHA1 of the newly written version, or the 
     # Gollum::Committer instance if this is part of a batch update.
-    def write_page(name, format, data, commit = {})
+    def write_page(dir, filename, format, data, commit = {})
       multi_commit = false
 
       committer = if obj = commit[:committer]
@@ -228,12 +229,12 @@ module Gollum
       else
         Committer.new(self, commit)
       end
-
-      committer.add_to_index('', name, format, data)
+      
+      committer.add_to_index(dir, filename, format, data)
 
       committer.after_commit do |index, sha|
         @access.refresh
-        index.update_working_dir('', name, format)
+        index.update_working_dir(dir, filename, format)
       end
 
       multi_commit ? committer : committer.commit

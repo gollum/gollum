@@ -12,6 +12,10 @@ module Precious
         CGI.escape(@name)
       end
 
+      def file_name
+        CGI.escape(Gollum::Page.cname(@name))
+      end
+
       def title
         "Home"
       end
