@@ -1,5 +1,6 @@
 require 'digest/sha1'
 require 'cgi'
+require 'uri'
 require 'pygments'
 require 'base64'
 
@@ -306,10 +307,10 @@ module Gollum
         link_name   = cname
         page, extra = find_page_from_name(cname)
         if page
-          link_name = @wiki.page_class.cname(page.name)
+          link_name = page.url #@wiki.page_class.cname(page.name)
           presence  = "present"
         end
-        link = ::File.join(@wiki.base_path, CGI.escape(link_name))
+        link = ::File.join(@wiki.base_path, URI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
     end
