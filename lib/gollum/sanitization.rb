@@ -55,6 +55,13 @@ module Gollum
       end
     end
 
+    # Default elements whose contents will be removed in addition
+    # to the elements themselve
+    REMOVE_CONTENTS = [
+      'script',
+      'style'
+      ].freeze
+
     # Default transformers to force @id attributes with 'wiki-' prefix
     TRANSFORMERS = [
       lambda do |env|
@@ -104,18 +111,23 @@ module Gollum
     # Default: {}
     attr_reader :add_attributes
 
+    # Gets an Array of element names whose contents will be removed in addition
+    # to the elements themselves. Default: REMOVE_CONTENTS
+    attr_reader :remove_contents
+
     # Sets a boolean determining whether Sanitize allows HTML comments in the
     # output.  Default: false.
     attr_writer :allow_comments
 
     def initialize
-      @elements       = ELEMENTS
-      @attributes     = ATTRIBUTES
-      @protocols      = PROTOCOLS
-      @transformers   = TRANSFORMERS
-      @add_attributes = {}
-      @allow_comments = false
-      @id_prefix      = 'wiki-'
+      @elements         = ELEMENTS
+      @attributes       = ATTRIBUTES
+      @protocols        = PROTOCOLS
+      @transformers     = TRANSFORMERS
+      @add_attributes   = {}
+      @remove_contents  = REMOVE_CONTENTS
+      @allow_comments   = false
+      @id_prefix        = 'wiki-'
       yield self if block_given?
     end
 
@@ -140,13 +152,14 @@ module Gollum
     #
     # Returns a Hash.
     def to_hash
-      { :elements       => elements,
-        :attributes     => attributes,
-        :protocols      => protocols,
-        :add_attributes => add_attributes,
-        :allow_comments => allow_comments?,
-        :transformers   => transformers,
-        :id_prefix      => id_prefix
+      { :elements         => elements,
+        :attributes       => attributes,
+        :protocols        => protocols,
+        :add_attributes   => add_attributes,
+        :remove_contents  => remove_contents,
+        :allow_comments   => allow_comments?,
+        :transformers     => transformers,
+        :id_prefix        => id_prefix
       }
     end
 
