@@ -54,12 +54,12 @@ context "Wiki" do
   test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      %w(Bilbo-Baggins.md Eye-Of-Sauron.md Home.textile My-Precious.md),
+      ['Bilbo-Baggins.md', 'Eye-Of-Sauron.md', 'Home.textile', 'My-Precious.md', 'Samwise Gamgee.mediawiki'],
       pages.map { |p| p.filename }.sort
   end
 
   test "counts pages" do
-    assert_equal 4, @wiki.size
+    assert_equal 5, @wiki.size
   end
 
   test "text_data" do
@@ -232,6 +232,64 @@ context "Wiki page writing" do
   end
 end
 
+context "Wiki page writing with whitespace (filename contains whitespace)" do
+  setup do
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+  end
+  
+  test "update_page" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, :textile, "h1. Samwise Gamgee2", commit_details)
+
+    assert_equal :textile, @wiki.page("Samwise Gamgee").format
+    assert_equal "h1. Samwise Gamgee2", @wiki.page("Samwise Gamgee").raw_data
+    assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
+  end
+  
+  test "update page with format change, verify non-canonicalization of filename,  where filename contains Whitespace" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, :textile, "h1. Samwise Gamgee", commit_details)
+
+    assert_equal :textile, @wiki.page("Samwise Gamgee").format
+    assert_equal "h1. Samwise Gamgee", @wiki.page("Samwise Gamgee").raw_data
+    assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
+  end
+ 
+  test "update page with name change, verify canonicalization of filename, where filename contains Whitespace" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, 'Sam Gamgee', :textile, "h1. Samwise Gamgee", commit_details)
+
+    assert_equal "h1. Samwise Gamgee", @wiki.page("Sam Gamgee").raw_data  
+    assert_equal "Sam-Gamgee.textile", @wiki.page("Sam Gamgee").filename
+  end
+  
+  test "update page with name and format change, verify canonicalization of filename, where filename contains Whitespace" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, 'Sam Gamgee', :textile, "h1. Samwise Gamgee", commit_details)
+
+    assert_equal :textile, @wiki.page("Sam Gamgee").format
+    assert_equal "h1. Samwise Gamgee", @wiki.page("Sam Gamgee").raw_data
+    assert_equal "Sam-Gamgee.textile", @wiki.page("Sam Gamgee").filename
+  end  
+  
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+end
+
 context "Wiki sync with working directory" do
   setup do
     @path = testpath('examples/wdtest')
@@ -282,6 +340,49 @@ context "Wiki sync with working directory" do
     assert !File.exist?(File.join(@path, "New-Page.md"))
   end
 
+  teardown do
+    FileUtils.rm_r(@path)
+  end
+end
+
+context "Wiki sync with working directory (filename contains whitespace)" do
+  setup do
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+  end
+  test "update a page with same name and format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, page.format, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+
+  test "update a page with different name and same format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, "Sam Gamgee", page.format, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Sam-Gamgee.mediawiki"))
+    assert !File.exist?(File.join(@path, "Samwise Gamgee"))
+  end
+
+  test "update a page with same name and different format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, :textile, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Samwise Gamgee.textile"))
+    assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+
+  test "update a page with different name and different format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, "Sam Gamgee", :textile, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Sam-Gamgee.textile"))
+    assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+
+  test "delete a page" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.delete_page(page, commit_details)
+    assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+  
   teardown do
     FileUtils.rm_r(@path)
   end
