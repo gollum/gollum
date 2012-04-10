@@ -481,7 +481,7 @@ module Gollum
         doc  = sanitize.clean_node!(doc) if sanitize
         yield doc if block_given?
 
-        data = doc_to_html(doc)
+        data = doc.to_html
         data = process_tex(data)
         data
       end
