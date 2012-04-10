@@ -1,6 +1,7 @@
 require 'digest/sha1'
 require 'cgi'
 require 'pygments'
+require 'base64'
 
 module Gollum
 
@@ -53,15 +54,11 @@ module Gollum
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
         doc  = sanitize.clean_node!(doc) if sanitize
         yield doc if block_given?
-        data = doc_to_html(doc)
+        data = doc.to_html
       end
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
-    end
-
-    def doc_to_html(doc)
-      doc.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
     end
 
     #########################################################################
@@ -98,13 +95,7 @@ module Gollum
     def process_tex(data)
       @texmap.each do |id, spec|
         type, tex = *spec
-        out =
-        case type
-          when :block
-            %{<script type="math/tex; mode=display">#{tex}</script>}
-          when :inline
-            %{<script type="math/tex">#{tex}</script>}
-        end
+        out = %{<img src="#{::File.join(@wiki.base_path, '_tex.png')}?type=#{type}&data=#{Base64.encode64(tex).chomp}" alt="#{CGI.escapeHTML(tex)}">}
         data.gsub!(id, out)
       end
       data
@@ -455,15 +446,28 @@ module Gollum
         data = extract_code(data)
         data = extract_tags(data)
 
-        flags = [
-          :autolink,
-          :fenced_code,
-          :tables,
-          :strikethrough,
-          :lax_htmlblock,
-          :no_intraemphasis
-        ]
-        data = Redcarpet.new(data, *flags).to_html
+        if Gem::Version.new(Redcarpet::VERSION) > Gem::Version.new("1.17.2")
+          html_renderer = Redcarpet::Render::HTML.new({
+            :autolink => true,
+            :fenced_code_blocks => true, 
+            :tables => true,
+            :strikethrough => true,
+            :lax_htmlblock => true,
+            :no_intraemphasis => true
+          })
+          markdown = Redcarpet::Markdown.new(html_renderer)
+          data = markdown.render(data)
+        else
+          flags = [
+            :autolink,
+            :fenced_code,
+            :tables,
+            :strikethrough,
+            :lax_htmlblock,
+            :no_intraemphasis
+          ]
+          data = Redcarpet.new(data, *flags).to_html
+        end
         data = process_tags(data)
         data = process_code(data, encoding)
 
@@ -480,7 +484,7 @@ module Gollum
         doc  = sanitize.clean_node!(doc) if sanitize
         yield doc if block_given?
 
-        data = doc_to_html(doc)
+        data = doc.to_html
         data = process_tex(data)
         data
       end

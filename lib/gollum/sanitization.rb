@@ -43,7 +43,7 @@ module Gollum
 
     # Default whitelisted protocols for URLs.
     PROTOCOLS = {
-      'a'   => {'href' => ['http', 'https', 'mailto', :relative]},
+      'a'   => {'href' => ['http', 'https', 'mailto', 'ftp', 'irc', :relative]},
       'img' => {'src'  => ['http', 'https', :relative]}
     }.freeze
 
@@ -55,10 +55,17 @@ module Gollum
       end
     end
 
+    # Default elements whose contents will be removed in addition
+    # to the elements themselve
+    REMOVE_CONTENTS = [
+      'script',
+      'style'
+      ].freeze
+
     # Default transformers to force @id attributes with 'wiki-' prefix
     TRANSFORMERS = [
       lambda do |env|
-        node      = env[:node]
+        node = env[:node]
         return if env[:is_whitelisted] || !node.element?
         prefix = env[:config][:id_prefix]
         found_attrs = %w(id name).select do |key|
@@ -68,7 +75,7 @@ module Gollum
         end
         if found_attrs.size > 0
           ADD_ATTRIBUTES.call(env, node)
-          {:node_whitelist => [node]}
+          {}
         end
       end,
       lambda do |env|
@@ -77,7 +84,7 @@ module Gollum
         prefix = env[:config][:id_prefix]
         node['href'] = value.gsub(/\A\#(#{prefix})?/, '#'+prefix)
         ADD_ATTRIBUTES.call(env, node)
-        {:node_whitelist => [node]}
+        {}
       end
     ].freeze
 
@@ -88,11 +95,11 @@ module Gollum
     # elements.  Default: ATTRIBUTES.
     attr_reader :attributes
 
-    # Gets a Hash describing which URI protocols are allowed in HTML 
+    # Gets a Hash describing which URI protocols are allowed in HTML
     # attributes.  Default: PROTOCOLS
     attr_reader :protocols
 
-    # Gets a Hash describing which URI protocols are allowed in HTML 
+    # Gets a Hash describing which URI protocols are allowed in HTML
     # attributes.  Default: TRANSFORMERS
     attr_reader :transformers
 
@@ -100,22 +107,27 @@ module Gollum
     # Default: 'wiki-'
     attr_accessor :id_prefix
 
-    # Gets a Hash describing HTML attributes that Sanitize should add.  
+    # Gets a Hash describing HTML attributes that Sanitize should add.
     # Default: {}
     attr_reader :add_attributes
+
+    # Gets an Array of element names whose contents will be removed in addition
+    # to the elements themselves. Default: REMOVE_CONTENTS
+    attr_reader :remove_contents
 
     # Sets a boolean determining whether Sanitize allows HTML comments in the
     # output.  Default: false.
     attr_writer :allow_comments
 
     def initialize
-      @elements       = ELEMENTS
-      @attributes     = ATTRIBUTES
-      @protocols      = PROTOCOLS
-      @transformers   = TRANSFORMERS
-      @add_attributes = {}
-      @allow_comments = false
-      @id_prefix      = 'wiki-'
+      @elements         = ELEMENTS
+      @attributes       = ATTRIBUTES
+      @protocols        = PROTOCOLS
+      @transformers     = TRANSFORMERS
+      @add_attributes   = {}
+      @remove_contents  = REMOVE_CONTENTS
+      @allow_comments   = false
+      @id_prefix        = 'wiki-'
       yield self if block_given?
     end
 
@@ -140,13 +152,14 @@ module Gollum
     #
     # Returns a Hash.
     def to_hash
-      { :elements       => elements,
-        :attributes     => attributes,
-        :protocols      => protocols,
-        :add_attributes => add_attributes,
-        :allow_comments => allow_comments?,
-        :transformers   => transformers,
-        :id_prefix      => id_prefix
+      { :elements         => elements,
+        :attributes       => attributes,
+        :protocols        => protocols,
+        :add_attributes   => add_attributes,
+        :remove_contents  => remove_contents,
+        :allow_comments   => allow_comments?,
+        :transformers     => transformers,
+        :id_prefix        => id_prefix
       }
     end
 

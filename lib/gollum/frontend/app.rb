@@ -144,6 +144,12 @@ module Precious
       mustache :compare
     end
 
+    get '/_tex.png' do
+      content_type 'image/png'
+      formula = Base64.decode64(params[:data])
+      Gollum::Tex.render_formula(formula)
+    end
+
     get %r{^/(javascript|css|images)} do
       halt 404
     end
@@ -199,7 +205,7 @@ module Precious
     end
 
     def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
-      return if !page ||  
+      return if !page ||
         ((!content || page.raw_data == content) && page.format == format)
       name    ||= page.name
       format    = (format || page.format).to_sym

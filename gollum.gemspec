@@ -23,8 +23,9 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_dependency('grit', "~> 2.4.1")
-  s.add_dependency('github-markup', [">= 0.4.0", "< 1.0.0"])
+  s.add_dependency('github-markup', [">= 0.7.0", "< 1.0.0"])
   s.add_dependency('pygments.rb', "~> 0.2.0")
+  s.add_dependency('posix-spawn', "~> 0.3.0")
   s.add_dependency('sinatra', "~> 1.0")
   s.add_dependency('mustache', [">= 0.11.2", "< 1.0.0"])
   s.add_dependency('sanitize', "~> 2.0.0")
@@ -34,7 +35,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('RedCloth')
   s.add_development_dependency('mocha')
   s.add_development_dependency('org-ruby')
-  s.add_development_dependency('rdiscount')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('rack-test')
   s.add_development_dependency('wikicloth', '~> 0.6.3')
