@@ -15,7 +15,8 @@ module Precious
     # We want to serve public assets for now
     set :public_folder, "#{dir}/public"
     set :static,         true
-
+    set :default_markup, :markdown
+    
     set :mustache, {
       # Tell mustache where the Views constant lives
       :namespace => Precious,
