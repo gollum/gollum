@@ -20,7 +20,10 @@ module Gollum
 
       # Sets the default email for commits.
       attr_accessor :default_committer_email
-
+      
+      # Array of chars to substitute whitespace for when trying to locate file in git repo.
+      attr_accessor :default_ws_subs
+      
       # Sets sanitization options. Set to false to deactivate
       # sanitization altogether.
       attr_writer :sanitization
@@ -102,6 +105,8 @@ module Gollum
     self.default_ref = 'master'
     self.default_committer_name  = 'Anonymous'
     self.default_committer_email = 'anon@anon.com'
+    
+    self.default_ws_subs = ['_','-']
 
     # The String base path to prefix to internal links. For example, when set
     # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
@@ -119,6 +124,9 @@ module Gollum
 
     # Gets the String directory in which all page files reside.
     attr_reader :page_file_dir
+    
+    # Gets the Array of chars to sub for ws in filenames.
+    attr_reader :ws_subs
 
     # Public: Initialize a new Gollum Repo.
     #
@@ -134,6 +142,7 @@ module Gollum
     #           :sanitization  - An instance of Sanitization.
     #           :page_file_dir - String the directory in which all page files reside
     #           :ref - String the repository ref to retrieve pages from
+    #           :ws_subs       - Array of chars to sub for ws in filenames.
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -151,6 +160,8 @@ module Gollum
       @repo          = @access.repo
       @ref           = options[:ref] || self.class.default_ref
       @sanitization  = options[:sanitization] || self.class.sanitization
+      @ws_subs       = options[:ws_subs] ||
+        self.class.default_ws_subs
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
     end
@@ -228,12 +239,14 @@ module Gollum
       else
         Committer.new(self, commit)
       end
-
-      committer.add_to_index('', name, format, data)
+      
+      filename = Gollum::Page.cname(name)
+      
+      committer.add_to_index('', filename, format, data)
 
       committer.after_commit do |index, sha|
         @access.refresh
-        index.update_working_dir('', name, format)
+        index.update_working_dir('', filename, format)
       end
 
       multi_commit ? committer : committer.commit
@@ -265,7 +278,10 @@ module Gollum
       name   ||= page.name
       format ||= page.format
       dir      = ::File.dirname(page.path)
-      dir      = '' if dir == '.'
+      dir      = '' if dir == '.'   
+      filename = (rename = page.name != name) ?
+        Gollum::Page.cname(name) : page.filename_stripped
+      
       multi_commit = false
 
       committer = if obj = commit[:committer]
@@ -274,18 +290,18 @@ module Gollum
       else
         Committer.new(self, commit)
       end
-
-      if page.name == name && page.format == format
+      
+      if !rename && page.format == format
         committer.add(page.path, normalize(data))
       else
         committer.delete(page.path)
-        committer.add_to_index(dir, name, format, data, :allow_same_ext)
+        committer.add_to_index(dir, filename, format, data, :allow_same_ext)
       end
-
+      
       committer.after_commit do |index, sha|
         @access.refresh
-        index.update_working_dir(dir, page.name, page.format)
-        index.update_working_dir(dir, name, format)
+        index.update_working_dir(dir, page.filename_stripped, page.format)
+        index.update_working_dir(dir, filename, format)
       end
 
       multi_commit ? committer : committer.commit
@@ -324,7 +340,7 @@ module Gollum
         dir = '' if dir == '.'
 
         @access.refresh
-        index.update_working_dir(dir, page.name, page.format)
+        index.update_working_dir(dir, page.filename_stripped, page.format)
       end
 
       multi_commit ? committer : committer.commit
@@ -362,7 +378,7 @@ module Gollum
 
         files = []
         if page
-          files << [page.path, page.name, page.format]
+          files << [page.path, page.filename_stripped, page.format]
         else
           # Grit::Diff can't parse reverse diffs.... yet
           patch.each_line do |line|
@@ -522,13 +538,12 @@ module Gollum
 
     # Assemble a Page's filename from its name and format.
     #
-    # name   - The String name of the page (may be in human format).
+    # name   - The String name of the page (should be pre-canonicalized).
     # format - The Symbol format of the page.
     #
     # Returns the String filename.
     def page_file_name(name, format)
-      ext = @page_class.format_to_ext(format)
-      @page_class.cname(name) + '.' + ext
+      name + '.' + @page_class.format_to_ext(format)
     end
 
     # Fill an array with a list of pages.
