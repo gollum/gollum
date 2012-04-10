@@ -414,6 +414,17 @@ module Gollum
       tree_list(treeish || @ref)
     end
 
+    # Public: Lists all pages for this wiki sorted by title.
+    #
+    # treeish - The String commit ID or ref to find  (default: master)
+    #
+    # Returns an Array of Gollum::Page instances.
+    def pages_sorted_by_title(treeish = nil)
+      tree_list(treeish || @ref).sort! do |x, y| 
+        x.title.downcase <=> y.title.downcase
+      end
+    end
+
     # Public: Returns the number of pages accessible from a commit
     #
     # ref - A String ref that is either a commit SHA or references one.

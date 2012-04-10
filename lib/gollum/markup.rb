@@ -19,6 +19,7 @@ module Gollum
       @format  = page.format
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
+      @extensiontagmap  = {}
       @codemap = {}
       @texmap  = {}
       @premap  = {}
@@ -39,6 +40,7 @@ module Gollum
       data = extract_tex(@data.dup)
       data = extract_code(data)
       data = extract_tags(data)
+      data = extract_extension_tags(data)
       begin
         data = GitHub::Markup.render(@name, data)
         if data.nil?
@@ -48,6 +50,7 @@ module Gollum
         data = %{<p class="gollum-error">#{e.message}</p>}
       end
       data = process_tags(data)
+      data = process_extension_tags(data)
       data = process_code(data)
       if sanitize || block_given?
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
@@ -344,7 +347,57 @@ module Gollum
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
     end
+    
+    #########################################################################
+    #
+    # Extension tags
+    #
+    #########################################################################
 
+    # Extract all extension tags into the tagmap and replace with placeholders.
+    #
+    # data - The raw String data.
+    #
+    # Returns the placeholder'd String data.
+    def extract_extension_tags(data)
+      data.gsub(/(.?)\{\{(.+?)\}\}([^\[]?)/m) do
+        if $1 == "'" && $3 != "'"
+          "\{\{#{$2}\}\}#{$3}"
+        elsif $2.include?('}{[')
+          $&
+        else
+          id = Digest::SHA1.hexdigest($2)
+          @extensiontagmap[id] = $2
+          "#{$1}#{id}#{$3}"
+        end
+      end
+    end
+
+    # Process all extension tags from the tagmap and replace the placeholders
+    # with the final markup.
+    #
+    # data - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
+    def process_extension_tags(data)
+      @extensiontagmap.each do |id, tag|
+        data.gsub!(id, process_extension_tag(tag))
+      end
+      data
+    end
+
+    # Process a single extension tag into its final HTML form.
+    #
+    # tag - The String tag contents (the stuff inside the double brackets).
+    #
+    # Returns the String HTML version of the tag.
+    def process_extension_tag(tag)
+      tag = tag.split
+      command = tag.first
+      arguments = tag[1..-1].join
+      Gollum::ExtensionTag.extensions[command].new(@wiki, tag.join, arguments).render
+    end
+    
     #########################################################################
     #
     # Code
