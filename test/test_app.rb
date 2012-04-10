@@ -85,6 +85,20 @@ context "Frontend" do
     assert_equal 'def', page.version.message
   end
 
+  test "creates pages with escaped characters in title" do
+    post "/create", :content => 'abc', :page => 'Title with spaces',
+      :format => 'markdown', :message => 'foo'
+    assert_equal 'http://example.org/Title-with-spaces', last_response.headers['Location']
+    get "/Title-with-spaces"
+    assert_match /abc/, last_response.body
+
+    post "/create", :content => 'ghi', :page => 'Title/with/slashes',
+      :format => 'markdown', :message => 'bar'
+    assert_equal 'http://example.org/Title-with-slashes', last_response.headers['Location']
+    get "/Title-with-slashes"
+    assert_match /ghi/, last_response.body
+  end
+
   test "guards against creation of existing page" do
     name = "A"
     post "/create", :content => 'abc', :page => name,
