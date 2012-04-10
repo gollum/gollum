@@ -83,6 +83,10 @@ module Gollum
       filename.split('.')[0..-2].join('.').gsub('-', ' ')
     end
 
+    def self.slugify(filename)
+        cname(filename.split('.')[0..-2].join('.'))
+    end
+
     # Public: Initialize a page.
     #
     # wiki - The Gollum::Wiki in question.
@@ -100,12 +104,32 @@ module Gollum
       @blob && @blob.name
     end
 
+    # Public: The path to the on-disk file.
+    #
+    # Returns the String dir.
+    def dir
+      return nil if path.scan(/\//).size == 0
+      path.split('/')[0..-2].join('/')+'/'
+    end
+
+
+
     # Public: The canonical page name without extension, and dashes converted
     # to spaces.
     #
     # Returns the String name.
     def name
       self.class.canonicalize_filename(filename)
+    end
+
+    # Public: returns slug - name prepared for url
+    def slug
+      self.class.slugify(filename)
+    end
+
+    def url
+      return dir + slug if dir
+      slug
     end
 
     # Public: If the first element of a formatted page is an <h1> tag it can
@@ -256,7 +280,7 @@ module Gollum
     # Returns the String canonical name.
     def self.cname(name)
       name.respond_to?(:gsub)      ?
-        name.gsub(%r{[ /<>]}, '-') :
+        name.gsub(%r{[ <>]}, '-') :
         ''
     end
 
@@ -329,7 +353,7 @@ module Gollum
       map.each do |entry|
         next if entry.name.to_s.empty?
         next unless checked_dir.nil? || entry.dir.downcase == checked_dir
-        next unless page_match(name, entry.name)
+        next unless page_match("/"+name, entry.dir+"/"+entry.name)
         return entry.page(@wiki, @version)
       end
 

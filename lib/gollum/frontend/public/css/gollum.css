@@ -1,10 +1,3 @@
-#wiki-wrapper #template blockquote {
-  margin: 1em 0;
-  border-left: 4px solid #ddd;
-  padding-left: .8em;
-  color: #555;
-}
-
 /*
   gollum.css
   A basic stylesheet for Gollum
@@ -13,7 +6,7 @@
 /* @section core */
 body, html {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 10px; /* -> 1em */
   margin: 0;
   padding: 0;
 }
@@ -37,13 +30,18 @@ a:hover, a:visited {
 
 /* @section head */
 #head {
+  border-bottom: 1px solid #ccc;
   margin: 4.5em 0 0.5em;
   padding: 0.5em 0;
   overflow: hidden;
 }
 
   #head h1 {
-     display: none;
+    font-size: 3.3em;
+    float: left;
+    line-height: normal;
+    margin: 0;
+    padding: 0.08em 0 0 0;
   }
   
   #head ul.actions {
@@ -208,11 +206,12 @@ a:hover, a:visited {
   
   /* @section page-footer */
   .page #footer {
+    border-top: 1px solid #ccc;
     margin: 1em 0 7em;
   }
   
   #footer p#last-edit {
-    font-size: .9em;
+    font-size: 1.2em;
     line-height: 1.6em;
     color: #999;
     margin: 0.9em 0;
@@ -639,7 +638,7 @@ ul.actions {
   }
   
   #head #searchbar #searchbar-fauxtext #search-submit span {
-    background-image: url(/images/icon-sprite.png);
+    background-image: url(../images/icon-sprite.png);
     background-position: -431px -1px;
     background-repeat: no-repeat;
     display: block;
