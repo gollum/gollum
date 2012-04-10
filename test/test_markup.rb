@@ -459,6 +459,18 @@ np.array([[2,2],[1,3]],np.float)
     compare(content, output)
   end
 
+  test "removes style blocks completely" do
+    content = "<style>body { color: red }</style>foobar"
+    output = "<p>foobar</p>"
+    compare(content, output)
+  end
+
+  test "removes script blocks completely" do
+    content = "<script>alert('hax');</script>foobar"
+    output = "<p>foobar</p>"
+    compare(content, output)
+  end
+
   test "escaped wiki link" do
     content = "a '[[Foo]], b"
     output = "<p>a [[Foo]], b</p>"
