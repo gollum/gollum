@@ -54,31 +54,29 @@ module Gollum
       # Gets the markup class used by all instances of this Wiki.
       # Default: Gollum::Markup
       def markup_classes
-        @markup_classes ||
+        @markup_classes ||=
           if superclass.respond_to?(:markup_classes)
             superclass.markup_classes
           else
-            classes = Hash.new(::Gollum::Markup)
-
-            # Add custom markup classes for different languages
-            classes[:markdown] = ::Gollum::MarkupGFM
-            classes
+            Hash.new(::Gollum::Markup)
           end
       end
 
       # Gets the default markup class used by all instances of this Wiki.
       # Kept for backwards compatibility until Gollum v2.x
-      def markup_class
-        markup_classes[:default]
+      def markup_class(language=:default)
+        markup_classes[language]
       end
 
       # Sets the default markup class used by all instances of this Wiki.
       # Kept for backwards compatibility until Gollum v2.x
       def markup_class=(default)
-        new_classes     = Hash.new default
         @markup_classes = Hash.new(default).update(markup_classes)
         default
       end
+
+      alias_method :default_markup_class, :markup_class
+      alias_method :default_markup_class=, :markup_class=
 
       # Gets the default sanitization options for current pages used by
       # instances of this Wiki.
