@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.3.2'
+  s.version           = '1.4.0'
   s.date              = '2012-04-10'
   s.rubyforge_project = 'gollum'
 
@@ -102,6 +102,7 @@ Gem::Specification.new do |s|
     lib/gollum/pagination.rb
     lib/gollum/sanitization.rb
     lib/gollum/tex.rb
+    lib/gollum/web_sequence_diagram.rb
     lib/gollum/wiki.rb
     templates/formatting.html
     test/examples/empty.git/HEAD
@@ -123,6 +124,7 @@ Gem::Specification.new do |s|
     test/examples/empty.git/refs/heads/.gitkeep
     test/examples/lotr.git/COMMIT_EDITMSG
     test/examples/lotr.git/HEAD
+    test/examples/lotr.git/ORIG_HEAD
     test/examples/lotr.git/config
     test/examples/lotr.git/description
     test/examples/lotr.git/index
@@ -132,7 +134,10 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/objects/06/131480411710c92a82fe2d1e76932c70feb2e5
     test/examples/lotr.git/objects/0a/de1e2916346d4c1f2fb63b863fd3c16808fe44
     test/examples/lotr.git/objects/0e/d8cbe0a25235bd867e65193c7d837c66b328ef
+    test/examples/lotr.git/objects/12/629d666c5e3178f82f533f543d61b53dc78c0b
+    test/examples/lotr.git/objects/1d/b89ebba7e2c14d93b94ff98cfa3708a4f0d4e3
     test/examples/lotr.git/objects/24/49c2681badfd3c189e8ed658dacffe8ba48fe5
+    test/examples/lotr.git/objects/25/4bdc1ba27d8b8a794538a8522d9a2b56ec2dd9
     test/examples/lotr.git/objects/2c/b9156ad383914561a8502fc70f5a1d887e48ad
     test/examples/lotr.git/objects/5d/cac289a8603188d2c5caf481dcba2985126aaa
     test/examples/lotr.git/objects/60/f12f4254f58801b9ee7db7bca5fa8aeefaa56b
@@ -142,11 +147,14 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/objects/94/523d7ae48aeba575099dd12926420d8fd0425d
     test/examples/lotr.git/objects/96/97dc65e095658bbd1b8e8678e08881e86d32f1
     test/examples/lotr.git/objects/a3/1ca2a7c352c92531a8b99815d15843b259e814
+    test/examples/lotr.git/objects/a6/59b3763b822dd97544621fd0beef162ea37b14
     test/examples/lotr.git/objects/a8/ad3c09dd842a3517085bfadd37718856dee813
     test/examples/lotr.git/objects/aa/b61fe89d56f8614c0a8151da34f939dcedfa68
+    test/examples/lotr.git/objects/bc/4b5fc0ce2c2ba3acef6647e4f67256ee45ab60
     test/examples/lotr.git/objects/c3/b43e9f08966b088e7a0192e436b7a884542e05
     test/examples/lotr.git/objects/dc/596d6b2dd89ab05c66f4abd7d5eb706bc17f19
     test/examples/lotr.git/objects/ec/da3205bee14520aab5a7bb307392064b938e83
+    test/examples/lotr.git/objects/f4/84ebb1f40f8eb20d1bcd8d1d71934d2b8ae961
     test/examples/lotr.git/objects/fa/e7ef5344202bba4129abdc13060d9297d99465
     test/examples/lotr.git/objects/info/packs
     test/examples/lotr.git/objects/pack/pack-dcbeaf3f6ff6c5eb08ea2b0a2d83626e8763546b.idx

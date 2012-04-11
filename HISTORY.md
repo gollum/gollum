@@ -1,4 +1,4 @@
-# 1.3.2 / 2012-04-10
+# 1.4.0 / 2012-04-10
 
 * Minor
   * Add a way to configure the `#id_prefix` property of Sanitization
