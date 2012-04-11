@@ -324,7 +324,7 @@ inline with regular text. For example:
 ## SEQUENCE DIAGRAMS
 
 You may imbed sequence diagrams into your wiki page (rendered by
-[WebSequenceDiagrams](http://www.websequencediagrams.com) by using the 
+[WebSequenceDiagrams](http://www.websequencediagrams.com) by using the
 following syntax:
 
     {{{ blue-modern
@@ -443,18 +443,18 @@ To delete a page and commit the change:
 
 ### RACK
 
-You can also run gollum with any rack-compatible server by placing this config.ru 
-file inside your wiki repository. This allows you to utilize any Rack middleware 
-like Rack::Auth, OmniAuth, etc.   
+You can also run gollum with any rack-compatible server by placing this config.ru
+file inside your wiki repository. This allows you to utilize any Rack middleware
+like Rack::Auth, OmniAuth, etc.
 
     #!/usr/bin/env ruby
     require 'rubygems'
     require 'gollum/frontend/app'
-    
+
     gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
     Precious::App.set(:default_markup, :markdown) # set your favorite markup language
     run Precious::App
- 
+
 ## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:
