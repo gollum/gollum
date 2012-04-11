@@ -4,7 +4,7 @@ module Precious
       attr_reader :page, :page_num
 
       def title
-        "History of #{@page.title}"
+        @page.title
       end
 
       def versions

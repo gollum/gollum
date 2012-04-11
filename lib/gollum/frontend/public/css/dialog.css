@@ -1,0 +1,141 @@
+/* @control dialog */
+
+#gollum-dialog-dialog {
+  display: block;
+  overflow: visible;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+#gollum-dialog-dialog.active {
+  display: block;
+}
+
+#gollum-dialog-dialog-inner {
+  margin: 0 0 0 -225px;
+  position: relative;
+  width: 450px;
+
+  border: 7px solid #999;
+  border: 7px solid rgba(0, 0, 0, 0.3); 
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+#gollum-dialog-dialog-bg {
+  background-color: #fff;
+  overflow: hidden;
+  padding: 1em;
+  
+  background: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#ffffff));
+  background: -moz-linear-gradient(top, #f7f7f7, #ffffff);
+}
+
+#gollum-dialog-dialog-inner h4 {
+  border-bottom: 1px solid #ddd;
+  color: #000;
+  font-size: 1.8em;
+  line-height: normal;
+  font-weight: bold;
+  margin: 0 0 0.75em 0;
+  padding: 0 0 0.3em 0;
+}
+
+#gollum-dialog-dialog-body {
+  font-size: 1.2em;
+  line-height: 1.6em;
+}
+
+#gollum-dialog-dialog-body fieldset {
+  display: block;
+  border: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+#gollum-dialog-dialog-body fieldset .field {
+  margin: 0 0 1.5em 0;
+  padding: 0;
+}
+
+  #gollum-dialog-dialog-body fieldset .field label {
+    color: #000;
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1.6em;
+    margin: 0;
+    padding: 0;
+    min-width: 80px;
+  }
+  
+  #gollum-dialog-dialog-body fieldset .field input[type="text"] {
+    border: 1px solid #ddd;
+    display: block;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin: 0.3em 0 0 0;
+    padding: 0.3em 0.5em;
+    width: 96.5%;
+  }
+  
+  #gollum-dialog-dialog-body fieldset .field input.code {
+    font-family: 'Monaco', 'Courier New', Courier, monospace;
+  }
+  
+#gollum-dialog-dialog-body fieldset .field:last-child {
+  margin: 0 0 1em 0;
+}
+
+#gollum-dialog-dialog-buttons {
+  border-top: 1px solid #ddd;
+  overflow: hidden;
+  margin: 1.5em 0 0 0;
+  padding: 1em 0 0 0;
+}
+
+#gollum-dialog-dialog a.minibutton {
+  float: right;
+  margin-right: 0.5em;
+  width: auto;
+}
+
+#gollum-dialog-dialog a.minibutton,
+#gollum-dialog-dialog a.minibutton:visited {
+  background-color: #f7f7f7;
+  border: 1px solid #d4d4d4;
+  color: #333;
+  cursor: pointer;
+  display: block;
+  font-size: 1.2em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  margin: 0 0 0 0.8em;
+  padding: 0.4em 1em;
+
+  text-shadow: 0 1px 0 #fff;
+
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
+  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
+
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+#gollum-dialog-dialog a.minibutton:hover {
+  background: #3072b3;
+  border-color: #518cc6 #518cc6 #2a65a0;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
+  background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
+  background: -moz-linear-gradient(top, #599bdc, #3072b3);
+}

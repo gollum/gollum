@@ -1,8 +1,27 @@
-require File.join(File.dirname(__FILE__), *%w[helper])
+# ~*~ encoding: utf-8 ~*~
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Wiki" do
   setup do
     @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"))
+    Gollum::Wiki.markup_classes = nil
+  end
+
+  test "#markup_class gets default markup" do
+    assert_equal Gollum::Markup, Gollum::Wiki.markup_class
+  end
+
+  test "#default_markup_class= doesn't clobber alternate markups" do
+    custom = Class.new(Gollum::Markup)
+    custom_md = Class.new(Gollum::Markup)
+
+    Gollum::Wiki.markup_classes = Hash.new Gollum::Markup
+    Gollum::Wiki.markup_classes[:markdown] = custom_md
+    Gollum::Wiki.default_markup_class = custom
+
+    assert_equal custom, Gollum::Wiki.default_markup_class
+    assert_equal custom, Gollum::Wiki.markup_classes[:orgmode]
+    assert_equal custom_md, Gollum::Wiki.markup_classes[:markdown]
   end
 
   test "repo path" do
@@ -32,56 +51,41 @@ context "Wiki" do
     assert_equal commits, @wiki.log(:page => 2).map { |c| c.id }
   end
 
-  test "list pages, sorted by title" do
+  test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      %w(bilbo.md Bilbo-Baggins.md Eye-Of-Sauron.md My-Precious.md Home.textile),
-      pages.map { |p| p.filename }
+      ['Bilbo-Baggins.md', 'Eye-Of-Sauron.md', 'Home.textile', 'My-Precious.md', 'Samwise Gamgee.mediawiki'],
+      pages.map { |p| p.filename }.sort
   end
 
   test "counts pages" do
     assert_equal 5, @wiki.size
   end
 
-  test "normalizes commit hash" do
-    commit = {:message => 'abc'}
-    name  = @wiki.repo.config['user.name']
-    email = @wiki.repo.config['user.email']
-    assert_equal({:message => 'abc', :name => name, :email => email},
-      @wiki.normalize_commit(commit.dup))
-
-    commit[:name]  = 'bob'
-    commit[:email] = ''
-    assert_equal({:message => 'abc', :name => 'bob', :email => email},
-      @wiki.normalize_commit(commit.dup))
-
-    commit[:email] = 'foo@bar.com'
-    assert_equal({:message => 'abc', :name => 'bob', :email => 'foo@bar.com'},
-      @wiki.normalize_commit(commit.dup))
+  test "text_data" do
+    wiki = Gollum::Wiki.new(testpath("examples/yubiwa.git"))
+    if String.instance_methods.include?(:encoding)
+      utf8 = wiki.page("strider").text_data
+      assert_equal Encoding::UTF_8, utf8.encoding
+      sjis = wiki.page("sjis").text_data(Encoding::SHIFT_JIS)
+      assert_equal Encoding::SHIFT_JIS, sjis.encoding
+    else
+      page = wiki.page("strider")
+      assert_equal page.raw_data, page.text_data
+    end
   end
 
-  test "#tree_map_for caches ref and tree" do
-    assert @wiki.ref_map.empty?
-    assert @wiki.tree_map.empty?
-    @wiki.tree_map_for 'master'
-    assert_equal({"master"=>"308fdf72d89351bf53fa6eeb00884273047e07fa"}, @wiki.ref_map)
-
-    map = @wiki.tree_map['308fdf72d89351bf53fa6eeb00884273047e07fa']
-    assert_equal 'Bilbo-Baggins.md',        map[0].path
-    assert_equal '',                        map[0].dir
-    assert_equal map[0].path,               map[0].name
-    assert_equal 'Mordor/Eye-Of-Sauron.md', map[3].path
-    assert_equal '/Mordor',                 map[3].dir
-    assert_equal 'Eye-Of-Sauron.md',        map[3].name
+  test "gets reverse diff" do
+    diff = @wiki.full_reverse_diff('a8ad3c09dd842a3517085bfadd37718856dee813')
+    assert_match "b/Mordor/_Sidebar.md", diff
+    assert_match "b/_Sidebar.md", diff
   end
 
-  test "#tree_map_for only caches tree for commit" do
-    assert @wiki.tree_map.empty?
-    @wiki.tree_map_for '308fdf72d89351bf53fa6eeb00884273047e07fa'
-    assert @wiki.ref_map.empty?
-
-    entry = @wiki.tree_map['308fdf72d89351bf53fa6eeb00884273047e07fa'][0]
-    assert_equal 'Bilbo-Baggins.md', entry.path
+  test "gets reverse diff for a page" do
+    diff  = @wiki.full_reverse_diff_for('_Sidebar.md', 'a8ad3c09dd842a3517085bfadd37718856dee813')
+    regex = /b\/Mordor\/\_Sidebar\.md/
+    assert_match    "b/_Sidebar.md", diff
+    assert_no_match regex, diff
   end
 end
 
@@ -228,6 +232,64 @@ context "Wiki page writing" do
   end
 end
 
+context "Wiki page writing with whitespace (filename contains whitespace)" do
+  setup do
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+  end
+  
+  test "update_page" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, :textile, "h1. Samwise Gamgee2", commit_details)
+
+    assert_equal :textile, @wiki.page("Samwise Gamgee").format
+    assert_equal "h1. Samwise Gamgee2", @wiki.page("Samwise Gamgee").raw_data
+    assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
+  end
+  
+  test "update page with format change, verify non-canonicalization of filename,  where filename contains Whitespace" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, :textile, "h1. Samwise Gamgee", commit_details)
+
+    assert_equal :textile, @wiki.page("Samwise Gamgee").format
+    assert_equal "h1. Samwise Gamgee", @wiki.page("Samwise Gamgee").raw_data
+    assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
+  end
+ 
+  test "update page with name change, verify canonicalization of filename, where filename contains Whitespace" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, 'Sam Gamgee', :textile, "h1. Samwise Gamgee", commit_details)
+
+    assert_equal "h1. Samwise Gamgee", @wiki.page("Sam Gamgee").raw_data  
+    assert_equal "Sam-Gamgee.textile", @wiki.page("Sam Gamgee").filename
+  end
+  
+  test "update page with name and format change, verify canonicalization of filename, where filename contains Whitespace" do
+    assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
+    assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
+
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, 'Sam Gamgee', :textile, "h1. Samwise Gamgee", commit_details)
+
+    assert_equal :textile, @wiki.page("Sam Gamgee").format
+    assert_equal "h1. Samwise Gamgee", @wiki.page("Sam Gamgee").raw_data
+    assert_equal "Sam-Gamgee.textile", @wiki.page("Sam Gamgee").filename
+  end  
+  
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+end
+
 context "Wiki sync with working directory" do
   setup do
     @path = testpath('examples/wdtest')
@@ -280,5 +342,121 @@ context "Wiki sync with working directory" do
 
   teardown do
     FileUtils.rm_r(@path)
+  end
+end
+
+context "Wiki sync with working directory (filename contains whitespace)" do
+  setup do
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+  end
+  test "update a page with same name and format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, page.format, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+
+  test "update a page with different name and same format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, "Sam Gamgee", page.format, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Sam-Gamgee.mediawiki"))
+    assert !File.exist?(File.join(@path, "Samwise Gamgee"))
+  end
+
+  test "update a page with same name and different format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, page.name, :textile, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Samwise Gamgee.textile"))
+    assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+
+  test "update a page with different name and different format" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.update_page(page, "Sam Gamgee", :textile, "What we need is a few good taters.", commit_details)
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Sam-Gamgee.textile"))
+    assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+
+  test "delete a page" do
+    page = @wiki.page("Samwise Gamgee")
+    @wiki.delete_page(page, commit_details)
+    assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
+  end
+  
+  teardown do
+    FileUtils.rm_r(@path)
+  end
+end
+
+context "page_file_dir option" do
+  setup do
+    @path = cloned_testpath('examples/page_file_dir')
+    @repo = Grit::Repo.init(@path)
+    @page_file_dir = 'docs'
+    @wiki = Gollum::Wiki.new(@path, :page_file_dir => @page_file_dir)
+  end
+
+  test "write a page in sub directory" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details)
+    assert_equal "Hi", File.read(File.join(@path, @page_file_dir, "New-Page.md"))
+    assert !File.exist?(File.join(@path, "New-Page.md"))
+  end
+  
+  test "edit a page in a sub directory" do
+    page = @wiki.page('foo')
+    @wiki.update_page(page, page.name, page.format, 'new contents', commit_details)
+  end
+
+  test "a file in page file dir should be found" do
+    assert @wiki.page("foo")
+  end
+
+  test "a file out of page file dir should not be found" do
+    assert !@wiki.page("bar")
+  end
+
+  test "search results should be restricted in page filer dir" do
+    results = @wiki.search("foo")
+    assert_equal 1, results.size
+    assert_equal "foo", results[0][:name]
+  end
+
+  teardown do
+    FileUtils.rm_r(@path)
+  end
+end
+
+context "Wiki page writing with different branch" do
+  setup do
+    @path = testpath("examples/test.git")
+    FileUtils.rm_rf(@path)
+    @repo = Grit::Repo.init_bare(@path)
+    @wiki = Gollum::Wiki.new(@path)
+
+    # We need an initial commit to create the master branch
+    # before we can create new branches
+    cd = commit_details
+    @wiki.write_page("Gollum", :markdown, "# Gollum", cd)
+
+    # Create our test branch and check it out
+    @repo.update_ref("test", @repo.commits.first.id)
+    @branch = Gollum::Wiki.new(@path, :ref => "test")
+  end
+
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+
+  test "write_page" do
+    cd = commit_details
+
+    @branch.write_page("Bilbo", :markdown, "# Bilbo", commit_details)
+    assert @branch.page("Bilbo")
+    assert @wiki.page("Gollum")
+
+    assert_equal 1, @wiki.repo.commits.size
+    assert_equal 1, @branch.repo.commits.size
+
+    assert_equal nil, @wiki.page("Bilbo")
   end
 end

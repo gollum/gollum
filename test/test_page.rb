@@ -1,5 +1,5 @@
 # ~*~ encoding: utf-8 ~*~
-require File.join(File.dirname(__FILE__), *%w[helper])
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Page" do
   setup do
@@ -25,7 +25,27 @@ context "Page" do
   test "get existing page case insensitive" do
     assert_equal @wiki.page('Bilbo Baggins').path, @wiki.page('bilbo baggins').path
   end
+  
+  test "get existing page with hyphen" do
+    assert_equal @wiki.page('Bilbo Baggins').path, @wiki.page('Bilbo-Baggins').path
+  end
 
+  test "get existing page with underscore" do
+    assert_nil @wiki.page('Bilbo_Baggins')
+  end
+  
+  test "get existing page where filename contains whitespace, with hypen" do
+    assert_equal @wiki.page('Samwise Gamgee').path, @wiki.page('Samwise-Gamgee').path
+  end
+  
+  test "get existing page where filename contains whitespace, with underscore" do
+    assert_equal @wiki.page('Samwise Gamgee').path, @wiki.page('Samwise_Gamgee').path
+  end
+  
+  test "get existing page where filename contains whitespace, with whitespace" do
+    assert_equal @wiki.page('Samwise Gamgee').path, @wiki.page('Samwise Gamgee').path
+  end
+  
   test "get nested page" do
     page = @wiki.page('Eye Of Sauron')
     assert_equal 'Mordor/Eye-Of-Sauron.md', page.path
@@ -109,10 +129,38 @@ context "Page" do
   test "footer itself" do
     footer = @wiki.page("_Footer")
     assert_nil footer.footer
+    assert_nil footer.sidebar
+  end
+
+  test "top level sidebar" do
+    sidebar = @wiki.page('Home').sidebar
+    assert_equal 'Lord of the Rings wiki', sidebar.raw_data
+    assert_equal '_Sidebar.md', sidebar.path
+  end
+
+  test "nested sidebar" do
+    sidebar = @wiki.page('Eye Of Sauron').sidebar
+    assert_equal "Ones does not simply **walk** into Mordor!\n", sidebar.raw_data
+    assert_equal "Mordor/_Sidebar.md", sidebar.path
+  end
+
+  test "sidebar itself" do
+    sidebar = @wiki.page("_Sidebar")
+    assert_nil sidebar.footer
+    assert_nil sidebar.sidebar
   end
 
   test "cannot convert non string to human readable page title" do
     assert_equal '', Gollum::Page.cname(nil)
     assert_equal '', Gollum::Page.cname(3)
+  end
+
+  test "normalize_dir" do
+    assert_equal "", Gollum::BlobEntry.normalize_dir("")
+    assert_equal "", Gollum::BlobEntry.normalize_dir(".")
+    assert_equal "", Gollum::BlobEntry.normalize_dir("/")
+    assert_equal "", Gollum::BlobEntry.normalize_dir("c:/")
+    assert_equal "/foo", Gollum::BlobEntry.normalize_dir("foo")
+    assert_equal "/foo", Gollum::BlobEntry.normalize_dir("/foo")
   end
 end

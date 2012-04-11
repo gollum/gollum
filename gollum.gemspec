@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.0.1'
-  s.date              = '2010-08-12'
+  s.version           = '1.3.2'
+  s.date              = '2012-04-10'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -18,28 +18,33 @@ Gem::Specification.new do |s|
   s.require_paths = %w[lib]
 
   s.executables = ["gollum"]
-  s.default_executable = 'gollum'
 
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('grit', "~> 2.3")
-  s.add_dependency('github-markup', [">= 0.4.0", "< 1.0.0"])
-  s.add_dependency('albino', "~> 1.0")
+  s.add_dependency('grit', "~> 2.4.1")
+  s.add_dependency('github-markup', [">= 0.7.0", "< 1.0.0"])
+  s.add_dependency('pygments.rb', "~> 0.2.0")
+  s.add_dependency('posix-spawn', "~> 0.3.0")
   s.add_dependency('sinatra', "~> 1.0")
   s.add_dependency('mustache', [">= 0.11.2", "< 1.0.0"])
-  s.add_dependency('sanitize', "~> 1.1")
+  s.add_dependency('sanitize', "~> 2.0.0")
   s.add_dependency('nokogiri', "~> 1.4")
+  s.add_dependency('redcarpet')
 
   s.add_development_dependency('RedCloth')
   s.add_development_dependency('mocha')
   s.add_development_dependency('org-ruby')
-  s.add_development_dependency('rdiscount')
   s.add_development_dependency('shoulda')
+  s.add_development_dependency('rack-test')
+  s.add_development_dependency('wikicloth', '~> 0.6.3')
+  s.add_development_dependency('rake', '~> 0.9.2')
 
   # = MANIFEST =
   s.files = %w[
+    Gemfile
     HISTORY.md
+    Home.md
     LICENSE
     README.md
     Rakefile
@@ -47,436 +52,83 @@ Gem::Specification.new do |s|
     docs/sanitization.md
     gollum.gemspec
     lib/gollum.rb
-    lib/gollum/albino.rb
+    lib/gollum/blob_entry.rb
+    lib/gollum/committer.rb
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
-    lib/gollum/frontend/public/css/editbar.css
+    lib/gollum/frontend/public/css/dialog.css
+    lib/gollum/frontend/public/css/editor.css
     lib/gollum/frontend/public/css/gollum.css
-    lib/gollum/frontend/public/css/screen.css
-    lib/gollum/frontend/public/css/syntax.css
-    lib/gollum/frontend/public/images/buttons.png
-    lib/gollum/frontend/public/images/editbar-buttons.png
-    lib/gollum/frontend/public/images/example.png
-    lib/gollum/frontend/public/images/twiddle-down.png
-    lib/gollum/frontend/public/images/twiddle-right.png
-    lib/gollum/frontend/public/images/txt.png
-    lib/gollum/frontend/public/javascript/MathJax/COPYING.txt
-    lib/gollum/frontend/public/javascript/MathJax/MathJax.js
-    lib/gollum/frontend/public/javascript/MathJax/README.txt
-    lib/gollum/frontend/public/javascript/MathJax/config/MMLorHTML.js
-    lib/gollum/frontend/public/javascript/MathJax/config/MathJax.js
-    lib/gollum/frontend/public/javascript/MathJax/config/local/local.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/AMSmath.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/AMSsymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/autobold.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/boldsymbol.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/mathchoice.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/newcommand.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/noErrors.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/unicode.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/TeX/verb.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/jsMath2jax.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/mml2jax.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/tex2jax.js
-    lib/gollum/frontend/public/javascript/MathJax/extensions/toMathML.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/jax.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/Arrows.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/CombDiactForSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/Dingbats.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/GeometricShapes.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/MiscMathSymbolsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/MiscMathSymbolsB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/MiscTechnical.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/SuppMathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/element/mml/optable/SupplementalArrowsB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/config.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/a.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/b.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/c.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/d.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/e.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/f.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/fr.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/g.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/h.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/i.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/j.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/k.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/l.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/m.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/n.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/o.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/opf.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/p.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/q.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/r.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/s.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/scr.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/t.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/u.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/v.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/w.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/x.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/y.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/entities/z.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/MathML/jax.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/TeX/config.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/input/TeX/jax.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/autoload/menclose.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/autoload/mglyph.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/autoload/ms.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/blank.gif
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/config.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/AlphaPresentForms.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/Arrows.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/BoldFraktur.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/BoxDrawing.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/CombDiactForSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/ControlPictures.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/CurrencySymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/Cyrillic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/EnclosedAlphanum.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/GeometricShapes.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/GreekBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/GreekSSBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/IPAExtensions.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/LatinExtendedAdditional.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/LatinExtendedB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/MathBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/MathSSBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/MiscMathSymbolsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/MiscMathSymbolsB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/MiscSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/MiscTechnical.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/NumberForms.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/PhoneticExtensions.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/SuperAndSubscripts.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Bold/SuppMathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/AlphaPresentForms.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/BoxDrawing.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/CombDiactForSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/ControlPictures.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/CurrencySymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/Cyrillic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/EnclosedAlphanum.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/GreekBoldItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/GreekSSBoldItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/IPAExtensions.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/LatinExtendedAdditional.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/LatinExtendedB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/MathBoldItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/MathBoldScript.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/MathSSItalicBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/BoldItalic/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/AlphaPresentForms.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/BoxDrawing.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/CombDiactForSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/ControlPictures.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/CurrencySymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/Cyrillic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/EnclosedAlphanum.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/GreekItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/IPAExtensions.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/LatinExtendedAdditional.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/LatinExtendedB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/MathItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/MathSSItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/MathScript.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Italic/ij.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/AlphaPresentForms.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Arrows.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/BBBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/BlockElements.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/BoldFraktur.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/BoxDrawing.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/CJK.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/CombDiactForSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/ControlPictures.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/CurrencySymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Cyrillic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Dingbats.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/EnclosedAlphanum.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Fraktur.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GeometricShapes.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GreekBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GreekBoldItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GreekItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GreekSSBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/GreekSSBoldItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Hiragana.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/IPAExtensions.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/LatinExtendedAdditional.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/LatinExtendedB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/LatinExtendedD.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathBoldItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathBoldScript.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathSS.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathSSBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathSSItalic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathSSItalicBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathScript.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MathTT.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MiscMathSymbolsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MiscMathSymbolsB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MiscSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MiscSymbolsAndArrows.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/MiscTechnical.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/NumberForms.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/PhoneticExtensions.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/Specials.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/SuperAndSubscripts.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/SuppMathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/SupplementalArrowsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/SupplementalArrowsB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/General/Regular/ij.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsD/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsD/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsD/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsSm/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsSm/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsSm/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUp/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUp/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUp/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUpD/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUpD/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUpD/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUpSm/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUpSm/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/IntegralsUpSm/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Bold/PrivateUse.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/BoldItalic/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/BoldItalic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/BoldItalic/PrivateUse.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Italic/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Italic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Italic/PrivateUse.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/NonUnicode/Regular/PrivateUse.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeFiveSym/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeFiveSym/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeFourSym/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeFourSym/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeFourSym/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeOneSym/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeOneSym/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeOneSym/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeOneSym/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeThreeSym/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeThreeSym/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeThreeSym/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeTwoSym/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeTwoSym/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/SizeTwoSym/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/Variants/Bold/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/Variants/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/Variants/Regular/All.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/Variants/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/fontdata-beta.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/STIX/fontdata.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/Arrows.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/BBBold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/BoxDrawing.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/Dingbats.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/EnclosedAlphanum.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/GeometricShapes.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/MiscMathSymbolsB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/MiscSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/MiscTechnical.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/PUA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/SuppMathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Caligraphic/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Caligraphic/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/Other.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/PUA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/Other.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/PUA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/BoldItalic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Italic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/Arrows.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/CombDiactForSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/GeometricShapes.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/LatinExtendedB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/MiscMathSymbolsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/MiscSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/MiscTechnical.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/SuppMathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/SupplementalArrowsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/LatinExtendedB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Italic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/Arrows.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/CombDiactForSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/GeneralPunctuation.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/GeometricShapes.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/GreekAndCoptic.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/Latin1Supplement.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/LatinExtendedA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/LatinExtendedB.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/LetterlikeSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/MathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/MiscMathSymbolsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/MiscSymbols.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/MiscTechnical.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/SpacingModLetters.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/SuppMathOperators.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/SupplementalArrowsA.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Math/BoldItalic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Math/Italic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Bold/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Bold/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Bold/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Bold/Other.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Italic/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Italic/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Italic/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Italic/Other.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Regular/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Regular/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/SansSerif/Regular/Other.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Script/Regular/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Script/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Script/Regular/Other.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Size1/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Size2/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Size3/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Size4/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/BasicLatin.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/CombDiacritMarks.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/Other.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/WinChrome/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/WinIE6/Regular/AMS.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/WinIE6/Regular/Bold.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/WinIE6/Regular/Main.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/fonts/TeX/fontdata.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/imageFonts.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/HTML-CSS/jax.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/NativeMML/config.js
-    lib/gollum/frontend/public/javascript/MathJax/jax/output/NativeMML/jax.js
-    lib/gollum/frontend/public/javascript/MathJax/test/index-images.html
-    lib/gollum/frontend/public/javascript/MathJax/test/index.html
-    lib/gollum/frontend/public/javascript/MathJax/test/sample.html
+    lib/gollum/frontend/public/css/ie7.css
+    lib/gollum/frontend/public/css/template.css
+    lib/gollum/frontend/public/images/icon-sprite.png
+    lib/gollum/frontend/public/javascript/editor/gollum.editor.js
+    lib/gollum/frontend/public/javascript/editor/langs/asciidoc.js
+    lib/gollum/frontend/public/javascript/editor/langs/creole.js
+    lib/gollum/frontend/public/javascript/editor/langs/markdown.js
+    lib/gollum/frontend/public/javascript/editor/langs/org.js
+    lib/gollum/frontend/public/javascript/editor/langs/pod.js
+    lib/gollum/frontend/public/javascript/editor/langs/rdoc.js
+    lib/gollum/frontend/public/javascript/editor/langs/textile.js
+    lib/gollum/frontend/public/javascript/gollum.dialog.js
     lib/gollum/frontend/public/javascript/gollum.js
-    lib/gollum/frontend/public/javascript/jquery-1.4.2.min.js
-    lib/gollum/frontend/public/javascript/jquery.previewable_comment_form.js
-    lib/gollum/frontend/public/javascript/jquery.tabs.js
-    lib/gollum/frontend/public/javascript/jquery.text_selection-1.0.0.min.js
+    lib/gollum/frontend/public/javascript/gollum.placeholder.js
+    lib/gollum/frontend/public/javascript/jquery.color.js
+    lib/gollum/frontend/public/javascript/jquery.js
     lib/gollum/frontend/templates/compare.mustache
     lib/gollum/frontend/templates/create.mustache
     lib/gollum/frontend/templates/edit.mustache
-    lib/gollum/frontend/templates/editbar.mustache
+    lib/gollum/frontend/templates/editor.mustache
+    lib/gollum/frontend/templates/error.mustache
     lib/gollum/frontend/templates/history.mustache
     lib/gollum/frontend/templates/layout.mustache
     lib/gollum/frontend/templates/page.mustache
+    lib/gollum/frontend/templates/pages.mustache
     lib/gollum/frontend/templates/search.mustache
+    lib/gollum/frontend/templates/searchbar.mustache
     lib/gollum/frontend/views/compare.rb
     lib/gollum/frontend/views/create.rb
     lib/gollum/frontend/views/edit.rb
     lib/gollum/frontend/views/editable.rb
+    lib/gollum/frontend/views/error.rb
     lib/gollum/frontend/views/history.rb
     lib/gollum/frontend/views/layout.rb
     lib/gollum/frontend/views/page.rb
+    lib/gollum/frontend/views/pages.rb
     lib/gollum/frontend/views/search.rb
+    lib/gollum/git_access.rb
     lib/gollum/markup.rb
     lib/gollum/page.rb
     lib/gollum/pagination.rb
+    lib/gollum/sanitization.rb
+    lib/gollum/tex.rb
     lib/gollum/wiki.rb
     templates/formatting.html
+    test/examples/empty.git/HEAD
+    test/examples/empty.git/config
+    test/examples/empty.git/description
+    test/examples/empty.git/hooks/applypatch-msg.sample
+    test/examples/empty.git/hooks/commit-msg.sample
+    test/examples/empty.git/hooks/post-commit.sample
+    test/examples/empty.git/hooks/post-receive.sample
+    test/examples/empty.git/hooks/post-update.sample
+    test/examples/empty.git/hooks/pre-applypatch.sample
+    test/examples/empty.git/hooks/pre-commit.sample
+    test/examples/empty.git/hooks/pre-rebase.sample
+    test/examples/empty.git/hooks/prepare-commit-msg.sample
+    test/examples/empty.git/hooks/update.sample
+    test/examples/empty.git/info/exclude
+    test/examples/empty.git/objects/info/.gitkeep
+    test/examples/empty.git/objects/pack/.gitkeep
+    test/examples/empty.git/refs/heads/.gitkeep
+    test/examples/lotr.git/COMMIT_EDITMSG
     test/examples/lotr.git/HEAD
     test/examples/lotr.git/config
     test/examples/lotr.git/description
-    test/examples/lotr.git/hooks/applypatch-msg.sample
-    test/examples/lotr.git/hooks/commit-msg.sample
-    test/examples/lotr.git/hooks/post-commit.sample
-    test/examples/lotr.git/hooks/post-receive.sample
-    test/examples/lotr.git/hooks/post-update.sample
-    test/examples/lotr.git/hooks/pre-applypatch.sample
-    test/examples/lotr.git/hooks/pre-commit.sample
-    test/examples/lotr.git/hooks/pre-rebase.sample
-    test/examples/lotr.git/hooks/prepare-commit-msg.sample
-    test/examples/lotr.git/hooks/update.sample
+    test/examples/lotr.git/index
     test/examples/lotr.git/info/exclude
-    test/examples/lotr.git/info/refs
+    test/examples/lotr.git/logs/HEAD
+    test/examples/lotr.git/logs/refs/heads/master
     test/examples/lotr.git/objects/06/131480411710c92a82fe2d1e76932c70feb2e5
     test/examples/lotr.git/objects/0a/de1e2916346d4c1f2fb63b863fd3c16808fe44
     test/examples/lotr.git/objects/0e/d8cbe0a25235bd867e65193c7d837c66b328ef
@@ -485,9 +137,12 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/objects/5d/cac289a8603188d2c5caf481dcba2985126aaa
     test/examples/lotr.git/objects/60/f12f4254f58801b9ee7db7bca5fa8aeefaa56b
     test/examples/lotr.git/objects/71/4323c104239440a5c66ab12a67ed07a83c404f
+    test/examples/lotr.git/objects/84/0ec5b1ba1320e8ec443f28f99566f615d5af10
     test/examples/lotr.git/objects/93/6b83ee0dd8837adb82511e40d5e4ebe59bb675
     test/examples/lotr.git/objects/94/523d7ae48aeba575099dd12926420d8fd0425d
     test/examples/lotr.git/objects/96/97dc65e095658bbd1b8e8678e08881e86d32f1
+    test/examples/lotr.git/objects/a3/1ca2a7c352c92531a8b99815d15843b259e814
+    test/examples/lotr.git/objects/a8/ad3c09dd842a3517085bfadd37718856dee813
     test/examples/lotr.git/objects/aa/b61fe89d56f8614c0a8151da34f939dcedfa68
     test/examples/lotr.git/objects/c3/b43e9f08966b088e7a0192e436b7a884542e05
     test/examples/lotr.git/objects/dc/596d6b2dd89ab05c66f4abd7d5eb706bc17f19
@@ -498,10 +153,61 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/objects/pack/pack-dcbeaf3f6ff6c5eb08ea2b0a2d83626e8763546b.pack
     test/examples/lotr.git/packed-refs
     test/examples/lotr.git/refs/heads/master
+    test/examples/lotr.git/refs/remotes/origin/HEAD
+    test/examples/page_file_dir.git/COMMIT_EDITMSG
+    test/examples/page_file_dir.git/HEAD
+    test/examples/page_file_dir.git/config
+    test/examples/page_file_dir.git/description
+    test/examples/page_file_dir.git/index
+    test/examples/page_file_dir.git/info/exclude
+    test/examples/page_file_dir.git/logs/HEAD
+    test/examples/page_file_dir.git/logs/refs/heads/master
+    test/examples/page_file_dir.git/objects/0c/7d27db1f575263efdcab3dc650f4502a2dbcbf
+    test/examples/page_file_dir.git/objects/22/b404803c966dd92865614d86ff22ca12e50c1e
+    test/examples/page_file_dir.git/objects/25/7cc5642cb1a054f08cc83f2d943e56fd3ebe99
+    test/examples/page_file_dir.git/objects/57/16ca5987cbf97d6bb54920bea6adde242d87e6
+    test/examples/page_file_dir.git/objects/5b/43e14e0a15fb6f08feab1773d1c0991e9f71e2
+    test/examples/page_file_dir.git/refs/heads/master
+    test/examples/revert.git/COMMIT_EDITMSG
+    test/examples/revert.git/HEAD
+    test/examples/revert.git/config
+    test/examples/revert.git/description
+    test/examples/revert.git/index
+    test/examples/revert.git/info/exclude
+    test/examples/revert.git/logs/HEAD
+    test/examples/revert.git/logs/refs/heads/master
+    test/examples/revert.git/objects/20/2ced67cea93c7b6bd2928aa1daef8d1d55a20d
+    test/examples/revert.git/objects/41/76394bfa11222363c66ce7e84b5f154095b6d9
+    test/examples/revert.git/objects/6a/69f92020f5df77af6e8813ff1232493383b708
+    test/examples/revert.git/objects/b4/785957bc986dc39c629de9fac9df46972c00fc
+    test/examples/revert.git/objects/f4/03b791119f8232b7cb0ba455c624ac6435f433
+    test/examples/revert.git/objects/info/packs
+    test/examples/revert.git/objects/pack/pack-a561f8437234f74d0bacb9e0eebe52d207f5770d.idx
+    test/examples/revert.git/objects/pack/pack-a561f8437234f74d0bacb9e0eebe52d207f5770d.pack
+    test/examples/revert.git/packed-refs
+    test/examples/revert.git/refs/heads/master
+    test/examples/revert.git/refs/remotes/origin/HEAD
+    test/examples/yubiwa.git/HEAD
+    test/examples/yubiwa.git/config
+    test/examples/yubiwa.git/description
+    test/examples/yubiwa.git/info/exclude
+    test/examples/yubiwa.git/objects/10/fa2ddc4e3b4009d8a453aace10bd6148c1ad00
+    test/examples/yubiwa.git/objects/52/4b82874327ea7cbf730389964ba7cb3de966de
+    test/examples/yubiwa.git/objects/58/3fc201cb457fb3f1480f3e1e5999b119633835
+    test/examples/yubiwa.git/objects/87/bc1dd46ab3d3874d4e898d45dd512cc20a7cc8
+    test/examples/yubiwa.git/objects/89/64ed1b4e21aa90e831763bbce9034bfda81b70
+    test/examples/yubiwa.git/objects/9f/f6dd0660da5fba2d3374adb2b84fa653bb538b
+    test/examples/yubiwa.git/objects/ac/e97abf2b177815a1972d7db22f229f58c83309
+    test/examples/yubiwa.git/objects/b1/f443863a4816628807fbf86141ebef055dda34
+    test/examples/yubiwa.git/refs/heads/master
     test/helper.rb
+    test/test_app.rb
+    test/test_committer.rb
     test/test_file.rb
+    test/test_git_access.rb
     test/test_markup.rb
     test/test_page.rb
+    test/test_page_revert.rb
     test/test_wiki.rb
   ]
   # = MANIFEST =

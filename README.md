@@ -9,7 +9,7 @@ Gollum wikis are simply Git repositories that adhere to a specific format.
 Gollum pages may be written in a variety of formats and can be edited in a
 number of ways depending on your needs. You can edit your wiki locally:
 
-* With your favorite text editor or IDE.
+* With your favorite text editor or IDE (changes will be visible after committing).
 * With the built-in web interface.
 * With the Gollum Ruby API.
 
@@ -23,6 +23,11 @@ The best way to install Gollum is with RubyGems:
 
     $ [sudo] gem install gollum
 
+If you're installing from source, you can use [Bundler][bundler] to pick up all the
+gems:
+
+    $ bundle install # ([more info](http://gembundler.com/bundle_install.html))
+
 In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
 to install the dependencies for the formats that you plan to use.
@@ -35,7 +40,9 @@ to install the dependencies for the formats that you plan to use.
 * [RDoc](http://rdoc.sourceforge.net/)
 * [ReStructuredText](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
 * [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
+* [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth`
 
+[bundler]: http://gembundler.com/
 
 ## RUNNING
 
@@ -74,6 +81,7 @@ current list of formats and allowed extensions is:
 * RDoc: .rdoc
 * ReStructuredText: .rest.txt, .rst.txt, .rest, .rst
 * Textile: .textile
+* MediaWiki: .mediawiki, .wiki
 
 Gollum detects the page file format via the extension, so files must have one
 of the supported extensions in order to be converted.
@@ -90,13 +98,19 @@ The special page file `Home.ext` (where the extension is one of the supported
 formats) will be used as the entrance page to your wiki. If it is missing, an
 automatically generated table of contents will be shown instead.
 
+## SIDEBAR FILES
+
+Sidebar files allow you to add a simple sidebar to your wiki.  Sidebar files
+are named `_Sidebar.ext` where the extension is one of the supported formats.
+Sidebars affect all pages in their directory and any subdirectories that do not
+have a sidebar file of their own.
 
 ## FOOTER FILES
 
 Footer files allow you to add a simple footer to your wiki. Footer files must
 be named `_Footer.ext` where the extension is one of the supported formats.
-Footers affect all pages in their directory and any subdirectories that do not
-have a footer file of their own.
+Like sidebars, footers affect all pages in their directory and any
+subdirectories that do not have a footer file of their own.
 
 
 ## HTML SANITIZATION
@@ -124,6 +138,9 @@ the link text displayed on the page. If the tag is an embedded image, the
 first thing in the tag will be a path to an image file. Use this trick to
 easily remember which order things should appear in tags.
 
+Some formats, such as MediaWiki, support the opposite syntax:
+
+    [[Page Title|Link]]
 
 ## PAGE LINKS
 
@@ -210,7 +227,7 @@ the pipe.
 ## IMAGES
 
 To display images that are contained in the Gollum repository you should use
-the Gollum Image Tag. This will display the actual image on the page. 
+the Gollum Image Tag. This will display the actual image on the page.
 
     [[gollum.png]]
 
@@ -268,8 +285,8 @@ This is useful for writing about the link syntax in your wiki pages.
 ## SYNTAX HIGHLIGHTING
 
 In page files you can get automatic syntax highlighting for a wide range of
-languages (courtesy of [Pygments](http://pygments.org/)) by using the
-following syntax:
+languages (courtesy of [Pygments](http://pygments.org/) - must install
+separately) by using the following syntax:
 
     ```ruby
       def foo
@@ -301,10 +318,7 @@ and `\]`. For example:
 Inline equations are delimited by `\(` and `\)`. These equations will appear
 inline with regular text. For example:
 
-    The Pythagorean theorum is \( a^2 + b^2 = c^2 \).
-
-Gollum uses [MathJax](http://www.mathjax.org/) to convert the TeX syntax into
-output suitable for display in web browsers.
+    The Pythagorean theorem is \( a^2 + b^2 = c^2 \).
 
 
 ## SEQUENCE DIAGRAMS
@@ -427,7 +441,20 @@ To delete a page and commit the change:
 
     wiki.delete_page(page, commit)
 
+### RACK
 
+You can also run gollum with any rack-compatible server by placing this config.ru 
+file inside your wiki repository. This allows you to utilize any Rack middleware 
+like Rack::Auth, OmniAuth, etc.   
+
+    #!/usr/bin/env ruby
+    require 'rubygems'
+    require 'gollum/frontend/app'
+    
+    gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
+    Precious::App.set(:default_markup, :markdown) # set your favorite markup language
+    run Precious::App
+ 
 ## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:
@@ -445,4 +472,4 @@ your changes merged back into core is as follows:
 1. Do not change the version number, I will do that on my end
 1. If necessary, rebase your commits into logical chunks, without errors
 1. Push the branch up to GitHub
-1. Send me (mojombo) a pull request for your branch
+1. Send a pull request to the github/gollum project.
