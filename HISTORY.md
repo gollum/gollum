@@ -1,11 +1,20 @@
-# git
+# 1.3.2 / 2012-04-10
 
 * Minor
   * Add a way to configure the `#id_prefix` property of Sanitization
     objects.
+  * Add web sequence diagrams support
+  * Support for updating wysiwyg components when markup language changes
+  * Support RedCarpet 2.0
+  * Allow ftp and irc links in wiki markup
+  * Minor ui fixups
+
 * Bug Fixes
   * Include the language of the code snippet when making a uniquely
     identifiable sha of a code snippet while rendering a page.
+  * Pygments lexer forces utf8 encoding
+  * Remove MathJax, this created problems in production for us.
+    We'll look at bringing it back in future releases
 
 # 1.3.1 / 2011-07-21
 
