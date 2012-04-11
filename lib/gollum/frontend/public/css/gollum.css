@@ -586,7 +586,7 @@ ul.actions {
 /* @control searchbar */
 #head #searchbar {
   float: right;
-  margin: 1em 0 0 0;
+  margin: 0;
   padding: 0;
   overflow: hidden;
 }
@@ -640,7 +640,7 @@ ul.actions {
   
   #head #searchbar #searchbar-fauxtext #search-submit span {
     background-image: url(/images/icon-sprite.png);
-    background-position: -431px -1px;
+    background-position: -431px 4px;
     background-repeat: no-repeat;
     display: block;
     height: 2em;
@@ -655,6 +655,6 @@ ul.actions {
   }
 
   #head #searchbar #searchbar-fauxtext #search-submit:hover span {
-    background-position: -431px -28px;
+    background-position: -431px -23px;
     padding: 0;
   }
