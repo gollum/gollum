@@ -422,7 +422,7 @@ module Gollum
     #
     #########################################################################
 
-    # Extract all sequence diagram blocks into the wsdmap and replace with 
+    # Extract all sequence diagram blocks into the wsdmap and replace with
     # placeholders.
     #
     # data - The raw String data.
@@ -436,7 +436,7 @@ module Gollum
       end
     end
 
-    # Process all diagrams from the wsdmap and replace the placeholders with 
+    # Process all diagrams from the wsdmap and replace the placeholders with
     # the final HTML.
     #
     # data - The String data (with placeholders).
@@ -487,7 +487,7 @@ module Gollum
         if Gem::Version.new(Redcarpet::VERSION) > Gem::Version.new("1.17.2")
           html_renderer = Redcarpet::Render::HTML.new({
             :autolink => true,
-            :fenced_code_blocks => true, 
+            :fenced_code_blocks => true,
             :tables => true,
             :strikethrough => true,
             :lax_htmlblock => true,

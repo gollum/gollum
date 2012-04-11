@@ -8,15 +8,15 @@ module Precious
       def title
         "Create a new page"
       end
-      
+
       def is_create_page
         true
       end
-      
+
       def is_edit_page
         false
       end
-      
+
       def format
         @format = (@page.format || false) if @format.nil? && @page
         @format.to_s.downcase
@@ -39,10 +39,10 @@ module Precious
       def formats
         super(:markdown)
       end
-      
+
       def default_markup
         Precious::App.settings.default_markup
-      end 
+      end
     end
   end
 end

@@ -10,8 +10,8 @@ module Precious
       def has_results
         !@results.empty?
       end
-      
-      def no_results 
+
+      def no_results
         @results.empty?
       end
     end

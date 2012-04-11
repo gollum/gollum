@@ -37,7 +37,7 @@ context "Wiki" do
         assert_equal committer, index
       end
 
-      res = wiki.write_page("Gollum", :markdown, "# Gollum", 
+      res = wiki.write_page("Gollum", :markdown, "# Gollum",
         :committer => committer)
 
       assert_equal committer, res

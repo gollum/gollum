@@ -19,7 +19,7 @@ module Gollum
         ([1, page.to_i].max - 1) * per_page
       end
 
-      # Fills in git-specific options for the log command using simple 
+      # Fills in git-specific options for the log command using simple
       # pagination options.
       #
       # options - Hash of options:
@@ -45,7 +45,7 @@ module Gollum
       self.class.page_to_skip(page)
     end
 
-    # Fills in git-specific options for the log command using simple 
+    # Fills in git-specific options for the log command using simple
     # pagination options.
     #
     # options - Hash of options:

@@ -20,10 +20,10 @@ module Gollum
 
       # Sets the default email for commits.
       attr_accessor :default_committer_email
-      
+
       # Array of chars to substitute whitespace for when trying to locate file in git repo.
       attr_accessor :default_ws_subs
-      
+
       # Sets sanitization options. Set to false to deactivate
       # sanitization altogether.
       attr_writer :sanitization
@@ -105,7 +105,7 @@ module Gollum
     self.default_ref = 'master'
     self.default_committer_name  = 'Anonymous'
     self.default_committer_email = 'anon@anon.com'
-    
+
     self.default_ws_subs = ['_','-']
 
     # The String base path to prefix to internal links. For example, when set
@@ -124,7 +124,7 @@ module Gollum
 
     # Gets the String directory in which all page files reside.
     attr_reader :page_file_dir
-    
+
     # Gets the Array of chars to sub for ws in filenames.
     attr_reader :ws_subs
 
@@ -225,10 +225,10 @@ module Gollum
     #          :tree      - Optional String SHA of the tree to create the
     #                       index from.
     #          :committer - Optional Gollum::Committer instance.  If provided,
-    #                       assume that this operation is part of batch of 
+    #                       assume that this operation is part of batch of
     #                       updates and the commit happens later.
     #
-    # Returns the String SHA1 of the newly written version, or the 
+    # Returns the String SHA1 of the newly written version, or the
     # Gollum::Committer instance if this is part of a batch update.
     def write_page(name, format, data, commit = {})
       multi_commit = false
@@ -239,9 +239,9 @@ module Gollum
       else
         Committer.new(self, commit)
       end
-      
+
       filename = Gollum::Page.cname(name)
-      
+
       committer.add_to_index('', filename, format, data)
 
       committer.after_commit do |index, sha|
@@ -269,19 +269,19 @@ module Gollum
     #          :tree      - Optional String SHA of the tree to create the
     #                       index from.
     #          :committer - Optional Gollum::Committer instance.  If provided,
-    #                       assume that this operation is part of batch of 
+    #                       assume that this operation is part of batch of
     #                       updates and the commit happens later.
     #
-    # Returns the String SHA1 of the newly written version, or the 
+    # Returns the String SHA1 of the newly written version, or the
     # Gollum::Committer instance if this is part of a batch update.
     def update_page(page, name, format, data, commit = {})
       name   ||= page.name
       format ||= page.format
       dir      = ::File.dirname(page.path)
-      dir      = '' if dir == '.'   
+      dir      = '' if dir == '.'
       filename = (rename = page.name != name) ?
         Gollum::Page.cname(name) : page.filename_stripped
-      
+
       multi_commit = false
 
       committer = if obj = commit[:committer]
@@ -290,14 +290,14 @@ module Gollum
       else
         Committer.new(self, commit)
       end
-      
+
       if !rename && page.format == format
         committer.add(page.path, normalize(data))
       else
         committer.delete(page.path)
         committer.add_to_index(dir, filename, format, data, :allow_same_ext)
       end
-      
+
       committer.after_commit do |index, sha|
         @access.refresh
         index.update_working_dir(dir, page.filename_stripped, page.format)
@@ -318,10 +318,10 @@ module Gollum
     #          :tree      - Optional String SHA of the tree to create the
     #                       index from.
     #          :committer - Optional Gollum::Committer instance.  If provided,
-    #                       assume that this operation is part of batch of 
+    #                       assume that this operation is part of batch of
     #                       updates and the commit happens later.
     #
-    # Returns the String SHA1 of the newly written version, or the 
+    # Returns the String SHA1 of the newly written version, or the
     # Gollum::Committer instance if this is part of a batch update.
     def delete_page(page, commit)
       multi_commit = false
@@ -628,7 +628,7 @@ module Gollum
     rescue Grit::GitRuby::Repository::NoSuchShaFound
       []
     end
-    
+
     def inspect
       %(#<#{self.class.name}:#{object_id} #{@repo.path}>)
     end

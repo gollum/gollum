@@ -237,7 +237,7 @@ context "Wiki page writing with whitespace (filename contains whitespace)" do
     @path = cloned_testpath("examples/lotr.git")
     @wiki = Gollum::Wiki.new(@path)
   end
-  
+
   test "update_page" do
     assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
     assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
@@ -249,7 +249,7 @@ context "Wiki page writing with whitespace (filename contains whitespace)" do
     assert_equal "h1. Samwise Gamgee2", @wiki.page("Samwise Gamgee").raw_data
     assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
   end
-  
+
   test "update page with format change, verify non-canonicalization of filename,  where filename contains Whitespace" do
     assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
     assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
@@ -261,7 +261,7 @@ context "Wiki page writing with whitespace (filename contains whitespace)" do
     assert_equal "h1. Samwise Gamgee", @wiki.page("Samwise Gamgee").raw_data
     assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
   end
- 
+
   test "update page with name change, verify canonicalization of filename, where filename contains Whitespace" do
     assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
     assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
@@ -269,10 +269,10 @@ context "Wiki page writing with whitespace (filename contains whitespace)" do
     page = @wiki.page("Samwise Gamgee")
     @wiki.update_page(page, 'Sam Gamgee', :textile, "h1. Samwise Gamgee", commit_details)
 
-    assert_equal "h1. Samwise Gamgee", @wiki.page("Sam Gamgee").raw_data  
+    assert_equal "h1. Samwise Gamgee", @wiki.page("Sam Gamgee").raw_data
     assert_equal "Sam-Gamgee.textile", @wiki.page("Sam Gamgee").filename
   end
-  
+
   test "update page with name and format change, verify canonicalization of filename, where filename contains Whitespace" do
     assert_equal :mediawiki, @wiki.page("Samwise Gamgee").format
     assert_equal "Samwise Gamgee.mediawiki", @wiki.page("Samwise Gamgee").filename
@@ -283,8 +283,8 @@ context "Wiki page writing with whitespace (filename contains whitespace)" do
     assert_equal :textile, @wiki.page("Sam Gamgee").format
     assert_equal "h1. Samwise Gamgee", @wiki.page("Sam Gamgee").raw_data
     assert_equal "Sam-Gamgee.textile", @wiki.page("Sam Gamgee").filename
-  end  
-  
+  end
+
   teardown do
     FileUtils.rm_rf(@path)
   end
@@ -382,7 +382,7 @@ context "Wiki sync with working directory (filename contains whitespace)" do
     @wiki.delete_page(page, commit_details)
     assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
   end
-  
+
   teardown do
     FileUtils.rm_r(@path)
   end
@@ -401,7 +401,7 @@ context "page_file_dir option" do
     assert_equal "Hi", File.read(File.join(@path, @page_file_dir, "New-Page.md"))
     assert !File.exist?(File.join(@path, "New-Page.md"))
   end
-  
+
   test "edit a page in a sub directory" do
     page = @wiki.page('foo')
     @wiki.update_page(page, page.name, page.format, 'new contents', commit_details)

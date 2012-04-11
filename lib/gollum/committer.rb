@@ -1,7 +1,7 @@
 module Gollum
-  # Responsible for handling the commit process for a Wiki.  It sets up the 
+  # Responsible for handling the commit process for a Wiki.  It sets up the
   # Git index, provides methods for modifying the tree, and stores callbacks
-  # to be fired after the commit has been made.  This is specifically 
+  # to be fired after the commit has been made.  This is specifically
   # designed to handle multiple updated pages in a single commit.
   class Committer
     # Gets the instance of the Gollum::Wiki that is being updated.
@@ -21,7 +21,7 @@ module Gollum
     #           :tree      - Optional String SHA of the tree to create the
     #                        index from.
     #           :committer - Optional Gollum::Committer instance.  If provided,
-    #                        assume that this operation is part of batch of 
+    #                        assume that this operation is part of batch of
     #                        updates and the commit happens later.
     #
     # Returns the Committer instance.
@@ -152,7 +152,7 @@ module Gollum
 
     # Adds a callback to be fired after a commit.
     #
-    # block - A block that expects this Committer instance and the created 
+    # block - A block that expects this Committer instance and the created
     #         commit's SHA1 as the arguments.
     #
     # Returns nothing.

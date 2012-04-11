@@ -87,7 +87,7 @@ module Gollum
     #
     # filename - The string path or filename to strip
     #
-    # Returns the stripped String. 
+    # Returns the stripped String.
     def self.strip_filename(filename)
       ::File.basename(filename, ::File.extname(filename))
     end
