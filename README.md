@@ -428,7 +428,20 @@ To delete a page and commit the change:
 
     wiki.delete_page(page, commit)
 
+### RACK
 
+You can also run gollum with any rack-compatible server by placing this config.ru 
+file inside your wiki repository. This allows you to utilize any Rack middleware 
+like Rack::Auth, OmniAuth, etc.   
+
+    #!/usr/bin/env ruby
+    require 'rubygems'
+    require 'gollum/frontend/app'
+    
+    gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
+    Precious::App.set(:default_markup, :markdown) # set your favorite markup language
+    run Precious::App
+ 
 ## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:
