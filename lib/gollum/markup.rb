@@ -361,15 +361,27 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub!(/^``` ?([^\r\n]+)?\r?\n(.+?)\r?\n```\r?$/m) do
-        id     = Digest::SHA1.hexdigest("#{$1}.#{$2}")
+      data.gsub!(/^([ \t]*)``` ?([^\r\n]+)?\r?\n(.+?)\r?\n\1```\r?$/m) do
+        id     = Digest::SHA1.hexdigest("#{$2}.#{$3}")
         cached = check_cache(:code, id)
         @codemap[id] = cached   ?
           { :output => cached } :
-          { :lang => $1, :code => $2 }
-        id
+          { :lang => $2, :code => $3, :indent => $1 }
+        "#{$1}#{id}" # print the SHA1 ID with the proper indentation
       end
       data
+    end
+
+    # Remove the leading space from a code block. Leading space
+    # is only removed if every single line in the block has leading
+    # whitespace.
+    #
+    # code      - The code block to remove spaces from
+    # regex     - A regex to match whitespace
+    def remove_leading_space(code, regex)
+      if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ regex }
+        code.gsub!(regex, '')
+      end
     end
 
     # Process all code from the codemap and replace the placeholders with the
@@ -387,16 +399,18 @@ module Gollum
         next if spec[:output] # cached
 
         code = spec[:code]
-        if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
-          code.gsub!(/^(  |\t)/m, '')
-        end
+
+        remove_leading_space(code, /^#{spec[:indent]}/m)
+        remove_leading_space(code, /^(  |\t)/m)
 
         blocks << [spec[:lang], code]
       end
 
       highlighted = begin
         encoding ||= 'utf-8'
-        blocks.map { |lang, code| Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s}) }
+        blocks.map { |lang, code|
+          Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s})
+        }
       rescue ::RubyPython::PythonError
         []
       end
@@ -471,63 +485,5 @@ module Gollum
     end
   end
 
-  begin
-    require 'redcarpet'
-
-    class MarkupGFM < Markup
-      def render(no_follow = false, encoding = nil)
-        sanitize = no_follow ?
-          @wiki.history_sanitizer :
-          @wiki.sanitizer
-
-        data = extract_tex(@data.dup)
-        data = extract_code(data)
-        data = extract_tags(data)
-
-        if Gem::Version.new(Redcarpet::VERSION) > Gem::Version.new("1.17.2")
-          html_renderer = Redcarpet::Render::HTML.new({
-            :autolink => true,
-            :fenced_code_blocks => true,
-            :tables => true,
-            :strikethrough => true,
-            :lax_htmlblock => true,
-            :no_intraemphasis => true
-          })
-          markdown = Redcarpet::Markdown.new(html_renderer)
-          data = markdown.render(data)
-        else
-          flags = [
-            :autolink,
-            :fenced_code,
-            :tables,
-            :strikethrough,
-            :lax_htmlblock,
-            :no_intraemphasis
-          ]
-          data = Redcarpet.new(data, *flags).to_html
-        end
-        data = process_tags(data)
-        data = process_code(data, encoding)
-
-        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
-
-        doc.search('pre').each do |node|
-          next unless lang = node['lang']
-          next unless lexer = Pygments::Lexer[lang]
-          text = node.inner_text
-          html = lexer.highlight(text)
-          node.replace(html)
-        end
-
-        doc  = sanitize.clean_node!(doc) if sanitize
-        yield doc if block_given?
-
-        data = doc.to_html
-        data = process_tex(data)
-        data
-      end
-    end
-  rescue LoadError
-    MarkupGFM = Markup
-  end
+  MarkupGFM = Markup
 end

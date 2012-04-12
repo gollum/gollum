@@ -34,7 +34,8 @@ to install the dependencies for the formats that you plan to use.
 
 * [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc`
 * [Creole](http://wikicreole.org/) -- `gem install creole`
-* [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install rdiscount`
+* [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet`
+* [GitHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) -- `gem install github-markdown`
 * [Org](http://orgmode.org/) -- `gem install org-ruby`
 * [Pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML` comes with Perl >= 5.10. Lower versions should install Pod::Simple from CPAN.
 * [RDoc](http://rdoc.sourceforge.net/)
@@ -294,18 +295,19 @@ separately) by using the following syntax:
       end
     ```
 
-The block must start with three backticks (as the first characters on the
-line). After that comes the name of the language that is contained by the
+The block must start with three backticks, at the beginning of a line or
+indented with any number of spaces or tabs.
+After that comes the name of the language that is contained by the
 block. The language must be one of the `short name` lexer strings supported by
 Pygments. See the [list of lexers](http://pygments.org/docs/lexers/) for valid
 options.
 
-If the block contents are indented two spaces or one tab, then that whitespace
-will be ignored (this makes the blocks easier to read in plaintext).
+The block contents should be indented at the same level than the opening backticks.
+If the block contents are indented with an additional two spaces or one tab,
+then that whitespace will be ignored (this makes the blocks easier to read in plaintext).
 
-The block must end with three backticks as the first characters on a
-line.
-
+The block must end with three backticks indented at the same level than the opening
+backticks.
 
 ## MATHEMATICAL EQUATIONS
 

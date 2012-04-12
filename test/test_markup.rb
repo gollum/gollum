@@ -456,11 +456,6 @@ np.array([[2,2],[1,3]],np.float)
     # rendered with Gollum::Markup
     page, rendered = render_page(content)
     assert_markup_highlights_code Gollum::Markup, rendered
-
-    if Gollum.const_defined?(:MarkupGFM)
-      rendered_gfm = Gollum::MarkupGFM.new(page).render
-      assert_markup_highlights_code Gollum::MarkupGFM, rendered_gfm
-    end
   end
 
   def assert_markup_highlights_code(markup_class, rendered)
