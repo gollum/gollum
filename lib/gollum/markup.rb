@@ -484,4 +484,6 @@ module Gollum
     def update_cache(type, id, data)
     end
   end
+
+  MarkupGFM = Markup
 end
