@@ -361,15 +361,27 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub!(/^``` ?([^\r\n]+)?\r?\n(.+?)\r?\n```\r?$/m) do
-        id     = Digest::SHA1.hexdigest("#{$1}.#{$2}")
+      data.gsub!(/^([ \t]*)``` ?([^\r\n]+)?\r?\n(.+?)\r?\n\1```\r?$/m) do
+        id     = Digest::SHA1.hexdigest("#{$2}.#{$3}")
         cached = check_cache(:code, id)
         @codemap[id] = cached   ?
           { :output => cached } :
-          { :lang => $1, :code => $2 }
-        id
+          { :lang => $2, :code => $3, :indent => $1 }
+        "#{$1}#{id}" # print the SHA1 ID with the proper indentation
       end
       data
+    end
+
+    # Remove the leading space from a code block. Leading space
+    # is only removed if every single line in the block has leading
+    # whitespace.
+    #
+    # code      - The code block to remove spaces from
+    # regex     - A regex to match whitespace
+    def remove_leading_space(code, regex)
+      if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ regex }
+        code.gsub!(regex, '')
+      end
     end
 
     # Process all code from the codemap and replace the placeholders with the
@@ -387,16 +399,18 @@ module Gollum
         next if spec[:output] # cached
 
         code = spec[:code]
-        if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
-          code.gsub!(/^(  |\t)/m, '')
-        end
+
+        remove_leading_space(code, /^#{spec[:indent]}/m)
+        remove_leading_space(code, /^(  |\t)/m)
 
         blocks << [spec[:lang], code]
       end
 
       highlighted = begin
         encoding ||= 'utf-8'
-        blocks.map { |lang, code| Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s}) }
+        blocks.map { |lang, code|
+          Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s})
+        }
       rescue ::RubyPython::PythonError
         []
       end
