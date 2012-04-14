@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('RedCloth')
   s.add_development_dependency('mocha')
-  s.add_development_dependency('org-ruby')
+  s.add_development_dependency('org-ruby', '~>0.6.2')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('rack-test')
   s.add_development_dependency('wikicloth', '~> 0.6.3')
