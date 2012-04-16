@@ -26,7 +26,7 @@ The best way to install Gollum is with RubyGems:
 If you're installing from source, you can use [Bundler][bundler] to pick up all the
 gems:
 
-    $ bundle install # ([more info](http://gembundler.com/bundle_install.html))
+    $ bundle install
 
 In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
