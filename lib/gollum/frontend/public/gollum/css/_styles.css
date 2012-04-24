@@ -62,16 +62,16 @@ ol.tree
 	}
 		li.file a
 		{
-			background: url(/images/fileview/document.png) 0 0 no-repeat;
+			background: url(../images/fileview/document.png) 0 0 no-repeat;
 			color: #fff;
 			padding-left: 21px;
 			text-decoration: none;
 			display: block;
 		}
-		li.file a[href *= '.pdf']	{ background: url(/images/fileview/document.png) 0 0 no-repeat; }
-		li.file a[href *= '.html']	{ background: url(/images/fileview/document.png) 0 0 no-repeat; }
-		li.file a[href $= '.css']	{ background: url(/images/fileview/document.png) 0 0 no-repeat; }
-		li.file a[href $= '.js']		{ background: url(/images/fileview/document.png) 0 0 no-repeat; }
+		li.file a[href *= '.pdf']	{ background: url(../images/fileview/document.png) 0 0 no-repeat; }
+		li.file a[href *= '.html']	{ background: url(../images/fileview/document.png) 0 0 no-repeat; }
+		li.file a[href $= '.css']	{ background: url(../images/fileview/document.png) 0 0 no-repeat; }
+		li.file a[href $= '.js']		{ background: url(../images/fileview/document.png) 0 0 no-repeat; }
 	li input
 	{
 		position: absolute;
@@ -86,14 +86,14 @@ ol.tree
 	}
 		li input + ol
 		{
-			background: url(/images/fileview/toggle-small-expand.png) 40px 0 no-repeat;
+			background: url(../images/fileview/toggle-small-expand.png) 40px 0 no-repeat;
 			margin: -1.188em 0 0 -44px; /* 15px */
 			height: 1.5em;
 		}
 		li input + ol > li { display: none; margin-left: -14px !important; padding-left: 1px; }
 	li label
 	{
-		background: url(/images/fileview/folder-horizontal.png) 15px 1px no-repeat;
+		background: url(../images/fileview/folder-horizontal.png) 15px 1px no-repeat;
 		cursor: pointer;
 		display: block;
 		padding-left: 37px;
@@ -101,7 +101,7 @@ ol.tree
 
 	li input:checked + ol
 	{
-		background: url(/images/fileview/toggle-small.png) 40px 5px no-repeat;
+		background: url(../images/fileview/toggle-small.png) 40px 5px no-repeat;
 		margin: -1.5em 0 0 -44px; /* 20px */
 		padding: 1.563em 0 0 80px;
 		height: auto;
