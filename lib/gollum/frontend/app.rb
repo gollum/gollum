@@ -13,7 +13,7 @@ module Precious
     dir = File.dirname(File.expand_path(__FILE__))
 
     # We want to serve public assets for now
-    set :public_folder, "#{dir}/public"
+    set :public_folder, "#{dir}/public/gollum"
     set :static,         true
     set :default_markup, :markdown
 
