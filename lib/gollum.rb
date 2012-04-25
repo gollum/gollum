@@ -21,7 +21,7 @@ require File.expand_path('../gollum/tex', __FILE__)
 require File.expand_path('../gollum/web_sequence_diagram', __FILE__)
 
 module Gollum
-  VERSION = '1.4.1'
+  VERSION = '1.4.2'
 
   class Error < StandardError; end
 
