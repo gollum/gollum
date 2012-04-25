@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.4.2'
+  s.version           = '1.4.3'
   s.date              = '2012-04-25'
   s.rubyforge_project = 'gollum'
 
@@ -56,25 +56,25 @@ Gem::Specification.new do |s|
     lib/gollum/committer.rb
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
-    lib/gollum/frontend/public/css/dialog.css
-    lib/gollum/frontend/public/css/editor.css
-    lib/gollum/frontend/public/css/gollum.css
-    lib/gollum/frontend/public/css/ie7.css
-    lib/gollum/frontend/public/css/template.css
-    lib/gollum/frontend/public/images/icon-sprite.png
-    lib/gollum/frontend/public/javascript/editor/gollum.editor.js
-    lib/gollum/frontend/public/javascript/editor/langs/asciidoc.js
-    lib/gollum/frontend/public/javascript/editor/langs/creole.js
-    lib/gollum/frontend/public/javascript/editor/langs/markdown.js
-    lib/gollum/frontend/public/javascript/editor/langs/org.js
-    lib/gollum/frontend/public/javascript/editor/langs/pod.js
-    lib/gollum/frontend/public/javascript/editor/langs/rdoc.js
-    lib/gollum/frontend/public/javascript/editor/langs/textile.js
-    lib/gollum/frontend/public/javascript/gollum.dialog.js
-    lib/gollum/frontend/public/javascript/gollum.js
-    lib/gollum/frontend/public/javascript/gollum.placeholder.js
-    lib/gollum/frontend/public/javascript/jquery.color.js
-    lib/gollum/frontend/public/javascript/jquery.js
+    lib/gollum/frontend/public/gollum/css/dialog.css
+    lib/gollum/frontend/public/gollum/css/editor.css
+    lib/gollum/frontend/public/gollum/css/gollum.css
+    lib/gollum/frontend/public/gollum/css/ie7.css
+    lib/gollum/frontend/public/gollum/css/template.css
+    lib/gollum/frontend/public/gollum/images/icon-sprite.png
+    lib/gollum/frontend/public/gollum/javascript/editor/gollum.editor.js
+    lib/gollum/frontend/public/gollum/javascript/editor/langs/asciidoc.js
+    lib/gollum/frontend/public/gollum/javascript/editor/langs/creole.js
+    lib/gollum/frontend/public/gollum/javascript/editor/langs/markdown.js
+    lib/gollum/frontend/public/gollum/javascript/editor/langs/org.js
+    lib/gollum/frontend/public/gollum/javascript/editor/langs/pod.js
+    lib/gollum/frontend/public/gollum/javascript/editor/langs/rdoc.js
+    lib/gollum/frontend/public/gollum/javascript/editor/langs/textile.js
+    lib/gollum/frontend/public/gollum/javascript/gollum.dialog.js
+    lib/gollum/frontend/public/gollum/javascript/gollum.js
+    lib/gollum/frontend/public/gollum/javascript/gollum.placeholder.js
+    lib/gollum/frontend/public/gollum/javascript/jquery.color.js
+    lib/gollum/frontend/public/gollum/javascript/jquery.js
     lib/gollum/frontend/templates/compare.mustache
     lib/gollum/frontend/templates/create.mustache
     lib/gollum/frontend/templates/edit.mustache
