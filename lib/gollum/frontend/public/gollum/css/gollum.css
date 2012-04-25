@@ -45,11 +45,11 @@ a:hover, a:visited {
   #head h1 {
      display: none;
   }
-  
+
   #head ul.actions {
     float: right;
   }
-  
+
 /* @section content */
 #wiki-content {
   height: 1%;
@@ -77,7 +77,7 @@ a:hover, a:visited {
   .has-rightbar #wiki-body {
     width: 68%;
   }
-  
+
   /* @section rightbar */
   #wiki-rightbar {
     background-color: #f7f7f7;
@@ -86,12 +86,12 @@ a:hover, a:visited {
     float: right;
     padding: 7px;
     width: 25%;
-    
+
     border-radius: 0.5em;
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
   }
-  
+
     #wiki-rightbar p {
       margin: 13px 0 0;
     }
@@ -107,13 +107,13 @@ a:hover, a:visited {
       padding: 0 0 0.5em 0;
       text-shadow: 0 1px 0 #fff;
     }
-    
+
     /* Back arrow */
     #wiki-rightbar p.parent:before {
       color: #666;
       content: "← ";
     }
-    
+
     #wiki-rightbar h3 {
       font-size: 1.2em;
       color: #333;
@@ -121,12 +121,12 @@ a:hover, a:visited {
       padding: 0;
       text-shadow: 0 1px 0 #fff;
     }
-    
+
     #wiki-rightbar ul {
       margin: 0.5em 0 1em;
       padding: 0;
     }
-    
+
     #wiki-rightbar ul li {
       color: #bbb;
       margin: 0 0 0 1em;
@@ -134,23 +134,23 @@ a:hover, a:visited {
       line-height: 1.75em;
       list-style-position: inside;
       list-style-type: round;
-    } 
-    
+    }
+
     #wiki-rightbar #nav ul li a {
       font-weight: bold;
       text-shadow: 0 1px 0 #fff;
     }
-    
+
   /* @section footer */
   #wiki-footer {
     clear: both;
     margin: 2em 0 5em;
   }
-  
+
     .has-rightbar #wiki-footer {
       width: 70%;
     }
-    
+
     #wiki-footer #footer-content {
       background-color: #f7f7f7;
       border: 1px solid #ddd;
@@ -158,12 +158,12 @@ a:hover, a:visited {
       line-height: 1.5em;
       margin-top: 1.5em;
       padding: 1em;
-      
+
       border-radius: 0.5em;
       -moz-border-radius: 0.5em;
       -webkit-border-radius: 0.5em;
     }
-    
+
     #wiki-footer #footer-content h3 {
       font-size: 1.2em;
       color: #333;
@@ -171,18 +171,18 @@ a:hover, a:visited {
       padding: 0 0 0.2em;
       text-shadow: 0 1px 0 #fff;
     }
-    
+
     #wiki-footer #footer-content p {
       margin: 0.5em 0 0;
       padding: 0;
     }
-    
+
     #wiki-footer #footer-content ul.links {
       margin: 0.5em 0 0;
       overflow: hidden;
       padding: 0;
     }
-    
+
     #wiki-footer #footer-content ul.links li {
       color: #999;
       float: left;
@@ -191,33 +191,33 @@ a:hover, a:visited {
       padding: 0;
       margin-left: 0.75em;
     }
-    
+
     #wiki-footer #footer-content ul.links li a {
       font-weight: bold;
       text-shadow: 0 1px 0 #fff;
     }
-    
+
     #wiki-footer #footer-content ul.links li:first-child {
       list-style-type: none;
       margin: 0;
-    }  
-    
+    }
+
     .ff #wiki-footer #footer-content ul.links li:first-child {
       margin: 0 -0.75em 0 0;
     }
-  
+
   /* @section page-footer */
   .page #footer {
     margin: 1em 0 7em;
   }
-  
+
   #footer p#last-edit {
     font-size: .9em;
     line-height: 1.6em;
     color: #999;
     margin: 0.9em 0;
   }
-  
+
     #footer p#last-edit span.username {
       font-weight: bold;
     }
@@ -243,23 +243,23 @@ a:hover, a:visited {
     margin: 2em 0;
     padding: 0;
   }
-  
+
   #wiki-history table, #wiki-history tbody {
     border-collapse: collapse;
     padding: 0;
     margin: 0;
     width: 100%;
   }
-  
+
   #wiki-history table tr {
     padding: 0;
     margin: 0;
   }
-  
+
   #wiki-history table tr {
     background-color: #ebf2f6;
   }
-  
+
   #wiki-history table tr td {
     border: 1px solid #c0dce9;
     font-size: 1.2em;
@@ -267,12 +267,12 @@ a:hover, a:visited {
     margin: 0;
     padding: 0.3em 0.7em;
   }
-  
+
   #wiki-history table tr td.checkbox {
     min-width: 2em;
     padding: 0.3em;
   }
-  
+
   #wiki-history table tr td.checkbox input {
     cursor: pointer;
     display: block;
@@ -280,39 +280,39 @@ a:hover, a:visited {
     padding-top: 0.4em;
     margin-right: -0.2em;
   }
-  
+
   #wiki-history table tr:nth-child(2n),
   #wiki-history table tr.alt-row {
     background-color: #f3f7fa;
   }
-  
+
   #wiki-history table tr.selected {
     background-color: #ffffea !important;
     z-index: 100;
   }
-  
+
   #wiki-history table tr td.commit-name {
     border-left: 0;
   }
-  
+
   #wiki-history table tr td.commit-name span.time-elapsed {
     color: #999;
   }
-  
+
   #wiki-history table tr td.author {
     width: 20%;
   }
-  
+
   #wiki-history table tr td.author a {
     color: #000;
     font-weight: bold;
   }
-  
+
   #wiki-history table tr td.author a span.username {
     display: block;
     padding-top: 3px;
   }
-  
+
   #wiki-history table tr td img {
     background-color: #fff;
     border: 1px solid #999;
@@ -324,7 +324,7 @@ a:hover, a:visited {
     width: 18px;
     padding: 2px;
   }
-  
+
   #wiki-history table tr td.commit-name a {
     font-size: 0.9em;
     font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
@@ -359,25 +359,25 @@ a:hover, a:visited {
     color: #000;
     font-weight: bold;
   }
-  
+
   .results #results {
     border-bottom: 1px solid #ccc;
     margin-bottom: 2em;
     padding-bottom: 2em;
   }
-  
+
   .results #results ul {
     margin: 2em 0 0 0;
     padding: 0;
   }
-  
+
     .results #results ul li {
       font-size: 1.2em;
       line-height: 1.6em;
       list-style-position: outside;
       padding: 0.2em 0;
     }
-    
+
     .results #results ul li span.count {
       color: #999;
     }
@@ -387,11 +387,11 @@ a:hover, a:visited {
     line-height: 1.6em;
     margin-top: 2em;
   }
-  
+
   .results #footer ul.actions li {
     margin: 0 1em 0 0;
   }
-  
+
 
 /* @section compare */
 .compare h1 {
@@ -403,26 +403,26 @@ a:hover, a:visited {
     color: #000;
     font-weight: bold;
   }
-  
+
   .compare #compare-content {
     margin-top: 3em;
   }
-  
+
   .compare .data {
     border: 1px solid #ddd;
     margin-top: 1em;
     overflow: auto;
   }
-  
+
   .compare .data pre {
     margin: 0;
     padding: 0;
   }
-  
+
   .compare .data pre div {
     padding: 0 0 0 1em;
   }
-  
+
   .compare .data tr td {
     font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
     font-size: 1.2em;
@@ -430,11 +430,11 @@ a:hover, a:visited {
     margin: 0;
     padding: 0;
   }
-  
+
   .compare .data td.line_numbers {
     background: #f7f7f7;
     border-right: 1px solid #999;
-    color: #999; 
+    color: #999;
     padding: 0 0 0 0.5em;
   }
 
@@ -443,32 +443,32 @@ a:hover, a:visited {
   margin-left: 0;
   margin-right: 0.6em;
 }
-  
-  
-  
+
+
+
 /* @control syntax */
 .highlight  { background: #ffffff; }
-.highlight .c { color: #999988; font-style: italic } 
-.highlight .err { color: #a61717; background-color: #e3d2d2 } 
-.highlight .k { font-weight: bold } 
-.highlight .o { font-weight: bold } 
-.highlight .cm { color: #999988; font-style: italic } 
-.highlight .cp { color: #999999; font-weight: bold } 
-.highlight .c1 { color: #999988; font-style: italic } 
-.highlight .cs { color: #999999; font-weight: bold; font-style: italic } 
-.highlight .gd { color: #000000; background-color: #ffdddd } 
-.highlight .gd .x { color: #000000; background-color: #ffaaaa } 
-.highlight .ge { font-style: italic } 
-.highlight .gr { color: #aa0000 } 
-.highlight .gh { color: #999999 } 
-.highlight .gi { color: #000000; background-color: #ddffdd } 
-.highlight .gi .x { color: #000000; background-color: #aaffaa } 
+.highlight .c { color: #999988; font-style: italic }
+.highlight .err { color: #a61717; background-color: #e3d2d2 }
+.highlight .k { font-weight: bold }
+.highlight .o { font-weight: bold }
+.highlight .cm { color: #999988; font-style: italic }
+.highlight .cp { color: #999999; font-weight: bold }
+.highlight .c1 { color: #999988; font-style: italic }
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic }
+.highlight .gd { color: #000000; background-color: #ffdddd }
+.highlight .gd .x { color: #000000; background-color: #ffaaaa }
+.highlight .ge { font-style: italic }
+.highlight .gr { color: #aa0000 }
+.highlight .gh { color: #999999 }
+.highlight .gi { color: #000000; background-color: #ddffdd }
+.highlight .gi .x { color: #000000; background-color: #aaffaa }
 .highlight .gc { color: #999; background-color: #EAF2F5 }
-.highlight .go { color: #888888 } 
-.highlight .gp { color: #555555 } 
-.highlight .gs { font-weight: bold } 
-.highlight .gu { color: #aaaaaa } 
-.highlight .gt { color: #aa0000 } 
+.highlight .go { color: #888888 }
+.highlight .gp { color: #555555 }
+.highlight .gs { font-weight: bold }
+.highlight .gu { color: #aaaaaa }
+.highlight .gt { color: #aa0000 }
 
 
 /* @control minibutton */
@@ -562,7 +562,7 @@ ul.actions {
   margin: -10% 0 0 -35%;
   position: absolute;
   width: 70%;
-  
+
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em;
@@ -595,7 +595,7 @@ ul.actions {
     background: #fff;
     border: 1px solid #d4d4d4;
     overflow: hidden;
-    
+
     border-radius: 0.3em;
     -moz-border-radius: 0.3em;
     -webkit-border-radius: 0.3em;
@@ -608,22 +608,22 @@ ul.actions {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 1.2em;
     height: 1.8em;
-    
+
     -webkit-focus-ring: none;
   }
 
   .ff #head #searchbar #searchbar-fauxtext input#search-query {
     padding: 0.2em 0 0.2em 0.5em;
   }
-  
+
   .ie #head #searchbar #searchbar-fauxtext input#search-query {
     padding: 0.4em 0 0 0.5em;
   }
-  
+
   #head #searchbar #searchbar-fauxtext input#search-query.ph {
     color: #999;
   }
-  
+
   #head #searchbar #searchbar-fauxtext #search-submit {
     border: 0;
     border-left: 1px solid #d4d4d4;
@@ -632,12 +632,12 @@ ul.actions {
     padding: 0;
     float: right;
     font-size: 1.2em;
-    
+
     border-radius: 0 3px 3px 0;
     -moz-border-radius: 0 3px 3px 0;
     -webkit-border-radius: 0 3px 3px 0;
   }
-  
+
   #head #searchbar #searchbar-fauxtext #search-submit span {
     background-image: url(/images/icon-sprite.png);
     background-position: -431px -1px;

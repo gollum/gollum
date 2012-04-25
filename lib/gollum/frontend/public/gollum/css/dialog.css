@@ -18,7 +18,7 @@
   width: 450px;
 
   border: 7px solid #999;
-  border: 7px solid rgba(0, 0, 0, 0.3); 
+  border: 7px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -28,7 +28,7 @@
   background-color: #fff;
   overflow: hidden;
   padding: 1em;
-  
+
   background: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#ffffff));
   background: -moz-linear-gradient(top, #f7f7f7, #ffffff);
 }
@@ -71,7 +71,7 @@
     padding: 0;
     min-width: 80px;
   }
-  
+
   #gollum-dialog-dialog-body fieldset .field input[type="text"] {
     border: 1px solid #ddd;
     display: block;
@@ -82,11 +82,11 @@
     padding: 0.3em 0.5em;
     width: 96.5%;
   }
-  
+
   #gollum-dialog-dialog-body fieldset .field input.code {
     font-family: 'Monaco', 'Courier New', Courier, monospace;
   }
-  
+
 #gollum-dialog-dialog-body fieldset .field:last-child {
   margin: 0 0 1em 0;
 }

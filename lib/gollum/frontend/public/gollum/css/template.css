@@ -38,14 +38,14 @@ a.absent {
   margin: 1em 0;
   padding: 0;
 }
-  
+
   /* ReST first graf in nested list */
   #template * li p.first {
     display: inline-block;
   }
 
 /* Headings */
-#template h1, #template h2, #template h3, 
+#template h1, #template h2, #template h3,
 #template h4, #template h5, #template h6 {
   margin: 0;
   padding: 0;
@@ -91,7 +91,7 @@ a.absent {
 
 #template h6 {
   color: #666;
-  font-size: 14px; 
+  font-size: 14px;
   line-height: 26px;
   margin-bottom: -19px;
   padding: 18px 0 0;
@@ -107,8 +107,8 @@ a.absent {
   padding: 0;
 }
 
-  /* Border Reset for headers with horizontal rules */ 
-  #template > h2:first-child, 
+  /* Border Reset for headers with horizontal rules */
+  #template > h2:first-child,
   #template > h1:first-child {
     margin: 12px 0 0;
     padding: 10px 0 0;
@@ -116,20 +116,20 @@ a.absent {
 
 
 /* Lists, Blockquotes & Such */
-#template ul, 
+#template ul,
 #template ol {
   margin-top: 1.5em;
   margin-left: 2.6em;
 }
 
   /* Nested Lists */
-  #template ul li, 
-  #template ol li, 
-  #template ul li ul, 
+  #template ul li,
+  #template ol li,
+  #template ul li ul,
   #template ol li ol,
   #template ul li ol,
   #template ol li ul,
-  #template ul ul, 
+  #template ul ul,
   #template ol ol {
     padding: 0;
     margin: .5em 0;
@@ -181,7 +181,7 @@ a.absent {
     border: 1px solid #ccc;
     text-align: left;
     margin: 0;
-    padding: 6px 13px; 
+    padding: 6px 13px;
   }
 
 /* Images & Stuff */
@@ -267,7 +267,7 @@ a.absent {
   }
 
 #template span.float-right {
-  display: block; 
+  display: block;
   margin-left: 13px;
   overflow: hidden;
   float: right;
@@ -316,7 +316,7 @@ pre, code {
 }
 
 /*
-  Highlight rules from pull req 191 
+  Highlight rules from pull req 191
   https://github.com/eboto/gollum/commit/5df09477abf4a04c82c7fcaa2bd7ee2a85e7ec82
 */
 #template .highlight { background:#fff; }

@@ -31,7 +31,7 @@ a {
 }
 
 .ie #gollum-editor {
-  padding-bottom: 1em;  
+  padding-bottom: 1em;
 }
 
 #gollum-editor form fieldset {
@@ -119,11 +119,11 @@ a {
   /* text-indent: -5000px; */
   text-shadow: 0 1px 0 #fff;
   width: 25px;
-  
+
   border-radius: 0.3em;
   -moz-border-radius: 0.3em;
   -webkit-border-radius: 0.3em;
-  
+
   filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
   background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
   background: -moz-linear-gradient(top, #f4f4f4, #ececec);
@@ -133,7 +133,7 @@ a {
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
   text-decoration: none;
-  
+
   filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
   background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
   background: -moz-linear-gradient(top, #599bdc, #3072b3);
@@ -162,7 +162,7 @@ a#function-h2 span { background-position: -244px 0; }
 a#function-h3 span { background-position: -271px 0; }
 a#function-link span { background-position: -298px 0; }
 a#function-image span { background-position: -324px 0; }
-a#function-help span { background-position: -405px 0; } 
+a#function-help span { background-position: -405px 0; }
 
 a#function-bold:hover span { background-position: 0 -28px; }
 a#function-italic:hover span { background-position: -27px -28px; }
@@ -177,7 +177,7 @@ a#function-h2:hover span { background-position: -244px -28px; }
 a#function-h3:hover span { background-position: -271px -28px; }
 a#function-link:hover span { background-position: -298px -28px; }
 a#function-image:hover span { background-position: -324px -28px; }
-a#function-help:hover span { background-position: -405px -28px; } 
+a#function-help:hover span { background-position: -405px -28px; }
 
 
 #gollum-editor #gollum-editor-function-bar a.disabled {
@@ -195,11 +195,11 @@ a#function-help:hover span { background-position: -405px -28px; }
   padding: 0 0 1.1em 0;
 }
 
-#gollum-editor #gollum-editor-function-bar 
-  #gollum-editor-format-selector select {  
+#gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector select {
   background-color: #f9f9f9;
   border: 1px solid transparent;
-  
+
   float: right;
   font-size: 1.1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -207,15 +207,15 @@ a#function-help:hover span { background-position: -405px -28px; }
   line-height: 1.6em;
   padding: 0.5em 0.7em;
   margin-bottom: 0;
- 
- 
+
+
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em; 
+  -webkit-border-radius: 0.5em;
   -moz-outline: none;
 }
 
-#gollum-editor #gollum-editor-function-bar 
+#gollum-editor #gollum-editor-function-bar
   #gollum-editor-format-selector select:hover {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -231,13 +231,13 @@ a#function-help:hover span { background-position: -405px -28px; }
   line-height: 1.6em;
   padding: 0.6em 0.5em 0 0;
 }
-  
+
 #gollum-editor #gollum-editor-function-bar
   #gollum-editor-format-selector label:after {
   content: ':';
 }
-  
-  
+
+
 /* @section form-fields */
 
 #gollum-editor textarea#gollum-editor-body {
@@ -322,11 +322,11 @@ a#function-help:hover span { background-position: -405px -28px; }
   margin: 0.2em 0.5em 0.75em 0;
   text-shadow: 0 1px 0 #fff;
   width: 25px;
-  
+
   border-radius: 0.3em;
   -moz-border-radius: 0.3em;
   -webkit-border-radius: 0.3em;
-  
+
   filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
   background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
   background: -moz-linear-gradient(top, #f4f4f4, #ececec);
@@ -346,7 +346,7 @@ a#function-help:hover span { background-position: -405px -28px; }
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
   text-decoration: none;
-  
+
   filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
   background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
   background: -moz-linear-gradient(top, #599bdc, #3072b3);
@@ -461,16 +461,16 @@ a#function-help:hover span { background-position: -405px -28px; }
     padding: 1em 0;
     width: 18%;
   }
-  
+
   #gollum-editor-help-parent {
     border-right: 1px solid #eee;
   }
-  
+
   #gollum-editor-help-list {
     background: #fafafa;
     border-right: 1px solid #eee;
   }
-  
+
   #gollum-editor-help-parent li,
   #gollum-editor-help-list li {
     font-size: 1.2em;
@@ -478,7 +478,7 @@ a#function-help:hover span { background-position: -405px -28px; }
     margin: 0;
     padding: 0;
   }
-    
+
     #gollum-editor-help-parent li a,
     #gollum-editor-help-list li a {
       border: 1px solid transparent;
@@ -490,16 +490,16 @@ a#function-help:hover span { background-position: -405px -28px; }
       padding: 0.2em 1em;
       text-shadow: 0 -1px 0 #fff;
     }
-    
+
     #gollum-editor-help-parent li a:hover,
     #gollum-editor-help-list li a:hover {
       background: #fff;
       border-color: #f0f0f0;
       text-decoration: none;
-      
+
       box-shadow: none;
     }
-    
+
     #gollum-editor-help-parent li a.selected,
     #gollum-editor-help-list li a.selected {
       border: 1px solid #eee;
@@ -507,29 +507,29 @@ a#function-help:hover span { background-position: -405px -28px; }
       border-width: 1px 0;
       background: #fff;
       color: #000;
-      
+
       box-shadow: 0 1px 2px #f0f0f0;
     }
-    
+
   #gollum-editor-help-wrapper {
     background: #fff;
     overflow: auto;
     height: 17em;
     padding: 1em;
   }
-  
+
     #gollum-editor-help-content {
       font-size: 1.2em;
       margin: 0 1em 0 0.5em;
       padding: 0;
       line-height: 1.8em;
     }
-    
+
     #gollum-editor-help-content p {
       margin: 0 0 1em 0;
       padding: 0;
     }
-    
+
 /* IE */
 .ie #gollum-editor .singleline input {
   padding-top: 0.25em;
