@@ -475,3 +475,9 @@ your changes merged back into core is as follows:
 1. If necessary, rebase your commits into logical chunks, without errors
 1. Push the branch up to GitHub
 1. Send a pull request to the github/gollum project.
+
+## RELEASING
+
+    $ rake gemspec
+    $ gem build gollum.gemspec
+    $ gem push gollum-X.Y.Z.gem
