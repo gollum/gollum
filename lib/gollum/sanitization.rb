@@ -30,7 +30,7 @@ module Gollum
                 'compact', 'coords', 'datetime', 'dir',
                 'disabled', 'enctype', 'for', 'frame',
                 'headers', 'height', 'hreflang',
-                'hspace', 'ismap', 'label', 'lang',
+                'hspace', 'id', 'ismap', 'label', 'lang',
                 'longdesc', 'maxlength', 'media', 'method',
                 'multiple', 'name', 'nohref', 'noshade',
                 'nowrap', 'prompt', 'readonly', 'rel', 'rev',
