@@ -4,7 +4,7 @@ module Precious
       attr_reader :results, :ref
 
       def title
-        "All pages in #{@ref}"
+        "All Files"
       end
 
       def pages_as_nested_list
