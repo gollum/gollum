@@ -1,3 +1,5 @@
+/* @override http://localhost:4567/css/gollum.css */
+
 #wiki-wrapper #template blockquote {
   margin: 1em 0;
   border-left: 4px solid #ddd;
@@ -392,6 +394,32 @@ a:hover, a:visited {
     margin: 0 1em 0 0;
   }
 
+/* @section pages */
+
+#pages {
+  font-size: 1.2em;
+}
+
+#pages ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#pages li {
+    background-image: url(/images/page.png);
+    background-position: 0 1px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+#pages li.folder {
+    background-image: url(/images/folder.png);
+}
+
+#pages li.folder:hover {
+  cursor: pointer;
+}
 
 /* @section compare */
 .compare h1 {

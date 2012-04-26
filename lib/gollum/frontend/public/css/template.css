@@ -1,13 +1,8 @@
+/* @override http://localhost:4567/css/template.css */
+
 /*
   Gollum v3 Template
 */
-
-/* margin & padding reset*/
-* {
-  margin: 0;
-  padding: 0;
-}
-
 
 html, body {
   color: black;
