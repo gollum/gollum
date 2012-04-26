@@ -39,7 +39,7 @@ module Precious
     end
 
     get '/' do
-      show_page_or_file('Home')
+      redirect '/pages'
     end
 
     get '/edit/*' do
