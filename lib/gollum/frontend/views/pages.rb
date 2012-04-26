@@ -11,6 +11,11 @@ module Precious
         tree = {}
         if has_results
           @results.each do |page|
+            if !page.path.include?('/')
+              tree[page.path] = page.path
+              next
+            end
+
             # "example/foo/bar"
             #   => ["example", "foo", "bar"]
             #     => tree["example"]["foo"]["bar"] = 'path'
