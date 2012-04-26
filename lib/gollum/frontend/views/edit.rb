@@ -6,7 +6,7 @@ module Precious
       attr_reader :page, :content
 
       def title
-        "#{@page.title}"
+        @page.path
       end
 
       def page_name
