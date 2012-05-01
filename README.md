@@ -325,7 +325,9 @@ inline with regular text. For example:
 
 ### INSTALLATION REQUIREMENTS
 
-* TeTex or MacTex/BasicTeX (convert)
+In order to get the mathematical equations rendering to work, you need the following binaries:
+
+* LaText, TeTex or MacTex/BasicTeX (latex, dvips)
 * ImageMagick (convert)
 * Ghostscript (gs)
 
