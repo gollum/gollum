@@ -4,3 +4,5 @@ rvm:
   - rbx-2.0
 notifications:
   disabled: true
+before_install:
+ - sudo apt-get install -y asciidoc

@@ -116,6 +116,9 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
+      if @format == :asciidoc
+        return data
+      end
       data.gsub!(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
