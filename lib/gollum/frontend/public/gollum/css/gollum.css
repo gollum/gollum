@@ -586,7 +586,6 @@ ul.actions {
 /* @control searchbar */
 #head #searchbar {
   float: right;
-  margin: 1em 0 0 0;
   padding: 0;
   overflow: hidden;
 }
@@ -607,7 +606,7 @@ ul.actions {
     float: left;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 1.2em;
-    height: 1.8em;
+    height: 2em;
 
     -webkit-focus-ring: none;
   }
