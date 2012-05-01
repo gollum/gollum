@@ -311,6 +311,7 @@ backticks.
 
 ## MATHEMATICAL EQUATIONS
 
+
 Page files may contain mathematic equations in TeX syntax that will be nicely
 typeset into the expected output. A block-style equation is delimited by `\[`
 and `\]`. For example:
@@ -322,6 +323,13 @@ inline with regular text. For example:
 
     The Pythagorean theorem is \( a^2 + b^2 = c^2 \).
 
+### INSTALLATION REQUIREMENTS
+
+In order to get the mathematical equations rendering to work, you need the following binaries:
+
+* LaText, TeTex or MacTex/BasicTeX (latex, dvips)
+* ImageMagick (convert)
+* Ghostscript (gs)
 
 ## SEQUENCE DIAGRAMS
 
