@@ -589,19 +589,6 @@ np.array([[2,2],[1,3]],np.float)
   end
 
   #########################################################################
-  # Asciidoc
-  #########################################################################
-
-  test "asciidoc header" do 
-    compare("= Book Title\n\n== Heading", '<div class="sect1"><h2 id="wiki-_heading">Heading</h2><div class="sectionbody"></div></div>', 'asciidoc')
-  end
-
-  test "internal links with asciidoc" do 
-    compare("= Book Title\n\n[[anid]]\n== Heading", '<div class="sect1"><h2 id="wiki-anid">Heading</h2><div class="sectionbody"></div></div>', 'asciidoc')
-  end
-
-
-  #########################################################################
   #
   # Helpers
   #
