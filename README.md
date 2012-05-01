@@ -458,6 +458,10 @@ like Rack::Auth, OmniAuth, etc.
     Precious::App.set(:default_markup, :markdown) # set your favorite markup language
     run Precious::App
 
+## Testing
+
+[![Build Status](https://secure.travis-ci.org/github/gollum.png?branch=master)](http://travis-ci.org/github/gollum)
+
 ## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:
