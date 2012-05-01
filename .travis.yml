@@ -1,5 +1,5 @@
 rvm:
   - 1.8.7
-  - rbx-2.0
+  - rbx
 notifications:
   disabled: true
