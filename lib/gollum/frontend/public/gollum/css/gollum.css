@@ -142,6 +142,7 @@ a:hover, a:visited {
     }
 
   /* @section footer */
+
   #wiki-footer {
     clear: both;
     margin: 2em 0 5em;
@@ -236,12 +237,12 @@ a:hover, a:visited {
   }
 
 #wiki-history {
-  margin-top: 3em;
+  margin-top: 2em;
 }
 
   #wiki-history fieldset {
     border: 0;
-    margin: 2em 0;
+    margin: 1em 0;
     padding: 0;
   }
 
@@ -263,14 +264,14 @@ a:hover, a:visited {
 
   #wiki-history table tr td {
     border: 1px solid #c0dce9;
-    font-size: 1.2em;
+    font-size: 1em;
     line-height: 1.6em;
     margin: 0;
     padding: 0.3em 0.7em;
   }
 
   #wiki-history table tr td.checkbox {
-    min-width: 2em;
+    width: 4em;
     padding: 0.3em;
   }
 
@@ -279,7 +280,9 @@ a:hover, a:visited {
     display: block;
     padding-right: 0;
     padding-top: 0.4em;
-    margin-right: -0.2em;
+    margin: 0 auto;
+    width: 1.2em;
+    height: 1.2em;
   }
 
   #wiki-history table tr:nth-child(2n),
@@ -331,6 +334,10 @@ a:hover, a:visited {
     font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
     padding: 0 0.2em;
   }
+
+.history #footer {
+  margin-bottom: 7em;
+}
 
 .history #wiki-history ul.actions li,
 .history #footer ul.actions li {
