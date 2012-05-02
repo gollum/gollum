@@ -1,0 +1,361 @@
+/*
+  Gollum v3 previewframe
+*/
+
+
+/**
+added from new production css.
+should go in gollum.css
+*/
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+em, i {
+font-style: italic;
+}
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  cursor: auto;
+}
+
+#previewframe hr {
+  /*
+  https://a248.e.akamai.net/assets.github.com/images/modules/pulls/dirty-shade.png
+  '../../images/modules/pulls/dirty-shade.png'
+  */
+  background: transparent url('https://a248.e.akamai.net/assets.github.com/images/modules/pulls/dirty-shade.png') repeat-x 0 0;
+  border: 0 none;
+  color: #CCC;
+  height: 4px;
+  padding: 0;
+}
+
+#previewframe p code.nohighlight {
+  display: inline;
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #EAEAEA;
+  background-color: #F8F8F8;
+  border-radius: 3px;
+}
+/** end **/
+
+/* margin & padding reset*/
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+html, body {
+  color: black;
+}
+
+body {
+  font:100% helvetica,arial,freesans,clean,sans-serif;
+  line-height: 1.4;
+}
+
+img {
+  border: 0;
+}
+
+#previewframe {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 40px;
+  overflow-y: scroll;
+}
+
+/* Link Colors */
+a.absent {
+  color: #c00;
+}
+
+/* Primary Body Copy */
+#previewframe p {
+  margin: 1em 0;
+  padding: 0;
+}
+  
+  /* ReST first graf in nested list */
+  #previewframe * li p.first {
+    display: inline-block;
+  }
+
+/* Headings */
+#previewframe h1, #previewframe h2, #previewframe h3, 
+#previewframe h4, #previewframe h5, #previewframe h6 {
+  margin: 0;
+  padding: 0;
+}
+
+#previewframe h1 {
+  border-bottom: 1px solid #ccc;
+  font-size: 33px; /* was 32, GH is 33px */
+  line-height: normal;
+  padding: .08em 0 0 0;
+  margin: 0;
+}
+
+#previewframe h2 {
+  font-size: 22px;
+  line-height: normal;
+  margin: 22px 0 0;
+  padding: 7px 0 0;
+}
+
+#previewframe h3 {
+  font-size: 16px;
+  line-height: 26px;
+  padding: 26px 0 0;
+}
+
+#previewframe h4 {
+  font-size: 14px;
+  line-height: 26px;
+  padding: 18px 0 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#previewframe h5 {
+  font-size: 13px;
+  line-height: 26px;
+  margin-bottom: -19px;
+  padding: 14px 0 0;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#previewframe h6 {
+  color: #666;
+  font-size: 14px; 
+  line-height: 26px;
+  margin-bottom: -19px;
+  padding: 18px 0 0;
+  font-weight: normal;
+  font-variant: italic;
+}
+
+  /* Border Reset for headers with horizontal rules */ 
+  #previewframe > h2:first-child, 
+  #previewframe > h1:first-child {
+    margin: 12px 0 0;
+    padding: 10px 0 0;
+  }
+
+
+/* Lists, Blockquotes & Such */
+#previewframe ul, 
+#previewframe ol {
+  margin-top: 1.5em;
+  margin-left: 2.6em;
+}
+
+  /* Nested Lists */
+  #previewframe ul li, 
+  #previewframe ol li, 
+  #previewframe ul li ul, 
+  #previewframe ol li ol,
+  #previewframe ul li ol,
+  #previewframe ol li ul,
+  #previewframe ul ul, 
+  #previewframe ol ol {
+    padding: 0;
+    margin: .5em 0;
+  }
+
+#previewframe dl {
+  margin: 0;
+  padding: 20px 0 0;
+}
+
+  #previewframe dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: normal;
+    margin: 0;
+    padding: 20px 0 0;
+  }
+
+    #previewframe dl dt:first-child {
+      padding: 0;
+    }
+
+  #previewframe dl dd {
+    font-size: 13px;
+    margin: 0;
+    padding: 3px 0 0;
+  }
+
+/* Tables */
+#previewframe table {
+  border-collapse: collapse;
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+#previewframe table * tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+  #previewframe table * tr:nth-child(2n) {
+    background-color: #f8f8f8;
+  }
+
+  #previewframe table * tr th,
+  #previewframe table * tr td {
+    border: 1px solid #ccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px; 
+  }
+
+/* Images & Stuff */
+#previewframe img {
+  max-width: 100%;
+}
+
+/* Gollum Image Tags */
+
+/* Framed */
+#previewframe span.frame {
+  display: block;
+  overflow: hidden;
+}
+
+  #previewframe span.frame > span {
+    border: 1px solid #ddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto;
+  }
+
+  #previewframe span.frame span img {
+    display: block;
+    float: left;
+  }
+
+  #previewframe span.frame span span {
+    clear: both;
+    color: #333;
+    display: block;
+    padding: 5px 0 0;
+  }
+
+#previewframe span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+  #previewframe span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center;
+  }
+
+  #previewframe span.align-center span img {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+#previewframe span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+  #previewframe span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right;
+  }
+
+  #previewframe span.align-right span img {
+    margin: 0;
+    text-align: right;
+  }
+
+#previewframe span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left;
+}
+
+  #previewframe span.float-left span {
+    margin: 13px 0 0;
+  }
+
+#previewframe span.float-right {
+  display: block; 
+  margin-left: 13px;
+  overflow: hidden;
+  float: right;
+}
+
+  #previewframe span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right;
+  }
+
+
+/* Code */
+#previewframe code, #previewframe tt {
+  background-color: #f8f8f8;
+  border: 1px solid #dedede;
+  font-size: 13px;
+  padding: 0;
+
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+#previewframe .highlight code, #previewframe code {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+pre, code {
+  font: 12px 'Bitstream Vera Sans Mono','Courier',monospace
+}
+
+#previewframe pre code, #previewframe pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+/*
+no highlight rules for client side preview mode! (we're using highlight.js instead of pygments)
+*/
