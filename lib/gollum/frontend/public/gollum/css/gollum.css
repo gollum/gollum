@@ -418,8 +418,12 @@ a:hover, a:visited {
 
   .compare .data {
     border: 1px solid #ddd;
-    margin-top: 1em;
+    margin: 1em 0 2em;
     overflow: auto;
+  }
+
+  .compare .data table {
+    width: 100%;
   }
 
   .compare .data pre {
@@ -434,9 +438,13 @@ a:hover, a:visited {
   .compare .data tr td {
     font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
     font-size: 1.2em;
-    line-height: 1.8em;
+    line-height: 1.2em;
     margin: 0;
     padding: 0;
+  }
+
+  .compare .data tr td + td + td {
+    width: 100%;
   }
 
   .compare .data td.line_numbers {
@@ -450,6 +458,10 @@ a:hover, a:visited {
 .compare #footer ul.actions li {
   margin-left: 0;
   margin-right: 0.6em;
+}
+
+.compare #footer {
+  margin-bottom: 7em;
 }
 
 
