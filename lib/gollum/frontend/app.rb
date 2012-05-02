@@ -46,9 +46,14 @@ module Precious
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
-        @page = page
-        @content = page.raw_data
-        mustache :edit
+        if page.format.to_s.include?('markdown')
+          # TODO: Use encodeURIComponent on page name.
+          redirect '/livepreview/index.html?page=' + @name
+        else
+          @page = page
+          @content = page.raw_data
+          mustache :edit
+        end
       else
         mustache :create
       end
