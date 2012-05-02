@@ -3,10 +3,12 @@
   <h1>History for <strong>{{path}}</strong></h1>
   
   <ul class="actions">
+    <li class="minibutton">
+      {{>searchbar}}
+    </li>
     <li class="minibutton"><a href="/history/{{escaped_name}}"
        class="action-page-history">Back to Page History</a></li>
   </ul>
-  {{>searchbar}}
 </div>
 
 {{#message}}
