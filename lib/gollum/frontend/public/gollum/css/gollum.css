@@ -43,11 +43,7 @@ a:hover, a:visited {
 }
 
   #head h1 {
-    font-size: 3.3em;
-    float: left;
-    line-height: normal;
-    margin: 0;
-    padding: 0.08em 0 0 0;
+    display: none;
   }
 
   #head ul.actions {
