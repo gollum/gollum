@@ -37,6 +37,7 @@ a:hover, a:visited {
 
 /* @section head */
 #head {
+  border-bottom: 1px solid #ccc;
   margin: 4.5em 0 0.5em;
   padding: 0.5em 0;
   overflow: hidden;
@@ -481,7 +482,7 @@ ul.actions {
 
  ul.actions li {
    float: left;
-   font-size: 1.2em;
+   font-size: 1em;
    margin-left: 0.6em;
  }
 
@@ -605,8 +606,9 @@ ul.actions {
     color: #000;
     float: left;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 1.2em;
+    font-size: 1em;
     height: 2.15em;
+    padding: 0 .5em;
 
     -webkit-focus-ring: none;
   }
@@ -639,10 +641,10 @@ ul.actions {
 
   #head #searchbar #searchbar-fauxtext #search-submit span {
     background-image: url(/images/icon-sprite.png);
-    background-position: -431px 4px;
+    background-position: -431px 0px;
     background-repeat: no-repeat;
     display: block;
-    height: 2.15em;
+    height: 1.8em;
     overflow: hidden;
     text-indent: -5000px;
     width: 28px;
@@ -654,6 +656,6 @@ ul.actions {
   }
 
   #head #searchbar #searchbar-fauxtext #search-submit:hover span {
-    background-position: -431px -28px;
+    background-position: -431px -27px;
     padding: 0;
   }
