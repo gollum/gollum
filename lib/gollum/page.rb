@@ -124,35 +124,13 @@ module Gollum
       self.class.canonicalize_filename(filename)
     end
 
-    # Public: If the first element of a formatted page is an <h1> tag it can
-    # be considered the title of the page and used in the display. If the
-    # first element is NOT an <h1> tag, the title will be constructed from the
+    # Public: The title will be constructed from the
     # filename by stripping the extension and replacing any dashes with
     # spaces.
     #
     # Returns the fully sanitized String title.
     def title
-      doc = Nokogiri::HTML(%{<div id="gollum-root">} + self.formatted_data + %{</div>})
-
-      header =
-      case self.format
-        when :asciidoc
-          doc.css("div#gollum-root > div#header > h1:first-child")
-        when :org
-          doc.css("div#gollum-root > p.title:first-child")
-        when :pod
-          doc.css("div#gollum-root > a.dummyTopAnchor:first-child + h1")
-        when :rest
-          doc.css("div#gollum-root > div > div > h1:first-child")
-        else
-          doc.css("div#gollum-root > h1:first-child")
-      end
-
-      if !header.empty?
-        Sanitize.clean(header.to_html)
-      else
-        Sanitize.clean(name)
-      end.strip
+      header = Sanitize.clean(name).strip
     end
 
     # Public: The path of the page within the repo.
