@@ -116,7 +116,6 @@ window.onload = function() {
       url: "/create",
       data:  { page: $.key("page"), format: "markdown", content: editorSession.getValue() },
       success: function() {
-        // on success, load the new page.
         window.location = window.location.origin + "/" + $.key("page");
       }
     });
@@ -126,7 +125,6 @@ window.onload = function() {
       url: "/edit/" + $.key("page"),
       data:  { format: "markdown", content: editorSession.getValue() },
       success: function() {
-          // on success, load the new page.
           window.location = window.location.origin + "/" + $.key("page");
         }
       });
@@ -134,8 +132,6 @@ window.onload = function() {
   }
 
   $('#save').click(function() {
-    console.log("save clicked!");
-    // Save page and navigate to the new page on success.
     $.save();
   });
 
