@@ -6,6 +6,8 @@ require 'mustache/sinatra'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
+require File.expand_path '../uri_encode_component', __FILE__
+
 module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
@@ -55,8 +57,7 @@ module Precious
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
         if page.format.to_s.include?('markdown')
-          # TODO: Use encodeURIComponent on page name.
-          redirect '/livepreview/index.html?page=' + @name
+          redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
         else
           @page = page
           @content = page.raw_data
