@@ -91,6 +91,54 @@ editor.setShowPrintMargin(false);
 editor.setBehavioursEnabled(true);
 
 window.onload = function() {
+  // RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
+  $.key = function(key){
+      var value = new RegExp('[\\?&]' + key + '=([^&#]*)').exec(window.location.href);
+      return  (!value) ? 0 : value[1] || 0;
+  }
+
+  /* Load markdown from /data/page into the ace editor. */
+  jQuery.ajax({
+    type: "GET",
+    url: "/data/" + $.key("page"),
+    success: function(data) {
+       editorSession.setValue(data);
+    }
+  });
+
+  $.save = function() {
+    // if &create=true then handle create instead of edit.
+    var create = $.key("create");
+
+    if (create) {
+      jQuery.ajax({
+      type: "POST",
+      url: "/create",
+      data:  { page: $.key("page"), format: "markdown", content: editorSession.getValue() },
+      success: function() {
+        // on success, load the new page.
+        window.location = window.location.origin + "/" + $.key("page");
+      }
+    });
+    } else {
+      jQuery.ajax({
+      type: "POST",
+      url: "/edit/" + $.key("page"),
+      data:  { format: "markdown", content: editorSession.getValue() },
+      success: function() {
+          // on success, load the new page.
+          window.location = window.location.origin + "/" + $.key("page");
+        }
+      });
+    } // end else
+  }
+
+  $('#save').click(function() {
+    console.log("save clicked!");
+    // Save page and navigate to the new page on success.
+    $.save();
+  });
+
   // onChange calls applyTimeout which rate limits the calling of makePreviewHtml based on render time.
   editor.on('change', applyTimeout);
   makePreviewHtml(); // preview default text on load

@@ -42,6 +42,14 @@ module Precious
       show_page_or_file('Home')
     end
 
+    get '/data/*' do
+      @name = params[:splat].first
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      if page = wiki.page(@name)
+        page.raw_data
+      end
+    end
+
     get '/edit/*' do
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
