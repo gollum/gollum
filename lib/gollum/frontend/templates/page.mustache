@@ -2,6 +2,9 @@
 <div id="head">
   <h1>{{title}}</h1>
   <ul class="actions">
+    <li class="minibutton">
+      {{>searchbar}}
+    </li>
     <li class="minibutton"><a href="/pages"
       class="action-all-pages">All Pages</a></li>
     <li class="minibutton" class="jaws">
@@ -13,7 +16,6 @@
     <li class="minibutton"><a href="/history/{{escaped_name}}"
        class="action-page-history">Page History</a></li>
   </ul>
-  {{>searchbar}}
 </div>
 <div id="wiki-content">
 <div class="wrap {{#has_footer}} has-footer {{/has_footer}} {{#has_sidebar}}  has-rightbar{{/has_sidebar}}">
