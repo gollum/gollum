@@ -104,12 +104,12 @@ context "Page" do
     assert_equal 'My Precious', page.title
   end
 
-  test "title from h1 with normal contents" do
+  test "title from filename with normal contents" do
     page = @wiki.page('Home')
-    assert_equal "The LOTR Wiki", page.title
+    assert_equal "Home", page.title
   end
 
-  test "title from h1 with html contents" do
+  test "title from filename with html contents" do
     page = @wiki.page('Eye Of Sauron')
     assert_equal "Eye Of Sauron", page.title
   end
