@@ -615,16 +615,11 @@ ul.actions {
     background: #fff;
     border: 1px solid #d4d4d4;
     overflow: hidden;
-    height: 2.0em;
+    height: 2.2em;
 
     border-radius: 0.3em;
     -moz-border-radius: 0.3em;
     -webkit-border-radius: 0.3em;
-  }
-
-  .ie #head #searchbar #searchbar-fauxtext,
-  .ff #head #searchbar #searchbar-fauxtext {
-     height: 2.2em
   }
 
   #head #searchbar #searchbar-fauxtext input#search-query {
