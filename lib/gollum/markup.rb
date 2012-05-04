@@ -169,6 +169,8 @@ module Gollum
         html
       elsif html = process_file_link_tag(tag)
         html
+      elsif html = process_page_include_tag(tag)
+        html
       else
         process_page_link_tag(tag)
       end
@@ -290,6 +292,29 @@ module Gollum
         %{<a href="#{path}">#{name}</a>}
       else
         nil
+      end
+    end
+
+    # Attempt to process the tag as a page include tag.
+    #
+    # tag       - The String tag contents (the stuff inside the double
+    #             brackets).
+    #
+    # Returns the String HTML if the tag is a valid page include tag or nil
+    #   if it is not.
+    def process_page_include_tag(tag)
+      parts = tag.split('|')
+      parts.reverse! if @format == :mediawiki
+
+      command, page_name = *parts.compact.map(&:strip)
+
+      if command == "INCLUDE" and !page_name.nil?
+        page, extra = find_page_from_name(page_name)
+        if page
+          page.formatted_data
+        else
+          %{<p><b>INCLUDE <em>#{page_name}</em> NOT FOUND</b></p>}
+        end
       end
     end
 
