@@ -233,6 +233,7 @@ a#function-help:hover span { background-position: -405px -28px; }
 
 /* @section form-fields */
 
+#gollum-editor textarea#gollum-editor-sidebar,
 #gollum-editor textarea#gollum-editor-body {
   background: #fff;
   border: 1px solid #ddd;
@@ -330,12 +331,15 @@ a#function-help:hover span { background-position: -405px -28px; }
   font-size: 1.6em;
   float: left;
   margin: 0;
-  padding: 0.4em 0 0 0.3em;
+  padding: 0.15em 0 0 0.3em;
   text-shadow: 0 -1px 0 #fff;
+}
+#gollum-editor .collapsed h4 {
+  color: #bbb;
 }
 
 #gollum-editor .collapsed a.button:hover,
-#gollum-editor .expanded h4 a.button:hover {
+#gollum-editor .expanded  a.button:hover {
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
   text-decoration: none;
