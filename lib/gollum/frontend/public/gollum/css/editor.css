@@ -30,6 +30,7 @@ a {
   -webkit-border-radius: 1em;
 }
 
+.ff #gollum-editor,
 .ie #gollum-editor {
   padding-bottom: 1em;
 }
@@ -51,9 +52,9 @@ a {
   background: #fff;
   border: 1px solid #ddd;
   color: #000;
-  font-size: 1.3em;
+  font-size: 1.1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  line-height: 1.8em;
+  line-height: 1.5em;
   margin: 1em 0 0.4em;
   padding: 0.5em;
   width: 98%;
@@ -192,44 +193,36 @@ a#function-help:hover span { background-position: -405px -28px; }
 
 #gollum-editor #gollum-editor-function-bar #gollum-editor-format-selector {
   overflow: hidden;
-  padding: 0 0 1.1em 0;
+  padding: .2em 0 .5em 0;
 }
 
 #gollum-editor #gollum-editor-function-bar
   #gollum-editor-format-selector select {
   background-color: #f9f9f9;
-  border: 1px solid transparent;
+  border: 1px solid #ddd;
+  color: #333;
 
   float: right;
-  font-size: 1.1em;
+  font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
   line-height: 1.6em;
-  padding: 0.5em 0.7em;
-  margin-bottom: 0;
+  padding: 0.3em 0.4em;
 
 
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em;
-  -moz-outline: none;
-}
-
-#gollum-editor #gollum-editor-function-bar
-  #gollum-editor-format-selector select:hover {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  -moz-outline: none;
 }
 
 #gollum-editor #gollum-editor-function-bar
   #gollum-editor-format-selector label {
   color: #999;
   float: right;
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: bold;
   line-height: 1.6em;
-  padding: 0.6em 0.5em 0 0;
+  padding: .3em 0.5em 0 0;
 }
 
 #gollum-editor #gollum-editor-function-bar
@@ -243,9 +236,9 @@ a#function-help:hover span { background-position: -405px -28px; }
 #gollum-editor textarea#gollum-editor-body {
   background: #fff;
   border: 1px solid #ddd;
-  font-size: 1.3em;
+  font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  line-height: 1.8em;
+  line-height: 1.4em;
   margin: 1em 0 0.4em;
   padding: 0.5em; /* I don't really like mixing pct & em here… */
   width: 98%;
@@ -259,7 +252,7 @@ a#function-help:hover span { background-position: -405px -28px; }
   cursor: pointer;
   display: block;
   float: left;
-  font-size: 1.2em;
+  font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
   margin: 0;
@@ -403,7 +396,7 @@ a#function-help:hover span { background-position: -405px -28px; }
   color: #333;
   cursor: pointer;
   display: block;
-  font-size: 1.2em;
+  font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
   line-height: 1.2em;

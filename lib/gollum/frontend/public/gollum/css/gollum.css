@@ -37,8 +37,8 @@ a:hover, a:visited {
 
 /* @section head */
 #head {
+  border-bottom: 1px solid #ddd;
   margin: 4.5em 0 0.5em;
-  padding: 0.5em 0;
   overflow: hidden;
 }
 
@@ -142,6 +142,7 @@ a:hover, a:visited {
     }
 
   /* @section footer */
+
   #wiki-footer {
     clear: both;
     margin: 2em 0 5em;
@@ -208,6 +209,7 @@ a:hover, a:visited {
 
   /* @section page-footer */
   .page #footer {
+    border-top: 1px solid #ddd;
     margin: 1em 0 7em;
   }
 
@@ -235,12 +237,12 @@ a:hover, a:visited {
   }
 
 #wiki-history {
-  margin-top: 3em;
+  margin-top: 2em;
 }
 
   #wiki-history fieldset {
     border: 0;
-    margin: 2em 0;
+    margin: 1em 0;
     padding: 0;
   }
 
@@ -262,14 +264,14 @@ a:hover, a:visited {
 
   #wiki-history table tr td {
     border: 1px solid #c0dce9;
-    font-size: 1.2em;
+    font-size: 1em;
     line-height: 1.6em;
     margin: 0;
     padding: 0.3em 0.7em;
   }
 
   #wiki-history table tr td.checkbox {
-    min-width: 2em;
+    width: 4em;
     padding: 0.3em;
   }
 
@@ -278,7 +280,9 @@ a:hover, a:visited {
     display: block;
     padding-right: 0;
     padding-top: 0.4em;
-    margin-right: -0.2em;
+    margin: 0 auto;
+    width: 1.2em;
+    height: 1.2em;
   }
 
   #wiki-history table tr:nth-child(2n),
@@ -330,6 +334,10 @@ a:hover, a:visited {
     font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
     padding: 0 0.2em;
   }
+
+.history #footer {
+  margin-bottom: 7em;
+}
 
 .history #wiki-history ul.actions li,
 .history #footer ul.actions li {
@@ -410,8 +418,12 @@ a:hover, a:visited {
 
   .compare .data {
     border: 1px solid #ddd;
-    margin-top: 1em;
+    margin: 1em 0 2em;
     overflow: auto;
+  }
+
+  .compare .data table {
+    width: 100%;
   }
 
   .compare .data pre {
@@ -426,9 +438,13 @@ a:hover, a:visited {
   .compare .data tr td {
     font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
     font-size: 1.2em;
-    line-height: 1.8em;
+    line-height: 1.2em;
     margin: 0;
     padding: 0;
+  }
+
+  .compare .data tr td + td + td {
+    width: 100%;
   }
 
   .compare .data td.line_numbers {
@@ -442,6 +458,10 @@ a:hover, a:visited {
 .compare #footer ul.actions li {
   margin-left: 0;
   margin-right: 0.6em;
+}
+
+.compare #footer {
+  margin-bottom: 7em;
 }
 
 
@@ -481,8 +501,9 @@ ul.actions {
 
  ul.actions li {
    float: left;
-   font-size: 1.2em;
+   font-size: 0.9em;
    margin-left: 0.6em;
+   margin-bottom: 0.6em;
  }
 
 .minibutton a {
@@ -594,10 +615,16 @@ ul.actions {
     background: #fff;
     border: 1px solid #d4d4d4;
     overflow: hidden;
+    height: 2.0em;
 
     border-radius: 0.3em;
     -moz-border-radius: 0.3em;
     -webkit-border-radius: 0.3em;
+  }
+
+  .ie #head #searchbar #searchbar-fauxtext,
+  .ff #head #searchbar #searchbar-fauxtext {
+     height: 2.2em
   }
 
   #head #searchbar #searchbar-fauxtext input#search-query {
@@ -605,14 +632,11 @@ ul.actions {
     color: #000;
     float: left;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 1.2em;
-    height: 2.15em;
+    font-size: 1em;
+    height: inherit;
+    padding: 0 .5em;
 
     -webkit-focus-ring: none;
-  }
-
-  .ff #head #searchbar #searchbar-fauxtext input#search-query {
-    padding: 0.2em 0 0.2em 0.5em;
   }
 
   .ie #head #searchbar #searchbar-fauxtext input#search-query {
@@ -630,7 +654,7 @@ ul.actions {
     margin: 0 !important;
     padding: 0;
     float: right;
-    font-size: 1.2em;
+    height: inherit;
 
     border-radius: 0 3px 3px 0;
     -moz-border-radius: 0 3px 3px 0;
@@ -639,10 +663,10 @@ ul.actions {
 
   #head #searchbar #searchbar-fauxtext #search-submit span {
     background-image: url(/images/icon-sprite.png);
-    background-position: -431px 4px;
+    background-position: -431px -1px;
     background-repeat: no-repeat;
     display: block;
-    height: 2.15em;
+    height: inherit;
     overflow: hidden;
     text-indent: -5000px;
     width: 28px;

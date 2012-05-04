@@ -10,7 +10,7 @@
 
 
 html, body {
-  color: black;
+  color: #333;
 }
 
 body {
@@ -24,7 +24,7 @@ img {
 
 #template {
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.6;
   margin-bottom: 40px;
 }
 
@@ -35,7 +35,7 @@ a.absent {
 
 /* Primary Body Copy */
 #template p {
-  margin: 1em 0;
+  margin: 1.4em 0;
   padding: 0;
 }
 
@@ -52,17 +52,17 @@ a.absent {
 }
 
 #template h1 {
-  border-bottom: 1px solid #ccc;
-  font-size: 33px; /* was 32, GH is 33px */
+  font-size: 28px;
   line-height: normal;
-  padding: .08em 0 0 0;
-  margin: 0;
+  padding: 10px 0 0 0;
+  margin: 30px 0 10px;
 }
 
 #template h2 {
+  border-bottom: 1px solid #ddd;
   font-size: 22px;
-  line-height: normal;
-  margin: 22px 0 0;
+  line-height: 1.6;
+  margin: 22px 0 10px;
   padding: 7px 0 0;
 }
 
@@ -110,16 +110,16 @@ a.absent {
   /* Border Reset for headers with horizontal rules */
   #template > h2:first-child,
   #template > h1:first-child {
-    margin: 12px 0 0;
-    padding: 10px 0 0;
+    margin: 12px 0 10px;
+    padding: 10px 0 10px;
   }
 
 
 /* Lists, Blockquotes & Such */
 #template ul,
 #template ol {
-  margin-top: 1.5em;
-  margin-left: 2.6em;
+  margin: 15px 0;
+  padding-left: 30px;
 }
 
   /* Nested Lists */
@@ -132,7 +132,7 @@ a.absent {
   #template ul ul,
   #template ol ol {
     padding: 0;
-    margin: .5em 0;
+    margin: 15px 0;
   }
 
 #template dl {
@@ -286,7 +286,7 @@ a.absent {
   background-color: #f8f8f8;
   border: 1px solid #dedede;
   font-size: 13px;
-  padding: 0;
+  padding: 1px 5px;
 
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -313,6 +313,7 @@ pre, code {
 #template pre code, #template pre tt {
   background-color: transparent;
   border: none;
+  padding: 0;
 }
 
 /*
