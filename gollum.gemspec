@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('org-ruby', '~>0.6.2')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('rack-test')
-  s.add_development_dependency('wikicloth', '~> 0.6.3')
+  s.add_development_dependency('wikicloth')
   s.add_development_dependency('rake', '~> 0.9.2')
 
   # = MANIFEST =
