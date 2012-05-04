@@ -639,8 +639,8 @@ ul.actions {
     -webkit-focus-ring: none;
   }
 
-  .ie #head #searchbar #searchbar-fauxtext input#search-query {
-    padding: 0.4em 0 0 0.5em;
+  .ie8 #head #searchbar #searchbar-fauxtext input#search-query {
+    padding: 0.5em 0 0 0.5em;
   }
 
   #head #searchbar #searchbar-fauxtext input#search-query.ph {
