@@ -43,7 +43,7 @@ module Gollum
 
     # Default whitelisted protocols for URLs.
     PROTOCOLS = {
-      'a'   => {'href' => ['http', 'https', 'mailto', 'ftp', 'irc', :relative]},
+      'a'   => {'href' => ['http', 'https', 'mailto', 'ftp', 'irc', 'apt', :relative]},
       'img' => {'src'  => ['http', 'https', :relative]}
     }.freeze
 
