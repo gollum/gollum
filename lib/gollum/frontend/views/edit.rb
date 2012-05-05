@@ -13,6 +13,17 @@ module Precious
         @name.gsub('-', ' ')
       end
 
+      def header
+        if @header.nil?
+          if page = @page.header
+            @header = page.raw_data
+          else
+            @header = false
+          end
+        end
+        @header
+      end
+
       def footer
         if @footer.nil?
           if page = @page.footer

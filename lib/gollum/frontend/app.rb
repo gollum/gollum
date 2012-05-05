@@ -63,6 +63,7 @@ module Precious
 
       update_wiki_page(wiki, page, params[:content], commit, name,
         params[:format])
+      update_wiki_page(wiki, page.header,  params[:header],  commit) if params[:header]
       update_wiki_page(wiki, page.footer,  params[:footer],  commit) if params[:footer]
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
