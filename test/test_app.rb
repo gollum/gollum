@@ -32,6 +32,7 @@ context "Frontend" do
   test "edits page header footer and sidebar" do
     commits = @wiki.repo.commits('master').size
     page_1  = @wiki.page('A')
+    header_1 = page_1.header
     foot_1  = page_1.footer
     side_1  = page_1.sidebar
 
@@ -52,6 +53,7 @@ context "Frontend" do
     assert_equal 'footer', foot_2.raw_data
     assert_equal 'def',    foot_2.version.message
     assert_not_equal foot_1.version.sha, foot_2.version.sha
+    assert_not_equal header_1.version.sha, header_2.version.sha
 
     assert_equal 'sidebar', side_2.raw_data
     assert_equal 'def',     side_2.version.message
