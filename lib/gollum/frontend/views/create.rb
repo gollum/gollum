@@ -27,6 +27,11 @@ module Precious
         !!@footer
       end
 
+      def has_header
+        @header = (@page.header || false) if @header.nil? && @page
+        !!@header
+      end
+
       def has_sidebar
         @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
         !!@sidebar

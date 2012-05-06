@@ -99,7 +99,7 @@ module Gollum
     # Returns a newly initialized Gollum::Page.
     def initialize(wiki)
       @wiki = wiki
-      @blob = @footer = @sidebar = nil
+      @blob = @header = @footer = @sidebar = nil
     end
 
     # Public: The on-disk filename of the page including extension.
@@ -207,6 +207,13 @@ module Gollum
       else
         @wiki.repo.log(@wiki.ref, @path, log_pagination_options(options))
       end
+    end
+
+    # Public: The header Page.
+    #
+    # Returns the header Page or nil if none exists.
+    def header
+      @header ||= find_sub_page(:header)
     end
 
     # Public: The footer Page.
