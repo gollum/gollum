@@ -47,6 +47,7 @@ module Precious
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
         @page = page
+        @page.version = wiki.repo.log(wiki.ref, @page.path).first
         @content = page.raw_data
         mustache :edit
       else
