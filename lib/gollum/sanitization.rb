@@ -120,12 +120,12 @@ module Gollum
     attr_writer :allow_comments
 
     def initialize
-      @elements         = ELEMENTS
-      @attributes       = ATTRIBUTES
-      @protocols        = PROTOCOLS
-      @transformers     = TRANSFORMERS
+      @elements         = ELEMENTS.dup
+      @attributes       = ATTRIBUTES.dup
+      @protocols        = PROTOCOLS.dup
+      @transformers     = TRANSFORMERS.dup
       @add_attributes   = {}
-      @remove_contents  = REMOVE_CONTENTS
+      @remove_contents  = REMOVE_CONTENTS.dup
       @allow_comments   = false
       @id_prefix        = 'wiki-'
       yield self if block_given?
