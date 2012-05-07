@@ -68,7 +68,7 @@ a.absent {
 .markdown-body h4:hover a.anchor,
 .markdown-body h5:hover a.anchor,
 .markdown-body h6:hover a.anchor {
-  background: url('../../images/modules/styleguide/para.png') no-repeat 10px center;
+  background: url('/images/para.png') no-repeat 10px center;
   text-decoration: none;
 }
 .markdown-body h1 tt,
@@ -118,7 +118,7 @@ a.absent {
   margin: 15px 0
 }
 .markdown-body hr {
-  background: transparent url('../../images/modules/pulls/dirty-shade.png') repeat-x 0 0;
+  background: transparent url('/images/dirty-shade.png') repeat-x 0 0;
   border: 0 none;
   color: #ccc;
   height: 4px;
