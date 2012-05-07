@@ -20,6 +20,13 @@
 <div id="wiki-content">
 <div class="wrap {{#has_footer}} has-footer {{/has_footer}} {{#has_sidebar}}  has-rightbar{{/has_sidebar}}">
   <div id="wiki-body" class="gollum-{{format}}-content">
+    {{#has_header}}
+    <div id="wiki-header" class="gollum-{{header_format}}-content">
+      <div id="header-content">
+        {{{header_content}}}
+      </div>
+    </div>
+    {{/has_header}}
     <div class="markdown-body">
       {{{content}}}
     </div>
