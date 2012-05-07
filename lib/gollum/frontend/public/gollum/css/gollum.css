@@ -71,6 +71,7 @@ a:hover, a:visited {
     display: block;
     float: left;
     margin-right: 3%;
+    margin-bottom: 40px;
     width: 100%;
   }
 
@@ -86,6 +87,7 @@ a:hover, a:visited {
     float: right;
     padding: 7px;
     width: 25%;
+    color: #555;
 
     border-radius: 0.5em;
     -moz-border-radius: 0.5em;
@@ -97,7 +99,7 @@ a:hover, a:visited {
     }
 
       #wiki-rightbar > p:first-child {
-        margin-top: 0;
+        margin-top: 10px;
       }
 
     #wiki-rightbar p.parent {
@@ -112,33 +114,6 @@ a:hover, a:visited {
     #wiki-rightbar p.parent:before {
       color: #666;
       content: "← ";
-    }
-
-    #wiki-rightbar h3 {
-      font-size: 1.2em;
-      color: #333;
-      margin: 1.2em 0 0;
-      padding: 0;
-      text-shadow: 0 1px 0 #fff;
-    }
-
-    #wiki-rightbar ul {
-      margin: 0.5em 0 1em;
-      padding: 0;
-    }
-
-    #wiki-rightbar ul li {
-      color: #bbb;
-      margin: 0 0 0 1em;
-      padding: 0;
-      line-height: 1.75em;
-      list-style-position: inside;
-      list-style-type: round;
-    }
-
-    #wiki-rightbar #nav ul li a {
-      font-weight: bold;
-      text-shadow: 0 1px 0 #fff;
     }
 
   /* @section footer */
