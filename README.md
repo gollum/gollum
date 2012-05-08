@@ -472,6 +472,9 @@ like Rack::Auth, OmniAuth, etc.
     Precious::App.set(:default_markup, :markdown) # set your favorite markup language
     run Precious::App
 
+## Windows Filename Validation
+Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
+
 ## Testing
 
 [![Build Status](https://secure.travis-ci.org/github/gollum.png?branch=master)](http://travis-ci.org/github/gollum)
