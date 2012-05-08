@@ -60,6 +60,7 @@ module Precious
           redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
         else
           @page = page
+          @page.version = wiki.repo.log(wiki.ref, @page.path).first
           @content = page.raw_data
           mustache :edit
         end
@@ -77,6 +78,7 @@ module Precious
 
       update_wiki_page(wiki, page, params[:content], commit, name,
         params[:format])
+      update_wiki_page(wiki, page.header,  params[:header],  commit) if params[:header]
       update_wiki_page(wiki, page.footer,  params[:footer],  commit) if params[:footer]
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit

@@ -106,13 +106,19 @@ are named `_Sidebar.ext` where the extension is one of the supported formats.
 Sidebars affect all pages in their directory and any subdirectories that do not
 have a sidebar file of their own.
 
+## HEADER FILES
+
+Header files allow you to add a simple header to your wiki. Header files must
+be named `_Header.ext` where the extension is one of the supported formats.
+Like sidebars, headers affect all pages in their directory and any
+subdirectories that do not have a header file of their own.
+
 ## FOOTER FILES
 
 Footer files allow you to add a simple footer to your wiki. Footer files must
 be named `_Footer.ext` where the extension is one of the supported formats.
 Like sidebars, footers affect all pages in their directory and any
 subdirectories that do not have a footer file of their own.
-
 
 ## HTML SANITIZATION
 
@@ -465,6 +471,9 @@ like Rack::Auth, OmniAuth, etc.
     Precious::App.set(:gollum_path, gollum_path)
     Precious::App.set(:default_markup, :markdown) # set your favorite markup language
     run Precious::App
+
+## Windows Filename Validation
+Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
 
 ## Testing
 

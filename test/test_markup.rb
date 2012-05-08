@@ -495,6 +495,13 @@ np.array([[2,2],[1,3]],np.float)
     compare(content, output)
   end
 
+  test "allows apt uri schemes" do
+    content = "[Hack me](apt:gettext)"
+    output = "<p><a href=\"apt:gettext\">Hackme</a></p>"
+    compare(content, output)
+  end
+
+
   test "removes style blocks completely" do
     content = "<style>body { color: red }</style>foobar"
     output = "<p>foobar</p>"

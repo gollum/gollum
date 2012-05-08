@@ -29,13 +29,14 @@ context "Frontend" do
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
-  test "edits page footer and sidebar" do
+  test "edits page header footer and sidebar" do
     commits = @wiki.repo.commits('master').size
     page_1  = @wiki.page('A')
+    header_1 = page_1.header
     foot_1  = page_1.footer
     side_1  = page_1.sidebar
 
-    post "/edit/A",
+    post "/edit/A", :header => 'header',
       :footer => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
     follow_redirect!
     assert_equal "/A", last_request.fullpath
@@ -43,13 +44,16 @@ context "Frontend" do
 
     @wiki.clear_cache
     page_2 = @wiki.page(page_1.name)
+    header_2 = page_2.header
     foot_2 = page_2.footer
     side_2 = page_2.sidebar
     assert_equal page_1.raw_data, page_2.raw_data
 
+    assert_equal 'header', header_2.raw_data
     assert_equal 'footer', foot_2.raw_data
     assert_equal 'def',    foot_2.version.message
     assert_not_equal foot_1.version.sha, foot_2.version.sha
+    assert_not_equal header_1.version.sha, header_2.version.sha
 
     assert_equal 'sidebar', side_2.raw_data
     assert_equal 'def',     side_2.version.message

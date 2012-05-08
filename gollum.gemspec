@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'gollum'
-  s.version           = '1.4.3'
-  s.date              = '2012-05-03'
+  s.version           = '2.0.0'
+  s.date              = '2012-05-06'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('grit', "~> 2.4.1")
+  s.add_dependency('grit', "~> 2.5.0")
   s.add_dependency('github-markup', [">= 0.7.0", "< 1.0.0"])
   s.add_dependency('github-markdown')
   s.add_dependency('pygments.rb', "~> 0.2.0")
@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('org-ruby', '~>0.6.2')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('rack-test')
-  s.add_development_dependency('wikicloth', '~> 0.6.3')
+  s.add_development_dependency('wikicloth', '~>0.8.0')
   s.add_development_dependency('rake', '~> 0.9.2')
 
   # = MANIFEST =
@@ -75,80 +75,6 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/public/gollum/javascript/gollum.placeholder.js
     lib/gollum/frontend/public/gollum/javascript/jquery.color.js
     lib/gollum/frontend/public/gollum/javascript/jquery.js
-    lib/gollum/frontend/public/gollum/livepreview/css/custom.css
-    lib/gollum/frontend/public/gollum/livepreview/css/gollum/template.css
-    lib/gollum/frontend/public/gollum/livepreview/css/highlightjs/github.css
-    lib/gollum/frontend/public/gollum/livepreview/images/lr_24.png
-    lib/gollum/frontend/public/gollum/livepreview/images/save_24.png
-    lib/gollum/frontend/public/gollum/livepreview/index.html
-    lib/gollum/frontend/public/gollum/livepreview/js/ace/ace.js
-    lib/gollum/frontend/public/gollum/livepreview/js/ace/mode-markdown.js
-    lib/gollum/frontend/public/gollum/livepreview/js/ace/theme-twilight.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/highlight.pack.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/1c.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/actionscript.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/apache.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/avrasm.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/axapta.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/bash.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/cmake.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/coffeescript.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/cpp.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/cs.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/css.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/d.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/delphi.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/diff.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/django.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/dos.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/erlang-repl.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/erlang.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/go.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/haskell.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/http.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/ini.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/java.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/javascript.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/lisp.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/lua.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/markdown.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/matlab.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/mel.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/nginx.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/objectivec.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/parser3.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/perl.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/php.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/profile.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/python.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/r.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/renderman.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/ruby.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/rust.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/scala.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/smalltalk.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/sql.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/tex.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/vala.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/vbscript.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/vhdl.js
-    lib/gollum/frontend/public/gollum/livepreview/js/highlightjs/languages/xml.js
-    lib/gollum/frontend/public/gollum/livepreview/js/jquery/jquery-1.7.2.min.js
-    lib/gollum/frontend/public/gollum/livepreview/js/pagedown/Markdown.Converter.js
-    lib/gollum/frontend/public/gollum/livepreview/js/pagedown/Markdown.Sanitizer.js
-    lib/gollum/frontend/public/gollum/livepreview/licenses/ace/LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/bootstraponline_gollum/LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/gollum/LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/highlightjs/AUTHORS.en.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/highlightjs/AUTHORS.ru.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/highlightjs/LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/jquery/MIT-LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/licenses.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/notepages/LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/pagedown/LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/retina_display_icon_set/by_sa_3.0_unported_legalcode.txt
-    lib/gollum/frontend/public/gollum/livepreview/licenses/sizzle/LICENSE.txt
-    lib/gollum/frontend/public/gollum/livepreview/readme.md
     lib/gollum/frontend/templates/compare.mustache
     lib/gollum/frontend/templates/create.mustache
     lib/gollum/frontend/templates/edit.mustache
@@ -160,7 +86,6 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/templates/pages.mustache
     lib/gollum/frontend/templates/search.mustache
     lib/gollum/frontend/templates/searchbar.mustache
-    lib/gollum/frontend/uri_encode_component.rb
     lib/gollum/frontend/views/compare.rb
     lib/gollum/frontend/views/create.rb
     lib/gollum/frontend/views/edit.rb

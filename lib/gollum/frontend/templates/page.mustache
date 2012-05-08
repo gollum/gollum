@@ -2,6 +2,9 @@
 <div id="head">
   <h1>{{title}}</h1>
   <ul class="actions">
+    <li class="minibutton">
+      {{>searchbar}}
+    </li>
     <li class="minibutton"><a href="/pages"
       class="action-all-pages">All Pages</a></li>
     <li class="minibutton" class="jaws">
@@ -13,23 +16,31 @@
     <li class="minibutton"><a href="/history/{{escaped_name}}"
        class="action-page-history">Page History</a></li>
   </ul>
-  {{>searchbar}}
 </div>
 <div id="wiki-content">
 <div class="wrap {{#has_footer}} has-footer {{/has_footer}} {{#has_sidebar}}  has-rightbar{{/has_sidebar}}">
   <div id="wiki-body" class="gollum-{{format}}-content">
-    <div id="template">
+    {{#has_header}}
+    <div id="wiki-header" class="gollum-{{header_format}}-content">
+      <div id="header-content" class="markdown-body">
+        {{{header_content}}}
+      </div>
+    </div>
+    {{/has_header}}
+    <div class="markdown-body">
       {{{content}}}
     </div>
   </div>
   {{#has_sidebar}}
   <div id="wiki-rightbar" class="gollum-{{sidebar_format}}-content">
-    {{{sidebar_content}}}
+    <div id="sidebar-content" class="markdown-body">
+      {{{sidebar_content}}}
+    </div>
   </div>
   {{/has_sidebar}}
   {{#has_footer}}
   <div id="wiki-footer" class="gollum-{{footer_format}}-content">
-    <div id="footer-content">
+    <div id="footer-content" class="markdown-body">
       {{{footer_content}}}
     </div>
   </div>

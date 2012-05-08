@@ -38,8 +38,9 @@ module Gollum
         @wiki.history_sanitizer :
         @wiki.sanitizer
 
-      data = extract_tex(@data.dup)
+      data = @data.dup
       data = extract_code(data)
+      data = extract_tex(data)
       data = extract_wsd(data)
       data = extract_tags(data)
       begin
