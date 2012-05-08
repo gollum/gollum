@@ -10,6 +10,17 @@
   A basic stylesheet for Gollum
 */
 
+/*
+  Fixes AsciiDoc listing block rendering.
+  Must be !important to override
+  .markdown-body code, .markdown-body tt {
+  in template.css.
+  https://github.com/github/gollum/issues/278
+*/
+pre > tt {
+  white-space: pre !important;
+}
+
 /* @section core */
 body, html {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
