@@ -130,7 +130,7 @@ module Gollum
     #
     # Returns the fully sanitized String title.
     def title
-      header = Sanitize.clean(name).strip
+      Sanitize.clean(name).strip
     end
 
     # Public: The path of the page within the repo.
