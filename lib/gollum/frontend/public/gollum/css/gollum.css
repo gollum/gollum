@@ -116,71 +116,75 @@ a:hover, a:visited {
       content: "← ";
     }
 
-  /* @section footer */
+/* @section footer */
 
-  #wiki-footer {
-    clear: both;
-    margin: 2em 0 5em;
-  }
+#wiki-footer {
+  clear: both;
+  margin: 2em 0 5em;
+}
 
-    .has-rightbar #wiki-footer {
-      width: 70%;
-    }
+.has-rightbar #wiki-footer {
+  width: 70%;
+}
 
-    #wiki-footer #footer-content {
-      background-color: #f7f7f7;
-      border: 1px solid #ddd;
-      font-size: 1.2em;
-      line-height: 1.5em;
-      margin-top: 1.5em;
-      padding: 1em;
+#wiki-header #header-content,
+#wiki-footer #footer-content {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  padding: 1em;
 
-      border-radius: 0.5em;
-      -moz-border-radius: 0.5em;
-      -webkit-border-radius: 0.5em;
-    }
+  border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+}
+#wiki-header #header-content {
+  margin-bottom: 1.5em;
+}
+#wiki-footer #footer-content {
+  margin-top: 1.5em;
+}
 
-    #wiki-footer #footer-content h3 {
-      font-size: 1.2em;
-      color: #333;
-      margin: 0;
-      padding: 0 0 0.2em;
-      text-shadow: 0 1px 0 #fff;
-    }
+#wiki-footer #footer-content h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin: 0;
+  padding: 0 0 0.2em;
+  text-shadow: 0 1px 0 #fff;
+}
 
-    #wiki-footer #footer-content p {
-      margin: 0.5em 0 0;
-      padding: 0;
-    }
+#wiki-footer #footer-content p {
+  margin: 0.5em 0 0;
+  padding: 0;
+}
 
-    #wiki-footer #footer-content ul.links {
-      margin: 0.5em 0 0;
-      overflow: hidden;
-      padding: 0;
-    }
+#wiki-footer #footer-content ul.links {
+  margin: 0.5em 0 0;
+  overflow: hidden;
+  padding: 0;
+}
 
-    #wiki-footer #footer-content ul.links li {
-      color: #999;
-      float: left;
-      list-style-position: inside;
-      list-style-type: square;
-      padding: 0;
-      margin-left: 0.75em;
-    }
+#wiki-footer #footer-content ul.links li {
+  color: #999;
+  float: left;
+  list-style-position: inside;
+  list-style-type: square;
+  padding: 0;
+  margin-left: 0.75em;
+}
 
-    #wiki-footer #footer-content ul.links li a {
-      font-weight: bold;
-      text-shadow: 0 1px 0 #fff;
-    }
+#wiki-footer #footer-content ul.links li a {
+  font-weight: bold;
+  text-shadow: 0 1px 0 #fff;
+}
 
-    #wiki-footer #footer-content ul.links li:first-child {
-      list-style-type: none;
-      margin: 0;
-    }
+#wiki-footer #footer-content ul.links li:first-child {
+  list-style-type: none;
+  margin: 0;
+}
 
-    .ff #wiki-footer #footer-content ul.links li:first-child {
-      margin: 0 -0.75em 0 0;
-    }
+.ff #wiki-footer #footer-content ul.links li:first-child {
+  margin: 0 -0.75em 0 0;
+}
 
   /* @section page-footer */
   .page #footer {
