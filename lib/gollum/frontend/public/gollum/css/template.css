@@ -88,14 +88,20 @@ a.absent {
 .markdown-body h1 {
   font-size: 28px;
   color: #000;
+  margin-top: 50px;
+  margin-bottom: 20px;
 }
 .markdown-body h2 {
   font-size: 24px;
   border-bottom: 1px solid #ccc;
   color: #000;
+  margin-top: 40px;
+  margin-bottom: 20px;
 }
 .markdown-body h3 {
   font-size: 18px;
+  margin-top: 30px;
+  margin-bottom: 15px;
 }
 .markdown-body h4 {
   font-size: 16px;
@@ -124,15 +130,18 @@ a.absent {
   height: 4px;
   padding: 0;
 }
-.markdown-body>h2:first-child,
 .markdown-body>h1:first-child,
-.markdown-body>h1:first-child+h2,
+.markdown-body>h2:first-child,
 .markdown-body>h3:first-child,
 .markdown-body>h4:first-child,
 .markdown-body>h5:first-child,
 .markdown-body>h6:first-child {
-  margin-top: 0;
-  padding-top: 0;
+}
+.markdown-body h1+h2{
+  margin-top: 30px;
+}
+.markdown-body h2+h3{
+  margin-top: 10px;
 }
 .markdown-body a:first-child h1,
 .markdown-body a:first-child h2,
@@ -329,7 +338,6 @@ a.absent {
   border: none;
   background: transparent;
 }
-.markdown-body .highlight pre,
 .markdown-body pre {
   background-color: #f8f8f8;
   border: 1px solid #ccc;
@@ -339,12 +347,16 @@ a.absent {
   padding: 6px 10px;
   border-radius: 3px;
 }
+.markdown-body pre pre,
 .markdown-body pre code,
 .markdown-body pre tt {
   background-color: transparent;
   border: none;
 }
-
+.markdown-body pre pre {
+  margin: 0;
+  padding: 0;
+}
 .highlight {
   background: #fff;
 }

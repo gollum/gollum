@@ -49,7 +49,8 @@ a:hover, a:visited {
 /* @section head */
 #head {
   border-bottom: 1px solid #ddd;
-  margin: 4.5em 0 0.5em;
+  margin: 4em 0 1.5em;
+  padding-bottom: 0.3em;
   overflow: hidden;
 }
 
