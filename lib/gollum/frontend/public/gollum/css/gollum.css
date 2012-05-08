@@ -10,6 +10,17 @@
   A basic stylesheet for Gollum
 */
 
+/*
+  Fixes AsciiDoc listing block rendering.
+  Must be !important to override
+  .markdown-body code, .markdown-body tt {
+  in template.css.
+  https://github.com/github/gollum/issues/278
+*/
+pre > tt {
+  white-space: pre !important;
+}
+
 /* @section core */
 body, html {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -42,13 +53,13 @@ a:hover, a:visited {
   overflow: hidden;
 }
 
-  #head h1 {
-    display: none;
-  }
+#head h1 {
+  display: none;
+}
 
-  #head ul.actions {
-    float: right;
-  }
+#head ul.actions {
+  float: right;
+}
 
 /* @section content */
 #wiki-content {
@@ -56,148 +67,152 @@ a:hover, a:visited {
   overflow: visible;
 }
 
-  #wiki-content .wrap {
-    height: 1%;
-    overflow: auto;
-  }
+#wiki-content .wrap {
+  height: 1%;
+  overflow: auto;
+}
 
-  /* @section comments */
-  #wiki-body #inline-comment {
-    display: none; /* todo */
-  }
+/* @section comments */
+#wiki-body #inline-comment {
+  display: none; /* todo */
+}
 
-  /* @section body */
-  #wiki-body {
-    display: block;
-    float: left;
-    margin-right: 3%;
-    margin-bottom: 40px;
-    width: 100%;
-  }
+/* @section body */
+#wiki-body {
+  display: block;
+  float: left;
+  margin-right: 3%;
+  margin-bottom: 40px;
+  width: 100%;
+}
 
-  .has-rightbar #wiki-body {
-    width: 68%;
-  }
+.has-rightbar #wiki-body {
+  width: 68%;
+}
 
-  /* @section rightbar */
-  #wiki-rightbar {
-    background-color: #f7f7f7;
-    border: 1px solid #ddd;
-    font-size: 13px;
-    float: right;
-    padding: 7px;
-    width: 25%;
-    color: #555;
+/* @section rightbar */
+#wiki-rightbar {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  float: right;
+  padding: 7px;
+  width: 25%;
+  color: #555;
 
-    border-radius: 0.5em;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-  }
+  border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+}
 
-    #wiki-rightbar p {
-      margin: 13px 0 0;
-    }
+#wiki-rightbar p {
+  margin: 13px 0 0;
+}
 
-      #wiki-rightbar > p:first-child {
-        margin-top: 10px;
-      }
+#wiki-rightbar > p:first-child {
+  margin-top: 10px;
+}
 
-    #wiki-rightbar p.parent {
-      border-bottom: 1px solid #bbb;
-      font-weight: bold;
-      margin: 0 0 0.5em 0;
-      padding: 0 0 0.5em 0;
-      text-shadow: 0 1px 0 #fff;
-    }
+#wiki-rightbar p.parent {
+  border-bottom: 1px solid #bbb;
+  font-weight: bold;
+  margin: 0 0 0.5em 0;
+  padding: 0 0 0.5em 0;
+  text-shadow: 0 1px 0 #fff;
+}
 
-    /* Back arrow */
-    #wiki-rightbar p.parent:before {
-      color: #666;
-      content: "← ";
-    }
+/* Back arrow */
+#wiki-rightbar p.parent:before {
+  color: #666;
+  content: "← ";
+}
 
-  /* @section footer */
+/* @section footer */
 
-  #wiki-footer {
-    clear: both;
-    margin: 2em 0 5em;
-  }
+#wiki-footer {
+  clear: both;
+  margin: 2em 0 5em;
+}
 
-    .has-rightbar #wiki-footer {
-      width: 70%;
-    }
+.has-rightbar #wiki-footer {
+  width: 70%;
+}
 
-    #wiki-footer #footer-content {
-      background-color: #f7f7f7;
-      border: 1px solid #ddd;
-      font-size: 1.2em;
-      line-height: 1.5em;
-      margin-top: 1.5em;
-      padding: 1em;
+#wiki-header #header-content,
+#wiki-footer #footer-content {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  padding: 1em;
 
-      border-radius: 0.5em;
-      -moz-border-radius: 0.5em;
-      -webkit-border-radius: 0.5em;
-    }
+  border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+}
+#wiki-header #header-content {
+  margin-bottom: 1.5em;
+}
+#wiki-footer #footer-content {
+  margin-top: 1.5em;
+}
 
-    #wiki-footer #footer-content h3 {
-      font-size: 1.2em;
-      color: #333;
-      margin: 0;
-      padding: 0 0 0.2em;
-      text-shadow: 0 1px 0 #fff;
-    }
+#wiki-footer #footer-content h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin: 0;
+  padding: 0 0 0.2em;
+  text-shadow: 0 1px 0 #fff;
+}
 
-    #wiki-footer #footer-content p {
-      margin: 0.5em 0 0;
-      padding: 0;
-    }
+#wiki-footer #footer-content p {
+  margin: 0.5em 0 0;
+  padding: 0;
+}
 
-    #wiki-footer #footer-content ul.links {
-      margin: 0.5em 0 0;
-      overflow: hidden;
-      padding: 0;
-    }
+#wiki-footer #footer-content ul.links {
+  margin: 0.5em 0 0;
+  overflow: hidden;
+  padding: 0;
+}
 
-    #wiki-footer #footer-content ul.links li {
-      color: #999;
-      float: left;
-      list-style-position: inside;
-      list-style-type: square;
-      padding: 0;
-      margin-left: 0.75em;
-    }
+#wiki-footer #footer-content ul.links li {
+  color: #999;
+  float: left;
+  list-style-position: inside;
+  list-style-type: square;
+  padding: 0;
+  margin-left: 0.75em;
+}
 
-    #wiki-footer #footer-content ul.links li a {
-      font-weight: bold;
-      text-shadow: 0 1px 0 #fff;
-    }
+#wiki-footer #footer-content ul.links li a {
+  font-weight: bold;
+  text-shadow: 0 1px 0 #fff;
+}
 
-    #wiki-footer #footer-content ul.links li:first-child {
-      list-style-type: none;
-      margin: 0;
-    }
+#wiki-footer #footer-content ul.links li:first-child {
+  list-style-type: none;
+  margin: 0;
+}
 
-    .ff #wiki-footer #footer-content ul.links li:first-child {
-      margin: 0 -0.75em 0 0;
-    }
+.ff #wiki-footer #footer-content ul.links li:first-child {
+  margin: 0 -0.75em 0 0;
+}
 
-  /* @section page-footer */
-  .page #footer {
-    border-top: 1px solid #ddd;
-    margin: 1em 0 7em;
-  }
+/* @section page-footer */
+.page #footer {
+  border-top: 1px solid #ddd;
+  margin: 1em 0 7em;
+}
 
-  #footer p#last-edit {
-    font-size: .9em;
-    line-height: 1.6em;
-    color: #999;
-    margin: 0.9em 0;
-  }
+#footer p#last-edit {
+  font-size: .9em;
+  line-height: 1.6em;
+  color: #999;
+  margin: 0.9em 0;
+}
 
-    #footer p#last-edit span.username {
-      font-weight: bold;
-    }
+#footer p#last-edit span.username {
+  font-weight: bold;
+}
 
 
 /* @section history */
@@ -206,109 +221,109 @@ a:hover, a:visited {
   font-weight: normal;
 }
 
-  .history h1 strong {
-    color: #000;
-    font-weight: bold;
-  }
+.history h1 strong {
+  color: #000;
+  font-weight: bold;
+}
 
 #wiki-history {
   margin-top: 2em;
 }
 
-  #wiki-history fieldset {
-    border: 0;
-    margin: 1em 0;
-    padding: 0;
-  }
+#wiki-history fieldset {
+  border: 0;
+  margin: 1em 0;
+  padding: 0;
+}
 
-  #wiki-history table, #wiki-history tbody {
-    border-collapse: collapse;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-  }
+#wiki-history table, #wiki-history tbody {
+  border-collapse: collapse;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
 
-  #wiki-history table tr {
-    padding: 0;
-    margin: 0;
-  }
+#wiki-history table tr {
+  padding: 0;
+  margin: 0;
+}
 
-  #wiki-history table tr {
-    background-color: #ebf2f6;
-  }
+#wiki-history table tr {
+  background-color: #ebf2f6;
+}
 
-  #wiki-history table tr td {
-    border: 1px solid #c0dce9;
-    font-size: 1em;
-    line-height: 1.6em;
-    margin: 0;
-    padding: 0.3em 0.7em;
-  }
+#wiki-history table tr td {
+  border: 1px solid #c0dce9;
+  font-size: 1em;
+  line-height: 1.6em;
+  margin: 0;
+  padding: 0.3em 0.7em;
+}
 
-  #wiki-history table tr td.checkbox {
-    width: 4em;
-    padding: 0.3em;
-  }
+#wiki-history table tr td.checkbox {
+  width: 4em;
+  padding: 0.3em;
+}
 
-  #wiki-history table tr td.checkbox input {
-    cursor: pointer;
-    display: block;
-    padding-right: 0;
-    padding-top: 0.4em;
-    margin: 0 auto;
-    width: 1.2em;
-    height: 1.2em;
-  }
+#wiki-history table tr td.checkbox input {
+  cursor: pointer;
+  display: block;
+  padding-right: 0;
+  padding-top: 0.4em;
+  margin: 0 auto;
+  width: 1.2em;
+  height: 1.2em;
+}
 
-  #wiki-history table tr:nth-child(2n),
-  #wiki-history table tr.alt-row {
-    background-color: #f3f7fa;
-  }
+#wiki-history table tr:nth-child(2n),
+#wiki-history table tr.alt-row {
+  background-color: #f3f7fa;
+}
 
-  #wiki-history table tr.selected {
-    background-color: #ffffea !important;
-    z-index: 100;
-  }
+#wiki-history table tr.selected {
+  background-color: #ffffea !important;
+  z-index: 100;
+}
 
-  #wiki-history table tr td.commit-name {
-    border-left: 0;
-  }
+#wiki-history table tr td.commit-name {
+  border-left: 0;
+}
 
-  #wiki-history table tr td.commit-name span.time-elapsed {
-    color: #999;
-  }
+#wiki-history table tr td.commit-name span.time-elapsed {
+  color: #999;
+}
 
-  #wiki-history table tr td.author {
-    width: 20%;
-  }
+#wiki-history table tr td.author {
+  width: 20%;
+}
 
-  #wiki-history table tr td.author a {
-    color: #000;
-    font-weight: bold;
-  }
+#wiki-history table tr td.author a {
+  color: #000;
+  font-weight: bold;
+}
 
-  #wiki-history table tr td.author a span.username {
-    display: block;
-    padding-top: 3px;
-  }
+#wiki-history table tr td.author a span.username {
+  display: block;
+  padding-top: 3px;
+}
 
-  #wiki-history table tr td img {
-    background-color: #fff;
-    border: 1px solid #999;
-    display: block;
-    float: left;
-    height: 18px;
-    overflow: hidden;
-    margin: 0 0.5em 0 0;
-    width: 18px;
-    padding: 2px;
-  }
+#wiki-history table tr td img {
+  background-color: #fff;
+  border: 1px solid #999;
+  display: block;
+  float: left;
+  height: 18px;
+  overflow: hidden;
+  margin: 0 0.5em 0 0;
+  width: 18px;
+  padding: 2px;
+}
 
-  #wiki-history table tr td.commit-name a {
-    font-size: 0.9em;
-    font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
-    padding: 0 0.2em;
-  }
+#wiki-history table tr td.commit-name a {
+  font-size: 0.9em;
+  font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
+  padding: 0 0.2em;
+}
 
 .history #footer {
   margin-bottom: 7em;
@@ -326,10 +341,10 @@ a:hover, a:visited {
   font-weight: normal;
 }
 
-  .edit h1 strong {
-    color: #000;
-    font-weight: bold;
-  }
+.edit h1 strong {
+  color: #000;
+  font-weight: bold;
+}
 
 
 /* @section search */
@@ -338,42 +353,42 @@ a:hover, a:visited {
   font-weight: normal;
 }
 
-  .results h1 strong {
-    color: #000;
-    font-weight: bold;
-  }
+.results h1 strong {
+  color: #000;
+  font-weight: bold;
+}
 
-  .results #results {
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 2em;
-    padding-bottom: 2em;
-  }
+.results #results {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 2em;
+  padding-bottom: 2em;
+}
 
-  .results #results ul {
-    margin: 2em 0 0 0;
-    padding: 0;
-  }
+.results #results ul {
+  margin: 2em 0 0 0;
+  padding: 0;
+}
 
-    .results #results ul li {
-      font-size: 1.2em;
-      line-height: 1.6em;
-      list-style-position: outside;
-      padding: 0.2em 0;
-    }
+.results #results ul li {
+  font-size: 1.2em;
+  line-height: 1.6em;
+  list-style-position: outside;
+  padding: 0.2em 0;
+}
 
-    .results #results ul li span.count {
-      color: #999;
-    }
+.results #results ul li span.count {
+  color: #999;
+}
 
-  .results p#no-results {
-    font-size: 1.2em;
-    line-height: 1.6em;
-    margin-top: 2em;
-  }
+.results p#no-results {
+  font-size: 1.2em;
+  line-height: 1.6em;
+  margin-top: 2em;
+}
 
-  .results #footer ul.actions li {
-    margin: 0 1em 0 0;
-  }
+.results #footer ul.actions li {
+  margin: 0 1em 0 0;
+}
 
 
 /* @section compare */
@@ -382,52 +397,52 @@ a:hover, a:visited {
   font-weight: normal;
 }
 
-  .compare h1 strong {
-    color: #000;
-    font-weight: bold;
-  }
+.compare h1 strong {
+  color: #000;
+  font-weight: bold;
+}
 
-  .compare #compare-content {
-    margin-top: 3em;
-  }
+.compare #compare-content {
+  margin-top: 3em;
+}
 
-  .compare .data {
-    border: 1px solid #ddd;
-    margin: 1em 0 2em;
-    overflow: auto;
-  }
+.compare .data {
+  border: 1px solid #ddd;
+  margin: 1em 0 2em;
+  overflow: auto;
+}
 
-  .compare .data table {
-    width: 100%;
-  }
+.compare .data table {
+  width: 100%;
+}
 
-  .compare .data pre {
-    margin: 0;
-    padding: 0;
-  }
+.compare .data pre {
+  margin: 0;
+  padding: 0;
+}
 
-  .compare .data pre div {
-    padding: 0 0 0 1em;
-  }
+.compare .data pre div {
+  padding: 0 0 0 1em;
+}
 
-  .compare .data tr td {
-    font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
-    font-size: 1.2em;
-    line-height: 1.2em;
-    margin: 0;
-    padding: 0;
-  }
+.compare .data tr td {
+  font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  margin: 0;
+  padding: 0;
+}
 
-  .compare .data tr td + td + td {
-    width: 100%;
-  }
+.compare .data tr td + td + td {
+  width: 100%;
+}
 
-  .compare .data td.line_numbers {
-    background: #f7f7f7;
-    border-right: 1px solid #999;
-    color: #999;
-    padding: 0 0 0 0.5em;
-  }
+.compare .data td.line_numbers {
+  background: #f7f7f7;
+  border-right: 1px solid #999;
+  color: #999;
+  padding: 0 0 0 0.5em;
+}
 
 .compare #compare-content ul.actions li,
 .compare #footer ul.actions li {
@@ -586,68 +601,68 @@ ul.actions {
   overflow: hidden;
 }
 
-  #head #searchbar #searchbar-fauxtext {
-    background: #fff;
-    border: 1px solid #d4d4d4;
-    overflow: hidden;
-    height: 2.2em;
+#head #searchbar #searchbar-fauxtext {
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  overflow: hidden;
+  height: 2.2em;
 
-    border-radius: 0.3em;
-    -moz-border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
-  }
+  border-radius: 0.3em;
+  -moz-border-radius: 0.3em;
+  -webkit-border-radius: 0.3em;
+}
 
-  #head #searchbar #searchbar-fauxtext input#search-query {
-    border: none;
-    color: #000;
-    float: left;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 1em;
-    height: inherit;
-    padding: 0 .5em;
+#head #searchbar #searchbar-fauxtext input#search-query {
+  border: none;
+  color: #000;
+  float: left;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  height: inherit;
+  padding: 0 .5em;
 
-    -webkit-focus-ring: none;
-  }
+  -webkit-focus-ring: none;
+}
 
-  .ie8 #head #searchbar #searchbar-fauxtext input#search-query {
-    padding: 0.5em 0 0 0.5em;
-  }
+.ie8 #head #searchbar #searchbar-fauxtext input#search-query {
+  padding: 0.5em 0 0 0.5em;
+}
 
-  #head #searchbar #searchbar-fauxtext input#search-query.ph {
-    color: #999;
-  }
+#head #searchbar #searchbar-fauxtext input#search-query.ph {
+  color: #999;
+}
 
-  #head #searchbar #searchbar-fauxtext #search-submit {
-    border: 0;
-    border-left: 1px solid #d4d4d4;
-    cursor: pointer;
-    margin: 0 !important;
-    padding: 0;
-    float: right;
-    height: inherit;
+#head #searchbar #searchbar-fauxtext #search-submit {
+  border: 0;
+  border-left: 1px solid #d4d4d4;
+  cursor: pointer;
+  margin: 0 !important;
+  padding: 0;
+  float: right;
+  height: inherit;
 
-    border-radius: 0 3px 3px 0;
-    -moz-border-radius: 0 3px 3px 0;
-    -webkit-border-radius: 0 3px 3px 0;
-  }
+  border-radius: 0 3px 3px 0;
+  -moz-border-radius: 0 3px 3px 0;
+  -webkit-border-radius: 0 3px 3px 0;
+}
 
-  #head #searchbar #searchbar-fauxtext #search-submit span {
-    background-image: url(/images/icon-sprite.png);
-    background-position: -431px -1px;
-    background-repeat: no-repeat;
-    display: block;
-    height: inherit;
-    overflow: hidden;
-    text-indent: -5000px;
-    width: 28px;
-  }
+#head #searchbar #searchbar-fauxtext #search-submit span {
+  background-image: url(/images/icon-sprite.png);
+  background-position: -431px -1px;
+  background-repeat: no-repeat;
+  display: block;
+  height: inherit;
+  overflow: hidden;
+  text-indent: -5000px;
+  width: 28px;
+}
 
-  .ff #head #searchbar #searchbar-fauxtext #search-submit span,
-  .ie #head #searchbar #searchbar-fauxtext #search-submit span {
-    height: 2.2em;
-  }
+.ff #head #searchbar #searchbar-fauxtext #search-submit span,
+.ie #head #searchbar #searchbar-fauxtext #search-submit span {
+  height: 2.2em;
+}
 
-  #head #searchbar #searchbar-fauxtext #search-submit:hover span {
-    background-position: -431px -28px;
-    padding: 0;
-  }
+#head #searchbar #searchbar-fauxtext #search-submit:hover span {
+  background-position: -431px -28px;
+  padding: 0;
+}
