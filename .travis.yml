@@ -1,5 +1,6 @@
 rvm:
   - 1.8.7
+  - 1.9.3
 notifications:
   disabled: true
 before_install:
