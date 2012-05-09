@@ -226,22 +226,21 @@ a#function-help:hover span { background-position: -405px -28px; }
 }
 
 #gollum-editor #gollum-editor-function-bar
-  #gollum-editor-format-selector label:after {
+#gollum-editor-format-selector label:after {
   content: ':';
 }
 
 
 /* @section form-fields */
 
-#gollum-editor textarea#gollum-editor-sidebar,
-#gollum-editor textarea#gollum-editor-body {
+#gollum-editor textarea {
   background: #fff;
   border: 1px solid #ddd;
   font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
   margin: 1em 0 0.4em;
-  padding: 0.5em; /* I don't really like mixing pct & em here… */
+  padding: 0.5em;
   width: 98%;
   height: 20em;
 }
@@ -295,7 +294,7 @@ a#function-help:hover span { background-position: -405px -28px; }
   border-bottom: 1px solid #ddd;
   display: block;
   overflow: hidden;
-  padding: 1em 0 0.5em;
+  padding: 0.5em 0 0;
 }
 
 #gollum-editor #gollum-editor-body + .collapsed,
@@ -382,10 +381,10 @@ a#function-help:hover span { background-position: -405px -28px; }
   border: 1px solid #ddd;
   clear: both;
   display: block;
-  font-size: 1.3em;
+  font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   height: 7em;
-  line-height: 1.8em;
+  line-height: 1.4em;
   margin: 0.7em 0;
   padding: 0.5em;
   width: 98%;
