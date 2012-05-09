@@ -6,6 +6,8 @@ require 'mustache/sinatra'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
+require 'extensions/toc'
+
 module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
@@ -108,10 +110,20 @@ module Precious
     end
 
     post '/preview' do
-      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @name     = "Preview"
-      @page     = wiki.preview_page(@name, params[:content], params[:format])
-      @content  = @page.formatted_data
+      wiki     = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @name    = "Preview"
+      @page    = wiki.preview_page(@name, params[:content], params[:format])
+      @content = @page.formatted_data do
+        |doc|
+        # Insert anchors for table of contents
+        toc = Gollum::Extensions::Toc_gen.new doc
+        if (toc_content = toc.generate)
+             toc.insert_anchors 
+             @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
+           else
+             @toc_content = nil
+           end
+      end
       @editable = false
       mustache :page
     end
@@ -195,8 +207,18 @@ module Precious
       if page = wiki.page(name)
         @page = page
         @name = name
-        @content = page.formatted_data
         @editable = true
+        @content = page.formatted_data do
+          |doc|
+           # Insert anchors for table of contents
+           toc = Gollum::Extensions::Toc_gen.new doc
+           if (toc_content = toc.generate)
+             toc.insert_anchors 
+             @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
+           else
+             @toc_content = nil
+           end
+        end
         mustache :page
       elsif file = wiki.file(name)
         content_type file.mime_type
