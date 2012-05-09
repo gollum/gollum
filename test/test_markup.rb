@@ -501,7 +501,6 @@ np.array([[2,2],[1,3]],np.float)
     compare(content, output)
   end
 
-
   test "removes style blocks completely" do
     content = "<style>body { color: red }</style>foobar"
     output = "<p>foobar</p>"
@@ -606,7 +605,6 @@ np.array([[2,2],[1,3]],np.float)
   test "internal links with asciidoc" do 
     compare("= Book Title\n\n[[anid]]\n== Heading", '<div class="sect1"><h2 id="wiki-anid">Heading</h2><div class="sectionbody"></div></div>', 'asciidoc')
   end
-
 
   #########################################################################
   #
