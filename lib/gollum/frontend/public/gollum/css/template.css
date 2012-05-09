@@ -331,6 +331,7 @@ a.absent {
   background-color: #f8f8f8;
   border-radius: 3px;
 }
+.markdown-body pre>tt,
 .markdown-body pre>code {
   margin: 0;
   padding: 0;
