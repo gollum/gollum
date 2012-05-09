@@ -116,7 +116,7 @@ module Precious
       @content = @page.formatted_data do
         |doc|
         # Insert anchors for table of contents
-        toc = Gollum::Toc_gen.new doc
+        toc = Gollum::Toc.new doc
         if (toc_content = toc.generate)
              toc.insert_anchors 
              @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
@@ -211,7 +211,7 @@ module Precious
         @content = page.formatted_data do
           |doc|
            # Insert anchors for table of contents
-           toc = Gollum::Toc_gen.new doc
+           toc = Gollum::Toc.new doc
            if (toc_content = toc.generate)
              toc.insert_anchors 
              @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)

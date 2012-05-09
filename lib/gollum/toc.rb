@@ -1,5 +1,5 @@
 module Gollum
-  class Toc_gen
+  class Toc
     attr_accessor :header_tags
     
     NODE_CONTENT = 0
