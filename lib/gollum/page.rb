@@ -164,7 +164,24 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data(encoding = nil, &block)
-      @blob && markup_class.render(historical?, encoding, &block)
+      @blob && markup_class.render(historical?, encoding) do |doc| 
+        @doc = doc
+        yield doc if block_given?
+      end
+    end
+
+    # Public: The table of contents of the page.
+    #
+    # formatted_data - page already marked up in html.
+    #
+    # Returns the String data.
+    def toc_data()
+      formatted_data if @doc == nil
+      toc = Toc.new(@doc)
+      if (toc_content = toc.generate)
+        toc.insert_anchors
+        toc.generate.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
+      end
     end
 
     # Public: The format of the page.

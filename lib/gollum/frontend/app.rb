@@ -112,17 +112,8 @@ module Precious
       wiki     = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @name    = "Preview"
       @page    = wiki.preview_page(@name, params[:content], params[:format])
-      @content = @page.formatted_data do
-        |doc|
-        # Insert anchors for table of contents
-        toc = Gollum::Toc.new doc
-        if (toc_content = toc.generate)
-             toc.insert_anchors 
-             @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
-           else
-             @toc_content = nil
-           end
-      end
+      @content = @page.formatted_data
+      @toc_content = @page.toc_data
       @editable = false
       mustache :page
     end
@@ -207,17 +198,9 @@ module Precious
         @page = page
         @name = name
         @editable = true
-        @content = page.formatted_data do
-          |doc|
-           # Insert anchors for table of contents
-           toc = Gollum::Toc.new doc
-           if (toc_content = toc.generate)
-             toc.insert_anchors 
-             @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
-           else
-             @toc_content = nil
-           end
-        end
+        @content = page.formatted_data
+        @toc_content = page.toc_data
+
         mustache :page
       elsif file = wiki.file(name)
         content_type file.mime_type
