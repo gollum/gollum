@@ -86,6 +86,14 @@
     <textarea id="gollum-editor-body"
      data-markup-lang="{{format}}" name="content">{{content}}</textarea>
      
+    {{#header}}
+    <div id="gollum-editor-edit-header" class="collapsed">
+      <a href="#" class="button"><span>Expand/Collapse</span></a>
+      <h4>Header</h4>
+      <textarea id="gollum-editor-header" name="header">{{header}}</textarea>
+    </div>
+    {{/header}}
+    
     {{#footer}}
     <div id="gollum-editor-edit-footer" class="collapsed">
       <a href="#" class="button"><span>Expand/Collapse</span></a>
