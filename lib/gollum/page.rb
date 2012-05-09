@@ -397,7 +397,7 @@ module Gollum
 
       dirs = self.path.split('/')
       dirs.pop
-      map = @wiki.tree_map_for(self.version.id)
+      map = @wiki.tree_map_for(@wiki.ref)
       while !dirs.empty?
         if page = find_page_in_tree(map, name, dirs.join('/'))
           return page
