@@ -100,6 +100,7 @@ module Gollum
     def initialize(wiki)
       @wiki = wiki
       @blob = @header = @footer = @sidebar = nil
+      @doc = nil
     end
 
     # Public: The on-disk filename of the page including extension.

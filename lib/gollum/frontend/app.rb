@@ -113,7 +113,7 @@ module Precious
       @name    = "Preview"
       @page    = wiki.preview_page(@name, params[:content], params[:format])
       @content = @page.formatted_data
-      @toc_content = @page.toc_data
+      @toc_content = wiki.universal_toc ? @page.toc_data : nil
       @editable = false
       mustache :page
     end
@@ -199,7 +199,7 @@ module Precious
         @name = name
         @editable = true
         @content = page.formatted_data
-        @toc_content = page.toc_data
+        @toc_content = wiki.universal_toc ? @page.toc_data : nil
 
         mustache :page
       elsif file = wiki.file(name)
