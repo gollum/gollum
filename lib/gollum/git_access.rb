@@ -9,10 +9,10 @@ module Gollum
     # page_file_dir - String the directory in which all page files reside
     #
     # Returns this instance.
-    def initialize(path, page_file_dir = nil)
+    def initialize(path, page_file_dir = nil, bare = false)
       @page_file_dir = page_file_dir
       @path = path
-      @repo = Grit::Repo.new(path)
+      @repo = Grit::Repo.new(path, { :is_bare => bare })
       clear
     end
 
