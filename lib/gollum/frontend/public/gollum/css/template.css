@@ -26,6 +26,11 @@ a.absent {
   color: #c00;
 }
 
+.markdown-body a[id].wiki-toc-anchor  {
+  color: inherit;
+  text-decoration: none;
+}
+
 .markdown-body {
   font-size: 14px;
   line-height: 1.6;

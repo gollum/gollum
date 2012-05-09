@@ -43,7 +43,8 @@ module Gollum::Extensions
     def insert_anchors
       find_headings.each do |h|
         rep_h = Nokogiri::XML::Node.new('a', @doc)
-        rep_h['name'] = anchor_id(h.content)
+        rep_h['class'] = 'wiki-toc-anchor'
+        rep_h['id'] = anchor_id(h.content)
         rep_h.add_child(h.clone)
         h.replace(rep_h)
       end
