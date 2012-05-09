@@ -6,7 +6,6 @@ require 'mustache/sinatra'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
-require 'toc'
 
 module Precious
   class App < Sinatra::Base
