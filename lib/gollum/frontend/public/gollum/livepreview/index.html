@@ -207,22 +207,27 @@ var makePreviewHtml = function () {
   previewSet(text);
 
   // highlight code blocks.
-  var codeElements = preview.getElementsByTagName("code");
+  var codeElements = preview.getElementsByTagName("pre");
   var codeElementsLength = codeElements.length;
 
   if (codeElementsLength > 0) {
     for (var idx = 0; idx < codeElementsLength; idx++) {
       var element = codeElements[idx];
       var codeHTML = element.innerHTML;
-      var txt = element.innerHTML.split(/\b/);
-      // the syntax for code highlighting means all code, even one line, contains newlines.
-      if (txt.length > 0 && codeHTML.match(/\n/)) {
-        if ($.inArray(txt[0], languages) === -1) {
-          continue;
-        }
 
-        element.className = txt[0] + " highlight";
-        element.innerHTML = codeHTML.substring(txt[0].length);
+       // Only use pre tags marked containing code.
+      if (codeHTML[0] !== "`")
+       continue;
+
+      var txt = codeHTML.split(/\b/);
+      // the syntax for code highlighting means all code, even one line, contains newlines.
+      if (txt.length > 1 && codeHTML.match(/\n/)) {
+        // txt[0] = "`"; txt[1] = "ruby"
+        if ($.inArray(txt[1], languages) === -1) continue;
+
+        element.className = txt[1] + " highlight";
+        // length + 1 for the marker character.
+        element.innerHTML = codeHTML.substring(txt[1].length+1).trim();
         hljs.highlightBlock(element, "  ");
       } else {
         element.className = "nohighlight";

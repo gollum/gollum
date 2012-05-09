@@ -4,126 +4,120 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 */
 
-code {
-  display: block; padding: 0.5em;
-  color: #000;
-  background: #f8f8ff
-}
-
-code .comment,
-code .template_comment,
-code .diff .header,
-code .javadoc {
+pre .comment,
+pre .template_comment,
+pre .diff .header,
+pre .javadoc {
   color: #998;
   font-style: italic
 }
 
-code .keyword,
-code .css .rule .keyword,
-code .winutils,
-code .javascript .title,
-code .lisp .title,
-code .subst {
+pre .keyword,
+pre .css .rule .keyword,
+pre .winutils,
+pre .javascript .title,
+pre .lisp .title,
+pre .subst {
   color: #000;
   font-weight: bold
 }
 
-code .number,
-code .hexcolor {
+pre .number,
+pre .hexcolor {
   color: #40a070
 }
 
-code .string,
-code .tag .value,
-code .phpdoc,
-code .tex .formula {
+pre .string,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula {
   color: #d14
 }
 
-code .title,
-code .id {
+pre .title,
+pre .id {
   color: #900;
   font-weight: bold
 }
 
-code .javascript .title,
-code .lisp .title,
-code .subst {
+pre .javascript .title,
+pre .lisp .title,
+pre .subst {
   font-weight: normal
 }
 
-code .class .title,
-code .haskell .label,
-code .tex .command {
+pre .class .title,
+pre .haskell .label,
+pre .tex .command {
   color: #458;
   font-weight: bold
 }
 
-code .tag,
-code .tag .title,
-code .rules .property,
-code .django .tag .keyword {
+pre .tag,
+pre .tag .title,
+pre .rules .property,
+pre .django .tag .keyword {
   color: #000080;
   font-weight: normal
 }
 
-code .attribute,
-code .variable,
-code .instancevar,
-code .lisp .body {
+pre .attribute,
+pre .variable,
+pre .instancevar,
+pre .lisp .body {
   color: #008080
 }
 
-code .regexp {
+pre .regexp {
   color: #009926
 }
 
-code .class {
+pre .class {
   color: #458;
   font-weight: bold
 }
 
-code .symbol,
-code .ruby .symbol .string,
-code .ruby .symbol .keyword,
-code .ruby .symbol .keymethods,
-code .lisp .keyword,
-code .tex .special,
-code .input_number {
+pre .symbol,
+pre .ruby .symbol .string,
+pre .ruby .symbol .keyword,
+pre .ruby .symbol .keymethods,
+pre .lisp .keyword,
+pre .tex .special,
+pre .input_number {
   color: #990073
 }
 
-code .builtin,
-code .built_in,
-code .lisp .title {
+pre .builtin,
+pre .built_in,
+pre .lisp .title {
   color: #0086b3
 }
 
-code .preprocessor,
-code .pi,
-code .doctype,
-code .shebang,
-code .cdata {
+pre .preprocessor,
+pre .pi,
+pre .doctype,
+pre .shebang,
+pre .cdata {
   color: #999;
   font-weight: bold
 }
 
-code .deletion {
+pre .deletion {
   background: #fdd
 }
 
-code .addition {
+pre .addition {
   background: #dfd
 }
 
-code .diff .change {
+pre .diff .change {
   background: #0086b3
 }
 
-code .chunk {
+pre .chunk {
   color: #aaa
 }
 
-code .tex .formula {
+pre .tex .formula {
   opacity: 0.5;
 }
