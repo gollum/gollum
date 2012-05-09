@@ -1,4 +1,4 @@
-module Gollum::Extensions
+module Gollum
   class Toc_gen
     attr_accessor :header_tags
     

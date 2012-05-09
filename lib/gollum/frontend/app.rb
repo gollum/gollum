@@ -6,7 +6,7 @@ require 'mustache/sinatra'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
-require 'extensions/toc'
+require 'toc'
 
 module Precious
   class App < Sinatra::Base
@@ -116,7 +116,7 @@ module Precious
       @content = @page.formatted_data do
         |doc|
         # Insert anchors for table of contents
-        toc = Gollum::Extensions::Toc_gen.new doc
+        toc = Gollum::Toc_gen.new doc
         if (toc_content = toc.generate)
              toc.insert_anchors 
              @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
@@ -211,7 +211,7 @@ module Precious
         @content = page.formatted_data do
           |doc|
            # Insert anchors for table of contents
-           toc = Gollum::Extensions::Toc_gen.new doc
+           toc = Gollum::Toc_gen.new doc
            if (toc_content = toc.generate)
              toc.insert_anchors 
              @toc_content = toc_content.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
