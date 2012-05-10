@@ -6,7 +6,18 @@ require 'mustache/sinatra'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
-
+# Run the frontend, based on Sinatra
+# 
+# There are a number of wiki options that can be set for the frontend
+#
+# Example
+# require 'gollum/frontend/app'
+# Precious::App.set(:wiki_options, {
+#     :universal_toc => false,
+#     :header_hashtags => true
+# }
+#
+# See the wiki.rb file for more details on wiki options
 module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
