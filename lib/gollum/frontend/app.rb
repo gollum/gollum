@@ -57,7 +57,7 @@ module Precious
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
         if page.format.to_s.include?('markdown')
-          redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
+          redirect '/livepreview/index.html?page=' + CGI.escape(@name)
         else
           @page = page
           @page.version = wiki.repo.log(wiki.ref, @page.path).first
