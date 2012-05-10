@@ -39,7 +39,7 @@ module Precious
     end
 
     get '/' do
-      show_page_or_file('Home')
+      redirect File.join(settings.wiki_options[:base_path].to_s, 'Home')
     end
 
     get '/edit/*' do

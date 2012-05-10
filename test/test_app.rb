@@ -167,6 +167,20 @@ context "Frontend" do
     assert_equal page1.version.sha, page2.version.sha
   end
 
+  test "redirects from 'base_path' or 'base_path/' to 'base_path/Home'" do
+    Precious::App.set(:wiki_options, {})
+    get "/"
+    assert_match "http://example.org/Home", last_response.headers['Location']
+
+    Precious::App.set(:wiki_options, { :base_path => '/wiki' })
+    get "/"
+    assert_match "http://example.org/wiki/Home", last_response.headers['Location']
+
+    Precious::App.set(:wiki_options, { :base_path => '/wiki/' })
+    get "/"
+    assert_match "http://example.org/wiki/Home", last_response.headers['Location']
+  end
+
   def app
     Precious::App
   end
