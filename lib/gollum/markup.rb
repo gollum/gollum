@@ -58,13 +58,13 @@ module Gollum
         doc  = sanitize.clean_node!(doc) if sanitize
         
         doc.css('h1,h2,h3,h4,h5,h6').each do |h|
-          link = CGI::escape(h.content.gsub(' ','-'))
+          id = CGI::escape(h.content.gsub(' ','-'))
           anchor = Nokogiri::XML::Node.new('a', doc)
           anchor['class'] = 'anchor'
-          anchor['id'] = link
-          anchor['href'] = '#' + link
+          anchor['id'] = id
+          anchor['href'] = '#' + id
           h.child.before(anchor)
-        end if @wiki.header_anchors || @wiki.universal_toc
+        end if @wiki.header_hashtags || @wiki.universal_toc
         yield doc if block_given?
         data = doc.to_html
       end
