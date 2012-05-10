@@ -73,7 +73,7 @@ a.absent {
 .markdown-body h4:hover a.anchor,
 .markdown-body h5:hover a.anchor,
 .markdown-body h6:hover a.anchor {
-  background: url('/images/para.png') no-repeat 10px center;
+  background: url('/images/para.png') no-repeat center center;
   text-decoration: none;
 }
 .markdown-body h1 tt,

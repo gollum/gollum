@@ -53,9 +53,18 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data, encoding)
-      if sanitize || block_given?
+      if sanitize || block_given? || @wiki.header_anchors || @wiki.universal_toc
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
         doc  = sanitize.clean_node!(doc) if sanitize
+        
+        doc.css('h1,h2,h3,h4,h5,h6').each do |h|
+          link = CGI::escape(h.content.gsub(' ','-'))
+          anchor = Nokogiri::XML::Node.new('a', doc)
+          anchor['class'] = 'anchor'
+          anchor['id'] = link
+          anchor['href'] = '#' + link
+          h.child.before(anchor)
+        end if @wiki.header_anchors || @wiki.universal_toc
         yield doc if block_given?
         data = doc.to_html
       end

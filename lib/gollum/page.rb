@@ -180,7 +180,6 @@ module Gollum
       formatted_data if @doc == nil
       toc = Toc.new(@doc)
       if (toc_content = toc.generate)
-        toc.insert_anchors
         toc.generate.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
       end
     end

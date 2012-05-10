@@ -134,6 +134,7 @@ module Gollum
     #           site.
     # options - Optional Hash:
     #           :universal_toc - Display table of contents on all pages.  Default: false
+    #           :header_hashtags - Show links to headers.  Default: true
     #           :base_path     - String base path for all Wiki links.
     #                            Default: "/"
     #           :page_class    - The page Class. Default: Gollum::Page
@@ -166,6 +167,7 @@ module Gollum
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
       @universal_toc = options[:universal_toc] || false
+      @header_hashtags = options[:header_hashtags] || true
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -531,6 +533,9 @@ module Gollum
 
     # Toggles display of universal table of contents
     attr_reader :universal_toc
+
+    # Create hashtag link for headers to jump to sections
+    attr_reader :header_hashtags
 
     # Normalize the data.
     #
