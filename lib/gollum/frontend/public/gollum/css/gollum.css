@@ -43,9 +43,11 @@ a:hover, a:visited {
   overflow: hidden;
 }
 
+/*
 #head h1 {
   display: none;
 }
+*/
 
 #head ul.actions {
   float: right;
