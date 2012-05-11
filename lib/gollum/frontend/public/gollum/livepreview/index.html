@@ -223,13 +223,18 @@ var makePreviewHtml = function () {
       // the syntax for code highlighting means all code, even one line, contains newlines.
       if (txt.length > 1 && codeHTML.match(/\n/)) {
         // txt[0] = "`"; txt[1] = "ruby"
-        if ($.inArray(txt[1], languages) === -1) continue;
+        if ($.inArray(txt[1], languages) === -1) {
+          element.innerHTML = codeHTML.substring(1).trim();
+          element.className = "nohighlight";
+          continue;
+        }
 
         element.className = txt[1] + " highlight";
         // length + 1 for the marker character.
         element.innerHTML = codeHTML.substring(txt[1].length+1).trim();
         hljs.highlightBlock(element, "  ");
       } else {
+        element.innerHTML = codeHTML.substring(1).trim();
         element.className = "nohighlight";
       }
     }
