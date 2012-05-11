@@ -32,6 +32,10 @@ module Gollum
       # sanitization altogether.
       attr_writer :history_sanitization
 
+      # Hash for setting different default wiki options
+      # These defaults can be overridden by options passed directly to initialize()
+      attr_accessor :default_options
+
       # Gets the page class used by all instances of this Wiki.
       # Default: Gollum::Page.
       def page_class
@@ -107,6 +111,7 @@ module Gollum
     self.default_committer_email = 'anon@anon.com'
 
     self.default_ws_subs = ['_','-']
+    self.default_options = {}
 
     # The String base path to prefix to internal links. For example, when set
     # to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
@@ -150,6 +155,7 @@ module Gollum
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
+      options = self.class.default_options.merge(options)
       if path.is_a?(GitAccess)
         options[:access] = path
         path             = path.path

@@ -92,6 +92,7 @@ end
 context "Wiki page previewing" do
   setup do
     @path = testpath("examples/lotr.git")
+    Gollum::Wiki.default_options = {:header_hashtags => false, :universal_toc => false}
     @wiki = Gollum::Wiki.new(@path)
   end
 

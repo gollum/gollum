@@ -6,6 +6,7 @@ context "Markup" do
     @path = testpath("examples/test.git")
     FileUtils.rm_rf(@path)
     Grit::Repo.init_bare(@path)
+    Gollum::Wiki.default_options = {:header_hashtags => false, :universal_toc => false}
     @wiki = Gollum::Wiki.new(@path)
   end
 
