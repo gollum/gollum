@@ -133,8 +133,10 @@ module Gollum
     # path    - The String path to the Git repository that holds the Gollum
     #           site.
     # options - Optional Hash:
-    #           :universal_toc - Display table of contents on all pages.  Default: false
+    #           :universal_toc - Table of contents on all pages.  Default: false
     #           :header_hashtags - Show links to headers.  Default: true
+    #                            (Pages may be rendered slightly faster without 
+    #                            the toc and hashtags)
     #           :base_path     - String base path for all Wiki links.
     #                            Default: "/"
     #           :page_class    - The page Class. Default: Gollum::Page
@@ -166,8 +168,8 @@ module Gollum
         self.class.default_ws_subs
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
-      @universal_toc = options[:universal_toc] || false
-      @header_hashtags = options[:header_hashtags] || true
+      @universal_toc = options.fetch(:universal_toc, false)
+      @header_hashtags = options.fetch(:header_hashtags, true)
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
