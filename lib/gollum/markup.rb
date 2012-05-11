@@ -25,6 +25,75 @@ module Gollum
       @premap  = {}
     end
 
+    @@code_start = ['<','c','o','d','e','>']
+    @@code_end = ['<','/','c','o','d','e','>']
+    # length is zero indexed so minus one
+    @@code_end_length = @@code_end.length - 1 # 5
+    @@code_start_length = @@code_start.length - 1 # 6
+
+    def find_code_tags data
+      target = @@code_start
+      idx = 0;
+      start = true
+
+      start_array = []
+      end_array = []
+
+      data.each_char.each_with_index do |char, index|
+        if target[idx] == char
+          if start
+            if (idx >= @@code_start_length)
+              # look for end next
+              start = false
+              idx = 0;
+              target = @@code_end
+              # <code>text => start at 't'
+              start_array << index + 1
+            end
+          else
+            if (idx >= @@code_end_length)
+              # look for start next
+              start = true
+              idx = 0;
+              target = @@code_start
+              # text</code> => end at 't'
+              # then minus the start position
+              end_array << index - @@code_end_length - start_array.last
+            end
+          end # if start
+          idx += 1;
+        end # if target[idx] == char
+      end # each
+
+      [start_array, end_array]
+    end
+
+    # data = input html
+    # start_end_array_pair = [start_array, end_array]
+    def remove_links_in_code data, start_end_array_pair
+      start_array = start_end_array_pair[0]
+      end_array = start_end_array_pair[1]
+      offset = 0;
+
+      if (start_array.length == end_array.length)
+        start_array.each_index do |index|
+          s = start_array[index] - offset
+          e = end_array[index]
+          str = data[s,e]
+          new_str = str.gsub(/<a[^>]*>/m, '').gsub('</a>', '')
+          offset += str.length - new_str.length
+
+          data[s,e] = new_str
+        end
+      end
+
+      data
+    end
+
+    def no_links_in_code data
+      remove_links_in_code(data, find_code_tags(data))
+    end
+
     # Render the content with Gollum wiki syntax on top of the file's own
     # markup language.
     #
@@ -52,6 +121,7 @@ module Gollum
         data = %{<p class="gollum-error">#{e.message}</p>}
       end
       data = process_tags(data)
+      data = no_links_in_code(data)
       data = process_code(data, encoding)
       if sanitize || block_given?
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
