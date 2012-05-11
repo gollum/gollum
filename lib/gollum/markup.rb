@@ -53,7 +53,7 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data, encoding)
-      if sanitize || block_given? || @wiki.header_anchors || @wiki.universal_toc
+      if sanitize || block_given? || @wiki.header_hashtags || @wiki.universal_toc
         doc  = Nokogiri::HTML::DocumentFragment.parse(data)
         doc  = sanitize.clean_node!(doc) if sanitize
         
