@@ -105,6 +105,35 @@ context "Wiki page previewing" do
   end
 end
 
+context "Wiki TOC" do
+  setup do
+    @path = testpath("examples/lotr.git")
+    options = {:header_hashtags => false, :universal_toc => true}
+    @wiki = Gollum::Wiki.new(@path, options)
+  end
+
+  test "toc_generation" do
+    page = @wiki.preview_page("Test", "# Bilbo", :markdown)
+    assert_equal "# Bilbo", page.raw_data
+    assert_equal '<h1><a class="anchor" id="Bilbo" href="#Bilbo"></a>Bilbo</h1>', page.formatted_data.gsub(/\n/,"")
+    assert_equal '<ul><li><a href="#Bilbo">Bilbo</a></li></ul>', page.toc_data.gsub(/\n */,"")
+  end
+end
+
+context "Wiki header hashtags" do
+  setup do
+    @path = testpath("examples/lotr.git")
+    options = {:header_hashtags => true, :universal_toc => false}
+    @wiki = Gollum::Wiki.new(@path, options)
+  end
+
+  test "header_hashtags" do
+    page = @wiki.preview_page("Test", "# Bilbo", :markdown)
+    assert_equal "# Bilbo", page.raw_data
+    assert_equal '<h1><a class="anchor" id="Bilbo" href="#Bilbo"></a>Bilbo</h1>', page.formatted_data.gsub(/\n/,"")
+  end
+end
+
 context "Wiki page writing" do
   setup do
     @path = testpath("examples/test.git")
