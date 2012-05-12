@@ -54,10 +54,8 @@ module Gollum
       data = process_tags(data)
       data = process_code(data, encoding)
 
-      doc = Nokogiri::HTML::DocumentFragment.parse(data)
-      doc = remove_links_in_code(doc)
-
       if sanitize || block_given?
+        doc = Nokogiri::HTML::DocumentFragment.parse(data)
         doc = sanitize.clean_node!(doc) if sanitize
         yield doc if block_given?
         data = doc.to_html
@@ -156,9 +154,27 @@ module Gollum
     # Returns the marked up String data.
     def process_tags(data)
       @tagmap.each do |id, tag|
-        data.gsub!(id, process_tag(tag))
+        # If it's preformatted, just put the tag back
+        if is_preformatted?(data, id)
+          data.gsub!(id, "[[#{tag}]]")
+        else
+          data.gsub!(id, process_tag(tag))
+        end
       end
       data
+    end
+
+    # Find `id` within `data` and determine if it's within
+    # preformatted tags.
+    #
+    # data      - The String data (with placeholders).
+    # id        - The String SHA1 hash.
+    PREFORMATTED_TAGS = %w(code tt)
+    def is_preformatted?(data, id)
+      doc = Nokogiri::HTML::DocumentFragment.parse(data)
+      node = doc.search("[text()*='#{id}']").first
+      node && (PREFORMATTED_TAGS.include?(node.name) ||
+        node.ancestors.any? { |a| PREFORMATTED_TAGS.include?(a.name) })
     end
 
     # Process a single tag into its final HTML form.
@@ -354,15 +370,6 @@ module Gollum
       if pos = cname.index('#')
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
-    end
-
-    def remove_links_in_code(doc)
-      doc.css('code > a').each do |link|
-        link.before("[[#{link.content}]]")
-        link.remove
-      end
-
-      doc
     end
 
     #########################################################################

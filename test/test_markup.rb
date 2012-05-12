@@ -189,6 +189,12 @@ context "Markup" do
     assert_equal "<pre><code>sed -i '' 's/[[:space:]]*$//'\n</code></pre>", page.formatted_data
   end
 
+  test "piped wiki link within code block" do
+    @wiki.write_page("Potato", :markdown, "`make a link [[home|sweet home]]`", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<p><code>make a link [[home|sweet home]]</code></p>", page.formatted_data
+  end
+
   #########################################################################
   #
   # Images
