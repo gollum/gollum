@@ -53,9 +53,12 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data, encoding)
+
+      doc = Nokogiri::HTML::DocumentFragment.parse(data)
+      doc = remove_links_in_code(doc)
+
       if sanitize || block_given?
-        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
-        doc  = sanitize.clean_node!(doc) if sanitize
+        doc = sanitize.clean_node!(doc) if sanitize
         yield doc if block_given?
         data = doc.to_html
       end
@@ -351,6 +354,15 @@ module Gollum
       if pos = cname.index('#')
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
+    end
+
+    def remove_links_in_code(doc)
+      doc.css('code > a').each do |link|
+        link.before("[[#{link.content}]]")
+        link.remove
+      end
+
+      doc
     end
 
     #########################################################################
