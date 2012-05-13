@@ -23,6 +23,7 @@ module Gollum
       @texmap  = {}
       @wsdmap  = {}
       @premap  = {}
+      @toc = nil
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -53,25 +54,51 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data, encoding)
-      if sanitize || block_given? || @wiki.header_hashtags || @wiki.universal_toc
-        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
-        doc  = sanitize.clean_node!(doc) if sanitize
-        
-        doc.css('h1,h2,h3,h4,h5,h6').each do |h|
-          id = CGI::escape(h.content.gsub(' ','-'))
-          anchor = Nokogiri::XML::Node.new('a', doc)
-          anchor['class'] = 'anchor'
-          anchor['id'] = id
-          anchor['href'] = '#' + id
-          h.child.before(anchor)
-        end if @wiki.header_hashtags || @wiki.universal_toc
-        yield doc if block_given?
-        data = doc.to_html
-      end
+
+      doc = Nokogiri::HTML::DocumentFragment.parse(data)
+      doc = sanitize.clean_node!(doc) if sanitize
+      doc,@toc = process_headers(doc) if @wiki.header_hashtags || @wiki.universal_toc
+      yield doc if block_given?
+      data = doc.to_html
+
       data = process_tex(data)
       data = process_wsd(data)
       data.gsub!(/<p><\/p>/, '')
       data
+    end
+
+    def process_headers(doc)
+      toc = nil
+      doc.css('h1,h2,h3,h4,h5,h6').each do |h|
+        id = CGI::escape(h.content.gsub(' ','-'))
+        level = h.name.gsub(/[hH]/,'').to_i
+
+        # Add anchors
+        anchor = Nokogiri::XML::Node.new('a', doc)
+        anchor['class'] = 'anchor'
+        anchor['id'] = id
+        anchor['href'] = '#' + id
+        h.child.before(anchor)
+
+        # Build TOC
+        toc ||= Nokogiri::XML::Node.new('ul', doc)
+        tail ||= toc
+        tail_level ||= 1
+
+        while tail_level < level do
+          node = Nokogiri::XML::Node.new('ul', doc)
+          tail = tail.add_child(node)
+          tail_level += 1
+        end          
+        while tail_level > level
+          tail = tail.parent
+          tail_level -= 1
+        end
+        node = Nokogiri::XML::Node.new('li', doc)
+        node.add_child("<a href='##{id}'>#{h.content}</a>")
+        tail.add_child(node)
+      end
+      [doc, toc]
     end
 
     #########################################################################
