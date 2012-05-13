@@ -61,6 +61,7 @@ module Gollum
       yield doc if block_given?
       data = doc.to_html
 
+      data = process_toc_tags(data)
       data = process_tex(data)
       data = process_wsd(data)
       data.gsub!(/<p><\/p>/, '')
@@ -201,7 +202,9 @@ module Gollum
     #
     # Returns the String HTML version of the tag.
     def process_tag(tag)
-      if html = process_image_tag(tag)
+      if tag =~ /^_TOC_$/
+        %{[[#{tag}]]}
+      elsif html = process_image_tag(tag)
         html
       elsif html = process_file_link_tag(tag)
         html
@@ -356,6 +359,17 @@ module Gollum
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
+    end
+
+
+    # Process the special table of contents tag [[_TOC_]]
+    #
+    # data      - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
+    def process_toc_tags(data)
+      data.gsub!("[[_TOC_]]", @toc.nil? ? '' : @toc.to_html)
+      data
     end
 
     # Find the given file in the repo.
