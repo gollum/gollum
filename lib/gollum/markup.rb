@@ -83,7 +83,7 @@ module Gollum
         anchor['class'] = 'anchor'
         anchor['id'] = id
         anchor['href'] = '#' + id
-        h.child.before(anchor)
+        h.add_child(anchor)
 
         # Build TOC
         toc ||= Nokogiri::XML::Node.new('ul', doc)

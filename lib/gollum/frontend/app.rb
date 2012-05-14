@@ -14,7 +14,6 @@ require 'gollum/frontend/views/editable'
 # require 'gollum/frontend/app'
 # Precious::App.set(:wiki_options, {
 #     :universal_toc => false,
-#     :header_hashtags => true
 # }
 #
 # See the wiki.rb file for more details on wiki options
