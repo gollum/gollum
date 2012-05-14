@@ -4,16 +4,10 @@ module Gollum
 
     Wiki.page_class = self
 
-    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|(media)?wiki)$/i
-    FORMAT_NAMES = { :markdown  => "Markdown",
-                     :textile   => "Textile",
-                     :rdoc      => "RDoc",
-                     :org       => "Org-mode",
-                     :creole    => "Creole",
-                     :rest      => "reStructuredText",
-                     :asciidoc  => "AsciiDoc",
-                     :mediawiki => "MediaWiki",
-                     :pod       => "Pod" }
+    VALID_PAGE_RE = /^(.+)\.(html|css|vm)$/i
+    FORMAT_NAMES = { :html      => "HTML",
+                     :css       => "CSS",
+                     :velocity  => "Velocity" }
 
     # Sets a Boolean determing whether this page is a historical version.
     #
@@ -50,26 +44,12 @@ module Gollum
     #     :roff ]
     def self.format_for(filename)
       case filename.to_s
-        when /\.(md|mkdn?|mdown|markdown)$/i
-          :markdown
-        when /\.(textile)$/i
-          :textile
-        when /\.(rdoc)$/i
-          :rdoc
-        when /\.(org)$/i
-          :org
-        when /\.(creole)$/i
-          :creole
-        when /\.(re?st(\.txt)?)$/i
-          :rest
-        when /\.(asciidoc)$/i
-          :asciidoc
-        when /\.(pod)$/i
-          :pod
-        when /\.(\d)$/i
-          :roff
-        when /\.(media)?wiki$/i
-          :mediawiki
+        when /\.(html)$/i
+          :html
+        when /\.(css)$/i
+          :css
+        when /\.(vm)$/i
+          :velocity
         else
           nil
       end
@@ -273,15 +253,9 @@ module Gollum
     # Returns the String extension (no leading period).
     def self.format_to_ext(format)
       case format
-        when :markdown  then 'md'
-        when :textile   then 'textile'
-        when :rdoc      then 'rdoc'
-        when :org       then 'org'
-        when :creole    then 'creole'
-        when :rest      then 'rest'
-        when :asciidoc  then 'asciidoc'
-        when :pod       then 'pod'
-        when :mediawiki then 'mediawiki'
+        when :html      then 'html'
+        when :css       then 'css'
+        when :velocity  then 'vm'
       end
     end
 
