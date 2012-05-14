@@ -54,12 +54,12 @@ context "Wiki" do
   test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      ['Bilbo-Baggins.md', 'Eye-Of-Sauron.md', 'Home.textile', 'My-Precious.md', 'Samwise Gamgee.mediawiki'],
+      ['Bilbo-Baggins.md', 'Boromir.md', 'Eye-Of-Sauron.md', 'Home.textile', 'My-Precious.md', 'Samwise Gamgee.mediawiki'],
       pages.map { |p| p.filename }.sort
   end
 
   test "counts pages" do
-    assert_equal 5, @wiki.size
+    assert_equal 6, @wiki.size
   end
 
   test "text_data" do
