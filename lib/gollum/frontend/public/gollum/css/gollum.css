@@ -231,6 +231,7 @@ a:hover, a:visited {
 
 /* @section page-footer */
 .page #footer {
+  clear: both;
   border-top: 1px solid #ddd;
   margin: 1em 0 7em;
 }
