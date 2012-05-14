@@ -69,7 +69,6 @@ module Gollum
     end
 
     def process_headers(doc)
-      toc = nil
       doc.css('h1,h2,h3,h4,h5,h6').each do |h|
         id = CGI::escape(h.content.gsub(' ','-'))
         level = h.name.gsub(/[hH]/,'').to_i
@@ -86,7 +85,7 @@ module Gollum
         tail ||= toc
         tail_level ||= 1
 
-        while tail_level < level do
+        while tail_level < level
           node = Nokogiri::XML::Node.new('ul', doc)
           tail = tail.add_child(node)
           tail_level += 1
@@ -99,6 +98,7 @@ module Gollum
         node.add_child("<a href='##{id}'>#{h.content}</a>")
         tail.add_child(node)
       end
+      toc ||= Nokogiri::XML::DocumentFragment.parse('<!--No TOC headers found-->')
       [doc, toc]
     end
 
