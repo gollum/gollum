@@ -72,6 +72,11 @@ module Gollum
       data
     end
 
+    # Inserts header anchors and creates TOC
+    #
+    # doc - Nokogiri parsed document
+    #
+    # Returns doc Document and toc String
     def process_headers(doc)
       toc = nil
       doc.css('h1,h2,h3,h4,h5,h6').each do |h|
