@@ -21,7 +21,11 @@ require File.expand_path('../gollum/tex', __FILE__)
 require File.expand_path('../gollum/web_sequence_diagram', __FILE__)
 
 module Gollum
-  VERSION = '1.4.0'
+  VERSION = '2.1.0'
+
+  def self.assets_path
+    ::File.expand_path('gollum/frontend/public', ::File.dirname(__FILE__))
+  end
 
   class Error < StandardError; end
 

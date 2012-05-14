@@ -1,7 +1,7 @@
 module Precious
   module Views
     class Page < Layout
-      attr_reader :content, :page, :footer
+      attr_reader :content, :page, :header, :footer
       DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
 
@@ -25,6 +25,19 @@ module Precious
 
       def editable
         @editable
+      end
+
+      def has_header
+        @header = (@page.header || false) if @header.nil?
+        !!@header
+      end
+
+      def header_content
+        has_header && @header.formatted_data
+      end
+
+      def header_format
+        has_header && @header.format.to_s
       end
 
       def has_footer

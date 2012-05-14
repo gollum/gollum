@@ -99,7 +99,7 @@ task :build => :gemspec do
   sh "mv #{gem_file} pkg"
 end
 
-desc 'Validate gemspec'
+desc 'Update gemspec'
 task :gemspec => :validate do
   # read spec file and split out manifest section
   spec = File.read(gemspec_file)

@@ -8,8 +8,8 @@ context "Wiki" do
 
   test "normalizes commit hash" do
     commit = {:message => 'abc'}
-    name  = @wiki.repo.config['user.name']
-    email = @wiki.repo.config['user.email']
+    name  = @wiki.repo.config['user.name']  || @wiki.default_committer_name
+    email = @wiki.repo.config['user.email'] ||  @wiki.default_committer_email
     committer = Gollum::Committer.new(@wiki, commit)
     assert_equal name,  committer.actor.name
     assert_equal email, committer.actor.email

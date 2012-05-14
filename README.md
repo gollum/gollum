@@ -32,7 +32,7 @@ In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
 to install the dependencies for the formats that you plan to use.
 
-* [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc`
+* [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc` on mac or `apt-get install -y asciidoc` on Ubuntu
 * [Creole](http://wikicreole.org/) -- `gem install creole`
 * [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet`
 * [GitHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) -- `gem install github-markdown`
@@ -106,13 +106,19 @@ are named `_Sidebar.ext` where the extension is one of the supported formats.
 Sidebars affect all pages in their directory and any subdirectories that do not
 have a sidebar file of their own.
 
+## HEADER FILES
+
+Header files allow you to add a simple header to your wiki. Header files must
+be named `_Header.ext` where the extension is one of the supported formats.
+Like sidebars, headers affect all pages in their directory and any
+subdirectories that do not have a header file of their own.
+
 ## FOOTER FILES
 
 Footer files allow you to add a simple footer to your wiki. Footer files must
 be named `_Footer.ext` where the extension is one of the supported formats.
 Like sidebars, footers affect all pages in their directory and any
 subdirectories that do not have a footer file of their own.
-
 
 ## HTML SANITIZATION
 
@@ -311,6 +317,7 @@ backticks.
 
 ## MATHEMATICAL EQUATIONS
 
+
 Page files may contain mathematic equations in TeX syntax that will be nicely
 typeset into the expected output. A block-style equation is delimited by `\[`
 and `\]`. For example:
@@ -322,6 +329,13 @@ inline with regular text. For example:
 
     The Pythagorean theorem is \( a^2 + b^2 = c^2 \).
 
+### INSTALLATION REQUIREMENTS
+
+In order to get the mathematical equations rendering to work, you need the following binaries:
+
+* LaText, TeTex or MacTex/BasicTeX (latex, dvips)
+* ImageMagick (convert)
+* Ghostscript (gs)
 
 ## SEQUENCE DIAGRAMS
 
@@ -454,8 +468,16 @@ like Rack::Auth, OmniAuth, etc.
     require 'gollum/frontend/app'
 
     gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
+    Precious::App.set(:gollum_path, gollum_path)
     Precious::App.set(:default_markup, :markdown) # set your favorite markup language
     run Precious::App
+
+## Windows Filename Validation
+Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
+
+## Testing
+
+[![Build Status](https://secure.travis-ci.org/github/gollum.png?branch=master)](http://travis-ci.org/github/gollum)
 
 ## CONTRIBUTE
 
@@ -475,3 +497,9 @@ your changes merged back into core is as follows:
 1. If necessary, rebase your commits into logical chunks, without errors
 1. Push the branch up to GitHub
 1. Send a pull request to the github/gollum project.
+
+## RELEASING
+
+    $ rake gemspec
+    $ gem build gollum.gemspec
+    $ gem push gollum-X.Y.Z.gem

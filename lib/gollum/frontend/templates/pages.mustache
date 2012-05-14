@@ -2,9 +2,12 @@
 <div id="head">
   <h1>{{title}}</h1>
   <ul class="actions">
-    <li class="minibutton" class="jaws"><a href="#" id="minibutton-new-page">New Page</a></li>
+    <li class="minibutton">
+      {{>searchbar}}
+    </li>
+    <li class="minibutton"><a href="/"
+       class="action-edit-page">Home</a></li>
   </ul>
-  {{>searchbar}}
 </div>
 <div id="pages">
 

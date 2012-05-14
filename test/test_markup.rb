@@ -173,7 +173,26 @@ context "Markup" do
     @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal normal("<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>"), normal(output)
+    assert_equal normal("<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>
+"), normal(output)
+  end
+
+  test "wiki link within inline code block" do
+    @wiki.write_page("Potato", :markdown, "`sed -i '' 's/[[:space:]]*$//'`", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<p><code>sed -i '' 's/[[:space:]]*$//'</code></p>", page.formatted_data
+  end
+
+  test "wiki link within code block" do
+    @wiki.write_page("Potato", :markdown, "    sed -i '' 's/[[:space:]]*$//'", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<pre><code>sed -i '' 's/[[:space:]]*$//'\n</code></pre>", page.formatted_data
+  end
+
+  test "piped wiki link within code block" do
+    @wiki.write_page("Potato", :markdown, "`make a link [[home|sweet home]]`", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<p><code>make a link [[home|sweet home]]</code></p>", page.formatted_data
   end
 
   #########################################################################
@@ -495,6 +514,12 @@ np.array([[2,2],[1,3]],np.float)
     compare(content, output)
   end
 
+  test "allows apt uri schemes" do
+    content = "[Hack me](apt:gettext)"
+    output = "<p><a href=\"apt:gettext\">Hackme</a></p>"
+    compare(content, output)
+  end
+
   test "removes style blocks completely" do
     content = "<style>body { color: red }</style>foobar"
     output = "<p>foobar</p>"
@@ -546,29 +571,29 @@ np.array([[2,2],[1,3]],np.float)
     compare(content, output, 'org')
   end
 
-  # test "id with prefix ok" do
-  #   content = "h2(example#wiki-foo). xxxx"
-  #   output = %(<h2 class="example" id="wiki-foo">xxxx</h2>)
-  #   compare(content, output, :textile)
-  # end
+  test "id with prefix ok" do
+    content = "h2(example#wiki-foo). xxxx"
+    output = %(<h2 class="example" id="wiki-foo">xxxx</h2>)
+    compare(content, output, :textile)
+  end
 
-  # test "id prefix added" do
-  #   content = "h2(#foo). xxxx[1]\n\nfn1.footnote"
-  #   output = "<h2 id=\"wiki-foo\">xxxx" +
-  #            "<sup class=\"footnote\" id=\"wiki-fnr1\"><a href=\"#wiki-fn1\">1</a></sup></h2>" +
-  #            "\n<p class=\"footnote\" id=\"wiki-fn1\"><a href=\"#wiki-fnr1\"><sup>1</sup></a> footnote</p>"
-  #   compare(content, output, :textile)
-  # end
+  test "id prefix added" do
+    content = "h2(#foo). xxxx[1]\n\nfn1.footnote"
+    output = "<h2 id=\"wiki-foo\">xxxx" +
+             "<sup class=\"footnote\" id=\"wiki-fnr1\"><a href=\"#wiki-fn1\">1</a></sup></h2>" +
+             "\n<p class=\"footnote\" id=\"wiki-fn1\"><a href=\"#wiki-fnr1\"><sup>1</sup></a> footnote</p>"
+    compare(content, output, :textile)
+  end
 
-  # test "name prefix added" do
-  #   content = "abc\n\n__TOC__\n\n==Header==\n\nblah"
-  #   compare content, '', :mediawiki, [
-  #     /id="wiki-toc"/,
-  #     /href="#wiki-Header"/,
-  #     /id="wiki-Header"/,
-  #     /name="wiki-Header"/
-  #   ]
-  # end
+  test "name prefix added" do
+    content = "abc\n\n__TOC__\n\n==Header==\n\nblah"
+    compare content, '', :mediawiki, [
+      /id="wiki-toc"/,
+      /href="#wiki-Header"/,
+      /id="wiki-Header"/,
+      /name="wiki-Header"/
+    ]
+  end
 
   #########################################################################
   #
@@ -586,6 +611,18 @@ np.array([[2,2],[1,3]],np.float)
     content = 'a \( a^2 \) b'
     output = "<p>a<imgsrc=\"/_tex.png?type=inline&data=YV4y\"alt=\"a^2\">b</p>"
     compare(content, output, 'md')
+  end
+
+  #########################################################################
+  # Asciidoc
+  #########################################################################
+
+  test "asciidoc header" do
+    compare("= Book Title\n\n== Heading", '<div class="sect1"><h2 id="wiki-_heading">Heading</h2><div class="sectionbody"></div></div>', 'asciidoc')
+  end
+
+  test "internal links with asciidoc" do
+    compare("= Book Title\n\n[[anid]]\n== Heading", '<div class="sect1"><h2 id="wiki-anid">Heading</h2><div class="sectionbody"></div></div>', 'asciidoc')
   end
 
   #########################################################################

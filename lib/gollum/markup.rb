@@ -38,8 +38,9 @@ module Gollum
         @wiki.history_sanitizer :
         @wiki.sanitizer
 
-      data = extract_tex(@data.dup)
+      data = @data.dup
       data = extract_code(data)
+      data = extract_tex(data)
       data = extract_wsd(data)
       data = extract_tags(data)
       begin
@@ -52,9 +53,10 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data, encoding)
+
       if sanitize || block_given?
-        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
-        doc  = sanitize.clean_node!(doc) if sanitize
+        doc = Nokogiri::HTML::DocumentFragment.parse(data)
+        doc = sanitize.clean_node!(doc) if sanitize
         yield doc if block_given?
         data = doc.to_html
       end
@@ -116,6 +118,9 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
+      if @format == :asciidoc
+        return data
+      end
       data.gsub!(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
@@ -149,9 +154,27 @@ module Gollum
     # Returns the marked up String data.
     def process_tags(data)
       @tagmap.each do |id, tag|
-        data.gsub!(id, process_tag(tag))
+        # If it's preformatted, just put the tag back
+        if is_preformatted?(data, id)
+          data.gsub!(id, "[[#{tag}]]")
+        else
+          data.gsub!(id, process_tag(tag))
+        end
       end
       data
+    end
+
+    # Find `id` within `data` and determine if it's within
+    # preformatted tags.
+    #
+    # data      - The String data (with placeholders).
+    # id        - The String SHA1 hash.
+    PREFORMATTED_TAGS = %w(code tt)
+    def is_preformatted?(data, id)
+      doc = Nokogiri::HTML::DocumentFragment.parse(data)
+      node = doc.search("[text()*='#{id}']").first
+      node && (PREFORMATTED_TAGS.include?(node.name) ||
+        node.ancestors.any? { |a| PREFORMATTED_TAGS.include?(a.name) })
     end
 
     # Process a single tag into its final HTML form.

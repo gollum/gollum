@@ -6,6 +6,8 @@ require 'mustache/sinatra'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
+require File.expand_path '../uri_encode_component', __FILE__
+
 module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
@@ -13,7 +15,7 @@ module Precious
     dir = File.dirname(File.expand_path(__FILE__))
 
     # We want to serve public assets for now
-    set :public_folder, "#{dir}/public"
+    set :public_folder, "#{dir}/public/gollum"
     set :static,         true
     set :default_markup, :markdown
 
@@ -42,13 +44,26 @@ module Precious
       redirect '/pages'
     end
 
+    get '/data/*' do
+      @name = params[:splat].first
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      if page = wiki.page(@name)
+        page.raw_data
+      end
+    end
+
     get '/edit/*' do
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
-        @page = page
-        @content = page.raw_data
-        mustache :edit
+        if page.format.to_s.include?('markdown')
+          redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
+        else
+          @page = page
+          @page.version = wiki.repo.log(wiki.ref, @page.path).first
+          @content = page.raw_data
+          mustache :edit
+        end
       else
         mustache :create
       end
@@ -63,6 +78,7 @@ module Precious
 
       update_wiki_page(wiki, page, params[:content], commit, name,
         params[:format])
+      update_wiki_page(wiki, page.header,  params[:header],  commit) if params[:header]
       update_wiki_page(wiki, page.footer,  params[:footer],  commit) if params[:footer]
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
