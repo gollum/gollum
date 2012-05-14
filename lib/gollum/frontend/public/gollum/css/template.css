@@ -367,34 +367,42 @@ a.absent {
   margin: 0;
   padding: 0;
 }
-.markdown-body .toc {
+.toc {
+  background-color: #F7F7F7;
   border: 1px solid #ddd;
   padding: 5px 10px;
   margin: 0;
   border-radius: 3px;
 }
-.markdown-body .toc-title {
+.toc-title {
   color: #888;
+  font-size: 14px;
+  line-height: 1.6;
   padding: 2px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 3px;
 }
-.markdown-body .toc ul {
+.toc ul {
   padding-left: 10px;
   margin: 0;
 }
-.markdown-body .toc>ul {
+.toc>ul {
   margin-left: 10px;
   font-size: 17px;
 }
-.markdown-body .toc ul ul {
+.toc ul ul {
   font-size: 15px;
 }
-.markdown-body .toc ul ul ul {
+.toc ul ul ul {
   font-size: 14px;
 }
-.markdown-body .toc ul li{
+.toc ul li{
   margin: 0;
+}
+#header-content .toc,
+#footer-content .toc,
+#sidebar-content .toc {
+  border: none;
 }
 .highlight {
   background: #fff;

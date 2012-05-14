@@ -90,35 +90,17 @@ a:hover, a:visited {
   background-color: #F7F7F7;
   border: 1px solid #DDD;
   font-size: 13px;
-  padding: 7px;
+  padding: 0px 5px;
   float:left;
   margin-bottom: 20px;
+  min-width: 33%;
   
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em;
 }
-
-#wiki-toc-main > h2 {
-  font-size: 24px;
-  border-bottom: 1px solid #CCC;
-  color: black;
-  margin-top: 5px;
-  margin-bottom: 20px;
-}
-
-#wiki-toc-main ul {
-  -webkit-margin-before: 0px;
-  -webkit-padding-start: 0px;
-  margin-left: 1em;
-  margin-right: 1em;
-  padding-left: 0;
-}
-
-#wiki-toc-main ul li {
-  line-height: 1.75em;
-  list-style-position: inside;
-  list-style-type: round;
+#wiki-toc-main > div {
+  border: none;
 }
 
 /* @section rightbar */
