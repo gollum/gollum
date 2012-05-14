@@ -6,6 +6,7 @@ require 'base64'
 module Gollum
 
   class Markup
+    attr_accessor :toc
     # Initialize a new Markup object.
     #
     # page - The Gollum::Page.
@@ -17,6 +18,8 @@ module Gollum
       @data    = page.text_data
       @version = page.version.id if page.version
       @format  = page.format
+      @sub_page = page.sub_page
+      @parent_page = page.parent_page
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
       @codemap = {}
@@ -57,7 +60,8 @@ module Gollum
 
       doc = Nokogiri::HTML::DocumentFragment.parse(data)
       doc = sanitize.clean_node!(doc) if sanitize
-      doc,@toc = process_headers(doc) if @wiki.header_hashtags || @wiki.universal_toc
+      doc,toc = process_headers(doc)
+      @toc = @sub_page ? @parent_page.toc_data : toc
       yield doc if block_given?
       data = doc.to_html
 
@@ -69,6 +73,7 @@ module Gollum
     end
 
     def process_headers(doc)
+      toc = nil
       doc.css('h1,h2,h3,h4,h5,h6').each do |h|
         id = CGI::escape(h.content.gsub(' ','-'))
         level = h.name.gsub(/[hH]/,'').to_i
@@ -98,7 +103,7 @@ module Gollum
         node.add_child("<a href='##{id}'>#{h.content}</a>")
         tail.add_child(node)
       end
-      toc ||= Nokogiri::XML::DocumentFragment.parse('<!--No TOC headers found-->')
+      toc = toc.to_xhtml if toc != nil
       [doc, toc]
     end
 
@@ -368,7 +373,7 @@ module Gollum
     #
     # Returns the marked up String data.
     def process_toc_tags(data)
-      data.gsub!("[[_TOC_]]", @toc.nil? ? '' : @toc.to_html)
+      data.gsub!("[[_TOC_]]", @toc.nil? ? '' : @toc)
       data
     end
 

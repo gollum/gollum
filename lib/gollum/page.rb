@@ -20,6 +20,11 @@ module Gollum
     # Returns nothing.
     attr_writer :historical
 
+    # Parent page if this is a sub page
+    #
+    # Returns a Page
+    attr_accessor :parent_page
+
     # Checks if a filename has a valid extension understood by GitHub::Markup.
     #
     # filename - String filename, like "Home.md".
@@ -101,6 +106,7 @@ module Gollum
       @wiki = wiki
       @blob = @header = @footer = @sidebar = nil
       @doc = nil
+      @parent_page = nil
     end
 
     # Public: The on-disk filename of the page including extension.
@@ -132,6 +138,14 @@ module Gollum
     # Returns the fully sanitized String title.
     def title
       Sanitize.clean(name).strip
+    end
+
+    # Public: Determines if this is a sub-page
+    # Sub-pages have filenames beginning with an underscore
+    #
+    # Returns true or false.
+    def sub_page
+      filename =~ /^_/
     end
 
     # Public: The path of the page within the repo.
@@ -177,11 +191,9 @@ module Gollum
     #
     # Returns the String data.
     def toc_data()
-      formatted_data if @doc == nil
-      toc = Toc.new(@doc)
-      if (toc_content = toc.generate)
-        toc.generate.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
-      end
+      return @parent_page.toc_data if @parent_page and @sub_page
+      formatted_data if markup_class.toc == nil
+      markup_class.toc
     end
 
     # Public: The format of the page.
@@ -417,12 +429,15 @@ module Gollum
       map = @wiki.tree_map_for(self.version.id)
       while !dirs.empty?
         if page = find_page_in_tree(map, name, dirs.join('/'))
+          page.parent_page = self
           return page
         end
         dirs.pop
       end
 
-      find_page_in_tree(map, name, '')
+      page = find_page_in_tree(map, name, '')
+      page.parent_page = self
+      page
     end
 
     def inspect
