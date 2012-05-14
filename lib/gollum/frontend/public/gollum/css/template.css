@@ -367,6 +367,35 @@ a.absent {
   margin: 0;
   padding: 0;
 }
+.markdown-body .toc {
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  margin: 0;
+  border-radius: 3px;
+}
+.markdown-body .toc-title {
+  color: #888;
+  padding: 2px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 3px;
+}
+.markdown-body .toc ul {
+  padding-left: 10px;
+  margin: 0;
+}
+.markdown-body .toc>ul {
+  margin-left: 10px;
+  font-size: 17px;
+}
+.markdown-body .toc ul ul {
+  font-size: 15px;
+}
+.markdown-body .toc ul ul ul {
+  font-size: 14px;
+}
+.markdown-body .toc ul li{
+  margin: 0;
+}
 .highlight {
   background: #fff;
 }

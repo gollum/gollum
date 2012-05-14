@@ -61,7 +61,7 @@ module Gollum
       doc = Nokogiri::HTML::DocumentFragment.parse(data)
       doc = sanitize.clean_node!(doc) if sanitize
       doc,toc = process_headers(doc)
-      @toc = @sub_page ? @parent_page.toc_data : toc
+      @toc = @sub_page ? ( @parent_page ? @parent_page.toc_data : "[[_TOC_]]" ) : toc
       yield doc if block_given?
       data = doc.to_html
 
@@ -91,9 +91,9 @@ module Gollum
         h.add_child(anchor)
 
         # Build TOC
-        toc ||= Nokogiri::XML::Node.new('ul', doc)
-        tail ||= toc
-        tail_level ||= 1
+        toc ||= Nokogiri::XML::DocumentFragment.parse('<div class="toc"><div class="toc-title">Table of Contents</div></div>')
+        tail ||= toc.child
+        tail_level ||= 0
 
         while tail_level < level
           node = Nokogiri::XML::Node.new('ul', doc)
