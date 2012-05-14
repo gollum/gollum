@@ -158,8 +158,9 @@ module Gollum
         path             = path.path
       end
       @path          = path
+      @repo_is_bare  = options[:repo_is_bare]
       @page_file_dir = options[:page_file_dir]
-      @access        = options[:access]       || GitAccess.new(path, @page_file_dir)
+      @access        = options[:access]       || GitAccess.new(path, @page_file_dir, @repo_is_bare)
       @base_path     = options[:base_path]    || "/"
       @page_class    = options[:page_class]   || self.class.page_class
       @file_class    = options[:file_class]   || self.class.file_class

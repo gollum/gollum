@@ -6,6 +6,8 @@ require 'mustache/sinatra'
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
+require File.expand_path '../uri_encode_component', __FILE__
+
 # Run the frontend, based on Sinatra
 # 
 # There are a number of wiki options that can be set for the frontend
@@ -53,14 +55,26 @@ module Precious
       show_page_or_file('Home')
     end
 
+    get '/data/*' do
+      @name = params[:splat].first
+      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      if page = wiki.page(@name)
+        page.raw_data
+      end
+    end
+
     get '/edit/*' do
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
-        @page = page
-        @page.version = wiki.repo.log(wiki.ref, @page.path).first
-        @content = page.raw_data
-        mustache :edit
+        if page.format.to_s.include?('markdown')
+          redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
+        else
+          @page = page
+          @page.version = wiki.repo.log(wiki.ref, @page.path).first
+          @content = page.raw_data
+          mustache :edit
+        end
       else
         mustache :create
       end

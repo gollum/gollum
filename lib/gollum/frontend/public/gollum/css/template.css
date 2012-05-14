@@ -8,7 +8,6 @@
   padding: 0;
 }
 
-
 html, body {
   color: #333;
 }
@@ -20,6 +19,11 @@ body {
 
 img {
   border: 0;
+}
+
+a {
+  color: #4183C4;
+  text-decoration: none;
 }
 
 a.absent {

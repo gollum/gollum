@@ -1,0 +1,59 @@
+Ajaxorg Ace is used under the MPL
+https://github.com/ajaxorg/ace/blob/master/LICENSE
+
+https://github.com/ajaxorg/ace (build folder in master)
+  lib/gollum/frontend/public/src/*
+---
+
+Fivesixty Notepages (MIT license)
+https://github.com/fivesixty/notepages/blob/master/LICENSE
+
+---
+
+Save icon from notepag.es repo originally from blog.twg.ca (lib/gollum/frontend/public/images/save_24.png)
+CC BY-SA 3.0 Unported
+http://blog.twg.ca/2010/11/retina-display-icon-set/
+http://creativecommons.org/licenses/by-sa/3.0/legalcode.txt
+
+  lib/gollum/frontend/public/images/save_24.png
+
+---
+
+Gollum (MIT License)
+https://github.com/github/gollum/blob/master/LICENSE
+
+---
+
+jQuery is used under the MIT License
+  http://jquery.org/license/
+  http://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt
+
+jQuery.com
+  lib/gollum/frontend/public/jquery-1.7.js
+
+---
+
+Sizzle is used under the MIT license
+.
+https://github.com/jquery/sizzle/blob/master/LICENSE
+
+---
+
+The following PNGs are based on Ubuntu 11.10 SVG files located in /usr/share/icons/unity-icon-theme/places/svg/
+- group-folders.svg
+- group-files.svg
+- group-downloads.svg
+
+  lib/gollum/frontend/public/css/document.png
+  lib/gollum/frontend/public/css/folder-horizontal.png
+  lib/gollum/frontend/public/css/toggle-small-expand.png
+  lib/gollum/frontend/public/css/toggle-small.png
+
+---
+
+The css-tree-menu code is used under the MIT license.
+
+http://www.thecssninja.com/css/css-tree-menu
+http://www.thecssninja.com/demo/license.txt
+
+  lib/gollum/frontend/public/css/_styles.css

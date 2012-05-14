@@ -174,7 +174,26 @@ context "Markup" do
     @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal normal("<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>"), normal(output)
+    assert_equal normal("<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>
+"), normal(output)
+  end
+
+  test "wiki link within inline code block" do
+    @wiki.write_page("Potato", :markdown, "`sed -i '' 's/[[:space:]]*$//'`", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<p><code>sed -i '' 's/[[:space:]]*$//'</code></p>", page.formatted_data
+  end
+
+  test "wiki link within code block" do
+    @wiki.write_page("Potato", :markdown, "    sed -i '' 's/[[:space:]]*$//'", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<pre><code>sed -i '' 's/[[:space:]]*$//'\n</code></pre>", page.formatted_data
+  end
+
+  test "piped wiki link within code block" do
+    @wiki.write_page("Potato", :markdown, "`make a link [[home|sweet home]]`", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<p><code>make a link [[home|sweet home]]</code></p>", page.formatted_data
   end
 
   #########################################################################
@@ -502,7 +521,6 @@ np.array([[2,2],[1,3]],np.float)
     compare(content, output)
   end
 
-
   test "removes style blocks completely" do
     content = "<style>body { color: red }</style>foobar"
     output = "<p>foobar</p>"
@@ -608,7 +626,6 @@ end
   test "internal links with asciidoc" do 
     compare("= Book Title\n\n[[anid]]\n== Heading", '<div class="sect1"><h2 id="wiki-anid">Heading<a class="anchor" id="Heading" href="#Heading"></a></h2><div class="sectionbody"></div></div>', 'asciidoc')
   end
-
 
   #########################################################################
   #

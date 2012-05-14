@@ -1,0 +1,73 @@
+body {
+  overflow: hidden;
+}
+
+#editor { 
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#contentframe {
+  margin: 0 auto;
+  overflow: visible;
+  width: 80%;
+}
+
+#previewframe {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  overflow: auto;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+  right: 0;
+}
+
+/* -- Start from notepag.es -- */
+#toolpanel {
+  position: fixed;
+  background: #666;
+  top: 0;
+  height: 30px;
+  right: 20px;
+  width: 80px;
+  vertical-align: middle;
+  padding: 5px 0;
+  margin: 0;
+  text-align: center;
+}
+
+#toolpanel.edit a.edit {
+  opacity: 0.4;
+  /* Make it appear as a link even though save
+     doesn't have a href attribute. */
+  cursor: pointer;
+  display: inline-block;
+}
+
+#toolpanel a {
+  color: white;
+  text-decoration: none;
+  margin: 0 5px;
+  display: none;
+  padding: 4px;
+  font-family: sans-serif;
+}
+
+#toolpanel a img {
+  vertical-align: middle;
+  margin-left: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+a img {
+  border: none;
+}
+/* -- End from notepag.es -- */
