@@ -459,7 +459,8 @@ module Gollum
 
         {
           :count  => result[2].to_i,
-          :name   => file_name
+          :name   => file_name,
+          :path   => result[1]
         }
       end
     end

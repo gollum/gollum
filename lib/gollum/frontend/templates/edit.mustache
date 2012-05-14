@@ -2,10 +2,9 @@
 <div id="head">
   <h1>Editing <strong>{{title}}</strong></h1>
   <ul class="actions">
-    <li class="minibutton"><a href="/{{escaped_name}}"
-       class="action-view-page">View Page</a></li>
-    <li class="minibutton"><a href="/history/{{escaped_name}}"
-       class="action-page-history">Page History</a></li>
+    <li class="minibutton"><a href="/" class="action-edit-page">Home</a></li>
+    <li class="minibutton"><a href="/{{escaped_name}}" class="action-view-page">View Page</a></li>
+    <li class="minibutton"><a href="/history/{{escaped_name}}" class="action-page-history">Page History</a></li>
   </ul>
 </div>
   <div id="wiki-content">{{>editor}}</div>

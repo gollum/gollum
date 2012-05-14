@@ -41,7 +41,7 @@ module Precious
     end
 
     get '/' do
-      show_page_or_file('Home')
+      redirect '/pages'
     end
 
     get '/data/*' do
@@ -83,7 +83,7 @@ module Precious
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
 
-      redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
+      redirect "/#{CGI.escape(page.path)}"
     end
 
     post '/create' do
@@ -94,7 +94,7 @@ module Precious
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
+        redirect "/#{CGI.escape(page.path)}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error

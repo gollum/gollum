@@ -9,16 +9,10 @@
        class="action-edit-page">Home</a></li>
   </ul>
 </div>
-<div id="results">
+<div id="pages">
 
 {{#has_results}}
-  <ul>
-    {{#results}}
-    <li>
-      <a href="/{{name}}">{{name}}</a> 
-    </li>
-    {{/results}}
-  </ul>
+  {{{pages_as_nested_list}}}
 {{/has_results}}
 
 {{#no_results}}
@@ -34,4 +28,34 @@
   </ul>
 </div>
 </div>
+
+<script type="text/javascript">
+  // Execute this after the site is loaded.
+  $(function() {
+      // Find list items representing folders and
+      // style them accordingly.  Also, turn them
+      // into links that can expand/collapse the
+      // tree leaf.
+      $('li > ul').each(function(i) {
+          // Find this list's parent list item.
+          var parent_li = $(this).parent('li');
+
+          // Style the list item as folder.
+          parent_li.addClass('folder');
+
+          // Temporarily remove the list from the
+          // parent list item, wrap the remaining
+          // text in an anchor, then reattach it.
+          var sub_ul = $(this).remove();
+          parent_li.wrapInner('<a/>').find('a').click(function() {
+              // Make the anchor toggle the leaf display.
+              sub_ul.toggle();
+          });
+          parent_li.append(sub_ul);
+      });
+
+      // Hide all lists except the outermost.
+      $('ul ul').hide();
+  });
+</script>
 

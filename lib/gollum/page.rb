@@ -307,11 +307,21 @@ module Gollum
     # version - The String version ID to find.
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find(name, version)
+    def find_old(name, version)
       map = @wiki.tree_map_for(version.to_s)
       if page = find_page_in_tree(map, name)
         page.version    = version.is_a?(Grit::Commit) ?
           version : @wiki.commit_for(version)
+        page.historical = page.version.to_s == version.to_s
+        page
+      end
+    rescue Grit::GitRuby::Repository::NoSuchShaFound
+    end
+
+    def find(path, version)
+      map = @wiki.tree_map_for(version.to_s)
+      if page = find_page_in_tree(map, path)
+        page.version    = version.is_a?(Grit::Commit) ? version : @wiki.commit_for(version)
         page.historical = page.version.to_s == version.to_s
         page
       end
@@ -326,7 +336,7 @@ module Gollum
     #               to be in.  The string should
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_tree(map, name, checked_dir = nil)
+    def find_page_in_tree_old(map, name, checked_dir = nil)
       return nil if !map || name.to_s.empty?
       if checked_dir = BlobEntry.normalize_dir(checked_dir)
         checked_dir.downcase!
@@ -337,6 +347,19 @@ module Gollum
         next unless checked_dir.nil? || entry.dir.downcase == checked_dir
         next unless page_match(name, entry.name)
         return entry.page(@wiki, @version)
+      end
+
+      return nil # nothing was found
+    end
+
+    def find_page_in_tree(map, path, checked_dir = nil)
+      # FIXME: Hackety hack - we need to remove the checked_dir bit
+      #        here as we don't us it, (now we're using paths), but
+      #        some methods are still calling us with it...
+      map.each do |entry|
+        next if entry.name.to_s.empty?
+        next unless path == entry.path
+        return entry.page(@wiki,@version)
       end
 
       return nil # nothing was found

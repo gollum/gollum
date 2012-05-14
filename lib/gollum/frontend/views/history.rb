@@ -4,7 +4,7 @@ module Precious
       attr_reader :page, :page_num
 
       def title
-        @page.title
+        @page.path
       end
 
       def versions
