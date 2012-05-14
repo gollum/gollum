@@ -288,6 +288,22 @@ wiki page, simply preface the link with a single quote (like in LISP):
 
 This is useful for writing about the link syntax in your wiki pages.
 
+## TABLE OF CONTENTS
+
+Gollum has a special tag to insert a table of contents (new in v2.1)
+
+    '[[_TOC_]]
+
+This tag is case sensitive, use all upper case.  The TOC tag can be inserted
+into the `_Header`, `_Footer` or `_Sidebar` files too.
+
+There is also a wiki option `:universal_toc` which will display a
+table of contents at the top of all your wiki pages if it is enabled.
+The `:universal_toc` is not enabled by default.  To set the option,
+add the option to the `:wiki_options` hash before starting the
+frontend app:
+
+    Precious::App.set(:wiki_options, {:universal_toc => true})
 
 ## SYNTAX HIGHLIGHTING
 
@@ -470,6 +486,7 @@ like Rack::Auth, OmniAuth, etc.
     gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
     Precious::App.set(:gollum_path, gollum_path)
     Precious::App.set(:default_markup, :markdown) # set your favorite markup language
+    Precious::App.set(:wiki_options, {:universal_toc => false})
     run Precious::App
 
 ## Windows Filename Validation
