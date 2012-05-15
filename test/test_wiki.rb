@@ -116,7 +116,7 @@ context "Wiki TOC" do
     page = @wiki.preview_page("Test", "# Bilbo", :markdown)
     assert_equal "# Bilbo", page.raw_data
     assert_equal '<h1>Bilbo<a class="anchor" id="Bilbo" href="#Bilbo"></a></h1>', page.formatted_data.gsub(/\n/,"")
-    assert_equal '<ul><li><a href="#Bilbo">Bilbo</a></li></ul>', page.toc_data.gsub(/\n */,"")
+    assert_equal %{<div class="toc"><div class="toc-title">Table of Contents</div><ul><li><a href="#Bilbo">Bilbo</a></li></ul></div>}, page.toc_data.gsub(/\n */,"")
   end
 end
 
