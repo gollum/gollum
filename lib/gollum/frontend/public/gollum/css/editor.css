@@ -3,6 +3,12 @@
   Wiki editor formatting
 */
 
+#gollum-editor-ace {
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
 a {
   -moz-outline: none !important;
 }

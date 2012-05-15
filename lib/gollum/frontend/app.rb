@@ -17,7 +17,7 @@ module Precious
     # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
     set :static,         true
-    set :default_markup, :markdown
+    set :default_markup, :html
 
     set :mustache, {
       # Tell mustache where the Views constant lives
