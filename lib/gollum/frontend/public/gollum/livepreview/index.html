@@ -222,8 +222,9 @@ var makePreviewHtml = function () {
       var txt = codeHTML.split(/\b/);
       // the syntax for code highlighting means all code, even one line, contains newlines.
       if (txt.length > 1 && codeHTML.match(/\n/)) {
+        // txt[0] must be "`"
         // txt[0] = "`"; txt[1] = "ruby"
-        if ($.inArray(txt[1], languages) === -1) {
+        if (txt[0] !== "`" || $.inArray(txt[1], languages) === -1) {
           element.innerHTML = codeHTML.substring(1).trim();
           hljs.highlightBlock(element, hlSpace);
           continue;
