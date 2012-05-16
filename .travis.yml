@@ -5,3 +5,5 @@ notifications:
   disabled: true
 before_install:
  - sudo apt-get install -y asciidoc
+ - sudo easy_install docutils
+ 
