@@ -195,36 +195,6 @@ context "Markup" do
     assert_equal "<p><code>make a link [[home|sweet home]]</code></p>", page.formatted_data
   end
 
-  test "table with links" do
-    table = <<EOT
-+------------------------------+
-| Proposal      | Mentor       |
-+===============+==============+
-| [[Ray-Bans]]  | technoweenie |
-+------------------------------+
-EOT
-    expected_table = <<EOT
-<div class="document">
-<table border="1" class="docutils">
-<colgroup>
-<col width="52%">
-<col width="48%">
-</colgroup>
-<thead valign="bottom"><tr>
-<th class="head" colspan="2">Proposal      | Mentor</th>
-</tr></thead>
-<tbody valign="top"><tr>
-<td colspan="2">
-<a class="internal absent" href="/Ray-Bans">Ray-Bans</a>  | technoweenie</td>
-</tr></tbody>
-</table>
-</div>
-EOT
-    @wiki.write_page("Potato", :rest, table, commit_details)
-    page = @wiki.page("Potato")
-    assert_equal expected_table.chomp, page.formatted_data
-  end
-
   #########################################################################
   #
   # Images

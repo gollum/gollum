@@ -80,39 +80,15 @@ module Gollum
     def extract_tex(data)
       data.gsub(/\\\[\s*(.*?)\s*\\\]/m) do
         tag = CGI.escapeHTML($1)
-        id = generate_placeholder(tag, $&.length)
+        id  = Digest::SHA1.hexdigest(tag)
         @texmap[id] = [:block, tag]
         id
       end.gsub(/\\\(\s*(.*?)\s*\\\)/m) do
         tag = CGI.escapeHTML($1)
-        id = generate_placeholder(tag, $&.length)
+        id  = Digest::SHA1.hexdigest(tag)
         @texmap[id] = [:inline, tag]
         id
       end
-    end
-
-    # Fit `id` into `len` by adding trailing spaces or truncating.
-    #
-    # id  - The String identifier to be fit.
-    # len - The Integer target length.
-    #
-    # Returns the newly-fit String.
-    def fit_width(id, len)
-      if id.length < len
-        id.ljust(len)
-      else
-        id[0...len]
-      end
-    end
-
-    # Generate a placeholder of a particular length.
-    #
-    # tag    - The original String tag to be processed later.
-    # length - The Integer length the placeholder should be.
-    #
-    # Returns the new placeholder String.
-    def generate_placeholder(tag, length)
-      fit_width(Digest::SHA1.hexdigest(tag), length)
     end
 
     # Process all TeX from the texmap and replace the placeholders with the
@@ -155,14 +131,14 @@ module Gollum
             parts = $2.split('][')
             parts[0][0..4] = ""
             link = "#{parts[1]}|#{parts[0].sub(/\.org/,'')}"
-            id = generate_placeholder(link, $&.length)
+            id = Digest::SHA1.hexdigest(link)
             @tagmap[id] = link
             "#{pre}#{id}#{post}"
           else
             $&
           end
         else
-          id = generate_placeholder($2, $2.length+4)
+          id = Digest::SHA1.hexdigest($2)
           @tagmap[id] = $2
           "#{$1}#{id}#{$3}"
         end
@@ -409,7 +385,7 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_code(data)
       data.gsub!(/^([ \t]*)``` ?([^\r\n]+)?\r?\n(.+?)\r?\n\1```\r?$/m) do
-        id = generate_placeholder("#{$2}.#{$3}", [$2, $3].join.length)
+        id     = Digest::SHA1.hexdigest("#{$2}.#{$3}")
         cached = check_cache(:code, id)
         @codemap[id] = cached   ?
           { :output => cached } :
@@ -491,7 +467,7 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_wsd(data)
       data.gsub(/^\{\{\{ ?(.+?)\r?\n(.+?)\r?\n\}\}\}\r?$/m) do
-        id = generate_placeholder($2, $&.length)
+        id = Digest::SHA1.hexdigest($2)
         @wsdmap[id] = { :style => $1, :code => $2 }
         id
       end
