@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>JavaScript Markdown Editor</title>
+<title>Live Preview</title>
 
 <link rel="stylesheet" type="text/css" href="../css/template.css" />
 <link rel="stylesheet" type="text/css" href="css/highlightjs/github.css" />
@@ -209,7 +209,7 @@ var makePreviewHtml = function () {
   // highlight code blocks.
   var codeElements = preview.getElementsByTagName("pre");
   var codeElementsLength = codeElements.length;
-
+  var hlSpace = "  ";
   if (codeElementsLength > 0) {
     for (var idx = 0; idx < codeElementsLength; idx++) {
       var element = codeElements[idx];
@@ -222,20 +222,21 @@ var makePreviewHtml = function () {
       var txt = codeHTML.split(/\b/);
       // the syntax for code highlighting means all code, even one line, contains newlines.
       if (txt.length > 1 && codeHTML.match(/\n/)) {
+        // txt[0] must be "`"
         // txt[0] = "`"; txt[1] = "ruby"
-        if ($.inArray(txt[1], languages) === -1) {
+        if (txt[0] !== "`" || $.inArray(txt[1], languages) === -1) {
           element.innerHTML = codeHTML.substring(1).trim();
-          element.className = "nohighlight";
+          hljs.highlightBlock(element, hlSpace);
           continue;
         }
 
         element.className = txt[1] + " highlight";
         // length + 1 for the marker character.
         element.innerHTML = codeHTML.substring(txt[1].length+1).trim();
-        hljs.highlightBlock(element, "  ");
+        hljs.highlightBlock(element, hlSpace);
       } else {
         element.innerHTML = codeHTML.substring(1).trim();
-        element.className = "nohighlight";
+        hljs.highlightBlock(element, hlSpace);
       }
     }
   }
