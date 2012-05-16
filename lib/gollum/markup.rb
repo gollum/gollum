@@ -42,7 +42,7 @@ module Gollum
       data = extract_code(data)
       data = extract_tex(data)
       data = extract_wsd(data)
-      data = extract_tags(data)
+      data = extract_tags(data) if @format != :rest
       begin
         data = GitHub::Markup.render(@name, data)
         if data.nil?
@@ -51,6 +51,7 @@ module Gollum
       rescue Object => e
         data = %{<p class="gollum-error">#{e.message}</p>}
       end
+      data = extract_tags(data) if @format == :rest
       data = process_tags(data)
       data = process_code(data, encoding)
 
