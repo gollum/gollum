@@ -18,10 +18,9 @@ module Gollum
     #
     # filename - String filename, like "Home.md".
     #
-    # Returns the matching String basename of the file without the extension.
+    # Returns the filename if the extension is understood.
     def self.valid_filename?(filename)
-      # filename && filename.to_s =~ VALID_PAGE_RE && $1
-      filename
+      filename.to_s =~ VALID_PAGE_RE && filename
     end
 
     # Checks if a filename has a valid extension understood by GitHub::Markup.
@@ -301,15 +300,15 @@ module Gollum
     #               to be in.  The string should
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_tree(map, name, checked_dir = nil)
+    def find_page_in_tree(map, name, checked_dir = '')
       return nil if !map || name.to_s.empty?
-      if checked_dir = BlobEntry.normalize_dir(checked_dir || @wiki.page_file_dir)
+      if checked_dir = BlobEntry.normalize_dir(@wiki.page_file_dir || checked_dir)
         checked_dir.downcase!
       end
 
       map.each do |entry|
         next if entry.name.to_s.empty?
-        next unless checked_dir.nil? || entry.dir.downcase == checked_dir
+        next unless entry.dir.downcase == checked_dir
         next unless page_match(name, entry.name)
         return entry.page(@wiki, @version)
       end
