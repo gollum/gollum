@@ -4,7 +4,26 @@ module Precious
       attr_reader :results, :ref
 
       def title
-        "All Files"
+        "Browse Files"
+      end
+
+      def breadcrumb
+        breadcrumb = []
+        slugs      = "All Files/#{@path}".split('/')
+        slugs.each_index do |index|
+          text = slugs[index]
+          link = ['/pages']
+
+          if index > 0
+            (1..index).each do |position|
+              link << slugs[position]
+            end
+          end
+
+          breadcrumb << "<a href=\"#{link.join('/')}/\">#{text}</a>"
+        end
+
+        breadcrumb.join(' / ')
       end
 
       def files_folders
