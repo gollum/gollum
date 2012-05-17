@@ -79,7 +79,7 @@ window.onload = function() {
     var markdown = "markdown";
     var txt = editorSession.getValue();
     var msg = pageName + " ("+markdown+")"
-    var newLocation = location + "/" + pageName;
+    var newLocation = window.location.origin + "/" + pageName;
 
     if (create) {
       jQuery.ajax({
