@@ -42,16 +42,15 @@ module Precious
 
     # Deagol helper function - this allows us to manage repositories
     # with directories etc...
-    def sort_out_path(file_path=nil)
-      @path = file_path || params[:splat].first.dup
-      if @path != '' && @path != '/' && @path.include?('/')
-        @path.sub!(/\/[\w\-\_\.]*$/,'')
-        @path.sub!(/^\//,'')
+    def set_the_path(file_path)
+      path = file_path.dup
+      if path != '' && path != '/' && path.include?('/')
+        path.sub!(/\/[\w\-\_\.]*$/,'')
+        path.sub!(/^\//,'')
       else
-        @path = nil
+        path = nil
       end
-
-      settings.wiki_options.merge!({ :page_file_dir => @path })
+      path
     end
 
     get '/' do
@@ -59,7 +58,8 @@ module Precious
     end
 
     get '/data/*' do
-      sort_out_path
+      @path = set_the_path(params[:splat].first)
+      settings.wiki_options.merge!({ :page_file_dir => @path })
       @name = params[:splat].first.split("/").last
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
@@ -68,7 +68,8 @@ module Precious
     end
 
     get '/edit/*' do
-      sort_out_path
+      @path = set_the_path(params[:splat].first)
+      settings.wiki_options.merge!({ :page_file_dir => @path })
       @name = params[:splat].first.split("/").last
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
@@ -86,7 +87,8 @@ module Precious
     end
 
     post '/edit/*' do
-      sort_out_path
+      @path = set_the_path(params[:splat].first)
+      settings.wiki_options.merge!({ :page_file_dir => @path })
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       page = wiki.page(params[:splat].first.split("/").last)
       name = params[:rename] || page.name
@@ -119,7 +121,8 @@ module Precious
     end
 
     post '/revert/:page/:version_list' do
-      sort_out_path(params[:page].dup)
+      @path = set_the_path(params[:page].dup)
+      settings.wiki_options.merge!({ :page_file_dir => @path })
       @name = params[:page].split('/').last
       wiki  = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @page = wiki.page(@name)
@@ -149,7 +152,8 @@ module Precious
     end
 
     get '/history/*' do
-      sort_out_path
+      @path     = set_the_path(params[:splat].first)
+      settings.wiki_options.merge!({ :page_file_dir => @path })
       @name     = params[:splat].first.split("/").last
       wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @page     = wiki.page(@name)
@@ -172,7 +176,8 @@ module Precious
     end
 
     get '/compare/:name/:version_list' do
-      sort_out_path(params[:name].dup)
+      @path     = set_the_path(params[:name].dup)
+      settings.wiki_options.merge!({ :page_file_dir => @path })
       @name     = params[:name].split('/').last
       @versions = params[:version_list].split(/\.{2,3}/)
       wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
@@ -194,7 +199,7 @@ module Precious
 
     get %r{/(.+?)/([0-9a-f]{40})} do
       file_path = params[:captures][0]
-      sort_out_path(file_path.dup)
+      set_the_path(file_path.dup)
       name = file_path.split('/').last
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(name, params[:captures][1])
@@ -217,7 +222,8 @@ module Precious
     end
 
     get '/pages*' do
-      sort_out_path
+      @path = set_the_path(params[:splat].first)
+      settings.wiki_options.merge!({ :page_file_dir => @path })
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @results = wiki.pages
       @ref = wiki.ref
