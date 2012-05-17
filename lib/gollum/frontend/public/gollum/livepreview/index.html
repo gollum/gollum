@@ -74,23 +74,29 @@ window.onload = function() {
   $.save = function() {
     // if &create=true then handle create instead of edit.
     var create = $.key("create");
+    var POST = "POST";
+    var pageName = $.key("page");
+    var markdown = "markdown";
+    var txt = editorSession.getValue();
+    var msg = pageName + " ("+markdown+")"
+    var newLocation = location + "/" + pageName;
 
     if (create) {
       jQuery.ajax({
-      type: "POST",
-      url: "/create",
-      data:  { page: $.key("page"), format: "markdown", content: editorSession.getValue() },
-      success: function() {
-        window.location = window.location.origin + "/" + $.key("page");
-      }
+        type: POST,
+        url: "/create",
+        data:  { page: pageName, format: markdown, content: txt, message: "Created " + msg },
+        success: function() {
+          window.location = newLocation;
+        }
     });
     } else {
       jQuery.ajax({
-      type: "POST",
-      url: "/edit/" + $.key("page"),
-      data:  { format: "markdown", content: editorSession.getValue() },
-      success: function() {
-          window.location = window.location.origin + "/" + $.key("page");
+        type: POST,
+        url: "/edit/" + pageName,
+        data:  { format: markdown, content: txt, message: "Updated " + msg },
+        success: function() {
+            window.location = newLocation;
         }
       });
     } // end else
