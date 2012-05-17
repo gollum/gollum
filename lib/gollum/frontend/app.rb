@@ -72,6 +72,12 @@ module Precious
       @name        = params[:splat].first.split("/").last
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+
+      @format = nil
+      if match = /^.+\.(\w+)$/.match(@name)
+        @format = match[1]
+      end
+
       if page = wiki.page(@name)
         if page.format.to_s.include?('markdown')
           redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
@@ -105,13 +111,22 @@ module Precious
     end
 
     post '/create' do
-      name   = params[:page]
-      wiki   = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      format = params[:format].intern
+      name         = params[:page].split('/').last
+      path         = set_the_path(params[:page].dup)
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+
+      filename_to_write = name.dup
+      format            = params[:format].intern
+      @format           = format
+      if filename_to_write =~ /^(.+)\.#{format}$/
+        filename_to_write = $1
+      end
 
       begin
-        wiki.write_page(name, format, params[:content], commit_message)
-        redirect "/#{CGI.escape(page.path)}"
+        wiki.write_page(filename_to_write, format, params[:content], commit_message)
+        page = wiki.page(name)
+        redirect "/#{CGI.escape(page.path).gsub('%2F','/')}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -247,6 +262,10 @@ module Precious
         file.raw_data
       else
         @name = name
+        @format = nil
+        if match = /^.+\.(\w+)$/.match(@name)
+          @format = match[1]
+        end
         mustache :create
       end
     end

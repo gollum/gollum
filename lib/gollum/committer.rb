@@ -88,7 +88,7 @@ module Gollum
 
       dir = '/' if dir.strip.empty?
 
-      fullpath = ::File.join(*[@wiki.page_file_dir, dir, path].compact)
+      fullpath = ::File.join(*[@wiki.page_file_dir, path].compact)
       fullpath = fullpath[1..-1] if fullpath =~ /^\//
 
       if index.current_tree && tree = index.current_tree / dir

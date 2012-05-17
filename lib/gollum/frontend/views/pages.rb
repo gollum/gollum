@@ -7,6 +7,12 @@ module Precious
         "Browse Files"
       end
 
+      def data_path
+        if @path && @path != '' && @path != '/'
+          " data-path=\"#{@path}/\""
+        end
+      end
+
       def breadcrumb
         breadcrumb = []
         slugs      = "All Files/#{@path}".split('/')
