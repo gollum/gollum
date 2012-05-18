@@ -41,6 +41,6 @@ Using jQuery v1.7.2.
 - Download latest production version from [jquery.com](http://www.jquery.com).
 
 ## Pagedown
-The Pagedown code used is from revision `44a4db795617`, Mar 2, 2012 (currently the newest version at the time of writing this document). Markdown.Converter.js has been enhanced to support Gollum style code highlighting.
+The Pagedown code used is from revision `44a4db795617`, Mar 2, 2012 (currently the newest version at the time of writing this document). Markdown.Converter.js has been enhanced to support Gollum style code highlighting. Markdown.Sanitizer.js has been fixed to not remove h4-6.
 
 `https://code.google.com/p/pagedown/source/detail?r=44a4db795617288ae9817c90735fb497891ede23`
