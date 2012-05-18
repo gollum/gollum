@@ -133,7 +133,11 @@ window.onload = function() {
 
   // Hide dimmer, comment tool panel, and comment.
   $("#commentcancel").click(function() {
+    // Restore focus on commentcancel but not on
+    // savecommentconfirm because the latter loads
+    // a new page.
     hideCommentWindow();
+    editor.focus();
   });
 
   var isCommentHidden = true;
@@ -150,7 +154,9 @@ window.onload = function() {
     isCommentHidden = false;
     darkness.style.visibility = "visible";
     commentToolPanel.style.visibility = "visible";
-    comment.style.visibility = "visible";      
+    comment.style.visibility = "visible";
+    // Set focus so typing can begin immediately.
+    commentEditor.focus();
   });
 
   $("#savecommentconfirm").click(function() {
