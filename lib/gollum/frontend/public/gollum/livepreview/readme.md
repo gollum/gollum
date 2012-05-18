@@ -12,6 +12,7 @@ Uses code/assets from:
 0. [notepages](https://github.com/fivesixty/notepages)
 0. [pagedown](https://code.google.com/p/pagedown/)
 0. [retina_display_icon_set](http://blog.twg.ca/2010/11/retina-display-icon-set/)
+0. [debounce](https://github.com/cowboy/jquery-throttle-debounce)
 
 See licenses folder for details.
 
