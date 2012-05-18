@@ -14,19 +14,20 @@ module Gollum
     end
 
     def new_page page
-      %Q(  <li class="file"><a href="#{page.name}">#{page.name2}</a></li>\n)
+      name = page.name
+      %Q(  <li class="file"><a href="#{name}">#{name}</a></li>\n)
     end
 
     def new_folder page
-      new_sub_folder ::File.dirname(page.path), page.name, page.name2
+      new_sub_folder ::File.dirname(page.path), page.name
     end
 
-    def new_sub_folder path, name, name2
+    def new_sub_folder path, name
       <<-HTML
       <li>
         <label>#{path}</label> <input type="checkbox" checked />
         <ol>
-          <li class="file"><a href="#{name}">#{name2}</a></li>
+          <li class="file"><a href="#{name}">#{name}</a></li>
       HTML
     end
 
@@ -63,12 +64,12 @@ module Gollum
       # Handle special case of only one folder.
       if (count - folder_start == 1)
         path = @pages[ folder_start ]
-        
+        name = page.name
         html += <<-HTML
         <li>
           <label>#{::File.dirname(path)}</label> <input type="checkbox" checked />
           <ol>
-            <li class="file"><a href="#{page.name}">#{page.name2}</a></li>
+            <li class="file"><a href="#{name}">#{name}</a></li>
          </ol>
         </li>
         HTML
@@ -128,7 +129,7 @@ module Gollum
             end
 
             # subfolder
-            html += new_sub_folder ::File.dirname(page.path).split('/').last, page.name, page.name2
+            html += new_sub_folder ::File.dirname(page.path).split('/').last, page.name
           else
             # depth+1 because we need an additional end_folder
             (depth+1).times { html += end_folder; }

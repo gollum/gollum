@@ -116,19 +116,12 @@ module Gollum
       self.class.strip_filename(filename)
     end
 
-    # Public: The canonical page name without extension.
+    # Public: The canonical page name without extension, and dashes converted
+    # to spaces.
     #
     # Returns the String name.
     def name
       self.class.canonicalize_filename(filename)
-    end
-
-    # Public: The canonical page name without extension, and dashes
-    # really converted to spaces.
-    #
-    # Returns the String name.
-    def name2
-      self.class.canonicalize_filename(filename).gsub('-', ' ')
     end
 
     # Public: The title will be constructed from the
