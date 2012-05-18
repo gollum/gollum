@@ -203,8 +203,12 @@ module Precious
     get '/fileview' do
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @results = Gollum::FileView.new(wiki.pages).render_files
+      File.open('/tmp/log.txt', 'w') {|f| 
+        f.puts "log!"
+        f.puts @results
+      }
       @ref = wiki.ref
-      mustache :fileview
+      mustache :file_view
     end
 
     get '/*' do
