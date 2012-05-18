@@ -2,7 +2,8 @@
 <head>
 <title>Live Preview</title>
 
-<link rel="stylesheet" type="text/css" href="../css/template.css" />
+<!-- change to href="../css/template.css" for production. -->
+<link rel="stylesheet" type="text/css" href="css/gollum/template.css" />
 <link rel="stylesheet" type="text/css" href="css/highlightjs/github.css" />
 <link rel="stylesheet" type="text/css" href="css/custom.css" />
 
@@ -13,27 +14,40 @@
 <script src="js/pagedown/Markdown.Sanitizer.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/highlightjs/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/debounce/jquery.ba-throttle-debounce.js" type="text/javascript" charset="utf-8"></script>
 </head>
 
 <body>
 <div id="editor"></div>
 
 <div id="previewframe"><div id="contentframe" class="markdown-body"></div></div>
- <!-- tool panel from notepage.es. save & savecomment icons from Retina Display Icon Set -->  
-<div id="toolpanel" class="edit" style="width: 500px; right: 0px; ">
-  <a id="save" class="edit"><img src="images/save_24.png" alt="Save" title="Save"></a>
+<!-- tool panel from notepage.es. save & savecomment icons from Retina Display Icon Set. -->  
+<div id="toolpanel" class="toolpanel edit" style="width: 500px; right: 0px; ">
+  <a id="save" class="edit"><img src="images/save_24.png" alt="save" title="save"></a>
   <a id="savecomment" class="edit"><img src="images/savecomment_24.png" alt="Save with comment" title="Save with comment"></a>
   <a id="toggle" class="edit" href="javascript:void(0)" onclick="jsm.toggleLeftRight();"><img src="images/lr_24.png" alt="Toggle left to right" title="Toggle left to right"></a>
 </div>
+
+<div id="commenttoolpanel" class="toolpanel edit" style="width: 500px; right: 0px; ">
+  <a id="savecommentconfirm" class="edit"><img src="images/savecomment_24.png" alt="Confirm save with comment" title="Confirm save with comment"></a>
+  <a id="commentcancel" class="edit"><img src="images/cancel_24.png" alt="Cancel save with comment" title="Cancel save with comment"></a>
+</div>
+<div id="comment"></div>
+<div id="darkness"></div>
 
 <script type="text/javascript">
 (function () {
 var converter = Markdown.getSanitizingConverter();
 var editor = ace.edit("editor");
 var editorSession = editor.getSession();
+var editorContainer = editor.container;
 var preview = document.getElementById("previewframe");
 var content = document.getElementById("contentframe");
 var toolPanel = document.getElementById("toolpanel");
+var comment = document.getElementById("comment");
+var commentToolPanel = document.getElementById("commenttoolpanel");
+// dim the page
+var darkness = document.getElementById("darkness");
 
 var leftRight = true;
 var jsm = {}; // JavaScript Markdown
@@ -43,18 +57,29 @@ window.jsm.toggleLeftRight = function() {
   jsm.resize();
 }
 
-editor.setTheme("ace/theme/twilight");
 var MarkdownMode = require("ace/mode/markdown").Mode;
 
-editorSession.setMode(new MarkdownMode());
-// Gutter shows line numbers
-editor.renderer.setShowGutter(true);
-editor.renderer.setHScrollBarAlwaysVisible(false);
-editorSession.setUseSoftTabs(true);
-editorSession.setTabSize(2);
-editorSession.setUseWrapMode(true);
-editor.setShowPrintMargin(false);
-editor.setBehavioursEnabled(true);
+function initAce(editor, editorSession) {
+  editor.setTheme("ace/theme/twilight");
+  editorSession.setMode(new MarkdownMode());
+  // Gutter shows line numbers
+  editor.renderer.setShowGutter(true);
+  editor.renderer.setHScrollBarAlwaysVisible(false);
+  editorSession.setUseSoftTabs(true);
+  editorSession.setTabSize(2);
+  editorSession.setUseWrapMode(true);
+  editor.setShowPrintMargin(false);
+  editor.setBehavioursEnabled(true);
+}
+
+initAce(editor, editorSession);
+
+// Setup comment ace.
+var commentEditor = ace.edit("comment"); // Comment Editor
+var commentEditorSession = commentEditor.getSession(); // Comment Editor Session
+var commentEditorContainer = commentEditor.container; // COmment Editor Container
+
+initAce(commentEditor, commentEditorSession);
 
 window.onload = function() {
   // RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
@@ -72,21 +97,21 @@ window.onload = function() {
     }
   });
 
-  $.save = function() {
+  $.save = function( commitMessage ) {
     // if &create=true then handle create instead of edit.
     var create = $.key("create");
     var POST = "POST";
     var pageName = $.key("page");
     var markdown = "markdown";
     var txt = editorSession.getValue();
-    var msg = pageName + " ("+markdown+")"
+    var msg = pageName + " (" + markdown + ")"
     var newLocation = window.location.origin + "/" + pageName;
 
     if (create) {
       jQuery.ajax({
         type: POST,
         url: "/create",
-        data:  { page: pageName, format: markdown, content: txt, message: "Created " + msg },
+        data:  { page: pageName, format: markdown, content: txt, message: commitMessage || "Created " + msg },
         success: function() {
           window.location = newLocation;
         }
@@ -95,7 +120,7 @@ window.onload = function() {
       jQuery.ajax({
         type: POST,
         url: "/edit/" + pageName,
-        data:  { format: markdown, content: txt, message: "Updated " + msg },
+        data:  { format: markdown, content: txt, message:  commitMessage || "Updated " + msg },
         success: function() {
             window.location = newLocation;
         }
@@ -103,12 +128,35 @@ window.onload = function() {
     } // end else
   }
 
-  $('#save').click(function() {
+  $("#save").click(function() {
     $.save();
   });
 
-  $('#savecomment').click(function() {
-    $.save();
+  // Hide dimmer, comment tool panel, and comment.
+  $("#commentcancel").click(function() {
+    hideCommentWindow();
+  });
+
+  var isCommentHidden = true;
+
+  function hideCommentWindow() {
+    isCommentHidden = true;
+    darkness.style.visibility = "hidden";
+    commentToolPanel.style.visibility = "hidden";
+    comment.style.visibility = "hidden";
+  }
+
+  // Show dimmer, comment tool panel, and comment.
+  $("#savecomment").click(function() {
+    isCommentHidden = false;
+    darkness.style.visibility = "visible";
+    commentToolPanel.style.visibility = "visible";
+    comment.style.visibility = "visible";      
+  });
+
+  $("#savecommentconfirm").click(function() {
+    $.save(ces.getValue());
+    hideCommentWindow();
   });
 
   // onChange calls applyTimeout which rate limits the calling of makePreviewHtml based on render time.
@@ -116,33 +164,68 @@ window.onload = function() {
   makePreviewHtml(); // preview default text on load
 
   function resize() {
-    var ace = editor.container;//document.getElementById("editor");
-    var widthHalf = $(window).width() / 2;
+    var width = $(window).width();
+    var widthHalf = width / 2;
+    var widthFourth = widthHalf / 2;
     var height = $(window).height();
-    ace.style.width = widthHalf + "px";
-    // Minus 50 so the end of document text doesn't flow off the page.
-    ace.style.height = height - 50 + "px";
-    ace.style.left = leftRight === false ? widthHalf + "px" : "0px";
-    ace.style.top = "40px"; // use 40px for tool menu
-    ace.style.fontSize = 16 + "px";
+    var heightHalf = height / 2;
+ 
+    // height minus 50 so the end of document text doesn't flow off the page.
+    var editorContainerStyle = "width:" + widthHalf + "px;" +
+      "height:" + (height - 50) + "px;" + 
+      "left:" + (leftRight === false ? widthHalf + "px;" : "0px;") +
+      "top:" + "40px;"; // use 40px for tool menu
+    cssSet( editorContainer, editorContainerStyle );
     editor.resize();
 
-    var previewFrame = document.getElementById("previewframe");
-    previewFrame.style.width = widthHalf - 2 - 10 + "px"; // -2 for scroll bar & -10 for left offset
-    previewFrame.style.height = height + "px";
-    previewFrame.style.left = leftRight === false ? "10px" : widthHalf + "px";
-    previewFrame.style.top = "0px";
+    // width -2 for scroll bar & -10 for left offset
+    var previewStyle = "width:" + (widthHalf - 2 - 10) + "px;" +
+      "height:" + height + "px;" +
+      "left:" + (leftRight === false ? "10px;" : widthHalf + "px;") +
+      "top:" + "0px;";
+    cssSet( preview, previewStyle );
 
-    // Resize tool panel
-    toolPanel.style.width = widthHalf + "px";
-    toolPanel.style.left = leftRight === false ? widthHalf + "px" : "0px";
+     // Resize tool panel
+    var toolPanelStyle = "width:" + widthHalf + "px;" +
+      "left:" + (leftRight === false ? widthHalf + "px;" : "0px;");
+    cssSet( toolPanel, toolPanelStyle );
+
+    // Resize comment related elements.
+    var commentHidden = "visibility:" + ( isCommentHidden === true ? "hidden;" : "visible;" );
+
+    // Adjust comment editor
+    var commentEditorContainerStyle = "height:" + heightHalf + "px;" +
+      "width:" + widthHalf + "px;" +
+      "left:" + widthFourth + "px;" +
+      "top:" + (heightHalf / 2) + "px;" +
+      commentHidden;
+    cssSet( commentEditorContainer, commentEditorContainerStyle );
+    commentEditor.resize();
+
+    // In top subtract height (40px) of comment tool panel.
+    var commentToolPanelStyle = "width:" + widthHalf + "px;" +
+      "left:" + widthFourth + "px;" +
+      "top:" + (height / 4 - 40) + "px;" +
+      commentHidden;
+    cssSet( commentToolPanel, commentToolPanelStyle );
+
+    // Resize dimmer.
+    var darknessStyle = "width:" + width + "px;" +
+      "height:" + height + "px;" +
+      commentHidden;
+    cssSet(darkness, darknessStyle);
   }
 
   window.jsm.resize = resize;
 
-  $(window).resize(function() {
-    resize();
-  });
+  /*
+     Resize can be called an absurd amount of times
+     and will crash the page without debouncing.
+     http://benalman.com/projects/jquery-throttle-debounce-plugin/
+     https://github.com/cowboy/jquery-throttle-debounce
+     http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+  */
+  $(window).resize( $.debounce( 100, resize ) );
 
   // resize for the intial page load
   resize();
@@ -152,7 +235,6 @@ var elapsedTime;
 var oldInputText = "";
 
 // ---- from Markdown.Editor
-var previewSetter;
 var timeout;
 
 var nonSuckyBrowserPreviewSet = function (text) {
@@ -173,16 +255,39 @@ var ieSafePreviewSet = function (text) {
     parent.insertBefore(content, sibling);
 }
 
-var previewSet = function (text) {
-  if (previewSetter)
-    return previewSetter(text);
+var cssTextSet = function( element, css ){
+  element.style.cssText = css;
+}
 
+var cssAttrSet = function( element, css ){
+  element.setAttribute( 'style', css );
+}
+
+/*
+ Redefine the function based on browser support.
+ element - the element to set the css on
+ css     - a fully formed css string. ex: "top: 0; left: 0;"
+
+ Avoid reflow by batching CSS changes.
+ http://dev.opera.com/articles/view/efficient-javascript/?page=3#stylechanges
+*/
+var cssSet = function( element, css ) {
+  if( typeof( element.style.cssText ) != 'undefined' ) {
+    cssTextSet( element, css );
+    cssSet = cssTextSet;
+  } else {
+    cssAttrSet( element, css );
+    cssSet = cssAttrSet;
+  }
+}
+
+var previewSet = function( text ) {
   try {
-    nonSuckyBrowserPreviewSet(text);
-    previewSetter = nonSuckyBrowserPreviewSet;
+    nonSuckyBrowserPreviewSet( text );
+    previewSet = nonSuckyBrowserPreviewSet;
   } catch (e) {
-    previewSetter = ieSafePreviewSet;
-    previewSetter(text);
+    ieSafePreviewSet( text );
+    previewSet = ieSafePreviewSet;
   }
 };
 
