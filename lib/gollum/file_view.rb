@@ -14,7 +14,7 @@ module Gollum
     end
 
     def new_page page
-      '<!-- new page -->' + %Q(  <li class="file"><a href="#{page.name}">#{page.name2}</a></li>\n)
+      %Q(  <li class="file"><a href="#{page.name}">#{page.name2}</a></li>\n)
     end
 
     def new_folder page
@@ -23,7 +23,6 @@ module Gollum
 
     def new_sub_folder path, name, name2
       <<-HTML
-      <!-- sub_folder #{path + '/' + name2} -->
       <li>
         <label>#{path}</label> <input type="checkbox" checked />
         <ol>
@@ -33,7 +32,6 @@ module Gollum
 
     def end_folder
       <<-HTML
-        <!-- end folder -->
         </ol>
       </li>
       HTML
