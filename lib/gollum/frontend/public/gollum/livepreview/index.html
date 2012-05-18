@@ -133,124 +133,148 @@ $.save = function( commitMessage ) {
   } // end else
 }
 
-window.onload = function() {
-  /* Load markdown from /data/page into the ace editor. */
-  jQuery.ajax({
-    type: "GET",
-    url: "/data/" + $.key("page"),
-    success: function(data) {
-       editorSession.setValue(data);
-    }
-  });
- 
-  $("#save").click(function() {
-    $.save();
-  });
 
-  // Hide dimmer, comment tool panel, and comment.
-  $("#commentcancel").click(function() {
-    // Restore focus on commentcancel but not on
-    // savecommentconfirm because the latter loads
-    // a new page.
-    hideCommentWindow();
-    editor.focus();
-  });
-
-  var isCommentHidden = true;
-
-  function hideCommentWindow() {
-    isCommentHidden = true;
-    darkness.style.visibility = "hidden";
-    commentToolPanel.style.visibility = "hidden";
-    comment.style.visibility = "hidden";
+/* Load markdown from /data/page into the ace editor. */
+jQuery.ajax({
+  type: "GET",
+  url: "/data/" + $.key("page"),
+  success: function(data) {
+     editorSession.setValue(data);
   }
+});
 
-  // Show dimmer, comment tool panel, and comment.
-  $("#savecomment").click(function() {
-    isCommentHidden = false;
-    darkness.style.visibility = "visible";
-    commentToolPanel.style.visibility = "visible";
-    comment.style.visibility = "visible";
-    // Set focus so typing can begin immediately.
-    commentEditor.focus();
-  });
+$("#save").click(function() {
+  $.save();
+});
 
-  $("#savecommentconfirm").click(function() {
-    $.save(commentEditorSession.getValue());
-    hideCommentWindow();
-  });
+// Hide dimmer, comment tool panel, and comment.
+$("#commentcancel").click(function() {
+  // Restore focus on commentcancel but not on
+  // savecommentconfirm because the latter loads
+  // a new page.
+  hideCommentWindow();
+  editor.focus();
+});
 
-  // onChange calls applyTimeout which rate limits the calling of makePreviewHtml based on render time.
-  editor.on('change', applyTimeout);
-  makePreviewHtml(); // preview default text on load
+var isCommentHidden = true;
 
-  function resize() {
-    var width = $(window).width();
-    var widthHalf = width / 2;
-    var widthFourth = widthHalf / 2;
-    var height = $(window).height();
-    var heightHalf = height / 2;
- 
-    // height minus 50 so the end of document text doesn't flow off the page.
-    var editorContainerStyle = "width:" + widthHalf + "px;" +
-      "height:" + (height - 50) + "px;" + 
-      "left:" + (leftRight === false ? widthHalf + "px;" : "0px;") +
-      "top:" + "40px;"; // use 40px for tool menu
-    cssSet( editorContainer, editorContainerStyle );
-    editor.resize();
+function hideCommentWindow() {
+  isCommentHidden = true;
+  darkness.style.visibility = "hidden";
+  commentToolPanel.style.visibility = "hidden";
+  comment.style.visibility = "hidden";
+}
 
-    // width -2 for scroll bar & -10 for left offset
-    var previewStyle = "width:" + (widthHalf - 2 - 10) + "px;" +
-      "height:" + height + "px;" +
-      "left:" + (leftRight === false ? "10px;" : widthHalf + "px;") +
-      "top:" + "0px;";
-    cssSet( preview, previewStyle );
+// Show dimmer, comment tool panel, and comment.
+$("#savecomment").click(function() {
+  isCommentHidden = false;
+  darkness.style.visibility = "visible";
+  commentToolPanel.style.visibility = "visible";
+  comment.style.visibility = "visible";
+  // Set focus so typing can begin immediately.
+  commentEditor.focus();
+});
 
-     // Resize tool panel
-    var toolPanelStyle = "width:" + widthHalf + "px;" +
-      "left:" + (leftRight === false ? widthHalf + "px;" : "0px;");
-    cssSet( toolPanel, toolPanelStyle );
+$("#savecommentconfirm").click(function() {
+  $.save(commentEditorSession.getValue());
+  hideCommentWindow();
+});
 
-    // Resize comment related elements.
-    var commentHidden = "visibility:" + ( isCommentHidden === true ? "hidden;" : "visible;" );
+// onChange calls applyTimeout which rate limits the calling of makePreviewHtml based on render time.
+editor.on('change', applyTimeout);
 
-    // Adjust comment editor
-    var commentEditorContainerStyle = "height:" + heightHalf + "px;" +
-      "width:" + widthHalf + "px;" +
-      "left:" + widthFourth + "px;" +
-      "top:" + (heightHalf / 2) + "px;" +
-      commentHidden;
-    cssSet( commentEditorContainer, commentEditorContainerStyle );
-    commentEditor.resize();
-
-    // In top subtract height (40px) of comment tool panel.
-    var commentToolPanelStyle = "width:" + widthHalf + "px;" +
-      "left:" + widthFourth + "px;" +
-      "top:" + (height / 4 - 40) + "px;" +
-      commentHidden;
-    cssSet( commentToolPanel, commentToolPanelStyle );
-
-    // Resize dimmer.
-    var darknessStyle = "width:" + width + "px;" +
-      "height:" + height + "px;" +
-      commentHidden;
-    cssSet(darkness, darknessStyle);
-  }
-
-  window.jsm.resize = resize;
-
-  /*
-     Resize can be called an absurd amount of times
-     and will crash the page without debouncing.
-     http://benalman.com/projects/jquery-throttle-debounce-plugin/
-     https://github.com/cowboy/jquery-throttle-debounce
-     http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
-  */
-  $(window).resize( $.debounce( 100, resize ) );
-
-  // resize for the intial page load
-  resize();
+var cssTextSet = function( element, css ){
+  element.style.cssText = css;
 };
+
+var cssAttrSet = function( element, css ){
+  element.setAttribute( 'style', css );
+};
+
+/*
+ Redefine the function based on browser support.
+ element - the element to set the css on
+ css     - a fully formed css string. ex: "top: 0; left: 0;"
+
+ Avoid reflow by batching CSS changes.
+ http://dev.opera.com/articles/view/efficient-javascript/?page=3#stylechanges
+*/
+var cssSet = function( element, css ) {
+  if( typeof( element.style.cssText ) != 'undefined' ) {
+    cssTextSet( element, css );
+    cssSet = cssTextSet;
+  } else {
+    cssAttrSet( element, css );
+    cssSet = cssAttrSet;
+  }
+};
+
+function resize() {
+  var width = $(window).width();
+  var widthHalf = width / 2;
+  var widthFourth = widthHalf / 2;
+  var height = $(window).height();
+  var heightHalf = height / 2;
+
+  // height minus 50 so the end of document text doesn't flow off the page.
+  var editorContainerStyle = "width:" + widthHalf + "px;" +
+    "height:" + (height - 50) + "px;" + 
+    "left:" + (leftRight === false ? widthHalf + "px;" : "0px;") +
+    "top:" + "40px;"; // use 40px for tool menu
+  cssSet( editorContainer, editorContainerStyle );
+  editor.resize();
+
+  // width -2 for scroll bar & -10 for left offset
+  var previewStyle = "width:" + (widthHalf - 2 - 10) + "px;" +
+    "height:" + height + "px;" +
+    "left:" + (leftRight === false ? "10px;" : widthHalf + "px;") +
+    "top:" + "0px;";
+  cssSet( preview, previewStyle );
+
+   // Resize tool panel
+  var toolPanelStyle = "width:" + widthHalf + "px;" +
+    "left:" + (leftRight === false ? widthHalf + "px;" : "0px;");
+  cssSet( toolPanel, toolPanelStyle );
+
+  // Resize comment related elements.
+  var commentHidden = "visibility:" + ( isCommentHidden === true ? "hidden;" : "visible;" );
+
+  // Adjust comment editor
+  var commentEditorContainerStyle = "height:" + heightHalf + "px;" +
+    "width:" + widthHalf + "px;" +
+    "left:" + widthFourth + "px;" +
+    "top:" + (heightHalf / 2) + "px;" +
+    commentHidden;
+  cssSet( commentEditorContainer, commentEditorContainerStyle );
+  commentEditor.resize();
+
+  // In top subtract height (40px) of comment tool panel.
+  var commentToolPanelStyle = "width:" + widthHalf + "px;" +
+    "left:" + widthFourth + "px;" +
+    "top:" + (height / 4 - 40) + "px;" +
+    commentHidden;
+  cssSet( commentToolPanel, commentToolPanelStyle );
+
+  // Resize dimmer.
+  var darknessStyle = "width:" + width + "px;" +
+    "height:" + height + "px;" +
+    commentHidden;
+  cssSet(darkness, darknessStyle);
+}
+
+window.jsm.resize = resize;
+
+/*
+   Resize can be called an absurd amount of times
+   and will crash the page without debouncing.
+   http://benalman.com/projects/jquery-throttle-debounce-plugin/
+   https://github.com/cowboy/jquery-throttle-debounce
+   http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+*/
+$(window).resize( $.debounce( 100, resize ) );
+
+// resize for the intial page load
+resize();
 
 var elapsedTime;
 var oldInputText = "";
@@ -274,32 +298,6 @@ var ieSafePreviewSet = function (text) {
     parent.appendChild(content);
   else
     parent.insertBefore(content, sibling);
-}
-
-var cssTextSet = function( element, css ){
-  element.style.cssText = css;
-}
-
-var cssAttrSet = function( element, css ){
-  element.setAttribute( 'style', css );
-}
-
-/*
- Redefine the function based on browser support.
- element - the element to set the css on
- css     - a fully formed css string. ex: "top: 0; left: 0;"
-
- Avoid reflow by batching CSS changes.
- http://dev.opera.com/articles/view/efficient-javascript/?page=3#stylechanges
-*/
-var cssSet = function( element, css ) {
-  if( typeof( element.style.cssText ) != 'undefined' ) {
-    cssTextSet( element, css );
-    cssSet = cssTextSet;
-  } else {
-    cssAttrSet( element, css );
-    cssSet = cssAttrSet;
-  }
 }
 
 var previewSet = function( text ) {
@@ -378,6 +376,9 @@ var makePreviewHtml = function () {
     }
   }
 };
+
+// preview default text on load
+makePreviewHtml();
 
 // setTimeout is already used.  Used as an event listener.
 var applyTimeout = function () {
