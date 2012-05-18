@@ -80,13 +80,60 @@ var commentEditorContainer = commentEditor.container;
 
 initAce(commentEditor, commentEditorSession);
 
-window.onload = function() {
-  // RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
-  $.key = function(key){
-      var value = new RegExp('[\\?&]' + key + '=([^&#]*)').exec(window.location.href);
-      return  (!value) ? 0 : value[1] || 0;
-  }
+// RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
+$.key = function(key){
+    var value = new RegExp('[\\?&]' + key + '=([^&#]*)').exec(window.location.href);
+    return  (!value) ? 0 : value[1] || 0;
+}
 
+// True if &create=true
+var create = $.key("create");
+// The name of the page being edited.
+var pageName = $.key("page");
+
+defaultCommitMessage = function() {
+  var msg = pageName + " (markdown)";
+
+  if (create) {
+    return "Created " + msg;
+  } else {
+    return "Updated " + msg;
+  }
+}
+
+// Set comment using the default commit message.
+commentEditorSession.setValue( defaultCommitMessage() );
+
+$.save = function( commitMessage ) {
+  var POST = "POST";
+  var markdown = "markdown";
+  var txt = editorSession.getValue();
+  var msg = defaultCommitMessage();
+  var newLocation = window.location.origin + "/" + pageName;
+
+  // if &create=true then handle create instead of edit.
+  if (create) {
+    jQuery.ajax({
+      type: POST,
+      url: "/create",
+      data:  { page: pageName, format: markdown, content: txt, message: commitMessage || msg },
+      success: function() {
+        window.location = newLocation;
+      }
+  });
+  } else {
+    jQuery.ajax({
+      type: POST,
+      url: "/edit/" + pageName,
+      data:  { format: markdown, content: txt, message:  commitMessage || msg },
+      success: function() {
+          window.location = newLocation;
+      }
+    });
+  } // end else
+}
+
+window.onload = function() {
   /* Load markdown from /data/page into the ace editor. */
   jQuery.ajax({
     type: "GET",
@@ -95,38 +142,7 @@ window.onload = function() {
        editorSession.setValue(data);
     }
   });
-
-  $.save = function( commitMessage ) {
-    // if &create=true then handle create instead of edit.
-    var create = $.key("create");
-    var POST = "POST";
-    var pageName = $.key("page");
-    var markdown = "markdown";
-    var txt = editorSession.getValue();
-    var msg = pageName + " (" + markdown + ")"
-    var newLocation = window.location.origin + "/" + pageName;
-
-    if (create) {
-      jQuery.ajax({
-        type: POST,
-        url: "/create",
-        data:  { page: pageName, format: markdown, content: txt, message: commitMessage || "Created " + msg },
-        success: function() {
-          window.location = newLocation;
-        }
-    });
-    } else {
-      jQuery.ajax({
-        type: POST,
-        url: "/edit/" + pageName,
-        data:  { format: markdown, content: txt, message:  commitMessage || "Updated " + msg },
-        success: function() {
-            window.location = newLocation;
-        }
-      });
-    } // end else
-  }
-
+ 
   $("#save").click(function() {
     $.save();
   });
