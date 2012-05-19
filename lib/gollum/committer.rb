@@ -91,7 +91,7 @@ module Gollum
       fullpath = ::File.join(*[@wiki.page_file_dir, dir, path].compact)
       fullpath = fullpath[1..-1] if fullpath =~ /^\//
 
-      if index.current_tree && tree = index.current_tree / dir
+      if index.current_tree && tree = index.current_tree / (@wiki.page_file_dir || '/') / dir
         downpath = path.downcase.sub(/\.\w+$/, '')
 
         tree.blobs.each do |blob|
