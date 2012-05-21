@@ -12,7 +12,7 @@
 </div>
 <script type="text/javascript">
 window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
-$("#gollum-editor-submit").click( window.onbeforeunload = null; );
+$("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );
 
 jQuery(document).ready(function() {
   $.GollumEditor();
