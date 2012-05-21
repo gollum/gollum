@@ -9,6 +9,7 @@
 </div>
 </div>
 <script type="text/javascript">
+window.onbeforeunload = function(){ return "Leaving will not create a new page!" };
 jQuery(document).ready(function() {
   $.GollumEditor({ NewFile: true, MarkupType: '{{default_markup}}' });
 });

@@ -11,6 +11,7 @@
   <div id="wiki-content">{{>editor}}</div>
 </div>
 <script type="text/javascript">
+window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
 jQuery(document).ready(function() {
   $.GollumEditor();
 });
