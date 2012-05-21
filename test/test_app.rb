@@ -15,23 +15,7 @@ context "Frontend" do
     FileUtils.rm_rf(@path)
   end
 
-  test "committer remains same if page didn't modified" do
-    @wiki.write_page('CC', :markdown, 'asdf', 
-                     { :name => "asdf", :email => "news@nomail.com" });
-
-    get '/CC'
-    assert_match /Last edited by <b>asdf/, last_response.body
-
-    @wiki.write_page('DD', :markdown, 'asdf', 
-                     { :name => "news", :email => "asdf@nomail.com" });
-
-    get '/DD'
-    assert_match /Last edited by <b>news/, last_response.body
-    get '/CC'
-    assert_match /Last edited by <b>asdf/, last_response.body
-  end
-
-   test "edits page" do
+  test "edits page" do
     page_1 = @wiki.page('A')
     post "/edit/A", :content => 'abc',
       :format => page_1.format, :message => 'def'
