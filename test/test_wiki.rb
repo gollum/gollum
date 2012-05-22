@@ -54,12 +54,12 @@ context "Wiki" do
   test "list pages" do
     pages = @wiki.pages
     assert_equal \
-      ['Bilbo-Baggins.md', 'Eye-Of-Sauron.md', 'Home.textile', 'My-Precious.md', 'Samwise Gamgee.mediawiki'],
+      ['Bilbo-Baggins.md', 'Boromir.md', 'Eye-Of-Sauron.md', 'Home.textile', 'My-Precious.md', 'Samwise Gamgee.mediawiki'],
       pages.map { |p| p.filename }.sort
   end
 
   test "counts pages" do
-    assert_equal 5, @wiki.size
+    assert_equal 6, @wiki.size
   end
 
   test "text_data" do
@@ -92,15 +92,31 @@ end
 context "Wiki page previewing" do
   setup do
     @path = testpath("examples/lotr.git")
+    Gollum::Wiki.default_options = {:universal_toc => false}
     @wiki = Gollum::Wiki.new(@path)
   end
 
   test "preview_page" do
     page = @wiki.preview_page("Test", "# Bilbo", :markdown)
     assert_equal "# Bilbo", page.raw_data
-    assert_equal "<h1>Bilbo</h1>", page.formatted_data
+    assert_equal %Q{<h1>Bilbo<a class="anchor" id="Bilbo" href="#Bilbo"></a>\n</h1>}, page.formatted_data
     assert_equal "Test.md", page.filename
     assert_equal "Test", page.name
+  end
+end
+
+context "Wiki TOC" do
+  setup do
+    @path = testpath("examples/lotr.git")
+    options = {:universal_toc => true}
+    @wiki = Gollum::Wiki.new(@path, options)
+  end
+
+  test "toc_generation" do
+    page = @wiki.preview_page("Test", "# Bilbo", :markdown)
+    assert_equal "# Bilbo", page.raw_data
+    assert_equal '<h1>Bilbo<a class="anchor" id="Bilbo" href="#Bilbo"></a></h1>', page.formatted_data.gsub(/\n/,"")
+    assert_equal %{<div class="toc"><div class="toc-title">Table of Contents</div><ul><li><a href="#Bilbo">Bilbo</a></li></ul></div>}, page.toc_data.gsub(/\n */,"")
   end
 end
 

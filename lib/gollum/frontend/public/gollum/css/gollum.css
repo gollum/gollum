@@ -75,6 +75,7 @@ a:hover, a:visited {
 #wiki-body {
   display: block;
   float: left;
+  clear: left;
   margin-right: 3%;
   margin-bottom: 40px;
   width: 100%;
@@ -82,6 +83,24 @@ a:hover, a:visited {
 
 .has-rightbar #wiki-body {
   width: 68%;
+}
+
+/* @section toc */
+#wiki-toc-main {
+  background-color: #F7F7F7;
+  border: 1px solid #DDD;
+  font-size: 13px;
+  padding: 0px 5px;
+  float:left;
+  margin-bottom: 20px;
+  min-width: 33%;
+  
+  border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+}
+#wiki-toc-main > div {
+  border: none;
 }
 
 /* @section rightbar */
@@ -145,6 +164,7 @@ a:hover, a:visited {
 #wiki-header #header-content {
   margin-bottom: 1.5em;
 }
+
 #wiki-footer #footer-content {
   margin-top: 1.5em;
 }

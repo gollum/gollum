@@ -16,7 +16,7 @@ context "Page" do
     page = @wiki.page('Bilbo Baggins')
     assert_equal Gollum::Page, page.class
     assert page.raw_data =~ /^# Bilbo Baggins\n\nBilbo Baggins/
-    assert page.formatted_data =~ /<h1>Bilbo Baggins<\/h1>\n\n<p>Bilbo Baggins/
+    assert page.formatted_data =~ %r{<h1>Bilbo Baggins<a class="anchor" id="Bilbo-Baggins" href="#Bilbo-Baggins"></a>\n</h1>\n\n<p>Bilbo Baggins}
     assert_equal 'Bilbo-Baggins.md', page.path
     assert_equal :markdown, page.format
     assert_equal @wiki.repo.commits.first.id, page.version.id
@@ -114,6 +114,25 @@ context "Page" do
     assert_equal "Eye Of Sauron", page.title
   end
 
+  test "top level header" do
+    header = @wiki.page('Home').header
+    assert_equal "Hobbits\n", header.raw_data
+    assert_equal "_Header.md", header.path
+  end
+
+  test "nested header" do
+    header = @wiki.page('Eye Of Sauron').header
+    assert_equal "Sauron\n", header.raw_data
+    assert_equal "Mordor/_Header.md", header.path
+  end
+
+  test "header itself" do
+    header = @wiki.page("_Header")
+    assert_nil header.header
+    assert_nil header.footer
+    assert_nil header.sidebar
+  end
+
   test "top level footer" do
     footer = @wiki.page('Home').footer
     assert_equal 'Lord of the Rings wiki', footer.raw_data
@@ -128,6 +147,7 @@ context "Page" do
 
   test "footer itself" do
     footer = @wiki.page("_Footer")
+    assert_nil footer.header
     assert_nil footer.footer
     assert_nil footer.sidebar
   end
@@ -146,6 +166,7 @@ context "Page" do
 
   test "sidebar itself" do
     sidebar = @wiki.page("_Sidebar")
+    assert_nil sidebar.header
     assert_nil sidebar.footer
     assert_nil sidebar.sidebar
   end

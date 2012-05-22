@@ -20,6 +20,11 @@ module Gollum
     # Returns nothing.
     attr_writer :historical
 
+    # Parent page if this is a sub page
+    #
+    # Returns a Page
+    attr_accessor :parent_page
+
     # Checks if a filename has a valid extension understood by GitHub::Markup.
     #
     # filename - String filename, like "Home.md".
@@ -100,6 +105,8 @@ module Gollum
     def initialize(wiki)
       @wiki = wiki
       @blob = @header = @footer = @sidebar = nil
+      @doc = nil
+      @parent_page = nil
     end
 
     # Public: The on-disk filename of the page including extension.
@@ -133,6 +140,14 @@ module Gollum
       Sanitize.clean(name).strip
     end
 
+    # Public: Determines if this is a sub-page
+    # Sub-pages have filenames beginning with an underscore
+    #
+    # Returns true or false.
+    def sub_page
+      filename =~ /^_/
+    end
+
     # Public: The path of the page within the repo.
     #
     # Returns the String path.
@@ -164,7 +179,21 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data(encoding = nil, &block)
-      @blob && markup_class.render(historical?, encoding, &block)
+      @blob && markup_class.render(historical?, encoding) do |doc| 
+        @doc = doc
+        yield doc if block_given?
+      end
+    end
+
+    # Public: The table of contents of the page.
+    #
+    # formatted_data - page already marked up in html.
+    #
+    # Returns the String data.
+    def toc_data()
+      return @parent_page.toc_data if @parent_page and @sub_page
+      formatted_data if markup_class.toc == nil
+      markup_class.toc
     end
 
     # Public: The format of the page.
@@ -400,12 +429,16 @@ module Gollum
       map = @wiki.tree_map_for(@wiki.ref)
       while !dirs.empty?
         if page = find_page_in_tree(map, name, dirs.join('/'))
+          page.parent_page = self
           return page
         end
         dirs.pop
       end
 
-      find_page_in_tree(map, name, '')
+      if page = find_page_in_tree(map, name, '')
+        page.parent_page = self
+      end
+      page
     end
 
     def inspect
