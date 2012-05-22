@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html;charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="/css/_styles.css" media="all">
+  <title>File View</title>
+</head>
+<body>
+
+<div id="home_button">
+  <ul class="actions">
+    <li class="minibutton">
+      <a href="/" class="action-edit-page">Home</a>
+    </li>
+    <li class="minibutton" class="jaws">
+      <a href="#" id="minibutton-new-page">New Page</a>
+    </li>
+  </ul>
+</div>
+
+{{#has_results}}
+  <div id="results">
+  {{{results}}}
+  </div>
+{{/has_results}}
+
+{{#no_results}}
+  <p id="no-results">
+    There are no pages in <strong>{{ref}}</strong>.
+  </p>
+{{/no_results}}
+</body>
+</html>

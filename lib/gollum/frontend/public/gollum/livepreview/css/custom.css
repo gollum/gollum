@@ -2,7 +2,22 @@ body {
   overflow: hidden;
 }
 
-#editor { 
+#darkness {
+  visibility: hidden;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-color: black;
+  opacity: 0.8;
+  z-index: 1001; /* must be > 1000 to overlay ace gutter */
+}
+
+#commenttoolpanel {
+  visibility: hidden;
+  z-index: 1002; /* > 1001 to not be hidden by darkness */
+}
+
+#comment, #editor { 
   margin: 0;
   padding: 0;
   position: absolute;
@@ -10,6 +25,16 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+  /* Set font size of both ace editors. */
+  font-size: 16px;
+}
+
+/* Set comment to have a higher z-index
+so editor doesn't display in the background. */
+
+#comment {
+  visibility: hidden;
+  z-index: 1003; /* > 1002 to not be hidden by toolpanel */
 }
 
 #contentframe {
@@ -30,7 +55,7 @@ body {
 }
 
 /* -- Start from notepag.es -- */
-#toolpanel {
+.toolpanel {
   position: fixed;
   background: #666;
   top: 0;
@@ -43,7 +68,7 @@ body {
   text-align: center;
 }
 
-#toolpanel.edit a.edit {
+.toolpanel.edit a.edit {
   opacity: 0.4;
   /* Make it appear as a link even though save
      doesn't have a href attribute. */
@@ -51,7 +76,7 @@ body {
   display: inline-block;
 }
 
-#toolpanel a {
+.toolpanel a {
   color: white;
   text-decoration: none;
   margin: 0 5px;
@@ -60,7 +85,7 @@ body {
   font-family: sans-serif;
 }
 
-#toolpanel a img {
+.toolpanel a img {
   vertical-align: middle;
   margin-left: 5px;
   margin: 0;

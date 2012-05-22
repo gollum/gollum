@@ -59,6 +59,7 @@ utility, you can run it like so:
 
     $ gollum --help
 
+Note that the gollum server will not run on Windows because of [an issue](https://github.com/rtomayko/posix-spawn/issues/9) with posix-spawn.
 
 ## REPO STRUCTURE
 

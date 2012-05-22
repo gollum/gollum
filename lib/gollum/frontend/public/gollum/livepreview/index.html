@@ -1,10 +1,28 @@
 <html>
 <head>
-<title>JavaScript Markdown Editor</title>
-
+<title>Live Preview</title>
 <link rel="stylesheet" type="text/css" href="../css/template.css" />
 <link rel="stylesheet" type="text/css" href="css/highlightjs/github.css" />
 <link rel="stylesheet" type="text/css" href="css/custom.css" />
+</head>
+
+<body>
+<div id="editor"></div>
+
+<div id="previewframe"><div id="contentframe" class="markdown-body"></div></div>
+<!-- tool panel from notepage.es. save & savecomment icons from Retina Display Icon Set. -->  
+<div id="toolpanel" class="toolpanel edit" style="width: 500px; right: 0px; ">
+  <a id="save" class="edit"><img src="images/save_24.png" alt="Save" title="Save"></a>
+  <a id="savecomment" class="edit"><img src="images/savecomment_24.png" alt="Save with comment" title="Save with comment"></a>
+  <a id="toggle" class="edit" href="javascript:void(0)" onclick="jsm.toggleLeftRight();"><img src="images/lr_24.png" alt="Toggle left to right" title="Toggle left to right"></a>
+</div>
+
+<div id="commenttoolpanel" class="toolpanel edit" style="width: 500px; right: 0px; ">
+  <a id="savecommentconfirm" class="edit"><img src="images/savecomment_24.png" alt="Confirm save with comment" title="Confirm save with comment"></a>
+  <a id="commentcancel" class="edit"><img src="images/cancel_24.png" alt="Cancel save with comment" title="Cancel save with comment"></a>
+</div>
+<div id="comment"></div>
+<div id="darkness"></div>
 
 <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
@@ -13,249 +31,7 @@
 <script src="js/pagedown/Markdown.Sanitizer.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/highlightjs/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
-</head>
-
-<body>
-<div id="editor"></div>
-
-<div id="previewframe"><div id="contentframe" class="markdown-body"></div></div>
- <!-- tool panel and save from notepage.es -->  
-<div id="toolpanel" class="edit" style="width: 500px; right: 0px; ">
-  <a id="save" class="edit"><img src="images/save_24.png" alt="save" title="save"></a>
-  <a id="toggle" class="edit" href="javascript:void(0)" onclick="jsm.toggleLeftRight();"><img src="images/lr_24.png" alt="Toggle left to right" title="Toggle left to right"></a>
-</div>
-
-<script type="text/javascript">
-(function () {
-var converter = Markdown.getSanitizingConverter();
-var editor = ace.edit("editor");
-var editorSession = editor.getSession();
-var preview = document.getElementById("previewframe");
-var content = document.getElementById("contentframe");
-var toolPanel = document.getElementById("toolpanel");
-
-var leftRight = true;
-var jsm = {}; // JavaScript Markdown
-window.jsm = jsm;
-window.jsm.toggleLeftRight = function() {
-  leftRight = leftRight === false ? true : false;
-  jsm.resize();
-}
-
-editor.setTheme("ace/theme/twilight");
-var MarkdownMode = require("ace/mode/markdown").Mode;
-
-editorSession.setMode(new MarkdownMode());
-// Gutter shows line numbers
-editor.renderer.setShowGutter(true);
-editor.renderer.setHScrollBarAlwaysVisible(false);
-editorSession.setUseSoftTabs(true);
-editorSession.setTabSize(2);
-editorSession.setUseWrapMode(true);
-editor.setShowPrintMargin(false);
-editor.setBehavioursEnabled(true);
-
-window.onload = function() {
-  // RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
-  $.key = function(key){
-      var value = new RegExp('[\\?&]' + key + '=([^&#]*)').exec(window.location.href);
-      return  (!value) ? 0 : value[1] || 0;
-  }
-
-  /* Load markdown from /data/page into the ace editor. */
-  jQuery.ajax({
-    type: "GET",
-    url: "/data/" + $.key("page"),
-    success: function(data) {
-       editorSession.setValue(data);
-    }
-  });
-
-  $.save = function() {
-    // if &create=true then handle create instead of edit.
-    var create = $.key("create");
-
-    if (create) {
-      jQuery.ajax({
-      type: "POST",
-      url: "/create",
-      data:  { page: $.key("page"), format: "markdown", content: editorSession.getValue() },
-      success: function() {
-        window.location = window.location.origin + "/" + $.key("page");
-      }
-    });
-    } else {
-      jQuery.ajax({
-      type: "POST",
-      url: "/edit/" + $.key("page"),
-      data:  { format: "markdown", content: editorSession.getValue() },
-      success: function() {
-          window.location = window.location.origin + "/" + $.key("page");
-        }
-      });
-    } // end else
-  }
-
-  $('#save').click(function() {
-    $.save();
-  });
-
-  // onChange calls applyTimeout which rate limits the calling of makePreviewHtml based on render time.
-  editor.on('change', applyTimeout);
-  makePreviewHtml(); // preview default text on load
-
-  function resize() {
-    var ace = editor.container;//document.getElementById("editor");
-    var widthHalf = $(window).width() / 2;
-    var height = $(window).height();
-    ace.style.width = widthHalf + "px";
-    // Minus 50 so the end of document text doesn't flow off the page.
-    ace.style.height = height - 50 + "px";
-    ace.style.left = leftRight === false ? widthHalf + "px" : "0px";
-    ace.style.top = "40px"; // use 40px for tool menu
-    ace.style.fontSize = 16 + "px";
-    editor.resize();
-
-    var previewFrame = document.getElementById("previewframe");
-    previewFrame.style.width = widthHalf - 2 - 10 + "px"; // -2 for scroll bar & -10 for left offset
-    previewFrame.style.height = height + "px";
-    previewFrame.style.left = leftRight === false ? "10px" : widthHalf + "px";
-    previewFrame.style.top = "0px";
-
-    // Resize tool panel
-    toolPanel.style.width = widthHalf + "px";
-    toolPanel.style.left = leftRight === false ? widthHalf + "px" : "0px";
-  }
-
-  window.jsm.resize = resize;
-
-  $(window).resize(function() {
-    resize();
-  });
-
-  // resize for the intial page load
-  resize();
-};
-
-var elapsedTime;
-var oldInputText = "";
-
-// ---- from Markdown.Editor
-var previewSetter;
-var timeout;
-
-var nonSuckyBrowserPreviewSet = function (text) {
-  content.innerHTML = text;
-}
-
-// IE doesn't let you use innerHTML if the element is contained somewhere in a table
-// (which is the case for inline editing) -- in that case, detach the element, set the
-// value, and reattach. Yes, that *is* ridiculous.
-var ieSafePreviewSet = function (text) {
-  var parent = content.parentNode;
-  var sibling = content.nextSibling;
-  parent.removeChild(content);
-  content.innerHTML = text;
-  if (!sibling)
-    parent.appendChild(content);
-  else
-    parent.insertBefore(content, sibling);
-}
-
-var previewSet = function (text) {
-  if (previewSetter)
-    return previewSetter(text);
-
-  try {
-    nonSuckyBrowserPreviewSet(text);
-    previewSetter = nonSuckyBrowserPreviewSet;
-  } catch (e) {
-    previewSetter = ieSafePreviewSet;
-    previewSetter(text);
-  }
-};
-
-var languages = [ "1c", "actionscript", "apache", "avrasm", "axapta",
-"bash", "cmake", "coffeescript", "cpp", "cs", "css", "delphi", "diff",
-"django", "d", "dos", "erlang", "erlang-repl", "go", "haskell", "ini",
-"java", "javascript", "languages", "lisp", "lua", "markdown", "matlab",
-"mel", "nginx", "objectivec", "parser3", "perl", "php", "profile",
-"python", "renderman", "ruby", "rust", "scala", "smalltalk", "sql",
-"tex", "vala", "vbscript", "vhdl", "xml" ];
-
-var makePreviewHtml = function () {
-  var text = editorSession.getValue();
-
-  if (text && text == oldInputText) {
-    return; // Input text hasn't changed.
-  }
-  else {
-    oldInputText = text;
-  }
-
-  var prevTime = new Date().getTime();
-
-  text = converter.makeHtml(text);
-
-  // Calculate the processing time of the HTML creation.
-  // It's used as the delay time in the event listener.
-  var currTime = new Date().getTime();
-  elapsedTime = currTime - prevTime;
-
-  // Update the text using feature detection to support IE.
-  // preview.innerHTML = text; // this doesn't work on IE.
-  previewSet(text);
-
-  // highlight code blocks.
-  var codeElements = preview.getElementsByTagName("pre");
-  var codeElementsLength = codeElements.length;
-
-  if (codeElementsLength > 0) {
-    for (var idx = 0; idx < codeElementsLength; idx++) {
-      var element = codeElements[idx];
-      var codeHTML = element.innerHTML;
-
-       // Only use pre tags marked containing code.
-      if (codeHTML[0] !== "`")
-       continue;
-
-      var txt = codeHTML.split(/\b/);
-      // the syntax for code highlighting means all code, even one line, contains newlines.
-      if (txt.length > 1 && codeHTML.match(/\n/)) {
-        // txt[0] = "`"; txt[1] = "ruby"
-        if ($.inArray(txt[1], languages) === -1) {
-          element.innerHTML = codeHTML.substring(1).trim();
-          element.className = "nohighlight";
-          continue;
-        }
-
-        element.className = txt[1] + " highlight";
-        // length + 1 for the marker character.
-        element.innerHTML = codeHTML.substring(txt[1].length+1).trim();
-        hljs.highlightBlock(element, "  ");
-      } else {
-        element.innerHTML = codeHTML.substring(1).trim();
-        element.className = "nohighlight";
-      }
-    }
-  }
-};
-
-// setTimeout is already used.  Used as an event listener.
-var applyTimeout = function () {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = undefined;
-  }
-
-  // 3 second max delay
-  if (elapsedTime > 3000) {
-    elapsedTime = 3000;
-  }
-
-  timeout = setTimeout(makePreviewHtml, elapsedTime);
-};
-})();
-</script>
+<script src="js/debounce/jquery.ba-throttle-debounce.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/livepreview/livepreview.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
