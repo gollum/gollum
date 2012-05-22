@@ -435,8 +435,9 @@ module Gollum
         dirs.pop
       end
 
-      page = find_page_in_tree(map, name, '')
-      page.parent_page = self
+      if page = find_page_in_tree(map, name, '')
+        page.parent_page = self
+      end
       page
     end
 
