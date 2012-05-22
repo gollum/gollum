@@ -6,6 +6,7 @@ require 'base64'
 module Gollum
 
   class Markup
+    attr_accessor :toc
     # Initialize a new Markup object.
     #
     # page - The Gollum::Page.
@@ -17,12 +18,15 @@ module Gollum
       @data    = page.text_data
       @version = page.version.id if page.version
       @format  = page.format
+      @sub_page = page.sub_page
+      @parent_page = page.parent_page
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
       @codemap = {}
       @texmap  = {}
       @wsdmap  = {}
       @premap  = {}
+      @toc = nil
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -54,16 +58,58 @@ module Gollum
       data = process_tags(data)
       data = process_code(data, encoding)
 
-      if sanitize || block_given?
-        doc = Nokogiri::HTML::DocumentFragment.parse(data)
-        doc = sanitize.clean_node!(doc) if sanitize
-        yield doc if block_given?
-        data = doc.to_html
-      end
+      doc = Nokogiri::HTML::DocumentFragment.parse(data)
+      doc = sanitize.clean_node!(doc) if sanitize
+      doc,toc = process_headers(doc)
+      @toc = @sub_page ? ( @parent_page ? @parent_page.toc_data : "[[_TOC_]]" ) : toc
+      yield doc if block_given?
+      data = doc.to_html
+
+      data = process_toc_tags(data)
       data = process_tex(data)
       data = process_wsd(data)
       data.gsub!(/<p><\/p>/, '')
       data
+    end
+
+    # Inserts header anchors and creates TOC
+    #
+    # doc - Nokogiri parsed document
+    #
+    # Returns doc Document and toc String
+    def process_headers(doc)
+      toc = nil
+      doc.css('h1,h2,h3,h4,h5,h6').each do |h|
+        id = CGI::escape(h.content.gsub(' ','-'))
+        level = h.name.gsub(/[hH]/,'').to_i
+
+        # Add anchors
+        anchor = Nokogiri::XML::Node.new('a', doc)
+        anchor['class'] = 'anchor'
+        anchor['id'] = id
+        anchor['href'] = '#' + id
+        h.add_child(anchor)
+
+        # Build TOC
+        toc ||= Nokogiri::XML::DocumentFragment.parse('<div class="toc"><div class="toc-title">Table of Contents</div></div>')
+        tail ||= toc.child
+        tail_level ||= 0
+
+        while tail_level < level
+          node = Nokogiri::XML::Node.new('ul', doc)
+          tail = tail.add_child(node)
+          tail_level += 1
+        end          
+        while tail_level > level
+          tail = tail.parent
+          tail_level -= 1
+        end
+        node = Nokogiri::XML::Node.new('li', doc)
+        node.add_child("<a href='##{id}'>#{h.content}</a>")
+        tail.add_child(node)
+      end
+      toc = toc.to_xhtml if toc != nil
+      [doc, toc]
     end
 
     #########################################################################
@@ -184,7 +230,9 @@ module Gollum
     #
     # Returns the String HTML version of the tag.
     def process_tag(tag)
-      if html = process_image_tag(tag)
+      if tag =~ /^_TOC_$/
+        %{[[#{tag}]]}
+      elsif html = process_image_tag(tag)
         html
       elsif html = process_file_link_tag(tag)
         html
@@ -339,6 +387,17 @@ module Gollum
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
+    end
+
+
+    # Process the special table of contents tag [[_TOC_]]
+    #
+    # data      - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
+    def process_toc_tags(data)
+      data.gsub!("[[_TOC_]]", @toc.nil? ? '' : @toc)
+      data
     end
 
     # Find the given file in the repo.

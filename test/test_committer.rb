@@ -50,7 +50,7 @@ context "Wiki" do
   end
 
   test "parents with default master ref" do
-    ref = '1db89ebba7e2c14d93b94ff98cfa3708a4f0d4e3'
+    ref = 'b0de6e794dfdc7ef3400e894225bfe23308aae5c'
     committer = Gollum::Committer.new(@wiki)
     assert_equal ref,  committer.parents.first.sha
   end

@@ -8,6 +8,17 @@ require 'gollum/frontend/views/editable'
 
 require File.expand_path '../uri_encode_component', __FILE__
 
+# Run the frontend, based on Sinatra
+# 
+# There are a number of wiki options that can be set for the frontend
+#
+# Example
+# require 'gollum/frontend/app'
+# Precious::App.set(:wiki_options, {
+#     :universal_toc => false,
+# }
+#
+# See the wiki.rb file for more details on wiki options
 module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
@@ -122,10 +133,11 @@ module Precious
     end
 
     post '/preview' do
-      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @name     = "Preview"
-      @page     = wiki.preview_page(@name, params[:content], params[:format])
-      @content  = @page.formatted_data
+      wiki     = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @name    = "Preview"
+      @page    = wiki.preview_page(@name, params[:content], params[:format])
+      @content = @page.formatted_data
+      @toc_content = wiki.universal_toc ? @page.toc_data : nil
       @editable = false
       mustache :page
     end
@@ -220,8 +232,10 @@ module Precious
       if page = wiki.page(name)
         @page = page
         @name = name
-        @content = page.formatted_data
         @editable = true
+        @content = page.formatted_data
+        @toc_content = wiki.universal_toc ? @page.toc_data : nil
+
         mustache :page
       elsif file = wiki.file(name)
         content_type file.mime_type

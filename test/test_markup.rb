@@ -6,6 +6,7 @@ context "Markup" do
     @path = testpath("examples/test.git")
     FileUtils.rm_rf(@path)
     Grit::Repo.init_bare(@path)
+    Gollum::Wiki.default_options = {:universal_toc => false}
     @wiki = Gollum::Wiki.new(@path)
   end
 
@@ -573,14 +574,15 @@ np.array([[2,2],[1,3]],np.float)
 
   test "id with prefix ok" do
     content = "h2(example#wiki-foo). xxxx"
-    output = %(<h2 class="example" id="wiki-foo">xxxx</h2>)
-    compare(content, output, :textile)
-  end
+output = %(<h2 class="example" id="wiki-foo">xxxx<a class=\"anchor\" id=\"xxxx\" href=\"#xxxx\"></a></h2>)
+compare(content, output, :textile)
+end
 
   test "id prefix added" do
     content = "h2(#foo). xxxx[1]\n\nfn1.footnote"
     output = "<h2 id=\"wiki-foo\">xxxx" +
-             "<sup class=\"footnote\" id=\"wiki-fnr1\"><a href=\"#wiki-fn1\">1</a></sup></h2>" +
+             "<sup class=\"footnote\" id=\"wiki-fnr1\"><a href=\"#wiki-fn1\">1</a></sup>" +
+             "<a class=\"anchor\" id=\"xxxx1\" href=\"#xxxx1\"></a></h2>" +
              "\n<p class=\"footnote\" id=\"wiki-fn1\"><a href=\"#wiki-fnr1\"><sup>1</sup></a> footnote</p>"
     compare(content, output, :textile)
   end
@@ -617,12 +619,12 @@ np.array([[2,2],[1,3]],np.float)
   # Asciidoc
   #########################################################################
 
-  test "asciidoc header" do
-    compare("= Book Title\n\n== Heading", '<div class="sect1"><h2 id="wiki-_heading">Heading</h2><div class="sectionbody"></div></div>', 'asciidoc')
+  test "asciidoc header" do 
+    compare("= Book Title\n\n== Heading", '<div class="sect1"><h2 id="wiki-_heading">Heading<a class="anchor" id="Heading" href="#Heading"></a></h2><div class="sectionbody"></div></div>', 'asciidoc')
   end
 
-  test "internal links with asciidoc" do
-    compare("= Book Title\n\n[[anid]]\n== Heading", '<div class="sect1"><h2 id="wiki-anid">Heading</h2><div class="sectionbody"></div></div>', 'asciidoc')
+  test "internal links with asciidoc" do 
+    compare("= Book Title\n\n[[anid]]\n== Heading", '<div class="sect1"><h2 id="wiki-anid">Heading<a class="anchor" id="Heading" href="#Heading"></a></h2><div class="sectionbody"></div></div>', 'asciidoc')
   end
 
   #########################################################################
