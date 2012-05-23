@@ -14,13 +14,15 @@ module Precious
       end
 
       def author
-        return DEFAULT_AUTHOR unless @page.version
-        @page.version.author.name
+        first = @page.versions ? @page.versions.first : false
+        return DEFAULT_AUTHOR unless first
+        first.author.name
       end
 
       def date
-        return Time.now.strftime(DATE_FORMAT) unless @page.version
-        @page.version.authored_date.strftime(DATE_FORMAT)
+        first = @page.versions ? @page.versions.first : false
+        return Time.now.strftime(DATE_FORMAT) unless first
+        first.authored_date.strftime(DATE_FORMAT)
       end
 
       def editable
