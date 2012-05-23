@@ -14,13 +14,19 @@ module Precious
       end
 
       def author
-        return DEFAULT_AUTHOR unless @page.version
-        @page.versions.first.author.name
+        pagev = @page.version
+        return DEFAULT_AUTHOR unless pagev
+        first = @page.versions.first
+        author = first == nil ? pagev.author : first.author
+        author.name
       end
 
       def date
-        return Time.now.strftime(DATE_FORMAT) unless @page.version
-        @page.versions.first.authored_date.strftime(DATE_FORMAT)
+        pagev = @page.version
+        return Time.now.strftime(DATE_FORMAT) unless pagev
+        first = @page.versions.first
+        date = first == nil ? pagev.authored_date : first.authored_date
+        date.strftime(DATE_FORMAT)
       end
 
       def editable
