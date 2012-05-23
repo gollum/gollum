@@ -171,3 +171,34 @@ context "Frontend" do
     Precious::App
   end
 end
+
+context "Frontend with page-file-dir" do
+  include Rack::Test::Methods
+
+  setup do
+    @path = cloned_testpath("examples/page_file_dir.git")
+    @wiki = Gollum::Wiki.new(@path, { :page_file_dir => "docs" })
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, { :page_file_dir => "docs" })
+  end
+
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+
+  test "open existing parent" do
+    get "/"
+    assert last_response.ok?
+
+    post "/create", :content => "asdf", :page => "bar",
+      :format => 'markdown'
+    follow_redirect!
+    assert last_response.ok?
+
+    assert_not_match /Duplicate page/, last_response.body
+  end
+
+  def app
+    Precious::App
+  end
+end
