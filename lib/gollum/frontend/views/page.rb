@@ -67,11 +67,17 @@ module Precious
       def sidebar_format
         has_sidebar && @sidebar.format.to_s
       end
+
       def has_toc
         !@toc_content.nil?
       end
+
       def toc_content
         @toc_content
+      end
+
+      def mathjax
+        @mathjax
       end
     end
   end

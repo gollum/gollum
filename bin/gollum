@@ -52,6 +52,10 @@ opts = OptionParser.new do |opts|
   opts.on("--ref [REF]", "Specify the repository ref to use (default: master).") do |ref|
     wiki_options[:ref] = ref
   end
+
+  opts.on("--no-mathjax", "Disables mathjax.") do
+    options['mathjax'] = false
+  end
 end
 
 # Read command line options into `options` hash
