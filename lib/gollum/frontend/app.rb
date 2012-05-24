@@ -58,20 +58,20 @@ module Precious
     end
 
     get '/data/*' do
-      @path = set_the_path(params[:splat].first)
-      settings.wiki_options.merge!({ :page_file_dir => @path })
-      @name = params[:splat].first.split("/").last
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @path        = set_the_path(params[:splat].first)
+      @name        = params[:splat].first.split("/").last
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       if page = wiki.page(@name)
         page.raw_data
       end
     end
 
     get '/edit/*' do
-      @path = set_the_path(params[:splat].first)
-      settings.wiki_options.merge!({ :page_file_dir => @path })
-      @name = params[:splat].first.split("/").last
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      @path        = set_the_path(params[:splat].first)
+      @name        = params[:splat].first.split("/").last
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       if page = wiki.page(@name)
         if page.format.to_s.include?('markdown')
           redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
@@ -87,16 +87,15 @@ module Precious
     end
 
     post '/edit/*' do
-      @path = set_the_path(params[:splat].first)
-      settings.wiki_options.merge!({ :page_file_dir => @path })
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      page = wiki.page(params[:splat].first.split("/").last)
-      name = params[:rename] || page.name
-      committer = Gollum::Committer.new(wiki, commit_message)
-      commit    = {:committer => committer}
+      @path        = set_the_path(params[:splat].first)
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      page         = wiki.page(params[:splat].first.split("/").last)
+      name         = params[:rename] || page.name
+      committer    = Gollum::Committer.new(wiki, commit_message)
+      commit       = {:committer => committer}
 
-      update_wiki_page(wiki, page, params[:content], commit, name,
-        params[:format])
+      update_wiki_page(wiki, page, params[:content], commit, name, params[:format])
       update_wiki_page(wiki, page.header,  params[:header],  commit) if params[:header]
       update_wiki_page(wiki, page.footer,  params[:footer],  commit) if params[:footer]
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
@@ -106,9 +105,8 @@ module Precious
     end
 
     post '/create' do
-      name = params[:page]
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-
+      name   = params[:page]
+      wiki   = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       format = params[:format].intern
 
       begin
@@ -121,14 +119,14 @@ module Precious
     end
 
     post '/revert/:page/:version_list' do
-      @path = set_the_path(params[:page].dup)
-      settings.wiki_options.merge!({ :page_file_dir => @path })
-      @name = params[:page].split('/').last
-      wiki  = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @page = wiki.page(@name)
-      @versions = params[:version_list].split(/\.{2,3}/)
-      sha1  = @versions.first
-      sha2  = @versions.last
+      @path        = set_the_path(params[:page].dup)
+      @name        = params[:page].split('/').last
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @page        = wiki.page(@name)
+      @versions    = params[:version_list].split(/\.{2,3}/)
+      sha1         = @versions.first
+      sha2         = @versions.last
 
       if wiki.revert_page(@page, sha1, sha2, commit_message)
         redirect "/#{CGI.escape(@page.path).gsub('%2F','/')}"
@@ -152,13 +150,13 @@ module Precious
     end
 
     get '/history/*' do
-      @path     = set_the_path(params[:splat].first)
-      settings.wiki_options.merge!({ :page_file_dir => @path })
-      @name     = params[:splat].first.split("/").last
-      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @page     = wiki.page(@name)
-      @page_num = [params[:page].to_i, 1].max
-      @versions = @page.versions :page => @page_num
+      @path        = set_the_path(params[:splat].first)
+      @name        = params[:splat].first.split("/").last
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @page        = wiki.page(@name)
+      @page_num    = [params[:page].to_i, 1].max
+      @versions    = @page.versions :page => @page_num
       mustache :history
     end
 
@@ -176,14 +174,14 @@ module Precious
     end
 
     get '/compare/:name/:version_list' do
-      @path     = set_the_path(params[:name].dup)
-      settings.wiki_options.merge!({ :page_file_dir => @path })
-      @name     = params[:name].split('/').last
-      @versions = params[:version_list].split(/\.{2,3}/)
-      wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @page     = wiki.page(@name)
-      diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
-      @diff     = diffs.first
+      @path        = set_the_path(params[:name].dup)
+      @name        = params[:name].split('/').last
+      @versions    = params[:version_list].split(/\.{2,3}/)
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @page        = wiki.page(@name)
+      diffs        = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+      @diff        = diffs.first
       mustache :compare
     end
 
@@ -198,10 +196,12 @@ module Precious
     end
 
     get %r{/(.+?)/([0-9a-f]{40})} do
-      file_path = params[:captures][0]
-      set_the_path(file_path.dup)
-      name = file_path.split('/').last
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      file_path    = params[:captures][0]
+      path         = set_the_path(file_path.dup)
+      name         = file_path.split('/').last
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+
       if page = wiki.page(name, params[:captures][1])
         @page = page
         @name = name
@@ -222,11 +222,11 @@ module Precious
     end
 
     get '/pages*' do
-      @path = set_the_path(params[:splat].first)
-      settings.wiki_options.merge!({ :page_file_dir => @path })
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @results = wiki.pages
-      @ref = wiki.ref
+      @path        = set_the_path(params[:splat].first)
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @results     = wiki.pages
+      @ref         = wiki.ref
       mustache :pages
     end
 
