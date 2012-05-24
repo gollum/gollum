@@ -8,9 +8,10 @@ module Precious
       end
 
       def data_path
-        if @path && @path != '' && @path != '/'
-          " data-path=\"#{@path}/\""
-        end
+        @path =~ /^\/?(.*?)\/?$/
+        path  = $1 || ''
+        path  << '/' unless path.empty?
+        " data-path=\"#{path}\""
       end
 
       def breadcrumb

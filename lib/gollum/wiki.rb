@@ -242,11 +242,12 @@ module Gollum
       end
 
       filename = Gollum::Page.cname(name)
+      dir      = page_file_dir || ''
 
-      committer.add_to_index(page_file_dir, filename, format, data)
+      committer.add_to_index(dir, filename, format, data)
       committer.after_commit do |index, sha|
         @access.refresh
-        index.update_working_dir(page_file_dir, filename, format)
+        index.update_working_dir(dir, filename, format)
       end
 
       multi_commit ? committer : committer.commit
