@@ -149,6 +149,7 @@ module Gollum
     #           :page_file_dir - String the directory in which all page files reside
     #           :ref - String the repository ref to retrieve pages from
     #           :ws_subs       - Array of chars to sub for ws in filenames.
+    #           :mathjax       - Set to false to disable mathjax.
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -173,6 +174,7 @@ module Gollum
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
       @universal_toc = options.fetch(:universal_toc, false)
+      @mathjax = options[:mathjax] || true
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -538,6 +540,9 @@ module Gollum
 
     # Toggles display of universal table of contents
     attr_reader :universal_toc
+
+    # Toggles mathjax.
+    attr_reader :mathjax
 
     # Normalize the data.
     #
