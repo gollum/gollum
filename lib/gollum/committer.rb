@@ -104,7 +104,7 @@ module Gollum
         end
       end
 
-      index.add(fullpath, @wiki.normalize(data))
+      index.add(fullpath.force_encoding('ascii-8bit'), @wiki.normalize(data))
     end
 
     # Update the given file in the repository's working directory if there
@@ -131,9 +131,9 @@ module Gollum
 
         Dir.chdir(::File.join(@wiki.repo.path, '..')) do
           if file_path_scheduled_for_deletion?(index.tree, path)
-            @wiki.repo.git.rm({'f' => true}, '--', path)
+            @wiki.repo.git.rm({'f' => true}, '--', path.force_encoding('ascii-8bit'))
           else
-            @wiki.repo.git.checkout({}, 'HEAD', '--', path)
+            @wiki.repo.git.checkout({}, 'HEAD', '--', path.force_encoding('ascii-8bit'))
           end
         end
       end
@@ -212,6 +212,7 @@ module Gollum
 
     # Proxies methods t
     def method_missing(name, *args)
+      args.map! { |item| item.force_encoding('ascii-8bit') }
       index.send(name, *args)
     end
   end
