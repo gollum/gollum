@@ -696,3 +696,24 @@ ul.actions {
   padding: 0.25em;
 }
 
+/* @section login */
+
+.login label, .login input {
+  display: block;
+}
+
+.login label {
+  font-weight: bold;
+}
+
+.login input {
+  margin-bottom: 15px;
+  height: 2em;
+  width: 30em;
+}
+
+.login button {
+  width: 8em;
+  height: 2em;
+}
+
