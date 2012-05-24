@@ -677,17 +677,22 @@ ul.actions {
     padding: 0;
 }
 
-#pages li {
+#pages li a.file,
+#pages li a.folder {
     background-image: url(/images/page.png);
     background-position: 0 1px;
     background-repeat: no-repeat;
     padding-left: 20px;
 }
 
-#pages li.folder {
+#pages li a.folder {
     background-image: url(/images/folder.png);
 }
 
-#pages li.folder:hover {
-  cursor: pointer;
+#pages .breadcrum {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 1em 0;
+  padding: 0.25em;
 }
+

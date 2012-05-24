@@ -9,7 +9,11 @@ module Precious
       attr_reader :name
 
       def escaped_name
-        CGI.escape(@name)
+        if @path
+          CGI.escape("#{@path}/#{@name}")
+        else
+          CGI.escape(@name)
+        end
       end
 
       def title
