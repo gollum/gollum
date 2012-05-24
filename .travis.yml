@@ -4,5 +4,5 @@ rvm:
 notifications:
   disabled: true
 before_install:
- - sudo gem uninstall ffi -a
+ - gem uninstall ffi -a
  - sudo apt-get install -y asciidoc
