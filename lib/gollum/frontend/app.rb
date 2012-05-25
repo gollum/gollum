@@ -63,6 +63,23 @@ module Precious
           nil
         end
       end
+
+      # Extract the path string that Gollum::Wiki expects
+      def extract_path(file_path)
+        path = file_path.dup
+        if path != '' && path != '/' && path.include?('/')
+          path.sub!(/\/[\w\-\_\.]*$/,'')
+          path.sub!(/^\//,'')
+        else
+          path = nil
+        end
+        path
+      end
+
+      # Extract the 'page' name from the file_path
+      def extract_name(file_path)
+        file_path.split("/").last
+      end
     end
 
     get '/login' do
@@ -90,23 +107,6 @@ module Precious
       response.set_cookie('name', false)
       response.set_cookie('token', false)
       redirect '/login'
-    end
-
-    # Deagol helper - extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      path = file_path.dup
-      if path != '' && path != '/' && path.include?('/')
-        path.sub!(/\/[\w\-\_\.]*$/,'')
-        path.sub!(/^\//,'')
-      else
-        path = nil
-      end
-      path
-    end
-
-    # Deagol helper - extract the 'page' name from the file_path
-    def extract_name(file_path)
-      file_path.split("/").last
     end
 
     get '/' do
