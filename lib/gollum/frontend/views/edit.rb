@@ -58,6 +58,10 @@ module Precious
         @format = (@page.format || false) if @format.nil?
         @format.to_s.downcase
       end
+
+      def formats
+        super(format().to_sym)
+      end
     end
   end
 end

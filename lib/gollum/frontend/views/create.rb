@@ -42,7 +42,7 @@ module Precious
       end
 
       def formats
-        super(:markdown)
+        super(format.to_sym)
       end
 
       def default_markup

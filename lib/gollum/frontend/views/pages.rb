@@ -7,6 +7,13 @@ module Precious
         "Browse Files"
       end
 
+      def data_path
+        @path =~ /^\/?(.*?)\/?$/
+        path  = $1 || ''
+        path  << '/' unless path.empty?
+        " data-path=\"#{path}\""
+      end
+
       def breadcrumb
         breadcrumb = []
         slugs      = "All Files/#{@path}".split('/')
