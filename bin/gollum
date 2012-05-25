@@ -48,6 +48,10 @@ opts = OptionParser.new do |opts|
   opts.on("--page-file-dir [PATH]", "Specify the sub directory for all page files (default: repository root).") do |path|
     wiki_options[:page_file_dir] = path
   end
+  
+  opts.on("--base-path [PATH]", "Specify the base path.") do |path|
+    wiki_options[:base_path] = path
+  end
 
   opts.on("--ref [REF]", "Specify the repository ref to use (default: master).") do |ref|
     wiki_options[:ref] = ref
