@@ -1,4 +1,5 @@
 require 'cgi'
+require 'pathname'
 require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
@@ -45,7 +46,8 @@ module Precious
     # Deagol helper functions
     helpers do
       def authentication_required!
-        redirect '/login' unless @current_user = current_user
+        @current_user = current_user
+        redirect '/login' unless @current_user
       end
 
       def current_user
@@ -53,27 +55,15 @@ module Precious
         name  = request.cookies['name']
         token = request.cookies['token']
 
-        if email && name && token
-          if token_ok?(email,token)
-            { :email => email, :name => name, :token => token }
-          else
-            nil
-          end
-        else
-          nil
+        if email && name && token && token_ok?(email,token)
+          { :email => email, :name => name, :token => token }
         end
       end
 
       # Extract the path string that Gollum::Wiki expects
       def extract_path(file_path)
-        path = file_path.dup
-        if path != '' && path != '/' && path.include?('/')
-          path.sub!(/\/[\w\-\_\.]*$/,'')
-          path.sub!(/^\//,'')
-        else
-          path = nil
-        end
-        path
+        pn = Pathname.new(file_path.dup).dirname.to_s.sub(/^\//,'')
+        pn unless ['','.','/'].include?(pn)
       end
 
       # Extract the 'page' name from the file_path
