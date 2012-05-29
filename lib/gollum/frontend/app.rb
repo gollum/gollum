@@ -1,4 +1,5 @@
 require 'cgi'
+require 'pathname'
 require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
@@ -7,10 +8,12 @@ require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 
 require File.expand_path '../uri_encode_component', __FILE__
+require File.expand_path '../ldap_authentication', __FILE__
 
 module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
+    include LdapAuthentication
 
     dir = File.dirname(File.expand_path(__FILE__))
 
@@ -40,21 +43,60 @@ module Precious
       enable :logging, :raise_errors, :dump_errors
     end
 
-    # Deagol helper - extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      path = file_path.dup
-      if path != '' && path != '/' && path.include?('/')
-        path.sub!(/\/[\w\-\_\.]*$/,'')
-        path.sub!(/^\//,'')
-      else
-        path = nil
+    # Deagol helper functions
+    helpers do
+      def authentication_required!
+        @current_user = current_user
+        redirect '/login' unless @current_user
       end
-      path
+
+      def current_user
+        email = request.cookies['email']
+        name  = request.cookies['name']
+        token = request.cookies['token']
+
+        if email && name && token && token_ok?(email,token)
+          { :email => email, :name => name, :token => token }
+        end
+      end
+
+      # Extract the path string that Gollum::Wiki expects
+      def extract_path(file_path)
+        pn = Pathname.new(file_path.dup).dirname.to_s.sub(/^\//,'')
+        pn unless ['','.','/'].include?(pn)
+      end
+
+      # Extract the 'page' name from the file_path
+      def extract_name(file_path)
+        file_path.split("/").last
+      end
     end
 
-    # Deagol helper - extract the 'page' name from the file_path
-    def extract_name(file_path)
-      file_path.split("/").last
+    get '/login' do
+      mustache :login
+    end
+
+    post '/login' do
+      login    = params[:login]
+      password = params[:password]
+
+      @current_user = authenticate(login, password)
+
+      if @current_user
+        response.set_cookie('email', @current_user[:email])
+        response.set_cookie('name', @current_user[:name])
+        response.set_cookie('token', @current_user[:token])
+        redirect '/'
+      else
+        redirect '/login'
+      end
+    end
+
+    get '/logout' do
+      response.set_cookie('email', false)
+      response.set_cookie('name', false)
+      response.set_cookie('token', false)
+      redirect '/login'
     end
 
     get '/' do
@@ -62,6 +104,7 @@ module Precious
     end
 
     get '/data/*' do
+      authentication_required!
       @path        = extract_path(params[:splat].first)
       @name        = extract_name(params[:splat].first)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
@@ -72,6 +115,7 @@ module Precious
     end
 
     get '/edit/*' do
+      authentication_required!
       @path        = extract_path(params[:splat].first)
       @name        = extract_name(params[:splat].first)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
@@ -97,6 +141,7 @@ module Precious
     end
 
     post '/edit/*' do
+      authentication_required!
       @path        = extract_path(params[:splat].first)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
@@ -115,6 +160,7 @@ module Precious
     end
 
     post '/create' do
+      authentication_required!
       name         = params[:page].split('/').last
       path         = extract_path(params[:page].dup)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
@@ -137,6 +183,7 @@ module Precious
     end
 
     post '/revert/:page/:version_list' do
+      authentication_required!
       @path        = extract_path(params[:page].dup)
       @name        = params[:page].split('/').last
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
@@ -159,6 +206,7 @@ module Precious
     end
 
     post '/preview' do
+      authentication_required!
       wiki      = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @name     = "Preview"
       @page     = wiki.preview_page(@name, params[:content], params[:format])
@@ -168,6 +216,7 @@ module Precious
     end
 
     get '/history/*' do
+      authentication_required!
       @path        = extract_path(params[:splat].first)
       @name        = extract_name(params[:splat].first)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
@@ -179,6 +228,7 @@ module Precious
     end
 
     post '/compare/*' do
+      authentication_required!
       @file     = params[:splat].first
       @versions = params[:versions] || []
       if @versions.size < 2
@@ -192,6 +242,7 @@ module Precious
     end
 
     get '/compare/:name/:version_list' do
+      authentication_required!
       @path        = extract_path(params[:name].dup)
       @name        = params[:name].split('/').last
       @versions    = params[:version_list].split(/\.{2,3}/)
@@ -204,6 +255,7 @@ module Precious
     end
 
     get '/_tex.png' do
+      authentication_required!
       content_type 'image/png'
       formula = Base64.decode64(params[:data])
       Gollum::Tex.render_formula(formula)
@@ -214,6 +266,7 @@ module Precious
     end
 
     get %r{/(.+?)/([0-9a-f]{40})} do
+      authentication_required!
       file_path    = params[:captures][0]
       path         = extract_path(file_path.dup)
       name         = file_path.split('/').last
@@ -232,6 +285,7 @@ module Precious
     end
 
     get '/search' do
+      authentication_required!
       @query = params[:q]
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @results = wiki.search @query
@@ -240,6 +294,7 @@ module Precious
     end
 
     get '/pages*' do
+      authentication_required!
       @path        = extract_path(params[:splat].first)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
@@ -249,6 +304,7 @@ module Precious
     end
 
     get '/*' do
+      authentication_required!
       show_page_or_file(params[:splat].first)
     end
 

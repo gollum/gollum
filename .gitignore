@@ -4,3 +4,4 @@ pkg
 .bundle
 Gemfile.lock
 *.gem
+config/ldap.yml
