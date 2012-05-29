@@ -70,6 +70,11 @@ module Precious
       def extract_name(file_path)
         file_path.split("/").last
       end
+
+      # Extrace the 'format' from the file name
+      def extract_format(filename)
+        $1 if filename =~ /^.+\.(\w+)$/
+      end
     end
 
     get '/login' do
@@ -118,13 +123,9 @@ module Precious
       authentication_required!
       @path        = extract_path(params[:splat].first)
       @name        = extract_name(params[:splat].first)
+      @format      = extract_format(@name)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
-
-      @format = nil
-      if @name =~ /^.+\.(\w+)$/
-        @format = $1
-      end
 
       if page = wiki.page(@name)
         if page.format.to_s.include?('markdown')
@@ -320,11 +321,8 @@ module Precious
         content_type file.mime_type
         file.raw_data
       else
-        @name = name
-        @format = nil
-        if name =~ /^.+\.(\w+)$/
-          @format = $1
-        end
+        @name   = name
+        @format = extract_format(@name)
         mustache :create
       end
     end
