@@ -2,6 +2,7 @@ require 'cgi'
 require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
+require 'useragent'
 
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
@@ -24,6 +25,14 @@ module Precious
     register Mustache::Sinatra
 
     dir = File.dirname(File.expand_path(__FILE__))
+
+    # Detect unsupported browsers.
+    @@supported_browsers = ['Firefox', 'Chrome', 'Safari']
+
+    def supported_useragent?( user_agent ) 
+      browser = UserAgent.parse( user_agent ).browser
+      @@supported_browsers.include? browser
+    end
 
     # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
@@ -67,7 +76,7 @@ module Precious
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
-        if page.format.to_s.include?('markdown')
+        if page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
           redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
         else
           @page = page
