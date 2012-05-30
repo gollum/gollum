@@ -29,7 +29,7 @@ module Precious
     # Detect unsupported browsers.
     @@supported_browsers = ['Firefox', 'Chrome', 'Safari']
 
-    def is_supported( user_agent ) 
+    def supported_useragent?( user_agent ) 
       browser = UserAgent.parse( user_agent ).browser
       @@supported_browsers.include? browser
     end
@@ -76,7 +76,7 @@ module Precious
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
-        if page.format.to_s.include?('markdown') && is_supported( request.user_agent )
+        if page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
           redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
         else
           @page = page
