@@ -63,11 +63,11 @@ module Gollum
 
       # Handle special case of only one folder.
       if (count - folder_start == 1)
-        path = @pages[ folder_start ]
+        page = @pages[ folder_start ]
         name = page.name
         html += <<-HTML
         <li>
-          <label>#{::File.dirname(path)}</label> <input type="checkbox" checked />
+          <label>#{::File.dirname(page.path)}</label> <input type="checkbox" checked />
           <ol>
             <li class="file"><a href="#{name}">#{name}</a></li>
          </ol>
