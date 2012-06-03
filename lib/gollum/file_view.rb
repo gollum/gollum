@@ -10,7 +10,7 @@ module Gollum
     end
 
     def enclose_tree string
-      %Q(<ol class="tree">\n) + string + %Q(\n</ol>)
+      %Q(<ol class="tree">\n) + string + %Q(</ol>)
     end
 
     def new_page page

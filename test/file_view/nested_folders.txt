@@ -1,0 +1,18 @@
+<ol class="tree">
+      <li>
+        <label>folder0/folder1/folder2</label> <input type="checkbox" checked />
+        <ol>
+          <li class="file"><a href="0">0</a></li>
+      <li>
+        <label>folder3</label> <input type="checkbox" checked />
+        <ol>
+          <li class="file"><a href="1">1</a></li>
+        </ol>
+      </li>
+        </ol>
+      </li>
+      <li>
+        <label>folder4</label> <input type="checkbox" checked />
+        <ol>
+          <li class="file"><a href="2">2</a></li>
+</ol>
