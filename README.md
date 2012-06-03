@@ -1,6 +1,8 @@
 gollum -- A wiki built on top of Git
 ====================================
 
+[![Build Status](https://secure.travis-ci.org/github/gollum.png?branch=master)](http://travis-ci.org/github/gollum)
+
 ## DESCRIPTION
 
 Gollum is a simple wiki system built on top of Git that powers GitHub Wikis.
@@ -492,10 +494,6 @@ like Rack::Auth, OmniAuth, etc.
 
 ## Windows Filename Validation
 Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
-
-## Testing
-
-[![Build Status](https://secure.travis-ci.org/github/gollum.png?branch=master)](http://travis-ci.org/github/gollum)
 
 ## CONTRIBUTE
 
