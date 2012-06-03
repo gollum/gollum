@@ -195,7 +195,8 @@ context "Frontend with page-file-dir" do
     follow_redirect!
     assert last_response.ok?
 
-    assert_not_match /Duplicate page/, last_response.body
+    # Assert not match.
+    assert_equal true, /Duplicate page/.match(last_response.body) == nil
   end
 
   def app
