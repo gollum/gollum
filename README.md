@@ -416,6 +416,11 @@ Get the footer (if any) for a given page:
 
     page.footer
     # => <Gollum::Page>
+    
+Get the header (if any) for a given page:
+
+    page.header
+    # => <Gollum::Page>
 
 Get a list of versions for a given page:
 
