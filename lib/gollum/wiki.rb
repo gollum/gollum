@@ -139,6 +139,7 @@ module Gollum
     #           site.
     # options - Optional Hash:
     #           :universal_toc - Table of contents on all pages.  Default: false
+    #           :live_preview  - Livepreview editing for markdown files. Default: true
     #           :base_path     - String base path for all Wiki links.
     #                            Default: "/"
     #           :page_class    - The page Class. Default: Gollum::Page
@@ -173,6 +174,7 @@ module Gollum
         self.class.default_ws_subs
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
+      @live_preview  = options.fetch(:live_preview, true)
       @universal_toc = options.fetch(:universal_toc, false)
       @mathjax = options[:mathjax] || true
     end
