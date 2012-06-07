@@ -57,6 +57,10 @@ opts = OptionParser.new do |opts|
     wiki_options[:ref] = ref
   end
 
+  opts.on("--no-live-preview", "Disables livepreview.") do
+    wiki_options[:live_preview] = false
+  end
+
   opts.on("--no-mathjax", "Disables mathjax.") do
     options['mathjax'] = false
   end
