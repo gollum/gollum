@@ -59,7 +59,7 @@ so editor doesn't display in the background. */
   position: fixed;
   background: #666;
   top: 0;
-  height: 30px;
+  height: 31px;
   right: 20px;
   width: 80px;
   vertical-align: middle;
