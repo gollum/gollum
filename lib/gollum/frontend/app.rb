@@ -76,7 +76,7 @@ module Precious
       @name = params[:splat].first
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       if page = wiki.page(@name)
-        if settings.wiki_options[:live_preview] && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
+        if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
           redirect '/livepreview/index.html?page=' + encodeURIComponent(@name)
         else
           @page = page

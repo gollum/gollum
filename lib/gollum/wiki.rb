@@ -133,6 +133,9 @@ module Gollum
     # Gets the Array of chars to sub for ws in filenames.
     attr_reader :ws_subs
 
+    # Gets the boolean live preview value.
+    attr_reader :live_preview
+
     # Public: Initialize a new Gollum Repo.
     #
     # path    - The String path to the Git repository that holds the Gollum
