@@ -28,10 +28,13 @@ module Precious
 
     # Detect unsupported browsers.
     @@supported_browsers = ['Firefox', 'Chrome', 'Safari']
+    @@ie9 = Browser.new('Internet Explorer', '9.0')
+    
+    def supported_useragent?(user_agent)
+      ua = UserAgent.parse(user_agent)
+      return true if ua >= @@ie9
 
-    def supported_useragent?( user_agent ) 
-      browser = UserAgent.parse( user_agent ).browser
-      @@supported_browsers.include? browser
+      @@supported_browsers.include? ua.browser
     end
 
     # We want to serve public assets for now
