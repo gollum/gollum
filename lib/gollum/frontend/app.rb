@@ -28,6 +28,7 @@ module Precious
 
     # Detect unsupported browsers.
     @@supported_browsers = ['Firefox', 'Chrome', 'Safari']
+    Browser = Struct.new(:browser, :version)
     @@ie9 = Browser.new('Internet Explorer', '9.0')
     
     def supported_useragent?(user_agent)
