@@ -124,17 +124,30 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tex(data)
+      # Random string to escape the `$` character (might be overkill)
+      hash = "@#{rand(36**5).to_s(36)}@"
       data.gsub(/\\\[\s*(.*?)\s*\\\]/m) do
         tag = CGI.escapeHTML($1)
         id  = Digest::SHA1.hexdigest(tag)
         @texmap[id] = [:block, tag]
         id
+      end.gsub(/'\$/, hash). # Replace `'$` by the hash generated earlier in order to escape it
+        gsub(/\$\$\s*(.*?)\s*\$\$/m) do
+          tag = CGI.escapeHTML($1)
+          id  = Digest::SHA1.hexdigest(tag)
+          @texmap[id] = [:block, tag]
+          id
       end.gsub(/\\\(\s*(.*?)\s*\\\)/m) do
         tag = CGI.escapeHTML($1)
         id  = Digest::SHA1.hexdigest(tag)
         @texmap[id] = [:inline, tag]
         id
-      end
+      end.gsub(/\$\s*(.*?)\s*\$/m) do # match inline $<formula>$ 
+        tag = CGI.escapeHTML($1)
+        id  = Digest::SHA1.hexdigest(tag)
+        @texmap[id] = [:inline, tag]
+        id
+      end.gsub(/#{hash}/, '$') # replace the hash back to `$`
     end
 
     # Process all TeX from the texmap and replace the placeholders with the
