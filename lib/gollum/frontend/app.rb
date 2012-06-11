@@ -3,7 +3,6 @@ require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
 require 'useragent'
-require 'time'
 
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
