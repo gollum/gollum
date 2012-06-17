@@ -527,17 +527,7 @@ your changes merged back into core is as follows:
     
 ## BUILDING THE GEM FROM MASTER
 
-```
-$ git clone https://github.com/github/gollum.git
-$ cd gollum
-gollum$ rake build
-Updated gollum.gemspec
-mkdir -p pkg
-gem build gollum.gemspec
-  Successfully built RubyGem
-  Name: gollum
-  Version: 2.1.0
-  File: gollum-2.1.0.gem
-mv gollum-2.1.0.gem pkg
-gollum$ gem install pkg/gollum-2.1.0.gem
-```
+    $ git clone https://github.com/github/gollum.git
+    $ cd gollum
+    gollum$ rake build
+    gollum$ gem install pkg/gollum*.gem
