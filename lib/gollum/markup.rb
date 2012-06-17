@@ -525,7 +525,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_wsd(data)
-      data.gsub(/^\{\{\{ ?(.+?)\r?\n(.+?)\r?\n\}\}\}\r?$/m) do
+      data.gsub(/^\{\{\{\{\{\{ ?(.+?)\r?\n(.+?)\r?\n\}\}\}\}\}\}\r?$/m) do
         id = Digest::SHA1.hexdigest($2)
         @wsdmap[id] = { :style => $1, :code => $2 }
         id
