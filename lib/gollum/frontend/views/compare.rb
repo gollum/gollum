@@ -1,14 +1,12 @@
 module Precious
   module Views
     class Compare < Layout
+      include HasPage
+
       attr_reader :page, :diff, :versions, :message
 
       def title
         "Comparison of #{@page.title}"
-      end
-
-      def path
-        @page.path
       end
 
       def before

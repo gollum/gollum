@@ -1,6 +1,8 @@
 module Precious
   module Views
     class History < Layout
+      include HasPage
+
       attr_reader :page, :page_num
 
       def title

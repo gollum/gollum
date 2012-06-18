@@ -434,7 +434,7 @@ context "page_file_dir option" do
   test "search results should be restricted in page filer dir" do
     results = @wiki.search("foo")
     assert_equal 1, results.size
-    assert_equal "foo", results[0][:name]
+    assert_equal "docs/foo", results[0][:name]
   end
 
   teardown do

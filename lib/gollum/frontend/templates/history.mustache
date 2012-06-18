@@ -5,25 +5,25 @@
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="/{{escaped_name}}"
+    <li class="minibutton"><a href="/{{escaped_url_path}}"
        class="action-view-page">View Page</a></li>
-    <li class="minibutton"><a href="/edit/{{escaped_name}}"
+    <li class="minibutton"><a href="/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit Page</a></li>
   </ul>
 </div>
 <div id="wiki-history">
-  
+
   <ul class="actions">
     <li class="minibutton"><a href="javascript:void(0);"
        class="action-compare-revision">Compare Revisions</a></li>
   </ul>
 
   <form name="compare-versions" id="version-form" method="post"
-   action="/compare/{{escaped_name}}">
+   action="/compare/{{escaped_url_path}}">
   <fieldset>
   <table>
     <tbody>
-      
+
       {{#versions}}
       <tr>
         <td class="checkbox">
@@ -39,11 +39,11 @@
         <td class="commit-name">
           <span class="time-elapsed">{{date}}:</span>&nbsp;
           {{message}}
-          [<a href="/{{escaped_name}}/{{id}}" title="View commit">{{id7}}</a>]
+          [<a href="/{{escaped_url_path}}/{{id}}" title="View commit">{{id7}}</a>]
         </td>
       </tr>
       {{/versions}}
-      
+
     </tbody>
   </table>
   </fieldset>
@@ -53,7 +53,7 @@
   <ul class="actions">
     <li class="minibutton"><a href="javascript:void(0);"
        class="action-compare-revision">Compare Revisions</a></li>
-       
+
     <!-- only show this button if we have more than 20 revisions -->
     <li class="minibutton"><a href="#"
        class="action-back-to-top">Back to Top</a></li>

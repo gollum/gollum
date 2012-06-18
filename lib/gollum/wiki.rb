@@ -470,7 +470,7 @@ module Gollum
 
       @repo.git.grep(*args).split("\n").map! do |line|
         result = line.split(':')
-        file_name = Gollum::Page.canonicalize_filename(::File.basename(result[1]))
+        file_name = result[1].gsub( ::File.extname(result[1]), '' )
 
         {
           :count  => result[2].to_i,

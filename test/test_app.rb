@@ -18,7 +18,7 @@ context "Frontend" do
   test "retain edit information" do
     page1 = 'page1'
     user1 = 'user1'
-    @wiki.write_page(page1, :markdown, '', 
+    @wiki.write_page(page1, :markdown, '',
                      { :name => user1, :email => user1 });
 
     get page1
@@ -26,7 +26,7 @@ context "Frontend" do
 
     page2 = 'page2'
     user2 = 'user2'
-    @wiki.write_page(page2, :markdown, '', 
+    @wiki.write_page(page2, :markdown, '',
                      { :name => user2, :email => user2 });
 
     get page2
@@ -38,7 +38,7 @@ context "Frontend" do
 
   test "edits page" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc',
+    post "/edit/A", :content => 'abc', :page => 'A',
       :format => page_1.format, :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -85,7 +85,7 @@ context "Frontend" do
   test "renames page" do
     page_1 = @wiki.page('B')
     post "/edit/B", :content => 'abc',
-      :rename => "C",
+      :rename => "C", :page => 'B',
       :format => page_1.format, :message => 'def'
     follow_redirect!
     assert_equal "/C", last_request.fullpath
@@ -150,7 +150,6 @@ context "Frontend" do
     assert last_response.ok?
   end
 
-
   test "reverts single commit" do
     page1 = @wiki.page('B')
 
@@ -193,31 +192,128 @@ context "Frontend" do
   end
 end
 
-context "Frontend with page-file-dir" do
+# WTF? Surely this test is wrong...
+# In this test repo there is already a file called 'bar.md'.
+# This SHOULD raise a Duplicate Page error, no?
+# context "Frontend with page-file-dir" do
+#   include Rack::Test::Methods
+
+#   setup do
+#     @path = cloned_testpath("examples/page_file_dir.git")
+#     @wiki = Gollum::Wiki.new(@path, { :page_file_dir => "docs" })
+#     Precious::App.set(:gollum_path, @path)
+#     Precious::App.set(:wiki_options, { :page_file_dir => "docs" })
+#   end
+
+#   teardown do
+#     FileUtils.rm_rf(@path)
+#   end
+
+#   test "open existing parent" do
+#     get "/"
+#     assert last_response.ok?
+
+#     post "/create", :content => "asdf", :page => "bar",
+#       :format => 'markdown'
+#     follow_redirect!
+#     assert last_response.ok?
+
+#     # Assert not match.
+#     assert_equal true, /Duplicate page/.match(last_response.body) == nil
+#   end
+
+#   def app
+#     Precious::App
+#   end
+# end
+
+context "Frontend with lotr" do
   include Rack::Test::Methods
 
   setup do
-    @path = cloned_testpath("examples/page_file_dir.git")
-    @wiki = Gollum::Wiki.new(@path, { :page_file_dir => "docs" })
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, { :page_file_dir => "docs" })
+    Precious::App.set(:wiki_options, {})
   end
 
   teardown do
     FileUtils.rm_rf(@path)
   end
 
-  test "open existing parent" do
-    get "/"
+  # Here's the dir structure of lotr.git
+  #
+  # .
+  # ├── Bilbo-Baggins.md
+  # ├── Data.csv
+  # ├── Gondor
+  # │   ├── Boromir.md
+  # │   ├── _Footer.md
+  # │   ├── _Header.md
+  # │   └── _Sidebar.md
+  # ├── Home.textile
+  # ├── Mordor
+  # │   ├── Eye-Of-Sauron.md
+  # │   ├── _Footer.md
+  # │   ├── _Header.md
+  # │   ├── _Sidebar.md
+  # │   ├── eye.jpg
+  # │   └── todo.txt
+  # ├── My-Precious.md
+  # ├── Samwise\ Gamgee.mediawiki
+  # ├── _Footer.md
+  # ├── _Header.md
+  # └── _Sidebar.md
+  #
+
+  test "/pages" do
+    get "/pages"
     assert last_response.ok?
 
-    post "/create", :content => "asdf", :page => "bar",
-      :format => 'markdown'
-    follow_redirect!
-    assert last_response.ok?
+    body = last_response.body
 
-    # Assert not match.
-    assert_equal true, /Duplicate page/.match(last_response.body) == nil
+    assert body.include?("Bilbo Baggins"), "/pages should include the page 'Bilbo Baggins'"
+    assert body.include?("Gondor"), "/pages should include the folder 'Gondor'"
+    assert !body.include?("Boromir"), "/pages should NOT include the page 'Boromir'"
+    assert body.include?("Mordor"), "/pages should include the folder 'Mordor'"
+    assert !body.include?("Eye Of Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
+  end
+
+  test "/pages/Mordor/" do
+    get "/pages/Mordor/"
+    assert last_response.ok?, "/pages/Mordor/ did not respond ok"
+
+    body = last_response.body
+
+    assert !body.include?("Bilbo Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
+    assert body.include?("Eye Of Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
+  end
+
+  test "create pages within sub-directories" do
+    post "/create", :content => 'big smelly creatures', :page => 'Orc',
+      :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    get "/Mordor/Orc"
+    assert_match /big smelly creatures/, last_response.body
+
+    post "/create", :content => 'really big smelly creatures', :page => 'Orc/Uruk-hai',
+      :path => 'Mordor', :format => 'markdown', :message => 'oooh, very scary'
+    assert_equal 'http://example.org/Mordor/Orc-Uruk-hai', last_response.headers['Location']
+    get "/Mordor/Orc-Uruk-hai"
+    assert_match /really big smelly creatures/, last_response.body
+  end
+
+  test "edit pages within sub-directories" do
+    post "/create", :content => 'big smelly creatures', :page => 'Orc',
+      :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+
+    post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',
+      :page => 'Orc', :path => 'Mordor', :message => 'minor edit'
+    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+
+    get "/Mordor/Orc"
+    assert_match /not so big smelly creatures/, last_response.body
   end
 
   def app
