@@ -230,7 +230,7 @@ module Precious
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       @results = Gollum::FileView.new(wiki.pages).render_files
       @ref = wiki.ref
-      mustache :file_view
+      mustache :file_view, { :layout => false }
     end
 
     get '/*' do

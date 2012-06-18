@@ -4,7 +4,7 @@ module Precious
       attr_reader :results, :ref
 
       def title
-        "All pages in #{@ref}"
+        "File view of #{@ref}"
       end
 
       def has_results
