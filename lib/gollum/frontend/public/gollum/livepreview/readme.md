@@ -16,25 +16,16 @@ Uses code/assets from:
 
 See licenses folder for details.
 
-# Updating gollum
-```
-css/
-images/
-js/
-licenses/
-index.html
-readme.md
-```
-
-
 # Dependency Notes
 
 ## Ace
-Using master branch at [dbab677c413aec097bf2e7f95a9e245a4526ce88](https://github.com/ajaxorg/ace/commit/dbab677c413aec097bf2e7f95a9e245a4526ce88).
+Using master branch at [a091a627a09d5530747576869fefe797816ec4b6](https://github.com/ajaxorg/ace/commit/a091a627a09d5530747576869fefe797816ec4b6).
 
 - Copy `ajaxorg/ace/lib/ace` to `/public/js/ace/lib/ace`
-- `public/js/ace/lib/ace/ext/static_highlight.js` has been modified to disable gutter rendering. [#799](https://github.com/ajaxorg/ace/pull/799)
-- `public/js/ace/lib/ace/theme/github.css` `public/js/ace/lib/ace/theme/github.js` are custom theme files. [#798](https://github.com/ajaxorg/ace/pull/798)
+
+All changes to Ace for livepreview have been upstreamed.
+- Gutter control [#799](https://github.com/ajaxorg/ace/pull/799)
+- GitHub theme [#798](https://github.com/ajaxorg/ace/pull/798)
 
 ## jQuery & Sizzle
 Using jQuery v1.7.2.
@@ -48,3 +39,13 @@ https://code.google.com/p/pagedown/source/detail?r=3151a581819f39123b0b5fd1ca9e2
 
 - The h4-6 fix has been submitted for upstream inclusion. [#29](https://code.google.com/p/pagedown/issues/detail?id=29)
 - livepreview has various additions to pagedown so it can't be replaced by upstream unpatched.
+
+# Updating gollum
+
+ - /public/css/custom.css (not css/gollum/)
+ - /public/images/*
+ - /public/js/*
+ - /public/licenses/*
+ - /public/index.html
+ - readme.md
+ - replace template.css link in index.html
