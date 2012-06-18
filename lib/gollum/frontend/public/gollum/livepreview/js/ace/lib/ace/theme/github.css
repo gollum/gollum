@@ -1,131 +1,82 @@
-/* CSS style content from github's default pygments highlighter template. */
+/* CSS style content from github's default pygments highlighter template.
+   Cursor and selection styles from textmate.css. */
 .ace-github .ace_editor {
   color: #333;
   background-color: #F8F8F8;
   border: 1px solid #CCC;
-  /* Must use font and not font-family and font-size or the body
-     font property will override. Also requires important to override ace sty le.*/
   font: 13px 'Bitstream Vera Sans Mono', Courier, monospace !important;
-  /* needs !important to set line hight given conflicting ace styles. */
   line-height: 19px !important;
   overflow: auto;
   padding: 6px 10px;
   border-radius: 3px;
-  /* defaults to absolute which causes all code to overlap. */
   position: relative;
   margin-bottom: 15px;
 }
 
-/* k = keyword */
 .ace-github .ace_keyword {
   font-weight: bold;
 }
 
-/* 
-  ss = ace_string
-     - example ':initial' in example.rb
-     - Ace is unable to differentiate between 
-       ruby symbols and strings.
-  s2 = ace_string
-*/
 .ace-github .ace_string {
   color: #D14;
 }
 
-/* 
-   nn = ace_variable ace_class 
-   nc = ace_variable ace_class
-   no = ace_variable ace_class
-   Ace does not differentiate between nc and no
-   although pygments does.
-   see: ruby_func_def.rb
-
-   teal from 'no' seems most common so
-   use that color.
-*/
 .ace-github .ace_variable.ace_class {
   color: teal;
 }
 
-/* mi = ace_constant ace_numeric */
 .ace-github .ace_constant.ace_numeric {
   color: #099;
 }
 
-/* 
-   n = ace_identifier  
-  nf = ace_identifier
-  nn = ace_identifer
-  
-  Ace thinks java imports are identifiers...
-
-  Ace identifies many more identifiers than pygments tags as 'nf'.
-  Pygments is much better at recognizing individual elements.
-  Only highlight identifier if it's after a keyword or paren.
-    - prevents highlighting arguments as functions
-      - see 'argh, aaahaa' in ruby_func_def.rb
-    - prevents highlighting methods within method bodies
-      - see 'ruby!' in  ruby_func_def.rb
-*/
-/*.ace-github .ace_keyword + .ace_identifier,
-.ace-github .ace_paren + .ace_identifier {
-  color: #900;
-  font-weight: bold;
-} */
-
-/* c1 = ace_comment
-  condensed_ruby.rb */
 .ace-github .ace_comment {
   color: #998;
   font-style: italic;
 }
 
-/* 
-nb = ace_support ace_function
-condensed_ruby.rb
-
-nb = ace_variable ace_language
-'self' in condensed_ruby.rb
-*/
-/*.ace-github .ace_support.ace_function,
-
-ace_support ace_function highlights strange things such as 'Short' in java.
-*/
 .ace-github .ace_variable.ace_language  {
   color: #0086B3;
 }
 
-/* o = ace_paren ace_rparen
-   o = ace_paren ace_lparen 
-  '[]' in condensed_ruby.rb
-*/
 .ace-github .ace_paren.ace_lparen,
 .ace-github .ace_paren.ace_rparen {
   font-weight: bold;
 }
 
-/*
-  kp = ace_constant ace_language ace_boolean
-*/
-
 .ace-github .ace_constant.ace_language.ace_boolean {
   font-weight: bold;
 }
 
-/*
-  sr = ace_string ace_regexp
-  Sometimes ace will fail to recognize regexps.
-*/
 .ace-github .ace_string.ace_regexp {
   color: #009926;
   font-weight: normal;
 }
 
-/* vi = ace_variable ace_instancce */
 .ace-github .ace_variable.ace_instancce {
   color: teal;
 }
 
 .ace-github .ace_constant.ace_language {
   font-weight: bold;
+}
+
+.ace-github .ace_text-layer {
+  cursor: text;
+}
+
+.ace-github .ace_cursor {
+  border-left: 2px solid black;
+}
+
+.ace-github .ace_cursor.ace_overwrite {
+  border-left: 0px;
+  border-bottom: 1px solid black;
+}
+
+.ace-github .ace_marker-layer .ace_selection {
+  background: rgb(181, 213, 255);
+}
+.ace-github.multiselect .ace_selection.start {
+  box-shadow: 0 0 3px 0px white;
+  border-radius: 2px;
 }
