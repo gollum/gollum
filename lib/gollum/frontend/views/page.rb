@@ -17,7 +17,7 @@ module Precious
         page_versions = @page.versions
         first = page_versions ? page_versions.first : false
         return DEFAULT_AUTHOR unless first
-        first.author.name.force_encoding('UTF-8')
+        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
       end
 
       def date
