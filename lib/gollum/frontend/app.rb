@@ -147,7 +147,7 @@ module Precious
 
     post '/preview' do
       wiki     = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @name    = "Preview"
+      @name    = params[:page] || "Preview"
       @page    = wiki.preview_page(@name, params[:content], params[:format])
       @content = @page.formatted_data
       @toc_content = wiki.universal_toc ? @page.toc_data : nil
