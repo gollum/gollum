@@ -94,7 +94,7 @@ a:hover, a:visited {
   float:left;
   margin-bottom: 20px;
   min-width: 33%;
-  
+
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em;
@@ -681,3 +681,36 @@ ul.actions {
   background-position: -431px -28px;
   padding: 0;
 }
+
+/* @section pages */
+
+#pages {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+#pages ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#pages li a.file,
+#pages li a.folder {
+    background-image: url(/images/fileview/document.png);
+    background-position: 0 1px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+#pages li a.folder {
+    background-image: url(/images/fileview/folder-horizontal.png);
+}
+
+#pages .breadcrumb {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 1em 0;
+  padding: 0.25em;
+}
+

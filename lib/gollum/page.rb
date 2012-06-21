@@ -153,6 +153,27 @@ module Gollum
     # Returns the String path.
     attr_reader :path
 
+    # Public: The url path required to reach this page within the repo.
+    #
+    # Returns the String url_path
+    def url_path
+      path = if self.path.include?('/')
+        self.path.sub(/\/.+$/, '/')
+      else
+        ''
+      end
+
+      path << Page.cname(self.name, '-', '-')
+      path
+    end
+
+    # Public: The url_path, but CGI escaped.
+    #
+    # Returns the String url_path
+    def escaped_url_path
+      CGI.escape(self.url_path).gsub('%2F','/')
+    end
+
     # Public: The raw contents of the page.
     #
     # Returns the String data.
@@ -179,7 +200,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data(encoding = nil, &block)
-      @blob && markup_class.render(historical?, encoding) do |doc| 
+      @blob && markup_class.render(historical?, encoding) do |doc|
         @doc = doc
         yield doc if block_given?
       end

@@ -75,7 +75,7 @@ context "Frontend Unicode support" do
     page = @wiki.page('PG')
     assert_equal '다른 text', utf8(page.raw_data)
 
-    post '/edit/PG', :content => '바뀐 text', :message => 'ghi'
+    post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
     follow_redirect!
     assert last_response.ok?
 
@@ -96,7 +96,7 @@ context "Frontend Unicode support" do
     page = @wiki.page('한글')
     assert_equal '다른 text', utf8(page.raw_data)
 
-    post '/edit/' + CGI.escape('한글'), :content => '바뀐 text',
+    post '/edit/' + CGI.escape('한글'), :page => '한글', :content => '바뀐 text',
       :format => 'markdown', :message => 'ghi'
     follow_redirect!
     assert last_response.ok?
