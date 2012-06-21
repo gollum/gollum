@@ -126,7 +126,7 @@ module Precious
     end
 
     post '/create' do
-      name         = CGI.unescape(params[:page])
+      name         = params[:page]
       path         = sanitize_empty_params(params[:path])
       format       = params[:format].intern
 
@@ -191,19 +191,26 @@ module Precious
       @file     = params[:splat].first
       @versions = params[:versions] || []
       if @versions.size < 2
-        redirect "/history/#{CGI.escape(@file)}"
+        redirect "/history/#{@file}"
       else
         redirect "/compare/%s/%s...%s" % [
-          CGI.escape(@file),
+          @file,
           @versions.last,
           @versions.first]
       end
     end
 
-    get '/compare/:name/:version_list' do
-      @path        = extract_path(params[:name].dup)
-      @name        = extract_name(params[:name])
-      @versions    = params[:version_list].split(/\.{2,3}/)
+    get %r{
+      /compare/ # match any URL beginning with /compare/
+      (.+)      # extract the full path (including any directories)
+      /         # match the final slash
+      ([^.]+)   # match the first SHA1
+      \.{2,3}   # match .. or ...
+      (.+)      # match the second SHA1
+    }x do |path, start_version, end_version|
+      @path        = extract_path(path)
+      @name        = extract_name(path)
+      @versions    = [start_version, end_version]
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       @page        = wiki.page(@name)
