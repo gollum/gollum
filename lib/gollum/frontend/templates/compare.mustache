@@ -1,16 +1,16 @@
 <div id="wiki-wrapper" class="compare">
 <div id="head">
   <h1>History for <strong>{{path}}</strong></h1>
-  
+
   <ul class="actions">
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="/{{escaped_name}}"
+    <li class="minibutton"><a href="/{{escaped_url_path}}"
        class="action-view-page">View Page</a></li>
-    <li class="minibutton"><a href="/edit/{{escaped_name}}"
+    <li class="minibutton"><a href="/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit Page</a></li>
-    <li class="minibutton"><a href="/history/{{escaped_name}}"
+    <li class="minibutton"><a href="/history/{{escaped_url_path}}"
        class="action-page-history">Page History</a></li>
   </ul>
 </div>
@@ -20,19 +20,19 @@
 {{/message}}
 
 <div id="compare-content">
-  
+
   {{#show_revert}}
   <ul class="actions">
-    <li class="minibutton"><a href="/history/{{escaped_name}}"
+    <li class="minibutton"><a href="/history/{{escaped_url_path}}"
        class="action-page-history">Back to Page History</a></li>
     <li class="minibutton">
-      <form name="gollum-revert" action="/revert/{{escaped_name}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
+      <form name="gollum-revert" action="/revert/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
       <a href="#" class="gollum-revert-button">Revert Changes</a>
       </form>
     </li>
   </ul>
   {{/show_revert}}
-  
+
   <div class="data highlight">
     <table cellpadding="0" cellspacing="0">
       {{#lines}}
@@ -49,7 +49,7 @@
 </div>
 <div id="footer">
   <ul class="actions">
-    <li class="minibutton"><a href="/history/{{escaped_name}}"
+    <li class="minibutton"><a href="/history/{{escaped_url_path}}"
        class="action-page-history">Back to Page History</a></li>
     {{#show_revert}}
     <li class="minibutton">

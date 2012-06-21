@@ -2,6 +2,7 @@ module Precious
   module Views
     class Edit < Layout
       include Editable
+      include HasPage
 
       attr_reader :page, :content
 

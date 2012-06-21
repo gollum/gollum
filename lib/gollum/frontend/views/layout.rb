@@ -6,7 +6,7 @@ module Precious
       include Rack::Utils
       alias_method :h, :escape_html
 
-      attr_reader :name
+      attr_reader :name, :path
 
       def escaped_name
         CGI.escape(@name)

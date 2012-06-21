@@ -51,6 +51,16 @@ context "Page" do
     assert_equal 'Mordor/Eye-Of-Sauron.md', page.path
   end
 
+  test "url_path" do
+    page = @wiki.page('Bilbo Baggins')
+    assert_equal 'Bilbo-Baggins', page.url_path
+  end
+
+  test "nested url_path" do
+    page = @wiki.page('Eye Of Sauron')
+    assert_equal 'Mordor/Eye-Of-Sauron', page.url_path
+  end
+
   test "page versions" do
     page = @wiki.page('Bilbo Baggins')
     assert_equal ["f25eccd98e9b667f9e22946f3e2f945378b8a72d", "5bc1aaec6149e854078f1d0f8b71933bbc6c2e43"],

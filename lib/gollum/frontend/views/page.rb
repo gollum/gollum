@@ -1,16 +1,14 @@
 module Precious
   module Views
     class Page < Layout
+      include HasPage
+
       attr_reader :content, :page, :header, :footer
       DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
 
       def title
-        @page.title
-      end
-
-      def format
-        @page.format.to_s
+        @page.url_path.gsub("-", " ")
       end
 
       def author

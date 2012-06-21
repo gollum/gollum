@@ -9,16 +9,17 @@
        class="action-edit-page">Home</a></li>
   </ul>
 </div>
-<div id="results">
+<div id="pages">
 
 {{#has_results}}
-  <ul>
-    {{#results}}
-    <li>
-      <a href="/{{name}}">{{name}}</a> 
-    </li>
-    {{/results}}
-  </ul>
+  <div id="file-browser">
+    <div class="breadcrumb">
+      {{{breadcrumb}}}
+    </div>
+    <ul>
+      {{{files_folders}}}
+    </ul>
+  </div>
 {{/has_results}}
 
 {{#no_results}}
