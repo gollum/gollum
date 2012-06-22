@@ -482,13 +482,15 @@ module Gollum
       @repo.git.grep(*args).split("\n").each do |line|
         result = line.split(':')
         result_1 = result[1]
-        file_name = result_1.gsub( ::File.extname(result_1), '' )
+        file_name = result_1.chomp(::File.extname(result_1))
         results[file_name] = result[2].to_i
       end
 
       # Use git ls-files '*query*' to search for file names. Grep only searches file content.
       @repo.git.ls_files({}, "*#{ query }*").split("\n").each do |line|
-        file_name = line.gsub( ::File.extname(line), '' )
+        file_name = line.chomp(::File.extname(line))
+        # If there's not already a result for file_name then
+        # the value is nil and nil.to_i is 0.
         results[file_name] = results[file_name].to_i + 1;
       end
 
