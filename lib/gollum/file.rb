@@ -39,12 +39,12 @@ module Gollum
       @blob.mime_type
     end
 
-    # Populate the Page with information from the Blob.
+    # Populate the File with information from the Blob.
     #
     # blob - The Grit::Blob that contains the info.
-    # path - The String directory path of the page file.
+    # path - The String directory path of the file.
     #
-    # Returns the populated Gollum::Page.
+    # Returns the populated Gollum::File.
     def populate(blob, path=nil)
       @blob = blob
       @path = "#{path}/#{blob.name}"[1..-1]
