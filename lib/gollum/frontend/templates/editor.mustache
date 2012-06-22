@@ -10,6 +10,9 @@
   <div id="gollum-editor-title-field" class="singleline">
     <label for="page" class="jaws">Page Title</label>
     <input type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
+    {{#has_path}}
+    <p class="path_note"><strong>NOTE:</strong> This page will be created within the &quot;<strong>{{path}}</strong>&quot; directory</p>
+    {{/has_path}}
   </div>
   {{/is_create_page}}
   {{#is_edit_page}}
