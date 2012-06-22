@@ -489,8 +489,7 @@ module Gollum
       # Use git ls-files '*query*' to search for file names. Grep only searches file content.
       @repo.git.ls_files({}, "*#{ query }*").split("\n").each do |line|
         file_name = line.gsub( ::File.extname(line), '' )
-        count = results[file_name]
-        results[file_name] = count == nil ? 1 : count + 1;
+        results[file_name] = results[file_name].to_i + 1;
       end
 
       results.map do |key,val|
