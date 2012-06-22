@@ -58,6 +58,13 @@ context "Wiki" do
       pages.map { |p| p.filename }.sort
   end
 
+  test "list files" do
+    files = @wiki.files
+    assert_equal \
+      ['Data.csv', 'eye.jpg', 'todo.txt'],
+      files.map { |p| p.filename }.sort
+  end
+
   test "counts pages" do
     assert_equal 6, @wiki.size
   end

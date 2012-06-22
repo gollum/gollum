@@ -19,6 +19,7 @@ module Gollum
     def name
       @blob && @blob.name
     end
+    alias filename name
 
     # Public: The raw contents of the page.
     #
@@ -28,7 +29,7 @@ module Gollum
     end
 
     # Public: The Grit::Commit version of the file.
-    attr_reader :version
+    attr_accessor :version
 
     # Public: The String path of the file.
     attr_reader :path
@@ -36,6 +37,18 @@ module Gollum
     # Public: The String mime type of the file.
     def mime_type
       @blob.mime_type
+    end
+
+    # Populate the File with information from the Blob.
+    #
+    # blob - The Grit::Blob that contains the info.
+    # path - The String directory path of the file.
+    #
+    # Returns the populated Gollum::File.
+    def populate(blob, path=nil)
+      @blob = blob
+      @path = "#{path}/#{blob.name}"[1..-1]
+      self
     end
 
     #########################################################################

@@ -48,6 +48,18 @@ module Gollum
       page
     end
 
+    # Gets a File instance for this blob.
+    #
+    # wiki - Gollum::Wiki instance for the Gollum::File
+    #
+    # Returns a Gollum::File instance.
+    def file(wiki, commit)
+      blob = self.blob(wiki.repo)
+      file = wiki.file_class.new(wiki).populate(blob, self.dir)
+      file.version = commit
+      file
+    end
+
     def inspect
       %(#<Gollum::BlobEntry #{@sha} #{@path}>)
     end
