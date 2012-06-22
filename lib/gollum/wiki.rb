@@ -487,7 +487,8 @@ module Gollum
       end
 
       # Use git ls-files '*query*' to search for file names. Grep only searches file content.
-      @repo.git.ls_files({}, "*#{ query }*").split("\n").each do |line|
+      # Spaces are converted to dashes when saving pages to disk.
+      @repo.git.ls_files({}, "*#{ query.gsub(' ', '-') }*").split("\n").each do |line|
         file_name = line.chomp(::File.extname(line))
         # If there's not already a result for file_name then
         # the value is nil and nil.to_i is 0.
