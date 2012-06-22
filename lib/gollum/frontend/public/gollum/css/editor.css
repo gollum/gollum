@@ -64,6 +64,12 @@ a {
   color: #999;
 }
 
+#gollum-editor .path_note {
+  text-align: right;
+  font-size: small;
+  padding-right: 5px;
+}
+
 #gollum-editor-title-field input#gollum-editor-page-title {
   font-weight: bold;
   margin-top: 0;
