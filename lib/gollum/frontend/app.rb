@@ -299,6 +299,7 @@ module Precious
         file.raw_data
       else
         @name = name
+        @path = path
         mustache :create
       end
     end

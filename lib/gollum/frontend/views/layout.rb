@@ -15,6 +15,10 @@ module Precious
       def title
         "Home"
       end
+
+      def has_path
+        !@path.nil?
+      end
     end
   end
 end
