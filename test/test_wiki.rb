@@ -437,6 +437,13 @@ context "page_file_dir option" do
     assert_equal "docs/foo", results[0][:name]
   end
 
+  test "search results should make the content/filename search additive" do
+    # This file contains the word 'foo' and is called 'foo', so it should
+    # have a count of 2, not 1...
+    results = @wiki.search("foo")
+    assert_equal 2, results[0][:count]
+  end
+
   teardown do
     FileUtils.rm_r(@path)
   end

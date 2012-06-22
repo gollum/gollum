@@ -468,25 +468,23 @@ module Gollum
       args = [{}, '-i', '-c', query, @ref, '--']
       args << '--' << @page_file_dir if @page_file_dir
 
-      results = @repo.git.grep(*args).split("\n").map! do |line|
+      results = {}
+
+      @repo.git.grep(*args).split("\n").each do |line|
         result = line.split(':')
         file_name = result[1].gsub( ::File.extname(result[1]), '' )
-
-        {
-          :count  => result[2].to_i,
-          :name   => file_name
-        }
+        results[file_name] = result[2].to_i
       end
 
       # Use git ls-files '*query*' to search for file names. Grep only searches file content.
-      results += @repo.git.ls_files({}, "*#{ query }*").split("\n").map! do |line|
-        {
-          :count  => 1,
-          :name   => line
-        }
+      @repo.git.ls_files({}, "*#{ query }*").split("\n").each do |line|
+        file_name = line.gsub( ::File.extname(line), '' )
+        results[file_name] += 1;
       end
 
-      results
+      results.map do |key,val|
+        { :count => val, :name => key }
+      end
     end
 
     # Public: All of the versions that have touched the Page.
