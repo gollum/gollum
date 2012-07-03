@@ -2,6 +2,22 @@
 <html>
 <head>
 <title>Live Preview</title>
+<script>
+(function( win ){
+var location = win.location;
+
+// RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
+function pageName() {
+  var value = new RegExp( '[\\?&]' + 'page' + '=([^&#]*)' ).exec( location.href );
+  return  ( !value ) ? 0 : value[ 1 ] || 0;
+}
+
+// Fall back to old edit mode on browsers that do not support typed arrays.
+if ( typeof Int32Array == 'undefined' ) {
+  win.location = location.protocol + '//' + location.host + '/edit/' + pageName();
+}
+})(window);
+</script>
 <link rel='stylesheet' type='text/css' href='../css/template.css' />
 <link rel='stylesheet' type='text/css' href='css/custom.css' />
 </head>
@@ -24,7 +40,7 @@
 <div id='comment'></div>
 <div id='darkness'></div>
 
-<script type='text/javascript'>
+<script>
 var require = {
   paths: {
     ace: 'js/ace/lib/ace'
