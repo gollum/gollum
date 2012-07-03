@@ -106,7 +106,7 @@ module Precious
     end
 
     post '/edit/*' do
-      path         = sanitize_empty_params(params[:path])
+      path         = extract_path(sanitize_empty_params(params[:path]))
       wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       page         = wiki.page(CGI.unescape(params[:page]))
