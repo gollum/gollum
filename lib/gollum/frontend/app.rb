@@ -30,12 +30,18 @@ module Precious
     dir = File.dirname(File.expand_path(__FILE__))
 
     # Detect unsupported browsers.
-    @@supported_browsers = ['Firefox', 'Chrome', 'Safari']
     Browser = Struct.new(:browser, :version)
+
+    @@min_ua = [
+        Browser.new('Internet Explorer', '10.0'),
+        Browser.new('Chrome', '7.0'),
+        Browser.new('Firefox', '4.0'),
+        Browser.new('Safari', '5.1')
+    ]
 
     def supported_useragent?(user_agent)
       ua = UserAgent.parse(user_agent)
-      @@supported_browsers.include? ua.browser
+      @@min_ua.detect {|min| ua >= min }
     end
 
     # We want to serve public assets for now
