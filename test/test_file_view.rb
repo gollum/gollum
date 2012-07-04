@@ -7,6 +7,11 @@ class FakePage
     @filepath = filepath  
   end
   
+  # From page.rb
+  def filename_stripped
+    ::File.basename(@filepath, ::File.extname(@filepath))
+  end
+
   def path
     return @filepath
   end
