@@ -433,7 +433,7 @@ module Gollum
       false
     end
 
-    # Loads a sub page.  Sub page nanes (footers) are prefixed with
+    # Loads a sub page.  Sub page names (footers, headers, sidebars) are prefixed with
     # an underscore to distinguish them from other Pages.
     #
     # name - String page name.
