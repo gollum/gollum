@@ -159,6 +159,13 @@ module Gollum
           # again, it will use the already cached formula and it might have some advantages from the point of view of browser caching (really not sure here).
           out = %{<img width="#{width}" height="#{height}" style="vertical-align: #{align}px;" src="#{::File.join(@wiki.base_path, '_tex.png')}?type=#{type}&data=#{Base64.encode64(tex).chomp}" alt="#{CGI.escapeHTML(tex)}" />}
         rescue # In case of error
+          case type
+          when :block
+            tex = "\\[#{tex}\\]"
+          when :inline
+            tex = "\\(#{tex}\\)"
+          end
+          
           out = CGI.escapeHTML(tex)
         end
         
