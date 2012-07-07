@@ -7,6 +7,8 @@ module Gollum
 
   class Markup
     attr_accessor :toc
+    attr_reader   :metadata
+
     # Initialize a new Markup object.
     #
     # page - The Gollum::Page.
@@ -27,6 +29,7 @@ module Gollum
       @wsdmap  = {}
       @premap  = {}
       @toc = nil
+      @metadata = nil
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -43,6 +46,7 @@ module Gollum
         @wiki.sanitizer
 
       data = @data.dup
+      data = extract_metadata(data)
       data = extract_code(data)
       data = extract_tex(data)
       data = extract_wsd(data)
@@ -560,6 +564,29 @@ module Gollum
         data.gsub!(id, Gollum::WebSequenceDiagram.new(code, style).to_tag)
       end
       data
+    end
+
+    #########################################################################
+    #
+    # Metadata
+    #
+    #########################################################################
+
+    # Extract metadata for data and build metadata table. Metadata
+    # is content found between `<!-- ---` and `-->` markers, and must
+    # be a valid YAML mapping.
+    #
+    # Returns the String of formatted data with metadata removed.
+    def extract_metadata(data)
+      @metadata ||= {}
+      data.gsub(/\<\!--+\s+---(.*?)--+\>/m) do
+        yaml = @wiki.sanitizer.clean($1)
+        hash = YAML.load(yaml)
+        if Hash === hash
+          @metadata.update(hash)
+        end
+        ''
+      end
     end
 
     # Hook for getting the formatted value of extracted tag data.

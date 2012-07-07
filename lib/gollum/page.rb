@@ -217,6 +217,14 @@ module Gollum
       markup_class.toc
     end
 
+    # Public: Embedded metadata.
+    #
+    # Returns Hash of metadata.
+    def meta_data()
+      formatted_data if markup_class.metadata == nil
+      markup_class.metadata
+    end
+
     # Public: The format of the page.
     #
     # Returns the Symbol format of the page. One of:

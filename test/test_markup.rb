@@ -505,6 +505,57 @@ np.array([[2,2],[1,3]],np.float)
 
   #########################################################################
   #
+  # Metadata Blocks
+  #
+  #########################################################################
+
+  test "metadata blocks" do
+    content = "a\n\n<!-- ---\ntags: [foo, bar]\n-->\n\nb"
+    output = "<p>a</p>\n\n<p>b</p>"
+    result = {'tags'=>['foo','bar']}
+
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add metadata")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered 
+    assert_equal result, page.meta_data
+  end
+
+  test "metadata blocks with newline" do
+    content = "a\n\n<!--\n---\ntags: [foo, bar]\n-->\n\nb"
+    output = "<p>a</p>\n\n<p>b</p>"
+    result = {'tags'=>['foo','bar']}
+
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add metadata")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered 
+    assert_equal result, page.meta_data
+  end
+
+  test "metadata sanitation" do
+    content = "a\n\n<!-- ---\nfoo: <script>alert('');</script>\n-->\n\nb"
+    output = "<p>a</p>\n\n<p>b</p>"
+    result = {'foo'=>nil}
+
+    index = @wiki.repo.index
+    index.add("Bilbo-Baggins.md", content)
+    index.commit("Add metadata")
+
+    page = @wiki.page("Bilbo Baggins")
+    rendered = Gollum::Markup.new(page).render
+    assert_equal output, rendered 
+    assert_equal result, page.meta_data
+  end
+
+  #########################################################################
+  #
   # Various
   #
   #########################################################################
