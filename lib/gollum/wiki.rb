@@ -686,8 +686,9 @@ module Gollum
     #
     # Returns an Array of BlobEntry instances.
     def tree_map_for(ref, ignore_page_file_dir=false)
-      if ignore_page_file_dir
-        GitAccess.new(path, nil, @repo_is_bare).tree(ref)
+      if ignore_page_file_dir && !@page_file_dir.nil?
+        @root_access ||= GitAccess.new(path, nil, @repo_is_bare)
+        @root_access.tree(ref)
       else
         @access.tree(ref)
       end
