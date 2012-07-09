@@ -682,10 +682,15 @@ module Gollum
     # listing is cached based on its actual commit SHA.
     #
     # ref - A String ref that is either a commit SHA or references one.
+    # ignore_page_file_dir - Boolean, if true, searches all files within the git repo, regardless of dir/subdir
     #
     # Returns an Array of BlobEntry instances.
-    def tree_map_for(ref)
-      @access.tree(ref)
+    def tree_map_for(ref, ignore_page_file_dir=false)
+      if ignore_page_file_dir
+        GitAccess.new(path, nil, @repo_is_bare).tree(ref)
+      else
+        @access.tree(ref)
+      end
     rescue Grit::GitRuby::Repository::NoSuchShaFound
       []
     end

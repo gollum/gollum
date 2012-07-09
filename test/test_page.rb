@@ -195,3 +195,36 @@ context "Page" do
     assert_equal "/foo", Gollum::BlobEntry.normalize_dir("/foo")
   end
 end
+
+context "within a sub-directory" do
+  setup do
+    @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"), { :page_file_dir => 'Rivendell' })
+  end
+
+  test "get existing page" do
+    page = @wiki.page('Elrond')
+    assert_equal Gollum::Page, page.class
+    assert page.raw_data =~ /^# Elrond\n\nElrond/
+    assert_equal 'Rivendell/Elrond.md', page.path
+    assert_equal :markdown, page.format
+    assert_equal @wiki.repo.commits.first.id, page.version.id
+  end
+
+  test "should not get page from parent dir" do
+    page = @wiki.page('Bilbo Baggins')
+    assert_equal nil, page
+  end
+
+  test "should inherit header/footer/sidebar pages from parent directories" do
+    page = @wiki.page('Elrond')
+
+    assert_equal Gollum::Page, page.sidebar.class
+    assert_equal Gollum::Page, page.header.class
+    assert_equal Gollum::Page, page.footer.class
+
+    assert page.sidebar.raw_data =~ /^Lord of the Rings/
+    assert page.header.raw_data =~ /^Hobbits/
+    assert page.footer.raw_data =~ /^Lord of the Rings/
+  end
+end
+
