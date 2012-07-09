@@ -143,7 +143,7 @@ module Precious
     end
 
     post '/create' do
-      name         = params[:page].to_ascii
+      name         = params[:page].to_url
       path         = sanitize_empty_params(params[:path])
       format       = params[:format].intern
 
