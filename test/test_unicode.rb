@@ -16,16 +16,16 @@ context "Unicode Support" do
   end
 
   test "create and read non-latin page" do
-    @wiki.write_page("한글 test", :markdown, "# 한글")
+    @wiki.write_page("test", :markdown, "# 한글")
 
-    page = @wiki.page("한글 test")
+    page = @wiki.page("test")
     assert_equal Gollum::Page, page.class
     assert_equal "# 한글", utf8(page.raw_data)
   end
 
   test "unicode with existing format rules" do
-    @wiki.write_page("한글 test", :markdown, "# 한글")
-    assert_equal @wiki.page("한글 test").path, @wiki.page("한글-test").path
+    @wiki.write_page("test", :markdown, "# 한글")
+    assert_equal @wiki.page("test").path, @wiki.page("test").path
   end
 end
 
@@ -43,24 +43,13 @@ context "Frontend Unicode support" do
     FileUtils.rm_rf(@path)
   end
 
-  test "creates korean page" do
-    post "/create", :content => 'english text', :page => "한글",
-      :format => 'markdown', :message => 'def'
-    follow_redirect!
-    assert last_response.ok?
-
-    page = @wiki.page('한글')
-    assert_equal 'english text', page.raw_data
-    assert_equal 'def', page.version.message
-  end
-
   test "creates korean page which contains korean content" do
-    post "/create", :content => '한글 text', :page => "한글",
+    post "/create", :content => '한글 text', :page => "k",
       :format => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
 
-    page = @wiki.page('한글')
+    page = @wiki.page('k')
     assert_equal '한글 text', utf8(page.raw_data)
     assert_equal 'def', page.version.message
   end
@@ -86,23 +75,23 @@ context "Frontend Unicode support" do
   end
 
   test "heavy use 2" do
-    post "/create", :content => '한글 text', :page => "한글",
+    post "/create", :content => '한글 text', :page => "k",
       :format => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
 
-    @wiki.update_page(@wiki.page('한글'), nil, nil, '다른 text', {})
+    @wiki.update_page(@wiki.page('k'), nil, nil, '다른 text', {})
     @wiki = Gollum::Wiki.new(@path)
-    page = @wiki.page('한글')
+    page = @wiki.page('k')
     assert_equal '다른 text', utf8(page.raw_data)
 
-    post '/edit/' + CGI.escape('한글'), :page => '한글', :content => '바뀐 text',
+    post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
       :format => 'markdown', :message => 'ghi'
     follow_redirect!
     assert last_response.ok?
 
     @wiki = Gollum::Wiki.new(@path)
-    page = @wiki.page('한글')
+    page = @wiki.page('k')
     assert_equal '바뀐 text', utf8(page.raw_data)
     assert_equal 'ghi', page.version.message
   end
