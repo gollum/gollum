@@ -96,6 +96,12 @@ context "Frontend Unicode support" do
     assert_equal 'ghi', page.version.message
   end
 
+  test 'transliteration' do
+    @wiki.write_page('ééééé', :markdown, '한글 text', { :name => '', :email => '' } )
+    page = @wiki.page('eeeee')
+    assert_equal '한글 text', utf8(page.raw_data)
+  end
+
   def app
     Precious::App
   end
