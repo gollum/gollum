@@ -97,7 +97,8 @@ context "Frontend Unicode support" do
   end
 
   test 'transliteration' do
-    @wiki.write_page('ééééé', :markdown, '한글 text', { :name => '', :email => '' } )
+    # TODO: Remove to_url once write_page changes are merged.
+    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', { :name => '', :email => '' } )
     page = @wiki.page('eeeee')
     assert_equal '한글 text', utf8(page.raw_data)
   end
