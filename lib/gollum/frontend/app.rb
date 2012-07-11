@@ -3,7 +3,6 @@ require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
 require 'useragent'
-require 'stringex'
 
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
@@ -143,7 +142,7 @@ module Precious
     end
 
     post '/create' do
-      name         = params[:page].to_url
+      name         = params[:page]
       path         = sanitize_empty_params(params[:path])
       format       = params[:format].intern
 

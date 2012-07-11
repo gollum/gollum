@@ -31,7 +31,9 @@ context "Page" do
   end
 
   test "get existing page with underscore" do
-    assert_nil @wiki.page('Bilbo_Baggins')
+    # underscores are now converted to dashes by stringex.to_url
+    # Bilbo_Baggins maps to Bilbo-Baggins which exists
+    assert_equal @wiki.page('Bilbo_Baggins').path, @wiki.page('Bilbo-Baggins').path
   end
 
   test "get existing page where filename contains whitespace, with hypen" do
