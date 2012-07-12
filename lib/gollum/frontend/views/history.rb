@@ -17,8 +17,8 @@ module Precious
             :id7      => v.id[0..6],
             :num      => i,
             :selected => @page.version.id == v.id,
-            :author   => v.author.name,
-            :message  => v.message,
+            :author   => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message  => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
             :date     => v.committed_date.strftime("%B %d, %Y"),
             :gravatar => Digest::MD5.hexdigest(v.author.email) }
         end
