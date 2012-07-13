@@ -23,7 +23,7 @@ wiki_options = {}
 
 opts = OptionParser.new do |opts|
   opts.banner = help
-
+ 
   opts.on("--port [PORT]", "Bind port (default 4567).") do |port|
     options['port'] = port.to_i
   end
