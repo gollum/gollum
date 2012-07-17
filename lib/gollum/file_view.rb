@@ -106,24 +106,24 @@ module Gollum
 
       # process rest of folders
       (0...sorted_folders.size).each do | index |
-          page =  @pages[ sorted_folders[ index ][1] ]
+          page =  @pages[ sorted_folders[ index ][ 1 ] ]
           path = page.path
           folder = ::File.dirname path
 
-          tmp_array = folder.split('/')
+          tmp_array = folder.split '/'
 
-          0.upto(tmp_array.size - 1) do |index|
-            if cwd_array[index].nil? || changed
-              html += new_sub_folder tmp_array[index]
+          (0...tmp_array.size).each do | index |
+            if cwd_array[ index ].nil? || changed
+              html += new_sub_folder tmp_array[ index ]
               next
             end
 
-            if cwd_array[index] != tmp_array[index]
+            if cwd_array[ index ] != tmp_array[ index ]
               changed = true
-              index.upto(cwd_array.size - 1) do |i|
+              (cwd_array.size - index).times do
                 html += end_folder
               end
-              html += new_sub_folder tmp_array[index]
+              html += new_sub_folder tmp_array[ index ]
             end
           end
 
