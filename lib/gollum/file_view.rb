@@ -61,8 +61,6 @@ module Gollum
       # If there are no folders, then we're done.
       return enclose_tree(html) if folder_start <= -1
 
-      puts "!>> folder_start = #{folder_start}, count = #{count}"
-
       # Handle special case of only one folder.
       if (count - folder_start == 1)
         page = @pages[ folder_start ]
@@ -82,7 +80,6 @@ module Gollum
 
       sorted_folders = []
       (folder_start).upto count - 1 do | index |
-        puts "!>>sorted_folders => #{@pages[ index ].path} "
         sorted_folders += [[ @pages[ index ].path, index ]]
       end
 
