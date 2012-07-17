@@ -48,9 +48,13 @@ opts = OptionParser.new do |opts|
   opts.on("--page-file-dir [PATH]", "Specify the sub directory for all page files (default: repository root).") do |path|
     wiki_options[:page_file_dir] = path
   end
-  
+
   opts.on("--base-path [PATH]", "Specify the base path.") do |path|
     wiki_options[:base_path] = path
+  end
+
+  opts.on("--gollum-path [PATH]", "Specify the gollum path.") do |path|
+    wiki_options[:gollum_path] = path
   end
 
   opts.on("--ref [REF]", "Specify the repository ref to use (default: master).") do |ref|
@@ -78,7 +82,11 @@ rescue OptionParser::InvalidOption
   exit
 end
 
-gollum_path = ARGV[0] || Dir.pwd
+if wiki_options[:gollum_path] then
+  gollum_path = wiki_options[:gollum_path]
+else
+  gollum_path = ARGV[0] || Dir.pwd
+end
 
 if options['irb']
   require 'irb'
