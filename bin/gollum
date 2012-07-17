@@ -82,11 +82,10 @@ rescue OptionParser::InvalidOption
   exit
 end
 
-if wiki_options[:gollum_path] then
-  gollum_path = wiki_options[:gollum_path]
-else
-  gollum_path = ARGV[0] || Dir.pwd
-end
+# --gollum-path wins over ARGV[0]
+gollum_path = wiki_options[:gollum_path] ?
+              wiki_options[:gollum_path] :
+              ARGV[0] || Dir.pwd
 
 if options['irb']
   require 'irb'
