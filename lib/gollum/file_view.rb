@@ -105,7 +105,7 @@ module Gollum
       changed = false
 
       # process rest of folders
-      0.upto(sorted_folders.size - 1) do | index |
+      (0...sorted_folders.size).each do | index |
           page =  @pages[ sorted_folders[ index ][1] ]
           path = page.path
           folder = ::File.dirname path
