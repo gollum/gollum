@@ -141,7 +141,7 @@ module Precious
 
     get '/create/*' do
       @path        = extract_path(params[:splat].first)
-      @name        = extract_name(params[:splat].first)
+      @name        = extract_name(params[:splat].first).to_url
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
 
