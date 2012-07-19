@@ -2,29 +2,12 @@
 <html>
 <head>
 <title>Live Preview</title>
-<script>
-(function( win ){
-var location = win.location;
-
-// RegExp from http://stackoverflow.com/questions/901115/get-query-string-values-in-javascript
-function pageName() {
-  var value = new RegExp( '[\\?&]' + 'page' + '=([^&#]*)' ).exec( location.href );
-  return  ( !value ) ? 0 : value[ 1 ] || 0;
-}
-
-// Fall back to old edit mode on browsers that do not support typed arrays.
-if ( typeof Int32Array == 'undefined' ) {
-  win.location = location.protocol + '//' + location.host + '/edit/' + pageName();
-}
-})(window);
-</script>
 <link rel='stylesheet' type='text/css' href='../css/template.css' />
 <link rel='stylesheet' type='text/css' href='css/custom.css' />
 </head>
 
 <body>
 <div id='editor'></div>
-
 <div id='previewframe'><div id='contentframe' class='markdown-body'></div></div>
 <!-- tool panel from notepage.es. save & savecomment icons from Retina Display Icon Set. -->  
 <div id='toolpanel' class='toolpanel edit' style='width: 500px; right: 0px; visibility: hidden;'>
@@ -47,11 +30,12 @@ var require = {
   }
 };
 </script>
-<script src='js/requirejs/require.js'></script>
-<script src='js/jquery/jquery-1.7.2.min.js'></script>
-<script src='js/debounce/jquery.ba-throttle-debounce.js'></script>
-<script src='js/sundown/sundown_o2_wo.js'></script>
-<script src='js/livepreview/livepreview.js'></script>
+<script src='js/requirejs.min.js'></script>
+<script src='../javascript/jquery-1.7.2.min.js'></script>
+<script src='js/jquery.ba-throttle-debounce.min.js'></script>
+<script src='js/sundown.js'></script>
+<script src='js/md_sundown.js'></script>
+<script src='js/livepreview.js'></script>
 <script>(function(d,j){
 j = d.createElement('script');
 j.src = 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';

@@ -29,6 +29,15 @@ body {
   font-size: 16px;
 }
 
+/*
+  Must set ace-line to preserve whitespace in empty lines.
+  Ace editor sets the height inline. The static highlight ext does not.
+  <div class="ace_line" style="height:15px"></div>
+*/
+#previewframe #contentframe .ace-github .ace_editor.ace_scroller.ace_text-layer .ace_line {
+  height: 15px;
+}
+
 /* Set comment to have a higher z-index
 so editor doesn't display in the background. */
 

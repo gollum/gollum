@@ -70,9 +70,6 @@ opts = OptionParser.new do |opts|
   end
 end
 
-# Keep live_preview disabled until a JS based markdown parser is ready.
-wiki_options[:live_preview] = false
-
 # Read command line options into `options` hash
 begin
   opts.parse!

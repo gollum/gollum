@@ -1,6 +1,5 @@
-Client side live preview of Markdown for Gollum with syntax highlighting.
-
-[Click for demo.](http://bootstraponline.github.com/livepreview/public)
+- [sundown + livepreview](http://bootstraponline.github.com/livepreview/public)
+- [markdowndeep + livepreview](http://bootstraponline.github.com/livepreview/public/index_deep.html)
 
 Uses code/assets from:
 
@@ -14,6 +13,7 @@ Uses code/assets from:
 0. [requirejs](https://github.com/jrburke/requirejs)
 0. [emscripten](https://github.com/kripken/emscripten)
 0. [sundown](https://github.com/bootstraponline/sundown)
+0. [markdowndeep](https://github.com/toptensoftware/markdowndeep)
 
 See licenses folder for details.
 
@@ -42,12 +42,3 @@ All changes to Ace for livepreview have been upstreamed.
 Using jQuery v1.7.2.
 
 - Download latest production version from [jquery.com](http://www.jquery.com).
-
-## Sundown & emscripten
-
-- Install emscripten
-- src/settings.js must be edited to include _str_to_html in exported functions.
-> var EXPORTED_FUNCTIONS = ['_main', '_malloc', '_free', '_str_to_html'];
-- Run to_js.sh after checking out the emscripten Sundown repository
-- Copy the o2 version into livepreview
-- Based on upstrean Sundown [c744346e507e7f905d4b401de78db4404068a43c](https://github.com/tanoku/sundown/commit/c744346e507e7f905d4b401de78db4404068a43c)
