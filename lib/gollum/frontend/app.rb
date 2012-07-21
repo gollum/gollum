@@ -125,8 +125,7 @@ module Precious
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       page         = wiki.page(CGI.unescape(params[:page]))
       name         = params[:rename] || page.name
-      msg          = commit_message
-      committer    = Gollum::Committer.new(wiki, msg)
+      committer    = Gollum::Committer.new(wiki, commit_message)
       commit       = {:committer => committer}
 
       update_wiki_page(wiki, page, params[:content], commit, name, params[:format])
