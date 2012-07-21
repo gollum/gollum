@@ -125,7 +125,9 @@ module Precious
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       page         = wiki.page(CGI.unescape(params[:page]))
       name         = params[:rename] || page.name
-      committer    = Gollum::Committer.new(wiki, commit_message)
+      msg          = commit_message
+      msg[:message]= msg[:message] + " [#{page.version_short}]"
+      committer    = Gollum::Committer.new(wiki, msg)
       commit       = {:committer => committer}
 
       update_wiki_page(wiki, page, params[:content], commit, name, params[:format])
@@ -137,6 +139,17 @@ module Precious
       page = wiki.page(params[:rename]) if params[:rename]
 
       redirect "/#{page.escaped_url_path}"
+    end
+
+    get '/delete/*' do
+      @path        = extract_path(params[:splat].first)
+      @name        = extract_name(params[:splat].first).to_url
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @page        = wiki.page(@name)
+      wiki.delete_page(@page, { :message => "Destroyed #{@name} (#{@page.format}) [#{@page.version_short}]" })
+
+      redirect '/'
     end
 
     get '/create/*' do
@@ -331,13 +344,13 @@ module Precious
       end
     end
 
-    def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
+    def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
       return if !page ||
         ((!content || page.raw_data == content) && page.format == format)
       name    ||= page.name
       format    = (format || page.format).to_sym
       content ||= page.raw_data
-      wiki.update_page(page, name, format, content.to_s, commit_message)
+      wiki.update_page(page, name, format, content.to_s, commit)
     end
 
     def commit_message

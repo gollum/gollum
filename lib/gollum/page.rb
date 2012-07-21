@@ -259,6 +259,13 @@ module Gollum
       end
     end
 
+    # Public: The first 7 characters of the current version.
+    #
+    # Returns the first 7 characters of the current version.
+   def version_short
+     version.to_s[0,7]
+   end
+
     # Public: The header Page.
     #
     # Returns the header Page or nil if none exists.

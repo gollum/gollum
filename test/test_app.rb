@@ -46,7 +46,7 @@ context "Frontend" do
     @wiki.clear_cache
     page_2 = @wiki.page(page_1.name)
     assert_equal 'abc', page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def [ed6c9f6]', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
@@ -72,12 +72,12 @@ context "Frontend" do
 
     assert_equal 'header', header_2.raw_data
     assert_equal 'footer', foot_2.raw_data
-    assert_equal 'def',    foot_2.version.message
+    assert_equal 'def [ed6c9f6]',    foot_2.version.message
     assert_not_equal foot_1.version.sha, foot_2.version.sha
     assert_not_equal header_1.version.sha, header_2.version.sha
 
     assert_equal 'sidebar', side_2.raw_data
-    assert_equal 'def',     side_2.version.message
+    assert_equal 'def [ed6c9f6]',     side_2.version.message
     assert_not_equal side_1.version.sha, side_2.version.sha
     assert_equal commits+1, @wiki.repo.commits('master').size
   end
@@ -95,7 +95,7 @@ context "Frontend" do
     assert_nil @wiki.page("B")
     page_2 = @wiki.page('C')
     assert_equal 'abc', page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def [ed6c9f6]', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
