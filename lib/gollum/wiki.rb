@@ -1,3 +1,14 @@
+require 'stringex'
+
+class String
+  alias :upstream_to_url :to_url
+  # _Header => header which causes errors
+  def to_url
+    return self if ['_Header', '_Footer', '_Sidebar'].include? self
+    upstream_to_url
+  end
+end
+
 module Gollum
   class Wiki
     include Pagination
@@ -196,6 +207,7 @@ module Gollum
     #
     # Returns a Gollum::Page or nil if no matching page was found.
     def page(name, version = @ref)
+      name = name.to_url
       @page_class.new(self).find(name, version)
     end
 
@@ -247,6 +259,7 @@ module Gollum
     # Returns the String SHA1 of the newly written version, or the
     # Gollum::Committer instance if this is part of a batch update.
     def write_page(name, format, data, commit = {})
+      name = name.to_url
       multi_commit = false
 
       committer = if obj = commit[:committer]
@@ -292,6 +305,7 @@ module Gollum
     # Gollum::Committer instance if this is part of a batch update.
     def update_page(page, name, format, data, commit = {})
       name   ||= page.name
+      name = name.to_url
       format ||= page.format
       dir      = ::File.dirname(page.path)
       dir      = '' if dir == '.'

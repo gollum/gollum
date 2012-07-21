@@ -102,7 +102,7 @@ context "Markup" do
     page = @wiki.page("Bilbo Baggins")
     output = page.formatted_data
     assert_match /class="internal present"/, output
-    assert_match /href="\/Bilbo-Baggins"/,   output
+    assert_match /href="\/bilbo-baggins"/,   output
     assert_match /\>Bilbo Baggins\</,        output
   end
 
@@ -135,7 +135,7 @@ context "Markup" do
       page = @wiki.page(name)
       output = page.formatted_data
       assert_match /class="internal present"/,        output
-      assert_match /href="\/wiki\/Bilbo-Baggins-\d"/, output
+      assert_match /href="\/wiki\/bilbo-baggins-\d"/, output
       assert_match /\>Bilbo Baggins \d\</,            output
     end
   end
@@ -145,7 +145,7 @@ context "Markup" do
     page   = @wiki.page('Precious #1')
     output = page.formatted_data
     assert_match /class="internal present"/, output
-    assert_match /href="\/Precious-%231"/,   output
+    assert_match /href="\/precious-number-1"/,   output
   end
 
   test "page link with extra #" do
@@ -153,7 +153,7 @@ context "Markup" do
     page   = @wiki.page('Potato')
     output = page.formatted_data
     assert_match /class="internal present"/, output
-    assert_match /href="\/Potato#1"/,        output
+    assert_match /href="\/potato#1"/,        output
   end
 
   test "external page link" do
@@ -167,14 +167,14 @@ context "Markup" do
     @wiki.write_page("Potato", :markdown, "a [[Potato Heaad|Potato]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal "<p>a<aclass=\"internalpresent\"href=\"/Potato\">PotatoHeaad</a></p>", normal(output)
+    assert_equal "<p>a<aclass=\"internalpresent\"href=\"/potato\">PotatoHeaad</a></p>", normal(output)
   end
 
   test "page link with different text on mediawiki" do
     @wiki.write_page("Potato", :mediawiki, "a [[Potato|Potato Heaad]] ", commit_details)
     page = @wiki.page("Potato")
     output = page.formatted_data
-    assert_equal normal("<p>\na <a class=\"internal present\" href=\"/Potato\">Potato Heaad</a> </p>
+    assert_equal normal("<p>\na <a class=\"internal present\" href=\"/potato\">Potato Heaad</a> </p>
 "), normal(output)
   end
 
