@@ -126,7 +126,6 @@ module Precious
       page         = wiki.page(CGI.unescape(params[:page]))
       name         = params[:rename] || page.name
       msg          = commit_message
-      msg[:message]= msg[:message] + " [#{page.version_short}]"
       committer    = Gollum::Committer.new(wiki, msg)
       commit       = {:committer => committer}
 
@@ -147,7 +146,7 @@ module Precious
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       @page        = wiki.page(@name)
-      wiki.delete_page(@page, { :message => "Destroyed #{@name} (#{@page.format}) [#{@page.version_short}]" })
+      wiki.delete_page(@page, { :message => "Destroyed #{@name} (#{@page.format})" })
 
       redirect '/'
     end

@@ -61,8 +61,8 @@ context "Frontend Unicode support" do
     assert last_response.ok?
 
     @wiki.update_page(@wiki.page('PG'), nil, nil, '다른 text', {})
-    page2 = @wiki.page('PG')
-    assert_equal '다른 text', utf8(page2.raw_data)
+    page = @wiki.page('PG')
+    assert_equal '다른 text', utf8(page.raw_data)
 
     post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
     follow_redirect!
@@ -71,7 +71,7 @@ context "Frontend Unicode support" do
     @wiki = Gollum::Wiki.new(@path)
     page = @wiki.page('PG')
     assert_equal '바뀐 text', utf8(page.raw_data)
-    assert_equal 'ghi [' + page2.version_short + ']', page.version.message
+    assert_equal 'ghi', page.version.message
   end
 
   test "heavy use 2" do
@@ -82,8 +82,8 @@ context "Frontend Unicode support" do
 
     @wiki.update_page(@wiki.page('k'), nil, nil, '다른 text', {})
     @wiki = Gollum::Wiki.new(@path)
-    page2 = @wiki.page('k')
-    assert_equal '다른 text', utf8(page2.raw_data)
+    page = @wiki.page('k')
+    assert_equal '다른 text', utf8(page.raw_data)
 
     post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
       :format => 'markdown', :message => 'ghi'
@@ -93,7 +93,7 @@ context "Frontend Unicode support" do
     @wiki = Gollum::Wiki.new(@path)
     page = @wiki.page('k')
     assert_equal '바뀐 text', utf8(page.raw_data)
-    assert_equal 'ghi [' + page2.version_short + ']', page.version.message
+    assert_equal 'ghi', page.version.message
   end
 
   test 'transliteration' do
