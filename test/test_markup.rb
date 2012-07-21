@@ -478,6 +478,20 @@ np.array([[2,2],[1,3]],np.float)
     assert_markup_highlights_code Gollum::Markup, rendered
   end
 
+  test "code with trailing whitespace" do
+    content = <<-END
+shoop da woop
+
+``` python 
+np.array([[2,2],[1,3]],np.float)
+```
+    END
+
+    # rendered with Gollum::Markup
+    page, rendered = render_page(content)
+    assert_markup_highlights_code Gollum::Markup, rendered
+  end
+
   def assert_markup_highlights_code(markup_class, rendered)
     assert_match /div class="highlight"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
     assert_match /span class="n"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
