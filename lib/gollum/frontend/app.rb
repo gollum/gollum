@@ -17,6 +17,7 @@ class String
   alias :upstream_to_url :to_url
   # _Header => header which causes errors
   def to_url
+    return nil if self.nil?
     return self if ['_Header', '_Footer', '_Sidebar'].include? self
     upstream_to_url
   end
@@ -124,7 +125,8 @@ module Precious
       wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       page         = wiki.page(CGI.unescape(params[:page]))
-      name         = params[:rename] || page.name
+      rename       = params[:rename].to_url if params[:rename]
+      name         = rename || page.name
       committer    = Gollum::Committer.new(wiki, commit_message)
       commit       = {:committer => committer}
 
@@ -134,14 +136,14 @@ module Precious
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
 
-      page = wiki.page(params[:rename]) if params[:rename]
+      page = wiki.page(rename) if rename
 
       redirect "/#{page.escaped_url_path}"
     end
 
     get '/delete/*' do
       @path        = extract_path(params[:splat].first)
-      @name        = extract_name(params[:splat].first).to_url
+      @name        = extract_name(params[:splat].first)
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       @page        = wiki.page(@name)

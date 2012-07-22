@@ -88,7 +88,7 @@ context "Frontend" do
       :rename => "C", :page => 'B',
       :format => page_1.format, :message => 'def'
     follow_redirect!
-    assert_equal "/C", last_request.fullpath
+    assert_equal '/c', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
