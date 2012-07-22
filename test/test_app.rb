@@ -153,6 +153,20 @@ context "Frontend" do
     assert_not_equal 'abc', page.raw_data
   end
 
+  test "delete a page" do
+    name = "deleteme"
+    post "/create", :content => 'abc', :page => name,
+      :format => 'markdown', :message => 'foo'
+    page = @wiki.page(name)
+    assert_equal 'abc', page.raw_data
+
+    get '/delete/' + name
+
+    @wiki.clear_cache
+    page = @wiki.page(name)
+    assert_equal nil, page
+  end
+
   test "previews content" do
     post "/preview", :content => 'abc', :format => 'markdown'
     assert last_response.ok?
