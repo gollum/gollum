@@ -69,6 +69,7 @@ module Precious
 
     before do
       @base_url = url('/')
+      settings.wiki_options.merge!({ :base_path => @base_url }) unless settings.wiki_options.has_key? :base_path
     end
 
     get '/' do
