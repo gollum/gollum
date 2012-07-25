@@ -81,6 +81,11 @@ module Precious
       enable :logging, :raise_errors, :dump_errors
     end
 
+    before do
+      @base_url = url('/')
+      settings.wiki_options.merge!({ :base_path => @base_url }) unless settings.wiki_options.has_key? :base_path
+    end
+
     get '/' do
       show_page_or_file('Home')
     end
@@ -107,7 +112,7 @@ module Precious
           if @path
             live_preview_url << '&path=' + encodeURIComponent(@path)
           end
-          redirect live_preview_url
+          redirect to(live_preview_url)
         else
           @page = page
           @page.version = wiki.repo.log(wiki.ref, @page.path).first
@@ -116,7 +121,7 @@ module Precious
           mustache :edit
         end
       else
-        redirect "/create/#{CGI.escape(@name)}"
+        redirect to("/create/#{CGI.escape(@name)}")
       end
     end
 
@@ -138,7 +143,7 @@ module Precious
 
       page = wiki.page(rename) if rename
 
-      redirect "/#{page.escaped_url_path}"
+      redirect to("/#{page.escaped_url_path}")
     end
 
     get '/delete/*' do
@@ -149,7 +154,7 @@ module Precious
       @page        = wiki.page(@name)
       wiki.delete_page(@page, { :message => "Destroyed #{@name} (#{@page.format})" })
 
-      redirect '/'
+      redirect to('/')
     end
 
     get '/create/*' do
@@ -160,7 +165,7 @@ module Precious
 
       page = wiki.page(@name)
       if page
-        redirect "/#{page.escaped_url_path}"
+        redirect to("/#{page.escaped_url_path}")
       else
         mustache :create
       end
@@ -177,7 +182,7 @@ module Precious
       begin
         wiki.write_page(name, format, params[:content], commit_message)
         page = wiki.page(name)
-        redirect "/#{page.escaped_url_path}"
+        redirect to("/#{page.escaped_url_path}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -195,7 +200,7 @@ module Precious
       sha2         = shas.shift
 
       if wiki.revert_page(@page, sha1, sha2, commit_message)
-        redirect "/#{@page.escaped_url_path}"
+        redirect to("/#{@page.escaped_url_path}")
       else
         sha2, sha1 = sha1, "#{sha1}^" if !sha2
         @versions = [sha1, sha2]
@@ -232,12 +237,13 @@ module Precious
       @file     = params[:splat].first
       @versions = params[:versions] || []
       if @versions.size < 2
-        redirect "/history/#{@file}"
+        redirect to("/history/#{@file}")
       else
-        redirect "/compare/%s/%s...%s" % [
+        redirect to("/compare/%s/%s...%s" % [
           @file,
           @versions.last,
           @versions.first]
+        )
       end
     end
 
@@ -340,7 +346,7 @@ module Precious
         file.raw_data
       else
         page_path = [path, name].compact.join('/')
-        redirect "/create/#{CGI.escape(page_path).gsub('%2F','/')}"
+        redirect to("/create/#{CGI.escape(page_path).gsub('%2F','/')}")
       end
     end
 

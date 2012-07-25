@@ -5,9 +5,9 @@
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="/{{escaped_url_path}}"
+    <li class="minibutton"><a href="{{base_url}}{{escaped_url_path}}"
        class="action-view-page">View Page</a></li>
-    <li class="minibutton"><a href="/edit/{{escaped_url_path}}"
+    <li class="minibutton"><a href="{{base_url}}edit/{{escaped_url_path}}"
        class="action-edit-page">Edit Page</a></li>
   </ul>
 </div>
@@ -19,7 +19,7 @@
   </ul>
 
   <form name="compare-versions" id="version-form" method="post"
-   action="/compare/{{escaped_url_path}}">
+   action="{{base_url}}compare/{{escaped_url_path}}">
   <fieldset>
   <table>
     <tbody>
@@ -39,7 +39,7 @@
         <td class="commit-name">
           <span class="time-elapsed">{{date}}:</span>&nbsp;
           {{message}}
-          [<a href="/{{escaped_url_path}}/{{id}}" title="View commit">{{id7}}</a>]
+          [<a href="{{base_url}}{{escaped_url_path}}/{{id}}" title="View commit">{{id7}}</a>]
         </td>
       </tr>
       {{/versions}}
