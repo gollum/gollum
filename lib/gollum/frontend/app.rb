@@ -121,7 +121,7 @@ module Precious
           mustache :edit
         end
       else
-        redirect "/create/#{CGI.escape(@name)}"
+        redirect to("/create/#{CGI.escape(@name)}")
       end
     end
 
@@ -154,7 +154,7 @@ module Precious
       @page        = wiki.page(@name)
       wiki.delete_page(@page, { :message => "Destroyed #{@name} (#{@page.format})" })
 
-      redirect '/'
+      redirect to('/')
     end
 
     get '/create/*' do
@@ -165,7 +165,7 @@ module Precious
 
       page = wiki.page(@name)
       if page
-        redirect "/#{page.escaped_url_path}"
+        redirect to("/#{page.escaped_url_path}")
       else
         mustache :create
       end
@@ -346,7 +346,7 @@ module Precious
         file.raw_data
       else
         page_path = [path, name].compact.join('/')
-        redirect "/create/#{CGI.escape(page_path).gsub('%2F','/')}"
+        redirect to("/create/#{CGI.escape(page_path).gsub('%2F','/')}")
       end
     end
 
