@@ -124,30 +124,17 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tex(data)
-      # Random string to escape the `$` character (might be overkill)
-      esc = "/%%/"
       data.gsub(/\\\[\s*(.*?)\s*\\\]/m) do
         tag = CGI.escapeHTML($1)
         id  = Digest::SHA1.hexdigest(tag)
         @texmap[id] = [:block, tag]
         id
-      end.gsub(/'\$/, esc). # Replace `'$` with the `esc` string in order to escape it
-        gsub(/\$\$\s*(.*?)\s*\$\$/m) do
-          tag = CGI.escapeHTML($1)
-          id  = Digest::SHA1.hexdigest(tag)
-          @texmap[id] = [:block, tag]
-          id
       end.gsub(/\\\(\s*(.*?)\s*\\\)/m) do
         tag = CGI.escapeHTML($1)
         id  = Digest::SHA1.hexdigest(tag)
         @texmap[id] = [:inline, tag]
         id
-      end.gsub(/\$\s*(.*?)\s*\$/m) do # match inline $<formula>$ 
-        tag = CGI.escapeHTML($1)
-        id  = Digest::SHA1.hexdigest(tag)
-        @texmap[id] = [:inline, tag]
-        id
-      end.gsub(/#{esc}/, '$') # replace the `esc` string back to `$`
+      end
     end
 
     # Process all TeX from the texmap and replace the placeholders with the
@@ -472,11 +459,12 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_code(data)
       data.gsub!(/^([ \t]*)``` ?([^\r\n]+)?\r?\n(.+?)\r?\n\1```\r?$/m) do
-        id     = Digest::SHA1.hexdigest("#{$2}.#{$3}")
+        lang   = $2 ? $2.strip : nil
+        id     = Digest::SHA1.hexdigest("#{lang}.#{$3}")
         cached = check_cache(:code, id)
         @codemap[id] = cached   ?
           { :output => cached } :
-          { :lang => $2, :code => $3, :indent => $1 }
+          { :lang => lang, :code => $3, :indent => $1 }
         "#{$1}#{id}" # print the SHA1 ID with the proper indentation
       end
       data

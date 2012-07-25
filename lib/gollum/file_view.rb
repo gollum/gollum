@@ -15,19 +15,19 @@ module Gollum
 
     def new_page page
       name = page.name
-      %Q(  <li class="file"><a href="#{name}">#{name}</a></li>\n)
+      url  = page.filename_stripped
+      %Q(  <li class="file"><a href="#{url}">#{name}</a></li>\n)
     end
 
-    def new_folder page
-      new_sub_folder ::File.dirname(page.path), page.name
+    def new_folder folder_path
+      new_sub_folder folder_path
     end
 
-    def new_sub_folder path, name
+    def new_sub_folder path
       <<-HTML
       <li>
         <label>#{path}</label> <input type="checkbox" checked />
         <ol>
-          <li class="file"><a href="#{name}">#{name}</a></li>
       HTML
     end
 
@@ -65,11 +65,12 @@ module Gollum
       if (count - folder_start == 1)
         page = @pages[ folder_start ]
         name = page.name
+        url  = page.filename_stripped
         html += <<-HTML
         <li>
           <label>#{::File.dirname(page.path)}</label> <input type="checkbox" checked />
           <ol>
-            <li class="file"><a href="#{name}">#{name}</a></li>
+            <li class="file"><a href="#{url}">#{name}</a></li>
          </ol>
         </li>
         HTML
@@ -99,53 +100,37 @@ module Gollum
         end
       end
 
-      # Process first folder
-      page = @pages[ sorted_folders[ 0 ][1] ]
-      html += new_folder page
-
-      last_folder =  ::File.dirname page.path # define last_folder
-
       # keep track of folder depth, 0 = at root.
-      depth = 0
+      cwd_array = []
+      changed = false
 
       # process rest of folders
-      1.upto(sorted_folders.size - 1) do | index |
-          page =  @pages[ sorted_folders[ index ][1] ]
+      (0...sorted_folders.size).each do | index |
+          page =  @pages[ sorted_folders[ index ][ 1 ] ]
           path = page.path
           folder = ::File.dirname path
 
-          if last_folder == folder
-            # same folder
-            html += new_page page
-          elsif folder.include?('/')
-            # check if we're going up or down a depth level
-            if last_folder.scan('/').size > folder.scan('/').size
-              # end tag for 1 subfolder & 1 parent folder
-              # so emit 2 end tags
-              2.times { html += end_folder; }
-              depth -= 1
-            else
-              depth += 1
+          tmp_array = folder.split '/'
+
+          (0...tmp_array.size).each do | index |
+            if cwd_array[ index ].nil? || changed
+              html += new_sub_folder tmp_array[ index ]
+              next
             end
 
-            # subfolder
-            html += new_sub_folder ::File.dirname(page.path).split('/').last, page.name
-          else
-            # depth+1 because we need an additional end_folder
-            (depth+1).times { html += end_folder; }
-            depth = 0
-            # New root folder
-            html += new_folder page
+            if cwd_array[ index ] != tmp_array[ index ]
+              changed = true
+              (cwd_array.size - index).times do
+                html += end_folder
+              end
+              html += new_sub_folder tmp_array[ index ]
+            end
           end
 
-          last_folder = folder
+          html += new_page page
+          cwd_array = tmp_array
+          changed = false
       end
-
-      # Process last folder's ending tags.
-      (depth+1).times {       
-        depth.times { html += end_folder; }
-        depth = 0
-      }
 
       # return the completed html
       enclose_tree html

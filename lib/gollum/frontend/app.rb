@@ -3,6 +3,7 @@ require 'sinatra'
 require 'gollum'
 require 'mustache/sinatra'
 require 'useragent'
+require 'stringex'
 
 require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
@@ -10,6 +11,17 @@ require 'gollum/frontend/views/has_page'
 
 require File.expand_path '../uri_encode_component', __FILE__
 require File.expand_path '../helpers', __FILE__
+
+# Fix to_url
+class String
+  alias :upstream_to_url :to_url
+  # _Header => header which causes errors
+  def to_url
+    return nil if self.nil?
+    return self if ['_Header', '_Footer', '_Sidebar'].include? self
+    upstream_to_url
+  end
+end
 
 # Run the frontend, based on Sinatra
 #
@@ -30,15 +42,17 @@ module Precious
     dir = File.dirname(File.expand_path(__FILE__))
 
     # Detect unsupported browsers.
-    @@supported_browsers = ['Firefox', 'Chrome', 'Safari']
     Browser = Struct.new(:browser, :version)
-    @@ie9 = Browser.new('Internet Explorer', '9.0')
+
+    @@min_ua = [
+        Browser.new('Internet Explorer', '10.0'),
+        Browser.new('Chrome', '7.0'),
+        Browser.new('Firefox', '4.0'),
+    ]
 
     def supported_useragent?(user_agent)
       ua = UserAgent.parse(user_agent)
-      return true if ua >= @@ie9
-
-      @@supported_browsers.include? ua.browser
+      @@min_ua.detect {|min| ua >= min }
     end
 
     # We want to serve public assets for now
@@ -102,7 +116,8 @@ module Precious
         else
           @page = page
           @page.version = wiki.repo.log(wiki.ref, @page.path).first
-          @content = page.raw_data
+          raw_data = page.raw_data
+          @content = raw_data.respond_to?(:force_encoding) ? raw_data.force_encoding('UTF-8') : raw_data
           mustache :edit
         end
       else
@@ -111,11 +126,12 @@ module Precious
     end
 
     post '/edit/*' do
-      path         = sanitize_empty_params(params[:path])
+      path         = extract_path(sanitize_empty_params(params[:path]))
       wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       page         = wiki.page(CGI.unescape(params[:page]))
-      name         = params[:rename] || page.name
+      rename       = params[:rename].to_url if params[:rename]
+      name         = rename || page.name
       committer    = Gollum::Committer.new(wiki, commit_message)
       commit       = {:committer => committer}
 
@@ -125,23 +141,38 @@ module Precious
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
 
-      page = wiki.page(params[:rename]) if params[:rename]
+      page = wiki.page(rename) if rename
 
       redirect to("/#{page.escaped_url_path}")
     end
-    
+
+    get '/delete/*' do
+      @path        = extract_path(params[:splat].first)
+      @name        = extract_name(params[:splat].first)
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @page        = wiki.page(@name)
+      wiki.delete_page(@page, { :message => "Destroyed #{@name} (#{@page.format})" })
+
+      redirect '/'
+    end
+
     get '/create/*' do
-      wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-      @name = params[:splat].first
-      if wiki.page(@name)
-        redirect "/#{CGI.escape(@name)}"
+      @path        = extract_path(params[:splat].first)
+      @name        = extract_name(params[:splat].first).to_url
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+
+      page = wiki.page(@name)
+      if page
+        redirect "/#{page.escaped_url_path}"
       else
         mustache :create
       end
     end
-    
+
     post '/create' do
-      name         = params[:page]
+      name         = params[:page].to_url
       path         = sanitize_empty_params(params[:path])
       format       = params[:format].intern
 
@@ -314,17 +345,18 @@ module Precious
         content_type file.mime_type
         file.raw_data
       else
-        redirect "/create/#{CGI.escape(name)}"
+        page_path = [path, name].compact.join('/')
+        redirect "/create/#{CGI.escape(page_path).gsub('%2F','/')}"
       end
     end
 
-    def update_wiki_page(wiki, page, content, commit_message, name = nil, format = nil)
+    def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
       return if !page ||
         ((!content || page.raw_data == content) && page.format == format)
       name    ||= page.name
       format    = (format || page.format).to_sym
       content ||= page.raw_data
-      wiki.update_page(page, name, format, content.to_s, commit_message)
+      wiki.update_page(page, name, format, content.to_s, commit)
     end
 
     def commit_message

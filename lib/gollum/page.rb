@@ -259,6 +259,13 @@ module Gollum
       end
     end
 
+    # Public: The first 7 characters of the current version.
+    #
+    # Returns the first 7 characters of the current version.
+   def version_short
+     version.to_s[0,7]
+   end
+
     # Public: The header Page.
     #
     # Returns the header Page or nil if none exists.
@@ -433,8 +440,10 @@ module Gollum
       false
     end
 
-    # Loads a sub page.  Sub page nanes (footers) are prefixed with
-    # an underscore to distinguish them from other Pages.
+    # Loads a sub page.  Sub page names (footers, headers, sidebars) are prefixed with
+    # an underscore to distinguish them from other Pages. If there is not one within
+    # the current directory, starts walking up the directory tree to try and find one
+    # within parent directories.
     #
     # name - String page name.
     #
@@ -447,7 +456,7 @@ module Gollum
 
       dirs = self.path.split('/')
       dirs.pop
-      map = @wiki.tree_map_for(@wiki.ref)
+      map = @wiki.tree_map_for(@wiki.ref, true)
       while !dirs.empty?
         if page = find_page_in_tree(map, name, dirs.join('/'))
           page.parent_page = self

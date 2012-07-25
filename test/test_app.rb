@@ -88,7 +88,7 @@ context "Frontend" do
       :rename => "C", :page => 'B',
       :format => page_1.format, :message => 'def'
     follow_redirect!
-    assert_equal "/C", last_request.fullpath
+    assert_equal '/c', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -113,15 +113,9 @@ context "Frontend" do
   test "creates pages with escaped characters in title" do
     post "/create", :content => 'abc', :page => 'Title with spaces',
       :format => 'markdown', :message => 'foo'
-    assert_equal 'http://example.org/Title-with-spaces', last_response.headers['Location']
+    assert_equal 'http://example.org/title-with-spaces', last_response.headers['Location']
     get "/Title-with-spaces"
     assert_match /abc/, last_response.body
-
-    post "/create", :content => 'ghi', :page => 'Title/with/slashes',
-      :format => 'markdown', :message => 'bar'
-    assert_equal 'http://example.org/Title-with-slashes', last_response.headers['Location']
-    get "/Title-with-slashes"
-    assert_match /ghi/, last_response.body
   end
 
   test "redirects to create on non-existant page" do
@@ -138,7 +132,7 @@ context "Frontend" do
     follow_redirect!
     assert_equal "/create/#{name}", last_request.fullpath
     assert last_response.ok?
-  end  
+  end
 
   test "create redirects to page if already exists" do
     name = "A"
@@ -147,7 +141,7 @@ context "Frontend" do
     assert_equal "/#{name}", last_request.fullpath
     assert last_response.ok?
   end
- 
+
   test "guards against creation of existing page" do
     name = "A"
     post "/create", :content => 'abc', :page => name,
@@ -157,6 +151,20 @@ context "Frontend" do
     @wiki.clear_cache
     page = @wiki.page(name)
     assert_not_equal 'abc', page.raw_data
+  end
+
+  test "delete a page" do
+    name = "deleteme"
+    post "/create", :content => 'abc', :page => name,
+      :format => 'markdown', :message => 'foo'
+    page = @wiki.page(name)
+    assert_equal 'abc', page.raw_data
+
+    get '/delete/' + name
+
+    @wiki.clear_cache
+    page = @wiki.page(name)
+    assert_equal nil, page
   end
 
   test "previews content" do
@@ -215,41 +223,6 @@ context "Frontend" do
     Precious::App
   end
 end
-
-# WTF? Surely this test is wrong...
-# In this test repo there is already a file called 'bar.md'.
-# This SHOULD raise a Duplicate Page error, no?
-# context "Frontend with page-file-dir" do
-#   include Rack::Test::Methods
-
-#   setup do
-#     @path = cloned_testpath("examples/page_file_dir.git")
-#     @wiki = Gollum::Wiki.new(@path, { :page_file_dir => "docs" })
-#     Precious::App.set(:gollum_path, @path)
-#     Precious::App.set(:wiki_options, { :page_file_dir => "docs" })
-#   end
-
-#   teardown do
-#     FileUtils.rm_rf(@path)
-#   end
-
-#   test "open existing parent" do
-#     get "/"
-#     assert last_response.ok?
-
-#     post "/create", :content => "asdf", :page => "bar",
-#       :format => 'markdown'
-#     follow_redirect!
-#     assert last_response.ok?
-
-#     # Assert not match.
-#     assert_equal true, /Duplicate page/.match(last_response.body) == nil
-#   end
-
-#   def app
-#     Precious::App
-#   end
-# end
 
 context "Frontend with lotr" do
   include Rack::Test::Methods
@@ -316,25 +289,25 @@ context "Frontend with lotr" do
   test "create pages within sub-directories" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/orc', last_response.headers['Location']
     get "/Mordor/Orc"
     assert_match /big smelly creatures/, last_response.body
 
-    post "/create", :content => 'really big smelly creatures', :page => 'Orc/Uruk-hai',
+    post "/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, very scary'
-    assert_equal 'http://example.org/Mordor/Orc-Uruk-hai', last_response.headers['Location']
-    get "/Mordor/Orc-Uruk-hai"
+    assert_equal 'http://example.org/Mordor/uruk-hai', last_response.headers['Location']
+    get "/Mordor/Uruk-Hai"
     assert_match /really big smelly creatures/, last_response.body
   end
 
   test "edit pages within sub-directories" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/orc', last_response.headers['Location']
 
     post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',
       :page => 'Orc', :path => 'Mordor', :message => 'minor edit'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/orc', last_response.headers['Location']
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body

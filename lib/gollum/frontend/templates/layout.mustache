@@ -6,19 +6,25 @@
   <link rel="stylesheet" type="text/css" href="{{base_url}}css/editor.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}css/dialog.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}css/template.css" media="all">
-  
+
   <!--[if IE 7]>
   <link rel="stylesheet" type="text/css" href="{{base_url}}css/ie7.css" media="all">
   <![endif]-->
 
   <script>var baseUrl = '{{base_url}}'</script>
-  <script type="text/javascript" src="{{base_url}}javascript/jquery.js"></script>
+  <script type="text/javascript" src="{{base_url}}javascript/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="{{base_url}}javascript/mousetrap.min.js"></script>
   <script type="text/javascript" src="{{base_url}}javascript/gollum.js"></script>
   <script type="text/javascript" src="{{base_url}}javascript/gollum.dialog.js"></script>
   <script type="text/javascript" src="{{base_url}}javascript/gollum.placeholder.js"></script>
-  
   <script type="text/javascript" src="{{base_url}}javascript/editor/gollum.editor.js"></script>
-  {{#mathjax}}<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>{{/mathjax}}
+  {{#mathjax}}<script>(function(d,j){
+  j = d.createElement('script');
+  j.src = 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+  (d.head || d.getElementsByTagName('head')[0]).appendChild(j);
+  }(document));
+  </script>{{/mathjax}}
+
   <title>{{title}}</title>
 </head>
 <body>

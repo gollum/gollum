@@ -226,6 +226,8 @@ a.absent {
 }
 .markdown-body table {
   padding: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 .markdown-body table tr {
   border-top: 1px solid #ccc;
