@@ -662,7 +662,7 @@ ul.actions {
 }
 
 #head #searchbar #searchbar-fauxtext #search-submit span {
-  background-image: url(/images/icon-sprite.png);
+  background-image: url(../images/icon-sprite.png);
   background-position: -431px -1px;
   background-repeat: no-repeat;
   display: block;
