@@ -15,7 +15,7 @@ module Gollum
 
     def new_page page
       name = page.name
-      url  = page.filename_stripped
+      url  = ::File.join(::File.dirname(page.path), page.filename_stripped)
       %Q(  <li class="file"><a href="#{url}">#{name}</a></li>\n)
     end
 
