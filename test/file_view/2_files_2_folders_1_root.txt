@@ -1,5 +1,5 @@
 <ol class="tree">
-  <li class="file"><a href="./root">root</a></li>
+  <li class="file"><a href="root">root</a></li>
       <li>
         <label>folder0</label> <input type="checkbox" checked />
         <ol>

@@ -15,7 +15,7 @@ module Gollum
 
     def new_page page
       name = page.name
-      url  = ::File.join(::File.dirname(page.path), page.filename_stripped)
+      url  = url_for_page page
       %Q(  <li class="file"><a href="#{url}">#{name}</a></li>\n)
     end
 
@@ -36,6 +36,12 @@ module Gollum
         </ol>
       </li>
       HTML
+    end
+
+    def url_for_page page
+      url = ::File.join(::File.dirname(page.path), page.filename_stripped)
+      url = url[2..-1] if url[0,2] == './'
+      url
     end
 
     def render_files
@@ -65,7 +71,7 @@ module Gollum
       if (count - folder_start == 1)
         page = @pages[ folder_start ]
         name = page.name
-        url  = ::File.join(::File.dirname(page.path), page.filename_stripped)
+        url  = url_for_page page
         html += <<-HTML
         <li>
           <label>#{::File.dirname(page.path)}</label> <input type="checkbox" checked />
