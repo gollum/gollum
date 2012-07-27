@@ -65,7 +65,7 @@ module Gollum
       if (count - folder_start == 1)
         page = @pages[ folder_start ]
         name = page.name
-        url  = page.filename_stripped
+        url  = ::File.join(::File.dirname(page.path), page.filename_stripped)
         html += <<-HTML
         <li>
           <label>#{::File.dirname(page.path)}</label> <input type="checkbox" checked />
