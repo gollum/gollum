@@ -504,15 +504,17 @@ module Gollum
         blocks << [spec[:lang], code]
       end
 
-      highlighted = begin
+      highlighted = []
+      blocks.each do |lang, code|
         encoding ||= 'utf-8'
-        blocks.map { |lang, code|
-          Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s})
-        }
-      rescue ::RubyPython::PythonError
-        []
+        begin
+          hl_code = Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s})
+        rescue ::RubyPython::PythonError
+          hl_code = code
+        end
+        highlighted << hl_code
       end
-
+      
       @codemap.each do |id, spec|
         body = spec[:output] || begin
           if (body = highlighted.shift.to_s).size > 0
