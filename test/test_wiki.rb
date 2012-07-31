@@ -94,6 +94,22 @@ context "Wiki" do
     assert_match    "b/_Sidebar.md", diff
     assert_no_match regex, diff
   end
+
+  test "gets scoped page from specified directory" do
+    @path = cloned_testpath('examples/lotr.git')
+    begin
+      wiki = Gollum::Wiki.new(@path)
+      index = wiki.repo.index
+      index.read_tree 'master'
+      index.add('Foobar/Elrond.md', 'Baz')
+      index.commit 'Add Foobar/Elrond.', [wiki.repo.commits.last], Grit::Actor.new('Tom Preston-Werner', 'tom@github.com')
+
+      assert_equal 'Rivendell/Elrond.md', wiki.scoped_page('Elrond', 'Rivendell').path
+      assert_equal 'Foobar/Elrond.md', wiki.scoped_page('Elrond', 'Foobar').path
+    ensure
+      FileUtils.rm_rf(@path)
+    end
+  end
 end
 
 context "Wiki page previewing" do
