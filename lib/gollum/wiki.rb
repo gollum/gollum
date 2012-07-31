@@ -199,6 +199,18 @@ module Gollum
       @page_class.new(self).find(name, version)
     end
 
+    # Public: Get the formatted page for a given page name scoped to a
+    # directory.
+    #
+    # name    - The human or canonical String page name of the wiki page.
+    # dir     - The directory String relative to the repo.
+    # version - The String version ID to find (default: @ref).
+    #
+    # Returns a Gollum::Page or nil if no matching page was found.
+    def scoped_page(name, dir, version = @ref)
+      @page_class.new(self).find(name, version || @ref, dir)
+    end
+
     # Public: Get the static file for a given name.
     #
     # name    - The full String pathname to the file.
