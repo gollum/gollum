@@ -82,7 +82,7 @@ module Precious
     end
 
     before do
-      @base_url = url('/')
+      @base_url = settings.wiki_options.has_key?(:base_url) ? settings.wiki_options[:base_url] : url('/')
       settings.wiki_options.merge!({ :base_path => @base_url }) unless settings.wiki_options.has_key? :base_path
     end
 
