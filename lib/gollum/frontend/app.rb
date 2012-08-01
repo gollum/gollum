@@ -143,7 +143,7 @@ module Precious
 
       page = wiki.page(rename) if rename
 
-      redirect to("/#{page.escaped_url_path}")
+      redirect to("/#{page.escaped_url_path}") unless page.nil?
     end
 
     get '/delete/*' do
