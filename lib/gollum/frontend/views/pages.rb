@@ -9,10 +9,6 @@ module Precious
         "All pages in #{@ref}"
       end
 
-      def new_page_data_variables
-        %{ data-path="#{@path}"} if @path
-      end
-
       def breadcrumb
         if @path
           path = Pathname.new(@path)

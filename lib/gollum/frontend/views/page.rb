@@ -7,10 +7,6 @@ module Precious
       DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
 
-      def new_page_data_variables
-        %{ data-path="#{@path}"} if @path
-      end
-
       def title
         @page.url_path.gsub("-", " ")
       end

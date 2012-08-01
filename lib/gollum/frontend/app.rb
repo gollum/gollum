@@ -344,8 +344,6 @@ module Precious
         @content = page.formatted_data
         @toc_content = wiki.universal_toc ? @page.toc_data : nil
         @mathjax = wiki.mathjax
-        # Set @path for mustache :page new_page_data_variables
-        @path = path
         mustache :page
       elsif file = wiki.file(fullpath)
         content_type file.mime_type
