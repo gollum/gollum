@@ -105,7 +105,8 @@ context "Wiki" do
       index.commit 'Add Foobar/Elrond.', [wiki.repo.commits.last], Grit::Actor.new('Tom Preston-Werner', 'tom@github.com')
 
       assert_equal 'Rivendell/Elrond.md', wiki.page('Elrond', nil, 'Rivendell').path
-      assert_equal 'Foobar/Elrond.md', wiki.page('Elrond', nil, 'Foobar').path
+      # test paged as well.
+      assert_equal 'Foobar/Elrond.md', wiki.paged('Elrond', 'Foobar').path
     ensure
       FileUtils.rm_rf(@path)
     end

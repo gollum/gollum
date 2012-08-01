@@ -201,6 +201,17 @@ module Gollum
       @page_class.new(self).find(name, version, dir)
     end
 
+    # Public: Convenience method instead of calling page(name, nil, dir).
+    #
+    # name    - The human or canonical String page name of the wiki page.
+    # version - The String version ID to find (default: @ref).
+    # dir     - The directory String relative to the repo.
+    #
+    # Returns a Gollum::Page or nil if no matching page was found.
+    def paged(name, dir = nil, version = @ref)
+      page(name, version, dir)
+    end
+
     # Public: Get the static file for a given name.
     #
     # name    - The full String pathname to the file.
