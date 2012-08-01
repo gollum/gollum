@@ -79,6 +79,17 @@ module Precious
       def mathjax
         @mathjax
       end
+
+      # Access to embedded metadata.
+      #
+      # Examples
+      #
+      #   {{#metadata}}{{name}}{{/metadata}}
+      #
+      # Returns Hash.
+      def metadata
+        @page.metadata
+      end
     end
   end
 end
