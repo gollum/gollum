@@ -104,8 +104,8 @@ context "Wiki" do
       index.add('Foobar/Elrond.md', 'Baz')
       index.commit 'Add Foobar/Elrond.', [wiki.repo.commits.last], Grit::Actor.new('Tom Preston-Werner', 'tom@github.com')
 
-      assert_equal 'Rivendell/Elrond.md', wiki.scoped_page('Elrond', 'Rivendell').path
-      assert_equal 'Foobar/Elrond.md', wiki.scoped_page('Elrond', 'Foobar').path
+      assert_equal 'Rivendell/Elrond.md', wiki.page('Elrond', nil, 'Rivendell').path
+      assert_equal 'Foobar/Elrond.md', wiki.page('Elrond', nil, 'Foobar').path
     ensure
       FileUtils.rm_rf(@path)
     end
