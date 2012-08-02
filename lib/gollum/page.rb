@@ -451,7 +451,8 @@ module Gollum
     # Loads a sub page.  Sub page names (footers, headers, sidebars) are prefixed with
     # an underscore to distinguish them from other Pages. If there is not one within
     # the current directory, starts walking up the directory tree to try and find one
-    # within parent directories.
+    # within parent directories. If an empty one is found in the current directory or
+    # during the walk, then the relevant sub page is disabled.
     #
     # name - String page name.
     #
@@ -468,7 +469,11 @@ module Gollum
       while !dirs.empty?
         if page = find_page_in_tree(map, name, dirs.join('/'))
           page.parent_page = self
-          return page
+          if page.raw_data.empty?
+            return nil
+          else
+            return page
+          end
         end
         dirs.pop
       end
@@ -476,7 +481,11 @@ module Gollum
       if page = find_page_in_tree(map, name, '')
         page.parent_page = self
       end
-      page
+      if page.raw_data.empty?
+        return nil
+      else
+        return page
+      end
     end
 
     def inspect
