@@ -471,21 +471,19 @@ module Gollum
           page.parent_page = self
           if page.raw_data.empty?
             return nil
-          else
-            return page
           end
+          return page
         end
         dirs.pop
       end
 
       if page = find_page_in_tree(map, name, '')
         page.parent_page = self
+        if page.raw_data.empty?
+          return nil
+        end
       end
-      if page.raw_data.empty?
-        return nil
-      else
-        return page
-      end
+      page
     end
 
     def inspect
