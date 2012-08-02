@@ -104,16 +104,20 @@ automatically generated table of contents will be shown instead.
 
 ## SIDEBAR FILES
 
-Sidebar files allow you to add a simple sidebar to your wiki.  Sidebar files
+Sidebar files allow you to add a simple sidebar to your wiki. Sidebar files
 are named `_Sidebar.ext` where the extension is one of the supported formats.
 Sidebars affect all pages in their directory and any subdirectories that do not
-have a sidebar file of their own.
+have a sidebar file of their own. An empty sidebar file will disable the
+sidebar on all pages in their directory and any subdirectories that do not have
+a sidebar file of their own.
 
 ## HEADER FILES
 
 Header files allow you to add a simple header to your wiki. Header files must
 be named `_Header.ext` where the extension is one of the supported formats.
 Like sidebars, headers affect all pages in their directory and any
+subdirectories that do not have a header file of their own. An empty header
+file will disable the header on all pages in their directory and any
 subdirectories that do not have a header file of their own.
 
 ## FOOTER FILES
@@ -121,6 +125,8 @@ subdirectories that do not have a header file of their own.
 Footer files allow you to add a simple footer to your wiki. Footer files must
 be named `_Footer.ext` where the extension is one of the supported formats.
 Like sidebars, footers affect all pages in their directory and any
+subdirectories that do not have a footer file of their own. An empty footer
+file will disable the footer on all pages in their directory and any
 subdirectories that do not have a footer file of their own.
 
 ## HTML SANITIZATION
