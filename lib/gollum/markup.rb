@@ -403,7 +403,7 @@ module Gollum
           link_name = @wiki.page_class.cname(page.name)
           presence  = "present"
         end
-        link = ::File.join(@wiki.base_path, CGI.escape(link_name))
+        link = ::File.join(@wiki.base_path, page ? page.escaped_url_path : CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
     end
