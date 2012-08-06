@@ -91,6 +91,9 @@ module Precious
     end
 
     # path is set to name if path is nil.
+    #   if path is 'a/b' and a and b are dirs, then
+    #   path must have a trailing slash 'a/b/' or
+    #   extract_path will trim path to 'a'
     # name, path, version
     def wiki_page( name, path = nil, version = nil)
       path = name if path.nil?
@@ -193,7 +196,7 @@ module Precious
       begin
         wiki.write_page(name, format, params[:content], commit_message)
         page = wiki.page(name)
-        redirect to("/#{page.escaped_url_path}")
+        redirect to("/#{page.escaped_url_path}") unless page.nil?
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error

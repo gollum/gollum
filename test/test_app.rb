@@ -142,6 +142,24 @@ context "Frontend" do
     assert last_response.ok?
   end
 
+  test "page create and edit with dash" do
+    page = 'c-d-e'
+    path = 'a/b/' # path must end with /
+
+    post '/create', :content => 'create_msg', :page => page,
+      :path => path, :format => 'markdown', :message => ''
+    assert_equal 'create_msg', @wiki.paged(page, path).raw_data
+
+    # must clear or create_msg will be returned
+    @wiki.clear_cache
+
+    # post '/edit' fails. post '/edit/' works.
+    post '/edit/', :content => 'edit_msg',
+      :page => page, :path => path, :message => ''
+    wpage = @wiki.paged(page, path)
+    assert_equal 'edit_msg', @wiki.paged(page, path).raw_data
+  end
+
   test "guards against creation of existing page" do
     name = "A"
     post "/create", :content => 'abc', :page => name,
