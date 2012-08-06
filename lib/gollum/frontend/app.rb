@@ -288,10 +288,10 @@ module Precious
 
     get %r{/(.+?)/([0-9a-f]{40})} do
       file_path = params[:captures][0]
-      wikip     = wiki_page(file_path)
+      version   = params[:captures][1]
+      wikip     = wiki_page(file_path, file_path, version)
       name      = wikip.name
       path      = wikip.path
-      version   = params[:captures][1]
       if page = wikip.page
         @page = page
         @name = name
