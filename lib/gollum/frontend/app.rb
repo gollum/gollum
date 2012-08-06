@@ -90,14 +90,12 @@ module Precious
       show_page_or_file('Home')
     end
 
-    # if path is omitted then extraction is necessary
+    # path is set to name if path is nil.
     # name, path, version
     def wiki_page( name, path = nil, version = nil)
-      if path.nil?
-        path = name
-        name = extract_name(name)
-        path = extract_path(path)
-      end
+      path = name if path.nil?
+      name = extract_name(name)
+      path = extract_path(path)
 
       wiki = wiki_new
 
@@ -140,7 +138,7 @@ module Precious
     end
 
     post '/edit/*' do
-      wikip = wiki_page(CGI.unescape(params[:page]), sanitize_empty_params(params[:path]))
+      wikip        = wiki_page(CGI.unescape(params[:page]), sanitize_empty_params(params[:path]))
       path         = wikip.path
       wiki         = wikip.wiki
       page         = wikip.page
@@ -171,9 +169,8 @@ module Precious
     end
 
     get '/create/*' do
-      splat = params[:splat].first
-      wikip = wiki_page(extract_name(splat).to_url, extract_path(splat))
-      @name = wikip.name
+      wikip = wiki_page(params[:splat].first)
+      @name = wikip.name.to_url
       @path = wikip.path
 
       page = wikip.page
@@ -288,10 +285,11 @@ module Precious
 
     get %r{/(.+?)/([0-9a-f]{40})} do
       file_path = params[:captures][0]
-      name      = extract_name(file_path)
-      path      = extract_path(file_path)
+      wikip     = wiki_page(file_path)
+      name      = wikip.name
+      path      = wikip.path
       version   = params[:captures][1]
-      if page = wiki_page(name, path, version).page
+      if page = wikip.page
         @page = page
         @name = name
         @content = page.formatted_data
