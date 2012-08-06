@@ -156,7 +156,6 @@ context "Frontend" do
     # post '/edit' fails. post '/edit/' works.
     post '/edit/', :content => 'edit_msg',
       :page => page, :path => path, :message => ''
-    wpage = @wiki.paged(page, path)
     assert_equal 'edit_msg', @wiki.paged(page, path).raw_data
   end
 
