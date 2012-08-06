@@ -90,12 +90,15 @@ module Precious
       show_page_or_file('Home')
     end
 
+    # if path is omitted then extraction is necessary
     # name, path, version
     def wiki_page( name, path = nil, version = nil)
-      path = name if path.nil?
+      if path.nil?
+        path = name
+        name = extract_name(name)
+        path = extract_path(path)
+      end
 
-      name = extract_name(name)
-      path = extract_path(path)
       wiki = wiki_new
 
       OpenStruct.new(:wiki => wiki, :page => wiki.paged(name, path, version),
@@ -169,7 +172,7 @@ module Precious
 
     get '/create/*' do
       splat = params[:splat].first
-      wikip = wiki_page(extract_name(splat).to_url, splat)
+      wikip = wiki_page(extract_name(splat).to_url, extract_path(splat))
       @name = wikip.name
       @path = wikip.path
 
