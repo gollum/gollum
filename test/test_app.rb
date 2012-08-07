@@ -142,13 +142,14 @@ context "Frontend" do
     assert last_response.ok?
   end
 
-  test "page create and edit with dash" do
+  test "page create and edit with dash & page rev" do
     page = 'c-d-e'
     path = 'a/b/' # path must end with /
 
     post '/create', :content => 'create_msg', :page => page,
       :path => path, :format => 'markdown', :message => ''
-    assert_equal 'create_msg', @wiki.paged(page, path).raw_data
+    page_c = @wiki.paged(page, path)
+    assert_equal 'create_msg', page_c.raw_data
 
     # must clear or create_msg will be returned
     @wiki.clear_cache
@@ -156,7 +157,19 @@ context "Frontend" do
     # post '/edit' fails. post '/edit/' works.
     post '/edit/', :content => 'edit_msg',
       :page => page, :path => path, :message => ''
-    assert_equal 'edit_msg', @wiki.paged(page, path).raw_data
+    page_e = @wiki.paged(page, path)
+    assert_equal 'edit_msg', page_e.raw_data
+
+    @wiki.clear_cache
+
+    # test `get %r{/(.+?)/([0-9a-f]{40})} do` in app.rb
+    get '/' + page_c.escaped_url_path + '/' + page_c.version.to_s
+    assert last_response.ok?
+    assert_match /create_msg/, last_response.body
+
+    get '/' + page_e.escaped_url_path + '/' + page_e.version.to_s
+    assert last_response.ok?
+    assert_match /edit_msg/, last_response.body
   end
 
   test "guards against creation of existing page" do
