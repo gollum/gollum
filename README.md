@@ -520,8 +520,10 @@ your changes merged back into core is as follows:
 1. Send a pull request to the github/gollum project.
 
 ## RELEASING
-
+    Update VERSION in lib/gollum.rb
     $ rake gemspec
+    $ git tag vX.Y.Z
+    $ git push origin vX.Y.Z
     $ gem build gollum.gemspec
     $ gem push gollum-X.Y.Z.gem
     
