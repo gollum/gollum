@@ -5,7 +5,7 @@
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}"
+    <li class="minibutton"><a href="{{base_url}}/"
        class="action-edit-page">Home</a></li>
   </ul>
 </div>
@@ -15,7 +15,7 @@
   <ul>
     {{#results}}
     <li>
-      <a href="{{base_url}}{{name}}">{{name}}</a>
+      <a href="{{base_url}}/{{name}}">{{name}}</a>
       <span class="count">({{count}} matches)</span>
     </li>
     {{/results}}
