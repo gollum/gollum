@@ -5,21 +5,21 @@
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}"
+    <li class="minibutton"><a href="{{base_url}}/"
        class="action-edit-page">Home</a></li>
-    <li class="minibutton"><a href="{{base_url}}pages"
+    <li class="minibutton"><a href="{{base_url}}/pages"
       class="action-all-pages">All</a></li>
-    <li class="minibutton"><a href="{{base_url}}fileview"
+    <li class="minibutton"><a href="{{base_url}}/fileview"
     class="action-all-pages">Files</a></li>
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-new-page">New</a></li>
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-rename-page">Rename</a></li>
     {{#editable}}
-    <li class="minibutton"><a href="{{base_url}}edit/{{escaped_url_path}}"
+    <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit</a></li>
     {{/editable}}
-    <li class="minibutton"><a href="{{base_url}}history/{{escaped_url_path}}"
+    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
        class="action-page-history">History</a></li>
   </ul>
 </div>
@@ -62,7 +62,7 @@
 <div id="footer">
   <p id="last-edit">Last edited by <b>{{author}}</b>, {{date}}</p>
   <p>
-    <a id="delete-link" href="{{base_url}}{{escaped_url_path}}" data-confirm="Are you sure you want to delete this page?"><span>Delete this Page</span></a>
+    <a id="delete-link" href="{{base_url}}/{{escaped_url_path}}" data-confirm="Are you sure you want to delete this page?"><span>Delete this Page</span></a>
   </p>
 </div>
 </div>
