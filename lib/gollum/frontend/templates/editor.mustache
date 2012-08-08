@@ -1,9 +1,9 @@
 <div id="gollum-editor" data-escaped-name="{{escaped_name}}" class="{{#is_create_page}}create{{/is_create_page}}{{#is_edit_page}}edit{{/is_edit_page}}">
 {{#is_create_page}}
-<form name="gollum-editor" action="{{base_url}}create" method="post">
+<form name="gollum-editor" action="{{base_url}}/create" method="post">
 {{/is_create_page}}
 {{#is_edit_page}}
-<form name="gollum-editor" action="{{base_url}}edit/{{escaped_name}}" method="post">
+<form name="gollum-editor" action="{{base_url}}/edit/{{escaped_name}}" method="post">
 {{/is_edit_page}}
   <fieldset id="gollum-editor-fields">
   {{#is_create_page}}
@@ -126,7 +126,7 @@
 
     <span class="jaws"><br></span>
     <input type="submit" id="gollum-editor-submit" value="Save" title="Save current changes">
-    <a href="{{base_url}}preview" id="gollum-editor-preview" class="minibutton" title="Preview this Page">Preview</a>
+    <a href="{{base_url}}/preview" id="gollum-editor-preview" class="minibutton" title="Preview this Page">Preview</a>
   </fieldset>
 </form>
 </div>
