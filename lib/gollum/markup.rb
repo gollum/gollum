@@ -3,6 +3,9 @@ require 'cgi'
 require 'pygments'
 require 'base64'
 
+# initialize Pygments
+Pygments.start
+
 module Gollum
 
   class Markup
