@@ -6,8 +6,7 @@ module Precious
       attr_reader :results, :ref
 
       def prefix
-        return '/' if @base_url.nil?
-        @base_url.chomp('/').empty? ? '/' : @base_url + '/'
+        @base_url ? @base_url.chomp('/') + '/' : '/'
       end
 
       def title

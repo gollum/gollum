@@ -34,4 +34,13 @@ context "Precious::Views::Pages" do
     @page.instance_variable_set("@results", results)
     assert_equal %{<li><a href="/Mordor/Eye-Of-Sauron" class="file">Eye Of Sauron</a></li>\n<li><a href="/pages/Mordor/Orc/" class="folder">Orc</a></li>}, @page.files_folders
   end
+
+  test "base url" do
+    # based on test "files_folders"
+    @page.instance_variable_set("@path", "Mordor")
+    @page.instance_variable_set("@base_url", "/wiki")
+    results = [FakeResult.new("Mordor/Eye-Of-Sauron.md"), FakeResult.new("Mordor/Orc/Saruman.md"), FakeResult.new("Mordor/.gitkeep")]
+    @page.instance_variable_set("@results", results)
+    assert_equal %{<li><a href="/wiki/Mordor/Eye-Of-Sauron" class="file">Eye Of Sauron</a></li>\n<li><a href="/wiki/pages/Mordor/Orc/" class="folder">Orc</a></li>}, @page.files_folders
+  end
 end
