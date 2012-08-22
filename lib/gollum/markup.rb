@@ -87,14 +87,14 @@ module Gollum
     def process_headers(doc)
       toc = nil
       doc.css('h1,h2,h3,h4,h5,h6').each do |h|
-        id = CGI::escape(h.content.gsub(' ','-'))
+        id = encodeURIComponent(h.content.gsub(' ','-'))
         level = h.name.gsub(/[hH]/,'').to_i
 
         # Add anchors
         anchor = Nokogiri::XML::Node.new('a', doc)
         anchor['class'] = 'anchor'
         anchor['id'] = id
-        anchor['href'] = '#' + id
+        anchor['href'] = '#' + id.gsub('%', '%25')
         h.add_child(anchor)
 
         # Build TOC
