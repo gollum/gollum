@@ -2,6 +2,10 @@ body {
   overflow: hidden;
 }
 
+#editor .ace_sb {
+  overflow-y: auto !important;
+}
+
 #darkness {
   visibility: hidden;
   position: absolute;
@@ -49,7 +53,7 @@ so editor doesn't display in the background. */
 #contentframe {
   margin: 0 auto;
   overflow: visible;
-  width: 80%;
+  width: 90%;
 }
 
 #previewframe {
@@ -63,14 +67,35 @@ so editor doesn't display in the background. */
   right: 0;
 }
 
+.editor_bg {
+  position: fixed;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  background: black;
+  width: 50%;
+  height: 100%;
+  z-index: -2;
+}
+
+.toolpanel_bg {
+  position: fixed;
+  background: #666;
+  top: 0;
+  height: 30px;
+  width: 100%;
+  padding: 5px 0;
+  margin: 0;
+  z-index: -1;
+}
+
 /* -- Start from notepag.es -- */
 .toolpanel {
   position: fixed;
   background: #666;
   top: 0;
   height: 30px;
-  right: 20px;
-  width: 80px;
+  width: 50%;
   vertical-align: middle;
   padding: 5px 0;
   margin: 0;
