@@ -172,7 +172,7 @@ module Precious
     end
 
     get '/create/*' do
-      wikip = wiki_page(params[:splat].first)
+      wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
 
