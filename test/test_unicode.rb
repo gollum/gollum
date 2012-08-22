@@ -15,6 +15,12 @@ context "Unicode Support" do
     FileUtils.rm_rf(@path)
   end
 
+  test "uri encode" do
+    c = '한글'
+    assert_equal '%ED%95%9C%EA%B8%80', encodeURIComponent(c)
+    assert_equal '%ED%95%9C%EA%B8%80', CGI::escape(c)
+  end
+
   test "create and read non-latin page with anchor" do
     @wiki.write_page("test", :markdown, "# 한글")
 
