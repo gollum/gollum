@@ -40,8 +40,9 @@ end
 # define charCodeAt on String
 class String
   def charCodeAt(k)
-    # 'str'.ord is broken on 1.8
-    return self[k].unpack('U')[0]
+    # use unpack instead of ord for 1.8
+    c = self[k]
+    return c.respond_to?(:unpack) ? c.unpack('U')[0] : c.ord
   end
 end
 
