@@ -179,7 +179,7 @@ module Gollum
         self.class.history_sanitization
       @live_preview  = options.fetch(:live_preview, true)
       @universal_toc = options.fetch(:universal_toc, false)
-      @mathjax = options[:mathjax] || true
+      @mathjax = options[:mathjax] || false
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
