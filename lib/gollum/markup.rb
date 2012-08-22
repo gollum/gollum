@@ -87,7 +87,7 @@ module Gollum
     def process_headers(doc)
       toc = nil
       doc.css('h1,h2,h3,h4,h5,h6').each do |h|
-        id = CGI::escape(h.content.gsub(' ','-'))
+        id = encodeURIComponent(h.content.gsub(' ','-'))
         level = h.name.gsub(/[hH]/,'').to_i
 
         # Add anchors

@@ -136,7 +136,7 @@ module Precious
           mustache :edit
         end
       else
-        redirect to("/create/#{CGI.escape(@name)}")
+        redirect to("/create/#{encodeURIComponent(@name)}")
       end
     end
 
@@ -354,7 +354,7 @@ module Precious
         file.raw_data
       else
         page_path = [path, name].compact.join('/')
-        redirect to("/create/#{CGI.escape(page_path).gsub('%2F','/')}")
+        redirect to("/create/#{encodeURIComponent(page_path).gsub('%2F','/')}")
       end
     end
 
