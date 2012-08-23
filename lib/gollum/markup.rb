@@ -94,6 +94,7 @@ module Gollum
         anchor = Nokogiri::XML::Node.new('a', doc)
         anchor['class'] = 'anchor'
         anchor['id'] = id
+        # % -> %25 so anchors work on Firefox. See issue #475
         anchor['href'] = '#' + id.gsub('%', '%25')
         h.add_child(anchor)
 
@@ -112,7 +113,8 @@ module Gollum
           tail_level -= 1
         end
         node = Nokogiri::XML::Node.new('li', doc)
-        node.add_child("<a href='##{id}'>#{h.content}</a>")
+        # % -> %25 so anchors work on Firefox. See issue #475
+        node.add_child("<a href='##{id.gsub('%', '%25')}'>#{h.content}</a>")
         tail.add_child(node)
       end
       toc = toc.to_xhtml if toc != nil
