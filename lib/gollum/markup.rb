@@ -448,8 +448,13 @@ module Gollum
     # is found.
     def find_page_from_name(cname)
       slash = cname.rindex('/')
-      name = cname[slash+1..-1]
-      path = cname[0..slash]
+      unless slash.nil?
+        name = cname[slash+1..-1]
+        path = cname[0..slash]
+      else
+        name = cname
+        path = '/'
+      end
       if page = @wiki.paged(name, path)
         return page
       end
