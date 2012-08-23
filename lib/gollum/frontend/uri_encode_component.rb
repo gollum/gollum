@@ -40,9 +40,12 @@ end
 # define charCodeAt on String
 class String
   def charCodeAt(k)
-    # use unpack instead of ord for 1.8
-    c = self[k]
-    return c.respond_to?(:unpack) ? c.unpack('U')[0] : c.ord
+    # use scan, nil check, and unpack instead of ord for 1.8
+    # 1.9 can simply use self[k].ord
+    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
+    c = self.scan(/./mu)[k]
+    return nil if c.nil?
+    c.unpack('U')[0]
   end
 end
 
@@ -150,6 +153,7 @@ def Encode(uri, unescape)
   k = -1;
   while ((k+=1) < uriLength) do
     cc1 = uri.charCodeAt(k);
+    next if cc1.nil?
     if (self.send(unescape, cc1))
       result[index] = cc1;
       index += 1
@@ -166,10 +170,11 @@ def Encode(uri, unescape)
       end
     end
   end
+  # use .compact to get rid of nils from charCodeAt
   # return %StringFromCharCodeArray(result);
   # 'c' = 8 bit signed char
   # http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-pack
-  return result.pack 'c*'
+  return result.compact.pack 'c*'
 end
 end # class << self
 end # module
