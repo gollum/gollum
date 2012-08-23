@@ -99,7 +99,8 @@ context "Page" do
   test "cname" do
     assert_equal "Foo", Gollum::Page.cname("Foo")
     assert_equal "Foo-Bar", Gollum::Page.cname("Foo Bar")
-    assert_equal "Foo---Bar", Gollum::Page.cname("Foo / Bar")
+    # / is now a directory delimiter so it must be preserved
+    assert_equal "Foo-/-Bar", Gollum::Page.cname("Foo / Bar")
     assert_equal "José", Gollum::Page.cname("José")
     assert_equal "モルドール", Gollum::Page.cname("モルドール")
   end
