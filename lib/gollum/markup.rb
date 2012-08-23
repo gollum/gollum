@@ -228,7 +228,7 @@ module Gollum
         if is_preformatted?(data, id)
           data.gsub!(id, "[[#{tag}]]")
         else
-          data.gsub!(id, process_tag(tag))
+          data.gsub!(id, process_tag(tag).gsub('%2F', '/'))
         end
       end
       data
