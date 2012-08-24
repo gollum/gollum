@@ -176,7 +176,8 @@ context "Frontend" do
     name = "A"
     post "/create", :content => 'abc', :page => name,
       :format => 'markdown', :message => 'def'
-    assert last_response.ok?
+    # create redirects on success
+    assert_equal last_response.status, 302
 
     @wiki.clear_cache
     page = @wiki.page(name)

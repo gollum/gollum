@@ -372,9 +372,9 @@ module Gollum
     # version - The String version ID to find.
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find(name, version, dir = nil)
+    def find(name, version, dir = nil, exact = false)
       map = @wiki.tree_map_for(version.to_s)
-      if page = find_page_in_tree(map, name, dir)
+      if page = find_page_in_tree(map, name, dir, exact)
         page.version    = version.is_a?(Grit::Commit) ?
           version : @wiki.commit_for(version)
         page.historical = page.version.to_s == version.to_s
@@ -391,11 +391,13 @@ module Gollum
     #               to be in.  The string should
     #
     # Returns a Gollum::Page or nil if the page could not be found.
-    def find_page_in_tree(map, name, checked_dir = nil)
+    def find_page_in_tree(map, name, checked_dir = nil, exact = false)
       return nil if !map || name.to_s.empty?
       if checked_dir = BlobEntry.normalize_dir(checked_dir)
         checked_dir.downcase!
       end
+
+      checked_dir = '' if exact && checked_dir.nil?
 
       map.each do |entry|
         next if entry.name.to_s.empty?

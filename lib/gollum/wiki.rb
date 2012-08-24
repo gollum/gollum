@@ -196,9 +196,9 @@ module Gollum
     # dir     - The directory String relative to the repo.
     #
     # Returns a Gollum::Page or nil if no matching page was found.
-    def page(name, version = @ref, dir = nil)
+    def page(name, version = @ref, dir = nil, exact = false)
       version = @ref if version.nil?
-      @page_class.new(self).find(name, version, dir)
+      @page_class.new(self).find(name, version, dir, exact)
     end
 
     # Public: Convenience method instead of calling page(name, nil, dir).
@@ -208,8 +208,8 @@ module Gollum
     # dir     - The directory String relative to the repo.
     #
     # Returns a Gollum::Page or nil if no matching page was found.
-    def paged(name, dir = nil, version = @ref)
-      page(name, version, dir)
+    def paged(name, dir = nil, exact = false, version = @ref)
+      page(name, version, dir, exact)
     end
 
     # Public: Get the static file for a given name.

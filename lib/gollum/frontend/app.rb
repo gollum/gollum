@@ -90,19 +90,24 @@ module Precious
       redirect File.join(settings.wiki_options[:base_path].to_s, 'Home')
     end
 
+    def clean_url url
+      url.gsub('%2F','/').gsub(/^\/+/,'')
+    end
+
     # path is set to name if path is nil.
     #   if path is 'a/b' and a and b are dirs, then
     #   path must have a trailing slash 'a/b/' or
     #   extract_path will trim path to 'a'
     # name, path, version
-    def wiki_page( name, path = nil, version = nil)
+    def wiki_page(name, path = nil, version = nil, exact = true)
       path = name if path.nil?
       name = extract_name(name)
       path = extract_path(path)
+      path = '/' if exact && path.nil?
 
       wiki = wiki_new
 
-      OpenStruct.new(:wiki => wiki, :page => wiki.paged(name, path, version),
+      OpenStruct.new(:wiki => wiki, :page => wiki.paged(name, path, exact, version),
                      :name => name, :path => path)
     end
 
@@ -141,7 +146,9 @@ module Precious
     end
 
     post '/edit/*' do
-      wikip        = wiki_page(CGI.unescape(params[:page]), sanitize_empty_params(params[:path]))
+      # TODO: Why does exact = true break /edit unit tests?
+      # name, path, version = nil, exact = false
+      wikip        = wiki_page(CGI.unescape(params[:page]), sanitize_empty_params(params[:path]), nil, true)
       path         = wikip.path
       wiki         = wikip.wiki
       page         = wikip.page
@@ -187,6 +194,7 @@ module Precious
     post '/create' do
       name         = params[:page].to_url
       path         = sanitize_empty_params(params[:path])
+      path = '' if path.nil?
       format       = params[:format].intern
 
       # write_page is not directory aware so use wiki_options to emulate dir support.
@@ -195,8 +203,7 @@ module Precious
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        page = wiki.page(name)
-        redirect to("/#{page.escaped_url_path}") unless page.nil?
+        redirect to("/#{clean_url(CGI.escape(::File.join(path,name)))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -343,7 +350,7 @@ module Precious
 
       path = '/' if path.nil?
 
-      if page = wiki.paged(name, path)
+      if page = wiki.paged(name, path, exact = true)
         @page = page
         @name = name
         @editable = true
@@ -356,7 +363,7 @@ module Precious
         file.raw_data
       else
         page_path = [path, name].compact.join('/')
-        redirect to("/create/#{encodeURIComponent(page_path).gsub('%2F','/')}")
+        redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
       end
     end
 
