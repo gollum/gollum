@@ -341,6 +341,8 @@ module Precious
       path         = extract_path(fullpath)
       wiki         = wiki_new
 
+      path = '/' if path.nil?
+
       if page = wiki.paged(name, path)
         @page = page
         @name = name
