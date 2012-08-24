@@ -148,7 +148,7 @@ module Precious
     post '/edit/*' do
       # TODO: Why does exact = true break /edit unit tests?
       # name, path, version = nil, exact = false
-      wikip        = wiki_page(CGI.unescape(params[:page]), sanitize_empty_params(params[:path]), nil, true)
+      wikip        = wiki_page(CGI.unescape(params[:page]), sanitize_empty_params(params[:path]), nil, false)
       path         = wikip.path
       wiki         = wikip.wiki
       page         = wikip.page
