@@ -146,16 +146,14 @@ module Precious
     end
 
     post '/edit/*' do
-      # TODO: Why does exact = true break /edit unit tests?
-      # name, path, version = nil, exact = false
-      wikip        = wiki_page(CGI.unescape(params[:page]), sanitize_empty_params(params[:path]), nil, false)
-      path         = wikip.path
-      wiki         = wikip.wiki
-      page         = wikip.page
-      rename       = params[:rename].to_url if params[:rename]
-      name         = rename || page.name
-      committer    = Gollum::Committer.new(wiki, commit_message)
-      commit       = {:committer => committer}
+      path      = sanitize_empty_params(params[:path])
+      page_name = CGI.unescape(params[:page])
+      wiki      = wiki_new
+      page      = wiki.paged(page_name, path, exact = true)
+      rename    = params[:rename].to_url if params[:rename]
+      name      = rename || page.name
+      committer = Gollum::Committer.new(wiki, commit_message)
+      commit    = {:committer => committer}
 
       update_wiki_page(wiki, page, params[:content], commit, name, params[:format])
       update_wiki_page(wiki, page.header,  params[:header],  commit) if params[:header]
