@@ -90,7 +90,9 @@ module Precious
       redirect File.join(settings.wiki_options[:base_path].to_s, 'Home')
     end
 
+    # Removes all slashes from the start of string.
     def clean_url url
+      return url if url.nil?
       url.gsub('%2F','/').gsub(/^\/+/,'')
     end
 
@@ -146,7 +148,7 @@ module Precious
     end
 
     post '/edit/*' do
-      path      = sanitize_empty_params(params[:path])
+      path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
       page      = wiki.paged(page_name, path, exact = true)

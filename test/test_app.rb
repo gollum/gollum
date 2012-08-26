@@ -50,6 +50,14 @@ context "Frontend" do
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
+  test "edit page with slash" do
+    page_1 = @wiki.page('A')
+    post "/edit/A", :content => 'abc', :page => 'A', :path => '/////',
+      :format => page_1.format, :message => 'def'
+    follow_redirect!
+    assert last_response.ok?
+  end
+
   test "edits page header footer and sidebar" do
     commits = @wiki.repo.commits('master').size
     page_1  = @wiki.page('A')
