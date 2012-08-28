@@ -9,7 +9,6 @@ require 'gollum/frontend/views/layout'
 require 'gollum/frontend/views/editable'
 require 'gollum/frontend/views/has_page'
 
-require File.expand_path '../uri_encode_component', __FILE__
 require File.expand_path '../helpers', __FILE__
 
 # Fix to_url
