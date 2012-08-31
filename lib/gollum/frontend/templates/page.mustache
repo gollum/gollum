@@ -1,3 +1,10 @@
+<script>
+Mousetrap.bind(['e'], function( e ) {
+  e.preventDefault();
+  window.location = "/edit" + window.location.pathname;
+  return false;
+});
+</script>
 <div id="wiki-wrapper" class="page">
 <div id="head">
   <h1>{{title}}</h1>
