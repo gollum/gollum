@@ -591,12 +591,18 @@ module Gollum
     #########################################################################
 
     # Extract metadata for data and build metadata table. Metadata
-    # is content found between ` <!-- --- ` and ` --> ` markers, and must
+    # is content found between markers, and must
     # be a valid YAML mapping.
+    #
+    # Because ri and ruby 1.8.7 are awesome, the markers can't
+    # be included in this documentation without triggering
+    # `Unhandled special: Special: type=17`
+    # Please read the source code for the exact markers
     #
     # Returns the String of formatted data with metadata removed.
     def extract_metadata(data)
       @metadata ||= {}
+      # The markers are `<!-- ---` and `-->`
       data.gsub(/\<\!--+\s+---(.*?)--+\>/m) do
         yaml = @wiki.sanitizer.clean($1)
         hash = YAML.load(yaml)
