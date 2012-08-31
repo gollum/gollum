@@ -532,4 +532,4 @@ your changes merged back into core is as follows:
     $ git clone https://github.com/github/gollum.git
     $ cd gollum
     gollum$ rake build
-    gollum$ gem install pkg/gollum*.gem
+    gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem
