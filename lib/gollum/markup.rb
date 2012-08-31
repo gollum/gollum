@@ -591,7 +591,7 @@ module Gollum
     #########################################################################
 
     # Extract metadata for data and build metadata table. Metadata
-    # is content found between `<!-- ---` and `-->` markers, and must
+    # is content found between ` <!-- --- ` and ` --> ` markers, and must
     # be a valid YAML mapping.
     #
     # Returns the String of formatted data with metadata removed.
