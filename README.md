@@ -528,7 +528,7 @@ your changes merged back into core is as follows:
     $ gem push gollum-X.Y.Z.gem
     
 ## BUILDING THE GEM FROM MASTER
-    $ gem uninstall -aix gollum
+    $ gem uninstall -ax gollum
     $ git clone https://github.com/github/gollum.git
     $ cd gollum
     gollum$ rake build
