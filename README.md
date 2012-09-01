@@ -497,8 +497,12 @@ like Rack::Auth, OmniAuth, etc.
     Precious::App.set(:wiki_options, {:universal_toc => false})
     run Precious::App
 
-## Windows Filename Validation
+## WINDOWS FILENAME VALIDATION
 Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
+
+## LIB.SO ERROR
+
+`Could not open library 'lib.so'` may be solved by installing `python-devel` on Fedora or `python-dev` on Ubuntu.
 
 ## CONTRIBUTE
 
