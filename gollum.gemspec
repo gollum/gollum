@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency('github-markup', [">= 0.7.0", "< 1.0.0"])
   s.add_dependency('github-markdown')
   s.add_dependency('pygments.rb', "~> 0.2.0")
-  s.add_dependency('posix-spawn', "~> 0.3.0")
+  s.add_dependency('escape_utils', "0.2.4")
   s.add_dependency('sinatra', "~> 1.0")
   s.add_dependency('mustache', [">= 0.11.2", "< 1.0.0"])
   s.add_dependency('sanitize', "~> 2.0.0")

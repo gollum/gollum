@@ -670,13 +670,13 @@ end
 
   test "TeX block syntax" do
     content = 'a \[ a^2 \] b'
-    output = "<p>a<imgwidth=\"15\"height=\"16\"style=\"vertical-align:-1px;\"src=\"/_tex.png?type=block&data=YV4y\"alt=\"a^2\"/>b</p>"
+    output = "<p>a<imgsrc=\"http://www.mathtran.org/cgi-bin/toy/?D=4;tex=a^2\"alt=\"a^2\">b</p>"
     compare(content, output, 'md')
   end
 
   test "TeX inline syntax" do
     content = 'a \( a^2 \) b'
-    output = "<p>a<imgwidth=\"15\"height=\"16\"style=\"vertical-align:-1px;\"src=\"/_tex.png?type=inline&data=YV4y\"alt=\"a^2\"/>b</p>"
+    output = "<p>a<imgsrc=\"http://www.mathtran.org/cgi-bin/toy/?D=2;tex=a^2\"alt=\"a^2\">b</p>"
     compare(content, output, 'md')
   end
 

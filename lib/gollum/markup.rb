@@ -155,23 +155,7 @@ module Gollum
     def process_tex(data)
       @texmap.each do |id, spec|
         type, tex = *spec
-
-        # Obtain the formula with parameters
-        out = nil
-        begin 
-          width, height, align, base64 = Gollum::Tex.render_formula(tex, true)
-
-          # TODO: Should we load the binary inside the html?
-          #out = %{<img width="#{width}" height="#{height}" style="vertical-align: #{align}px;" src="data:image/png;base64,\n#{base64}" alt="#{CGI.escapeHTML(tex)}" />}
-
-          # Use the alignment values from the formula rendering but still use the call to '_tex.png'. Although it will call render_formula()
-          # again, it will use the already cached formula and it might have some advantages from the point of view of browser caching (really not sure here).
-          out = %{<img width="#{width}" height="#{height}" style="vertical-align: #{align}px;" src="#{::File.join(@wiki.base_path, '_tex.png')}?type=#{type}&data=#{Base64.encode64(tex).chomp}" alt="#{CGI.escapeHTML(tex)}" />}
-        rescue # In case of error
-          out = CGI.escapeHTML(tex)
-        end
-        
-        data.gsub!(id, out)
+        data.gsub!(id, Gollum::Tex.to_html(tex, type))
       end
       data
     end

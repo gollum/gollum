@@ -282,12 +282,6 @@ module Precious
       mustache :compare
     end
 
-    get '/_tex.png' do
-      content_type 'image/png'
-      formula = Base64.decode64(params[:data])
-      Gollum::Tex.render_formula(formula)
-    end
-
     get %r{^/(javascript|css|images)} do
       halt 404
     end
