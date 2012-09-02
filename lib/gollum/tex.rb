@@ -8,7 +8,7 @@ module Gollum
     def self.to_html(tex, type = :inline)
       tex_uri = EscapeUtils.escape_uri(tex)
       tex_alt = EscapeUtils.escape_html(tex)
-      %{<img src="#{TEX_URL}?D=#{TEX_SIZES[type]};tex=#{tex}" alt="#{tex_alt}">}
+      %{<img src="#{TEX_URL}?D=#{TEX_SIZES[type]};tex=#{tex_uri}" alt="#{tex_alt}">}
     end
   end
 end
