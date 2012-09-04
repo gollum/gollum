@@ -39,7 +39,6 @@ context "Page Reverting" do
     assert_equal "INITIAL", body=page2.raw_data.strip
     assert_equal body, File.read(File.join(@path, "B.md")).strip
   end
-=end
 
   test "reverts multiple commits for a page" do
     page1 = @wiki.page('A')
@@ -49,6 +48,7 @@ context "Page Reverting" do
     assert_equal "INITIAL", body=page2.raw_data.strip
     assert_equal body, File.read(File.join(@path, "A.md")).strip
   end
+=end
 
   test "cannot revert conflicting commit" do
     page1 = @wiki.page('A')
