@@ -47,6 +47,6 @@ context "gitcode" do
   end
 
   teardown do
-    @cleanup.()
+    @cleanup.call
   end
 end

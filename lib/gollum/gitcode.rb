@@ -1,4 +1,5 @@
 require 'net/http'
+require 'net/https' # ruby 1.8.7 fix, remove at upgrade
 require 'uri'
 require 'open-uri'
 
