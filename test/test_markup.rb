@@ -1,17 +1,14 @@
 # ~*~ encoding: utf-8 ~*~
-require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
+require File.expand_path( "../helper", __FILE__ )
+require File.expand_path( "../wiki_factory", __FILE__ )
 
 context "Markup" do
   setup do
-    @path = testpath("examples/test.git")
-    FileUtils.rm_rf(@path)
-    Grit::Repo.init_bare(@path)
-    Gollum::Wiki.default_options = {:universal_toc => false}
-    @wiki = Gollum::Wiki.new(@path)
+    @wiki, @path, @teardown = WikiFactory.create 'examples/test.git'
   end
 
   teardown do
-    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+    @teardown.()
   end
 
   test "formats page from Wiki#pages" do

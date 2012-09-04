@@ -2,6 +2,7 @@ require 'digest/sha1'
 require 'cgi'
 require 'pygments'
 require 'base64'
+require File.expand_path( '../gitcode', __FILE__ )
 
 # initialize Pygments
 Pygments.start
@@ -50,6 +51,7 @@ module Gollum
 
       data = @data.dup
       data = extract_metadata(data)
+      data = extract_gitcode(data)
       data = extract_code(data)
       data = extract_tex(data)
       data = extract_wsd(data)
@@ -446,6 +448,20 @@ module Gollum
       end
       if pos = cname.index('#')
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
+      end
+    end
+
+    #########################################################################
+    #
+    # Gitcode - fetch code from github search path and replace the contents
+    #           to a code-block that gets run the next parse.
+    #
+    #########################################################################
+
+    def extract_gitcode data
+      data.gsub /^[ \t]*``` ?(\w+):(.+)```$/ do
+        gc = Gollum::Gitcode.new $2
+        "```#{$1}\n#{gc.contents}\n```"
       end
     end
 

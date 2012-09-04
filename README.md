@@ -334,6 +334,27 @@ then that whitespace will be ignored (this makes the blocks easier to read in pl
 The block must end with three backticks indented at the same level than the opening
 backticks.
 
+### GITHUB SYNTAX HIGHLIGHTING
+
+As an extra feature, you can syntax highlight a file from your repository, allowing
+you keep some of your sample code in the main repository. The code-snippet is
+updated when the wiki is rebuilt. You include github code like this:
+
+    ```html:github/gollum/master/test/file_view/1_file.txt```
+
+This will make the builder look at the **github user**, in the **gollum project**,
+in the **master branch**, at path **test/file_view/1_file.txt**. It will be
+rewritten to:
+
+    ```html
+    <ol class="tree">
+      <li class="file"><a href="0">0</a></li>
+    </ol>
+    ```
+
+Which will be parsed as HTML code during the Pygments run, and thereby coloured 
+appropriately.
+
 ## MATHEMATICAL EQUATIONS
 
 
