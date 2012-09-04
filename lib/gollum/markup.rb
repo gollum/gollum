@@ -2,7 +2,7 @@ require 'digest/sha1'
 require 'cgi'
 require 'pygments'
 require 'base64'
-require_relative 'gitcode'
+require File.expand_path( '../gitcode', __FILE__ )
 
 # initialize Pygments
 Pygments.start

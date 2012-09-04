@@ -1,6 +1,6 @@
 # ~*~ encoding: utf-8 ~*~
-require_relative 'helper'
-require_relative 'wiki_factory'
+require File.expand_path( '../helper', __FILE__ )
+require File.expand_path( '../wiki_factory', __FILE__ )
 
 context "gitcode" do
 
@@ -19,7 +19,7 @@ context "gitcode" do
 
     # given
     p = page_with_content "a\n\n```html:github/gollum/master/test/file_view/1_file.txt```\n\nb"
-    
+
     # when rendering the page
     @rendered = Gollum::Markup.new(p).render
   end
@@ -40,7 +40,7 @@ context "gitcode" do
 
   test 'contents' do
     g = Gollum::Gitcode.new 'github/gollum/master/test/file_view/1_file.txt'
-    
+
     assert_equal g.contents, %{<ol class="tree">
   <li class="file"><a href="0">0</a></li>
 </ol>}
