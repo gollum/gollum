@@ -1,6 +1,6 @@
 # ~*~ encoding: utf-8 ~*~
-require_relative "helper"
-require_relative "wiki_factory"
+require File.expand_path( "../helper", __FILE__ )
+require File.expand_path( "wiki_factory", __FILE__ )
 
 context "Markup" do
   setup do
