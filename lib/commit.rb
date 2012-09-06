@@ -1,7 +1,7 @@
 module RJGit
 
-  import org.eclipse.jgit.revwalk.RevWalk
-  import org.eclipse.jgit.revwalk.RevCommit
+  import 'org.eclipse.jgit.revwalk.RevWalk'
+  import 'org.eclipse.jgit.revwalk.RevCommit'
 
   class Commit
 

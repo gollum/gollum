@@ -1,6 +1,6 @@
 module RJGit
 
-  import org.eclipse.jgit.api.Git
+  import 'org.eclipse.jgit.api.Git'
 
   class RubyGit
   

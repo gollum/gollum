@@ -1,7 +1,7 @@
 module RJGit
 
-  import org.eclipse.jgit.lib.Repository
-  import org.eclipse.jgit.lib.RepositoryBuilder
+  import 'org.eclipse.jgit.lib.Repository'
+  import 'org.eclipse.jgit.lib.RepositoryBuilder'
   
   class Repo
   

@@ -4,7 +4,7 @@ module RJGit
 
   begin
     require 'java'
-    Dir["#{File.dirname(__FILE__)}/../java/jars/*.jar"].each { |jar| require jar }    
+    Dir["#{File.dirname(__FILE__)}/java/jars/*.jar"].each { |jar| require jar }
   rescue LoadError
     puts "You need to be running JRuby to use this gem."
     raise
