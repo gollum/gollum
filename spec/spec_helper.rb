@@ -3,6 +3,6 @@ include RJGit
 
 def valid_repo_attributes
   {
-    path => "/tmp/repo_test"
+    :path => "/tmp/repo_test"
   }
 end
