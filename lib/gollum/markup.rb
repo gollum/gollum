@@ -155,7 +155,11 @@ module Gollum
     def process_tex(data)
       @texmap.each do |id, spec|
         type, tex = *spec
-        data.gsub!(id, Gollum::Tex.to_html(tex, type))
+        if @wiki.mathjax
+          data.gsub!(id, Gollum::Tex.to_tex(tex, type))
+        else
+          data.gsub!(id, Gollum::Tex.to_html(tex, type))
+        end
       end
       data
     end
