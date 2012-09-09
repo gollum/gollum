@@ -184,6 +184,12 @@ context "Markup" do
     assert_equal "<p><code>sed -i '' 's/[[:space:]]*$//'</code></p>", page.formatted_data
   end
 
+  test "regexp gsub! backref (#383)" do
+    @wiki.write_page("Potato", :markdown, "`rot13='tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\'`", commit_details)
+    page = @wiki.page("Potato")
+    assert_equal "<p><code>rot13='tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\'</code></p>", page.formatted_data
+  end
+
   test "wiki link within code block" do
     @wiki.write_page("Potato", :markdown, "    sed -i '' 's/[[:space:]]*$//'", commit_details)
     page = @wiki.page("Potato")

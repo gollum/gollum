@@ -75,7 +75,9 @@ module Gollum
       data = process_toc_tags(data)
       data = process_tex(data)
       data = process_wsd(data)
-      data.gsub!(/<p><\/p>/, '')
+      data.gsub!(/<p><\/p>/) do
+        ''
+      end
       data
     end
 
@@ -155,7 +157,9 @@ module Gollum
     def process_tex(data)
       @texmap.each do |id, spec|
         type, tex = *spec
-        data.gsub!(id, Gollum::Tex.to_html(tex, type))
+        data.gsub!(id) do
+          Gollum::Tex.to_html(tex, type)
+        end
       end
       data
     end
@@ -210,9 +214,13 @@ module Gollum
       @tagmap.each do |id, tag|
         # If it's preformatted, just put the tag back
         if is_preformatted?(data, id)
-          data.gsub!(id, "[[#{tag}]]")
+          data.gsub!(id) do
+            "[[#{tag}]]"
+          end
         else
-          data.gsub!(id, process_tag(tag).gsub('%2F', '/'))
+          data.gsub!(id) do
+            process_tag(tag).gsub('%2F', '/')
+          end
         end
       end
       data
@@ -404,7 +412,9 @@ module Gollum
     #
     # Returns the marked up String data.
     def process_toc_tags(data)
-      data.gsub!("[[_TOC_]]", @toc.nil? ? '' : @toc)
+      data.gsub!("[[_TOC_]]") do
+        @toc.nil? ? '' : @toc
+      end
       data
     end
 
@@ -481,7 +491,9 @@ module Gollum
     # regex     - A regex to match whitespace
     def remove_leading_space(code, regex)
       if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ regex }
-        code.gsub!(regex, '')
+        code.gsub!(regex) do
+          ''
+        end
       end
     end
 
@@ -527,7 +539,9 @@ module Gollum
             "<pre><code>#{CGI.escapeHTML(spec[:code])}</code></pre>"
           end
         end
-        data.gsub!(id, body)
+        data.gsub!(id) do
+          body
+        end
       end
 
       data
@@ -563,7 +577,9 @@ module Gollum
       @wsdmap.each do |id, spec|
         style = spec[:style]
         code = spec[:code]
-        data.gsub!(id, Gollum::WebSequenceDiagram.new(code, style).to_tag)
+        data.gsub!(id) do
+          Gollum::WebSequenceDiagram.new(code, style).to_tag
+        end
       end
       data
     end
