@@ -527,7 +527,9 @@ module Gollum
             "<pre><code>#{CGI.escapeHTML(spec[:code])}</code></pre>"
           end
         end
-        data.gsub!(id, body)
+        data.gsub!(id) do
+          body
+        end
       end
 
       data
