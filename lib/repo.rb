@@ -2,6 +2,7 @@ module RJGit
 
   import 'org.eclipse.jgit.lib.Repository'
   import 'org.eclipse.jgit.lib.RepositoryBuilder'
+  import 'org.eclipse.jgit.storage.file.FileRepository';
   
   class Repo
   
@@ -50,6 +51,17 @@ module RJGit
     def description
     end
   
+    def add(fname)
+    end
+  
+    # Convenience method to retrieve a Blob by name
+    def blob(name)
+    end  
+  
+    # Convenience method to retrieve a Tree by name
+    def tree(name)
+    end
+    
   end
 
 end

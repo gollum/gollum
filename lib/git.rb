@@ -29,6 +29,14 @@ module RJGit
       end
       array
     end
+    
+    def commit(message)
+      @git.commit().setMessage(message).call()
+    end
+    
+    def clone(remote, local)
+      Git.cloneRepository().setURI(remote).setDirectory(new File(local)).call()
+    end
   
   end
 

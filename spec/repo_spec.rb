@@ -23,4 +23,8 @@ describe Repo do
     pending
   end
   
+  it "should add files to itself" do
+    pending
+  end
+  
 end

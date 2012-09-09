@@ -1,4 +1,3 @@
-* Fix requires so that JGit library is loaded correctly
 * Describe behaviors in Rspec
 * Implement fixtures (mocks etc.)
 * Implement behaviors in Ruby
