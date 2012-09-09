@@ -185,9 +185,27 @@ context "Markup" do
   end
 
   test "regexp gsub! backref (#383)" do
-    @wiki.write_page("Potato", :markdown, "`rot13='tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\'`", commit_details)
-    page = @wiki.page("Potato")
-    assert_equal "<p><code>rot13='tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\'</code></p>", page.formatted_data
+    # bug only triggers on "```" syntax
+    # not `code`
+    page = 'test_rgx'
+    @wiki.write_page(page, :markdown,
+      (<<-'DATA'
+          ```
+          rot13='tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\'
+          ```
+          DATA
+      ), commit_details)
+    output = @wiki.page(page).formatted_data
+    expected = (<<-'HTML'
+<pre><code>      <div class="highlight">
+<pre><span class="n">rot13</span><span class="p">=</span><span class="s">'tr '</span><span class="o">\</span><span class="s">''</span><span class="n">A</span><span class="o">-</span><span class="n">Za</span><span class="o">-</span><span class="n">z</span><span class="o">'\</span><span class="s">''</span> <span class="s">'\''N-ZA-Mn-za-m'</span><span class="o">\</span><span class="s">'</span>
+</pre>
+</div>
+
+</code></pre>
+HTML
+).strip # remove trailing \n
+    assert_equal expected, output
   end
 
   test "wiki link within code block" do
