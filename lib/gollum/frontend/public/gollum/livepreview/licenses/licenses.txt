@@ -57,3 +57,10 @@ http://www.thecssninja.com/css/css-tree-menu
 http://www.thecssninja.com/demo/license.txt
 
   lib/gollum/frontend/public/css/_styles.css
+
+---
+
+`lr_24.png` is a modified version of http://templarian.com/files/wp_icons/icons/light/appbar.arrow.right.left.png
+
+https://github.com/Templarian/WindowsIcons/blob/21189bffeb17237d444419ef43ed1b49e9f4e9f8/WindowsPhone/license.txt
+
