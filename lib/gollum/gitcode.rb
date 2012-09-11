@@ -16,7 +16,6 @@ module Gollum
 
     def contents
       @contents ||= self.req @uri
-      #req @uri
     end
 
     def unchomp p
@@ -25,7 +24,6 @@ module Gollum
     end
 
     def req uri, cut = 1
-      #puts uri.to_s
       return "Too many redirects or retries" if cut >= 10
       http = Net::HTTP.new uri.host, uri.port
       http.use_ssl = true
