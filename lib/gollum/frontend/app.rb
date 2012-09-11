@@ -89,12 +89,6 @@ module Precious
       redirect File.join(settings.wiki_options[:base_path].to_s, 'Home')
     end
 
-    # Removes all slashes from the start of string.
-    def clean_url url
-      return url if url.nil?
-      url.gsub('%2F','/').gsub(/^\/+/,'')
-    end
-
     # path is set to name if path is nil.
     #   if path is 'a/b' and a and b are dirs, then
     #   path must have a trailing slash 'a/b/' or
