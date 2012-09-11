@@ -20,6 +20,7 @@ module Gollum
     end
 
     def unchomp p
+      return p if p.nil?
       p[0] == '/' ? p : ('/' + p)
     end
 
