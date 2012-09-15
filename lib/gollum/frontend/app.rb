@@ -369,8 +369,13 @@ module Precious
       wiki.update_page(page, name, format, content.to_s, commit)
     end
 
+    private
+
     def commit_message
-      { :message => params[:message] }
+      commit_message = { :message => params[:message] }
+      author_parameters = session['gollum.author']
+      commit_message.merge! author_parameters unless author_parameters.nil?
+      commit_message
     end
   end
 end
