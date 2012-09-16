@@ -369,8 +369,19 @@ module Precious
       wiki.update_page(page, name, format, content.to_s, commit)
     end
 
+    private
+
+    # Options parameter to Gollum::Committer#initialize
+    #     :message   - The String commit message.
+    #     :name      - The String author full name.
+    #     :email     - The String email address.
+    # message is sourced from the incoming request parameters
+    # author details are sourced from the session, to be populated by rack middleware ahead of us
     def commit_message
-      { :message => params[:message] }
+      commit_message = { :message => params[:message] }
+      author_parameters = session['gollum.author']
+      commit_message.merge! author_parameters unless author_parameters.nil?
+      commit_message
     end
   end
 end
