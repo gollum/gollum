@@ -497,6 +497,8 @@ like Rack::Auth, OmniAuth, etc.
     Precious::App.set(:wiki_options, {:universal_toc => false})
     run Precious::App
 
+Your Rack middleware can pass author details to Gollum in a Hash in the session under the 'gollum.author' key.
+
 ## WINDOWS FILENAME VALIDATION
 Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
 
