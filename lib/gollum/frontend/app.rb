@@ -371,6 +371,12 @@ module Precious
 
     private
 
+    # Options parameter to Gollum::Committer#initialize
+    #     :message   - The String commit message.
+    #     :name      - The String author full name.
+    #     :email     - The String email address.
+    # message is sourced from the incoming request parameters
+    # author details are sourced from the session, to be populated by rack middleware ahead of us
     def commit_message
       commit_message = { :message => params[:message] }
       author_parameters = session['gollum.author']
