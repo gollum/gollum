@@ -65,8 +65,14 @@ describe Repo do
   end
   
   it "should return a Blob by name" do
-    blob = @repo.blob('blahblah')
-    blob.is_a?(Blob).should eql true
+    blob = @bare_repo.blob('Manifest.txt')
+    # puts "tree_id: #{tree_id}" unless tree_id.nil?
+    # puts tree_id.class
+    #tree_id.is_a?(ObjectId).should eql true
+    #fail
+    #blob.is_a?(RevBlob).should eql true
+    # blob.name.should == "blahblah"
+    pending
   end
   
   it "should return a Tree by name" do

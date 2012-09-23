@@ -3,12 +3,20 @@ module RJGit
   import 'org.eclipse.jgit.lib.Repository'
   import 'org.eclipse.jgit.lib.RepositoryBuilder'
   import 'org.eclipse.jgit.storage.file.FileRepository'
+  import 'org.eclipse.jgit.treewalk.TreeWalk'
   
   class Repo
   
     attr_accessor :git
     attr_accessor :repo
     attr_accessor :path
+    
+    TREE_TYPE = 0040000
+    SYMLINK_TYPE = 0120000 
+    FILE_TYPE = 0100000
+    GITLINK_TYPE = 0160000
+    MISSING_TYPE = 0000000
+    REG_FILE_TYPE = 100644
     
     def initialize(path, options = {}, create = false)
       epath = File.expand_path(path)
@@ -59,7 +67,24 @@ module RJGit
   
     # Convenience method to retrieve a Blob by name
     def blob(name)
-    end  
+      tree_id = @repo.resolve("HEAD^{tree}")
+      File.open('/tmp/rjgit.log', 'w') {|f| f.write(tree_id) }
+      #puts "tree_id: " + tree_id unless tree_id.nil?
+      return nil if tree_id.nil?
+      walk = TreeWalk.new(@repo)
+      walk.addTree(tree_id)
+      walk.setRecursive(true)
+       
+      while (walk.next())
+        mode = walk.getFileMode(0)
+        if mode.equals(REG_FILE_TYPE)
+          if name == walk.getNameString()
+            File.open('/tmp/rjgit.log', 'a') {|f| f.write("Yay! #{name}") }
+          end
+        end
+      end
+      
+    end
   
     # Convenience method to retrieve a Tree by name
     def tree(name)
