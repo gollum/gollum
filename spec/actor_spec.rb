@@ -9,7 +9,7 @@ describe "A Git Actor" do
     offset = pieces.pop
     output = pieces * ' '
     output.should eql "Tom Werner <tom@example.com> #{t.to_i}" 
-    offset.should eql /-?\d{4}/
+    offset.should match /-?\d{4}/
   end
 
   # from_string
