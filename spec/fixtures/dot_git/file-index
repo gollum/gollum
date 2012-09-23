@@ -1,0 +1,893 @@
+634396b2f541a9f2d58b00be1a07f0c358b999b3 initial grit setup
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/grit
+lib/grit.rb
+lib/grit/errors.rb
+lib/grit/grit.rb
+test/helper.rb
+test/test_grit.rb
+4c8124ffcf4039d292442eeccabdeca5af5c5017 634396b2f541a9f2d58b00be1a07f0c358b999b3 implement Grit#heads
+lib/grit.rb
+lib/grit/grit.rb
+lib/grit/head.rb
+test/test_grit.rb
+06f63b43050935962f84fe54473a7c5de7977325 4c8124ffcf4039d292442eeccabdeca5af5c5017 stub git call for Grit#heads test
+lib/grit/grit.rb
+test/helper.rb
+test/test_grit.rb
+5057e76a11abd02e83b7d3d3171c4b68d9c88480 06f63b43050935962f84fe54473a7c5de7977325 clean up heads test
+test/test_grit.rb
+a47fd41f3aa4610ea527dcc1669dfdb9c15c5425 5057e76a11abd02e83b7d3d3171c4b68d9c88480 add more comments throughout
+lib/grit.rb
+lib/grit/commit.rb
+lib/grit/grit.rb
+d01a4cfad6ea50285c4710243e3cbe019d381eba a47fd41f3aa4610ea527dcc1669dfdb9c15c5425 convert to Grit module, refactor to be more OO
+lib/grit.rb
+lib/grit/commit.rb
+lib/grit/errors.rb
+lib/grit/git.rb
+lib/grit/grit.rb
+lib/grit/head.rb
+lib/grit/repo.rb
+test/helper.rb
+test/suite.rb
+test/test_git.rb
+test/test_grit.rb
+test/test_repo.rb
+d837bd432d63b740b62d964dda48818bd97e778b d01a4cfad6ea50285c4710243e3cbe019d381eba implement Repo#branches
+lib/grit/repo.rb
+test/test_repo.rb
+2c6af5a45ddf8b539e8481d7bf9dff4bc71dde78 d837bd432d63b740b62d964dda48818bd97e778b implement Repo.commits
+Rakefile
+lib/grit/commit.rb
+lib/grit/git.rb
+lib/grit/repo.rb
+test/fixtures/for_each_ref
+test/fixtures/rev_list
+test/helper.rb
+test/test_commit.rb
+test/test_git.rb
+test/test_repo.rb
+a911921efe39c4f6fdce8571c1828eaf45d5551e 2c6af5a45ddf8b539e8481d7bf9dff4bc71dde78 move heads logic into Head
+lib/grit/head.rb
+lib/grit/repo.rb
+404b7a0dea6406545f9969232049ff8119d3ac6f a911921efe39c4f6fdce8571c1828eaf45d5551e handle multiline commit messages
+lib/grit/commit.rb
+lib/grit/repo.rb
+test/test_repo.rb
+de8ecf488033fb75504bf5179608f90d750f8759 404b7a0dea6406545f9969232049ff8119d3ac6f more commits tests
+test/fixtures/rev_list
+test/test_repo.rb
+8bfefdbc0d901a6e8ccd27b9f20879d109f49c03 de8ecf488033fb75504bf5179608f90d750f8759 implement Repo#commit and begin on Repo#tree
+lib/grit/repo.rb
+test/test_repo.rb
+6ffe534098dacefb3633efafff01eb0296f26725 8bfefdbc0d901a6e8ccd27b9f20879d109f49c03 branches is alias of heads
+lib/grit/commit.rb
+lib/grit/repo.rb
+test/test_commit.rb
+test/test_repo.rb
+3b1930208a82457747d76729ae088e90edca4673 6ffe534098dacefb3633efafff01eb0296f26725 big refactor to do lazy loading
+lib/grit.rb
+lib/grit/commit.rb
+lib/grit/git.rb
+lib/grit/head.rb
+lib/grit/lazy.rb
+lib/grit/repo.rb
+test/fixtures/for_each_ref
+test/test_git.rb
+test/test_repo.rb
+4aa0e11f540c42a32ba24988966e9b1efbba6de3 3b1930208a82457747d76729ae088e90edca4673 add comments and make Comment.parents return Commits
+lib/grit/commit.rb
+test/test_repo.rb
+917522c4572a6237897e9a554cde21b8c6292dd3 4aa0e11f540c42a32ba24988966e9b1efbba6de3 more code comments throughout
+lib/grit/commit.rb
+lib/grit/git.rb
+lib/grit/head.rb
+lib/grit/repo.rb
+b17b974691f0a26f26908495d24d9c4c718920f8 917522c4572a6237897e9a554cde21b8c6292dd3 started implementing Tree
+lib/grit.rb
+lib/grit/repo.rb
+lib/grit/tree.rb
+test/test_repo.rb
+2ac1712b56771dd2ca6420eb5319765c1827e13e b17b974691f0a26f26908495d24d9c4c718920f8 add lazy computation of tree contents
+lib/grit/tree.rb
+test/fixtures/ls_tree_a
+test/profile.rb
+test/test_reality.rb
+test/test_tree.rb
+74fd66519e983a0f29e16a342a6059dbffe36020 2ac1712b56771dd2ca6420eb5319765c1827e13e add Blob
+lib/grit.rb
+lib/grit/blob.rb
+lib/grit/git.rb
+lib/grit/tree.rb
+test/fixtures/ls_tree_b
+test/test_reality.rb
+test/test_repo.rb
+test/test_tree.rb
+c12f398c2f3c4068ca5e01d736b1c9ae994b2138 74fd66519e983a0f29e16a342a6059dbffe36020 add inspects to objects
+lib/grit/blob.rb
+lib/grit/commit.rb
+lib/grit/head.rb
+lib/grit/tree.rb
+fc128af28cb263bf1f524f84609a7a75ffa27a9b c12f398c2f3c4068ca5e01d736b1c9ae994b2138 commit now returns Tree object for tree attribute
+lib/grit/commit.rb
+lib/grit/tree.rb
+test/test_repo.rb
+34a87f9a723cc51b6b74e0fe095c9046a826ef3b fc128af28cb263bf1f524f84609a7a75ffa27a9b implement Blob.data and Blob.size
+.gitignore
+lib/grit/blob.rb
+lib/grit/git.rb
+test/fixtures/cat_file_blob
+test/fixtures/cat_file_blob_size
+test/fixtures/rev_list_single
+test/test_blob.rb
+test/test_commit.rb
+test/test_head.rb
+test/test_repo.rb
+test/test_tree.rb
+ebdf4716e38c810b06b6e1fbc2ce3a6da2821f7a 34a87f9a723cc51b6b74e0fe095c9046a826ef3b add Repo.blob
+Rakefile
+lib/grit/repo.rb
+lib/grit/tree.rb
+test/test_repo.rb
+b6e1b765e0c15586a2c5b9832854f95defd71e1f ebdf4716e38c810b06b6e1fbc2ce3a6da2821f7a implement Repo.init_bare
+lib/grit.rb
+lib/grit/blob.rb
+lib/grit/git.rb
+lib/grit/head.rb
+lib/grit/repo.rb
+test/test_blob.rb
+test/test_repo.rb
+01a1b4f1cbf0f4d9c13618a3ca9c9f429c8dd0e8 b6e1b765e0c15586a2c5b9832854f95defd71e1f implement Blob.blame
+lib/grit/blob.rb
+lib/grit/commit.rb
+lib/grit/lazy.rb
+test/fixtures/blame
+test/test_blob.rb
+1fddfabeaa0b62cb4becdb44980ec6cfa48ebd87 01a1b4f1cbf0f4d9c13618a3ca9c9f429c8dd0e8 clear info hash in Blob.blame and update the doc
+lib/grit/blob.rb
+4ea50f4754937bf19461af58ce3b3d24c77311d9 1fddfabeaa0b62cb4becdb44980ec6cfa48ebd87 better errors for Repo.new
+lib/grit/errors.rb
+lib/grit/repo.rb
+test/test_repo.rb
+40d3057d09a7a4d61059bca9dca5ae698de58cbe 4ea50f4754937bf19461af58ce3b3d24c77311d9 add Tree./ to ease getting subtrees
+lib/grit/repo.rb
+lib/grit/tree.rb
+test/test_tree.rb
+038af8c329ef7c1bae4568b98bd5c58510465493 40d3057d09a7a4d61059bca9dca5ae698de58cbe implement repo level diff
+lib/grit/repo.rb
+test/test_repo.rb
+91169e1f5fa4de2eaea3f176461f5dc784796769 038af8c329ef7c1bae4568b98bd5c58510465493 fix some initialization warnings
+lib/grit/commit.rb
+lib/grit/lazy.rb
+lib/grit/tree.rb
+test/test_blob.rb
+test/test_git.rb
+e80bbd2ce67651aa18e57fb0b43618ad4baf7750 91169e1f5fa4de2eaea3f176461f5dc784796769 add Actor class to encapsulate name and email
+lib/grit.rb
+lib/grit/actor.rb
+lib/grit/blob.rb
+lib/grit/commit.rb
+test/test_actor.rb
+test/test_blob.rb
+test/test_commit.rb
+test/test_repo.rb
+ec037431382e83c3e95d4f2b3d145afbac8ea55d e80bbd2ce67651aa18e57fb0b43618ad4baf7750 add Actor inspect
+lib/grit/actor.rb
+test/test_actor.rb
+f1ec1aea10986159456846b8a05615b87828d6c6 ec037431382e83c3e95d4f2b3d145afbac8ea55d begin readme
+README.txt
+b5d4f15a4dd41646405f11fb107aa8efb16c98a4 f1ec1aea10986159456846b8a05615b87828d6c6 more readme
+README.txt
+8c7f4e1d8cb66590825701b758160e3721003dde b5d4f15a4dd41646405f11fb107aa8efb16c98a4 dynamically rewrite ruby style git options
+lib/grit/git.rb
+test/test_git.rb
+337539e896b8c85cc043a923c8fbb927f58e6450 8c7f4e1d8cb66590825701b758160e3721003dde prepare for packaging as gem
+.gitignore
+Manifest.txt
+Rakefile
+lib/grit.rb
+5f141d9c0181b8732c0ec2fab4967f0ffa24fa3f 337539e896b8c85cc043a923c8fbb927f58e6450 git-log support
+lib/grit/repo.rb
+test/test_repo.rb
+02617bd0f7cae462e71be075c99385f709279533 5f141d9c0181b8732c0ec2fab4967f0ffa24fa3f add Actor#to_s as alias to Actor#name
+lib/grit/actor.rb
+test/test_actor.rb
+46291865ba0f6e0c9818b11be799fe2db6964d56 02617bd0f7cae462e71be075c99385f709279533 implement commit diff
+lib/grit.rb
+lib/grit/commit.rb
+lib/grit/diff.rb
+lib/grit/repo.rb
+test/fixtures/diff_p
+test/test_commit.rb
+test/test_repo.rb
+44f82e5ac93ba322161019dce44b78c5bd1fdce2 46291865ba0f6e0c9818b11be799fe2db6964d56 fix commit-diff deleted file bug
+lib/grit/diff.rb
+test/test_commit.rb
+1d22e6fde59c9ded9b8093cf26213a5bd9d4c5ec 44f82e5ac93ba322161019dce44b78c5bd1fdce2 add #diffs to commit object
+lib/grit/commit.rb
+test/test_commit.rb
+4c596908ce1136e8c32174ba13892c6fe68a010d 1d22e6fde59c9ded9b8093cf26213a5bd9d4c5ec rework lazy some to be more of a delegator
+lib/grit.rb
+lib/grit/commit.rb
+lib/grit/lazy.rb
+lib/grit/tree.rb
+80f136f500dfdb8c3e8abf4ae716f875f0a1b57f 44f82e5ac93ba322161019dce44b78c5bd1fdce2 fix tests on other machines
+README.txt
+test/test_git.rb
+test/test_reality.rb
+test/test_repo.rb
+b86b48e3520a106739035b149dbed97445152868 80f136f500dfdb8c3e8abf4ae716f875f0a1b57f abbreviated sha1 and archiving
+lib/grit/commit.rb
+lib/grit/repo.rb
+test/fixtures/rev_parse
+test/test_commit.rb
+test/test_repo.rb
+62e423d6d27b3c5016072c94e72bee1be37aea6d 1d22e6fde59c9ded9b8093cf26213a5bd9d4c5ec b86b48e3520a106739035b149dbed97445152868 Merge branch 'mojombo'
+3e0955045cb189a7112015c26132152a94f637bf b86b48e3520a106739035b149dbed97445152868 add Commit#mime_type
+lib/grit.rb
+lib/grit/blob.rb
+test/test_blob.rb
+db64b1265cb572d3b97cde164312194b83449ef2 62e423d6d27b3c5016072c94e72bee1be37aea6d 3e0955045cb189a7112015c26132152a94f637bf Merge branch 'mojombo'
+7bcc0ee821cdd133d8a53e8e7173a334fef448aa 3e0955045cb189a7112015c26132152a94f637bf prepare for public release
+History.txt
+Manifest.txt
+bin/grit
+lib/grit.rb
+6c38e553796a965fe62397350c537d0a795c9fd6 7bcc0ee821cdd133d8a53e8e7173a334fef448aa rake site
+.gitignore
+Rakefile
+fe3bf3660ac64d86f2855ac3185eb5953ea2c3bd 6c38e553796a965fe62397350c537d0a795c9fd6 add Repo#commits_between
+lib/grit/repo.rb
+e631529f2525180e49b7b90fd0198d90d8106de0 fe3bf3660ac64d86f2855ac3185eb5953ea2c3bd add fork_bare
+lib/grit/git.rb
+lib/grit/repo.rb
+fb49d370b21ed9214677d812dcde243cfeaf2303 e631529f2525180e49b7b90fd0198d90d8106de0 62e423d6d27b3c5016072c94e72bee1be37aea6d Merge branch 'master' of git://github.com/defunkt/grit into defunkt2
+18e19dbbe8b7e152f762af65799bb19429e0d349 fb49d370b21ed9214677d812dcde243cfeaf2303 add options to fork_bare
+lib/grit/repo.rb
+test/test_repo.rb
+275a2b7c7aeadbd03fae865a5f67900a7ee1bfc6 18e19dbbe8b7e152f762af65799bb19429e0d349 update readme with github location
+README.txt
+8f24479836ada10f08846678a59d79609ce3d14f 275a2b7c7aeadbd03fae865a5f67900a7ee1bfc6 add options to Repo.init_bare
+lib/grit/repo.rb
+test/test_repo.rb
+02879cf62c803fd706dc45ab85dbc2e7efe5acc1 8f24479836ada10f08846678a59d79609ce3d14f add enable/disable daemon serve
+lib/grit.rb
+lib/grit/repo.rb
+test/test_repo.rb
+3c413f1d3879a80ee3cbd8c7cd8033f7f04afa68 db64b1265cb572d3b97cde164312194b83449ef2 02879cf62c803fd706dc45ab85dbc2e7efe5acc1 Merge branch 'mojombo'
+c45fa0feea864d535f77d39caa735820aa720caa 3c413f1d3879a80ee3cbd8c7cd8033f7f04afa68 display the first commit of a repo without dying
+lib/grit/commit.rb
+test/fixtures/diff_i
+test/test_commit.rb
+6f6cb7cd4ab707c2273dd97113d9891da7a11885 02879cf62c803fd706dc45ab85dbc2e7efe5acc1 add commits_since
+lib/grit/commit.rb
+lib/grit/repo.rb
+301edd42ff7a55dffb86446349b33d6d4198d192 6f6cb7cd4ab707c2273dd97113d9891da7a11885 quote all git parameters
+lib/grit/git.rb
+lib/grit/head.rb
+lib/grit/repo.rb
+lib/grit/tree.rb
+test/test_git.rb
+test/test_real.rb
+4ceb8e966103ba1c0cf442f90b476367b0302347 c45fa0feea864d535f77d39caa735820aa720caa 301edd42ff7a55dffb86446349b33d6d4198d192 Merge branch 'mojombo'
+3ed8c6eb935326c8de850dae4be5e2493a2a8c2e 301edd42ff7a55dffb86446349b33d6d4198d192 fix quoting problem for Repo#log
+lib/grit/git.rb
+lib/grit/repo.rb
+test/test_repo.rb
+7235ace853d766d2c4a39d5e505c05497b1b7fb7 3ed8c6eb935326c8de850dae4be5e2493a2a8c2e add Repo#commit_count
+lib/grit/commit.rb
+lib/grit/repo.rb
+test/fixtures/rev_list_count
+test/test_repo.rb
+13d27d5cea4d0d787163dd97f8ee63d200d2a663 7235ace853d766d2c4a39d5e505c05497b1b7fb7 c45fa0feea864d535f77d39caa735820aa720caa Merge branch 'master' of git://github.com/defunkt/grit into d3
+59ddc32609925a9fb7e3b2e2cee04b7afd204d00 13d27d5cea4d0d787163dd97f8ee63d200d2a663 deal with empty initial commit
+lib/grit/commit.rb
+test/fixtures/show_empty_commit
+test/test_commit.rb
+460b3216db32a55d07b1de0570bbb8427611b599 59ddc32609925a9fb7e3b2e2cee04b7afd204d00 fix bug in diff caused by new mode
+lib/grit/diff.rb
+test/fixtures/diff_new_mode
+test/test_diff.rb
+80238dccfb24b5dee8f6d6c99fc8d272486e0946 460b3216db32a55d07b1de0570bbb8427611b599 wip
+lib/grit/repo.rb
+lib/grit/tag.rb
+7a8d32cb18a0ba2ff8bf86cadacc3fd2816da219 80238dccfb24b5dee8f6d6c99fc8d272486e0946 add tag support
+lib/grit.rb
+lib/grit/head.rb
+lib/grit/repo.rb
+lib/grit/tag.rb
+test/fixtures/for_each_ref_tags
+test/test_tag.rb
+c9cf68fc61bd2634e90a4f6a12d88744e6297c4e 460b3216db32a55d07b1de0570bbb8427611b599 allow Grit::Commit.diff to specify an optional array of paths
+lib/grit/commit.rb
+test/fixtures/diff_2
+test/fixtures/diff_2f
+test/fixtures/diff_f
+test/test_commit.rb
+f32458940ef496d61946d4e3d63bc5edd1ae0af7 c9cf68fc61bd2634e90a4f6a12d88744e6297c4e add to Commit::Diff tests so we know the right filename is parsed
+test/test_commit.rb
+c6d10852bf3cca44f17c0e3f3abb721c6fe7ec27 7a8d32cb18a0ba2ff8bf86cadacc3fd2816da219 add alternates getter and setter
+lib/grit/repo.rb
+test/test_repo.rb
+e8e7b385fd00a7e9609cf2f270d021f19f08f17f c6d10852bf3cca44f17c0e3f3abb721c6fe7ec27 better alternates behavior
+lib/grit/repo.rb
+test/test_repo.rb
+3ea514188523ae9e8ecd603f760442f147042d6c f32458940ef496d61946d4e3d63bc5edd1ae0af7 add alternates getter and setter
+lib/grit/repo.rb
+test/test_repo.rb
+125c3f885f9041a48b2828cd1c707dbaff78a825 3ea514188523ae9e8ecd603f760442f147042d6c better alternates behavior
+lib/grit/repo.rb
+test/test_repo.rb
+182a706d083de61af95c3dba0d59dd3f91fe31b2 125c3f885f9041a48b2828cd1c707dbaff78a825 compact Commit contents from Trees so that #/(path_to_commit) doesn't raise a NoMethodError on NilClass#name.
+lib/grit/tree.rb
+test/fixtures/ls_tree_commit
+test/test_tree.rb
+e8ea908dd932eb21856495db140e27efb014bf3e e8e7b385fd00a7e9609cf2f270d021f19f08f17f Update tests to not use fixed absolute paths
+test/helper.rb
+test/test_repo.rb
+3c230a377740b6beb679a6b57a1e2b7e9940d321 e8ea908dd932eb21856495db140e27efb014bf3e 182a706d083de61af95c3dba0d59dd3f91fe31b2 merge from technoweenie
+242253bdce7ae94d34b2af702e3618eea8ed9754 3c230a377740b6beb679a6b57a1e2b7e9940d321 fix diffs for mode only changes
+lib/grit/diff.rb
+test/fixtures/diff_mode_only
+test/test_commit.rb
+991ac754cafa7c87ccf25d77225154d16d4f4be6 4ceb8e966103ba1c0cf442f90b476367b0302347 242253bdce7ae94d34b2af702e3618eea8ed9754 Merge branch 'mojombo'
+4f0ea0c7c8985c48c94269886ba93c0ea73636cc 991ac754cafa7c87ccf25d77225154d16d4f4be6 4c596908ce1136e8c32174ba13892c6fe68a010d Merge branch 'lazy_delegator'
+ff3f41fe66bd482281347314ed1cd1cb4b853c38 242253bdce7ae94d34b2af702e3618eea8ed9754 get full message from commits as well
+lib/grit/commit.rb
+test/test_repo.rb
+f6b346156dd19a9fe46004a3efce4fc8d66addf9 ff3f41fe66bd482281347314ed1cd1cb4b853c38 repsect blank lines in commit messages
+lib/grit/commit.rb
+test/fixtures/rev_list
+test/test_repo.rb
+55737f3f9128b02bf3519f5f70b6118234454c65 f6b346156dd19a9fe46004a3efce4fc8d66addf9 do not strip leading spaces from commit messages
+lib/grit/commit.rb
+test/fixtures/rev_list
+test/test_repo.rb
+472e4f3d6f54514c560487ce6bde30405a84ffa7 55737f3f9128b02bf3519f5f70b6118234454c65 Tiny fix to add mime-types as a dependency in Hoe's extra_deps
+Rakefile
+179f919876a255a8e09d32a95c8209d66c7ed660 55737f3f9128b02bf3519f5f70b6118234454c65 enable --all for Commit.find_all
+lib/grit/commit.rb
+lib/grit/repo.rb
+ca78e948410d39b690a76a7c613b83b70de64eeb 179f919876a255a8e09d32a95c8209d66c7ed660 allow letters in git version test
+test/test_git.rb
+4aa3410e2d458b00b0f41920ffc2aa21f019d13d ca78e948410d39b690a76a7c613b83b70de64eeb don't crash when diffing and last pair only contains file mode changes
+lib/grit/diff.rb
+test/fixtures/diff_new_mode
+test/test_diff.rb
+f1964ad1919180dd1d9eae9d21a1a1f68ac60e77 179f919876a255a8e09d32a95c8209d66c7ed660 Add support for accessing repository configuration values
+lib/grit.rb
+lib/grit/config.rb
+lib/grit/repo.rb
+test/fixtures/simple_config
+test/test_config.rb
+3dc4f654a697467692478f502817dfc3e0248378 f1964ad1919180dd1d9eae9d21a1a1f68ac60e77 Don't add .git to "bare" repositories as it is unnecessary.
+lib/grit/repo.rb
+test/test_repo.rb
+ccc8ba203bfb6b6051bfa083f73969f680ced61a 3dc4f654a697467692478f502817dfc3e0248378 Add write support to the git configuration
+lib/grit/config.rb
+test/test_config.rb
+a55a698345a3f27a981ada27c7486d89e374bc21 4f0ea0c7c8985c48c94269886ba93c0ea73636cc add in Commit#to_hash method
+lib/grit/commit.rb
+test/test_commit.rb
+78617eaee2ca3b88cd9bb5361d29a99b5555a3d2 a55a698345a3f27a981ada27c7486d89e374bc21 179f919876a255a8e09d32a95c8209d66c7ed660 Merge branch 'master' of git://github.com/mojombo/grit into mojombo/master
+ad44b88d69c4b7b61a9ec12445f00f082ca19f41 78617eaee2ca3b88cd9bb5361d29a99b5555a3d2 Touch up Commit#to_hash
+lib/grit/commit.rb
+test/test_commit.rb
+22825175e37f22c9418d756ca69b574d75602994 179f919876a255a8e09d32a95c8209d66c7ed660 do not screw up diffs that have files with spaces in them
+.gitignore
+lib/grit/diff.rb
+be3178ec3bf47bbdc69bd6023443fb6c4ac5385c 22825175e37f22c9418d756ca69b574d75602994 472e4f3d6f54514c560487ce6bde30405a84ffa7 Merge branch 'master' of git://github.com/kamal/grit into kamal
+28e7a1d3dd172a8e757ff777ab205a538b80385e be3178ec3bf47bbdc69bd6023443fb6c4ac5385c 4aa3410e2d458b00b0f41920ffc2aa21f019d13d Merge branch 'master' of git://github.com/evilchelu/grit into evilchelu
+f11ceb37cbd72b8c7627aa9e2a7b8dbcbf10d107 28e7a1d3dd172a8e757ff777ab205a538b80385e ccc8ba203bfb6b6051bfa083f73969f680ced61a Merge branch 'master' of git://github.com/halorgium/grit into halorgium
+11d191ef3f04012a78222cb118619c16d5581886 f11ceb37cbd72b8c7627aa9e2a7b8dbcbf10d107 ad44b88d69c4b7b61a9ec12445f00f082ca19f41 Merge branch 'defunkt' into local
+d6016bc9fa3950ad18e3028f9d2d26f831061a62 11d191ef3f04012a78222cb118619c16d5581886 require time for xmlschema
+lib/grit.rb
+e1193f8092ae9ece0ba336b7aa4c29dcde78777f d6016bc9fa3950ad18e3028f9d2d26f831061a62 support for heads with slashes in them
+lib/grit/head.rb
+test/fixtures/for_each_ref
+test/test_head.rb
+5a0943123f6872e75a9b1dd0b6519dd42a186fda e1193f8092ae9ece0ba336b7aa4c29dcde78777f add timeout protection to grit
+lib/grit.rb
+lib/grit/git.rb
+30e367cef2203eba2b341dc9050993b06fd1e108 5a0943123f6872e75a9b1dd0b6519dd42a186fda timeout code and tests
+lib/grit/git.rb
+test/test_git.rb
+420eac97a826bfac8724b6b0eef35c20922124b7 d6016bc9fa3950ad18e3028f9d2d26f831061a62 Added a method for getting the current branch.
+lib/grit/head.rb
+lib/grit/repo.rb
+5e3ee1198672257164ce3fe31dea3e40848e68d5 30e367cef2203eba2b341dc9050993b06fd1e108 420eac97a826bfac8724b6b0eef35c20922124b7 Merge branch 'master' of git://github.com/dustin/grit
+2d3acf90f35989df8f262dc50beadc4ee3ae1560 5e3ee1198672257164ce3fe31dea3e40848e68d5 ignore errors from SIGCHLD on trap
+lib/grit/git.rb
+3fa4e130fa18c92e3030d4accb5d3e0cadd40157 2d3acf90f35989df8f262dc50beadc4ee3ae1560 added a git directory to the testing dir for current and future testing
+test/dot_git/FETCH_HEAD
+test/dot_git/HEAD
+test/dot_git/ORIG_HEAD
+test/dot_git/config
+test/dot_git/description
+test/dot_git/hooks/applypatch-msg
+test/dot_git/hooks/commit-msg
+test/dot_git/hooks/post-commit
+test/dot_git/hooks/post-receive
+test/dot_git/hooks/post-update
+test/dot_git/hooks/pre-applypatch
+test/dot_git/hooks/pre-commit
+test/dot_git/hooks/pre-rebase
+test/dot_git/hooks/prepare-commit-msg
+test/dot_git/hooks/update
+test/dot_git/index
+test/dot_git/info/exclude
+test/dot_git/logs/HEAD
+test/dot_git/logs/refs/heads/master
+test/dot_git/logs/refs/remotes/origin/master
+test/dot_git/logs/refs/remotes/tom/master
+test/dot_git/objects/00/03f8338f3668723f26b37c8ccf544a95e29ec6
+test/dot_git/objects/00/1569f8fc3eb464ba486e4b22f2f06494f399e2
+test/dot_git/objects/00/b71297a9d326f1c9647dc3199759696aa0fcd3
+test/dot_git/objects/00/f3447967b64aba158140cd40ee8b367612ce81
+test/dot_git/objects/01/0ad5aba678e910d4d663b42dcc23b42beb829f
+test/dot_git/objects/02/1e14889189cd86cff25b5677e12ac2c7234e0b
+test/dot_git/objects/02/3d5211ccff94a988645cdeb1738ef681053928
+test/dot_git/objects/03/37a36c245dcafeb65eb8a77322bfa353447774
+test/dot_git/objects/03/7f79a326dbcb10176d28f61998d72924ce77c8
+test/dot_git/objects/04/c3a03b3f0d0a60b313f4be77749845a5235c08
+test/dot_git/objects/05/7826b56de5733beb44b4561443d3b46a449691
+test/dot_git/objects/05/7926e768e8b202655a3aa26adc7f201c0edcfc
+test/dot_git/objects/05/7929610b4988ec16e3c45b8383bd158990b4a0
+test/dot_git/objects/05/af9a86721dbfc9c26aa1e51ae2a69e3e659d4e
+test/dot_git/objects/05/b059421d3747a7806ac17ae7fec58942f4febb
+test/dot_git/objects/06/05c3b4232a3ce29e9eaa37c5b87798500a6e7d
+test/dot_git/objects/06/2279d5eb12f88189544abbaed53853c5ed9515
+test/dot_git/objects/06/e218ce2718fb29fe8c3406e20a03af92b2c211
+test/dot_git/objects/08/31f152b831b72c29c402c43a4f0d5f9c08098b
+test/dot_git/objects/09/509a4195f9fb7afbf688b03c80695bf42415aa
+test/dot_git/objects/09/722f3e93f2ac8b7576ad9875570b9fcd9c7742
+test/dot_git/objects/0a/8a50a991f45aacd9182cc9660352291102d62c
+test/dot_git/objects/0b/7cad903e284fb0c67b4c5c2b7dce7bcb1ab331
+test/dot_git/objects/0c/27bd8cee7c56836d7116224eeee572b14d9207
+test/dot_git/objects/0c/93fbac2cae83e0c1ae53b95b1ad1e52049f9dc
+test/dot_git/objects/0d/757583ecf0ce5235d41487d26bee258c317b3e
+test/dot_git/objects/0f/341dd5b4a15b61545f8f8a22fdfcfa611b88ba
+test/dot_git/objects/0f/41b030d38bc256c46da51ec61d8fbf78d95c71
+test/dot_git/objects/0f/f24bd854839ec2d63df82511b30a87563cf93b
+test/dot_git/objects/10/3b19041fdc3d56c2a233faeb835250f7979025
+test/dot_git/objects/10/49a9f3dde7bb76587fe082462866b5d0dbd286
+test/dot_git/objects/11/8273918e8e542d828b37fb58cb2ec0f557fb5f
+test/dot_git/objects/11/af521eb0e6e9c112b3bb6c4ad7ec24986d3ca9
+test/dot_git/objects/12/285f38fe70a726001e29108536954f64d7133a
+test/dot_git/objects/12/c33c0bcf3ac3f569850943ad62c46c9861edeb
+test/dot_git/objects/12/c7b3bf5cdc29830afecbe20755d6f08fe735a1
+test/dot_git/objects/13/2335def2380870cd3b8f40d326976aea182aa7
+test/dot_git/objects/13/d306ed324d1be706c78071a72414d50c68dca5
+test/dot_git/objects/14/66fcacc4070eb9a8fd88b3a825c6647f6491f1
+test/dot_git/objects/14/67cde22fefa7ddcab86786d5066bc6f51b250a
+test/dot_git/objects/15/2111c53821f7dd53a3cc4f6a251a7de3789414
+test/dot_git/objects/15/d022ad2ff13d0ef33424ff412676b6047ffed8
+test/dot_git/objects/15/e293762a035e16b6d3f5562c51e8a524c84381
+test/dot_git/objects/15/ebfa5c7792de35a107f413b397407ac3330888
+test/dot_git/objects/16/48e3b1e22ebb852ded047d0ab7eac1b05fe060
+test/dot_git/objects/16/81e1b6486f601c8edcaddcaba5b43cee4aea3f
+test/dot_git/objects/16/910c6a1377054903ccb52369d3ee07b13e5d08
+test/dot_git/objects/16/ff20f07ceb75dc60619c082f530ccd3379d572
+test/dot_git/objects/17/ac818de1cc5ab1b1e1fc5f2796b0bb816a600c
+test/dot_git/objects/17/d488c2f71729e5d182cb944d28c837fba95ccf
+test/dot_git/objects/17/da04256d519b3bc102ff6654388a15ede87a9e
+test/dot_git/objects/19/6583fa8a32069927196d341590917ec3a44068
+test/dot_git/objects/19/f53b5d629ef910276aa4ff3da37098b84ebbe5
+test/dot_git/objects/1a/d7f5703990fffc0623027f890c8da5a84b7f69
+test/dot_git/objects/1b/4ac33eca9279c482cf15bfbdaeff285dd610b1
+test/dot_git/objects/1b/6572ea59d924437ef351841ad7769189744070
+test/dot_git/objects/1b/9fe079b5b81a05c585e71d7a3f435cf740ef98
+test/dot_git/objects/1b/fb8784f878f9cd3cfeaca34357cf50a74f1e09
+test/dot_git/objects/1c/6ab3410ae104091c7c48eb51fafeb10ceb840a
+test/dot_git/objects/1d/52507d6a4b62353f17426395176114a78c3e27
+test/dot_git/objects/1d/ad0ebe6a69a154ae53834551aac811e2084d92
+test/dot_git/objects/1e/48c5e962aed49286c66caf359ec9c2d36c2702
+test/dot_git/objects/1e/602e850a67f89c395797eac185740d5f26d4d2
+test/dot_git/objects/1e/d9b70c5aeb93e24139fa7203d9a7455476c102
+test/dot_git/objects/1e/eb71ddbc2be8fd6cc4fe8c8465361601d2e1a5
+test/dot_git/objects/1f/cfb4f859faed6bf0384993f0fd5edf41f00ef5
+test/dot_git/objects/20/527a9f7bff75c1fbddd9d99bb7e6da2558650a
+test/dot_git/objects/20/58b040a09bd2a1fbaebb1e40aae595115a715e
+test/dot_git/objects/21/0ce1bcc38e0e98f8ec8930a930dbd7988ac4b2
+test/dot_git/objects/21/6092db5b7af3826eb8cab98f214b87338f2e85
+test/dot_git/objects/22/0553c2c0869a33996016d0f01a16471c3cdfb4
+test/dot_git/objects/22/fb8209d8655a24594398d47f339870f924804f
+test/dot_git/objects/24/bc825eb69933d3c42e1a81c92cc9ebc6cc3472
+test/dot_git/objects/27/9478dba188b07e2948b2f52ac865557065031e
+test/dot_git/objects/27/b04aeb5b6042a2d90fb40d4293863841257640
+test/dot_git/objects/28/08c797feeb40639304a503a395e8333daa0aaf
+test/dot_git/objects/28/0ebe908f5b3306f56b95c2e6758abeed139e26
+test/dot_git/objects/28/f509a6f26bcce60274974581e63d730236cf90
+test/dot_git/objects/29/bb1b3a815aa0c6c6f41aaf4bca766d0bef1cdf
+test/dot_git/objects/2a/525a828e4d0d02c01d14445b49c645771bb82a
+test/dot_git/objects/2a/5c7305b52b836fbc0ec7200df58f3f9ba06ec0
+test/dot_git/objects/2a/6d2a310fdaed46fb3a44901392e0bf4f05f8e7
+test/dot_git/objects/2a/88c76b382e2e3c3e3587e0676301f9949d646d
+test/dot_git/objects/2b/79e430dc370f0810552660b495e4ecdeca6aae
+test/dot_git/objects/2c/97dd5ed8d14496cfc71e7ab12bedfec7c14f2e
+test/dot_git/objects/2d/aea61e18b399977a0fc0b124c837e1d00934fa
+test/dot_git/objects/2d/f7c5ddd50228c2d751df8b6aab96b37cdbc965
+test/dot_git/objects/2e/e881239adb659aea65927a76daf526c0d83891
+test/dot_git/objects/2f/91a713750e086ab1704e05177d4a8f0d88953b
+test/dot_git/objects/30/2bc1a9a65d8c4ddf073a56d0fdacaff71d5500
+test/dot_git/objects/30/a95debfc08077d566c9aa204f708104c716e1d
+test/dot_git/objects/30/c859bedf72cb8dfb745bb17f705e4774d4f339
+test/dot_git/objects/30/eaea1a7dbd755b4774f2e7b4663623398b09a3
+test/dot_git/objects/31/5cd4d93bf65f8d00303515c7f31be1b888a349
+test/dot_git/objects/31/98cb65f97c46156ad634d04141a3aec5a7f637
+test/dot_git/objects/31/aaeceab051ff055f4b46b642f5891ac54e85ae
+test/dot_git/objects/31/c867dca3a847692dc87bc4906194f13d183cae
+test/dot_git/objects/32/d7a7f04ce188e48735ca805f27a2e399a1cffc
+test/dot_git/objects/32/dec7871d83a6de85e5b96d06178ada1b4185c8
+test/dot_git/objects/33/49c1bb38f1a3bff19ffdb83fe81373f0947531
+test/dot_git/objects/33/a3d4c5d14917e67edec483f3222245be341fd1
+test/dot_git/objects/33/b61981170deb261faec0ce907d8775dc9b0827
+test/dot_git/objects/34/a29f36e9085784d1c22db7331c0d9ac4e90d99
+test/dot_git/objects/35/82158a912c79ee8d48eba6196c3613b1e34e57
+test/dot_git/objects/36/5e358e24b22ca327750961b28dbfba0330d53f
+test/dot_git/objects/37/175959911a8e8032e07935cde93b873f2466f3
+test/dot_git/objects/37/593280ce24318d5ff8eb1448ae06c83772afe4
+test/dot_git/objects/37/7c4c6c44acbdfd450bdd0eba55845ee885be82
+test/dot_git/objects/37/b6a48b7f3b475a48fe1cbe6c85e1e5c47caa32
+test/dot_git/objects/38/5b7e7fbe895f4c9e866899c8a9dd413c687e3f
+test/dot_git/objects/38/5f9658195f704e1f20ae167f23c3a91871dba2
+test/dot_git/objects/38/d6fa611eb2c06126f711eb64f036ffa83331fe
+test/dot_git/objects/3a/6030afdfb2890fd10a19d4fba1395d7b24f828
+test/dot_git/objects/3b/494f98fb24ee05c63c63cfaafa730bd933f9ea
+test/dot_git/objects/3b/5cc49cd62921d1abc9eaac373c29ea6fa604c9
+test/dot_git/objects/3c/135209062a3ccd2032092ab2457eb3980b249f
+test/dot_git/objects/3c/631958129f12cd496c2c918ff76c04e3aec471
+test/dot_git/objects/3c/681414cda7c8200292d9c37baef74b8e55b25e
+test/dot_git/objects/3d/6fb637c4c133a62712c2f5c5bc5d6c918b257b
+test/dot_git/objects/3d/8cf6e46dbc2863435a7c0befa9f0f9b72f2b40
+test/dot_git/objects/3e/4e5142403fdafa5daaf580ad2754bd5469f297
+test/dot_git/objects/3e/8b951715d51b517615319e74f1ff5f143bdd33
+test/dot_git/objects/3e/c671d1b0661dec389ec97ac49729be98a98363
+test/dot_git/objects/3f/09b8a94def39594ff66018a0267e3a095f0166
+test/dot_git/objects/3f/a8b0bb7b1158b3d75cb01a338c688465266ae8
+test/dot_git/objects/3f/ab2e2576d21e160f65e0f037ef49932153b750
+test/dot_git/objects/3f/ef1de16cfa99882a900d682c98bf4cdbb0bd1e
+test/dot_git/objects/40/878bdc3b0b546884c23cc56e36bb01bca26360
+test/dot_git/objects/42/8b046f3d44ee60a2707cd0ec870f214d52b51d
+test/dot_git/objects/42/ea225300e8cf78bb8dee7867cd9b9dd62a2e42
+test/dot_git/objects/44/c1bb76bef6677159624272045dbbd9e1be3de6
+test/dot_git/objects/46/d3b63432ebd26da44b9b5f4463ecab8610003c
+test/dot_git/objects/47/07d2feacccdc27e3ae08b6557313c66ad792cb
+test/dot_git/objects/47/f94fe43e503475c4699b9bab535949d45786da
+test/dot_git/objects/48/18f5a5bf96cc367861b358578bad5d14bc1ad9
+test/dot_git/objects/49/9167ba61ed6a925dbf1d801a417fed31325e79
+test/dot_git/objects/49/c183e5076a69d95cb3267d65b15f07e8ef3dd0
+test/dot_git/objects/4a/4960fbcaa4f2b5f540c2417a0e6e3e13cd21e5
+test/dot_git/objects/4c/5d14c6b35b4b9f9f8a10db253e3a61968fe0d5
+test/dot_git/objects/4c/721af72f40368c4af46c04956fe6553505b03e
+test/dot_git/objects/4c/765b6172fefd3aa2f2462f40b2c5614f855e33
+test/dot_git/objects/4c/82aff6d42a4a658102f617678bfd9653e0a997
+test/dot_git/objects/4c/c4d71390cf1c9fbe9543b5da0cb0506fc354da
+test/dot_git/objects/4e/1ba5a8835b0208f7b4b8832a3ac1f11c5923ad
+test/dot_git/objects/4e/749569e29fd394f47f679262bf138307352c19
+test/dot_git/objects/4f/72728413e0e66b7281b979dce17eadc2fd8c60
+test/dot_git/objects/4f/f1303d44eba1b583ea2a3b7765153ee1743e61
+test/dot_git/objects/50/40f4c67674acda890725edcd0425d02093107c
+test/dot_git/objects/51/48455670cac62caf07b4104b898982a2ee1d27
+test/dot_git/objects/51/84bca98dfa4da277688eb0cf5d4c3c30049dbc
+test/dot_git/objects/52/c074ceaeeae3ad8faba5eaa883b29d47e3753d
+test/dot_git/objects/52/e6e4c8d61116b7306af1e3a83330e9b2f2b22e
+test/dot_git/objects/52/ebe29d5aab2f2d13bff0300809349e47a93578
+test/dot_git/objects/52/f056f557e9c34c1d410e38f28fb0ff3eb8cf8a
+test/dot_git/objects/53/bed2e68961f68a0d28589ab78ac3cddea26870
+test/dot_git/objects/53/e7f70cb60a4a2c42e0c16f9eac862d527ef2b5
+test/dot_git/objects/55/4dd421736514dbff8ee54bcd0fdb14c6066ec5
+test/dot_git/objects/56/3e1a6828c118fda28f11a33f9349bc15dd2607
+test/dot_git/objects/56/cfafc365c69aa55f9558a59e6d909d2f6822d9
+test/dot_git/objects/58/40f249cdfffd086dbad61feea0c3a8a4b3d109
+test/dot_git/objects/58/628e6483b6cc5cc721f1ee6d398bd0c2a87312
+test/dot_git/objects/59/96606c30d29c0bc97f67b18a0f255f87cc2da3
+test/dot_git/objects/59/eb45a3f0a6b80dbbb7b99024e55227a4086eba
+test/dot_git/objects/59/ee1a70e83c28f2d74843b91e39e557340e6172
+test/dot_git/objects/59/ef600ad21001772c04e540918f28c00ea71b39
+test/dot_git/objects/5b/2741fde089f266afca1adcfdc4eeb8dfe4a463
+test/dot_git/objects/5b/9e2e35bffc027b09677112d4bd1b3af4d5c313
+test/dot_git/objects/5b/c6f75b8462a5d6190fdd50f3e74cf9e1dfeed3
+test/dot_git/objects/5b/fd1435a75583e9dd95536f2da3882f41604727
+test/dot_git/objects/5d/84fe98507e47d78953bd0208ae063f06e52b1f
+test/dot_git/objects/5e/329b884e07932517bf9909303f6017cb178a25
+test/dot_git/objects/5e/79da1a7446822b46659edf25e9144816fa0454
+test/dot_git/objects/5f/ec1ca382b811bf51abc319eb929cd7553842e8
+test/dot_git/objects/60/390f7ddecc01fafb62b7d891f93ea23498acb8
+test/dot_git/objects/63/142041870ce53f5ef4451b8cf021151e145054
+test/dot_git/objects/63/2ff9f2fc143cb67362b8267d57ff969d91ce85
+test/dot_git/objects/64/2b8924b35c87dd48f07bbdb6d0deb1ae5495dc
+test/dot_git/objects/64/e717a84fb544375169f554be6b922aba692aa9
+test/dot_git/objects/64/ec7cc059b0db49a529e51823891aef4d8bf338
+test/dot_git/objects/66/1b95aeb34878aeacb70d74bf1c577b2cc461c3
+test/dot_git/objects/66/7e57234226564739a618858668734a6b244876
+test/dot_git/objects/66/99b0c4524bcdf045b66498ef281f863fc10628
+test/dot_git/objects/66/e81f2947ee43f489386e4839edbc51bbaa3200
+test/dot_git/objects/67/3f9b7a23a3fffe64f9ce4701914a110d70172b
+test/dot_git/objects/67/9a2f922a0937fc209a3ae77bffcc9fda6c49d0
+test/dot_git/objects/68/ad8c20d09837654709a9511a22d719631606d4
+test/dot_git/objects/6a/0f0474e45585c06d7caac652d252483187d68e
+test/dot_git/objects/6a/a4e1aa5e7dbd47c73b28ed8ca30bcab93b4638
+test/dot_git/objects/6b/7b8ca7b28c4c62f8a25ccccb4d6ade9e46c2d7
+test/dot_git/objects/6c/4b8c2fd3da22ef73e392683f926ae3b7494e57
+test/dot_git/objects/6c/57ae690bc5271210392920898240c13f4e5634
+test/dot_git/objects/6d/7b878255abaea31a1bd43cfacd89727a40b334
+test/dot_git/objects/6e/af969270949b97cde160323221579ebf7d0ae6
+test/dot_git/objects/6f/6906254fa5d16d54cd4511e79acc3ee79da96c
+test/dot_git/objects/70/7d0fbd934e645980235d52112ce9ed8a8da14c
+test/dot_git/objects/71/1cf6f726379a9c1a83eea1fae4ec3a10af28f1
+test/dot_git/objects/72/944ef1b06abd709ae708d6be3426937f248a32
+test/dot_git/objects/72/c02e7e07d2284fe144183529f9b5ca45027a99
+test/dot_git/objects/73/1501ae418cdc7babb9a86f3cb869daf11c28e8
+test/dot_git/objects/73/167b43c845d98eaa2040c701334f0c6f24a69c
+test/dot_git/objects/73/5942ed3013eb862658960cf891e4c7de0f511e
+test/dot_git/objects/74/e48401ad6085171109f933862cb87c98cf1132
+test/dot_git/objects/76/940ef6ba3d8d1048e6059d48417279b74e057f
+test/dot_git/objects/78/06987ac105edba10fe27c9a9f415dab7c0f9b8
+test/dot_git/objects/78/3367a2b50a733782aec243f1e8760effd62769
+test/dot_git/objects/78/591e22e8e9fd665bf9bf955ecd7601bc10efc5
+test/dot_git/objects/78/99ce846a293ff465fd391e790a8c7e6d896cbf
+test/dot_git/objects/79/0005c92fc8f75b3d194ae031bb89b041eecb04
+test/dot_git/objects/79/0e7b517e808fb9ddbc67ac1e6b4c02bd4f302a
+test/dot_git/objects/79/6a9d3b5c3ad98586fa0e68f91ddb9d317600ab
+test/dot_git/objects/79/d5f65d307915105523c1267ee2457c853f6d76
+test/dot_git/objects/7a/087349e9f350ece8e7fa7715da5e84927e9705
+test/dot_git/objects/7a/5e762fa8f7fa3e2302f1ad4c0710b6910812c1
+test/dot_git/objects/7a/e93eb82d94273605ea4ffa808223f3517751f1
+test/dot_git/objects/7b/0eb3a3b0d48710afc0fb2f7b95cf949c17db45
+test/dot_git/objects/7b/3c2f5c49cc882758b2dfebcda96f14bf04ba11
+test/dot_git/objects/7b/95db1c259d8fca0aa9d641dfc85127b079c311
+test/dot_git/objects/7d/bfba85b625779105f0d853f89522971346b3ef
+test/dot_git/objects/7d/cfb401bdfd9817a0b3ca08ada41bf0c1080802
+test/dot_git/objects/7e/3f8ceb97f84e983cbae9934eda025babbb393a
+test/dot_git/objects/7e/4639a2cb181a6592f431d42db83cf640a563d1
+test/dot_git/objects/7f/8c688c758239f302451b0bc10679e547003b5e
+test/dot_git/objects/7f/d9cd76d00c54c434d003a49058592b6f0c10c1
+test/dot_git/objects/7f/e607b5531e290bd50f1f70ea236d0306a882a9
+test/dot_git/objects/82/def912edf146e3f30dd02ec78c07356aefdfa5
+test/dot_git/objects/83/6dca6265fb655643b769aa1dd9d24de45713c4
+test/dot_git/objects/83/b2a44866c05489569466edd0b64fd64c35f3bf
+test/dot_git/objects/85/1c599e01cab929963ee07bb8911477da3817bd
+test/dot_git/objects/85/4e76fadf16d5005f334dbaac7a951bf690c310
+test/dot_git/objects/85/bb8a9e19a9a179bd9f5c2056588e6e25274288
+test/dot_git/objects/85/e5fdbc2cefd10f0aa7042e092bd5f4c8c823d3
+test/dot_git/objects/86/1b019631332e20abcedcd44efb78b4bc245797
+test/dot_git/objects/88/a86c6983316e48805a13bbb54fa0f9c80248b2
+test/dot_git/objects/89/353c81b260c81a3340ce0a1b92da0d94d8f6de
+test/dot_git/objects/89/6cdba0f0e33856711cb64067e30256894fe40c
+test/dot_git/objects/89/d0fc07bb62c543b73721d9eb8e76375317777c
+test/dot_git/objects/8a/0d30f5ec46a905b14597f5f1a50526339313f1
+test/dot_git/objects/8a/8a57d37adad012752dbba3c6e1063a374b66a6
+test/dot_git/objects/8a/ac2492e118b62b049858e49286eda99b70424c
+test/dot_git/objects/8b/8e7f353094009e7fc3b360ecc266081fa7e72d
+test/dot_git/objects/8b/a8d47b778c172e3fa94f59d715d3ccfec9eab8
+test/dot_git/objects/8b/ea8baddf15affc95414c402dfff718790816ee
+test/dot_git/objects/8c/a7f29a74c0245e6d5ffe19047290e89c53c2e3
+test/dot_git/objects/8c/b1801bab79dbed4c457f7c56a4243b19a572a1
+test/dot_git/objects/8c/cc9b07c5a8c07bb3170758dcd76bfd26631f05
+test/dot_git/objects/8d/e21b364f1831a676486d65deea2bfbe141962c
+test/dot_git/objects/8d/fad1edfb99419586b830f19f9e96ce9d241c49
+test/dot_git/objects/8f/1becb8995005a7e1b22260e5d6d674249f094c
+test/dot_git/objects/8f/1d9f4bc14deac99f49eddae61ef2c3db7ab5c4
+test/dot_git/objects/8f/67e2313d82205d121e809ba1095930ded3e3c7
+test/dot_git/objects/8f/a525c77fec13ec6c2178840912c6c37b8c3cce
+test/dot_git/objects/92/1f3eccb5f75c6b81f9044aedd151dd391eef10
+test/dot_git/objects/92/ffbe0beb74ed54fe13db418914b436f8b155b8
+test/dot_git/objects/93/a8d9a44e349e3b8eb1138d58aed8574dd1e5eb
+test/dot_git/objects/94/2831545ab1b5a6c47998d5204e8fa4a13af252
+test/dot_git/objects/95/c29e184a0ec7c5fa0a2d4ecd105f17bec6218b
+test/dot_git/objects/95/efe1bd08e0b7b1469b4773c14dc728d5068b7e
+test/dot_git/objects/97/71f107d373b028c2b73e2e169218951f772028
+test/dot_git/objects/97/bc5e8c3cff57c5ad09ee02a39e90a0de08109d
+test/dot_git/objects/97/ec7d3e32843a7a846c3b24332d812a05d28fff
+test/dot_git/objects/98/36cd7a87f3baa9c004d7ed277baef050b2ce3d
+test/dot_git/objects/98/4ab69b9f09ba4087a503628badb3bfb001e417
+test/dot_git/objects/98/b806b34a110411575eee9d45f949a72ac27c7a
+test/dot_git/objects/9b/70d75286c8218b28f623a9b0801b0b952ffb8b
+test/dot_git/objects/9c/5810283f7b71f0e6658f83fa3cea4c42add182
+test/dot_git/objects/9c/a4d54b87ae030f69c6a1652b06458229163bff
+test/dot_git/objects/9d/4cb25621a8fd3751691b5320a63acc0cb71359
+test/dot_git/objects/9e/5651973373448a7621f2b50a6c7719fc731717
+test/dot_git/objects/9f/17dfcb0f307446f1a9f5f4f265fd03f01e5337
+test/dot_git/objects/9f/94c114fbd1a011d99783c2df5dc97db923fd27
+test/dot_git/objects/9f/9b08b0ed1e63325c5669c54b1666cf00231856
+test/dot_git/objects/9f/ace5ebf66d7a4990759a6b23d593b27c560371
+test/dot_git/objects/a0/1626c862e48de9548a21ee3877c96266a9f247
+test/dot_git/objects/a0/292a1e42c64c9738088223f119740f9bcf25a4
+test/dot_git/objects/a0/89b4d1cc2b3887c816f5ba51ce48d90ea53e4a
+test/dot_git/objects/a0/931153ab2b7eadad5cccf57e8cfe67051a902a
+test/dot_git/objects/a1/3905543ce8634d5206f155d887818c261a34ca
+test/dot_git/objects/a2/83d38a51ccde7f05bf3b2cdbb374d3e794e3e4
+test/dot_git/objects/a2/d4e7e0f4d030940b4a62cf905c7f18c9f3ed08
+test/dot_git/objects/a4/8dbab8aaf71f35784363f7bd5fe0bbdc91219a
+test/dot_git/objects/a4/949eb5bfc411c724532a24a2070e16fafbdbf8
+test/dot_git/objects/a6/25a89a89cfe2916a812c0a19bbf7c88d2bc6c5
+test/dot_git/objects/a6/61101de591928518b26e5cf19f976173af84b1
+test/dot_git/objects/a6/b63376a6c6208c700d28f4152f06561a8591f5
+test/dot_git/objects/a6/cc9707d22121121c4c436961f25ad3136c7a2d
+test/dot_git/objects/a7/f6425fdc0d6eab1f94942603f9101a9eb010f3
+test/dot_git/objects/a8/2dc65e43b5f13287fe61d9c0d535319e10d1fb
+test/dot_git/objects/a8/a74a93cf26ee794cebc9f1440c56882b0124e7
+test/dot_git/objects/a8/f3b83e0ed58f5a7c58fd673eeca588942bcde5
+test/dot_git/objects/a9/35f4bb2d641436ab22510afdb2ddf59f953521
+test/dot_git/objects/aa/ca7266c757878ce0f80a5edd9651afc32624c5
+test/dot_git/objects/ab/c19c8c3819bbaa4964ca4f7fafc32d97834920
+test/dot_git/objects/ac/e84f11ee83b490c7b0421c3815da52172e6106
+test/dot_git/objects/ad/ac6394aaa5f63348d12c6d7c556cc5895bdb5e
+test/dot_git/objects/ad/be3ad1cfaed6ae867ff4c780e57b24aba92bb6
+test/dot_git/objects/ae/45e5b88fcd45b55efa1e8a1f60e6525897430f
+test/dot_git/objects/ae/88cc08586ab2baad34a00de9aed2be4e8ec297
+test/dot_git/objects/ae/aa7324c31d374eac09744a5e1cf3eb5c11b1ef
+test/dot_git/objects/af/37cb1d947f50b5a9c4ea7c68dcfeb67ad66f8a
+test/dot_git/objects/af/ae8e12352682bf9d015dce28e338a451c5f55e
+test/dot_git/objects/af/d4d958e849a246bd3413f2cc02e7910f19f058
+test/dot_git/objects/b0/1401ffc98de4b600588fcfcd09a3961d162c69
+test/dot_git/objects/b0/3531d097981c72b9c99aca10eca9c50a70d466
+test/dot_git/objects/b1/c0001ea8e43861235f34cd4d21853ca458158e
+test/dot_git/objects/b2/1d54ab7d3ec8d8a3c91c997ed9538777e46188
+test/dot_git/objects/b2/1f05a2f9d51a8ef2c143fb7b8282fc53be06dd
+test/dot_git/objects/b4/3d94c5a8e399fff7661187411c2f3702898160
+test/dot_git/objects/b4/fd01bf7d2194b58ffc3a8e703bcdef5b3046bc
+test/dot_git/objects/b6/33e336e94e1090bd7e19773972b1bf177d18bb
+test/dot_git/objects/b6/9a6fedabd2d05896b06986e7ac8f69f6d32903
+test/dot_git/objects/b6/e387967dd4d8cc2a590dae48327dd7b1225992
+test/dot_git/objects/b7/6a1914a9461f6e66a4fc5a32b890f38b3dbe89
+test/dot_git/objects/b8/a5e1b3d5334ec5484f1299b77526b187a94c25
+test/dot_git/objects/b9/e18f001d183fcf54debaf1b2995d31a2f60de8
+test/dot_git/objects/b9/fe6cfc99544168ab86a9e5326d2278651204c9
+test/dot_git/objects/ba/8e143dc8770a08a289c15e575adc55c5a4bb54
+test/dot_git/objects/ba/c7b8660ab69c5728f49b9e63751ad1d86ef5d3
+test/dot_git/objects/bb/332bf8f4417e45a74d87c762665d27562d4e95
+test/dot_git/objects/bb/d2a60494d609583a1117447158a329e1629022
+test/dot_git/objects/bd/1d7e6252aaa69a1a67688101117881c20c6ce2
+test/dot_git/objects/be/df2c64a1d0b97f039e8bc0d80722f020adfb70
+test/dot_git/objects/bf/2c69e3ff4f9c3abc2c8711a4d9b94fad30e9f0
+test/dot_git/objects/c0/a0771d3e3ca04f47b010867ac7a4a42408da0d
+test/dot_git/objects/c0/bff5fee2b3e7ced9f6db56394af1aad1ea7ed8
+test/dot_git/objects/c1/ccd31fd431573003f6492034e888f7d9f0b9b8
+test/dot_git/objects/c1/f6b5ee610aeb6ac999ad6dfba1252f17d06d76
+test/dot_git/objects/c2/85fb81c97b0ad4b5e31d6c88f7d2de1a999bf6
+test/dot_git/objects/c2/dcc243dd5586cdefe67c1a47922f2b33515e84
+test/dot_git/objects/c3/0c8c756c092cc3c5260805b630973786a0c740
+test/dot_git/objects/c3/d90063e61a4f18f0c67f40875c3fbef7679c37
+test/dot_git/objects/c4/e1178df3417161a08166519c671cc7eb9d13da
+test/dot_git/objects/c5/316e5a772e358243b305cd39185907ba4000e8
+test/dot_git/objects/c6/c29d8b2626547f47c454e3132643e911a9dca7
+test/dot_git/objects/c7/7d84a29d341be904705ff97f40060d896d32a2
+test/dot_git/objects/c9/67cea0a628ff0f9b85d59003b56ab3db1ab2b4
+test/dot_git/objects/ca/c661c85aa6405085fb561e4f5a1dbd62c89e0c
+test/dot_git/objects/cb/9af18c3753abd34f1bffd77af3c02e8975e24c
+test/dot_git/objects/cb/b903f44f2508c6204f58f812977dcc8cf9cefe
+test/dot_git/objects/cc/70a2b9b33e50633e146745b14be7b827a1b3fd
+test/dot_git/objects/cc/a47071801b43a39ca8d0a88f2201ad30ebedc9
+test/dot_git/objects/cc/fdeb08df97d990299a7cf523c0f26be1a17b72
+test/dot_git/objects/cd/b5ce2c133787835ca0b75e3dddd4482d7d40ce
+test/dot_git/objects/ce/37aab31d5b51592d153e85dc31a1164f2c74d5
+test/dot_git/objects/cf/19fd85e7967177d5419c4d07398f990c33545d
+test/dot_git/objects/cf/1c5abec20238b4fda0b8fb9c9fcc0314198010
+test/dot_git/objects/cf/ba8a784564e61ab02beec0546e2b7deb1dedf8
+test/dot_git/objects/d0/b8e19994cff4866d3464f604a44f5856436e67
+test/dot_git/objects/d0/c74daaca46f35c1ff78c5b600826deb5649524
+test/dot_git/objects/d1/13634b1167576fe27292c3857813ef5cc4a669
+test/dot_git/objects/d1/152cb07487bd11c9f63843437b277d51e07205
+test/dot_git/objects/d1/5036828e61ea14859aa7d1bfcebd0e3b0eb881
+test/dot_git/objects/d1/624b21caf0eee83ec682d312cf477e88f750d3
+test/dot_git/objects/d1/f010bd414b89ab2d70d95f819b913dfe421a14
+test/dot_git/objects/d2/110dfef12479935cf619a11136153f94ca9b67
+test/dot_git/objects/d2/563757320e1557299ad7249cd23523f065e654
+test/dot_git/objects/d2/ef2754d3f4498e5f39093a13bb7b63f5ac53e0
+test/dot_git/objects/d3/60d56c0dc32d09a1dac7d14227c0dc502e0315
+test/dot_git/objects/d3/6adf3899666534d3dfdbb7cb56ae6cd67c775f
+test/dot_git/objects/d4/c1f16003f3a9dbd786ff9c76fd870f6410219e
+test/dot_git/objects/d4/c52892a65b126bd009552425629d3ddeac187c
+test/dot_git/objects/d5/b2e50283d7c08ba11cff41cf969bc409e25b04
+test/dot_git/objects/d6/a96d9347d002e1f4c994f6e706c92cacf34c1b
+test/dot_git/objects/d6/fa111185d38e869024040461d97e3fb1f2a3dd
+test/dot_git/objects/d7/06308dfda94ed1d1fa3b4e166204a3b3b821de
+test/dot_git/objects/d7/7e88e54007ca7054c80e4a553dfc9497033190
+test/dot_git/objects/d7/b6c50da9b2013a2b68a58ad248a5ee86e3e413
+test/dot_git/objects/d8/263d0d2544145f915010a759217b3cca42372d
+test/dot_git/objects/d8/32e468be4f1fc8898bf2e5273f1edbe96df5a1
+test/dot_git/objects/da/1669b4371b10947264cb338e9a1cbedc0ad569
+test/dot_git/objects/da/a1ae72d1b50ea84156ab4609e643a070bdef4e
+test/dot_git/objects/da/fd8a6599574a188701e2efd965b5a9907925ee
+test/dot_git/objects/db/0101ef085f8c71eb0f4a1ec982d292924a5d7e
+test/dot_git/objects/db/d625cae0863ef56c00c09d7954dea8165650db
+test/dot_git/objects/dc/0bcf3df4f74fa898ab5541c38e38b405dbcaa9
+test/dot_git/objects/dc/13b3e9e0c9f064e50c432158e3b038dc36b63e
+test/dot_git/objects/dc/a70d64a067eb0739bd71b8725d8e34fbc1ed0a
+test/dot_git/objects/dd/7efbb77e82a842d13c91288c372e26fc701ed6
+test/dot_git/objects/de/6582afb45f6095e001f58add5ea7c10e9dcb6d
+test/dot_git/objects/de/b2346f42ba644e6768541b5eded5d381c26158
+test/dot_git/objects/de/e78dfdbff2d10b632252914a27b087c133c6c0
+test/dot_git/objects/df/bda7c78373c97807758e7385e980ea1969a6a6
+test/dot_git/objects/df/eeb6e6ca48947e35b882ae04bdcc7cbc992d99
+test/dot_git/objects/e1/c2a8f7843b588275eda6f3c8e321e23e74fd96
+test/dot_git/objects/e2/56e219e2898ef4e259472205a4cfb3fb782f3b
+test/dot_git/objects/e2/c9f53517ee568ac02ce2b8f2633e8b0a9f513e
+test/dot_git/objects/e3/3e78cb3c472bc6e1566146f6758851ce2677b6
+test/dot_git/objects/e3/a3038573f3b1246def8ef1a1614f054bedf997
+test/dot_git/objects/e3/e846396d26e98aa34d26c7417e851f46801f9a
+test/dot_git/objects/e4/45223b62c0dfe199d2db14b439c5eb1f10edd4
+test/dot_git/objects/e4/e9744dfabd3c54cddf8274d95ffe7e8d4ae1f6
+test/dot_git/objects/e5/3c62a8e65bcb441de67dd388f22d9e59ff41b4
+test/dot_git/objects/e6/04d431540c63ebb9387bd1506b7df63e3d4868
+test/dot_git/objects/e6/1b707b59d20dc125ae1c2383eb67e06ee6686e
+test/dot_git/objects/e7/67e28974d0047a53f3880d1361822c2386873b
+test/dot_git/objects/e8/c36a5942eb01f7036ed8969f5845c4d5385896
+test/dot_git/objects/e9/0d7972cddfcbed0e7efd7dac92cbe894c226f0
+test/dot_git/objects/e9/462ac46b53343c09ea5dcdc7ab53b28dbdaf95
+test/dot_git/objects/e9/4f08ad7175d17064b709e487cf3d16954fb204
+test/dot_git/objects/e9/5d5db706850682b2798f7643e31f3f82cfa8e0
+test/dot_git/objects/e9/6f1622e59e32a89c727359f2c8c5e598d719c8
+test/dot_git/objects/ea/7d7232c2035543c3b0f349339d50157874b5f0
+test/dot_git/objects/eb/275489327879906f5ced9f04220aa896534243
+test/dot_git/objects/eb/ee5088c07150ab83f09d7f56b7317afdc0b447
+test/dot_git/objects/ec/a0c428506f18dc36589e9464513f7157cd6e52
+test/dot_git/objects/ed/c62f0fb7f82ee1ad7c29b42e513960fdcf13d9
+test/dot_git/objects/ee/88371bc4a42cb7980fdb7704be9f05fee3b0a3
+test/dot_git/objects/ee/e9df3d091825b2ce066c0fe717e2224f2f2931
+test/dot_git/objects/ef/9d99db794a654d4c67527d277064481e996c5a
+test/dot_git/objects/ef/9e75f59ccadfd4c67c6853828b9bc34d974ec7
+test/dot_git/objects/ef/b165f0221d9739b6be5179ae3cecd633e45ce8
+test/dot_git/objects/f0/32303006cdfe5892e2f8f64cf0f972d351b9a3
+test/dot_git/objects/f0/5fb20e635d8ae2ff50ccb6a984274e58058632
+test/dot_git/objects/f0/6db1288baf0f8671f287ad5a2a91d943747068
+test/dot_git/objects/f0/f6f7e25c4bdd0647932e859fca992ff37869b3
+test/dot_git/objects/f0/f87fe091f1256b42135c6e2e482cd3a078c7f9
+test/dot_git/objects/f1/bf0001951ac41581e708bacacc4bdb4deddf3c
+test/dot_git/objects/f2/0b59e485ec38019c363f3e1e89e0f804ed48ec
+test/dot_git/objects/f2/41613e98ac4f7d57d45dfd8d7f38b7c8df99f3
+test/dot_git/objects/f2/55ce10804955454568678091a6f328ef66a8a6
+test/dot_git/objects/f2/7d9bd39b44bd80abd029a481c6a54617d0d170
+test/dot_git/objects/f2/8d3bb5dd2c9be42f4ec9458808a4d8487c2e3e
+test/dot_git/objects/f2/ce4153e5b1231e5603dea5772cd7a895d93923
+test/dot_git/objects/f2/e63e8292a9e5750c459398d54f3ad9a23c18d7
+test/dot_git/objects/f3/58447ff06a87a0aeac39e1945e3c635b328801
+test/dot_git/objects/f3/b578c9694e83744b094524cbd190f2763f4a12
+test/dot_git/objects/f4/1be6d524d8db969348f7e3bdcc08908932bb4e
+test/dot_git/objects/f5/0489c78cc3d06d797c82d871726716684fc61c
+test/dot_git/objects/f5/3a1631d49cfdb0a257974b3ebc0b5bc79bde52
+test/dot_git/objects/f5/3eb189e857104b44de96b0a41436ebf60ffd78
+test/dot_git/objects/f5/42ce17ea0da75b3de894eb7d0ffd8b9efe97d2
+test/dot_git/objects/f5/69f066cdae3a13946f7ef9608677006ff387ed
+test/dot_git/objects/f6/2215251c1d9fd76bdfb6454446cb1826ee9246
+test/dot_git/objects/f6/c9c0b559fd041a0a23d33ae4bb605f0dba7b58
+test/dot_git/objects/f7/3b9daf41c4c1380be40168b5cb7a3fefb87728
+test/dot_git/objects/f8/1eec2ace52484d074b1db7a29b32c8b716d056
+test/dot_git/objects/f8/206296fd197c506a224e9bbee22a8dccd2d8b7
+test/dot_git/objects/f8/f75c70d9abddb176e61fe67520a0f0a168b8ee
+test/dot_git/objects/f9/f3fe3f0b327e5b7955a195e5d789791bcc08f1
+test/dot_git/objects/fa/64d91bcda155c1622505ca91dde0fa694c04c1
+test/dot_git/objects/fb/c4ed43dfd3173f9707e3d7657809dc77c0bd9a
+test/dot_git/objects/fc/0bfccdebfaea6fbb28e5a6cea62f9a820ea817
+test/dot_git/objects/fe/7efffeafed1ecd4679b5526d72a7dd3df140a9
+test/dot_git/objects/fe/96440abd8d769d80037c7a8afcbf225156b604
+test/dot_git/objects/fe/a98a018892bd22aa0bf7de727097eafc66ecc2
+test/dot_git/objects/ff/2a1936f7883f44e7587a65dcbb5d18b03f3835
+test/dot_git/objects/ff/667b71fb08b0642e5a92087e763fc09096893c
+test/dot_git/objects/ff/97e5351d9fccccd047d798573c5a61771fc6c9
+test/dot_git/refs/heads/master
+test/dot_git/refs/remotes/origin/HEAD
+test/dot_git/refs/remotes/origin/master
+test/dot_git/refs/remotes/tom/master
+test/dot_git/refs/tags/v0.7.0
+ca8a30f5a7f0f163bbe3b6f0abf18a6c83b0687a 3fa4e130fa18c92e3030d4accb5d3e0cadd40157 added a pure-ruby git library and converted the cat_file commands to use it
+PURE_TODO
+lib/grit.rb
+lib/grit/git-ruby.rb
+lib/grit/git-ruby/internal/loose.rb
+lib/grit/git-ruby/internal/mmap.rb
+lib/grit/git-ruby/internal/pack.rb
+lib/grit/git-ruby/internal/raw_object.rb
+lib/grit/git-ruby/object.rb
+lib/grit/git-ruby/repository.rb
+lib/grit/git.rb
+test/fixtures/cat_file_blob_ruby
+test/fixtures/cat_file_commit_ruby
+test/fixtures/cat_file_tree_ruby
+test/test_rubygit.rb
