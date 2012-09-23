@@ -3,6 +3,9 @@ include RJGit
 
 TEST_REPO_NAME = "dot_git"
 TEST_REPO_PATH = File.join(File.dirname(__FILE__), 'fixtures', TEST_REPO_NAME)
+TEST_BARE_REPO_NAME = "dot_bare_git"
+TEST_BARE_REPO_PATH = File.join(File.dirname(__FILE__), 'fixtures', TEST_BARE_REPO_NAME)
+
 
 def valid_repo_attributes
   {

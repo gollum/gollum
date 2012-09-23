@@ -3,16 +3,14 @@ require 'spec_helper'
 describe Repo do
     
   before(:all) do
-    create_temp_repo(TEST_REPO_PATH)  
+    @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+    @temp_bare_repo_path = create_temp_repo(TEST_BARE_REPO_PATH)
+    @repo = Repo.new(@temp_repo_path)
+    @bare_repo = Repo.new(@temp_bare_repo_path, {:bare => true}, false)
   end
-  
-  before(:each) do
-    @repo = Repo.new(valid_repo_attributes[:path])
-    @bare_repo = Repo.new(valid_repo_attributes[:path], {:bare => true}, false)
-  end
-  
+    
   it "should default to a non-bare repository path" do
-    @repo.path.should eql valid_repo_attributes[:path] + '/.git'
+    @repo.path.should eql @temp_repo_path + '/.git'
   end
   
   it "should have a bare repository path if specified" do

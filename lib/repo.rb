@@ -25,8 +25,8 @@ module RJGit
       @working_dir = epath unless @bare
       
       repo_path = java.io.File.new(@path)
-      @repo = RepositoryBuilder.new().set_git_dir(repo_path).build()
-      @repo.create if create
+      @repo = @bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_work_tree(repo_path).build()
+      @repo.create(@bare) if create
       @git = RubyGit.new(@repo)
       
     end

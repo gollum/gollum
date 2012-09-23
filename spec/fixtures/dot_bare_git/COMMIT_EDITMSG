@@ -1,0 +1,22 @@
+added a pure-ruby git library and converted the cat_file commands to use it
+# Please enter the commit message for your changes.
+# (Comment lines starting with '#' will not be included)
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	new file:   PURE_TODO
+#	modified:   lib/grit.rb
+#	new file:   lib/grit/git-ruby.rb
+#	new file:   lib/grit/git-ruby/internal/loose.rb
+#	new file:   lib/grit/git-ruby/internal/mmap.rb
+#	new file:   lib/grit/git-ruby/internal/pack.rb
+#	new file:   lib/grit/git-ruby/internal/raw_object.rb
+#	new file:   lib/grit/git-ruby/object.rb
+#	new file:   lib/grit/git-ruby/repository.rb
+#	modified:   lib/grit/git.rb
+#	new file:   test/fixtures/cat_file_blob_ruby
+#	new file:   test/fixtures/cat_file_commit_ruby
+#	new file:   test/fixtures/cat_file_tree_ruby
+#	new file:   test/test_rubygit.rb
+#
