@@ -16,17 +16,17 @@ module RJGit
       epath = File.expand_path(path)
 
       if File.exist?(File.join(epath, '/.git'))
-        @bare = false
+        bare = false
       elsif File.exist?(epath) || options[:bare]
-        @bare = true
+        bare = true
       end
       
-      @path = @bare ? epath : File.join(epath, '/.git')
-      @working_dir = epath unless @bare
+      @path = bare ? epath : File.join(epath, '/.git')
+      @working_dir = epath unless bare
       
       repo_path = java.io.File.new(@path)
-      @repo = @bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_work_tree(repo_path).build()
-      @repo.create(@bare) if create
+      @repo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_work_tree(repo_path).build()
+      @repo.create(bare) if create
       @git = RubyGit.new(@repo)
     end
   
