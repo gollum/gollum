@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 2d3acf90f35989df8f262dc50beadc4ee3ae1560 Scott Chacon <schacon@gmail.com> 1208560687 -0700
+2d3acf90f35989df8f262dc50beadc4ee3ae1560 3fa4e130fa18c92e3030d4accb5d3e0cadd40157 Scott Chacon <schacon@gmail.com> 1208561167 -0700	commit: added a git directory to the testing dir for current and future testing
+3fa4e130fa18c92e3030d4accb5d3e0cadd40157 ca8a30f5a7f0f163bbe3b6f0abf18a6c83b0687a Scott Chacon <schacon@gmail.com> 1208561228 -0700	commit: added a pure-ruby git library and converted the cat_file commands to use it
