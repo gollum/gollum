@@ -1,7 +1,8 @@
 require 'rjgit'
 include RJGit
 
-TEST_REPO = File.join(File.dirname(__FILE__), 'fixtures', "dot_git")
+TEST_REPO_NAME = "dot_git"
+TEST_REPO_PATH = File.join(File.dirname(__FILE__), 'fixtures', TEST_REPO_NAME)
 
   def valid_repo_attributes
     {
@@ -17,7 +18,7 @@ TEST_REPO = File.join(File.dirname(__FILE__), 'fixtures', "dot_git")
     tmp_path = File.join("/tmp/", filename)
     FileUtils.mkdir_p(tmp_path)
     FileUtils.cp_r(clone_path, tmp_path)
-    File.join(tmp_path, 'dot_git')
+    File.join(tmp_path, TEST_REPO_NAME)
   end
   
 end
