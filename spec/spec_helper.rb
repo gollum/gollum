@@ -19,5 +19,5 @@ def create_temp_repo(clone_path)
   tmp_path = File.join("/tmp/", filename)
   FileUtils.mkdir_p(tmp_path)
   FileUtils.cp_r(clone_path, tmp_path)
-  File.join(tmp_path, TEST_REPO_NAME)
+  File.join(tmp_path, File.basename(clone_path))
 end

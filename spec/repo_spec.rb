@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe Repo do
     
+  before(:all) do
+    create_temp_repo(TEST_REPO_PATH)  
+  end
+  
   before(:each) do
     @repo = Repo.new(valid_repo_attributes[:path])
     @bare_repo = Repo.new(valid_repo_attributes[:path], {:bare => true}, false)
