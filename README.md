@@ -504,7 +504,7 @@ Note that filenames on windows must not contain any of the following characters 
 
 ## LIB.SO ERROR
 
-`Could not open library 'lib.so'` may be solved by installing `python-devel` on Fedora or `python-dev` on Ubuntu.
+`Could not open library 'lib.so'` may be solved by installing `python-devel` on Fedora or `python-dev` on Ubuntu. Gentoo requires a rubypython [patch](https://gist.github.com/2802480) to use python2.7.
 
 ## CONTRIBUTE
 
