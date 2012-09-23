@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe Tree do
   
   before(:each) do

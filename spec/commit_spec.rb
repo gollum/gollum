@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe "A Commit object" do
     
   before(:each) do

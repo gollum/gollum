@@ -32,7 +32,7 @@ module RJGit
     end
   
     def bare?
-      @bare
+      @repo.is_bare
     end
     
     def self.create(path, options = {:bare => true})

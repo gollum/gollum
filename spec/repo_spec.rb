@@ -15,11 +15,27 @@ describe Repo do
     File.basename(@bare_repo.path).should_not eql ".git"
   end
   
+  it "should tell us whether it is bare" do
+    @repo.bare?.should eql false
+    @bare_repo.bare?.should eql true
+  end
+  
   it "should have a reference to a JGit Repository object" do
     @repo.repo.kind_of?(org.eclipse.jgit.lib.Repository).should eql true 
   end
   
   it "should list its branches" do
+    result = @repo.branches
+    result.is_a?(Array).should eql true
+    result.include?("MASTER").should eql true
+  end
+  
+  it "should return its description" do
+    result = @repo.description
+    result.should eql fixtures("repo_description")
+  end
+  
+  it "should list its commits" do
     pending
   end
   
@@ -32,5 +48,8 @@ describe Repo do
     blob.is_a?(Blob).should eql true
   end
   
+  it "should return a Tree by name" do
+    pending
+  end
   
 end
