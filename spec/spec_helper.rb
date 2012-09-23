@@ -8,6 +8,7 @@ TEST_REPO_PATH = File.join(File.dirname(__FILE__), 'fixtures', TEST_REPO_NAME)
     {
       :path => "/tmp/repo_test"
     }
+  end
   
   def fixture(name)
     File.read(File.join(File.dirname(__FILE__), 'fixtures', name))
