@@ -50,8 +50,6 @@ module RJGit
     def tag(name, commit_or_revision_id, message = "", force = false)
       @git.tag.setName(name).setForceUpdate(force).setMessage(message).setObjectId(commit_or_revision_id).call
     end
-
-    def 
   
   end
 
