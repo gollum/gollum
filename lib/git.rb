@@ -1,5 +1,8 @@
 module RJGit
 
+  import 'java.io.ByteArrayInputStream'
+  import 'java.io.FileInputStream'
+
   import 'org.eclipse.jgit.api.Git'
   import 'org.eclipse.jgit.api.AddCommand'
 
@@ -44,13 +47,36 @@ module RJGit
     end
 
     def tag(name, message = "", force = false)
-      @git.tag.setName(name).setForceUpdate(force).setMessage(message).call
+      Ref.new(@git.tag.setName(name).setForceUpdate(force).setMessage(message).call)
     end
 
     def tag(name, commit_or_revision_id, message = "", force = false)
-      @git.tag.setName(name).setForceUpdate(force).setMessage(message).setObjectId(commit_or_revision_id).call
+      Ref.new(@git.tag.setName(name).setForceUpdate(force).setMessage(message).setObjectId(commit_or_revision_id).call)
     end
-  
+
+    def apply(input_stream)
+      updated_files = @git.apply.setPatch(input_stream).call
+      updated_files_parsed = []
+      updated_files.each do |file|
+        updated_files_parsed << file.getAbsolutePath
+      end
+      updated_files_parsed
+    end
+
+    def applyPatch(patch_content)
+      input_stream = ByteArrayInputStream.new(patch_content.to_java_bytes)
+      apply(input_stream)
+    end
+
+    def applyFile(patch_file)
+      input_stream = FileInputStream.new(patch_file)
+      apply(input_stream)
+    end
+
+    def clean
+      @git.clean.call
+    end
+
   end
 
 end
