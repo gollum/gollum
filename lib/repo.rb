@@ -2,7 +2,7 @@ module RJGit
 
   import 'org.eclipse.jgit.lib.Repository'
   import 'org.eclipse.jgit.lib.RepositoryBuilder'
-  import 'org.eclipse.jgit.storage.file.FileRepository';
+  import 'org.eclipse.jgit.storage.file.FileRepository'
   
   class Repo
   
@@ -28,7 +28,6 @@ module RJGit
       @repo = @bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_work_tree(repo_path).build()
       @repo.create(@bare) if create
       @git = RubyGit.new(@repo)
-      
     end
   
     def bare?
@@ -51,7 +50,8 @@ module RJGit
     def description
     end
   
-    def add(fname)
+    def add(fpattern)
+      @git.add(fpattern)
     end
   
     # Convenience method to retrieve a Blob by name

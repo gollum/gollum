@@ -1,6 +1,8 @@
 module RJGit
 
   class Actor
+    # PersonIdent in JGit
+
     attr_reader :name
     attr_reader :email
 

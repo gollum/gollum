@@ -1,6 +1,7 @@
 module RJGit
 
   import 'org.eclipse.jgit.api.Git'
+  import 'org.eclipse.jgit.api.AddCommand'
 
   class RubyGit
   
@@ -31,12 +32,26 @@ module RJGit
     end
     
     def commit(message)
-      @git.commit().setMessage(message).call()
+      @git.commit.setMessage(message).call
     end
     
     def clone(remote, local)
-      Git.cloneRepository().setURI(remote).setDirectory(new File(local)).call()
+      Git.cloneRepository().setURI(remote).setDirectory(new File(local)).call
     end
+
+    def add(fpattern)
+      @git.add.addFilePattern(fpattern).call
+    end
+
+    def tag(name, message = "", force = false)
+      @git.tag.setName(name).setForceUpdate(force).setMessage(message).call
+    end
+
+    def tag(name, commit_or_revision_id, message = "", force = false)
+      @git.tag.setName(name).setForceUpdate(force).setMessage(message).setObjectId(commit_or_revision_id).call
+    end
+
+    def 
   
   end
 
