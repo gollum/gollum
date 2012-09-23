@@ -27,4 +27,10 @@ describe Repo do
     pending
   end
   
+  it "should return a Blob by name" do
+    blob = @repo.blob('blahblah')
+    blob.is_a?(Blob).should eql true
+  end
+  
+  
 end
