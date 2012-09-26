@@ -456,7 +456,7 @@ context "Markup" do
 
   test "code blocks with multibyte caracters indent" do
     content = "a\n\n```ruby\ns = 'やくしまるえつこ'\n```\n\nb"
-    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">s</span> <span class=\"o\">=</span> <span class=\"s1\">'\343\202\204\343\201\217\343\201\227\343\201\276\343\202\213\343\201\210\343\201\244\343\201\223'</span>\n</pre></div>\n\n<p>b</p>}
+    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">s</span> <span class=\"o\">=</span> <span class=\"s1\">'やくしまるえつこ'</span>\n</pre></div>\n\n<p>b</p>}
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
     index.commit("Add alpha.jpg")
