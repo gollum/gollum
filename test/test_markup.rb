@@ -196,7 +196,15 @@ context "Markup" do
           DATA
       ), commit_details)
     output = @wiki.page(page).formatted_data
-    expected = %Q{<pre><code>      <div class=\"highlight\"><pre><span class=\"n\">rot13</span><span class=\"p\">=</span><span class=\"s\">'tr '</span><span class=\"o\">\\</span><span class=\"s\">''</span><span class=\"n\">A</span><span class=\"o\">-</span><span class=\"n\">Za</span><span class=\"o\">-</span><span class=\"n\">z</span><span class=\"o\">'\\</span><span class=\"s\">''</span> <span class=\"s\">'\\''N-ZA-Mn-za-m'</span><span class=\"o\">\\</span><span class=\"s\">'</span>\n</pre></div>\n</code></pre>}.strip # remove trailing \n
+    expected = (<<-'HTML'
+<pre><code>      <div class="highlight">
+<pre><span class="n">rot13</span><span class="p">=</span><span class="s">'tr '</span><span class="o">\</span><span class="s">''</span><span class="n">A</span><span class="o">-</span><span class="n">Za</span><span class="o">-</span><span class="n">z</span><span class="o">'\</span><span class="s">''</span> <span class="s">'\''N-ZA-Mn-za-m'</span><span class="o">\</span><span class="s">'</span>
+</pre>
+</div>
+
+</code></pre>
+HTML
+).strip # remove trailing \n
     assert_equal expected, output
   end
 
@@ -412,7 +420,9 @@ context "Markup" do
 
   test "code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
-    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre></div>\n\n<p>b</p>}
+    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre>" +
+             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -425,7 +435,9 @@ context "Markup" do
 
   test "code blocks with carriage returns" do
     content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
-    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre></div>\n\n<p>b</p>}
+    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre>" +
+             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
+             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -456,7 +468,9 @@ context "Markup" do
 
   test "code blocks with multibyte caracters indent" do
     content = "a\n\n```ruby\ns = 'やくしまるえつこ'\n```\n\nb"
-    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">s</span> <span class=\"o\">=</span> <span class=\"s1\">'\343\202\204\343\201\217\343\201\227\343\201\276\343\202\213\343\201\210\343\201\244\343\201\223'</span>\n</pre></div>\n\n<p>b</p>}
+    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre><span class=\"n\">" +
+             "s</span> <span class=\"o\">=</span> <span class=\"s1\">'やくしまるえつこ'" +
+             "</span>\n</pre>\n</div>\n\n\n<p>b</p>"
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
     index.commit("Add alpha.jpg")
