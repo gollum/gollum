@@ -1,14 +1,17 @@
 # ~*~ encoding: utf-8 ~*~
-require File.expand_path( "../helper", __FILE__ )
-require File.expand_path( "../wiki_factory", __FILE__ )
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Markup" do
   setup do
-    @wiki, @path, @teardown = WikiFactory.create 'examples/test.git'
+    @path = testpath("examples/test.git")
+    FileUtils.rm_rf(@path)
+    Grit::Repo.init_bare(@path)
+    Gollum::Wiki.default_options = {:universal_toc => false}
+    @wiki = Gollum::Wiki.new(@path)
   end
 
   teardown do
-    @teardown.call
+    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end
 
   test "formats page from Wiki#pages" do
@@ -179,6 +182,22 @@ context "Markup" do
     @wiki.write_page("Potato", :markdown, "`sed -i '' 's/[[:space:]]*$//'`", commit_details)
     page = @wiki.page("Potato")
     assert_equal "<p><code>sed -i '' 's/[[:space:]]*$//'</code></p>", page.formatted_data
+  end
+
+  test "regexp gsub! backref (#383)" do
+    # bug only triggers on "```" syntax
+    # not `code`
+    page = 'test_rgx'
+    @wiki.write_page(page, :markdown,
+      (<<-'DATA'
+          ```
+          rot13='tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\'
+          ```
+          DATA
+      ), commit_details)
+    output = @wiki.page(page).formatted_data
+    expected = %Q{<pre><code>      <div class=\"highlight\"><pre><span class=\"n\">rot13</span><span class=\"p\">=</span><span class=\"s\">'tr '</span><span class=\"o\">\\</span><span class=\"s\">''</span><span class=\"n\">A</span><span class=\"o\">-</span><span class=\"n\">Za</span><span class=\"o\">-</span><span class=\"n\">z</span><span class=\"o\">'\\</span><span class=\"s\">''</span> <span class=\"s\">'\\''N-ZA-Mn-za-m'</span><span class=\"o\">\\</span><span class=\"s\">'</span>\n</pre></div>\n</code></pre>}.strip # remove trailing \n
+    assert_equal expected, output
   end
 
   test "wiki link within code block" do
@@ -393,9 +412,7 @@ context "Markup" do
 
   test "code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre>" +
-             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
+    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre></div>\n\n<p>b</p>}
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -408,9 +425,7 @@ context "Markup" do
 
   test "code blocks with carriage returns" do
     content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre>" +
-             "<span class=\"n\">x</span> <span class=\"o\">=</span> " +
-             "<span class=\"mi\">1</span>\n</pre>\n</div>\n\n\n<p>b</p>"
+    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre></div>\n\n<p>b</p>}
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -441,9 +456,7 @@ context "Markup" do
 
   test "code blocks with multibyte caracters indent" do
     content = "a\n\n```ruby\ns = 'やくしまるえつこ'\n```\n\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\">\n<pre><span class=\"n\">" +
-             "s</span> <span class=\"o\">=</span> <span class=\"s1\">'やくしまるえつこ'" +
-             "</span>\n</pre>\n</div>\n\n\n<p>b</p>"
+    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">s</span> <span class=\"o\">=</span> <span class=\"s1\">'やくしまるえつこ'</span>\n</pre></div>\n\n<p>b</p>}
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
     index.commit("Add alpha.jpg")
@@ -503,7 +516,7 @@ np.array([[2,2],[1,3]],np.float)
     output_page = @wiki.page("page").formatted_data
 
     assert_equal %Q{<p>a  b</p>}, output_script
-    assert_equal %Q{<div class=\"highlight\">\n<pre><span class=\"nt\">&lt;p&gt;</span>a  b<span class=\"nt\">&lt;/p&gt;</span>\n</pre>\n</div>\n}, output_page
+    assert_equal %Q{<div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a  b<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>}, output_page
   end
 
   test "embed code page absolute link" do
@@ -512,7 +525,7 @@ np.array([[2,2],[1,3]],np.float)
 
     page = @wiki.page("a")
     output = page.formatted_data
-    assert_equal %Q{<p>a\n</p><div class=\"highlight\">\n<pre><span class=\"nt\">&lt;p&gt;</span>a\n!base<span class=\"nt\">&lt;/p&gt;</span>\n</pre>\n</div>\n\n}, output
+    assert_equal %Q{<p>a\n</p><div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a\n!base<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>\n}, output
   end
 
   test "embed code page relative link" do
@@ -521,7 +534,7 @@ np.array([[2,2],[1,3]],np.float)
 
     page = @wiki.page("a")
     output = page.formatted_data
-    assert_equal %Q{<p>a\n</p><div class=\"highlight\">\n<pre><span class=\"nt\">&lt;p&gt;</span>a\n!rel<span class=\"nt\">&lt;/p&gt;</span>\n</pre>\n</div>\n\n}, output
+    assert_equal %Q{<p>a\n</p><div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a\n!rel<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>\n}, output
   end
 
   #########################################################################
