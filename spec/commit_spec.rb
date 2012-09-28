@@ -21,4 +21,12 @@ describe "A Commit object" do
     # Commit.count(@r, 'master').should eql 107
   end
   
+  describe "Commit" do
+    it "should test commit" do 
+      Git.any_instance.expects(:commit).returns(fixture('commit'))
+      results = @repo.commit_index('my message')
+      assert_match /Created commit/, results
+    end
+  end
+  
 end

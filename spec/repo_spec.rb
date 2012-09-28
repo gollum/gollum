@@ -57,6 +57,8 @@ describe Repo do
   end
   
   it "should list its commits" do
+    @repo.commits.is_a?(Array).should eql true
+    @repo.commits.length.should == 0
     pending
   end
   
@@ -66,12 +68,9 @@ describe Repo do
   
   it "should return a Blob by name" do
     blob = @bare_repo.blob('Manifest.txt')
-    # puts "tree_id: #{tree_id}" unless tree_id.nil?
-    # puts tree_id.class
     #tree_id.is_a?(ObjectId).should eql true
-    #fail
     #blob.is_a?(RevBlob).should eql true
-    # blob.name.should == "blahblah"
+    # blob.name.should == "Manifest.txt"
     pending
   end
   
