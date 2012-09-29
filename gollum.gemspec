@@ -23,25 +23,25 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('grit', "~> 2.5.0")
-  s.add_dependency('github-markup', [">= 0.7.0", "< 1.0.0"])
-  s.add_dependency('github-markdown')
-  s.add_dependency('pygments.rb', "~> 0.3.0")
-  s.add_dependency('escape_utils', "0.2.4")
-  s.add_dependency('sinatra', "~> 1.0")
-  s.add_dependency('mustache', [">= 0.11.2", "< 1.0.0"])
-  s.add_dependency('sanitize', "~> 2.0.0")
-  s.add_dependency('nokogiri', "~> 1.5")
-  s.add_dependency('useragent', "~> 0.4.9")
-  s.add_dependency('stringex', "~> 1.4.0")
+  s.add_dependency('grit', '~> 2.5.0')
+  s.add_dependency('github-markup', ['>= 0.7.4', '< 1.0.0'])
+  s.add_dependency('github-markdown', '~> 0.5.1')
+  s.add_dependency('pygments.rb', '~> 0.3.1')
+  s.add_dependency('escape_utils', '0.2.4')
+  s.add_dependency('sinatra', '~> 1.3.3')
+  s.add_dependency('mustache', ['>= 0.99.4', '< 1.0.0'])
+  s.add_dependency('sanitize', '~> 2.0.3')
+  s.add_dependency('nokogiri', '~> 1.5.5')
+  s.add_dependency('useragent', '~> 0.4.10')
+  s.add_dependency('stringex', '~> 1.4.0')
 
-  s.add_development_dependency('RedCloth')
-  s.add_development_dependency('mocha')
+  s.add_development_dependency('RedCloth', '~> 4.2.9')
+  s.add_development_dependency('mocha', '~> 0.12.6')
   s.add_development_dependency('org-ruby', '~> 0.7.1')
-  s.add_development_dependency('shoulda')
-  s.add_development_dependency('rack-test')
-  s.add_development_dependency('wikicloth', '~>0.8.0')
-  s.add_development_dependency('rake', '~> 0.9.2')
+  s.add_development_dependency('shoulda', '~> 3.1.1')
+  s.add_development_dependency('rack-test', '~> 0.6.2')
+  s.add_development_dependency('wikicloth', '~> 0.8.0')
+  s.add_development_dependency('rake', '~> 0.9.2.2')
 
   # = MANIFEST =
   s.files = %w[
