@@ -8,7 +8,7 @@ context "Markup" do
   end
 
   teardown do
-    @teardown.()
+    @teardown.call
   end
 
   test "formats page from Wiki#pages" do
