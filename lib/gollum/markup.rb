@@ -3,12 +3,17 @@ require 'cgi'
 require 'pygments'
 require 'base64'
 
+require File.expand_path '../frontend/helpers', __FILE__
+require File.expand_path '../gitcode', __FILE__
+
 # initialize Pygments
 Pygments.start
 
 module Gollum
 
   class Markup
+    include Precious::Helpers
+
     attr_accessor :toc
     attr_reader   :metadata
 
@@ -50,6 +55,7 @@ module Gollum
 
       data = @data.dup
       data = extract_metadata(data)
+      data = extract_gitcode(data)
       data = extract_code(data)
       data = extract_tex(data)
       data = extract_wsd(data)
@@ -456,6 +462,34 @@ module Gollum
       end
       if pos = cname.index('#')
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
+      end
+    end
+
+    #########################################################################
+    #
+    # Gitcode - fetch code from github search path and replace the contents
+    #           to a code-block that gets run the next parse.
+    #
+    #########################################################################
+
+    def extract_gitcode data
+      data.gsub /^[ \t]*``` ?([^:\n\r]+):([^`\n\r]+)```/ do
+        contents = ''
+        # Use empty string if $2 is nil.
+        uri = $2 || ''
+        # Detect local file.
+        if uri[0..6] != 'github/'
+          if uri[0..0] != '/' # relative file
+            contents = @wiki.page(uri).formatted_data
+          else # use full path
+            contents = @wiki.paged( extract_name( clean_url( uri ) ),
+             '/' + clean_url( extract_path( uri ) ) ).formatted_data
+          end
+        else
+          contents = Gollum::Gitcode.new(uri).contents
+        end
+
+        "```#{$1}\n#{contents}\n```\n"
       end
     end
 

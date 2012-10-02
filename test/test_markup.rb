@@ -1,17 +1,14 @@
 # ~*~ encoding: utf-8 ~*~
-require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
+require File.expand_path( "../helper", __FILE__ )
+require File.expand_path( "../wiki_factory", __FILE__ )
 
 context "Markup" do
   setup do
-    @path = testpath("examples/test.git")
-    FileUtils.rm_rf(@path)
-    Grit::Repo.init_bare(@path)
-    Gollum::Wiki.default_options = {:universal_toc => false}
-    @wiki = Gollum::Wiki.new(@path)
+    @wiki, @path, @teardown = WikiFactory.create 'examples/test.git'
   end
 
   teardown do
-    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+    @teardown.call
   end
 
   test "formats page from Wiki#pages" do
@@ -506,6 +503,35 @@ np.array([[2,2],[1,3]],np.float)
     assert_match /div class="highlight"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
     assert_match /span class="n"/, rendered, "#{markup_class} doesn't highlight code\n #{rendered}"
     assert_match /\(\[\[/, rendered, "#{markup_class} parses out wiki links\n#{rendered}"
+  end
+
+  test "embed code is escaped" do
+    @wiki.write_page("script", :markdown, "a <script></script> b", commit_details)
+    @wiki.write_page("page", :markdown, "```html:script```", commit_details)
+
+    output_script = @wiki.page("script").formatted_data
+    output_page = @wiki.page("page").formatted_data
+
+    assert_equal %Q{<p>a  b</p>}, output_script
+    assert_equal %Q{<div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a  b<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>}, output_page
+  end
+
+  test "embed code page absolute link" do
+    @wiki.write_page("base", :markdown, "a\n!base\b", commit_details)
+    @wiki.write_page("a", :markdown, "a\n```html:/base```\b", commit_details)
+
+    page = @wiki.page("a")
+    output = page.formatted_data
+    assert_equal %Q{<p>a\n</p><div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a\n!base<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>\n}, output
+  end
+
+  test "embed code page relative link" do
+    @wiki.write_page("base", :markdown, "a\n!rel\b", commit_details)
+    @wiki.write_page("a", :markdown, "a\n```html:base```\b", commit_details)
+
+    page = @wiki.page("a")
+    output = page.formatted_data
+    assert_equal %Q{<p>a\n</p><div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a\n!rel<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>\n}, output
   end
 
   #########################################################################

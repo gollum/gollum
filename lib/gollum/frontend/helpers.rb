@@ -17,5 +17,11 @@ module Precious
     def sanitize_empty_params(param)
       [nil,''].include?(param) ? nil : CGI.unescape(param)
     end
+
+    # Remove all slashes from the start of string.
+    def clean_url url
+      return url if url.nil?
+      url.gsub('%2F','/').gsub(/^\/+/,'')
+    end
   end
 end
