@@ -495,14 +495,19 @@ module Gollum
       @repo.git.grep(*args).split("\n").each do |line|
         result = line.split(':')
         result_1 = result[1]
-        file_name = result_1.chomp(::File.extname(result_1))
+        # Remove ext only from known extensions.
+        # test.pdf => test.pdf, test.md => test
+        file_name = Page::valid_page_name?(result_1) ? result_1.chomp(::File.extname(result_1)) :
+                    result_1
         results[file_name] = result[2].to_i
       end
 
       # Use git ls-files '*query*' to search for file names. Grep only searches file content.
       # Spaces are converted to dashes when saving pages to disk.
       @repo.git.ls_files({}, "*#{ query.gsub(' ', '-') }*").split("\n").each do |line|
-        file_name = line.chomp(::File.extname(line))
+        # Remove ext only from known extensions.
+        file_name = Page::valid_page_name?(line) ? line.chomp(::File.extname(line)) :
+                    line
         # If there's not already a result for file_name then
         # the value is nil and nil.to_i is 0.
         results[file_name] = results[file_name].to_i + 1;
