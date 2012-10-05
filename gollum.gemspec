@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 1.8.7"
 
   s.name              = 'gollum'
-  s.version           = '2.2.1'
-  s.date              = '2012-09-04'
+  s.version           = '2.2.2'
+  s.date              = '2012-10-04'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -426,6 +426,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/public/gollum/livepreview/licenses/retina_display_icon_set/by_sa_3.0_unported_legalcode.txt
     lib/gollum/frontend/public/gollum/livepreview/licenses/sizzle/LICENSE.txt
     lib/gollum/frontend/public/gollum/livepreview/licenses/sundown/sundown.txt
+    lib/gollum/frontend/public/gollum/livepreview/licenses/templarian_windowsicons/license.txt
     lib/gollum/frontend/public/gollum/livepreview/readme.md
     lib/gollum/frontend/templates/compare.mustache
     lib/gollum/frontend/templates/create.mustache
@@ -453,6 +454,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/views/pages.rb
     lib/gollum/frontend/views/search.rb
     lib/gollum/git_access.rb
+    lib/gollum/gitcode.rb
     lib/gollum/markup.rb
     lib/gollum/page.rb
     lib/gollum/pagination.rb
@@ -464,6 +466,7 @@ Gem::Specification.new do |s|
     licenses/licenses.txt
     licenses/unity_asset_pool/COPYRIGHT
     templates/formatting.html
+    templates/helper_wiki.rb
   ]
   # = MANIFEST =
 
