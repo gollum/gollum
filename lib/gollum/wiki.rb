@@ -180,6 +180,7 @@ module Gollum
       @live_preview  = options.fetch(:live_preview, true)
       @universal_toc = options.fetch(:universal_toc, false)
       @mathjax = options[:mathjax] || false
+      @dot = options[:dot] || false
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -587,6 +588,10 @@ module Gollum
 
     # Toggles mathjax.
     attr_reader :mathjax
+
+    # Provides GraphViz dot location
+    # False if not set
+    attr_reader :dot
 
     # Normalize the data.
     #

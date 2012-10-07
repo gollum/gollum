@@ -54,6 +54,7 @@ module Gollum
         @wiki.sanitizer
 
       data = @data.dup
+      data = process_graphviz(data) if @wiki.dot
       data = extract_metadata(data)
       data = extract_gitcode(data)
       data = extract_code(data)
@@ -127,6 +128,40 @@ module Gollum
       end
       toc = toc.to_xhtml if toc != nil
       [doc, toc]
+    end
+
+    #########################################################################
+    #
+    # Graphviz
+    #
+    #########################################################################
+
+    # Transform graphviz into img links.
+    #
+    # data - The raw String data.
+    #
+    # Returns the image linked String data.
+    def process_graphviz(data)
+      data.gsub(/\<graphviz\>\s*(.*?)\s*\<\/graphviz\>/m) do
+        id  = Digest::SHA1.hexdigest($1)
+
+        # Write graphviz graph to temp file
+        tmp = Tempfile.new ''
+        tmp.write $1
+        tmp.close
+
+        out_path_dir = ::File.expand_path ::File.join(@wiki.path, 'tmp')
+        Dir.mkdir out_path_dir unless ::File.exists? out_path_dir
+        out_path = ::File.join(out_path_dir, id)
+
+        system "#{@wiki.dot} -Tpng -o #{out_path}.png #{tmp.path}"
+
+        # Clean up tmp file
+        tmp.delete
+
+        # Replace graph with img link
+        %Q(<img alt="Graphviz image" src="/tmp/#{id}.png">)
+      end
     end
 
     #########################################################################
