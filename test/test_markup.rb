@@ -534,6 +534,14 @@ np.array([[2,2],[1,3]],np.float)
     assert_equal %Q{<p>a\n</p><div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a\n!rel<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>\n}, output
   end
 
+  test "code block in unsupported language" do
+    @wiki.write_page("a", :markdown, "a\n```nonexistent\ncode\n```\nb", commit_details)
+
+    page = @wiki.page("a")
+    output = page.formatted_data
+    assert_equal %Q{<p>a\ncode\nb</p>}, output
+  end
+
   #########################################################################
   #
   # Web Sequence Diagrams

@@ -558,12 +558,12 @@ module Gollum
         encoding ||= 'utf-8'
         begin
           hl_code = Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s})
-        rescue ::RubyPython::PythonError
+        rescue
           hl_code = code
         end
         highlighted << hl_code
       end
-      
+
       @codemap.each do |id, spec|
         body = spec[:output] || begin
           if (body = highlighted.shift.to_s).size > 0
