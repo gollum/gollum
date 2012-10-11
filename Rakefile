@@ -17,6 +17,27 @@ def version
   line.match(/.*VERSION\s*=\s*['"](.*)['"]/)[1]
 end
 
+# assumes x.y.z all digit version
+def next_version
+  # x.y.z
+  v = version.split '.'
+  # bump z
+  v[-1] = v[-1].to_i + 1
+  v.join '.'
+end
+
+def bump_version
+  old_file = File.read("lib/#{name}.rb")
+  old_version_line = old_file[/^\s*VERSION\s*=\s*.*/]
+  new_version = next_version
+  # replace first match of old vesion with new version
+  old_file.sub!(old_version_line, "  VERSION = '#{new_version}'")
+
+  File.write("lib/#{name}.rb", old_file)
+
+  new_version
+end
+
 def date
   Date.today.to_s
 end
@@ -71,7 +92,14 @@ end
 #
 #############################################################################
 
-
+desc "Update version number and gemspec"
+task :bump do
+  puts "Updated version to #{bump_version}"
+  # Execute does not invoke dependencies.
+  # Manually invoke gemspec then validate.
+  Rake::Task[:gemspec].execute
+  Rake::Task[:validate].execute
+end
 
 #############################################################################
 #
