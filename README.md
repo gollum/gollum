@@ -547,17 +547,14 @@ your changes merged back into core is as follows:
 1. Send a pull request to the github/gollum project.
 
 ## RELEASING
+    For z releases:
+    $ rake bump
+    $ rake release
+
     For x.y releases:
     Update VERSION in lib/gollum.rb
     $ rake gemspec
-
-    For z releases:
-    $ rake bump
-
-    $ git tag vX.Y.Z
-    $ git push origin vX.Y.Z
-    $ gem build gollum.gemspec
-    $ gem push gollum-X.Y.Z.gem
+    $ rake release
     
 ## BUILDING THE GEM FROM MASTER
     $ gem uninstall -aIx gollum
