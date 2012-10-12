@@ -70,7 +70,7 @@ def check name, pages_array
   actual = view pages
   assert_equal expected, actual
 end
-
+#Good work really
 # Test Notes
 # root files must be before any folders.
 # Home.md => file at root folder
