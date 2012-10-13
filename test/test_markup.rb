@@ -68,7 +68,7 @@ context "Markup" do
     assert_equal 1, anchors.size
     assert_equal 'internal absent', anchors[0]['class']
     assert_equal '/Page',           anchors[0]['href']
-    assert_equal '/Page',            anchors[0].text
+    assert_equal '/Page',           anchors[0].text
   end
 
   test "double page links no space" do
