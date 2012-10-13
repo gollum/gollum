@@ -295,7 +295,7 @@ This is useful for writing about the link syntax in your wiki pages.
 
 Gollum has a special tag to insert a table of contents (new in v2.1)
 
-    '[[_TOC_]]
+    [[_TOC_]]
 
 This tag is case sensitive, use all upper case.  The TOC tag can be inserted
 into the `_Header`, `_Footer` or `_Sidebar` files too.
