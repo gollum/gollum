@@ -58,7 +58,6 @@ context "Markup" do
   test "absolute link to non-existent page" do
     @wiki.write_page("linktest", :markdown, "[[/Page]]", commit_details)
 
-    # "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a><a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>"
     page    = @wiki.page("linktest")
     doc     = Nokogiri::HTML page.formatted_data
     paras   = doc / :p
