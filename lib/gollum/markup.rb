@@ -407,12 +407,6 @@ module Gollum
           presence  = "present"
         end
         link = ::File.join(@wiki.base_path, page ? page.escaped_url_path : CGI.escape(link_name))
-
-        # //page is invalid
-        # strip all duplicate forward slashes using helpers.rb clean_url
-        # //page => /page
-        link = clean_url link
-
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
     end
