@@ -213,8 +213,6 @@ context "Markup" do
   end
 
   test "~~~ code blocks #537" do
-    # bug only triggers on "```" syntax
-    # not `code`
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
       %Q(~~~ {.ruby}
