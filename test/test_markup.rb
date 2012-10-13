@@ -55,7 +55,7 @@ context "Markup" do
   #
   #########################################################################
 
-  test "absolute link to non-existant page" do
+  test "absolute link to non-existent page" do
     @wiki.write_page("linktest", :markdown, "[[/Page]]", commit_details)
 
     # "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a><a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>"
