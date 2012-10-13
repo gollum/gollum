@@ -56,7 +56,7 @@ context "Markup" do
   #########################################################################
 
   test "absolute link to non-existant page" do
-    @wiki.write_page("linktest", :markdown, "[[/page]]", commit_details)
+    @wiki.write_page("linktest", :markdown, "[[/Page]]", commit_details)
 
     # "<p>a <a class=\"internal absent\" href=\"/Foo\">Foo</a><a class=\"internal absent\" href=\"/Bar\">Bar</a> b</p>"
     page    = @wiki.page("linktest")
@@ -68,7 +68,7 @@ context "Markup" do
     assert_equal 1, anchors.size
     assert_equal 'internal absent', anchors[0]['class']
     assert_equal '/Page',           anchors[0]['href']
-    assert_equal 'Page',            anchors[0].text
+    assert_equal '/Page',            anchors[0].text
   end
 
   test "double page links no space" do

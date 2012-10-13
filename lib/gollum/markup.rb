@@ -411,7 +411,7 @@ module Gollum
         # //page is invalid
         # strip all duplicate forward slashes using helpers.rb clean_url
         # //page => /page
-        # link = one_leading_slash link
+        link = trim_leading_slash link
 
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
