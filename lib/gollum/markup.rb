@@ -511,6 +511,22 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
+      data.gsub!(/^([ \t]*)~~~ ?([^\r\n]+)?\r?\n(.+?)\r?\n\1~~~\r?$/m) do
+        m_indent = $1
+        m_lang   = $2
+        m_code   = $3
+
+        lang   = m_lang ? m_lang.strip : nil
+        id     = Digest::SHA1.hexdigest("#{lang}.#{m_code}")
+        cached = check_cache(:code, id)
+
+        @codemap[id] = cached   ?
+          { :output => cached } :
+          { :lang => lang.gsub(/[{}\.]/, '').strip, :code => m_code, :indent => m_indent }
+
+        "#{m_indent}#{id}" # print the SHA1 ID with the proper indentation
+      end
+
       data.gsub!(/^([ \t]*)``` ?([^\r\n]+)?\r?\n(.+?)\r?\n\1```\r?$/m) do
         lang   = $2 ? $2.strip : nil
         id     = Digest::SHA1.hexdigest("#{lang}.#{$3}")

@@ -212,6 +212,20 @@ context "Markup" do
     assert_equal expected, output
   end
 
+  test "~~~ code blocks #537" do
+    # bug only triggers on "```" syntax
+    # not `code`
+    page = 'test_rgx'
+    @wiki.write_page(page, :markdown,
+      %Q(~~~ {.ruby}
+'hi'
+~~~
+      ), commit_details)
+    output = @wiki.page(page).formatted_data
+    expected = %Q{<div class=\"highlight\"><pre><span class=\"s1\">'hi'</span>\n</pre></div>}
+    assert_equal expected, output
+  end
+
   test "wiki link within code block" do
     @wiki.write_page("Potato", :markdown, "    sed -i '' 's/[[:space:]]*$//'", commit_details)
     page = @wiki.page("Potato")
