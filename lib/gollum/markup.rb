@@ -409,7 +409,7 @@ module Gollum
         link = ::File.join(@wiki.base_path, page ? page.escaped_url_path : CGI.escape(link_name))
 
         # //page is invalid
-        # strip all duplicate forward slashes using helpers.rb clean_url
+        # strip all duplicate forward slashes using helpers.rb trim_leading_slash
         # //page => /page
         link = trim_leading_slash link
 
