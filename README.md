@@ -18,6 +18,7 @@ number of ways depending on your needs. You can edit your wiki locally:
 Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 [TomDoc](http://tomdoc.org/) for inline documentation.
 
+
 ## INSTALLATION
 
 The best way to install Gollum is with RubyGems:
