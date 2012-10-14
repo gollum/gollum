@@ -273,6 +273,9 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :base_path => '/wiki/' })
     get "/"
     assert_match "http://example.org/wiki/Home", last_response.headers['Location']
+
+    # Reset base path
+    Precious::App.set(:wiki_options, { :base_path => nil })
   end
   
   test "author details in session are used" do
@@ -377,6 +380,7 @@ context "Frontend with lotr" do
   test "edit pages within sub-directories" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+
     assert_equal 'http://example.org/Mordor/orc', last_response.headers['Location']
 
     post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',

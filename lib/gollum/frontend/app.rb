@@ -145,6 +145,7 @@ module Precious
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
       page      = wiki.paged(page_name, path, exact = true)
+      return if page.nil?
       rename    = params[:rename].to_url if params[:rename]
       name      = rename || page.name
       committer = Gollum::Committer.new(wiki, commit_message)
@@ -192,7 +193,8 @@ module Precious
 
       page_dir = File.join(settings.wiki_options[:page_file_dir].to_s,
                            settings.wiki_options[:base_path].to_s)
-      page_dir = File.join(page_dir, path.sub(page_dir, ''))
+
+      page_dir = File.join(page_dir, path)
 
       # write_page is not directory aware so use wiki_options to emulate dir support.
       wiki_options = settings.wiki_options.merge({ :page_file_dir => page_dir })
