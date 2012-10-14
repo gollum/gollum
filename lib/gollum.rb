@@ -23,7 +23,7 @@ require File.expand_path('../gollum/web_sequence_diagram', __FILE__)
 require File.expand_path('../gollum/frontend/uri_encode_component', __FILE__)
 
 module Gollum
-  VERSION = '2.2.5'
+  VERSION = '2.2.6'
 
   def self.assets_path
     ::File.expand_path('gollum/frontend/public', ::File.dirname(__FILE__))
