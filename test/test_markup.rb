@@ -236,6 +236,19 @@ context "Markup" do
     assert_equal expected, output
   end
 
+  test "~~~ code blocks #537 with lots of tildes" do
+    page = 'test_rgx'
+    @wiki.write_page(page, :markdown,
+      %Q(~~~~~~ {#hi .ruby .sauce}
+~~
+'hi'~
+~~~~~~
+      ), commit_details)
+    output = @wiki.page(page).formatted_data
+    expected = %Q{<div class=\"highlight\"><pre><span class=\"o\">~~</span>\n<span class=\"s1\">'hi'</span><span class=\"o\">~</span>\n</pre></div>}
+    assert_equal expected, output
+  end
+
   test "wiki link within code block" do
     @wiki.write_page("Potato", :markdown, "    sed -i '' 's/[[:space:]]*$//'", commit_details)
     page = @wiki.page("Potato")

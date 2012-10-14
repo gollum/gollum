@@ -511,10 +511,15 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub!(/^([ \t]*)~~~ ?([^\r\n]+)?\r?\n(.+?)\r?\n\1~~~\r?$/m) do
+      data.gsub!(/^([ \t]*)(~~~+) ?([^\r\n]+)?\r?\n(.+?)\r?\n\1(~~~+)\r?$/m) do
         m_indent = $1
-        m_lang   = $2
-        m_code   = $3
+        m_start  = $2 # ~~~
+        m_lang   = $3
+        m_code   = $4
+        m_end    = $5 # ~~~
+
+        # start and finish tilde fence must be the same length
+        return '' if m_start.length != m_end.length
 
         lang   = m_lang ? m_lang.strip : nil
         id     = Digest::SHA1.hexdigest("#{lang}.#{m_code}")
