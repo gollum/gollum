@@ -520,9 +520,15 @@ module Gollum
         id     = Digest::SHA1.hexdigest("#{lang}.#{m_code}")
         cached = check_cache(:code, id)
 
+        # extract lang from { .ruby } or { #stuff .ruby .indent }
+        # see http://johnmacfarlane.net/pandoc/README.html#delimited-code-blocks
+
+        lang = lang.match(/\.([^}\s]+)/)
+        lang = lang[1] unless lang.nil?
+
         @codemap[id] = cached   ?
           { :output => cached } :
-          { :lang => lang.gsub(/[{}\.]/, '').strip, :code => m_code, :indent => m_indent }
+          { :lang => lang, :code => m_code, :indent => m_indent }
 
         "#{m_indent}#{id}" # print the SHA1 ID with the proper indentation
       end
