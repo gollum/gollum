@@ -123,7 +123,7 @@ context "Wiki page previewing" do
   test "preview_page" do
     page = @wiki.preview_page("Test", "# Bilbo", :markdown)
     assert_equal "# Bilbo", page.raw_data
-    assert_equal %Q{<h1>Bilbo<a class="anchor" id="Bilbo" href="#Bilbo"></a>\n</h1>}, page.formatted_data
+    assert_equal %Q{<h1>Bilbo<a class=\"anchor\" id=\"Bilbo\" href=\"#Bilbo\"></a></h1>}, page.formatted_data
     assert_equal "Test.md", page.filename
     assert_equal "Test", page.name
   end

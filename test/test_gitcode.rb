@@ -25,7 +25,7 @@ context "gitcode" do
   end
 
   test 'that the rendered output is correctly fetched and rendered as html code' do
-    assert_equal %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"nt\">&lt;ol</span> <span class=\"na\">class=</span><span class=\"s\">\"tree\"</span><span class=\"nt\">&gt;</span>\n  <span class=\"nt\">&lt;li</span> <span class=\"na\">class=</span><span class=\"s\">\"file\"</span><span class=\"nt\">&gt;&lt;a</span> <span class=\"na\">href=</span><span class=\"s\">\"0\"</span><span class=\"nt\">&gt;</span>0<span class=\"nt\">&lt;/a&gt;&lt;/li&gt;</span>\n<span class=\"nt\">&lt;/ol&gt;</span>\n</pre></div>\n\n<p>b</p>}, @rendered
+    assert_equal %Q{<p>a</p>\n\n<div class=\"highlight\">\n  <pre><span class=\"nt\">&lt;ol</span> <span class=\"na\">class=</span><span class=\"s\">\"tree\"</span><span class=\"nt\">&gt;</span>\n  <span class=\"nt\">&lt;li</span> <span class=\"na\">class=</span><span class=\"s\">\"file\"</span><span class=\"nt\">&gt;&lt;a</span> <span class=\"na\">href=</span><span class=\"s\">\"0\"</span><span class=\"nt\">&gt;</span>0<span class=\"nt\">&lt;/a&gt;&lt;/li&gt;</span>\n<span class=\"nt\">&lt;/ol&gt;</span>\n</pre>\n</div>\n\n<p>b</p>}, @rendered
   end
 
   test 'contents' do
