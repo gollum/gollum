@@ -29,9 +29,6 @@ context "Unicode Support" do
     assert_equal "# 한글", utf8(page.raw_data)
 
     # markup.rb
-    # #简介
-    # href.gsub('%', '%25') so the anchor works in Firefox.
-    # <a href="#%25ED%2595%259C%25EA%25B8%2580" id="%ED%95%9C%EA%B8%80" class="anchor"></a>
     doc     = Nokogiri::HTML page.formatted_data
     h1s     = doc / :h1
     h1      = h1s.first
@@ -52,9 +49,6 @@ context "Unicode Support" do
     assert_equal "# La faune d'Édiacara", utf8(page.raw_data)
 
     # markup.rb
-    # #简介
-    # href.gsub('%', '%25') so the anchor works in Firefox.
-    # <a href="#%25ED%2595%259C%25EA%25B8%2580" id="%ED%95%9C%EA%B8%80" class="anchor"></a>
     doc     = Nokogiri::HTML page.formatted_data
     h1s     = doc / :h1
     h1      = h1s.first
