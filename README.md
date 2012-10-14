@@ -416,6 +416,9 @@ By default, internal wiki links are all absolute from the root. To specify a dif
 Note that base_path just modifies the links. To map gollum to a non-root location, use `map` in config.ru. See [#532](https://github.com/github/gollum/issues/532).
 
 > :base_path     - String base path for all Wiki links.
+> The String base path to prefix to internal links. For example, when set
+> to "/wiki", the page "Hobbit" will be linked as "/wiki/Hobbit". Defaults
+> to "/".
 
 Get the latest version of the given human or canonical page name:
 
