@@ -193,6 +193,8 @@ module Precious
 
       page_dir = File.join(settings.wiki_options[:page_file_dir].to_s,
                            settings.wiki_options[:base_path].to_s)
+      # Home is a special case.
+      path = '' if name.downcase == 'home'
 
       page_dir = File.join(page_dir, path)
 
