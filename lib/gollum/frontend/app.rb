@@ -190,7 +190,8 @@ module Precious
       path = '' if path.nil?
       format       = params[:format].intern
 
-      page_dir = settings.wiki_options[:page_file_dir].to_s
+      page_dir = File.join(settings.wiki_options[:page_file_dir].to_s,
+                           settings.wiki_options[:base_path].to_s)
       page_dir = File.join(page_dir, path.sub(page_dir, ''))
 
       # write_page is not directory aware so use wiki_options to emulate dir support.
