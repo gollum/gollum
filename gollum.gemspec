@@ -47,7 +47,6 @@ Gem::Specification.new do |s|
   s.files = %w[
     Gemfile
     HISTORY.md
-    Home.md
     LICENSE
     README.md
     Rakefile
