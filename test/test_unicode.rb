@@ -38,10 +38,33 @@ context "Unicode Support" do
     anchors = h1 / :a
     assert_equal 1, h1s.size
     assert_equal 1, anchors.size
-    assert_equal '#%25ED%2595%259C%25EA%25B8%2580', anchors[0]['href']
-    assert_equal '%ED%95%9C%EA%B8%80',              anchors[0]['id']
-    assert_equal 'anchor',                          anchors[0]['class']
-    assert_equal '',                                anchors[0].text
+    assert_equal '#한글',  anchors[0]['href']
+    assert_equal  '한글',  anchors[0]['id']
+    assert_equal 'anchor', anchors[0]['class']
+    assert_equal '',       anchors[0].text
+  end
+
+  test "create and read non-latin page with anchor 2" do
+    @wiki.write_page("test", :markdown, "# La faune d'Édiacara")
+
+    page = @wiki.page("test")
+    assert_equal Gollum::Page, page.class
+    assert_equal "# La faune d'Édiacara", utf8(page.raw_data)
+
+    # markup.rb
+    # #简介
+    # href.gsub('%', '%25') so the anchor works in Firefox.
+    # <a href="#%25ED%2595%259C%25EA%25B8%2580" id="%ED%95%9C%EA%B8%80" class="anchor"></a>
+    doc     = Nokogiri::HTML page.formatted_data
+    h1s     = doc / :h1
+    h1      = h1s.first
+    anchors = h1 / :a
+    assert_equal 1, h1s.size
+    assert_equal 1, anchors.size
+    assert_equal %q(#La-faune-d'Édiacara), anchors[0]['href']
+    assert_equal %q(La-faune-d'Édiacara),  anchors[0]['id']
+    assert_equal 'anchor',                 anchors[0]['class']
+    assert_equal '',                       anchors[0].text
   end
 
   test "unicode with existing format rules" do

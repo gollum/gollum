@@ -76,7 +76,7 @@ module Gollum
       doc,toc = process_headers(doc)
       @toc = @sub_page ? ( @parent_page ? @parent_page.toc_data : "[[_TOC_]]" ) : toc
       yield doc if block_given?
-      data = doc.to_html
+      data = doc.to_xhtml
 
       data = process_toc_tags(data)
       data = process_tex(data)
@@ -95,16 +95,12 @@ module Gollum
     def process_headers(doc)
       toc = nil
       doc.css('h1,h2,h3,h4,h5,h6').each do |h|
-        id = encodeURIComponent(h.content.gsub(' ','-'))
+        h_name = h.content.gsub(' ','-')
+
         level = h.name.gsub(/[hH]/,'').to_i
 
         # Add anchors
-        anchor = Nokogiri::XML::Node.new('a', doc)
-        anchor['class'] = 'anchor'
-        anchor['id'] = id
-        # % -> %25 so anchors work on Firefox. See issue #475
-        anchor['href'] = '#' + id.gsub('%', '%25')
-        h.add_child(anchor)
+        h.add_child(%Q{<a class="anchor" id="#{h_name}" href="##{h_name}"></a>})
 
         # Build TOC
         toc ||= Nokogiri::XML::DocumentFragment.parse('<div class="toc"><div class="toc-title">Table of Contents</div></div>')
@@ -122,7 +118,7 @@ module Gollum
         end
         node = Nokogiri::XML::Node.new('li', doc)
         # % -> %25 so anchors work on Firefox. See issue #475
-        node.add_child(%Q{<a href="##{id.gsub("%", "%25")}">#{h.content}</a>})
+        node.add_child(%Q{<a href="##{h_name}">#{h.content}</a>})
         tail.add_child(node)
       end
       toc = toc.to_xhtml if toc != nil
