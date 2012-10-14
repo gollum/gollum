@@ -86,7 +86,7 @@ module Precious
     end
 
     get '/' do
-      redirect File.join(settings.wiki_options[:base_path].to_s, 'Home')
+      redirect File.join(settings.wiki_options[:page_file_dir].to_s,settings.wiki_options[:base_path].to_s, 'Home')
     end
 
     # path is set to name if path is nil.
@@ -190,13 +190,16 @@ module Precious
       path = '' if path.nil?
       format       = params[:format].intern
 
+      page_dir = settings.wiki_options[:page_file_dir].to_s
+      page_dir = File.join(page_dir, path.sub(page_dir, ''))
+
       # write_page is not directory aware so use wiki_options to emulate dir support.
-      wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => page_dir })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect to("/#{clean_url(CGI.escape(::File.join(path,name)))}")
+        redirect to("/#{clean_url(CGI.escape(::File.join(page_dir,name)))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
