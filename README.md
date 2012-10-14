@@ -413,6 +413,8 @@ By default, internal wiki links are all absolute from the root. To specify a dif
 
     wiki = Gollum::Wiki.new("my-gollum-repo.git", :base_path => "/wiki")
 
+Note that base_path just modifies the links. To map gollum to a non-root location, use `map` in config.ru. See [#532](https://github.com/github/gollum/issues/532).
+
 Get the latest version of the given human or canonical page name:
 
     page = wiki.page('page-name')
