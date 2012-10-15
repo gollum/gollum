@@ -95,7 +95,8 @@ module Gollum
     def process_headers(doc)
       toc = nil
       doc.css('h1,h2,h3,h4,h5,h6').each do |h|
-        h_name = h.content.gsub(' ','-')
+        # must escape "
+        h_name = h.content.gsub(' ','-').gsub('"','%22')
 
         level = h.name.gsub(/[hH]/,'').to_i
 

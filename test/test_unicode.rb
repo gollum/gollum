@@ -42,21 +42,21 @@ context "Unicode Support" do
   end
 
   test "create and read non-latin page with anchor 2" do
-    @wiki.write_page("test", :markdown, "# La faune d'Édiacara")
+    @wiki.write_page("test", :markdown, "# \"La\" faune d'Édiacara")
 
     page = @wiki.page("test")
     assert_equal Gollum::Page, page.class
-    assert_equal "# La faune d'Édiacara", utf8(page.raw_data)
+    assert_equal "# \"La\" faune d'Édiacara", utf8(page.raw_data)
 
-    # markup.rb
+    # markup.rb test: ', ", É
     doc     = Nokogiri::HTML page.formatted_data
     h1s     = doc / :h1
     h1      = h1s.first
     anchors = h1 / :a
     assert_equal 1, h1s.size
     assert_equal 1, anchors.size
-    assert_equal %q(#La-faune-d'Édiacara), anchors[0]['href']
-    assert_equal %q(La-faune-d'Édiacara),  anchors[0]['id']
+    assert_equal %q(#%22La%22-faune-d'Édiacara), anchors[0]['href']
+    assert_equal %q(%22La%22-faune-d'Édiacara),  anchors[0]['id']
     assert_equal 'anchor',                 anchors[0]['class']
     assert_equal '',                       anchors[0].text
   end
