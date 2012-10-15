@@ -68,6 +68,10 @@ opts = OptionParser.new do |opts|
   opts.on("--mathjax", "Enables mathjax.") do
     wiki_options[:mathjax] = true
   end
+
+  opts.on("--dot [PATH]", "Path to graphviz dot.") do |path|
+    wiki_options[:dot] = path
+  end
 end
 
 # Read command line options into `options` hash
