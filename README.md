@@ -413,7 +413,7 @@ By default, internal wiki links are all absolute from the root. To specify a dif
 
     wiki = Gollum::Wiki.new("my-gollum-repo.git", :base_path => "/wiki")
 
-Note that base_path just modifies the links. To map gollum to a non-root location, use `map` in config.ru. See [#532](https://github.com/github/gollum/issues/532).
+Note that base_path just modifies the links. To map gollum to a non-root location, use `map` in config.ru. See [#532](https://github.com/github/gollum/issues/532). `bin/gollum` now includes a simple map based on base path.
 
 > :base_path     - String base path for all Wiki links.
 >

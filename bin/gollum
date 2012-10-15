@@ -141,5 +141,31 @@ else
     require cfg
   end
 
-  Precious::App.run!(options)
+  base_path = wiki_options[:base_path]
+
+  if wiki_options[:base_path].nil?
+    Precious::App.run!(options)
+  else
+    require 'rack'
+
+    class MapGollum
+      def initialize base_path
+        @mg = Rack::Builder.new do
+          map '/' do
+            run Proc.new { [ 302, {'Location'=> "/#{base_path}" }, [] ] }
+          end
+
+          map "/#{base_path}" do
+            run Precious::App
+          end
+        end
+      end
+
+      def call(env)
+        @mg.call(env)
+      end
+    end
+    # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
+    Rack::Server.new(:app => MapGollum.new(base_path), :Port => options['port']).start
+  end
 end
