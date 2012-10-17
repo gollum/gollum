@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency('grit', '~> 2.5.0')
   s.add_dependency('github-markup', ['>= 0.7.4', '< 1.0.0'])
   s.add_dependency('github-markdown', '~> 0.5.1')
-  s.add_dependency('pygments.rb', '~> 0.3.1')
+  s.add_dependency('pygments.rb', '~> 0.3.2')
   s.add_dependency('escape_utils', '0.2.4')
   s.add_dependency('sinatra', '~> 1.3.3')
   s.add_dependency('mustache', ['>= 0.99.4', '< 1.0.0'])
