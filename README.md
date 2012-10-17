@@ -19,10 +19,10 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 [TomDoc](http://tomdoc.org/) for inline documentation.
 
 ## SYSTEM REQUIREMENTS
-- Python 2.5 or greater (for pygments.rb)
-- Ruby 1.8.7 or 1.9.3
+- Python 2.5+ (2.7.3 recommended)
+- Ruby 1.8.7+ (1.9.3 recommended)
 - Unix like operating system (OS X, Ubuntu, Debian, and more)
-- Will not work on Windows (because of grit)
+- Will not work on Windows (because of [grit](https://github.com/github/grit))
 
 ## INSTALLATION
 
