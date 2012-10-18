@@ -15,6 +15,28 @@ module Gollum
   class Markup
     include Precious::Helpers
 
+    @formats = {}
+
+    class << self
+      attr_reader :formats
+
+      # Register a file extension and associated markup type
+      #
+      # ext     - The file extension
+      # name    - The name of the markup type
+      # options - Hash of options:
+      #           regexp - Regexp to match against.
+      #                    Defaults to exact match of ext.
+      #
+      # If given a block, that block will be registered with GitHub::Markup to
+      # render any matching pages
+      def register(ext, name, options = {}, &block)
+        regexp = options[:regexp] || Regexp.new(ext.to_s)
+        @formats[ext] = { :name => name, :regexp => regexp }
+        GitHub::Markup.add_markup(regexp, &block) if block_given?
+      end
+    end
+
     attr_accessor :toc
     attr_reader   :metadata
 
