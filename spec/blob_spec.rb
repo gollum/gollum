@@ -11,6 +11,7 @@ describe Blob do
   it "should have a mode" 
   
   it "should return blob contents" do 
+    pending
     # Git.any_instance.expects(:cat_file).returns(fixture('cat_file_blob'))
     # blob = Blob.create(@repo, :id => 'abc')
     # blob.data.should == "Hello world"

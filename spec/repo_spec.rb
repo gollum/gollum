@@ -22,23 +22,23 @@ describe Repo do
     filename = 'git_create_test' + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
     tmp_path = File.join("/tmp/", filename)
     new_repo = Repo.new(tmp_path, {:bare => false}, @create_new)
-    File.exists?(tmp_path + '/.git').should eql true
+    (tmp_path + '/.git').should exist
   end
 
   it "should create a new bare repository if specified" do
     filename = 'git_create_bare_test' + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
     tmp_path = File.join("/tmp/", filename)
     new_bare_repo = Repo.new(tmp_path, {:bare => true}, @create_new)
-    File.directory?(tmp_path).should eql true
+    tmp_path.should be_a_directory
   end
   
   it "should tell us whether it is bare" do
-    @repo.bare?.should eql false
-    @bare_repo.bare?.should eql true
+    @repo.should_not be_bare
+    @bare_repo.should be_bare
   end
   
   it "should have a reference to a JGit Repository object" do
-    @repo.repo.kind_of?(org.eclipse.jgit.lib.Repository).should eql true 
+    @repo.repo.should be_a org.eclipse.jgit.lib.Repository 
   end
   
   it "should list the current branch" do
@@ -47,7 +47,7 @@ describe Repo do
   
   it "should list its branches" do
     result = @repo.branches
-    result.should be_an Array # is_a?(Array).should eql true
+    result.should be_an Array
     pending("Repo#branches currently returns []. Needs implementation.")
     result.should include("master")
   end
@@ -59,7 +59,7 @@ describe Repo do
   end
   
   it "should list its commits" do
-    @repo.commits.is_a?(Array).should eql true
+    @repo.commits.should be_an Array
     @repo.commits.length.should == 3
   end
   
@@ -67,8 +67,8 @@ describe Repo do
   
   it "should return a Blob by name" do
     blob = @bare_repo.blob('Manifest.txt')
-    #tree_id.is_a?(ObjectId).should eql true
-    #blob.is_a?(RevBlob).should eql true
+    # tree_id.should be_an ObjectId
+    # blob.should be_a RevBlob
     # blob.name.should == "Manifest.txt"
     pending("Not finished implementing the example.")
   end

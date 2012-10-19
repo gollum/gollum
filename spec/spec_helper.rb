@@ -24,3 +24,17 @@ def create_temp_repo(clone_path)
   FileUtils.cp_r(clone_path, tmp_path)
   File.join(tmp_path, File.basename(clone_path))
 end
+
+# Custom RSpec matchers
+
+RSpec::Matchers.define :be_a_directory do 
+  match do |dir| 
+    File.directory?(dir) 
+  end
+end
+
+RSpec::Matchers.define :exist do 
+  match do |match| 
+    File.exists?(match) 
+  end
+end
