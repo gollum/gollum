@@ -18,12 +18,11 @@ require File.expand_path('../gollum/file', __FILE__)
 require File.expand_path('../gollum/file_view', __FILE__)
 require File.expand_path('../gollum/markup', __FILE__)
 require File.expand_path('../gollum/sanitization', __FILE__)
-require File.expand_path('../gollum/tex', __FILE__)
 require File.expand_path('../gollum/web_sequence_diagram', __FILE__)
 require File.expand_path('../gollum/frontend/uri_encode_component', __FILE__)
 
 module Gollum
-  VERSION = '2.2.9'
+  VERSION = '2.3.0'
 
   def self.assets_path
     ::File.expand_path('gollum/frontend/public', ::File.dirname(__FILE__))

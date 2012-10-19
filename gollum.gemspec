@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 1.8.7"
 
   s.name              = 'gollum'
-  s.version           = '2.2.9'
-  s.date              = '2012-10-14'
+  s.version           = '2.3.0'
+  s.date              = '2012-10-18'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
   s.add_dependency('github-markup', ['>= 0.7.4', '< 1.0.0'])
   s.add_dependency('github-markdown', '~> 0.5.1')
   s.add_dependency('pygments.rb', '~> 0.3.2')
-  s.add_dependency('escape_utils', '0.2.4')
   s.add_dependency('sinatra', '~> 1.3.3')
   s.add_dependency('mustache', ['>= 0.99.4', '< 1.0.0'])
   s.add_dependency('sanitize', '~> 2.0.3')
@@ -458,7 +457,6 @@ Gem::Specification.new do |s|
     lib/gollum/page.rb
     lib/gollum/pagination.rb
     lib/gollum/sanitization.rb
-    lib/gollum/tex.rb
     lib/gollum/web_sequence_diagram.rb
     lib/gollum/wiki.rb
     licenses/css_tree_menu_thecssninja/license.txt

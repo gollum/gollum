@@ -759,24 +759,6 @@ end
   end
 
   #########################################################################
-  #
-  # TeX
-  #
-  #########################################################################
-
-  test "TeX block syntax" do
-    content = 'a \[ a^2 \] b'
-    output = "<p>a<imgsrc=\"http://www.mathtran.org/cgi-bin/toy/?D=4;tex=a%5E2\"alt=\"a^2\">b</p>"
-    compare(content, output, 'md')
-  end
-
-  test "TeX inline syntax" do
-    content = 'a \( a^2 \) b'
-    output = "<p>a<imgsrc=\"http://www.mathtran.org/cgi-bin/toy/?D=2;tex=a%5E2\"alt=\"a^2\">b</p>"
-    compare(content, output, 'md')
-  end
-
-  #########################################################################
   # Asciidoc
   #########################################################################
 

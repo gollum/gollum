@@ -33,7 +33,6 @@ module Gollum
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
       @codemap = {}
-      @texmap  = {}
       @wsdmap  = {}
       @premap  = {}
       @toc = nil
@@ -57,7 +56,6 @@ module Gollum
       data = extract_metadata(data)
       data = extract_gitcode(data)
       data = extract_code(data)
-      data = extract_tex(data)
       data = extract_wsd(data)
       data = extract_tags(data)
       begin
@@ -79,7 +77,6 @@ module Gollum
       data = doc.to_xhtml
 
       data = process_toc_tags(data)
-      data = process_tex(data)
       data = process_wsd(data)
       data.gsub!(/<p><\/p>/) do
         ''
@@ -124,47 +121,6 @@ module Gollum
       end
       toc = toc.to_xhtml if toc != nil
       [doc, toc]
-    end
-
-    #########################################################################
-    #
-    # TeX
-    #
-    #########################################################################
-
-    # Extract all TeX into the texmap and replace with placeholders.
-    #
-    # data - The raw String data.
-    #
-    # Returns the placeholder'd String data.
-    def extract_tex(data)
-      data.gsub(/\\\[\s*(.*?)\s*\\\]/m) do
-        tag = CGI.escapeHTML($1)
-        id  = Digest::SHA1.hexdigest(tag)
-        @texmap[id] = [:block, tag]
-        id
-      end.gsub(/\\\(\s*(.*?)\s*\\\)/m) do
-        tag = CGI.escapeHTML($1)
-        id  = Digest::SHA1.hexdigest(tag)
-        @texmap[id] = [:inline, tag]
-        id
-      end
-    end
-
-    # Process all TeX from the texmap and replace the placeholders with the
-    # final markup.
-    #
-    # data - The String data (with placeholders).
-    #
-    # Returns the marked up String data.
-    def process_tex(data)
-      @texmap.each do |id, spec|
-        type, tex = *spec
-        data.gsub!(id) do
-          Gollum::Tex.to_html(tex, type)
-        end
-      end
-      data
     end
 
     #########################################################################
