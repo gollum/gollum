@@ -6,13 +6,9 @@ describe Blob do
     # @repo = Repo.new(MOCK_REPO)
   end
   
-  it "should have a name" do
-    pending
-  end
+  it "should have a name" 
   
-  it "should have a mode" do
-    pending
-  end
+  it "should have a mode" 
   
   it "should return blob contents" do 
     # Git.any_instance.expects(:cat_file).returns(fixture('cat_file_blob'))
@@ -27,9 +23,7 @@ describe Blob do
     # blob.size.should == 11
   end
     
-  it "should return blame information" do
-    pending
-  end  
+  it "should return blame information"   
   
   # mime_type
 

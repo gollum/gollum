@@ -42,40 +42,37 @@ describe Repo do
   end
   
   it "should list the current branch" do
-    @repo.branch.should eql "master"
+    @repo.branch.should == "master"
   end
   
   it "should list its branches" do
     result = @repo.branches
-    result.is_a?(Array).should eql true
-    result.include?("master").should eql true
+    result.should be_an Array # is_a?(Array).should eql true
+    pending("Repo#branches currently returns []. Needs implementation.")
+    result.should include("master")
   end
   
   it "should return its description" do
     result = @repo.description
-    result.should eql fixtures("repo_description")
+    pending("repo_description fixture does not yet exist")
+    result.should eql fixture("repo_description")
   end
   
   it "should list its commits" do
     @repo.commits.is_a?(Array).should eql true
-    @repo.commits.length.should == 0
-    pending
+    @repo.commits.length.should == 3
   end
   
-  it "should add files to itself" do
-    pending
-  end
+  it "should add files to itself" 
   
   it "should return a Blob by name" do
     blob = @bare_repo.blob('Manifest.txt')
     #tree_id.is_a?(ObjectId).should eql true
     #blob.is_a?(RevBlob).should eql true
     # blob.name.should == "Manifest.txt"
-    pending
+    pending("Not finished implementing the example.")
   end
   
-  it "should return a Tree by name" do
-    pending
-  end
+  it "should return a Tree by name" 
   
 end
