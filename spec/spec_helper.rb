@@ -25,16 +25,5 @@ def create_temp_repo(clone_path)
   File.join(tmp_path, File.basename(clone_path))
 end
 
-# Custom RSpec matchers
-
-RSpec::Matchers.define :be_a_directory do 
-  match do |dir| 
-    File.directory?(dir) 
-  end
-end
-
-RSpec::Matchers.define :exist do 
-  match do |match| 
-    File.exists?(match) 
-  end
-end
+# Require any custom RSpec matchers
+Dir[File.dirname(__FILE__) + "/support/matchers/*.rb"].each {|f| require f}
