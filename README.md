@@ -365,6 +365,16 @@ appropriately.
 
 Start gollum with the `--mathjax` flag. Read more about [MathJax](http://docs.mathjax.org/en/latest/index.html) on the web. Gollum uses the `TeX-AMS-MML_HTMLorMML` config with the autoload-all extension.
 
+Inline math:
+
+- $2^2$
+- \\(2^2\\)
+
+Display math:
+
+- $$2^2$$
+- [2^2]
+
 ## SEQUENCE DIAGRAMS
 
 You may imbed sequence diagrams into your wiki page (rendered by
