@@ -20,7 +20,13 @@
   <script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.editor.js"></script>
   {{#mathjax}}
   <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ TeX: { extensions: ["autoload-all.js"] }});
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath:  [ ['$','$'],   ['\\(','\\)']],
+      displayMath: [ ['$$','$$'], ['\[','\]'] ],
+      processEscapes: true
+    },
+    TeX: { extensions: ["autoload-all.js"] }});
   </script>
   <script>(function(d,j){
   j = d.createElement('script');
