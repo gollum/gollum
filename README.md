@@ -375,13 +375,9 @@ inline with regular text. For example:
 
     The Pythagorean theorem is \( a^2 + b^2 = c^2 \).
 
-### INSTALLATION REQUIREMENTS
+### MathJax
 
-In order to get the mathematical equations rendering to work, you need the following binaries:
-
-* LaTex, TeTex or MacTex/BasicTeX (pdflatex)
-* Netpbm (pnmcrop, pnmpad, pnmscale, ppmtopgm, pnmgamma, pnmtopng)
-* Ghostscript (gs)
+In order to get the mathematical equations rendering to work, you need to start gollum with the `--mathjax` flag.
 
 ## SEQUENCE DIAGRAMS
 
