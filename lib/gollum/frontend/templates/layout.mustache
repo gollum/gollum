@@ -18,7 +18,11 @@
   <script type="text/javascript" src="{{base_url}}/javascript/gollum.dialog.js"></script>
   <script type="text/javascript" src="{{base_url}}/javascript/gollum.placeholder.js"></script>
   <script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.editor.js"></script>
-  {{#mathjax}}<script>(function(d,j){
+  {{#mathjax}}
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["autoload-all.js"] }});
+  </script>
+  <script>(function(d,j){
   j = d.createElement('script');
   j.src = 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
   (d.head || d.getElementsByTagName('head')[0]).appendChild(j);
