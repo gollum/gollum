@@ -363,21 +363,7 @@ appropriately.
 
 ## MATHEMATICAL EQUATIONS
 
-
-Page files may contain mathematic equations in TeX syntax that will be nicely
-typeset into the expected output. A block-style equation is delimited by `\[`
-and `\]`. For example:
-
-    \[ P(E) = {n \choose k} p^k (1-p)^{ n-k} \]
-
-Inline equations are delimited by `\(` and `\)`. These equations will appear
-inline with regular text. For example:
-
-    The Pythagorean theorem is \( a^2 + b^2 = c^2 \).
-
-### MathJax
-
-In order to get the mathematical equations rendering to work, you need to start gollum with the `--mathjax` flag.
+Start gollum with the `--mathjax` flag. Read more about [MathJax](http://docs.mathjax.org/en/latest/index.html) on the web. Gollum uses the `TeX-AMS-MML_HTMLorMML` config with the autoload-all extension.
 
 ## SEQUENCE DIAGRAMS
 
