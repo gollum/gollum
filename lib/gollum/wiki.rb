@@ -154,6 +154,8 @@ module Gollum
     #           :ref - String the repository ref to retrieve pages from
     #           :ws_subs       - Array of chars to sub for ws in filenames.
     #           :mathjax       - Set to false to disable mathjax.
+    #           :show_all      - Show all files in file view, not just valid pages.
+    #                            Default: false
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
