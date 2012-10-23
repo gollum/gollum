@@ -323,6 +323,7 @@ module Precious
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       @results     = wiki.pages
+      @results     += wiki.files if settings.wiki_options[:show_all]
       @ref         = wiki.ref
       mustache :pages
     end

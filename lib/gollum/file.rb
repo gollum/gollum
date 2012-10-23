@@ -13,6 +13,26 @@ module Gollum
       @path = nil
     end
 
+    # Public: The url path required to reach this page within the repo.
+    #
+    # Returns the String url_path
+    def url_path
+      path = if self.path.include?('/')
+        self.path.sub(/\/[^\/]+$/, '/')
+      else
+        ''
+      end
+
+      path
+    end
+
+    # Public: The url_path, but CGI escaped.
+    #
+    # Returns the String url_path
+    def escaped_url_path
+      CGI.escape(self.url_path).gsub('%2F','/')
+    end
+
     # Public: The on-disk filename of the file.
     #
     # Returns the String name.

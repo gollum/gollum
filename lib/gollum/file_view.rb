@@ -7,7 +7,7 @@ module Gollum
   class FileView
     # common use cases:
     # set pages to wiki.pages and show_all to false
-    # set pages to wiki.files and show_all to true
+    # set pages to wiki.pages + wiki.files and show_all to true
     def initialize pages, show_all = false
       @pages = pages
       @show_all = show_all
