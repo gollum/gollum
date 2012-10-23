@@ -5,8 +5,12 @@ module Gollum
     - Then all the folders are sorted and processed
 =end
   class FileView
-    def initialize pages
+    # common use cases:
+    # set pages to wiki.pages and show_all to false
+    # set pages to wiki.files and show_all to true
+    def initialize pages, show_all = false
       @pages = pages
+      @show_all = show_all
     end
 
     def enclose_tree string
@@ -39,7 +43,16 @@ module Gollum
     end
 
     def url_for_page page
-      url = ::File.join(::File.dirname(page.path), page.filename_stripped)
+      url = ''
+      if @show_all
+        # Remove ext for valid pages.
+        filename = page.filename
+        filename = Page::valid_page_name?(filename) ? filename.chomp(::File.extname(filename)) : filename
+
+        url = ::File.join(::File.dirname(page.path), filename)
+      else
+        url = ::File.join(::File.dirname(page.path), page.filename_stripped)
+      end
       url = url[2..-1] if url[0,2] == './'
       url
     end

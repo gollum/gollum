@@ -12,6 +12,10 @@ class FakePage
     ::File.basename(@filepath, ::File.extname(@filepath))
   end
 
+  def filename
+    ::File.basename(@filepath)
+  end
+
   def path
     return @filepath
   end

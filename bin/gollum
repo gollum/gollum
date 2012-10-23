@@ -68,6 +68,10 @@ opts = OptionParser.new do |opts|
   opts.on("--mathjax", "Enables mathjax.") do
     wiki_options[:mathjax] = true
   end
+
+  opts.on("--show-all", "Shows all files in file view. By default only valid pages are shown.") do
+    wiki_options[:show_all] = true
+  end
 end
 
 # Read command line options into `options` hash

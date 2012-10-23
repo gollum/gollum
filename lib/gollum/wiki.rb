@@ -180,6 +180,7 @@ module Gollum
       @live_preview  = options.fetch(:live_preview, true)
       @universal_toc = options.fetch(:universal_toc, false)
       @mathjax = options[:mathjax] || false
+      @show_all = options[:show_all] || false
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -587,6 +588,10 @@ module Gollum
 
     # Toggles mathjax.
     attr_reader :mathjax
+
+    # Toggles showing all files in files view. Default is false.
+    # When false, only valid pages in the git repo are displayed.
+    attr_reader :show_all
 
     # Normalize the data.
     #
