@@ -17,12 +17,8 @@ module Gollum
     #
     # Returns the String url_path
     def url_path
-      path = if self.path.include?('/')
-        self.path.sub(/\/[^\/]+$/, '/')
-      else
-        ''
-      end
-
+      path = self.path
+      path = path.sub(/\/[^\/]+$/, '/') if path.include?('/')
       path
     end
 
