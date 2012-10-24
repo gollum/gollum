@@ -597,6 +597,9 @@ module Gollum
     # When false, only valid pages in the git repo are displayed.
     attr_reader :show_all
 
+    # Start with collapsed file view. Default: false
+    attr_reader :collapse_tree
+
     # Normalize the data.
     #
     # data - The String data to be normalized.
