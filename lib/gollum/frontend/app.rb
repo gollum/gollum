@@ -332,8 +332,10 @@ module Precious
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
       show_all = settings.wiki_options[:show_all]
       # if showing all files include wiki.files
+      # must pass wiki_options for both because
+      # --show-all and --collapse-tree can be set.
       @results = show_all ? Gollum::FileView.new(wiki.pages + wiki.files, settings.wiki_options).render_files :
-                            Gollum::FileView.new(wiki.pages).render_files
+                            Gollum::FileView.new(wiki.pages, settings.wiki_options).render_files
       @ref = wiki.ref
       mustache :file_view, { :layout => false }
     end

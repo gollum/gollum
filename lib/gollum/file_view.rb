@@ -11,7 +11,7 @@ module Gollum
     def initialize pages, options = {}
       @pages = pages
       @show_all = options[:show_all] || false
-      @checked = "checked" unless options[:collapse_tree]
+      @checked = options[:collapse_tree] ? '' : "checked"
     end
 
     def enclose_tree string
