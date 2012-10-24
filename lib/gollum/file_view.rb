@@ -8,9 +8,10 @@ module Gollum
     # common use cases:
     # set pages to wiki.pages and show_all to false
     # set pages to wiki.pages + wiki.files and show_all to true
-    def initialize pages, show_all = false
+    def initialize pages, options = {}
       @pages = pages
-      @show_all = show_all
+      @show_all = options[:show_all] || false
+      @checked = "checked" unless options[:collapse_tree]
     end
 
     def enclose_tree string
@@ -30,7 +31,7 @@ module Gollum
     def new_sub_folder path
       <<-HTML
       <li>
-        <label>#{path}</label> <input type="checkbox" checked />
+        <label>#{path}</label> <input type="checkbox" #{@checked} />
         <ol>
       HTML
     end
@@ -87,7 +88,7 @@ module Gollum
         url  = url_for_page page
         html += <<-HTML
         <li>
-          <label>#{::File.dirname(page.path)}</label> <input type="checkbox" checked />
+          <label>#{::File.dirname(page.path)}</label> <input type="checkbox" #{@checked} />
           <ol>
             <li class="file"><a href="#{url}">#{name}</a></li>
          </ol>

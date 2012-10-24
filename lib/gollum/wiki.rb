@@ -154,6 +154,9 @@ module Gollum
     #           :ref - String the repository ref to retrieve pages from
     #           :ws_subs       - Array of chars to sub for ws in filenames.
     #           :mathjax       - Set to false to disable mathjax.
+    #           :show_all      - Show all files in file view, not just valid pages.
+    #                            Default: false
+    #           :collapse_tree - Start with collapsed file view. Default: false
     #
     # Returns a fresh Gollum::Repo.
     def initialize(path, options = {})
@@ -181,6 +184,7 @@ module Gollum
       @universal_toc = options.fetch(:universal_toc, false)
       @mathjax = options[:mathjax] || false
       @show_all = options[:show_all] || false
+      @collapse_tree = options[:collapse_tree] || false
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
