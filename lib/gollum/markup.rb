@@ -543,7 +543,9 @@ module Gollum
       blocks.each do |lang, code|
         encoding ||= 'utf-8'
         begin
-          hl_code = Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s})
+          # must set startinline to true for php to be highlighted without <?
+          # http://pygments.org/docs/lexers/
+          hl_code = Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s, :startinline => true})
         rescue
           hl_code = code
         end
