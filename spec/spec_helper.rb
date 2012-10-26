@@ -1,3 +1,7 @@
+require 'simplecov'
+
+SimpleCov.start
+
 require 'rjgit'
 include RJGit
 
@@ -23,6 +27,10 @@ def create_temp_repo(clone_path)
   FileUtils.mkdir_p(tmp_path)
   FileUtils.cp_r(clone_path, tmp_path)
   File.join(tmp_path, File.basename(clone_path))
+end
+
+def remove_temp_repo(path)
+  FileUtils.remove_dir(path) if File.exists?(path)
 end
 
 # Require any custom RSpec matchers

@@ -1,2 +1,6 @@
 source :rubygems
-gem 'rspec'
+
+group :test do
+  gem "rspec", "~> 2.0"
+  gem "simplecov"
+end

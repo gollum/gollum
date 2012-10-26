@@ -75,4 +75,8 @@ describe Repo do
   
   it "should return a Tree by name" 
   
+  after(:all) do
+    remove_temp_repo(File.dirname(@temp_repo_path))
+    remove_temp_repo(File.dirname(@temp_bare_repo_path))
+  end
 end
