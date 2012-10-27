@@ -81,6 +81,10 @@ module Gollum
       data.gsub!(/<p><\/p>/) do
         ''
       end
+      # fix 4 space indented code blocks
+      data.gsub!(/<pre>\s*<code>(.+)<\/code>\s*<\/pre>/m) do
+        "<pre><code>#{$1}</code></pre>"
+      end
       data
     end
 

@@ -208,7 +208,7 @@ context "Markup" do
           DATA
       ), commit_details)
     output = @wiki.page(page).formatted_data
-    expected = %Q{<pre>\n  <code>      <div class=\"highlight\"><pre><span class=\"n\">rot13</span><span class=\"p\">=</span><span class=\"s\">'tr '</span><span class=\"o\">\\</span><span class=\"s\">''</span><span class=\"n\">A</span><span class=\"o\">-</span><span class=\"n\">Za</span><span class=\"o\">-</span><span class=\"n\">z</span><span class=\"o\">'\\</span><span class=\"s\">''</span> <span class=\"s\">'\\''N-ZA-Mn-za-m'</span><span class=\"o\">\\</span><span class=\"s\">'</span>\n</pre></div>\n</code>\n</pre>}
+    expected = %Q{<pre><code>      <div class=\"highlight\"><pre><span class=\"n\">rot13</span><span class=\"p\">=</span><span class=\"s\">'tr '</span><span class=\"o\">\\</span><span class=\"s\">''</span><span class=\"n\">A</span><span class=\"o\">-</span><span class=\"n\">Za</span><span class=\"o\">-</span><span class=\"n\">z</span><span class=\"o\">'\\</span><span class=\"s\">''</span> <span class=\"s\">'\\''N-ZA-Mn-za-m'</span><span class=\"o\">\\</span><span class=\"s\">'</span>\n</pre></div>\n</code></pre>}
     assert_equal expected, output
   end
 
@@ -249,10 +249,20 @@ context "Markup" do
     assert_equal expected, output
   end
 
+  test "four space indented code block" do
+    page = 'test_four'
+    @wiki.write_page(page, :markdown,
+      %(    test
+    test), commit_details)
+    output = @wiki.page(page).formatted_data
+    expected = %(<pre><code>test\ntest\n</code></pre>)
+    assert_equal expected, output
+  end
+
   test "wiki link within code block" do
     @wiki.write_page("Potato", :markdown, "    sed -i '' 's/[[:space:]]*$//'", commit_details)
     page = @wiki.page("Potato")
-    assert_equal "<pre>\n  <code>sed -i '' 's/[[:space:]]*$//'\n</code>\n</pre>", page.formatted_data
+    assert_equal "<pre><code>sed -i '' 's/[[:space:]]*$//'\n</code></pre>", page.formatted_data
   end
 
   test "piped wiki link within code block" do
