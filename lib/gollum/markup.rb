@@ -38,6 +38,7 @@ module Gollum
       @premap  = {}
       @toc = nil
       @metadata = nil
+      @to_xml = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -79,7 +80,7 @@ module Gollum
       # formatting will create extra spaces in pre tags.
       # https://github.com/sparklemotion/nokogiri/issues/782
       # DEFAULT_HTML encodes unicode so XHTML is used for proper unicode support in href.
-      data = doc.to_xml( { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' } )
+      data = doc.to_xml( @to_xml )
 
       data = process_toc_tags(data)
       data = process_wsd(data)
@@ -125,7 +126,7 @@ module Gollum
         node.add_child(%Q{<a href="##{h_name}">#{h.content}</a>})
         tail.add_child(node)
       end
-      toc = toc.to_xhtml if toc != nil
+      toc = toc.to_xml(@to_xml) if toc != nil
       [doc, toc]
     end
 
