@@ -15,7 +15,10 @@ CC BY-SA 3.0 Unported
 http://blog.twg.ca/2010/11/retina-display-icon-set/
 http://creativecommons.org/licenses/by-sa/3.0/legalcode.txt
 
+  lib/gollum/frontend/public/images/savecomment_24.png
+  lib/gollum/frontend/public/images/cancel_24.png
   lib/gollum/frontend/public/images/save_24.png
+  lib/gollum/frontend/public/images/globe_24.png
 
 ---
 
