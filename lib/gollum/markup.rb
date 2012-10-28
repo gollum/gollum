@@ -75,7 +75,7 @@ module Gollum
       doc,toc = process_headers(doc)
       @toc = @sub_page ? ( @parent_page ? @parent_page.toc_data : "[[_TOC_]]" ) : toc
       yield doc if block_given?
-      # nokogiri's save options are xored together. FORMAT has a value of 1 so ^ 1 removes it.
+      # nokogiri's save options are ored together. FORMAT has a value of 1 so ^ 1 removes it.
       # formatting will create extra spaces in pre tags.
       # https://github.com/sparklemotion/nokogiri/issues/782
       # DEFAULT_HTML encodes unicode so XHTML is used for proper unicode support in href.
