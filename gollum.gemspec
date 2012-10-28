@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '2.3.3'
-  s.date              = '2012-10-23'
+  s.date              = '2012-10-28'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -41,8 +41,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rack-test', '~> 0.6.2')
   s.add_development_dependency('wikicloth', '~> 0.8.0')
   s.add_development_dependency('rake', '~> 0.9')
-  s.add_development_dependency('pry')
-  s.add_development_dependency('rb-readline')
+  s.add_development_dependency('pry', '~> 0.9.10')
+  # required by pry
+  s.add_development_dependency('rb-readline', '~> 0.4.2')
+
   # = MANIFEST =
   s.files = %w[
     Gemfile
@@ -93,6 +95,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/public/gollum/javascript/mousetrap.min.js
     lib/gollum/frontend/public/gollum/livepreview/css/custom.css
     lib/gollum/frontend/public/gollum/livepreview/images/cancel_24.png
+    lib/gollum/frontend/public/gollum/livepreview/images/globe_24.png
     lib/gollum/frontend/public/gollum/livepreview/images/lr_24.png
     lib/gollum/frontend/public/gollum/livepreview/images/save_24.png
     lib/gollum/frontend/public/gollum/livepreview/images/savecomment_24.png
