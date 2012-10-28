@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 module Gollum
   module Pagination
     def self.included(klass)

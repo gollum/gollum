@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 module Gollum
   # Responsible for handling the commit process for a Wiki.  It sets up the
   # Git index, provides methods for modifying the tree, and stores callbacks

@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 module Gollum
   # Encapsulate sanitization options.
   #

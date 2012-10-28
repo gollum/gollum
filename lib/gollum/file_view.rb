@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 module Gollum
 =begin
   FileView requires that:

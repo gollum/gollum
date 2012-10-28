@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 # stdlib
 require 'digest/md5'
 require 'ostruct'

@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 module Precious
   module Helpers
     # Extract the path string that Gollum::Wiki expects

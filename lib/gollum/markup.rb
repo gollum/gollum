@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 require 'digest/sha1'
 require 'cgi'
 require 'pygments'
@@ -74,13 +75,11 @@ module Gollum
       doc,toc = process_headers(doc)
       @toc = @sub_page ? ( @parent_page ? @parent_page.toc_data : "[[_TOC_]]" ) : toc
       yield doc if block_given?
-      data = doc.to_xhtml(:indent => 0, :encoding => 'UTF-8')
-
-      # fix 4 space indented code blocks introduced by nokogiri.
-      # tag should not have a newline after it
-      data.gsub!(/<pre>\s*<code>(.+)<\/code>\s*<\/pre>/m) do
-        "<pre><code>#{$1}</code></pre>"
-      end
+      # nokogiri's save options are xored together. FORMAT has a value of 1 so ^ 1 removes it.
+      # formatting will create extra spaces in pre tags.
+      # https://github.com/sparklemotion/nokogiri/issues/782
+      # DEFAULT_HTML encodes unicode so XHTML is used for proper unicode support in href.
+      data = doc.to_xml( { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' } )
 
       data = process_toc_tags(data)
       data = process_wsd(data)

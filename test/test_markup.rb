@@ -193,7 +193,7 @@ context "Markup" do
   test "wiki link within inline code block" do
     @wiki.write_page("Potato", :markdown, "`sed -i '' 's/[[:space:]]*$//'`", commit_details)
     page = @wiki.page("Potato")
-    assert_equal "<p>\n  <code>sed -i '' 's/[[:space:]]*$//'</code>\n</p>", page.formatted_data
+    assert_equal "<p><code>sed -i '' 's/[[:space:]]*$//'</code></p>", page.formatted_data
   end
 
   test "regexp gsub! backref (#383)" do
@@ -212,7 +212,7 @@ context "Markup" do
     assert_equal expected, output
   end
 
-  test "~~~ code blocks #537" do
+  test "tilda code blocks #537" do
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
       %Q(~~~ {.ruby}
@@ -220,11 +220,12 @@ context "Markup" do
 ~~~
       ), commit_details)
     output = @wiki.page(page).formatted_data
-    expected = %Q{<div class=\"highlight\">\n  <pre><span class=\"s1\">'hi'</span>\n</pre>\n</div>}
+    expected = %Q{<div class=\"highlight\"><pre><span class=\"s1\">'hi'</span>\n</pre></div>}
     assert_equal expected, output
   end
 
-  test "~~~ code blocks #537 with more than one class" do
+  # Issue #537
+  test "tilda code blocks with more than one class" do
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
       %Q(~~~ {#hi .ruby .sauce}
@@ -232,11 +233,12 @@ context "Markup" do
 ~~~
       ), commit_details)
     output = @wiki.page(page).formatted_data
-    expected = %Q{<div class=\"highlight\">\n  <pre><span class=\"s1\">'hi'</span>\n</pre>\n</div>}
+    expected = %Q{<div class=\"highlight\"><pre><span class=\"s1\">'hi'</span>\n</pre></div>}
     assert_equal expected, output
   end
 
-  test "~~~ code blocks #537 with lots of tildes" do
+  # Issue #537
+  test "tilda code blocks with lots of tildes" do
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
       %Q(~~~~~~ {#hi .ruby .sauce}
@@ -245,7 +247,7 @@ context "Markup" do
 ~~~~~~
       ), commit_details)
     output = @wiki.page(page).formatted_data
-    expected = %Q{<div class=\"highlight\">\n  <pre><span class=\"o\">~~</span>\n<span class=\"s1\">'hi'</span><span class=\"o\">~</span>\n</pre>\n</div>}
+    expected = %Q{<div class=\"highlight\"><pre><span class=\"o\">~~</span>\n<span class=\"s1\">'hi'</span><span class=\"o\">~</span>\n</pre></div>}
     assert_equal expected, output
   end
 
@@ -268,7 +270,7 @@ context "Markup" do
   test "piped wiki link within code block" do
     @wiki.write_page("Potato", :markdown, "`make a link [[home|sweet home]]`", commit_details)
     page = @wiki.page("Potato")
-    assert_equal "<p>\n  <code>make a link [[home|sweet home]]</code>\n</p>", page.formatted_data
+    assert_equal "<p><code>make a link [[home|sweet home]]</code></p>", page.formatted_data
   end
 
   #########################################################################
@@ -469,9 +471,9 @@ context "Markup" do
   #
   #########################################################################
 
-  test "code blocks" do
+  test "regular code blocks" do
     content = "a\n\n```ruby\nx = 1\n```\n\nb"
-    output = %Q{<p>a</p>\n\n<div class=\"highlight\">\n  <pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>}
+    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre></div>\n\n<p>b</p>}
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -484,7 +486,7 @@ context "Markup" do
 
   test "code blocks with carriage returns" do
     content = "a\r\n\r\n```ruby\r\nx = 1\r\n```\r\n\r\nb"
-    output = %Q{<p>a</p>\n\n<div class=\"highlight\">\n  <pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre>\n</div>\n\n<p>b</p>}
+    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"mi\">1</span>\n</pre></div>\n\n<p>b</p>}
 
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
@@ -515,7 +517,7 @@ context "Markup" do
 
   test "code blocks with multibyte caracters indent" do
     content = "a\n\n```ruby\ns = 'やくしまるえつこ'\n```\n\nb"
-    output = %Q{<p>a</p>\n\n<div class=\"highlight\">\n  <pre><span class=\"n\">s</span> <span class=\"o\">=</span> <span class=\"s1\">'やくしまるえつこ'</span>\n</pre>\n</div>\n\n<p>b</p>}
+    output = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"n\">s</span> <span class=\"o\">=</span> <span class=\"s1\">'やくしまるえつこ'</span>\n</pre></div>\n\n<p>b</p>}
     index = @wiki.repo.index
     index.add("Bilbo-Baggins.md", content)
     index.commit("Add alpha.jpg")
@@ -575,7 +577,7 @@ np.array([[2,2],[1,3]],np.float)
     output_page = @wiki.page("page").formatted_data
 
     assert_equal %Q{<p>a  b</p>}, output_script
-    assert_equal %Q{<div class=\"highlight\">\n  <pre><span class=\"nt\">&lt;p&gt;</span>a  b<span class=\"nt\">&lt;/p&gt;</span>\n</pre>\n</div>}, output_page
+    assert_equal %Q{<div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a  b<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>}, output_page
   end
 
   test "embed code page absolute link" do
@@ -584,7 +586,7 @@ np.array([[2,2],[1,3]],np.float)
 
     page = @wiki.page("a")
     output = page.formatted_data
-    assert_equal %Q{<p>a\n</p><div class=\"highlight\">\n  <pre><span class=\"nt\">&lt;p&gt;</span>a\n!base<span class=\"nt\">&lt;/p&gt;</span>\n</pre>\n</div>\n}, output
+    assert_equal %Q{<p>a\n</p><div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a\n!base<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>\n}, output
   end
 
   test "embed code page relative link" do
@@ -593,7 +595,7 @@ np.array([[2,2],[1,3]],np.float)
 
     page = @wiki.page("a")
     output = page.formatted_data
-    assert_equal %Q{<p>a\n</p><div class=\"highlight\">\n  <pre><span class=\"nt\">&lt;p&gt;</span>a\n!rel<span class=\"nt\">&lt;/p&gt;</span>\n</pre>\n</div>\n}, output
+    assert_equal %Q{<p>a\n</p><div class=\"highlight\"><pre><span class=\"nt\">&lt;p&gt;</span>a\n!rel<span class=\"nt\">&lt;/p&gt;</span>\n</pre></div>\n}, output
   end
 
   test "code block in unsupported language" do

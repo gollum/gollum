@@ -1,3 +1,4 @@
+# ~*~ encoding: utf-8 ~*~
 module Gollum
   # Controls all access to the Git objects from Gollum.  Extend this class to
   # add custom caching for special cases.
