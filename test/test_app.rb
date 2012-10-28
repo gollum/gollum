@@ -185,6 +185,8 @@ context "Frontend" do
     post "/create", :content => 'abc', :page => name,
       :format => 'markdown', :message => 'def'
 
+    follow_redirect!
+
     assert last_response.ok?
 
     @wiki.clear_cache

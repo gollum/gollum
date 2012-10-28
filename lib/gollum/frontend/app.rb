@@ -83,11 +83,12 @@ module Precious
 
     before do
       @base_url = url('/', false).chomp('/')
-      settings.wiki_options.merge!({ :base_path => @base_url }) unless settings.wiki_options.has_key? :base_path
+      # above will detect base_path when it's used with map in a config.ru
+      settings.wiki_options.merge!({ :base_path => @base_url })
     end
 
     get '/' do
-      redirect File.join(settings.wiki_options[:page_file_dir].to_s,settings.wiki_options[:base_path].to_s, 'Home')
+      redirect ::File.join(@base_url,'Home')
     end
 
     # path is set to name if path is nil.
@@ -192,20 +193,13 @@ module Precious
       path = '' if path.nil?
       format       = params[:format].intern
 
-      page_dir = File.join(settings.wiki_options[:page_file_dir].to_s,
-                           settings.wiki_options[:base_path].to_s)
-      # Home is a special case.
-      path = '' if name.downcase == 'home'
-
-      page_dir = File.join(page_dir, path)
-
       # write_page is not directory aware so use wiki_options to emulate dir support.
-      wiki_options = settings.wiki_options.merge({ :page_file_dir => page_dir })
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
 
       begin
         wiki.write_page(name, format, params[:content], commit_message)
-        redirect to("/#{clean_url(CGI.escape(::File.join(page_dir,name)))}")
+        redirect to("/#{clean_url(CGI.escape(::File.join(path,name)))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
