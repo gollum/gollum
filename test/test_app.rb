@@ -369,6 +369,36 @@ context "Frontend with lotr" do
     assert body.include?("Eye Of Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
   end
 
+  # base path requires 'map' in a config.ru to work correctly.
+  test "create pages within sub-directories using base path" do
+    Precious::App.set(:wiki_options, { :base_path => 'wiki' })
+    page = 'path'
+    post "/create", :content => '123', :page => page,
+      :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+    # should be wiki/Mordor/path
+    assert_equal 'http://example.org/Mordor/' + page, last_response.headers['Location']
+    get '/Mordor/' + page
+    assert_match /123/, last_response.body
+
+    # Reset base path
+    Precious::App.set(:wiki_options, { :base_path => nil })
+  end
+
+  test "create pages within sub-directories using page file dir" do
+    Precious::App.set(:wiki_options, { :page_file_dir => 'wiki' })
+
+    post "/create", :content => 'one two', :page => 'base',
+      :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+    assert_equal 'http://example.org/wiki/Mordor/base', last_response.headers['Location']
+    get "/wiki/Mordor/base"
+
+    # Reset page_file_dir after request but before matching.
+    Precious::App.set(:wiki_options, { :page_file_dir => nil })
+
+    assert_match /one two/, last_response.body
+  end
+
+
   test "create pages within sub-directories" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
