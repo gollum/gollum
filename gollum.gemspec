@@ -41,7 +41,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rack-test', '~> 0.6.2')
   s.add_development_dependency('wikicloth', '~> 0.8.0')
   s.add_development_dependency('rake', '~> 0.9')
-
+  s.add_development_dependency('pry')
+  s.add_development_dependency('rb-readline')
   # = MANIFEST =
   s.files = %w[
     Gemfile
