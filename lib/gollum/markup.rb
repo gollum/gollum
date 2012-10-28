@@ -74,17 +74,20 @@ module Gollum
       doc,toc = process_headers(doc)
       @toc = @sub_page ? ( @parent_page ? @parent_page.toc_data : "[[_TOC_]]" ) : toc
       yield doc if block_given?
-      data = doc.to_xhtml
+      data = doc.to_xhtml(:indent => 0, :encoding => 'UTF-8')
+
+      # fix 4 space indented code blocks introduced by nokogiri.
+      # tag should not have a newline after it
+      data.gsub!(/<pre>\s*<code>(.+)<\/code>\s*<\/pre>/m) do
+        "<pre><code>#{$1}</code></pre>"
+      end
 
       data = process_toc_tags(data)
       data = process_wsd(data)
       data.gsub!(/<p><\/p>/) do
         ''
       end
-      # fix 4 space indented code blocks
-      data.gsub!(/<pre>\s*<code>(.+)<\/code>\s*<\/pre>/m) do
-        "<pre><code>#{$1}</code></pre>"
-      end
+
       data
     end
 
