@@ -262,6 +262,9 @@ context "Frontend" do
     page2 = @wiki.page('A')
     assert_equal page1.version.sha, page2.version.sha
   end
+=begin
+  # redirects are now handled by class MapGollum in bin/gollum
+  # they should be set in config.ru
 
   test "redirects from 'base_path' or 'base_path/' to 'base_path/Home'" do
     Precious::App.set(:wiki_options, {})
@@ -279,6 +282,7 @@ context "Frontend" do
     # Reset base path
     Precious::App.set(:wiki_options, { :base_path => nil })
   end
+=end
   
   test "author details in session are used" do
     page1 = @wiki.page('A')
