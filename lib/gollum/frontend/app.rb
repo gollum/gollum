@@ -306,7 +306,8 @@ module Precious
     get '/search' do
       @query = params[:q]
       wiki = wiki_new
-      @results = wiki.search @query
+      # Sort wiki search results by count (desc) and then by name (asc)
+      @results = wiki.search(@query).sort{ |a, b| (a[:count] <=> b[:count]).nonzero? || b[:name] <=> a[:name] }.reverse
       @name = @query
       mustache :search
     end
