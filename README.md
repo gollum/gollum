@@ -556,6 +556,8 @@ your changes merged back into core is as follows:
 1. Send a pull request to the github/gollum project.
 
 ## RELEASING
+    x.y.z
+
     For z releases:
     $ rake bump
     $ rake release
