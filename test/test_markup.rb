@@ -212,6 +212,19 @@ context "Markup" do
     assert_equal expected, output
   end
 
+  # Issue #568
+  test "tilde code blocks without a language" do
+    page = 'test_rgx'
+    @wiki.write_page(page, :markdown,
+      %Q(~~~
+'hi'
+~~~
+      ), commit_details)
+    output = @wiki.page(page).formatted_data
+    expected = %Q{<div class=\"highlight\"><pre><span class=\"s\">'hi'</span>\n</pre></div>}
+    assert_equal expected, output
+  end
+
   test "tilda code blocks #537" do
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
