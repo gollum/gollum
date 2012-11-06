@@ -488,8 +488,10 @@ module Gollum
         # extract lang from { .ruby } or { #stuff .ruby .indent }
         # see http://johnmacfarlane.net/pandoc/README.html#delimited-code-blocks
 
-        lang = lang.match(/\.([^}\s]+)/)
-        lang = lang[1] unless lang.nil?
+        if lang
+            lang = lang.match(/\.([^}\s]+)/)
+            lang = lang[1] unless lang.nil?
+        end
 
         @codemap[id] = cached   ?
           { :output => cached } :
