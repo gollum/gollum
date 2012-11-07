@@ -225,7 +225,7 @@ context "Markup" do
     assert_equal expected, output
   end
 
-  test "tilda code blocks #537" do
+  test "tilde code blocks #537" do
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
       %Q(~~~ {.ruby}
@@ -238,7 +238,7 @@ context "Markup" do
   end
 
   # Issue #537
-  test "tilda code blocks with more than one class" do
+  test "tilde code blocks with more than one class" do
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
       %Q(~~~ {#hi .ruby .sauce}
@@ -251,7 +251,7 @@ context "Markup" do
   end
 
   # Issue #537
-  test "tilda code blocks with lots of tildes" do
+  test "tilde code blocks with lots of tildes" do
     page = 'test_rgx'
     @wiki.write_page(page, :markdown,
       %Q(~~~~~~ {#hi .ruby .sauce}
