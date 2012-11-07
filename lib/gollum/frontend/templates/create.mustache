@@ -1,4 +1,4 @@
-<div id="wiki-wrapper">
+<div id="wiki-wrapper" class="create">
 <div id="head">
   <h1>Create New Page</h1>
 </div>
@@ -8,13 +8,5 @@
   </div>
 </div>
 </div>
-<script type="text/javascript">
-window.onbeforeunload = function(){ return "Leaving will not create a new page!" };
-$("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );
-
-jQuery(document).ready(function() {
-  $.GollumEditor({ NewFile: true, MarkupType: '{{default_markup}}' });
-});
-</script>
 
 {{something}}
