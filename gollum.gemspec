@@ -69,6 +69,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/public/gollum/css/gollum.css
     lib/gollum/frontend/public/gollum/css/ie7.css
     lib/gollum/frontend/public/gollum/css/template.css
+    lib/gollum/frontend/public/gollum/images/man_24.png
     lib/gollum/frontend/public/gollum/images/dirty-shade.png
     lib/gollum/frontend/public/gollum/images/fileview/document.png
     lib/gollum/frontend/public/gollum/images/fileview/folder-horizontal.png
@@ -91,6 +92,7 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/public/gollum/javascript/gollum.dialog.js
     lib/gollum/frontend/public/gollum/javascript/gollum.js
     lib/gollum/frontend/public/gollum/javascript/gollum.placeholder.js
+    lib/gollum/frontend/public/gollum/javascript/identicon_canvas.js
     lib/gollum/frontend/public/gollum/javascript/jquery-1.7.2.min.js
     lib/gollum/frontend/public/gollum/javascript/jquery.color.js
     lib/gollum/frontend/public/gollum/javascript/mousetrap.min.js
@@ -443,6 +445,9 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/templates/pages.mustache
     lib/gollum/frontend/templates/search.mustache
     lib/gollum/frontend/templates/searchbar.mustache
+    lib/gollum/frontend/templates/history_authors/gravatar.mustache
+    lib/gollum/frontend/templates/history_authors/identicon.mustache
+    lib/gollum/frontend/templates/history_authors/none.mustache
     lib/gollum/frontend/uri_encode_component.rb
     lib/gollum/frontend/views/compare.rb
     lib/gollum/frontend/views/create.rb

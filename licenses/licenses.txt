@@ -30,3 +30,23 @@ http://www.thecssninja.com/css/css-tree-menu
 http://www.thecssninja.com/demo/license.txt
 
   lib/gollum/frontend/public/css/_styles.css
+
+---
+
+Default profile image (man_24.png) is used under the CC BY-SA 3.0 Unported license.
+
+CC BY-SA 3.0 Unported
+http://blog.twg.ca/2010/11/retina-display-icon-set/
+http://creativecommons.org/licenses/by-sa/3.0/legalcode.txt
+
+    lib/gollum/frontend/public/images/man_24.png
+
+---
+
+The canvas_identicon code is used under the MIT license.
+
+https://github.com/donpark/identicon/blob/master/identicon-canvas/identicon_canvas.js
+https://github.com/donpark/identicon/blob/master/README
+
+  lib/gollum/frontend/public/gollum/javascript/identicon_canvas.js
+
