@@ -238,6 +238,7 @@ module Precious
       @content = @page.formatted_data
       @toc_content = wiki.universal_toc ? @page.toc_data : nil
       @mathjax = wiki.mathjax
+      @css = wiki.css
       @editable = false
       mustache :page
     end
@@ -360,6 +361,7 @@ module Precious
         @content = page.formatted_data
         @toc_content = wiki.universal_toc ? @page.toc_data : nil
         @mathjax = wiki.mathjax
+        @css = wiki.css
         mustache :page
       elsif file = wiki.file(fullpath)
         content_type file.mime_type

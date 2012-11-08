@@ -536,6 +536,14 @@ Note that filenames on windows must not contain any of the following characters 
 
 Gollum optionally takes a `--config file`. See [config.rb](https://github.com/github/gollum/blob/master/config.rb) for an example.
 
+## CUSTOM CSS
+
+The `--css` flag will inject `custom.css` from the root of your git repository into each page. Here's an example of floating the sidebar to the left.
+
+```css
+#wiki-rightbar { float: left !important; }
+```
+
 ## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:

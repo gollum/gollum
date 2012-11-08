@@ -80,6 +80,10 @@ module Precious
         @mathjax
       end
 
+      def css # custom css
+        @css
+      end
+
       # Access to embedded metadata.
       #
       # Examples

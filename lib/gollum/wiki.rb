@@ -137,6 +137,10 @@ module Gollum
     # Gets the boolean live preview value.
     attr_reader :live_preview
 
+    # Injects custom css from custom.css in root repo.
+    # Defaults to false
+    attr_reader :css
+
     # Public: Initialize a new Gollum Repo.
     #
     # path    - The String path to the Git repository that holds the Gollum
@@ -191,6 +195,7 @@ module Gollum
       @mathjax              = options.fetch :mathjax, false
       @show_all             = options.fetch :show_all, false
       @collapse_tree        = options.fetch :collapse_tree, false
+      @css                  = options.fetch :css, false
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
