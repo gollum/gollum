@@ -532,10 +532,6 @@ Your Rack middleware can pass author details to Gollum in a Hash in the session 
 ## WINDOWS FILENAME VALIDATION
 Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
 
-## LIB.SO ERROR
-
-`Could not open library 'lib.so'` may be solved by installing `python-devel` on Fedora or `python-dev` on Ubuntu. Gentoo requires a rubypython [patch](https://gist.github.com/2802480) to use python2.7.
-
 ## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:
