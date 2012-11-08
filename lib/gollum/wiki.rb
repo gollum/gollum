@@ -181,8 +181,8 @@ module Gollum
         self.class.default_ws_subs
       @history_sanitization = options[:history_sanitization] ||
         self.class.history_sanitization
-      @live_preview  = options.fetch(:live_preview, true)
-      @universal_toc = options.fetch(:universal_toc, false)
+      @live_preview  = options[:live_preview] || true
+      @universal_toc = options[:universal_toc] || false
       @mathjax = options[:mathjax] || false
       @show_all = options[:show_all] || false
       @collapse_tree = options[:collapse_tree] || false
