@@ -534,7 +534,7 @@ Note that filenames on windows must not contain any of the following characters 
 
 ## CONFIG FILE
 
-Gollum optionaly takes a `--config file`. See [config.rb](https://github.com/github/gollum/blob/master/config.rb) for an example.
+Gollum optionally takes a `--config file`. See [config.rb](https://github.com/github/gollum/blob/master/config.rb) for an example.
 
 ## CONTRIBUTE
 
