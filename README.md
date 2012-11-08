@@ -532,6 +532,10 @@ Your Rack middleware can pass author details to Gollum in a Hash in the session 
 ## WINDOWS FILENAME VALIDATION
 Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
 
+## CONFIG FILE
+
+Gollum optionaly takes a `--config file`. See [config.rb](https://github.com/github/gollum/blob/master/config.rb) for an example.
+
 ## CONTRIBUTE
 
 If you'd like to hack on Gollum, start by forking my repo on GitHub:
