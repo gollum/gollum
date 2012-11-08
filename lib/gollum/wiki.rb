@@ -186,7 +186,7 @@ module Gollum
       @sanitization         = options.fetch :sanitization, self.class.sanitization
       @ws_subs              = options.fetch :ws_subs, self.class.default_ws_subs
       @history_sanitization = options.fetch :history_sanitization, self.class.history_sanitization
-      @live_preview         = options.fetch :live_preview,  true
+      @live_preview         = options.fetch :live_preview, true
       @universal_toc        = options.fetch :universal_toc, false
       @mathjax              = options.fetch :mathjax, false
       @show_all             = options.fetch :show_all, false
