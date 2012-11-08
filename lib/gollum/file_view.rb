@@ -22,7 +22,7 @@ module Gollum
     def new_page page
       name = page.name
       url  = url_for_page page
-      %Q(  <li class="file"><a href="#{url}">#{name}</a></li>\n)
+      %Q(  <li class="file"><a href="#{url}"><span class="icon"></span>#{name}</a></li>\n)
     end
 
     def new_folder folder_path
@@ -89,7 +89,7 @@ module Gollum
         <li>
           <label>#{::File.dirname(page.path)}</label> <input type="checkbox" #{@checked} />
           <ol>
-            #{new_page page}
+          #{new_page page}
          </ol>
         </li>
         HTML
