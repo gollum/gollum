@@ -8,7 +8,11 @@ module Precious
       DEFAULT_AUTHOR = 'you'
 
       def title
-        @page.url_path.gsub("-", " ")
+        extract_title(@content) || @page.url_path.gsub("-", " ")
+      end
+
+      def content
+        without_title(@content)
       end
 
       def author
@@ -93,6 +97,48 @@ module Precious
       # Returns Hash.
       def metadata
         @page.metadata
+      end
+
+      private
+
+      # Wraps page formatted data to Nokogiri::HTML document.
+      #
+      def build_document(content)
+        Nokogiri::HTML(%{<div id="gollum-root">} + content + %{</div>})
+      end
+
+      # Finds header node inside Nokogiri::HTML document.
+      #
+      def find_header_node(doc)
+        case self.format
+          when :asciidoc
+            doc.css("div#gollum-root > div#header > h1:first-child")
+          when :org
+            doc.css("div#gollum-root > p.title:first-child")
+          when :pod
+            doc.css("div#gollum-root > a.dummyTopAnchor:first-child + h1")
+          when :rest
+            doc.css("div#gollum-root > div > div > h1:first-child")
+          else
+            doc.css("div#gollum-root > h1:first-child")
+        end
+      end
+
+      # Extracts title from page if present.
+      #
+      def extract_title(content)
+        doc = build_document(content)
+        title = find_header_node(doc)
+        Sanitize.clean(title.to_html).strip unless title.empty?
+      end
+
+      # Returns page content without title if it was extracted.
+      #
+      def without_title(content)
+        doc = build_document(content)
+        title = find_header_node(doc)
+        title.remove unless title.empty?
+        doc.css("div#gollum-root").inner_html
       end
     end
   end
