@@ -1,3 +1,12 @@
+For gollum code, everything should fall under the existing MIT License.
+Alternative permissive licenses (such as BSD) for 3rd party dependencies are
+acceptable. For image assets in Gollum, CC BY or CC BY-SA is fine. Anything
+released under a copyleft license (for example GPL, AGPL, LGPL, MPL, EPL,
+etc.) is not permitted in gollum. Public domain, CC BY or CC BY-SA for code in
+gollum is not permitted.
+
+---
+
 The following PNGs are based on Ubuntu 11.10 SVG files located in /usr/share/icons/unity-icon-theme/places/svg/
 - group-folders.svg
 - group-files.svg
