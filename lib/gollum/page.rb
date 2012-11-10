@@ -221,7 +221,7 @@ module Gollum
     # Public: Embedded metadata.
     #
     # Returns Hash of metadata.
-    def meta_data()
+    def metadata()
       formatted_data if markup_class.metadata == nil
       markup_class.metadata
     end
