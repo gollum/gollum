@@ -2,7 +2,7 @@
         <li>
           <label>.</label> <input type="checkbox" checked />
           <ol>
-            <li class="file"><a href="folder0">folder0</a></li>
+            <li class="file"><a href="folder0"><span class="icon"></span>folder0</a></li>
          </ol>
         </li>
 </ol>

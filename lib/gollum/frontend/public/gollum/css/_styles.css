@@ -72,16 +72,23 @@ ol.tree
   }
     li.file a
     {
-      background: url(../images/fileview/document.png) 0 0 no-repeat;
       color: #fff;
-      padding-left: 21px;
       text-decoration: none;
-      display: block;
+      display: inline-block;
     }
-    li.file a[href *= '.pdf']  { background: url(../images/fileview/document.png) 0 0 no-repeat; }
-    li.file a[href *= '.html']  { background: url(../images/fileview/document.png) 0 0 no-repeat; }
-    li.file a[href $= '.css']  { background: url(../images/fileview/document.png) 0 0 no-repeat; }
-    li.file a[href $= '.js']    { background: url(../images/fileview/document.png) 0 0 no-repeat; }
+      li.file a span.icon
+      {
+        width: 14px;
+        height: 18px;
+        background: url(../images/fileview/document.png) 0 0 no-repeat;
+        display: inline-block;
+        margin-right: 7px;
+        vertical-align: text-top;
+      }
+      li.file a[href *= '.pdf'] span.icon { background: url(../images/fileview/document.png) 0 0 no-repeat; }
+      li.file a[href *= '.html'] span.icon { background: url(../images/fileview/document.png) 0 0 no-repeat; }
+      li.file a[href $= '.css'] span.icon { background: url(../images/fileview/document.png) 0 0 no-repeat; }
+      li.file a[href $= '.js']  span.icon { background: url(../images/fileview/document.png) 0 0 no-repeat; }
   li input
   {
     position: absolute;
