@@ -22,7 +22,7 @@ module Gollum
     def new_page page
       name = page.name
       url  = url_for_page page
-      %Q(  <li class="file"><a href="#{url}"><span class="icon"></span>#{name}</a></li>\n)
+      %Q(  <li class="file"><a href="#{url}"><span class="icon"></span>#{name}</a></li>)
     end
 
     def new_folder folder_path
@@ -38,10 +38,7 @@ module Gollum
     end
 
     def end_folder
-      <<-HTML
-        </ol>
-      </li>
-      HTML
+      "</ol></li>\n"
     end
 
     def url_for_page page

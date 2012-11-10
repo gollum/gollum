@@ -1,3 +1,2 @@
 <ol class="tree">
-  <li class="file"><a href="0"><span class="icon"></span>0</a></li>
-</ol>
+  <li class="file"><a href="0"><span class="icon"></span>0</a></li></ol>

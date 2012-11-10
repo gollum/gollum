@@ -72,6 +72,10 @@ def check name, pages_array
   pages = FakePages.new pages_array
   expected = read name
   actual = view pages
+
+  # Uncomment when updating tests
+  # write name, actual
+
   assert_equal expected, actual
 end
 

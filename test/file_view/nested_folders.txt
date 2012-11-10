@@ -8,21 +8,14 @@
       <li>
         <label>folder2</label> <input type="checkbox" checked />
         <ol>
-  <li class="file"><a href="folder0/folder1/folder2/0"><span class="icon"></span>0</a></li>
-        </ol>
-      </li>
+  <li class="file"><a href="folder0/folder1/folder2/0"><span class="icon"></span>0</a></li></ol></li>
       <li>
         <label>folder3</label> <input type="checkbox" checked />
         <ol>
-  <li class="file"><a href="folder0/folder1/folder3/1"><span class="icon"></span>1</a></li>
-        </ol>
-      </li>
-        </ol>
-      </li>
-        </ol>
-      </li>
+  <li class="file"><a href="folder0/folder1/folder3/1"><span class="icon"></span>1</a></li></ol></li>
+</ol></li>
+</ol></li>
       <li>
         <label>folder4</label> <input type="checkbox" checked />
         <ol>
-  <li class="file"><a href="folder4/2"><span class="icon"></span>2</a></li>
-</ol>
+  <li class="file"><a href="folder4/2"><span class="icon"></span>2</a></li></ol>
