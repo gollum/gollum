@@ -80,6 +80,9 @@ opts = OptionParser.new do |opts|
   opts.on("--collapse-tree", "Collapse file view tree. By default, expanded tree is shown.") do
     wiki_options[:collapse_tree] = true
   end
+  opts.on("--h1-title", "Sets page title to value of first h1") do
+    wiki_options[:h1_title] = true
+  end
 end
 
 # Read command line options into `options` hash

@@ -141,6 +141,10 @@ module Gollum
     # Defaults to false
     attr_reader :css
 
+    # Sets page title to value of first h1
+    # Defaults to false
+    attr_reader :h1_title
+
     # Public: Initialize a new Gollum Repo.
     #
     # path    - The String path to the Git repository that holds the Gollum
@@ -196,6 +200,7 @@ module Gollum
       @show_all             = options.fetch :show_all, false
       @collapse_tree        = options.fetch :collapse_tree, false
       @css                  = options.fetch :css, false
+      @h1_title             = options.fetch :h1_title, false
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.

@@ -8,7 +8,8 @@ module Precious
       DEFAULT_AUTHOR = 'you'
 
       def title
-        @page.url_path_title
+        h1 = @h1_title ? page_header_from_content(@content) : false
+        h1 || @page.url_path_title
       end
 
       def page_header
