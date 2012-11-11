@@ -136,7 +136,13 @@ or JavaScript. These tags will be stripped from the converted HTML. See
 `docs/sanitization.md` for more details on what tags and attributes are
 allowed.
 
+## TITLES
 
+The first defined `h1` will override the default header on a page. There are two ways to set a page title. The metadata syntax:
+
+`<!-- --- title: New Title -->`
+
+The first `h1` tag can be set to always override the page title, without needing to use the metadata syntax. Start gollum with the `--h1-title` flag.
 ## BRACKET TAGS
 
 A variety of Gollum tags use a double bracket syntax. For example:
