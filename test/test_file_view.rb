@@ -68,8 +68,6 @@ def write file, content
   end
 end
 
-@@format_xslt = File.expand_path(File.join(File.dirname(__FILE__), 'format.xslt'))
-
 def to_html html
   # Remove blank nodes for proper formatting
   doc = Nokogiri.XML(html) do |cfg|
