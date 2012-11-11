@@ -8,7 +8,7 @@ module Precious
       DEFAULT_AUTHOR = 'you'
 
       def title
-        @page.url_path.gsub("-", " ")
+        @page.url_path_title
       end
 
       def page_header

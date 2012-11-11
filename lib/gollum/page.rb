@@ -168,6 +168,27 @@ module Gollum
       path
     end
 
+    # Public: Defines title for page.rb
+    #
+    # Returns the String title
+    def url_path_title
+      metadata_title || url_path.gsub("-", " ")
+    end
+
+    # Public: Metadata title
+    #
+    # Set with <!-- --- title: New Title --> in page content
+    #
+    # Returns the String title or nil if not defined
+    def metadata_title
+      if metadata
+        title = metadata['title']
+        return title unless title.nil?
+      end
+
+      nil
+    end
+
     # Public: The url_path, but CGI escaped.
     #
     # Returns the String url_path

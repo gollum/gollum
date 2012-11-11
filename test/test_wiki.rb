@@ -198,6 +198,14 @@ context "Wiki page writing" do
     assert_equal cd[:email], @wiki.repo.commits.first.author.email
   end
 
+  test "page title override with metadata" do
+    @wiki.write_page("Gollum", :markdown, "<!-- --- title: Over -->", commit_details)
+
+    page = @wiki.page("Gollum")
+
+    assert_equal 'Over', page.url_path_title
+  end
+
   test "update page with format change" do
     @wiki.write_page("Gollum", :markdown, "# Gollum", commit_details)
 
