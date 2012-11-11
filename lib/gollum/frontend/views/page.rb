@@ -8,11 +8,15 @@ module Precious
       DEFAULT_AUTHOR = 'you'
 
       def title
-        extract_title(@content) || @page.url_path.gsub("-", " ")
+        @page.url_path.gsub("-", " ")
+      end
+
+      def page_header
+        page_header_from_content(@content) || title
       end
 
       def content
-        without_title(@content)
+        content_without_page_header(@content)
       end
 
       def author
@@ -126,7 +130,7 @@ module Precious
 
       # Extracts title from page if present.
       #
-      def extract_title(content)
+      def page_header_from_content(content)
         doc = build_document(content)
         title = find_header_node(doc)
         Sanitize.clean(title.to_html).strip unless title.empty?
@@ -134,7 +138,7 @@ module Precious
 
       # Returns page content without title if it was extracted.
       #
-      def without_title(content)
+      def content_without_page_header(content)
         doc = build_document(content)
         title = find_header_node(doc)
         title.remove unless title.empty?
