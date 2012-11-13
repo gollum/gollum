@@ -22,6 +22,7 @@ module Precious
             :date     => v.authored_date.strftime("%B %d, %Y"),
             :gravatar => Digest::MD5.hexdigest(v.author.email),
             :identicon => self._identicon_code(v.author.email),
+            :date_full=> v.authored_date,
           }
         end
       end
