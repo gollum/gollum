@@ -203,7 +203,9 @@ module Gollum
       @collapse_tree        = options.fetch :collapse_tree, false
       @css                  = options.fetch :css, false
       @h1_title             = options.fetch :h1_title, false
-      @user_icons           = options.fetch :user_icons, 'none'
+
+      @user_icons           = ['gravatar', 'identicon'].include?( options[:user_icons] ) ?
+                              options[:user_icons] : 'none'
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
