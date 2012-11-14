@@ -30,11 +30,7 @@
           <input type="checkbox" name="versions[]" value="{{id}}">
         </td>
         <td class="author">
-          <a href="javascript:void(0)">
-            <img src="https://secure.gravatar.com/avatar/{{gravatar}}?s=16"
-             alt="avatar: {{author}}" class="mini-gravatar">
-            <span class="username">{{author}}</span>
-          </a>
+            {{>author_template}}
         </td>
         <td class="commit-name">
           <span class="time-elapsed">{{date}}:</span>&nbsp;

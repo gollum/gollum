@@ -73,6 +73,10 @@ opts = OptionParser.new do |opts|
     wiki_options[:mathjax] = true
   end
 
+  opts.on("--user-icons [SOURCE]", "Set the history user icons. Valid values: gravatar, identicon, none. Default: none.") do
+    wiki_options[:user_icons] = source
+  end
+
   opts.on("--show-all", "Shows all files in file view. By default only valid pages are shown.") do
     wiki_options[:show_all] = true
   end

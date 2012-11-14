@@ -20,7 +20,30 @@ module Precious
             :author   => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
             :message  => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
             :date     => v.authored_date.strftime("%B %d, %Y"),
-            :gravatar => Digest::MD5.hexdigest(v.author.email) }
+            :gravatar => Digest::MD5.hexdigest(v.author.email),
+            :identicon => self._identicon_code(v.author.email),
+          }
+        end
+      end
+
+      def _identicon_code(blob)
+        sha_bytes = Digest::SHA1.hexdigest(blob + @request.host)[0,20]
+        # Thanks donpark's IdenticonUtil.java for this.
+        return  ((sha_bytes[0] & 0xFF) << 24) |
+                ((sha_bytes[1] & 0xFF) << 16) |
+                ((sha_bytes[2] & 0xFF) << 8) |
+                (sha_bytes[3] & 0xFF)
+      end
+
+      def use_identicon
+          @page.wiki.user_icons == 'identicon'
+      end
+
+      def partial(name)
+        if name == :author_template
+          self.class.partial("history_authors/#{@page.wiki.user_icons}")
+        else
+          super
         end
       end
 
