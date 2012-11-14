@@ -73,7 +73,7 @@ opts = OptionParser.new do |opts|
     wiki_options[:mathjax] = true
   end
 
-  opts.on("--user-icons [SOURCE]", "Set the history user icons. Valid values: gravatar, identicon, none. Default: none.") do
+  opts.on("--user-icons [SOURCE]", "Set the history user icons. Valid values: gravatar, identicon, none. Default: none.") do |source|
     wiki_options[:user_icons] = source
   end
 
