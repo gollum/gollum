@@ -27,7 +27,7 @@ module Precious
       end
 
       def _identicon_code(blob)
-        sha_bytes = Digest::SHA1.hexdigest(blob + @request.host)[0,20]
+        sha_bytes = Digest::SHA1.hexdigest(blob + @request.host)[0,20].unpack('C*')
         # Thanks donpark's IdenticonUtil.java for this.
         return  ((sha_bytes[0] & 0xFF) << 24) |
                 ((sha_bytes[1] & 0xFF) << 16) |
