@@ -612,7 +612,7 @@ module Gollum
     # Toggles mathjax.
     attr_reader :mathjax
 
-    # Toggles user icons. Default: 'gravatar'
+    # Toggles user icons. Default: 'none'
     attr_reader :user_icons
 
     # Toggles showing all files in files view. Default is false.
