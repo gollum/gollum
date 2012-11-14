@@ -1,6 +1,7 @@
 # ~*~ encoding: utf-8 ~*~
 # stdlib
 require 'digest/md5'
+require 'digest/sha1'
 require 'ostruct'
 
 # external

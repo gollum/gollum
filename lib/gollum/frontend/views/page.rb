@@ -93,6 +93,10 @@ module Precious
         @css
       end
 
+      def use_identicon
+        @page.wiki.user_icons == 'identicon'
+      end
+
       # Access to embedded metadata.
       #
       # Examples

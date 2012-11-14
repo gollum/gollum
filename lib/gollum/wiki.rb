@@ -163,6 +163,8 @@ module Gollum
     #           :ref - String the repository ref to retrieve pages from
     #           :ws_subs       - Array of chars to sub for ws in filenames.
     #           :mathjax       - Set to false to disable mathjax.
+    #           :user_icons    - Enable user icons on the history page. [gravatar, identicon, none].
+    #                            Default: none
     #           :show_all      - Show all files in file view, not just valid pages.
     #                            Default: false
     #           :collapse_tree - Start with collapsed file view. Default: false
@@ -201,6 +203,7 @@ module Gollum
       @collapse_tree        = options.fetch :collapse_tree, false
       @css                  = options.fetch :css, false
       @h1_title             = options.fetch :h1_title, false
+      @user_icons           = options.fetch :user_icons, 'none'
     end
 
     # Public: check whether the wiki's git repo exists on the filesystem.
@@ -608,6 +611,9 @@ module Gollum
 
     # Toggles mathjax.
     attr_reader :mathjax
+
+    # Toggles user icons. Default: 'gravatar'
+    attr_reader :user_icons
 
     # Toggles showing all files in files view. Default is false.
     # When false, only valid pages in the git repo are displayed.
