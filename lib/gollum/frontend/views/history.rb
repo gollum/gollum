@@ -26,13 +26,25 @@ module Precious
         end
       end
 
+      # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+
       def _identicon_code(blob)
-        sha_bytes = Digest::SHA1.hexdigest(blob + @request.host)[0,20].unpack('C*')
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(blob + @request.host)[0,20]].pack('H*').bytes.to_a
         # Thanks donpark's IdenticonUtil.java for this.
-        return  ((sha_bytes[0] & 0xFF) << 24) |
-                ((sha_bytes[1] & 0xFF) << 16) |
-                ((sha_bytes[2] & 0xFF) << 8) |
-                (sha_bytes[3] & 0xFF)
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+
+        return left_shift(b[0], 24) |
+               left_shift(b[1], 16) |
+               left_shift(b[2], 8)  |
+               b[3] & 0xFF
       end
 
       def use_identicon
