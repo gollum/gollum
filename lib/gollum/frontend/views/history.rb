@@ -33,9 +33,9 @@ module Precious
         (r & 2147483648) == 0 ? r : r - 4294967296
       end
 
-      def _identicon_code(blob)
+      def string_to_code string
         # sha bytes
-        b = [Digest::SHA1.hexdigest(blob + @request.host)[0,20]].pack('H*').bytes.to_a
+        b = [Digest::SHA1.hexdigest(string)[0,20]].pack('H*').bytes.to_a
         # Thanks donpark's IdenticonUtil.java for this.
         # Match the following Java code
         # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
@@ -45,6 +45,10 @@ module Precious
                left_shift(b[1], 16) |
                left_shift(b[2], 8)  |
                b[3] & 0xFF
+      end
+
+      def _identicon_code(blob)
+        string_to_code blob + @request.host
       end
 
       def use_identicon
