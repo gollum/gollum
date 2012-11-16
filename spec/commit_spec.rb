@@ -23,9 +23,7 @@ describe "A Commit object" do
   end
 
   it "should have a message" do
-    pending("commit#message returns nil for some reason.")
-    @stderr.puts @commit.message
-    @stderr.puts @commit.message.class
+    @commit.message.should match /added a pure-ruby git library and converted the cat_file commands to use it/
   end
 
   it "should have a count" do
