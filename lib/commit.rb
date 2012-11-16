@@ -9,24 +9,29 @@ module RJGit
     attr_reader :repo
     attr_reader :parents
     attr_reader :tree
-    attr_reader :author
+    attr_reader :actor
     attr_reader :authored_date
     attr_reader :committer
     attr_reader :committed_date
     attr_reader :message
     attr_reader :short_message
+    attr_reader :revcommit
+    attr_reader :count
   
     def initialize(commit)
+      @revcommit = commit
       # @repo = repo
-      @id = commit.get_id
+      @id = @revcommit.get_id.to_string
       # @parents = parents.map { |p| Commit.create(repo, :id => p) }
       # @tree = Tree.create(repo, :id => tree)
-      @author = commit.author_ident
+      @actor = Actor.new(@revcommit.get_author_ident)
       # @authored_date = authored_date
       # @committer = committer
-      @committed_date = Time.at(commit.commit_time)
-      @message = commit.full_message
-      @short_message = commit.full_message.split("\n").select { |x| !x.strip.empty? }[0] || ''
+      @committed_date = Time.at(@revcommit.commit_time)
+      @message = @revcommit.get_full_message
+      @short_message = @revcommit.get_short_message
+      @count = @revcommit.get_parent_count
+      # @short_message = @revcommit.full_message.split("\n").select { |x| !x.strip.empty? }[0] || ''
     end
   
     def self.find_all(repo, ref, options)

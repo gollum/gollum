@@ -5,13 +5,20 @@ module RJGit
 
     attr_reader :name
     attr_reader :email
-
+    attr_reader :person_ident
+    
     def initialize(name, email)
       @name = name
       @email = email
     end
     alias_method :to_s, :name
 
+    def initialize(person_ident)
+      @name = person_ident.get_name
+      @email = person_ident.get_email_address
+      @person_ident = person_ident
+    end
+    
     # Create an Actor from a string.
     #
     # str - The String in this format: 'John Doe <jdoe@example.com>'
