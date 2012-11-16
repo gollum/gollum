@@ -15,6 +15,14 @@ module RJGit
       @repo = repository
       @git = Git.new(repository)
     end
+    
+    def method_missing(name, *args)
+      begin
+	@git.send(name, *args)
+      rescue NoMethodError
+	return super
+      end
+    end
   
     def log
       logs = @git.log
