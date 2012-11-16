@@ -2,14 +2,15 @@ module RJGit
 
   class Actor
     # PersonIdent in JGit
+    import 'org.eclipse.jgit.lib.PersonIdent'
 
     attr_reader :name
     attr_reader :email
     attr_reader :person_ident
     
-    def initialize(name, email)
-      @name = name
-      @email = email
+    def self.new_from_name_and_email(name, email)
+      pi = PersonIdent.new(name, email)
+      return self.new(pi)
     end
     alias_method :to_s, :name
 
@@ -25,12 +26,9 @@ module RJGit
     #
     # Returns Git::Actor.
     def self.from_string(str)
-      case str
-        when /<.+>/
-          m, name, email = *str.match(/(.*) <(.+?)>/)
-          return self.new(name, email)
-        else
-          return self.new(str, nil)
+      if str =~ /<.+>/
+        m, name, email = *str.match(/(.*) <(.+?)>/)
+        return self.new_from_name_and_email(name, email)
       end
     end
 

@@ -25,6 +25,10 @@ describe "A Commit object" do
   it "should have a message" do
     @commit.message.should match /added a pure-ruby git library and converted the cat_file commands to use it/
   end
+  
+  it "should have a short message" do
+    @commit.short_message.should match /pure-ruby git library/
+  end
 
   it "should have a count" do
     @commit.count.should == 1

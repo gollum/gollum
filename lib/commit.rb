@@ -31,7 +31,6 @@ module RJGit
       @message = @revcommit.get_full_message
       @short_message = @revcommit.get_short_message
       @count = @revcommit.get_parent_count
-      # @short_message = @revcommit.full_message.split("\n").select { |x| !x.strip.empty? }[0] || ''
     end
   
     def self.find_all(repo, ref, options)
