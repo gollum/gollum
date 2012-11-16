@@ -4,6 +4,8 @@ module RJGit
   import 'org.eclipse.jgit.lib.RepositoryBuilder'
   import 'org.eclipse.jgit.storage.file.FileRepository'
   import 'org.eclipse.jgit.treewalk.TreeWalk'
+  import 'org.eclipse.jgit.treewalk.filter.PathFilter'
+  import 'org.eclipse.jgit.lib.Constants'
 
   class Repo
 
@@ -66,24 +68,22 @@ module RJGit
     end
 
     # Convenience method to retrieve a Blob by name
-    def blob(name)
-      tree_id = @repo.resolve("HEAD^{tree}")
-      File.open('/tmp/rjgit.log', 'w') {|f| f.write(tree_id) }
-      #puts "tree_id: " + tree_id unless tree_id.nil?
-      return nil if tree_id.nil?
-      walk = TreeWalk.new(@repo)
-      walk.addTree(tree_id)
-      walk.setRecursive(true)
+    def blob(file_path)
+      lastCommitHash = @repo.resolve(Constants::HEAD)
+      return nil if lastCommitHash.nil?
 
-      while (walk.next())
-        mode = walk.getFileMode(0)
-        if mode.equals(REG_FILE_TYPE)
-          # if name == walk.getNameString()
-          #   File.open('/tmp/rjgit.log', 'a') {|f| f.write("Yay! #{name}") }
-          # end
-        end
+      walk = RevWalk.new(@repo)
+      commit = walk.parseCommit(lastCommitHash)
+      treeWalk = TreeWalk.new(@repo)
+      treeWalk.addTree(commit.getTree)
+      treeWalk.setRecursive(true)
+      treeWalk.setFilter(PathFilter.create(file_path))
+      if treeWalk.next
+        revBlob = walk.lookupBlob(treeWalk.objectId(0));
+        revBlob.nil? ? nil : Blob.new(@repo, revBlob)
+      else
+        nil
       end
-
     end
 
     # Convenience method to retrieve a Tree by name

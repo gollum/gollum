@@ -1,13 +1,17 @@
 module RJGit
-  
+
   class Blob
     DEFAULT_MIME_TYPE = "text/plain"
 
     attr_reader :id
     attr_reader :mode
     attr_reader :name
-    
-    
+
+    def initialize(repo, blob)
+      @repo = repo
+      @backingBlob = blob
+    end
+
     # The size of this blob in bytes
     #
     # Returns Integer
@@ -29,9 +33,9 @@ module RJGit
       guesses = MIME::Types.type_for(self.name) rescue []
       guesses.first ? guesses.first.simplified : DEFAULT_MIME_TYPE
     end
-    
+
     def data
     end
-    
+
   end
 end

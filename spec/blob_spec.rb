@@ -6,8 +6,6 @@ describe Blob do
     @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
   end
 
-  it "should have a name"
-
   it "should have a mode"
 
   it "should return blob contents" do
@@ -42,5 +40,6 @@ describe Blob do
 
   after(:all) do
     remove_temp_repo(File.dirname(@temp_repo_path))
+    nil
   end
 end

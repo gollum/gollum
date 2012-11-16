@@ -68,17 +68,20 @@ describe Repo do
   it "should add files to itself"
 
   it "should return a Blob by name" do
-    blob = @bare_repo.blob('Manifest.txt')
+    # blob = @bare_repo.blob('Manifest.txt')
+    blob = @bare_repo.blob('lib/grit.rb')
+    blob.should_not be_nil
+
     # tree_id.should be_an ObjectId
     # blob.should be_a RevBlob
     # blob.name.should == "Manifest.txt"
-    pending("Not finished implementing the example.")
+    # pending("Not finished implementing the example.")
   end
-  
+
   it "should return a Tree by name" do
     pending
   end
-  
+
   after(:all) do
     remove_temp_repo(File.dirname(@temp_repo_path))
     remove_temp_repo(File.dirname(@temp_bare_repo_path))
