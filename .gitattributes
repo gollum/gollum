@@ -1,4 +1,11 @@
 # https://help.github.com/articles/dealing-with-line-endings
+#
+# For Mac & Linux
+# git config --global core.autocrlf input
+#
+# For windows
+# git config --global core.autocrlf true
+#
 # Set default behaviour, in case users don't have core.autocrlf set.
 * text=auto
 
