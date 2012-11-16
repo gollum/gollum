@@ -59,10 +59,6 @@ module RJGit
       return @git.branch_list
     end
 
-    def description
-      return "blah"
-    end
-
     def add(fpattern)
       @git.add(fpattern)
     end
