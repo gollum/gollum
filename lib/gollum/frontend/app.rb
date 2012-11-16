@@ -196,12 +196,10 @@ module Precious
       page_dir = settings.wiki_options[:page_file_dir].to_s
       path = clean_url(::File.join(page_dir, path)) unless path.start_with?(page_dir)
 
-      # write_page is not directory aware so use wiki_options to emulate dir support.
-      wiki_options = settings.wiki_options.merge({ :page_file_dir => path })
-      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      wiki = wiki_new
 
       begin
-        wiki.write_page(name, format, params[:content], commit_message)
+        wiki.write_page(name, format, params[:content], commit_message, path)
         redirect to("/#{clean_url(::File.join(path,name))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"

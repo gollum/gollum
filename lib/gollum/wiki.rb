@@ -282,10 +282,11 @@ module Gollum
     #          :committer - Optional Gollum::Committer instance.  If provided,
     #                       assume that this operation is part of batch of
     #                       updates and the commit happens later.
-    #
+    # dir    - The String subdirectory of the Gollum::Page without any
+    #          prefix or suffix slashes (e.g. "foo/bar").
     # Returns the String SHA1 of the newly written version, or the
     # Gollum::Committer instance if this is part of a batch update.
-    def write_page(name, format, data, commit = {})
+    def write_page(name, format, data, commit = {}, dir = '')
       multi_commit = false
 
       committer = if obj = commit[:committer]
@@ -297,7 +298,7 @@ module Gollum
 
       filename = Gollum::Page.cname(name)
 
-      committer.add_to_index('', filename, format, data)
+      committer.add_to_index(dir, filename, format, data)
 
       committer.after_commit do |index, sha|
         @access.refresh
