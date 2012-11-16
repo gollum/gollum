@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage          = ""
   s.require_paths     = ["lib"]
   s.files             = ["README.md", "Gemfile", "lib/rjgit.rb", "lib/ref.rb", "lib/repo.rb", "lib/version.rb", "lib/git.rb", "lib/commit.rb",
-                          "lib/java/jars/org.eclipse.jgit-1.3.0.201202151440-r.jar"]
+                          "lib/tree.rb", "lib/blob.rb", "lib/config.rb", "lib/java/jars/org.eclipse.jgit-1.3.0.201202151440-r.jar"]
   s.has_rdoc          = true
   s.extra_rdoc_files  = ["README.md"]
 
