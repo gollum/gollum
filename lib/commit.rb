@@ -53,5 +53,4 @@ module RJGit
     end    
     
   end
-
 end

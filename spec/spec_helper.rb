@@ -30,7 +30,7 @@ def create_temp_repo(clone_path)
 end
 
 def remove_temp_repo(path)
-  FileUtils.remove_dir(path) if File.exists?(path)
+  FileUtils.rm_rf(path) if File.exists?(path)
 end
 
 # Require any custom RSpec matchers

@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 describe Tree do
-  
+
   before(:each) do
     #@tree = repo.commits.first.tree
   end
-  
-  it "should have contents" 
-  
-  it "should have an id" 
-  
-  it "should have a mode" 
 
-  it "should return data as a string" 
-  
+  it "should have contents"
+
+  it "should have an id"
+
+  it "should have a mode"
+
+  it "should return data as a string"
+
   describe "content_from String" do
     it "should return a tree" do
       pending
@@ -24,7 +24,7 @@ describe Tree do
       # tree.mode.should == "040000"
       # tree.name.should == "test"
     end
-    
+
     it "should return a blob" do
       pending
       # text = fixture('ls_tree_b').split("\n").first
@@ -34,7 +34,7 @@ describe Tree do
       # tree.mode.should == "100644"
       # tree.name.should == "grit.rb"
     end
-    
+
   end
-  
+
 end
