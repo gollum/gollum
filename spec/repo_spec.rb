@@ -6,7 +6,7 @@ describe Repo do
     @create_new = true
     @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
     @temp_bare_repo_path = create_temp_repo(TEST_BARE_REPO_PATH)
-    @repo = Repo.new(@temp_repo_path)
+    @repo = Repo.new(@temp_repo_path) # Test with both a bare and a non-bare repository
     @bare_repo = Repo.new(@temp_bare_repo_path, {:bare => true}, false)
   end
 
@@ -51,20 +51,13 @@ describe Repo do
   end
 
   it "should list the current branch" do
-    @repo.branch.should == "master"
+    @repo.branch.should == "refs/heads/master"
   end
 
   it "should list its branches" do
     result = @repo.branches
     result.should be_an Array
-    pending("Repo#branches currently returns []. Needs implementation.")
-    result.should include("master")
-  end
-
-  it "should return its description" do
-    result = @repo.description
-    pending("repo_description fixture does not yet exist")
-    result.should eql fixture("repo_description")
+    result.should include("refs/heads/master")
   end
 
   it "should list its commits" do
@@ -81,6 +74,13 @@ describe Repo do
     # blob.name.should == "Manifest.txt"
     pending("Not finished implementing the example.")
   end
-
-  it "should return a Tree by name"
+  
+  it "should return a Tree by name" do
+    pending
+  end
+  
+  after(:all) do
+    remove_temp_repo(File.dirname(@temp_repo_path))
+    remove_temp_repo(File.dirname(@temp_bare_repo_path))
+  end
 end

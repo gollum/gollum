@@ -50,11 +50,11 @@ module RJGit
     end
 
     def branch
-      @repo.get_branch
+      @repo.get_full_branch
     end
 
     def branches
-      return []
+      return @git.branch_list
     end
 
     def description
