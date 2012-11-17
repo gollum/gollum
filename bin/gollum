@@ -185,6 +185,6 @@ else
       end
     end
     # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
-    Rack::Server.new(:app => MapGollum.new(base_path), :Port => options['port']).start
+    Rack::Server.new(:app => MapGollum.new(base_path), :Port => options['port'], :Host => options['bind']).start
   end
 end
