@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rack/test'
 require 'test/unit'
 require 'shoulda'
-require 'mocha'
+require 'mocha/setup'
 require 'fileutils'
 
 dir = File.dirname(File.expand_path(__FILE__))
