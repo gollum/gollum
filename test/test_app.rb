@@ -185,8 +185,6 @@ context "Frontend" do
     post "/create", :content => 'abc', :page => name,
       :format => 'markdown', :message => 'def'
 
-    follow_redirect!
-
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -385,15 +383,10 @@ context "Frontend with lotr" do
   end
 
   test "create pages within sub-directories using page file dir" do
-    Precious::App.set(:wiki_options, { :page_file_dir => 'wiki' })
-
     post "/create", :content => 'one two', :page => 'base',
-      :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+      :path => 'wiki/Mordor', :format => 'markdown', :message => 'oooh, scary'
     assert_equal 'http://example.org/wiki/Mordor/base', last_response.headers['Location']
     get "/wiki/Mordor/base"
-
-    # Reset page_file_dir after request but before matching.
-    Precious::App.set(:wiki_options, { :page_file_dir => nil })
 
     assert_match /one two/, last_response.body
   end
