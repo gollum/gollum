@@ -18,9 +18,9 @@ module RJGit
     
     def method_missing(name, *args)
       begin
-	@git.send(name, *args)
+	      @git.send(name, *args)
       rescue NoMethodError
-	return super
+	      return super
       end
     end
   
