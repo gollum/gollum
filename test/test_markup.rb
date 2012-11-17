@@ -783,6 +783,7 @@ end
     ]
   end
 
+if ENV['ASCIIDOC']
   #########################################################################
   # Asciidoc
   #########################################################################
@@ -794,6 +795,7 @@ end
   test "internal links with asciidoc" do 
     compare("= Book Title\n\n[[anid]]\n== Heading", '<div class="sect1"><h2 id="wiki-anid">Heading<a class="anchor" id="Heading" href="#Heading"></a></h2><div class="sectionbody"></div></div>', 'asciidoc')
   end
+end
 
   #########################################################################
   #
