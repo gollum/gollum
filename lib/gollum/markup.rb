@@ -395,12 +395,12 @@ module Gollum
     # name - The String absolute or relative path of the file.
     #
     # Returns the Gollum::File or nil if none was found.
-    def find_file(name)
+    def find_file(name, version=@version)
       if name =~ /^\//
-        @wiki.file(name[1..-1], @version)
+        @wiki.file(name[1..-1], version)
       else
         path = @dir == '.' ? name : ::File.join(@dir, name)
-        @wiki.file(path, @version)
+        @wiki.file(path, version)
       end
     end
 
@@ -435,6 +435,10 @@ module Gollum
     #
     # Gitcode - fetch code from github search path and replace the contents
     #           to a code-block that gets run the next parse.
+    #           Acceptable formats:
+    #              ```language:local-file.ext```
+    #              ```language:/abs/other-file.ext```
+    #              ```language:github/gollum/master/somefile.txt```
     #
     #########################################################################
 
@@ -445,12 +449,12 @@ module Gollum
         uri = $2 || ''
         # Detect local file.
         if uri[0..6] != 'github/'
-          if uri[0..0] != '/' # relative file
-            contents = @wiki.page(uri).formatted_data
-          else # use full path
-            contents = @wiki.paged( extract_name( clean_url( uri ) ),
-             '/' + clean_url( extract_path( uri ) ) ).formatted_data
-          end
+            if file = self.find_file(uri, @wiki.ref)
+              contents = file.raw_data
+            else
+              # How do we communicate a render error?
+              next "File not found: #{Rack::Utils::escape_html(uri)}"
+            end
         else
           contents = Gollum::Gitcode.new(uri).contents
         end
