@@ -282,10 +282,6 @@ module Precious
       mustache :compare
     end
 
-    get %r{^/(javascript|css|images)} do
-      halt 404
-    end
-
     get %r{/(.+?)/([0-9a-f]{40})} do
       file_path = params[:captures][0]
       version   = params[:captures][1]
