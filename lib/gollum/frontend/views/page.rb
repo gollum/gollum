@@ -89,10 +89,6 @@ module Precious
         @mathjax
       end
 
-      def css # custom css
-        @css
-      end
-
       def use_identicon
         @page.wiki.user_icons == 'identicon'
       end
