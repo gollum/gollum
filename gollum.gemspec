@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 1.8.7"
 
   s.name              = 'gollum'
-  s.version           = '2.4.0'
-  s.date              = '2012-11-11'
+  s.version           = '2.4.1'
+  s.date              = '2012-11-19'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -69,13 +69,13 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/public/gollum/css/gollum.css
     lib/gollum/frontend/public/gollum/css/ie7.css
     lib/gollum/frontend/public/gollum/css/template.css
-    lib/gollum/frontend/public/gollum/images/man_24.png
     lib/gollum/frontend/public/gollum/images/dirty-shade.png
     lib/gollum/frontend/public/gollum/images/fileview/document.png
     lib/gollum/frontend/public/gollum/images/fileview/folder-horizontal.png
     lib/gollum/frontend/public/gollum/images/fileview/toggle-small-expand.png
     lib/gollum/frontend/public/gollum/images/fileview/toggle-small.png
     lib/gollum/frontend/public/gollum/images/icon-sprite.png
+    lib/gollum/frontend/public/gollum/images/man_24.png
     lib/gollum/frontend/public/gollum/images/para.png
     lib/gollum/frontend/public/gollum/images/pin-16.png
     lib/gollum/frontend/public/gollum/images/pin-20.png
@@ -440,14 +440,14 @@ Gem::Specification.new do |s|
     lib/gollum/frontend/templates/error.mustache
     lib/gollum/frontend/templates/file_view.mustache
     lib/gollum/frontend/templates/history.mustache
+    lib/gollum/frontend/templates/history_authors/gravatar.mustache
+    lib/gollum/frontend/templates/history_authors/identicon.mustache
+    lib/gollum/frontend/templates/history_authors/none.mustache
     lib/gollum/frontend/templates/layout.mustache
     lib/gollum/frontend/templates/page.mustache
     lib/gollum/frontend/templates/pages.mustache
     lib/gollum/frontend/templates/search.mustache
     lib/gollum/frontend/templates/searchbar.mustache
-    lib/gollum/frontend/templates/history_authors/gravatar.mustache
-    lib/gollum/frontend/templates/history_authors/identicon.mustache
-    lib/gollum/frontend/templates/history_authors/none.mustache
     lib/gollum/frontend/uri_encode_component.rb
     lib/gollum/frontend/views/compare.rb
     lib/gollum/frontend/views/create.rb
