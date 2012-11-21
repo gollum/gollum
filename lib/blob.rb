@@ -1,6 +1,8 @@
 module RJGit
 
-  class Blob
+  require 'delegate'
+  
+  class Blob < Delegator
     DEFAULT_MIME_TYPE = "text/plain"
 
     attr_reader :id
@@ -10,8 +12,12 @@ module RJGit
     def initialize(repo, blob)
       @repo = repo
       @backingBlob = blob
+      super(@backingBlob)
     end
 
+    def __getobj__ ; @backingBlob ; end    
+    def __setobj__(obj) ; @backingBlob = obj ; end
+    
     # The size of this blob in bytes
     #
     # Returns Integer
@@ -35,6 +41,24 @@ module RJGit
     end
 
     def data
+    end
+    
+    def self.find_blob(repository, file_path, branch=Constants::HEAD)
+      lastCommitHash = repository.resolve(branch)
+      return nil if lastCommitHash.nil?
+
+      walk = RevWalk.new(repository)
+      commit = walk.parseCommit(lastCommitHash)
+      treeWalk = TreeWalk.new(repository)
+      treeWalk.addTree(commit.getTree)
+      treeWalk.setRecursive(true)
+      treeWalk.setFilter(PathFilter.create(file_path))
+      if treeWalk.next
+        revBlob = walk.lookupBlob(treeWalk.objectId(0));
+        revBlob.nil? ? nil : Blob.new(repository, revBlob)
+      else
+        nil
+      end
     end
 
   end

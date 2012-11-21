@@ -11,7 +11,7 @@ describe RubyGit do
   
   context "delegating missing methods to the underlying jgit Git object" do
      it "should delegate the method to the JGit object" do
-       @git.send(:rebase).should be_a org.eclipse.jgit.api.RebaseCommand # .rebase method not implemented in RubyGit, but is implemented in the underlying JGit object
+       @git.send(:rebase).should be_a org.eclipse.jgit.api.RebaseCommand # :rebase method not implemented in RubyGit, but is implemented in the underlying JGit object
      end
      
      it "should throw an exception if the JGit object does not know the method" do

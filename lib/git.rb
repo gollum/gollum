@@ -6,23 +6,20 @@ module RJGit
   import 'org.eclipse.jgit.api.Git'
   import 'org.eclipse.jgit.api.AddCommand'
 
-  class RubyGit
+  require 'forwardable'
   
+  class RubyGit
+    
+    extend Forwardable
     attr_accessor :git
     attr_accessor :repo
+    def_delegator :@git, :rebase
   
-    def initialize(repository)
+    def initialize(repository) 
       @repo = repository
       @git = Git.new(repository)
     end
-    
-    def method_missing(name, *args)
-      begin
-	      @git.send(name, *args)
-      rescue NoMethodError
-	      return super
-      end
-    end
+
   
     def log
       logs = @git.log

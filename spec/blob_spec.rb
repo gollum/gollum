@@ -4,11 +4,17 @@ describe Blob do
 
   before(:all) do
     @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+    @repo = Repo.new(@temp_repo_path)
+    @blob = Blob.find_blob(@repo.repo, 'materialist.txt')
   end
 
   it "should have a mode"
 
+  it "should have a size in bytes"   
+  
   it "should return blob contents" do
+    $stderr.puts @blob
+    $stderr.puts @blob.get_type
     pending
     # Git.any_instance.expects(:cat_file).returns(fixture('cat_file_blob'))
     # blob = Blob.create(@repo, :id => 'abc')

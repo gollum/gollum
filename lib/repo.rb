@@ -38,6 +38,10 @@ module RJGit
       @git = RubyGit.new(@repo)
     end
 
+    def resolve(const)
+      @repo.resolve(const)
+    end
+    
     def bare?
       @repo.is_bare
     end
@@ -65,21 +69,7 @@ module RJGit
 
     # Convenience method to retrieve a Blob by name
     def blob(file_path)
-      lastCommitHash = @repo.resolve(Constants::HEAD)
-      return nil if lastCommitHash.nil?
-
-      walk = RevWalk.new(@repo)
-      commit = walk.parseCommit(lastCommitHash)
-      treeWalk = TreeWalk.new(@repo)
-      treeWalk.addTree(commit.getTree)
-      treeWalk.setRecursive(true)
-      treeWalk.setFilter(PathFilter.create(file_path))
-      if treeWalk.next
-        revBlob = walk.lookupBlob(treeWalk.objectId(0));
-        revBlob.nil? ? nil : Blob.new(@repo, revBlob)
-      else
-        nil
-      end
+      Blob.find_blob(@repo, file_path)
     end
 
     # Convenience method to retrieve a Tree by name
