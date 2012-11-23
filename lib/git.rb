@@ -9,17 +9,18 @@ module RJGit
   require 'forwardable'
   
   class RubyGit
-    
     extend Forwardable
+    
     attr_accessor :git
     attr_accessor :repo
-    def_delegator :@git, :rebase
   
     def initialize(repository) 
       @repo = repository
       @git = Git.new(repository)
     end
-
+    
+    java_methods = Git.java_class.declared_instance_methods.map{ |method| method.name.to_sym }
+    def_delegators :@git, *java_methods
   
     def log
       logs = @git.log
