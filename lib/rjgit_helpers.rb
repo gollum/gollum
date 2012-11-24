@@ -8,5 +8,4 @@ module RJGit
     def_delegators delegate_name, *java_methods
   end
 
-  
 end

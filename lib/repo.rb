@@ -15,6 +15,8 @@ module RJGit
     attr_accessor :repo
     attr_accessor :path
 
+    RJGit.delegate_to(Repository, :@repo)
+    
     TREE_TYPE = 0040000
     SYMLINK_TYPE = 0120000
     FILE_TYPE = 0100000
@@ -39,8 +41,6 @@ module RJGit
       @repo.create(bare) if create
       @git = RubyGit.new(@repo)
     end
-
-    RJGit.delegate_to(Repository, :@repo)
     
     def bare?
       @repo.is_bare
