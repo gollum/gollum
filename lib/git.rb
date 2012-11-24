@@ -7,9 +7,9 @@ module RJGit
   import 'org.eclipse.jgit.api.AddCommand'
 
   require 'forwardable'
+  require 'rjgit_helpers'
   
   class RubyGit
-    extend Forwardable
     
     attr_accessor :git
     attr_accessor :repo
@@ -19,8 +19,9 @@ module RJGit
       @git = Git.new(repository)
     end
     
-    java_methods = Git.java_class.declared_instance_methods.map{ |method| method.name.to_sym }
-    def_delegators :@git, *java_methods
+    RJGit.delegate_to(Git, :@git)
+    #java_methods = Git.java_class.declared_instance_methods.map{ |method| method.name.to_sym }
+    #def_delegators :@git, *java_methods
   
     def log
       logs = @git.log

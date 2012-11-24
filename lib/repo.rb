@@ -7,10 +7,9 @@ module RJGit
   import 'org.eclipse.jgit.treewalk.filter.PathFilter'
   import 'org.eclipse.jgit.lib.Constants'
 
-  require 'forwardable'
+  require 'rjgit_helpers'
   
   class Repo
-    extend Forwardable
     
     attr_accessor :git
     attr_accessor :repo
@@ -41,8 +40,7 @@ module RJGit
       @git = RubyGit.new(@repo)
     end
 
-    java_methods = Repository.java_class.declared_instance_methods.map{ |method| method.name.to_sym }
-    def_delegators :@repo, *java_methods
+    RJGit.delegate_to(Repository, :@repo)
     
     def bare?
       @repo.is_bare
