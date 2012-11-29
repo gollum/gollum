@@ -1,22 +1,19 @@
 module RJGit
-
-  require 'delegate'
   
-  class Blob < Delegator
+  import 'org.eclipse.jgit.revwalk.RevBlob'
+  
+  class Blob 
     DEFAULT_MIME_TYPE = "text/plain"
 
-    attr_reader :id
-    attr_reader :mode
-    attr_reader :name
+    attr_reader :id, :mode, :name, :blob
+    RJGit.delegate_to(RevBlob, :@blob)
 
-    def initialize(repo, blob)
+    def initialize(repo, name, blob)
       @repo = repo
-      @backingBlob = blob
-      super(@backingBlob)
+      @blob = blob
+      @name = name
+      @id = ObjectId.toString(blob.get_id)
     end
-
-    def __getobj__ ; @backingBlob ; end    
-    def __setobj__(obj) ; @backingBlob = obj ; end
     
     # The size of this blob in bytes
     #
@@ -29,7 +26,7 @@ module RJGit
     #
     # Returns String
     def data
-      @data ||= @repo.git.cat_file({:p => true}, id)
+      @data ||= RJGit::Porcelain.cat_file(@repo, @blob) #@repo.git.cat_file({:p => true}, id)
     end
 
     # The mime type of this file (based on the filename)
@@ -40,8 +37,6 @@ module RJGit
       guesses.first ? guesses.first.simplified : DEFAULT_MIME_TYPE
     end
 
-    def data
-    end
     
     def self.find_blob(repository, file_path, branch=Constants::HEAD)
       lastCommitHash = repository.resolve(branch)
@@ -55,7 +50,7 @@ module RJGit
       treeWalk.setFilter(PathFilter.create(file_path))
       if treeWalk.next
         revBlob = walk.lookupBlob(treeWalk.objectId(0));
-        revBlob.nil? ? nil : Blob.new(repository, revBlob)
+        revBlob.nil? ? nil : Blob.new(repository, File.basename(file_path), revBlob)
       else
         nil
       end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 # Useful command git ls-tree HEAD
 
-describe RubyGit do
+describe RJGit do
   before(:all) do
     @temp_bare_repo_path = create_temp_repo(TEST_BARE_REPO_PATH)
     @bare_repo = Repo.new(@temp_bare_repo_path)
@@ -17,6 +17,13 @@ describe RubyGit do
      it "should throw an exception if the JGit object does not know the method" do
        expect { @git.send(:non_existent_method) }.to raise_error(NoMethodError)
      end
+  end
+  
+  describe Porcelain do
+    it "should mimic git-cat-file" do
+      blob = @bare_repo.blob('lib/grit.rb')
+      RJGit::Porcelain.cat_file(@bare_repo, blob.blob).should =~ /# core\n/
+    end
   end
   
   after(:all) do

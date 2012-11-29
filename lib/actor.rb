@@ -1,16 +1,16 @@
 module RJGit
 
+  # PersonIdent in JGit
+  import 'org.eclipse.jgit.lib.PersonIdent'
+  
   class Actor
-    # PersonIdent in JGit
-    import 'org.eclipse.jgit.lib.PersonIdent'
 
-    attr_reader :name
-    attr_reader :email
-    attr_reader :person_ident
+    attr_reader :name, :email, :person_ident
+    
+    RJGit.delegate_to(PersonIdent, :@person_ident)
     
     def self.new_from_name_and_email(name, email)
-      pi = PersonIdent.new(name, email)
-      return self.new(pi)
+      return self.new(PersonIdent.new(name, email))
     end
     alias_method :to_s, :name
 
@@ -50,10 +50,6 @@ module RJGit
         offset.abs % 60]
     end
 
-    # Pretty object inspection
-    def inspect
-      %Q{#<Grit::Actor "#{@name} <#{@email}>">}
-    end
-  end # Actor
+  end 
 
-end # Grit
+end

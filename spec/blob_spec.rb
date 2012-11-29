@@ -13,12 +13,7 @@ describe Blob do
   it "should have a size in bytes"   
   
   it "should return blob contents" do
-    # $stderr.puts @blob
-    # $stderr.puts @blob.get_type
-    pending
-    # Git.any_instance.expects(:cat_file).returns(fixture('cat_file_blob'))
-    # blob = Blob.create(@repo, :id => 'abc')
-    # blob.data.should == "Hello world"
+    @blob.data.should match /Baudrillardist hyperreality/
   end
 
   it "should return file size" do

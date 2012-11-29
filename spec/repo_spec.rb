@@ -68,14 +68,11 @@ describe Repo do
   it "should add files to itself"
 
   it "should return a Blob by name" do
-    # blob = @bare_repo.blob('Manifest.txt')
     blob = @bare_repo.blob('lib/grit.rb')
     blob.should_not be_nil
-
-    # tree_id.should be_an ObjectId
-    # blob.should be_a RevBlob
-    # blob.name.should == "Manifest.txt"
-    # pending("Not finished implementing the example.")
+    blob.id.should match /77aa887449c28a922a660b2bb749e4127f7664e5/
+    blob.name.should == 'grit.rb'
+    blob.blob.should be_a org.eclipse.jgit.revwalk.RevBlob
   end
 
   it "should return a Tree by name" do

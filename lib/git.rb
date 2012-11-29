@@ -6,7 +6,6 @@ module RJGit
   import 'org.eclipse.jgit.api.Git'
   import 'org.eclipse.jgit.api.AddCommand'
 
-  require 'rjgit_helpers'
   
   class RubyGit
     

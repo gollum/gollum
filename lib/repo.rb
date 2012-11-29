@@ -7,7 +7,6 @@ module RJGit
   import 'org.eclipse.jgit.treewalk.filter.PathFilter'
   import 'org.eclipse.jgit.lib.Constants'
 
-  require 'rjgit_helpers'
   
   class Repo
     
