@@ -23,6 +23,9 @@ require File.expand_path('../gollum/sanitization', __FILE__)
 require File.expand_path('../gollum/web_sequence_diagram', __FILE__)
 require File.expand_path('../gollum/frontend/uri_encode_component', __FILE__)
 
+# Set ruby to UTF-8 mode
+$KCODE = 'U'
+
 module Gollum
   VERSION = '2.4.1'
 

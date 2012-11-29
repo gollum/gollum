@@ -38,6 +38,10 @@ context "Frontend" do
     assert_equal 'm-plus-f', 'μ†ℱ'.to_url
   end
 
+  test 'utf-8 kcode' do
+    assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
+  end
+
   test "retain edit information" do
     page1 = 'page1'
     user1 = 'user1'
