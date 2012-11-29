@@ -15,6 +15,29 @@ context "Frontend" do
     FileUtils.rm_rf(@path)
   end
 
+  test "urls transform unicode" do
+    header = '_Header'
+    footer = '_Footer'
+    sidebar = '_Sidebar'
+
+    # header, footer, and sidebar must be preserved
+    # or gollum will not recognize them
+    assert_equal header, header.to_url
+    assert_equal footer, footer.to_url
+    assert_equal sidebar, sidebar.to_url
+
+    # spaces are converted to dashes in URLs
+    # and in file names saved to disk
+    # urls are not case sensitive
+    assert_equal 'title-space', 'Title Space'.to_url
+
+    # ascii only file names prevent UTF8 issues
+    # when using git repos across operating systems
+    # as this test demonstrates, translation is not
+    # great
+    assert_equal 'm-plus-f', 'μ†ℱ'.to_url
+  end
+
   test "retain edit information" do
     page1 = 'page1'
     user1 = 'user1'

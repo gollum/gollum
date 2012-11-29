@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency('sanitize', '~> 2.0.3')
   s.add_dependency('nokogiri', '~> 1.5.5')
   s.add_dependency('useragent', '~> 0.4.13')
-  s.add_dependency('stringex', '~> 1.4.0')
+  s.add_dependency('stringex', '~> 1.5.0')
 
   s.add_development_dependency('RedCloth', '~> 4.2.9')
   s.add_development_dependency('mocha', '~> 0.13.0')

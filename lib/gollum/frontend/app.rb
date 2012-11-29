@@ -18,8 +18,7 @@ class String
   # _Header => header which causes errors
   def to_url
     return nil if self.nil?
-    return self if ['_Header', '_Footer', '_Sidebar'].include? self
-    upstream_to_url
+    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar']
   end
 end
 
