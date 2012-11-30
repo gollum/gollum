@@ -87,6 +87,16 @@
     font-family: 'Monaco', 'Courier New', Courier, monospace;
   }
 
+  #gollum-dialog-dialog-body fieldset .field span.context {
+    font-size: .9em;
+    color: #666;
+  }
+    #gollum-dialog-dialog-body fieldset .field span.context span.path {
+      font-family: 'Monaco', 'Courier New', Courier, monospace;
+      font-weight: bold;
+    }
+
+
 #gollum-dialog-dialog-body fieldset .field:last-child {
   margin: 0 0 1em 0;
 }
