@@ -27,7 +27,7 @@ require File.expand_path('../gollum/frontend/uri_encode_component', __FILE__)
 $KCODE = 'U'
 
 module Gollum
-  VERSION = '2.4.1'
+  VERSION = '2.4.2'
 
   def self.assets_path
     ::File.expand_path('gollum/frontend/public', ::File.dirname(__FILE__))
