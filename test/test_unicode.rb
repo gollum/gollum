@@ -58,7 +58,7 @@ context "Unicode Support" do
     # href="#한글"
     # href="#%ED%95%9C%EA%B8%80"
     check_h1 '한글', '1'
-    # href="#한글"
+    # href="#Synhtèse"
     # href="#Synht%C3%A8se"
     check_h1 'Synhtèse', '2'
   end
