@@ -134,7 +134,7 @@ module Precious
       def page_header_from_content(content)
         doc = build_document(content)
         title = find_header_node(doc)
-        Sanitize.clean(title.to_html).strip unless title.empty?
+        Sanitize.clean(title.to_html(:encoding => 'UTF-8')).strip unless title.empty?
       end
 
       # Returns page content without title if it was extracted.

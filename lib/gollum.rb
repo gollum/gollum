@@ -24,6 +24,8 @@ require File.expand_path('../gollum/web_sequence_diagram', __FILE__)
 require File.expand_path('../gollum/frontend/uri_encode_component', __FILE__)
 
 # Set ruby to UTF-8 mode
+# Do not remove because of warning.
+# This is required for Ruby 1.8.7 which gollum still supports.
 $KCODE = 'U'
 
 module Gollum
