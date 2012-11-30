@@ -126,11 +126,7 @@ module Gollum
         node.add_child(%Q{<a href="##{h_name}">#{h.content}</a>})
         tail.add_child(node)
       end
-      if toc != nil
-        # convert to HTML first before XHTML
-        toc = Nokogiri::HTML::fragment toc.to_s
-        toc = toc.to_xhtml(:encoding => 'UTF-8')
-      end
+      toc = toc.to_xml(@to_xml) if toc != nil
       [doc, toc]
     end
 
