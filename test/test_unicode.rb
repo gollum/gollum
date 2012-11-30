@@ -41,7 +41,7 @@ context "Unicode Support" do
     assert_equal '',       anchors[0].text
   end
 
-  def test_h1 text, page
+  def check_h1 text, page
       @wiki.write_page(page, :markdown, "# " + text)
 
       page = @wiki.page(page)
@@ -67,9 +67,9 @@ context "Unicode Support" do
     # is encoded.
 
     # href="#%ED%95%9C%EA%B8%80"
-    test_h1 '한글', '1'
+    check_h1 '한글', '1'
     # href="#Synht%C3%A8se"
-    test_h1 'Synhtèse', '2'
+    check_h1 'Synhtèse', '2'
   end
 
   test "create and read non-latin page with anchor 2" do
