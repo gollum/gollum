@@ -41,6 +41,37 @@ context "Unicode Support" do
     assert_equal '',       anchors[0].text
   end
 
+  def test_h1 text, page
+      @wiki.write_page(page, :markdown, "# " + text)
+
+      page = @wiki.page(page)
+      assert_equal Gollum::Page, page.class
+      assert_equal '# ' + text, utf8(page.raw_data)
+
+      # markup.rb
+      doc     = Nokogiri::HTML page.formatted_data
+      h1s     = doc / :h1
+      h1      = h1s.first
+      anchors = h1 / :a
+      assert_equal 1, h1s.size
+      assert_equal 1, anchors.size
+      assert_equal '#' + text, anchors[0]['href']
+      assert_equal text,       anchors[0]['id']
+      assert_equal 'anchor',   anchors[0]['class']
+      assert_equal '',         anchors[0].text
+  end
+
+  test "create and read non-latin page with anchor" do
+    # Nokogiri's anchors[0]['href'] returns unencoded result
+    # so the test doesn't fail even though the actual value
+    # is encoded.
+
+    # href="#%ED%95%9C%EA%B8%80"
+    test_h1 '한글', '1'
+    # href="#Synht%C3%A8se"
+    test_h1 'Synhtèse', '2'
+  end
+
   test "create and read non-latin page with anchor 2" do
     @wiki.write_page("test", :markdown, "# \"La\" faune d'Édiacara")
 
