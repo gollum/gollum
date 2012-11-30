@@ -38,8 +38,22 @@ context "Frontend" do
     assert_equal 'm-plus-f', 'μ†ℱ'.to_url
   end
 
-  test 'utf-8 kcode' do
+  test "utf-8 kcode" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
+  end
+
+  test "UTF-8 headers href preserved" do
+    page = 'utfh1'
+    text = '한글'
+
+    # don't use h1 or it will be promoted to replace file name
+    # which doesn't generate a normal header link
+    @wiki.write_page(page, :markdown, '## ' + text,
+                     { :name => 'user1', :email => 'user1' });
+
+    get page
+
+    assert_match /<h2>#{text}<a class="anchor" id="#{text}" href="##{text}"><\/a><\/h2>/, last_response.body
   end
 
   test "retain edit information" do

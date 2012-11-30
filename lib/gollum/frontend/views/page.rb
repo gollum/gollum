@@ -109,7 +109,7 @@ module Precious
       # Wraps page formatted data to Nokogiri::HTML document.
       #
       def build_document(content)
-        Nokogiri::HTML(%{<div id="gollum-root">} + content + %{</div>})
+        Nokogiri::HTML::fragment(%{<div id="gollum-root">} + content.to_s + %{</div>}, 'UTF-8')
       end
 
       # Finds header node inside Nokogiri::HTML document.
@@ -134,7 +134,7 @@ module Precious
       def page_header_from_content(content)
         doc = build_document(content)
         title = find_header_node(doc)
-        Sanitize.clean(title.to_html(:encoding => 'UTF-8')).strip unless title.empty?
+        Sanitize.clean(title.to_xhtml(:encoding => 'UTF-8')).strip unless title.empty?
       end
 
       # Returns page content without title if it was extracted.
@@ -143,7 +143,8 @@ module Precious
         doc = build_document(content)
         title = find_header_node(doc)
         title.remove unless title.empty?
-        doc.css("div#gollum-root").inner_html
+        # .inner_html will cause href escaping on UTF-8
+        doc.css("div#gollum-root").children.to_xhtml(:encoding => 'UTF-8')
       end
     end
   end
