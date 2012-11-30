@@ -48,26 +48,17 @@ context "Unicode Support" do
       assert_equal Gollum::Page, page.class
       assert_equal '# ' + text, utf8(page.raw_data)
 
-      # markup.rb
-      doc     = Nokogiri::HTML page.formatted_data
-      h1s     = doc / :h1
-      h1      = h1s.first
-      anchors = h1 / :a
-      assert_equal 1, h1s.size
-      assert_equal 1, anchors.size
-      assert_equal '#' + text, anchors[0]['href']
-      assert_equal text,       anchors[0]['id']
-      assert_equal 'anchor',   anchors[0]['class']
-      assert_equal '',         anchors[0].text
+      output = page.formatted_data
+
+      # UTF-8 headers should not be encoded.
+      assert_match /<h1>#{text}<a class="anchor" id="#{text}" href="##{text}"><\/a><\/h1>/,   output
   end
 
   test "create and read non-latin page with anchor" do
-    # Nokogiri's anchors[0]['href'] returns unencoded result
-    # so the test doesn't fail even though the actual value
-    # is encoded.
-
+    # href="#한글"
     # href="#%ED%95%9C%EA%B8%80"
     check_h1 '한글', '1'
+    # href="#한글"
     # href="#Synht%C3%A8se"
     check_h1 'Synhtèse', '2'
   end
