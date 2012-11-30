@@ -6,12 +6,14 @@ JRuby wrapper around the JGit library for manipulating git repositories in code.
 
 RJGit is being developed by Team Repotag:
 
+* Maarten Engelen
 * Bart Kamphorst 
 * Dawa Ometto 
-* Maarten Engelen 
-* Patrick Pepels 
-* Steven Woudenberg
 * Arlette van Wissen
+* Steven Woudenberg
+
+With special thanks to: 
+* Patrick Pepels 
 
 ## Installation
 	#> gem install rjgit

@@ -8,8 +8,11 @@ module RJGit
     attr_reader :contents, :id, :mode, :name, :revtree
     RJGit.delegate_to(RevTree, :@revtree)
     
-    def initialize(revtree)
+    def initialize(mode, name, revtree)
+      @mode = mode
+      @name = name
       @revtree = revtree
+      @id = ObjectId.toString(revtree.get_id)
     end
     
     

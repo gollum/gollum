@@ -62,7 +62,7 @@ describe Repo do
 
   it "should list its commits" do
     @repo.commits.should be_an Array
-    @repo.commits.length.should == 3
+    @repo.commits.length.should > 3
   end
 
   it "should add files to itself"

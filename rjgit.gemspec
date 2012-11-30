@@ -18,5 +18,8 @@ Gem::Specification.new do |s|
                           "lib/tree.rb", "lib/blob.rb", "lib/config.rb", "lib/java/jars/org.eclipse.jgit-1.3.0.201202151440-r.jar"]
   s.has_rdoc          = true
   s.extra_rdoc_files  = ["README.md"]
+  s.rdoc_options = ["--charset=UTF-8"]
+
+  s.add_dependency('mime-types', "~> 1.15")
 
 end

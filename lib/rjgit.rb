@@ -17,7 +17,7 @@ module RJGit
   end
   
   # internal requires
-  
+  require 'mime/types'
   # require helpers first because RJGit#delegate_to is needed
   require "#{File.dirname(__FILE__)}/rjgit_helpers.rb"
   # require everything else

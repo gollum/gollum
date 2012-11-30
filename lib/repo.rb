@@ -16,6 +16,8 @@ module RJGit
 
     RJGit.delegate_to(Repository, :@repo)
     
+    import 'org.eclipse.jgit.lib.FileMode'
+    
     TREE_TYPE = 0040000
     SYMLINK_TYPE = 0120000
     FILE_TYPE = 0100000
