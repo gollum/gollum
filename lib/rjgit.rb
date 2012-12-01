@@ -1,5 +1,3 @@
-require 'logger'
-
 module RJGit
 
   begin
@@ -10,8 +8,6 @@ module RJGit
     raise
   end
 
-  @logger ||= ::Logger.new(STDOUT)
-  
   def self.version
     VERSION
   end
@@ -38,13 +34,13 @@ module RJGit
     def self.add(repository, file_pattern)
       git = repository.git.git
       add_command = git.add
-      add_command.addFilepattern(file_pattern).call
+      add_command.add_file_pattern(file_pattern).call
     end
     
     def self.commit(repository, message="")
       git = repository.git.git
       commit_command = git.commit
-      commit_command.setMessage(message).call
+      commit_command.set_message(message).call
     end
     
     # http://dev.eclipse.org/mhonarc/lists/jgit-dev/msg00558.html
@@ -53,25 +49,26 @@ module RJGit
       return bytes.to_a.pack('c*').force_encoding('UTF-8')
     end
     
-    def self.ls_tree(repository, branch=Constants::HEAD, options = {:recursive => false, :print => false})
+    def self.ls_tree(repository, branch=Constants::HEAD, options={})
       
+      options = {:recursive => false, :print => false}.merge(options)
       last_commit_hash = repository.resolve(branch)
       return nil unless last_commit_hash
 
       walk = RevWalk.new(repository)
       commit = walk.parse_commit(last_commit_hash)
-      revtree = commit.getTree
+      revtree = commit.get_tree
       treewalk = TreeWalk.new(repository)
       treewalk.set_recursive(options[:recursive])
       treewalk.add_tree(revtree)
       entries = []
       while treewalk.next
         entry = {}
-        mode = treewalk.getFileMode(0)
+        mode = treewalk.get_file_mode(0)
         entry[:mode] = mode.get_bits
-        entry[:type] = Constants.typeString(mode.getObjectType)
-        entry[:id]   = treewalk.getObjectId(0).name
-        entry[:path] = treewalk.getPathString
+        entry[:type] = Constants.type_string(mode.get_object_type)
+        entry[:id]   = treewalk.get_object_id(0).name
+        entry[:path] = treewalk.get_path_string
         entries << entry
       end
       print(entries) if options[:print]
