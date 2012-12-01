@@ -21,7 +21,9 @@ body, html {
 #wiki-wrapper {
   margin: 0 auto;
   overflow: visible;
-  width: 80%;
+  width: 920px;
+  padding-left:20px;
+  padding-right:20px;
 }
 
 a:link {
