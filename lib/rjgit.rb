@@ -16,7 +16,7 @@ module RJGit
     VERSION
   end
   
-  # internal requires
+  # gem requires
   require 'mime/types'
   # require helpers first because RJGit#delegate_to is needed
   require "#{File.dirname(__FILE__)}/rjgit_helpers.rb"
@@ -27,9 +27,10 @@ module RJGit
     end
   end
   
+  import 'org.eclipse.jgit.lib.ObjectId'
    
   class Porcelain
-    
+   
     import 'org.eclipse.jgit.api.AddCommand'
     import 'org.eclipse.jgit.api.CommitCommand'
     
