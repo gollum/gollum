@@ -45,21 +45,21 @@ module RJGit
     
     # Finds a particular Blob in repository matching file_path
     def self.find_blob(repository, file_path, branch=Constants::HEAD)
-      lastCommitHash = repository.resolve(branch)
-      return nil if lastCommitHash.nil?
+      last_commit_hash = repository.resolve(branch)
+      return nil if last_commit_hash.nil?
 
       walk = RevWalk.new(repository)
-      commit = walk.parseCommit(lastCommitHash)
-      treeWalk = TreeWalk.new(repository)
-      revTree = commit.getTree
-      treeWalk.addTree(revTree)
-      treeWalk.setRecursive(true)
-      treeWalk.setFilter(PathFilter.create(file_path))
-      if treeWalk.next
-        revBlob = walk.lookupBlob(treeWalk.objectId(0))
-        if revBlob
-          mode = RJGit.get_file_mode(repository, file_path, revTree) 
-          Blob.new(repository, File.basename(file_path), mode, revBlob)
+      commit = walk.parse_commit(last_commit_hash)
+      treewalk = TreeWalk.new(repository)
+      revtree = commit.get_tree
+      treewalk.add_tree(revtree)
+      treewalk.set_recursive(true)
+      treewalk.set_filter(PathFilter.create(file_path))
+      if treewalk.next
+        revblob = walk.lookup_blob(treewalk.objectId(0))
+        if revblob
+          mode = RJGit.get_file_mode(repository, file_path, revtree) 
+          Blob.new(repository, File.basename(file_path), mode, revblob)
         end
       else
         nil

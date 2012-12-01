@@ -17,8 +17,8 @@ module RJGit
   end
 
   def self.get_file_mode(repository, path, revtree)
-    treeWalk = TreeWalk.forPath(repository, path, revtree)
-    return treeWalk.getFileMode(0).to_string.to_i
+    treewalk = TreeWalk.forPath(repository, path, revtree)
+    return treewalk.get_file_mode(0).get_bits
   end
   
     

@@ -68,7 +68,7 @@ module RJGit
       while treewalk.next
         entry = {}
         mode = treewalk.getFileMode(0)
-        entry[:mode] = mode.to_string.to_i
+        entry[:mode] = mode.get_bits
         entry[:type] = Constants.typeString(mode.getObjectType)
         entry[:id]   = treewalk.getObjectId(0).name
         entry[:path] = treewalk.getPathString

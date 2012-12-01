@@ -5,7 +5,7 @@ describe "A Commit object" do
   before(:all) do
     @temp_bare_repo_path = create_temp_repo(TEST_BARE_REPO_PATH)
     @bare_repo = Repo.new(@temp_bare_repo_path, {:bare => true}, false)
-    @commit = @bare_repo.commits[0]
+    @commit = @bare_repo.commits.first
   end
 
   after(:all) do
