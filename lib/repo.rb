@@ -16,15 +16,6 @@ module RJGit
 
     RJGit.delegate_to(Repository, :@repo)
     
-    import 'org.eclipse.jgit.lib.FileMode'
-    
-    TREE_TYPE = 0040000
-    SYMLINK_TYPE = 0120000
-    FILE_TYPE = 0100000
-    GITLINK_TYPE = 0160000
-    MISSING_TYPE = 0000000
-    REG_FILE_TYPE = 100644
-
     def initialize(path, options = {}, create = false)
       epath = File.expand_path(path)
 

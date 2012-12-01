@@ -9,7 +9,7 @@ describe Blob do
   end
 
   it "should have a mode" do
-    @blob.mode.should eql 100644
+    @blob.mode.should eql REG_FILE_TYPE
   end
 
   it "should have a size in bytes" do

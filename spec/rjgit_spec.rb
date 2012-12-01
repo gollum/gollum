@@ -24,6 +24,18 @@ describe RJGit do
       blob = @bare_repo.blob('lib/grit.rb')
       RJGit::Porcelain.cat_file(@bare_repo, blob.blob).should =~ /# core\n/
     end
+    
+    it "should mimic git-ls-tree" do
+      listing = RJGit::Porcelain.ls_tree(@bare_repo.repo)
+      listing.should be_an Array
+      first_entry = listing.first
+      first_entry.should be_a Hash
+      first_entry[:mode].should == REG_FILE_TYPE
+      first_entry[:type].should == 'blob'
+      first_entry[:id].should match /baaa47163a922b716898936f4ab032db4e08ae8a/
+      first_entry[:path].should == '.gitignore'
+    end
+    
   end
   
   after(:all) do

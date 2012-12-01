@@ -52,10 +52,44 @@ module RJGit
       return bytes.to_a.pack('c*').force_encoding('UTF-8')
     end
     
-    def self.ls_tree
+    def self.ls_tree(repository, branch=Constants::HEAD, options = {:recursive => false, :print => false})
       
+      last_commit_hash = repository.resolve(branch)
+      return nil unless last_commit_hash
+
+      walk = RevWalk.new(repository)
+      commit = walk.parse_commit(last_commit_hash)
+      revtree = commit.getTree
+      treewalk = TreeWalk.new(repository)
+      treewalk.set_recursive(options[:recursive])
+      treewalk.add_tree(revtree)
+      entries = []
+      while treewalk.next
+        entry = {}
+        mode = treewalk.getFileMode(0)
+        entry[:mode] = mode.to_string.to_i
+        entry[:type] = Constants.typeString(mode.getObjectType)
+        entry[:id]   = treewalk.getObjectId(0).name
+        entry[:path] = treewalk.getPathString
+        entries << entry
+      end
+      print(entries) if options[:print]
+      entries
     end
     
+  end
+  
+  def print(entries)
+    entries.each do |entry|
+      $stdout.print entry[:mode]
+      $stdout.print "\t"
+      $stdout.print entry[:type]
+      $stdout.print "\t"
+      $stdout.print entry[:id]
+      $stdout.print "\t"
+      $stdout.print entry[:path]
+      $stdout.puts
+    end
   end
   
 end

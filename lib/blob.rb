@@ -3,8 +3,7 @@ module RJGit
   import 'org.eclipse.jgit.revwalk.RevBlob'
   
   class Blob 
-    DEFAULT_MIME_TYPE = "text/plain"
-
+    
     attr_reader :id, :mode, :name, :blob
     RJGit.delegate_to(RevBlob, :@blob)
 
@@ -28,14 +27,12 @@ module RJGit
     end
 
     # The binary contents of this blob.
-    #
     # Returns String
     def data
       @data ||= RJGit::Porcelain.cat_file(@repo, @blob) 
     end
 
     # The mime type of this file (based on the filename)
-    #
     # Returns String
     def mime_type
       Blob.mime_type(self.name)
@@ -46,6 +43,7 @@ module RJGit
       guesses.first ? guesses.first.simplified : DEFAULT_MIME_TYPE
     end
     
+    # Finds a particular Blob in repository matching file_path
     def self.find_blob(repository, file_path, branch=Constants::HEAD)
       lastCommitHash = repository.resolve(branch)
       return nil if lastCommitHash.nil?

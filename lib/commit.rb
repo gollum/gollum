@@ -49,12 +49,6 @@ module RJGit
     def self.diff(repo, a, b = nil, paths = [], options = {})
     end
     
-    def show
-    end
-    
-    def inspect
-      %Q{#<Git4j::Commit "#{@id}">}
-    end    
     
   end
 end
