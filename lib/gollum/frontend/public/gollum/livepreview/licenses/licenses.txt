@@ -1,8 +1,8 @@
-Ajaxorg Ace is used under the MPL
+Ajaxorg Ace is used under the New BSD License
 https://github.com/ajaxorg/ace/blob/master/LICENSE
 
 https://github.com/ajaxorg/ace (build folder in master)
-  lib/gollum/frontend/public/src/*
+  lib/gollum/frontend/public/gollum/livepreview/js/ace/*
 ---
 
 Fivesixty Notepages (MIT license)
