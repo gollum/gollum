@@ -6,38 +6,38 @@ module RJGit
   class Commit
 
     attr_reader :id
-    attr_reader :repo
     attr_reader :parents
-    attr_reader :tree
     attr_reader :actor
-    attr_reader :authored_date
     attr_reader :committer
+    attr_reader :authored_date
     attr_reader :committed_date
     attr_reader :message
     attr_reader :short_message
     attr_reader :revcommit
     attr_reader :count
   
+    RJGit.delegate_to(RevCommit, :@revcommit)
+    
     def initialize(commit)
       @revcommit = commit
-      # @repo = repo
       @id = ObjectId.to_string(commit.get_id)
-      # @parents = parents.map { |p| Commit.create(repo, :id => p) }
-      # @tree = Tree.create(repo, :id => tree)
       @actor = Actor.new(@revcommit.get_author_ident)
-      # @authored_date = authored_date
-      # @committer = committer
+      @committer = Actor.new(@revcommit.get_committer_ident)
       @committed_date = Time.at(@revcommit.commit_time)
       @message = @revcommit.get_full_message
       @short_message = @revcommit.get_short_message
       @count = @revcommit.get_parent_count
     end
   
+    def parents
+      @parents ||= @revcommit.get_parents.map{|parent| Commit.new(parent) }
+    end
+    
     def self.find_all(repo, ref, options)
       begin
         walk = RevWalk.new(repo);
-        objHead = repo.resolve(ref)
-        root = walk.parse_commit(objHead)
+        objhead = repo.resolve(ref)
+        root = walk.parse_commit(objhead)
         walk.mark_start(root)
         commits = walk.map { |commit| Commit.new(commit) }
         return commits.first(options[:limit])

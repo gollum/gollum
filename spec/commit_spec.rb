@@ -21,7 +21,16 @@ describe "A Commit object" do
     actor.name.should == 'Scott Chacon'
     actor.email.should == 'schacon@gmail.com'
   end
+  
+  it "should have a committer" do
+    @commit.committer.name.should == 'Scott Chacon'
+  end
 
+  it "should have parent commits" do
+    @commit.parents.should be_an Array
+    @commit.parents.first.id.should match /3fa4e130fa18c92e3030d4accb5d3e0cadd40157/
+  end
+  
   it "should have a message" do
     @commit.message.should match /added a pure-ruby git library and converted the cat_file commands to use it/
   end
