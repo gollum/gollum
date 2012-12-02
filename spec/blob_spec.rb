@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe Blob do
 
-  before(:all) do
-    @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
-    @repo = Repo.new(@temp_repo_path)
+  before(:each) do
+    @repo = Repo.new(TEST_REPO_PATH)
     @blob = Blob.find_blob(@repo.repo, 'materialist.txt')
   end
 
@@ -20,9 +19,16 @@ describe Blob do
     @blob.data.should match /Baudrillardist hyperreality/
   end
 
-  it "should return blame information"
+  it "should return blame information as an Array" do
+    @blob.blame.should be_an Array
+    @blob.blame.first[:actor].name.should == "Dawa Ometto"
+  end
 
-  # mime_type
+  it "should print blame information to IO object" do
+    strio = StringIO.new
+    @blob.blame({:print => true, :io => strio})
+    strio.string.should match /Truth is fundamentally a legal fiction/
+  end
 
   it "should return the correct mime type for known file types" do
     @blob = Blob.find_blob(@repo.repo, 'homer-excited.png')
@@ -33,8 +39,7 @@ describe Blob do
     Blob.mime_type('abc.argv').should == "text/plain"
   end
 
-  after(:all) do
-    remove_temp_repo(File.dirname(@temp_repo_path))
-    nil
+  after(:each) do
+    @repo = nil
   end
 end

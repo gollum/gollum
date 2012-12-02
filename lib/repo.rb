@@ -65,7 +65,8 @@ module RJGit
     end
 
     # Convenience method to retrieve a Tree by name
-    def tree(name)
+    def tree(file_path)
+      Tree.find_tree(@repo, file_path)
     end
 
   end

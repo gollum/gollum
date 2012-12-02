@@ -4,8 +4,7 @@ require 'spec_helper'
 
 describe RJGit do
   before(:all) do
-    @temp_bare_repo_path = create_temp_repo(TEST_BARE_REPO_PATH)
-    @bare_repo = Repo.new(@temp_bare_repo_path)
+    @bare_repo = Repo.new(TEST_BARE_REPO_PATH)
     @git = RubyGit.new(@bare_repo.repo)
   end
   
@@ -36,9 +35,13 @@ describe RJGit do
       first_entry[:path].should == '.gitignore'
     end
     
+    it "should mimic git-blame" do
+      RJGit::Porcelain.blame(@bare_repo, 'lib/grit.rb')
+    end
+    
   end
   
   after(:all) do
-    remove_temp_repo(File.dirname(@temp_bare_repo_path))
+    @bare_repo = nil
   end
 end

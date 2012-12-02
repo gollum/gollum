@@ -76,7 +76,11 @@ describe Repo do
   end
 
   it "should return a Tree by name" do
-    pending
+    tree = @bare_repo.tree('lib')
+    tree.should_not be_nil
+    tree.id.should match /aa74200714ce8190b38211795f974b4410f5a9d0/
+    tree.name.should == 'lib'
+    tree.revtree.should be_a org.eclipse.jgit.revwalk.RevTree
   end
 
   after(:all) do

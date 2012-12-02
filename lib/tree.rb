@@ -5,28 +5,22 @@ module RJGit
   
   class Tree 
 
-    attr_reader :contents, :id, :mode, :name, :revtree
+    attr_reader :contents, :id, :mode, :name, :repo, :revtree
     RJGit.delegate_to(RevTree, :@revtree)
     
-    def initialize(mode, name, revtree)
+    def initialize(repository, mode, path, revtree)
+      @repo = repository
       @mode = mode
-      @name = name
+      @path = path
+      @name = File.basename(path)
       @revtree = revtree
-      @id = ObjectId.toString(revtree.get_id)
+      @id = ObjectId.to_string(revtree.get_id)
     end
     
-    
-    def self.construct(repo, treeish, paths = [])
-    end
-    
-    def construct_initialize(repo, id, text)
-    end
-    
-    def self.create(repo, atts)
-    end
-    
-    def basename
-      File.basename(name)
+    def data
+      strio = StringIO.new
+      RJGit::Porcelain.ls_tree(@repo, @revtree, Constants::HEAD, options={:print => true, :io => strio})
+      strio.string
     end
     
     def self.find_tree(repository, file_path, branch=Constants::HEAD)
@@ -43,7 +37,7 @@ module RJGit
         tree = walk.lookup_tree(treewalk.object_id(0))
         if tree
           mode = RJGit.get_file_mode(repository, file_path, revtree) 
-          Tree.new(mode, file_path, tree)
+          Tree.new(repository, mode, file_path, tree)
         end
       else
         nil

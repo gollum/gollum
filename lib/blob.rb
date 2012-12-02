@@ -4,13 +4,14 @@ module RJGit
   
   class Blob 
     
-    attr_reader :id, :mode, :name, :blob
+    attr_reader :id, :mode, :name, :path, :blob
     RJGit.delegate_to(RevBlob, :@blob)
 
-    def initialize(repo, name, mode, blob)
+    def initialize(repo, path, mode, blob)
       @repo = repo
       @blob = blob
-      @name = name
+      @path = path
+      @name = File.basename(path)
       @mode = mode
       @id = ObjectId.toString(blob.get_id)
     end
@@ -24,6 +25,10 @@ module RJGit
 
     def size
       @size ||= bytesize
+    end
+    
+    def blame(options={})
+      @blame ||= RJGit::Porcelain.blame(@repo, @path, options)
     end
 
     # The binary contents of this blob.
@@ -59,7 +64,7 @@ module RJGit
         revblob = walk.lookup_blob(treewalk.objectId(0))
         if revblob
           mode = RJGit.get_file_mode(repository, file_path, revtree) 
-          Blob.new(repository, File.basename(file_path), mode, revblob)
+          Blob.new(repository, file_path, mode, revblob)
         end
       else
         nil

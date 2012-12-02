@@ -21,5 +21,14 @@ module RJGit
     return treewalk.get_file_mode(0).get_bits
   end
   
+  def stringify(entries)
+    strio = StringIO.new
+    entries.each do |entry|
+      line = entry.values.join("\t")
+      strio.write line
+      strio.write "\n"
+    end
+    strio.string
+  end
     
 end

@@ -29,6 +29,9 @@ module RJGit
    
     import 'org.eclipse.jgit.api.AddCommand'
     import 'org.eclipse.jgit.api.CommitCommand'
+    import 'org.eclipse.jgit.api.BlameCommand'
+    import 'org.eclipse.jgit.blame.BlameGenerator'
+    import 'org.eclipse.jgit.blame.BlameResult'
     
     # http://wiki.eclipse.org/JGit/User_Guide#Porcelain_API
     def self.add(repository, file_pattern)
@@ -49,15 +52,21 @@ module RJGit
       return bytes.to_a.pack('c*').force_encoding('UTF-8')
     end
     
-    def self.ls_tree(repository, branch=Constants::HEAD, options={})
-      
-      options = {:recursive => false, :print => false}.merge(options)
-      last_commit_hash = repository.resolve(branch)
-      return nil unless last_commit_hash
-
-      walk = RevWalk.new(repository)
-      commit = walk.parse_commit(last_commit_hash)
-      revtree = commit.get_tree
+    def self.ls_tree(repository, tree=nil, branch=Constants::HEAD, options={})
+      options = {:recursive => false, :print => false, :io => $stdout}.merge(options)
+      if tree 
+        if tree.is_a?(org.eclipse.jgit.revwalk.RevTree)
+          revtree = tree
+        elsif tree.is_a?(Tree)
+          revtree = tree.revtree
+        end
+      else
+        last_commit_hash = repository.resolve(branch)
+        return nil unless last_commit_hash
+        walk = RevWalk.new(repository)
+        commit = walk.parse_commit(last_commit_hash)
+        revtree = commit.get_tree
+      end
       treewalk = TreeWalk.new(repository)
       treewalk.set_recursive(options[:recursive])
       treewalk.add_tree(revtree)
@@ -71,22 +80,34 @@ module RJGit
         entry[:path] = treewalk.get_path_string
         entries << entry
       end
-      print(entries) if options[:print]
+      options[:io].puts RJGit.stringify(entries) if options[:print]
       entries
     end
     
-  end
-  
-  def print(entries)
-    entries.each do |entry|
-      $stdout.print entry[:mode]
-      $stdout.print "\t"
-      $stdout.print entry[:type]
-      $stdout.print "\t"
-      $stdout.print entry[:id]
-      $stdout.print "\t"
-      $stdout.print entry[:path]
-      $stdout.puts
+    def self.blame(repository, file_path, options={})
+      options = {:print => false, :io => $stdout}.merge(options)
+      repo = case repository
+        when Repo then repository.repo
+        when org.eclipse.jgit.lib.Repository then repository
+        else nil
+      end
+      return nil unless repo
+
+      blame_command = BlameCommand.new(repo)
+      blame_command.set_file_path(file_path)
+      result = blame_command.call
+      content = result.get_result_contents
+      blame = []
+      for index in (0..content.size - 1) do
+        blameline = {}
+        blameline[:actor] = Actor.new(result.get_source_author(index))
+        blameline[:line] = result.get_source_line(index)
+        blameline[:commit] = Commit.new(result.get_source_commit(index))
+        blameline[:line] = content.get_string(index)
+        blame << blameline
+      end
+      options[:io].puts RJGit.stringify(blame) if options[:print]
+      return blame
     end
   end
   

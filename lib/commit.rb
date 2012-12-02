@@ -21,7 +21,7 @@ module RJGit
     def initialize(commit)
       @revcommit = commit
       # @repo = repo
-      @id = ObjectId.toString(commit.get_id)
+      @id = ObjectId.to_string(commit.get_id)
       # @parents = parents.map { |p| Commit.create(repo, :id => p) }
       # @tree = Tree.create(repo, :id => tree)
       @actor = Actor.new(@revcommit.get_author_ident)
