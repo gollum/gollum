@@ -55,8 +55,12 @@ module RJGit
       return @git.branch_list
     end
 
-    def add(fpattern)
-      @git.add(fpattern)
+    def add(file_pattern)
+      @git.add(file_pattern)
+    end
+    
+    def commit(message)
+      @git.commit(message)
     end
 
     # Convenience method to retrieve a Blob by name

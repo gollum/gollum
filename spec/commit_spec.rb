@@ -43,12 +43,5 @@ describe "A Commit object" do
     @commit.count.should == 1
   end
 
-  it "should have a test commit" do
-    pending("The actual code to commit something is not yet implemented.")
-    Git.any_instance.should_receive(:commit).and_return(fixture('commit'))
-    pending("Repo#commit_index is not yet implemented")
-    results = @bare_repo.commit_index('my message')
-    result.should match /Created commit/
-  end
 
 end

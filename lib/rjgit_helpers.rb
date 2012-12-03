@@ -30,5 +30,21 @@ module RJGit
     end
     strio.string
   end
+  
+  def repository_type(repository)
+    repo = case repository
+      when Repo then repository.repo
+      when org.eclipse.jgit.lib.Repository then repository
+      else nil
+    end
+  end
+  
+  def tree_type(tree)
+    treeobj = case tree
+      when Tree then tree.revtree
+      when org.eclipse.jgit.revwalk.RevTree then tree
+      else nil
+    end
+  end
     
 end

@@ -38,30 +38,30 @@ module RJGit
     end
     
     def commit(message)
-      @git.commit.setMessage(message).call
+      @git.commit.set_message(message).call
     end
     
     def clone(remote, local)
-      Git.cloneRepository().setURI(remote).setDirectory(new File(local)).call
+      Git.clone_repository.setURI(remote).set_directory(new File(local)).call
     end
 
-    def add(fpattern)
-      @git.add.addFilePattern(fpattern).call
+    def add(file_pattern)
+      @git.add.add_filepattern(file_pattern).call
     end
 
     def tag(name, message = "", force = false)
-      Ref.new(@git.tag.setName(name).setForceUpdate(force).setMessage(message).call)
+      Ref.new(@git.tag.set_name(name).set_force_update(force).set_message(message).call)
     end
 
     def tag(name, commit_or_revision_id, message = "", force = false)
-      Ref.new(@git.tag.setName(name).setForceUpdate(force).setMessage(message).setObjectId(commit_or_revision_id).call)
+      Ref.new(@git.tag.set_name(name).set_force_update(force).set_message(message).set_object_id(commit_or_revision_id).call)
     end
 
     def apply(input_stream)
-      updated_files = @git.apply.setPatch(input_stream).call
+      updated_files = @git.apply.set_patch(input_stream).call
       updated_files_parsed = []
       updated_files.each do |file|
-        updated_files_parsed << file.getAbsolutePath
+        updated_files_parsed << file.get_absolute_path
       end
       updated_files_parsed
     end

@@ -65,7 +65,19 @@ describe Repo do
     @repo.commits.length.should > 3
   end
 
-  it "should add files to itself"
+  it "should add files to itself" do
+    File.open("#{@temp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
+    @repo.add("rspec-addfile.txt")
+    @repo.repo.read_dir_cache.find_entry("rspec-addfile.txt").should > 0
+  end
+  
+  it "should commit files to the repository" do
+    RJGit::Porcelain.ls_tree(@repo).size.should == 6
+    File.open("#{@temp_repo_path}/newfile.txt", 'w') {|file| file.write("This is a new file to commit.") }
+    @repo.add("newfile.txt")
+    @repo.commit("Committing a test file to a test repository.")
+    RJGit::Porcelain.ls_tree(@repo).size.should == 8
+  end
 
   it "should return a Blob by name" do
     blob = @bare_repo.blob('lib/grit.rb')

@@ -54,12 +54,9 @@ module RJGit
     
     def self.ls_tree(repository, tree=nil, branch=Constants::HEAD, options={})
       options = {:recursive => false, :print => false, :io => $stdout}.merge(options)
+      repository = repository_type(repository)
       if tree 
-        if tree.is_a?(org.eclipse.jgit.revwalk.RevTree)
-          revtree = tree
-        elsif tree.is_a?(Tree)
-          revtree = tree.revtree
-        end
+        revtree = tree_type(tree)
       else
         last_commit_hash = repository.resolve(branch)
         return nil unless last_commit_hash
@@ -83,14 +80,10 @@ module RJGit
       options[:io].puts RJGit.stringify(entries) if options[:print]
       entries
     end
-    
+      
     def self.blame(repository, file_path, options={})
       options = {:print => false, :io => $stdout}.merge(options)
-      repo = case repository
-        when Repo then repository.repo
-        when org.eclipse.jgit.lib.Repository then repository
-        else nil
-      end
+      repo = repository_type(repository)
       return nil unless repo
 
       blame_command = BlameCommand.new(repo)
