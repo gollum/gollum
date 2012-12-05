@@ -102,6 +102,21 @@ module RJGit
       options[:io].puts RJGit.stringify(blame) if options[:print]
       return blame
     end
+    
+    def self.diff(repository, old_tree=nil, new_tree=nil, file_path=nil, options = {})
+      options = {:namestatus => false}.merge(options)
+      git = repository.git.git
+      diff_command = git.diff
+      diff_command.set_old_tree(old_tree) if old_tree
+      diff_command.set_new_tree(new_tree) if new_tree
+      diff_command.set_path_filter(PathFilter.create(file_path)) if file_path
+      diff_command.set_show_name_and_status_only(true) if options[:namestatus] 
+      diff_entries = diff_command.call
+      diff_entries = diff_entries.to_array.to_ary
+      diff_entries = convert_diff_entries(diff_entries)
+      diff_entries
+    end
+    
   end
   
 end

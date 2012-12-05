@@ -39,6 +39,25 @@ describe RJGit do
       RJGit::Porcelain.blame(@bare_repo, 'lib/grit.rb')
     end
     
+    context "producing diffs" do
+      before(:each) do
+        @repo = Repo.new(TEST_REPO_PATH)
+      end
+      
+      it "should return diff information of working tree" do
+        diff_entries = RJGit::Porcelain.diff(@repo)
+        entry = diff_entries.first
+        entry.should be_a Hash
+        entry[:changetype].should == "ADD"
+        entry[:newid].should match /a106b0d89c179fc7414a5a62b058503857316c18/ 
+      end
+      
+      after(:each) do
+        @repo = nil
+      end
+      
+    end
+    
   end
   
   after(:all) do

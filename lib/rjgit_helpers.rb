@@ -31,6 +31,26 @@ module RJGit
     strio.string
   end
   
+  def convert_diff_entries(entries)
+    entries.map do |diff_entry|
+      diff_entry_to_hash(diff_entry)
+    end
+  end
+  
+  def diff_entry_to_hash(diff_entry)
+    entry = {}
+    entry[:changetype] = diff_entry.get_change_type.to_string
+    entry[:oldpath] = diff_entry.get_old_path
+    entry[:newpath] = diff_entry.get_new_path
+     entry[:oldmode] = diff_entry.get_old_mode.get_bits
+     entry[:newmode] = diff_entry.get_new_mode.get_bits
+     entry[:score] = diff_entry.get_score
+     entry[:oldid] = diff_entry.get_old_id.name
+     entry[:newid] = diff_entry.get_new_id.name
+     entry
+  end
+  
+  
   def repository_type(repository)
     repo = case repository
       when Repo then repository.repo
