@@ -26,7 +26,9 @@ require File.expand_path('../gollum/frontend/uri_encode_component', __FILE__)
 # Set ruby to UTF-8 mode
 # Do not remove because of warning.
 # This is required for Ruby 1.8.7 which gollum still supports.
-$KCODE = 'U'
+if ( RUBY_VERSION.split('.').map{|x| x.to_i} <=> "1.9".split('.').map{|x| x.to_i} ) == -1
+  $KCODE = 'U'
+end
 
 module Gollum
   VERSION = '2.4.3'
