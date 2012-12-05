@@ -1,15 +1,14 @@
 require 'spec_helper'
 
-describe "A Commit object" do
+describe Commit do
 
-  before(:all) do
-    @temp_bare_repo_path = create_temp_repo(TEST_BARE_REPO_PATH)
-    @bare_repo = Repo.new(@temp_bare_repo_path, {:bare => true}, false)
+  before(:each) do
+    @bare_repo = Repo.new(TEST_BARE_REPO_PATH, {:bare => true}, false)
     @commit = @bare_repo.commits.first
   end
 
-  after(:all) do
-    remove_temp_repo(File.dirname(@temp_bare_repo_path))
+  after(:each) do
+    @bare_repo = nil
   end
 
   it "should have an id" do
@@ -43,5 +42,12 @@ describe "A Commit object" do
     @commit.count.should == 1
   end
 
+  describe "#find_all(repo, ref, options)" do
+    it "should return an empty array if nothing is found" do
+      @commits = Commit.find_all(@bare_repo, 'remote42', {:limit => 10 })
+      @commits.should be_an Array
+      @commits.should be_empty
+    end
+  end 
 
 end

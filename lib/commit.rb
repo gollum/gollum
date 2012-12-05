@@ -33,10 +33,11 @@ module RJGit
       @parents ||= @revcommit.get_parents.map{|parent| Commit.new(parent) }
     end
     
-    def self.find_all(repo, ref, options)
+    def self.find_all(repository, ref, options)
+      repository = repository_type(repository)
       begin
-        walk = RevWalk.new(repo);
-        objhead = repo.resolve(ref)
+        walk = RevWalk.new(repository);
+        objhead = repository.resolve(ref)
         root = walk.parse_commit(objhead)
         walk.mark_start(root)
         commits = walk.map { |commit| Commit.new(commit) }

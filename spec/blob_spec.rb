@@ -13,6 +13,7 @@ describe Blob do
 
   it "should have a size in bytes" do
     @blob.bytesize.should eql 4680
+    @blob.size.should eql 4680
   end
   
   it "should return blob contents" do
@@ -31,12 +32,19 @@ describe Blob do
   end
 
   it "should return the correct mime type for known file types" do
-    @blob = Blob.find_blob(@repo.repo, 'homer-excited.png')
+    @blob = Blob.find_blob(@repo, 'homer-excited.png')
     @blob.mime_type.should == 'image/png'
   end
 
   it "should return text/plain for unknown mime types" do
     Blob.mime_type('abc.argv').should == "text/plain"
+  end
+  
+  describe "#find_blob(repository, file_path, branch)" do
+    it "should return nil if no blob is found" do
+      @blob = Blob.find_blob(@repo, 'abc.argv')
+      @blob.should be_nil
+    end
   end
 
   after(:each) do

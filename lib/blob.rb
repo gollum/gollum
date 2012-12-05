@@ -50,6 +50,7 @@ module RJGit
     
     # Finds a particular Blob in repository matching file_path
     def self.find_blob(repository, file_path, branch=Constants::HEAD)
+      repository = repository_type(repository)
       last_commit_hash = repository.resolve(branch)
       return nil if last_commit_hash.nil?
 

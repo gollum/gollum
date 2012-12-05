@@ -3,8 +3,7 @@ require 'spec_helper'
 describe Tree do
 
   before(:each) do
-    @temp_bare_repo_path = create_temp_repo(TEST_BARE_REPO_PATH)
-    @bare_repo = Repo.new(@temp_bare_repo_path, {:bare => true}, false)
+    @bare_repo = Repo.new(TEST_BARE_REPO_PATH, {:bare => true}, false)
     @tree = Tree.find_tree(@bare_repo.repo, 'lib')
     #@tree = repo.commits.first.tree
   end
@@ -29,6 +28,13 @@ describe Tree do
   it "should return data as a string" do
     @tree.data.should be_a String
     @tree.data.should match /77aa887449c28a922a660b2bb749e4127f7664e5/ 
+  end
+  
+  describe "#find_tree(repository, file_path, branch)" do
+    it "should return nil if no tree is found" do
+      @tree = Tree.find_tree(@bare_repo, 'abc.argv')
+      @tree.should be_nil
+    end
   end
 
 end

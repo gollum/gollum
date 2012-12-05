@@ -1,5 +1,4 @@
 require 'spec_helper'
-import 'org.eclipse.jgit.lib.PersonIdent'
 
 describe "A Git Actor" do
   
