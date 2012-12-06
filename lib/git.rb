@@ -76,8 +76,11 @@ module RJGit
       apply(input_stream)
     end
 
-    def clean
-      @git.clean.call
+    def clean(options = {})
+      clean_command = @git.clean
+      clean_command.set_dry_run(true) if options[:dryrun]
+      clean_command.set_paths(java.util.Arrays.asList(options[:paths])) if options[:paths]
+      clean_command.call
     end
 
   end
