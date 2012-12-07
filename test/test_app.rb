@@ -42,6 +42,26 @@ context "Frontend" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
   end
 
+  # this should not match
+  test "broken four space" do
+    page = 'utfh1'
+    text = %(
+    one
+    two
+    three
+    four
+)
+
+    # don't use h1 or it will be promoted to replace file name
+    # which doesn't generate a normal header link
+    @wiki.write_page(page, :markdown, text,
+                     { :name => 'user1', :email => 'user1' });
+
+    get page
+
+    assert_match /<pre>\n  <code>/, last_response.body
+  end
+
   test "UTF-8 headers href preserved" do
     page = 'utfh1'
     text = '한글'
