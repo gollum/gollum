@@ -8,6 +8,8 @@ describe RJGit do
     @git = RubyGit.new(@bare_repo.repo)
   end
   
+  it "should have a version"
+  
   context "delegating missing methods to the underlying jgit Git object" do
      it "should delegate the method to the JGit object" do
        @git.send(:rebase).should be_a org.eclipse.jgit.api.RebaseCommand # :rebase method not implemented in RubyGit, but is implemented in the underlying JGit object

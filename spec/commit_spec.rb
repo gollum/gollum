@@ -48,6 +48,9 @@ describe Commit do
       @commits.should be_an Array
       @commits.should be_empty
     end
+    
+    it "should return nil if something other than a repository is passed in"
+    
   end 
 
 end

@@ -35,6 +35,7 @@ module RJGit
     
     def self.find_all(repository, ref, options)
       repository = repository_type(repository)
+      return nil if repository.nil?
       begin
         walk = RevWalk.new(repository);
         objhead = repository.resolve(ref)

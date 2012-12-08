@@ -35,6 +35,9 @@ describe Tree do
       @tree = Tree.find_tree(@bare_repo, 'abc.argv')
       @tree.should be_nil
     end
+    
+    it "should return nil if no repository is passed in"
+    
   end
 
 end
