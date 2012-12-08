@@ -6,6 +6,7 @@ module Precious
       attr_reader :content, :page, :header, :footer
       DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
+      @@to_xml =  { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
 
       def title
         h1 = @h1_title ? page_header_from_content(@content) : false
@@ -134,7 +135,7 @@ module Precious
       def page_header_from_content(content)
         doc = build_document(content)
         title = find_header_node(doc)
-        Sanitize.clean(title.to_xhtml(:encoding => 'UTF-8')).strip unless title.empty?
+        Sanitize.clean(title.to_xml( @@to_xml )).strip unless title.empty?
       end
 
       # Returns page content without title if it was extracted.
@@ -144,7 +145,7 @@ module Precious
         title = find_header_node(doc)
         title.remove unless title.empty?
         # .inner_html will cause href escaping on UTF-8
-        doc.css("div#gollum-root").children.to_xhtml(:encoding => 'UTF-8')
+        doc.css("div#gollum-root").children.to_xml( @@to_xml )
       end
     end
   end

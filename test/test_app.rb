@@ -42,7 +42,7 @@ context "Frontend" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
   end
 
-  # This should not match
+
   test "broken four space" do
     page = 'utfh1'
     text = %(
@@ -56,8 +56,11 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
+    # good html:
+    # <pre><code>one\ntwo\nthree\nfour\n</code></pre>\n
+    # broken html:
     # <pre>\n  <code>one\ntwo\nthree\nfour\n</code>\n</pre>
-    assert_match /<pre>\n  <code>.+<\/code>\n<\/pre>/m, last_response.body
+    assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
   end
 
   test "UTF-8 headers href preserved" do
