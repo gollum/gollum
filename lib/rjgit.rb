@@ -99,14 +99,15 @@ module RJGit
       return blame
     end
     
-    def self.diff(repository, old_tree=nil, new_tree=nil, file_path=nil, options = {})
+    def self.diff(repository, options = {})
       options = {:namestatus => false}.merge(options)
       git = repository.git.jgit
       diff_command = git.diff
-      diff_command.set_old_tree(old_tree) if old_tree
-      diff_command.set_new_tree(new_tree) if new_tree
-      diff_command.set_path_filter(PathFilter.create(file_path)) if file_path
+      diff_command.set_old_tree(old_tree) if options[:old_tree]
+      diff_command.set_new_tree(new_tree) if options[:new_tree]
+      diff_command.set_path_filter(PathFilter.create(file_path)) if options[:file_path]
       diff_command.set_show_name_and_status_only(true) if options[:namestatus] 
+      diff_command.set_cached(true) if options[:cached]
       diff_entries = diff_command.call
       diff_entries = diff_entries.to_array.to_ary
       diff_entries = convert_diff_entries(diff_entries)
