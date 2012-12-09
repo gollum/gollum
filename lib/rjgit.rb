@@ -105,7 +105,7 @@ module RJGit
     
     def self.diff(repository, old_tree=nil, new_tree=nil, file_path=nil, options = {})
       options = {:namestatus => false}.merge(options)
-      git = repository.git.git
+      git = repository.git.jgit
       diff_command = git.diff
       diff_command.set_old_tree(old_tree) if old_tree
       diff_command.set_new_tree(new_tree) if new_tree

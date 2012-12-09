@@ -58,10 +58,14 @@ describe RJGit do
       
       after(:each) do
         @repo = nil
-      end
-      
-    end
-    
+      end 
+    end  
+  end # end Porcelain
+  
+  describe "helper methods" do
+    specify {repository_type("A String").should be_nil}
+    specify {tree_type("A String").should be_nil}
+    specify {RJGit.underscore("CamelCaseToSnakeCase").should == 'camel_case_to_snake_case'}
   end
   
   after(:all) do
