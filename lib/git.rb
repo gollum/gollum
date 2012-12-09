@@ -14,8 +14,8 @@ module RJGit
 
     RJGit.delegate_to(Git, :@git)
       
-    def initialize(repository) 
-      @repo = repository
+    def initialize(repository)
+      @repo = repository_type(repository)
       @git = Git.new(repository)
     end
     
