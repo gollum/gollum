@@ -45,13 +45,13 @@ describe RJGit do
     
  context "producing diffs" do
       before(:each) do
-        @tmp_repo_path = get_new_tmprepo_path
-        @repo = Repo.create(@tmp_repo_path)
+        @tmp_repo_path = create_temp_repo(TEST_REPO_PATH)
+        @repo = Repo.new(@tmp_repo_path)
         File.open("#{@tmp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
         @repo.add("rspec-addfile.txt")
       end
       
-      it "should return diff information of working tree" do
+      it "should return diff information of working tree when adding file" do
         entry = RJGit::Porcelain.diff(@repo, {:cached => true}).first
         entry.should be_a Hash
         entry[:changetype].should == "ADD"
@@ -60,15 +60,13 @@ describe RJGit do
         RJGit::Porcelain.diff(@repo).should be_nil
       end
       
-      it "should return cached diff information of working tree" do 
-        STDERR.puts RJGit::Porcelain.ls_tree(@repo)
+      it "should return diff information of working tree when removing file" do 
         @repo.remove("rspec-addfile.txt")
-        STDERR.puts RJGit::Porcelain.diff(@repo, {:cached => true}).inspect
         entry = RJGit::Porcelain.diff(@repo, {:cached => true}).first
         entry[:changetype].should == "DELETE"
         entry[:oldpath].should == "rspec-addfile.txt"
-        @repo.commit("Test")
-        entry = RJGit::Porcelain.diff(@repo, {:cached => true}).should be_nil
+        @repo.commit("Removing test file.")
+        entry = RJGit::Porcelain.diff(@repo).should be_nil
       end
       
       after(:each) do
