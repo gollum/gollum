@@ -2,7 +2,8 @@ module RJGit #From Grit gem
 
   class Config
     
-    def initialize
+    def initialize(path)
+      @path = path
     end
 
     def []=(key, value)
@@ -22,24 +23,31 @@ module RJGit #From Grit gem
       data.keys
     end
 
-    protected
-      def data
-        @data ||= load_config
-      end
+    def data
+      @data ||= load_config(@path)
+    end
 
-      def load_config(config_path)
-        hash = {}
-        config_lines.map do |line|
-          key, value = line.split(/=/, 2)
-          hash[key] = value
+    def load_config(path)
+      hash = {}
+      nested_hash = {}
+      config_lines(path).map do |line|
+        key, value = line.split(/=/, 2)
+        key = key.strip unless key.nil?
+        value = value.strip unless value.nil?
+        if key && value.nil?
+          nested_hash = Hash.new
+          hash[key] = nested_hash
+        elsif key && value
+          nested_hash[key] = value
         end
-        hash
       end
+      hash
+    end
 
-      def config_lines(config_path)
-        return nil unless File.file?(config_path)
-        IO.readlines(config_path)
-      end
+    def config_lines(path)
+      return nil unless File.file?(path)
+      IO.readlines(path)
+    end
   
   end 
 end
