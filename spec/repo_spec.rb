@@ -115,8 +115,6 @@ describe Repo do
       File.open("#{@temp_repo_path}/newfile.txt", 'w') {|file| file.write("This is a new file to commit.") }
       @repo.add("newfile.txt")
       @repo.commit("Committing a test file to a test repository.")
-      @diff = RJGit::Porcelain.diff(@repo)
-      $stderr.puts "\n\n\n" + @diff.inspect + "\n\n\n"
       RJGit::Porcelain.ls_tree(@repo).size.should > 5
     end
     
@@ -126,10 +124,10 @@ describe Repo do
       @repo.commit("Added remove_file.txt")
       "#{@temp_repo_path}/remove_file.txt".should exist
       @repo.remove("remove_file.txt")
-      @diff = RJGit::Porcelain.diff(@repo).first
-      $stderr.puts "\n\n\n" + @diff.inspect + "\n\n\n"
-      @diff[:oldpath].should == 'remove_file.txt'
-      @diff[:changetype].should == 'DELETE'
+      diff = RJGit::Porcelain.diff(@repo, {:cached => true}).first
+      @repo.commit("Removed file remove_file.txt.")
+      diff[:oldpath].should == 'remove_file.txt'
+      diff[:changetype].should == 'DELETE'
       "#{@temp_repo_path}/remove_file.txt".should_not exist
     end
     

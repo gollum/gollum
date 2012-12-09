@@ -5,6 +5,7 @@ module RJGit
 
   import 'org.eclipse.jgit.api.Git'
   import 'org.eclipse.jgit.api.AddCommand'
+  import 'org.eclipse.jgit.api.RmCommand'
 
   
   class RubyGit
@@ -47,6 +48,10 @@ module RJGit
 
     def add(file_pattern)
       @jgit.add.add_filepattern(file_pattern).call
+    end
+    
+    def remove(file_pattern)
+      @jgit.rm.add_filepattern(file_pattern).call
     end
 
     def tag(name, message = "", force = false)
