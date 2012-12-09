@@ -57,16 +57,17 @@ describe RJGit do
         entry[:changetype].should == "ADD"
         entry[:newid].should match "0621fdbce5ff954c0742c75076041741142b876d"
         @repo.commit("Committing a test file to a test repository.")
-        RJGit::Porcelain.diff(@repo).should be_nil
+        RJGit::Porcelain.diff(@repo).should == []
       end
       
       it "should return diff information of working tree when removing file" do 
+        @repo.commit("Adding rspec-addfile.txt so it can be deleted.")
         @repo.remove("rspec-addfile.txt")
         entry = RJGit::Porcelain.diff(@repo, {:cached => true}).first
         entry[:changetype].should == "DELETE"
         entry[:oldpath].should == "rspec-addfile.txt"
         @repo.commit("Removing test file.")
-        entry = RJGit::Porcelain.diff(@repo).should be_nil
+        RJGit::Porcelain.diff(@repo).should == []
       end
       
       after(:each) do
