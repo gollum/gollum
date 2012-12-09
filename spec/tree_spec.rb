@@ -4,12 +4,12 @@ describe Tree do
 
   before(:each) do
     @bare_repo = Repo.new(TEST_BARE_REPO_PATH, {:bare => true}, false)
-    @tree = Tree.find_tree(@bare_repo.repo, 'lib')
+    @tree = Tree.find_tree(@bare_repo.jrepo, 'lib')
     #@tree = repo.commits.first.tree
   end
 
   it "should have contents" do
-    contents = RJGit::Porcelain.ls_tree(@bare_repo.repo, @tree.revtree)
+    contents = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, @tree.revtree)
     contents.should be_an Array
     contents.first[:type].should == "blob"
     contents.first[:id].should match /77aa887449c28a922a660b2bb749e4127f7664e5/

@@ -4,7 +4,7 @@ describe Blob do
 
   before(:each) do
     @repo = Repo.new(TEST_REPO_PATH)
-    @blob = Blob.find_blob(@repo.repo, 'materialist.txt')
+    @blob = Blob.find_blob(@repo.jrepo, 'materialist.txt')
   end
 
   it "should have a mode" do

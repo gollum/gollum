@@ -58,7 +58,7 @@ describe Repo do
     end
 
     it "should have a reference to a JGit Repository object" do
-      @repo.repo.should be_a org.eclipse.jgit.lib.Repository
+      @repo.jrepo.should be_a org.eclipse.jgit.lib.Repository
     end
 
     it "should list the current branch" do
@@ -107,7 +107,7 @@ describe Repo do
     it "should add files to itself" do
       File.open("#{@temp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
       @repo.add("rspec-addfile.txt")
-      @repo.repo.read_dir_cache.find_entry("rspec-addfile.txt").should > 0
+      @repo.jrepo.read_dir_cache.find_entry("rspec-addfile.txt").should > 0
     end
   
     it "should commit files to the repository" do

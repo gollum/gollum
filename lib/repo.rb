@@ -11,10 +11,10 @@ module RJGit
   class Repo
     
     attr_accessor :git
-    attr_accessor :repo
+    attr_accessor :jrepo
     attr_accessor :path
 
-    RJGit.delegate_to(Repository, :@repo)
+    RJGit.delegate_to(Repository, :@jrepo)
     
     def initialize(path, options = {}, create = false)
       epath = File.expand_path(path)
@@ -29,13 +29,13 @@ module RJGit
       @path = bare ? epath : File.join(epath, '/.git')
 
       repo_path = java.io.File.new(@path)
-      @repo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).build()
-      @repo.create(bare) if create
-      @git = RubyGit.new(@repo)
+      @jrepo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).build()
+      @jrepo.create(bare) if create
+      @git = RubyGit.new(@jrepo)
     end
     
     def bare?
-      @repo.is_bare
+      @jrepo.is_bare
     end
 
     def self.create(path, options = {:bare => true})
@@ -44,11 +44,11 @@ module RJGit
 
     def commits(ref="master", limit=100)
       options = { :limit => limit }
-      Commit.find_all(@repo, ref, options)
+      Commit.find_all(@jrepo, ref, options)
     end
 
     def branch
-      @repo.get_full_branch
+      @jrepo.get_full_branch
     end
 
     def branches
@@ -65,12 +65,12 @@ module RJGit
 
     # Convenience method to retrieve a Blob by name
     def blob(file_path)
-      Blob.find_blob(@repo, file_path)
+      Blob.find_blob(@jrepo, file_path)
     end
 
     # Convenience method to retrieve a Tree by name
     def tree(file_path)
-      Tree.find_tree(@repo, file_path)
+      Tree.find_tree(@jrepo, file_path)
     end
 
   end

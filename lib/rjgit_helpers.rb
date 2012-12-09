@@ -53,7 +53,7 @@ module RJGit
   
   def repository_type(repository)
     repo = case repository
-      when Repo then repository.repo
+      when Repo then repository.jrepo
       when org.eclipse.jgit.lib.Repository then repository
       else nil
     end

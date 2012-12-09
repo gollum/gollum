@@ -5,7 +5,7 @@ require 'spec_helper'
 describe RJGit do
   before(:all) do
     @bare_repo = Repo.new(TEST_BARE_REPO_PATH)
-    @git = RubyGit.new(@bare_repo.repo)
+    @git = RubyGit.new(@bare_repo.jrepo)
   end
   
   it "should have a version" do
@@ -29,7 +29,7 @@ describe RJGit do
     end
     
     it "should mimic git-ls-tree" do
-      listing = RJGit::Porcelain.ls_tree(@bare_repo.repo)
+      listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo)
       listing.should be_an Array
       first_entry = listing.first
       first_entry.should be_a Hash
