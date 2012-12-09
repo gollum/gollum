@@ -19,23 +19,39 @@ describe Repo do
     end
 
     it "should create a new repository if specified" do
-      filename = 'git_create_test' + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
-      tmp_path = File.join("/tmp/", filename)
+      tmp_path = get_new_tmprepo_path
+      tmp_path.should_not exist
       new_repo = Repo.new(tmp_path, {:bare => false}, @create_new)
-      result = (tmp_path + '/.git').should exist
-      FileUtils.rm_rf(tmp_path)
+      result = tmp_path.should exist
+      remove_temp_repo(tmp_path)
       result
     end
 
     it "should create a new bare repository if specified" do
-      filename = 'git_create_bare_test' + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
-      tmp_path = File.join("/tmp/", filename)
+      tmp_path = get_new_tmprepo_path(true)
+      tmp_path.should_not be_a_directory
       new_bare_repo = Repo.new(tmp_path, {:bare => true}, @create_new)
       result = tmp_path.should be_a_directory
-      FileUtils.rm_rf(tmp_path)
+      remove_temp_repo(tmp_path)
       result
     end
 
+    it "should create the repository on disk" do
+      tmp_path = get_new_tmprepo_path(true) # bare repository
+      tmp_path.should_not be_a_directory
+      new_bare_repo = Repo.create(tmp_path, {:bare => true})
+      result = tmp_path.should be_a_directory
+      remove_temp_repo(tmp_path)
+      result
+      
+      tmp_path = get_new_tmprepo_path # non-bare repository
+      tmp_path.should_not exist
+      new_repo = Repo.create(tmp_path, {:bare => false})
+      result = tmp_path.should exist
+      remove_temp_repo(tmp_path)
+      result
+    end
+    
     it "should tell us whether it is bare" do
       @repo.should_not be_bare
       @bare_repo.should be_bare
@@ -101,8 +117,6 @@ describe Repo do
       @repo.commit("Committing a test file to a test repository.")
       RJGit::Porcelain.ls_tree(@repo).size.should > 6
     end
-    
-    it "should create the repository on disk"
     
     after(:each) do
       remove_temp_repo(File.dirname(@temp_repo_path))
