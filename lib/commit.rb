@@ -18,9 +18,9 @@ module RJGit
   
     RJGit.delegate_to(RevCommit, :@jcommit)
     
-    def initialize(commit)
-      @jcommit = commit
-      @id = ObjectId.to_string(commit.get_id)
+    def initialize(jcommit)
+      @jcommit = jcommit
+      @id = ObjectId.to_string(jcommit.get_id)
       @actor = Actor.new(@jcommit.get_author_ident)
       @committer = Actor.new(@jcommit.get_committer_ident)
       @committed_date = Time.at(@jcommit.commit_time)

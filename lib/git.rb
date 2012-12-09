@@ -9,27 +9,27 @@ module RJGit
   
   class RubyGit
     
-    attr_accessor :git
-    attr_accessor :repo
+    attr_accessor :jgit
+    attr_accessor :jrepo
 
-    RJGit.delegate_to(Git, :@git)
+    RJGit.delegate_to(Git, :@jgit)
       
     def initialize(repository)
-      @repo = repository_type(repository)
-      @git = Git.new(repository)
+      @jrepo = repository_type(repository)
+      @jgit = Git.new(@jrepo)
     end
     
     def log
-      logs = @git.log
+      logs = @jgit.log
       commits = Array.new
-      logs.call.each do |commit|
-        commits << Commit.new(commit)
+      logs.call.each do |jcommit|
+        commits << Commit.new(jcommit)
       end
       commits
     end
   
     def branch_list
-      branch = @git.branch_list
+      branch = @jgit.branch_list
       array = Array.new
       branch.call.each do |b|
         array << b.get_name
@@ -38,7 +38,7 @@ module RJGit
     end
     
     def commit(message)
-      @git.commit.set_message(message).call
+      @jgit.commit.set_message(message).call
     end
     
     def clone(remote, local)
@@ -46,19 +46,19 @@ module RJGit
     end
 
     def add(file_pattern)
-      @git.add.add_filepattern(file_pattern).call
+      @jgit.add.add_filepattern(file_pattern).call
     end
 
     def tag(name, message = "", force = false)
-      Ref.new(@git.tag.set_name(name).set_force_update(force).set_message(message).call)
+      Ref.new(@jgit.tag.set_name(name).set_force_update(force).set_message(message).call)
     end
 
     def tag(name, commit_or_revision_id, message = "", force = false)
-      Ref.new(@git.tag.set_name(name).set_force_update(force).set_message(message).set_object_id(commit_or_revision_id).call)
+      Ref.new(@jgit.tag.set_name(name).set_force_update(force).set_message(message).set_object_id(commit_or_revision_id).call)
     end
 
     def apply(input_stream)
-      updated_files = @git.apply.set_patch(input_stream).call
+      updated_files = @jgit.apply.set_patch(input_stream).call
       updated_files_parsed = []
       updated_files.each do |file|
         updated_files_parsed << file.get_absolute_path
@@ -77,7 +77,7 @@ module RJGit
     end
 
     def clean(options = {})
-      clean_command = @git.clean
+      clean_command = @jgit.clean
       clean_command.set_dry_run(true) if options[:dryrun]
       clean_command.set_paths(java.util.Arrays.asList(options[:paths])) if options[:paths]
       clean_command.call
