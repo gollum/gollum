@@ -51,7 +51,7 @@ module RJGit
   end
   
   
-  def repository_type(repository)
+  def self.repository_type(repository)
     repo = case repository
       when Repo then repository.jrepo
       when org.eclipse.jgit.lib.Repository then repository
@@ -59,7 +59,7 @@ module RJGit
     end
   end
   
-  def tree_type(tree)
+  def self.tree_type(tree)
     treeobj = case tree
       when Tree then tree.revtree
       when org.eclipse.jgit.revwalk.RevTree then tree

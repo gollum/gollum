@@ -24,7 +24,7 @@ module RJGit
     end
     
     def self.find_tree(repository, file_path, branch=Constants::HEAD)
-      jrepo = repository_type(repository)
+      jrepo = RJGit.repository_type(repository)
       return nil if jrepo.nil?
       last_commit_hash = jrepo.resolve(branch)
       return nil if last_commit_hash.nil?

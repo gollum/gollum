@@ -50,9 +50,9 @@ module RJGit
     
     def self.ls_tree(repository, tree=nil, branch=Constants::HEAD, options={})
       options = {:recursive => false, :print => false, :io => $stdout}.merge(options)
-      jrepo = repository_type(repository)
+      jrepo = RJGit.repository_type(repository)
       if tree 
-        jtree = tree_type(tree)
+        jtree = RJGit.tree_type(tree)
       else
         last_commit_hash = jrepo.resolve(branch)
         return nil unless last_commit_hash
@@ -79,7 +79,7 @@ module RJGit
       
     def self.blame(repository, file_path, options={})
       options = {:print => false, :io => $stdout}.merge(options)
-      jrepo = repository_type(repository)
+      jrepo = RJGit.repository_type(repository)
       return nil unless jrepo
 
       blame_command = BlameCommand.new(jrepo)
