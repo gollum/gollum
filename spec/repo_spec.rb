@@ -65,7 +65,7 @@ describe Repo do
       blob.should_not be_nil
       blob.id.should match /77aa887449c28a922a660b2bb749e4127f7664e5/
       blob.name.should == 'grit.rb'
-      blob.blob.should be_a org.eclipse.jgit.revwalk.RevBlob
+      blob.jblob.should be_a org.eclipse.jgit.revwalk.RevBlob
     end
 
     it "should return a Tree by name" do

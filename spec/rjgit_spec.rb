@@ -23,7 +23,7 @@ describe RJGit do
   describe Porcelain do
     it "should mimic git-cat-file" do
       blob = @bare_repo.blob('lib/grit.rb')
-      RJGit::Porcelain.cat_file(@bare_repo, blob.blob).should =~ /# core\n/
+      RJGit::Porcelain.cat_file(@bare_repo, blob.jblob).should =~ /# core\n/
     end
     
     it "should mimic git-ls-tree" do
