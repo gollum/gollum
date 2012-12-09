@@ -21,7 +21,7 @@ module RJGit
     return treewalk.get_file_mode(0).get_bits
   end
   
-  def stringify(entries)
+  def self.stringify(entries)
     strio = StringIO.new
     entries.each do |entry|
       line = entry.values.join("\t")
@@ -31,13 +31,13 @@ module RJGit
     strio.string
   end
   
-  def convert_diff_entries(entries)
+  def self.convert_diff_entries(entries)
     entries.map do |diff_entry|
-      diff_entry_to_hash(diff_entry)
+      RJGit. diff_entry_to_hash(diff_entry)
     end
   end
   
-  def diff_entry_to_hash(diff_entry)
+  def self.diff_entry_to_hash(diff_entry)
     entry = {}
     entry[:changetype] = diff_entry.get_change_type.to_string
     entry[:oldpath] = diff_entry.get_old_path

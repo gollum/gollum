@@ -120,7 +120,7 @@ describe Repo do
       RJGit::Porcelain.ls_tree(@repo).size.should > 5
     end
     
-    it "should remove files from the repository" do
+    it "should remove files from the index and the file system" do
       File.open("#{@temp_repo_path}/remove_file.txt", 'w') {|file| file.write("This is a file to remove.") }
       @repo.add("remove_file.txt")
       @repo.commit("Added remove_file.txt")
@@ -128,9 +128,9 @@ describe Repo do
       @repo.remove("remove_file.txt")
       @diff = RJGit::Porcelain.diff(@repo).first
       $stderr.puts "\n\n\n" + @diff.inspect + "\n\n\n"
-      @diff[:oldpath].should == 'remove_file.txt' # File must be removed from the index
+      @diff[:oldpath].should == 'remove_file.txt'
       @diff[:changetype].should == 'DELETE'
-      "#{@temp_repo_path}/remove_file.txt".should_not exist # File must be deleted from the file system
+      "#{@temp_repo_path}/remove_file.txt".should_not exist
     end
     
     after(:each) do

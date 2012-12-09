@@ -110,7 +110,7 @@ module RJGit
       diff_command.set_cached(true) if options[:cached]
       diff_entries = diff_command.call
       diff_entries = diff_entries.to_array.to_ary
-      diff_entries = convert_diff_entries(diff_entries)
+      diff_entries = RJGit.convert_diff_entries(diff_entries)
       diff_entries
     end
     
