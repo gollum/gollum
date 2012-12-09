@@ -50,19 +50,19 @@ module RJGit
     
     def self.ls_tree(repository, tree=nil, branch=Constants::HEAD, options={})
       options = {:recursive => false, :print => false, :io => $stdout}.merge(options)
-      repository = repository_type(repository)
+      jrepo = repository_type(repository)
       if tree 
-        revtree = tree_type(tree)
+        jtree = tree_type(tree)
       else
-        last_commit_hash = repository.resolve(branch)
+        last_commit_hash = jrepo.resolve(branch)
         return nil unless last_commit_hash
-        walk = RevWalk.new(repository)
-        commit = walk.parse_commit(last_commit_hash)
-        revtree = commit.get_tree
+        walk = RevWalk.new(jrepo)
+        jcommit = walk.parse_commit(last_commit_hash)
+        jtree = jcommit.get_tree
       end
-      treewalk = TreeWalk.new(repository)
+      treewalk = TreeWalk.new(jrepo)
       treewalk.set_recursive(options[:recursive])
-      treewalk.add_tree(revtree)
+      treewalk.add_tree(jtree)
       entries = []
       while treewalk.next
         entry = {}
@@ -79,10 +79,10 @@ module RJGit
       
     def self.blame(repository, file_path, options={})
       options = {:print => false, :io => $stdout}.merge(options)
-      repo = repository_type(repository)
-      return nil unless repo
+      jrepo = repository_type(repository)
+      return nil unless jrepo
 
-      blame_command = BlameCommand.new(repo)
+      blame_command = BlameCommand.new(jrepo)
       blame_command.set_file_path(file_path)
       result = blame_command.call
       content = result.get_result_contents
