@@ -35,15 +35,11 @@ module RJGit
     
     # http://wiki.eclipse.org/JGit/User_Guide#Porcelain_API
     def self.add(repository, file_pattern)
-      git = repository.git.git
-      add_command = git.add
-      add_command.add_file_pattern(file_pattern).call
+      repository.add(file_pattern)
     end
     
     def self.commit(repository, message="")
-      git = repository.git.git
-      commit_command = git.commit
-      commit_command.set_message(message).call
+      repository.commit(message)
     end
     
     # http://dev.eclipse.org/mhonarc/lists/jgit-dev/msg00558.html
