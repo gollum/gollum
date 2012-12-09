@@ -59,6 +59,10 @@ module RJGit
       @git.add(file_pattern)
     end
     
+    def remove(file_pattern)
+      @git.remove(file_pattern)
+    end
+    
     def commit(message)
       @git.commit(message)
     end

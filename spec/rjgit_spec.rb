@@ -45,9 +45,9 @@ describe RJGit do
     
  context "producing diffs" do
       before(:each) do
-	@tmp_repo_path = get_new_tmprepo_path
+        @tmp_repo_path = get_new_tmprepo_path
         @repo = Repo.create(@tmp_repo_path)
-	File.open("#{@tmp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
+        File.open("#{@tmp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
         @repo.add("#{@tmp_repo_path}/rspec-addfile.txt")
 	@repo.commit("Committing a test file to a test repository.")
       end
