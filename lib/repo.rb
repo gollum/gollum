@@ -62,6 +62,10 @@ module RJGit
     def commit(message)
       @git.commit(message)
     end
+    
+    def clean(options = {})
+      @git.clean(options)
+    end
 
     # Convenience method to retrieve a Blob by name
     def blob(file_path)
