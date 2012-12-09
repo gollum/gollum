@@ -23,9 +23,27 @@ describe RJGit do
   end
   
   describe Porcelain do
+    before(:all) do
+      @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+      @repo = Repo.new(@temp_repo_path)
+      @testfile = 'test_file.txt'
+      File.open(File.join(@temp_repo_path, @testfile), 'w') {|file| file.write("This is a new file to add.") }
+    end
+    
     it "should mimic git-cat-file" do
       blob = @bare_repo.blob('lib/grit.rb')
       RJGit::Porcelain.cat_file(@bare_repo, blob.jblob).should =~ /# core\n/
+    end
+    
+    it "should add files to a repository" do
+      Porcelain.add(@repo,@testfile)
+      @repo.jrepo.read_dir_cache.find_entry(@testfile).should > 0
+    end
+    
+    it "should commit files to a repository" do
+      message = "Initial commit"
+      Porcelain.commit(@repo, message)
+      @repo.commits.last.message.chomp.should == message
     end
     
     it "should mimic git-ls-tree" do
@@ -41,6 +59,11 @@ describe RJGit do
     
     it "should mimic git-blame" do
       RJGit::Porcelain.blame(@bare_repo, 'lib/grit.rb')
+    end
+    
+    after(:all) do
+      @repo = nil
+      remove_temp_repo(@temp_repo_path)
     end
     
  context "producing diffs" do
