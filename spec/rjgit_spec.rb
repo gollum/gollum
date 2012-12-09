@@ -8,7 +8,9 @@ describe RJGit do
     @git = RubyGit.new(@bare_repo.repo)
   end
   
-  it "should have a version"
+  it "should have a version" do
+    RJGit.version.should equal RJGit::VERSION
+  end
   
   context "delegating missing methods to the underlying jgit Git object" do
      it "should delegate the method to the JGit object" do
