@@ -16,10 +16,13 @@ describe RubyGit do
     before(:each) do
       @tmp_repo_path = get_new_tmprepo_path
       @repo = Repo.create(@tmp_repo_path)
-  	  File.open("#{@tmp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
+  	  File.open(File.join(@tmp_repo_path, "rspec-addfile.txt"), 'w') {|file| file.write("This is a new file to add.") }
     end
     
-    it "should remove untracked files from the working tree"
+    it "should remove untracked files from the working tree" do
+      @repo.clean
+      File.exist?(File.join(@tmp_repo_path, "rspec-addfile.txt")).should be_false
+    end
     
     context "after adding files" do
       
