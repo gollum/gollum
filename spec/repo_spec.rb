@@ -89,7 +89,7 @@ describe Repo do
       tree.should_not be_nil
       tree.id.should match /aa74200714ce8190b38211795f974b4410f5a9d0/
       tree.name.should == 'lib'
-      tree.revtree.should be_a org.eclipse.jgit.revwalk.RevTree
+      tree.jtree.should be_a org.eclipse.jgit.revwalk.RevTree
     end
 
     after(:each) do

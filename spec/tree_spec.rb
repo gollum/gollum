@@ -9,7 +9,7 @@ describe Tree do
   end
 
   it "should have contents" do
-    contents = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, @tree.revtree)
+    contents = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, @tree.jtree)
     contents.should be_an Array
     contents.first[:type].should == "blob"
     contents.first[:id].should match /77aa887449c28a922a660b2bb749e4127f7664e5/

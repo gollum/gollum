@@ -16,8 +16,8 @@ module RJGit
     def_delegators delegate_name, *java_methods
   end
 
-  def self.get_file_mode(repository, path, revtree)
-    treewalk = TreeWalk.forPath(repository, path, revtree)
+  def self.get_file_mode(repository, path, jtree)
+    treewalk = TreeWalk.forPath(repository, path, jtree)
     return treewalk.get_file_mode(0).get_bits
   end
   
