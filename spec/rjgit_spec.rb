@@ -43,21 +43,27 @@ describe RJGit do
       RJGit::Porcelain.blame(@bare_repo, 'lib/grit.rb')
     end
     
-    context "producing diffs" do
+ context "producing diffs" do
       before(:each) do
-        @repo = Repo.new(TEST_REPO_PATH)
+	@tmp_repo_path = get_new_tmprepo_path
+        @repo = Repo.create(@tmp_repo_path)
+	File.open("#{@tmp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
+        @repo.add("#{@tmp_repo_path}/rspec-addfile.txt")
+	@repo.commit("Committing a test file to a test repository.")
       end
       
       it "should return diff information of working tree" do
-        diff_entries = RJGit::Porcelain.diff(@repo)
-        entry = diff_entries.first
+        entry = RJGit::Porcelain.diff(@repo).first
         entry.should be_a Hash
         entry[:changetype].should == "ADD"
-        entry[:newid].should match /a106b0d89c179fc7414a5a62b058503857316c18/ 
+        entry[:newid].should match "0621fdbce5ff954c0742c75076041741142b876d"
       end
+      
+      it "should return a DELETE diff after deleting a file"
       
       after(:each) do
         @repo = nil
+	remove_temp_repo(@tmp_repo_path)
       end 
     end  
   end # end Porcelain

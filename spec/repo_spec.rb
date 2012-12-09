@@ -118,6 +118,8 @@ describe Repo do
       RJGit::Porcelain.ls_tree(@repo).size.should > 6
     end
     
+    it "should delete files from the repository"
+    
     after(:each) do
       remove_temp_repo(File.dirname(@temp_repo_path))
       @repo = nil

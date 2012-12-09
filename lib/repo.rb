@@ -38,7 +38,7 @@ module RJGit
       @jrepo.is_bare
     end
 
-    def self.create(path, options = {:bare => true})
+    def self.create(path, options = {:bare => false})
       Repo.new(path, options, true)
     end
 
