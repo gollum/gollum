@@ -111,13 +111,13 @@ describe Repo do
     end
   
     it "should commit files to the repository" do
-      RJGit::Porcelain.ls_tree(@repo).size.should == 6
+      RJGit::Porcelain.ls_tree(@repo).size.should == 5
       File.open("#{@temp_repo_path}/newfile.txt", 'w') {|file| file.write("This is a new file to commit.") }
       @repo.add("newfile.txt")
       @repo.commit("Committing a test file to a test repository.")
       @diff = RJGit::Porcelain.diff(@repo)
-      STDERR.puts "\n\n\n" + @diff.inspect + "\n\n\n"
-      RJGit::Porcelain.ls_tree(@repo).size.should > 6
+      $stderr.puts "\n\n\n" + @diff.inspect + "\n\n\n"
+      RJGit::Porcelain.ls_tree(@repo).size.should > 5
     end
     
     it "should remove files from the repository" do
@@ -127,7 +127,7 @@ describe Repo do
       "#{@temp_repo_path}/remove_file.txt".should exist
       @repo.remove("remove_file.txt")
       @diff = RJGit::Porcelain.diff(@repo).first
-      #STDERR.puts "\n\n\n" + @diff.inspect + "\n\n\n"
+      $stderr.puts "\n\n\n" + @diff.inspect + "\n\n\n"
       @diff[:oldpath].should == 'remove_file.txt' # File must be removed from the index
       @diff[:changetype].should == 'DELETE'
       "#{@temp_repo_path}/remove_file.txt".should_not exist # File must be deleted from the file system

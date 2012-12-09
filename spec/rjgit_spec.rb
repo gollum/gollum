@@ -49,7 +49,7 @@ describe RJGit do
         @repo = Repo.create(@tmp_repo_path)
         File.open("#{@tmp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
         @repo.add("#{@tmp_repo_path}/rspec-addfile.txt")
-	@repo.commit("Committing a test file to a test repository.")
+        @repo.commit("Committing a test file to a test repository.")
       end
       
       it "should return diff information of working tree" do
@@ -63,7 +63,7 @@ describe RJGit do
       
       after(:each) do
         @repo = nil
-	remove_temp_repo(@tmp_repo_path)
+	      remove_temp_repo(@tmp_repo_path)
       end 
     end  
   end # end Porcelain
