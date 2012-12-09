@@ -1,8 +1,8 @@
 module RJGit #From Grit gem
 
   class Config
-    def initialize(repo)
-      @repo = repo
+    
+    def initialize
     end
 
     def []=(key, value)
@@ -27,7 +27,7 @@ module RJGit #From Grit gem
         @data ||= load_config
       end
 
-      def load_config
+      def load_config(config_path)
         hash = {}
         config_lines.map do |line|
           key, value = line.split(/=/, 2)
@@ -36,8 +36,9 @@ module RJGit #From Grit gem
         hash
       end
 
-      def config_lines
-        @repo.git.config(:list => true).split(/\n/)
+      def config_lines(config_path)
+        return nil unless File.file?(config_path)
+        IO.readlines(config_path)
       end
   
   end 
