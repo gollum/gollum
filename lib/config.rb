@@ -18,10 +18,11 @@ module RJGit #From Grit gem
     def fetch(key, default = nil)
       data[key] || default || raise(IndexError.new("key not found"))
     end
-
+    
     def keys
       data.keys
     end
+    alias_method :sections, :keys
 
     def data
       @data ||= load_config(@path)
