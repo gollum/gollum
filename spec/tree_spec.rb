@@ -36,8 +36,10 @@ describe Tree do
       @tree.should be_nil
     end
     
-    it "should return nil if no repository is passed in"
-    
+    it "should return nil if no repository is passed in" do
+      @tree = Tree.find_tree(nil, 'lib')
+      @tree.should be_nil
+    end
   end
 
 end

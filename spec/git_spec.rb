@@ -2,7 +2,12 @@ require 'spec_helper'
 
 describe RubyGit do
   
-  it "should return log information"
+  it "should return log information" do
+    repo = Repo.new(TEST_REPO_PATH) # Test with both a bare and a non-bare repository
+    messages = repo.git.log
+    messages.should_not be_empty
+    messages.first.message.should match /moved prematerial.txt to chapters\/ so that this repo has at least one subtree./
+  end
   
   it "should tag with commit or revision id"
   
