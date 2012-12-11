@@ -699,14 +699,14 @@ ul.actions {
 
 #pages li a.file,
 #pages li a.folder {
-    background-image: url(/images/fileview/document.png);
+    background-image: url(../images/fileview/document.png);
     background-position: 0 1px;
     background-repeat: no-repeat;
     padding-left: 20px;
 }
 
 #pages li a.folder {
-    background-image: url(/images/fileview/folder-horizontal.png);
+    background-image: url(../images/fileview/folder-horizontal.png);
 }
 
 #pages .breadcrumb {
