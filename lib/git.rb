@@ -42,8 +42,24 @@ module RJGit
       @jgit.commit.set_message(message).call
     end
     
-    def clone(remote, local)
-      Git.clone_repository.setURI(remote).set_directory(new File(local)).call
+    def clone(remote, local, options = {})
+      RubyGit.clone(remote, local, options)
+    end
+    
+    def self.clone(remote, local, options = {})
+      clone_command = Git.clone_repository
+      clone_command.setURI(remote)
+      clone_command.set_directory(java.io.File.new(local))
+      clone_command.set_bare(true) if options[:bare]
+      if options[:branch]
+        if options[:branch] == :all
+          clone_command.set_clone_all_branches(true)
+        else
+          clone_command.set_branch(options[:branch]) 
+        end
+      end
+      clone_command.call
+      Repo.new(local)
     end
 
     def add(file_pattern)

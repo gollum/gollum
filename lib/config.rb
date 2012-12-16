@@ -28,6 +28,10 @@ module RJGit #From Grit gem
       @data ||= load_config(@path)
     end
 
+    # Use the following for sections:
+    # c = '[core]'
+    # s = c.delete('[]').to_sym
+    # o = "[ #{s} ]"
     def load_config(path)
       hash = {}
       nested_hash = {}

@@ -13,7 +13,51 @@ describe RubyGit do
   
   it "should tag without commit or revision id"
   
-  it "should clone repositories"
+  context "cloning a non-bare repository" do
+    before(:each) do
+      @repo = Repo.new(TEST_REPO_PATH) 
+      @remote = TEST_REPO_PATH
+      @local  = get_new_tmprepo_path 
+    end
+    
+    it "should create a new local repository" do
+      clone = @repo.git.clone(@remote, @local)
+      clone.path.should == File.join(@local, '/.git')
+      File.exist?(File.join(@local, 'homer-excited.png')).should be_true
+    end
+    
+    it "should clone a specific branch if specified" do
+      clone = @repo.git.clone(@remote, @local, {:branch => 'refs/heads/alternative'})
+      clone.branches.size.should == 1
+      clone.branches.first.should == 'refs/heads/alternative'
+    end
+    
+    it "should clone all branches if specified" do
+      clone = @repo.git.clone(@remote, @local, {:branch => :all})
+      pending "This specs fails because of a JGit bug with CloneCommand#set_clone_all_branches(true)"
+      clone.branches.size.should > 1
+    end
+    after(:each) do
+      remove_temp_repo(@local)
+    end
+    
+  end
+  
+  context "cloning a bare repository" do
+    before(:each) do
+      remote = TEST_BARE_REPO_PATH
+      @local  = get_new_tmprepo_path(true)
+      @clone = RubyGit.clone(remote, @local, {:bare => true})
+    end
+    
+    it "should be bare" do
+      @clone.should be_bare
+    end
+    
+    after(:each) do
+      remove_temp_repo(@local)
+    end
+  end
   
   it "should apply a patch to a file"
   

@@ -34,9 +34,9 @@ def remove_temp_repo(path)
 end
 
 def get_new_tmprepo_path(bare = false)
-  filename = 'git_create_bare_test' + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
+  dirname = bare ? 'git_bare_test' : 'git_non_bare_test'
+  filename = dirname + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
   result = File.join('/','tmp', filename)
-  bare = false ? result : File.join(result, '.git')    
 end
 
 # Require any custom RSpec matchers
