@@ -75,6 +75,11 @@ describe Repo do
       @repo.commits.should be_an Array
       @repo.commits.length.should > 3
     end
+    
+    it "should list its tags" do
+      @bare_repo.tags.should be_a Hash
+      @bare_repo.tags["annotated"].should == "b7f932bd02b3e0a4228ee7b55832749028d345de"
+    end
 
     it "should return a Blob by name" do
       blob = @bare_repo.blob('lib/grit.rb')

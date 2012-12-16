@@ -54,6 +54,13 @@ module RJGit
     def branches
       return @git.branch_list
     end
+    
+    def tags
+      jtags = @jrepo.get_tags.to_hash
+      jtags.each_with_object( Hash.new ) do |(key, value), hash| 
+        hash[key] = ObjectId.to_string(value.get_object_id)
+      end
+    end
 
     def add(file_pattern)
       @git.add(file_pattern)

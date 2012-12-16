@@ -9,9 +9,13 @@ describe RubyGit do
     messages.first.message.should match /Cleaning working directory/
   end
   
-  it "should tag with commit or revision id"
+  it "should tag with commit or revision id" do
+    bare_repo = Repo.new(TEST_BARE_REPO_PATH)
+    pending "Should be done in a write-access situation"
+  end
   
-  it "should tag without commit or revision id"
+  it "should tag without commit or revision id" do
+  end
   
   context "cloning a non-bare repository" do
     before(:each) do

@@ -70,12 +70,13 @@ module RJGit
       @jgit.rm.add_filepattern(file_pattern).call
     end
 
-    def tag(name, message = "", force = false)
-      Ref.new(@jgit.tag.set_name(name).set_force_update(force).set_message(message).call)
-    end
-
-    def tag(name, commit_or_revision_id, message = "", force = false)
-      Ref.new(@jgit.tag.set_name(name).set_force_update(force).set_message(message).set_object_id(commit_or_revision_id).call)
+    def tag(name, message = "", commit_or_revision_id = nil, force = false)
+      tag_command = @jgit.tag
+      tag_command.set_name(name)
+      tag_command.set_force_update(force)
+      tag_command.set_message(message)
+      tag_command.set_object_id(commit_or_revision_id) if commit_or_revision_id
+      tag_command.call
     end
 
     def apply(input_stream)
