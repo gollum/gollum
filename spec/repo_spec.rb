@@ -76,9 +76,16 @@ describe Repo do
       @repo.commits.length.should > 3
     end
     
-    it "should list its tags" do
+    it "should list its tags in name-id pairs" do
+      @bare_repo.tags(lightweight=true).should be_a Hash
+      @bare_repo.tags(true)["annotated"].should == "b7f932bd02b3e0a4228ee7b55832749028d345de"
+    end
+
+    it "should list its tags as Tags" do
       @bare_repo.tags.should be_a Hash
-      @bare_repo.tags["annotated"].should == "b7f932bd02b3e0a4228ee7b55832749028d345de"
+      tag = @bare_repo.tags['annotated']
+      tag.should be_a Tag
+      tag.id.should == "b7f932bd02b3e0a4228ee7b55832749028d345de"
     end
 
     it "should return a Blob by name" do
@@ -116,11 +123,11 @@ describe Repo do
     end
   
     it "should commit files to the repository" do
-      RJGit::Porcelain.ls_tree(@repo).size.should == 5
+      RJGit::Porcelain.ls_tree(@repo).should have(5).items
       File.open("#{@temp_repo_path}/newfile.txt", 'w') {|file| file.write("This is a new file to commit.") }
       @repo.add("newfile.txt")
       @repo.commit("Committing a test file to a test repository.")
-      RJGit::Porcelain.ls_tree(@repo).size.should > 5
+      RJGit::Porcelain.ls_tree(@repo).should have_at_least(6).items
     end
     
     it "should remove files from the index and the file system" do

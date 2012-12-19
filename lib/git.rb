@@ -70,15 +70,28 @@ module RJGit
       @jgit.rm.add_filepattern(file_pattern).call
     end
 
-    def tag(name, message = "", commit_or_revision_id = nil, force = false)
+    def tag(name, message = "", commit_or_revision = nil, actor = nil, force = false)
       tag_command = @jgit.tag
       tag_command.set_name(name)
       tag_command.set_force_update(force)
       tag_command.set_message(message)
-      tag_command.set_object_id(commit_or_revision_id) if commit_or_revision_id
+      tag_command.set_object_id(commit_or_revision) if commit_or_revision
+      if actor
+        actor = RJGit.actor_type(actor)
+        tag_command.set_tagger(actor)
+      end
       tag_command.call
     end
 
+    def resolve_tag(tagref)
+      begin
+        walk = RevWalk.new(@jrepo)
+        walk.parse_tag(tagref.get_object_id)
+      rescue Java::OrgEclipseJgitErrors::IncorrectObjectTypeException
+        nil
+      end
+    end
+    
     def apply(input_stream)
       updated_files = @jgit.apply.set_patch(input_stream).call
       updated_files_parsed = []

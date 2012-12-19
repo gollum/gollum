@@ -11,4 +11,6 @@ module RJGit
   
   DEFAULT_MIME_TYPE = "text/plain"
   
+  OBJ_TAG = 4
+  
 end

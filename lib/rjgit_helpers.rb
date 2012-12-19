@@ -59,6 +59,14 @@ module RJGit
     end
   end
   
+  def self.actor_type(actor)
+    person_ident = case actor
+      when Actor then actor.person_ident
+      when org.eclipse.jgit.lib.PersonIdent then actor
+      else nil
+    end
+  end
+  
   def self.tree_type(tree)
     treeobj = case tree
       when Tree then tree.revtree

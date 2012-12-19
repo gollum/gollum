@@ -5,7 +5,6 @@ describe Tree do
   before(:each) do
     @bare_repo = Repo.new(TEST_BARE_REPO_PATH, {:bare => true}, false)
     @tree = Tree.find_tree(@bare_repo.jrepo, 'lib')
-    #@tree = repo.commits.first.tree
   end
 
   it "should have contents" do

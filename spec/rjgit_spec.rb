@@ -103,6 +103,7 @@ describe RJGit do
   describe "helper methods" do
     specify {RJGit.repository_type("A String").should be_nil}
     specify {RJGit.tree_type("A String").should be_nil}
+    specify {RJGit.actor_type("A String").should be_nil}
     specify {RJGit.underscore("CamelCaseToSnakeCase").should == 'camel_case_to_snake_case'}
   end
   

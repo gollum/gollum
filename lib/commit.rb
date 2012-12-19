@@ -13,31 +13,31 @@ module RJGit
     attr_reader :committed_date
     attr_reader :message
     attr_reader :short_message
-    attr_reader :revcommit
+    attr_reader :jcommit
     attr_reader :count
   
-    RJGit.delegate_to(RevCommit, :@revcommit)
+    RJGit.delegate_to(RevCommit, :@jcommit)
     
     def initialize(commit)
-      @revcommit = commit
+      @jcommit = commit
       @id = ObjectId.to_string(commit.get_id)
-      @actor = Actor.new(@revcommit.get_author_ident)
-      @committer = Actor.new(@revcommit.get_committer_ident)
-      @committed_date = Time.at(@revcommit.commit_time)
-      @message = @revcommit.get_full_message
-      @short_message = @revcommit.get_short_message
-      @count = @revcommit.get_parent_count
+      @actor = Actor.new(@jcommit.get_author_ident)
+      @committer = Actor.new(@jcommit.get_committer_ident)
+      @committed_date = Time.at(@jcommit.commit_time)
+      @message = @jcommit.get_full_message
+      @short_message = @jcommit.get_short_message
+      @count = @jcommit.get_parent_count
     end
   
     def parents
-      @parents ||= @revcommit.get_parents.map{|parent| Commit.new(parent) }
+      @parents ||= @jcommit.get_parents.map{|parent| Commit.new(parent) }
     end
     
     def self.find_all(repository, ref, options)
       repository = RJGit.repository_type(repository)
       return nil if repository.nil?
       begin
-        walk = RevWalk.new(repository);
+        walk = RevWalk.new(repository)
         objhead = repository.resolve(ref)
         root = walk.parse_commit(objhead)
         walk.mark_start(root)

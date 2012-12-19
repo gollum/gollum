@@ -9,12 +9,42 @@ describe RubyGit do
     messages.first.message.should match /Cleaning working directory/
   end
   
-  it "should tag with commit or revision id" do
-    bare_repo = Repo.new(TEST_BARE_REPO_PATH)
-    pending "Should be done in a write-access situation"
-  end
+  context "when creating tags" do
+    before(:each) do
+      @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+      @repo = Repo.new(@temp_repo_path)
+    end
+
+    it "should tag with only a name" do
+      @repo.tags.should have(0).tags
+      @repo.git.tag('v0.0')
+      @repo.tags.should have_exactly(1).tags
+    end
   
-  it "should tag without commit or revision id" do
+    it "should tag with a name and message" do
+      @repo.tags.should have(0).tags
+      @repo.git.tag('v0.0', 'initial state commit')
+      @repo.tags.should have_exactly(1).tags
+      @repo.tags['v0.0'].full_message.should match /initial state commit/
+    end
+
+    it "should tag with a specific commit or revision" do
+      commit = @repo.commits.first
+      @repo.git.tag('v0.0', 'initial state commit for a specific commit', commit.jcommit)
+      @repo.tags.should have_exactly(1).tags
+    end
+    
+    it "should tag with specific actor information" do
+      actor = Actor.new_from_name_and_email('Rspec Examplar', 'rspec@tagging.example')
+      @repo.git.tag('v0.0', 'initial state commit', nil, actor)
+      @repo.tags.should have_exactly(1).tags
+      @repo.tags["v0.0"].actor.name.should == 'Rspec Examplar'
+    end
+    
+    after(:each) do
+      remove_temp_repo(File.dirname(@temp_repo_path))
+      @repo = nil
+    end
   end
   
   context "cloning a non-bare repository" do
@@ -32,14 +62,14 @@ describe RubyGit do
     
     it "should clone a specific branch if specified" do
       clone = @repo.git.clone(@remote, @local, {:branch => 'refs/heads/alternative'})
-      clone.branches.size.should == 1
+      clone.branches.should have_exactly(1).branch
       clone.branches.first.should == 'refs/heads/alternative'
     end
     
     it "should clone all branches if specified" do
       clone = @repo.git.clone(@remote, @local, {:branch => :all})
       pending "This specs fails because of a JGit bug with CloneCommand#set_clone_all_branches(true)"
-      clone.branches.size.should > 1
+      clone.branches.should have_at_least(1).branch
     end
     after(:each) do
       remove_temp_repo(@local)
@@ -63,7 +93,9 @@ describe RubyGit do
     end
   end
   
-  it "should apply a patch to a file"
+  context "patching" do
+    it "should apply a patch to a file"
+  end
   
   context "cleaning a repository" do
     before(:each) do

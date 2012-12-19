@@ -55,10 +55,22 @@ module RJGit
       return @git.branch_list
     end
     
-    def tags
+    def tags(lightweight = false)
       jtags = @jrepo.get_tags.to_hash
-      jtags.each_with_object( Hash.new ) do |(key, value), hash| 
-        hash[key] = ObjectId.to_string(value.get_object_id)
+      if lightweight
+        jtags.each_with_object( Hash.new ) do |(key, value), hash| 
+          hash[key] = ObjectId.to_string(value.get_object_id)
+        end
+      else
+        tags = Hash.new
+        jtags.each do |key, value|
+          jtag = @git.resolve_tag(value)
+          if jtag
+            tag = Tag.new(jtag)
+            tags[key] = tag 
+          end
+        end
+        tags
       end
     end
 
