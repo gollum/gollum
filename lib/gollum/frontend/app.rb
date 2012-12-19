@@ -194,7 +194,9 @@ module Precious
 
       # ensure pages are created in page_file_dir
       page_dir = settings.wiki_options[:page_file_dir].to_s
-      path = clean_url(::File.join(page_dir, path)) unless path.start_with?(page_dir)
+
+      path = clean_url(path)
+      path = path.sub(page_dir, '') if path.start_with?(page_dir)
 
       wiki = wiki_new
 
