@@ -68,9 +68,10 @@ describe RubyGit do
     
     it "should clone all branches if specified" do
       clone = @repo.git.clone(@remote, @local, {:branch => :all})
-      pending "This specs fails because of a JGit bug with CloneCommand#set_clone_all_branches(true)"
       clone.branches.should have_at_least(1).branch
+      pending "This specs fails because of a JGit bug with CloneCommand#set_clone_all_branches(true)"
     end
+    
     after(:each) do
       remove_temp_repo(@local)
     end
