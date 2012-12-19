@@ -45,7 +45,8 @@ module Gollum
     # Default whitelisted protocols for URLs.
     PROTOCOLS = {
       'a'   => {'href' => ['http', 'https', 'mailto', 'ftp', 'irc', 'apt', :relative]},
-      'img' => {'src'  => ['http', 'https', :relative]}
+      'img' => {'src'  => ['http', 'https', :relative]},
+      'form' => {'action' => ['http', 'https', :relative]}
     }.freeze
 
     ADD_ATTRIBUTES = lambda do |env, node|
