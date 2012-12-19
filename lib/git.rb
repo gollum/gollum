@@ -93,7 +93,8 @@ module RJGit
     end
     
     def apply(input_stream)
-      updated_files = @jgit.apply.set_patch(input_stream).call
+      apply_result = @jgit.apply.set_patch(input_stream).call
+      updated_files = apply_result.get_updated_files 
       updated_files_parsed = []
       updated_files.each do |file|
         updated_files_parsed << file.get_absolute_path
