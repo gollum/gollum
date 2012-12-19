@@ -181,7 +181,8 @@ module Precious
 
       page = wikip.page
       if page
-        redirect to("/#{page.escaped_url_path}")
+        page_dir = settings.wiki_options[:page_file_dir].to_s
+        redirect to("/#{clean_url(::File.join(page_dir, page.escaped_url_path))}")
       else
         mustache :create
       end
@@ -191,18 +192,13 @@ module Precious
       name         = params[:page].to_url
       path         = sanitize_empty_params(params[:path]) || ''
       format       = params[:format].intern
-
-      # ensure pages are created in page_file_dir
-      page_dir = settings.wiki_options[:page_file_dir].to_s
-
-      path = clean_url(path)
-      path = path.sub(page_dir, '') if path.start_with?(page_dir)
-
       wiki = wiki_new
 
       begin
         wiki.write_page(name, format, params[:content], commit_message, path)
-        redirect to("/#{clean_url(::File.join(path,name))}")
+
+        page_dir = settings.wiki_options[:page_file_dir].to_s
+        redirect to("/#{clean_url(::File.join(page_dir, path, name))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -346,9 +342,6 @@ module Precious
       name         = extract_name(fullpath)
       path         = extract_path(fullpath) || '/'
       wiki         = wiki_new
-
-      page_dir = settings.wiki_options[:page_file_dir].to_s
-      path = ::File.join(page_dir, path) unless path.start_with?(page_dir)
 
       if page = wiki.paged(name, path, exact = true)
         @page = page
