@@ -55,6 +55,18 @@ module RJGit
       return @git.branch_list
     end
     
+    def create_branch(name)
+      @git.create_branch(name)
+    end
+    
+    def delete_branch(name)
+      @git.delete_branch(name)
+    end
+    
+    def rename_branch(old_name, new_name)
+      @git.rename_branch(old_name, new_name)
+    end
+    
     def tags(lightweight = false)
       jtags = @jrepo.get_tags.to_hash
       if lightweight

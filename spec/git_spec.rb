@@ -95,7 +95,25 @@ describe RubyGit do
   end
   
   context "patching" do
-    it "should apply a patch to a file"
+    before(:each) do
+      @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+      @repo = Repo.new(@temp_repo_path)
+    end
+    
+    it "should apply from a String" do
+      patch = fixture('new_material.patch')
+      pending "fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[5,7->5,7]"
+      result = @repo.git.apply_patch(patch)
+      $stderr.puts result
+    end
+    
+    it "should apply a patch from a file" do
+      patch = File.join(File.dirname(__FILE__), 'fixtures', 'mod_materialist.patch')
+      pending "fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[1,7->1,10]"
+      result = @repo.git.apply_file(patch)
+      $stderr.puts result
+    end
+    
   end
   
   context "cleaning a repository" do

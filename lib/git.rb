@@ -92,6 +92,18 @@ module RJGit
       end
     end
     
+    def create_branch(name)
+      @jgit.branch_create.setName(name).call
+    end
+    
+    def delete_branch(name)
+      @jgit.branch_delete.set_branch_names(name).call
+    end
+    
+    def rename_branch(old_name, new_name)
+      @jgit.branch_rename.set_old_name(old_name).set_new_name(new_name).call
+    end
+    
     def apply(input_stream)
       apply_result = @jgit.apply.set_patch(input_stream).call
       updated_files = apply_result.get_updated_files 
@@ -102,12 +114,12 @@ module RJGit
       updated_files_parsed
     end
 
-    def applyPatch(patch_content)
+    def apply_patch(patch_content)
       input_stream = ByteArrayInputStream.new(patch_content.to_java_bytes)
       apply(input_stream)
     end
 
-    def applyFile(patch_file)
+    def apply_file(patch_file)
       input_stream = FileInputStream.new(patch_file)
       apply(input_stream)
     end

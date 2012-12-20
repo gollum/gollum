@@ -122,6 +122,21 @@ describe Repo do
       @repo.jrepo.read_dir_cache.find_entry("rspec-addfile.txt").should > 0
     end
   
+    it "should create a branch" do
+      @repo.create_branch('rspec-branch')
+      @repo.branches.should include('refs/heads/rspec-branch')
+    end
+    
+    it "should delete a branch" do
+      @repo.delete_branch('refs/heads/alternative')
+      @repo.branches.should_not include('refs/heads/alternative')
+    end
+    
+    it "should rename a branch" do
+      @repo.rename_branch('refs/heads/alternative', 'rspec-branch')
+      @repo.branches.should include('refs/heads/rspec-branch')
+    end
+    
     it "should commit files to the repository" do
       RJGit::Porcelain.ls_tree(@repo).should have(5).items
       File.open("#{@temp_repo_path}/newfile.txt", 'w') {|file| file.write("This is a new file to commit.") }

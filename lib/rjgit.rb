@@ -51,6 +51,7 @@ module RJGit
     def self.ls_tree(repository, tree=nil, branch=Constants::HEAD, options={})
       options = {:recursive => false, :print => false, :io => $stdout}.merge(options)
       jrepo = RJGit.repository_type(repository)
+      return nil unless jrepo
       if tree 
         jtree = RJGit.tree_type(tree)
       else

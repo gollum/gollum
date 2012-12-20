@@ -36,8 +36,8 @@ describe RJGit do
     end
     
     it "should add files to a repository" do
-      Porcelain.add(@repo,@testfile)
-      @repo.jrepo.read_dir_cache.find_entry(@testfile).should > 0
+      Porcelain.add(@repo, @testfile)
+      @repo.jrepo.read_dir_cache.find_entry(@testfile).should have_at_least(1).entries
     end
     
     it "should commit files to a repository" do
