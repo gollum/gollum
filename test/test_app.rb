@@ -112,6 +112,20 @@ context "Frontend" do
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
+  test "edit page with empty message" do
+    page_1 = @wiki.page('A')
+    post "/edit/A", :content => 'abc', :page => 'A',
+      :format => page_1.format
+    follow_redirect!
+    assert last_response.ok?
+
+    @wiki.clear_cache
+    page_2 = @wiki.page(page_1.name)
+    assert_equal 'abc', page_2.raw_data
+    assert_equal '[no message]', page_2.version.message
+    assert_not_equal page_1.version.sha, page_2.version.sha
+  end
+
   test "edit page with slash" do
     page_1 = @wiki.page('A')
     post "/edit/A", :content => 'abc', :page => 'A', :path => '/////',
@@ -380,6 +394,7 @@ context "Frontend" do
     page2 = @wiki.page('B')
     assert_not_equal page1.version.sha, page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
+#    assert_equal "Revert commit #7c45b5f", page2.version.message
   end
 
   test "reverts multiple commits" do
