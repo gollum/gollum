@@ -28,7 +28,7 @@ require File.expand_path('../gollum/frontend/uri_encode_component', __FILE__)
 $KCODE = 'U' if RUBY_VERSION[0,3] == '1.8'
 
 module Gollum
-  VERSION = '2.4.6'
+  VERSION = '2.4.7'
 
   def self.assets_path
     ::File.expand_path('gollum/frontend/public', ::File.dirname(__FILE__))
