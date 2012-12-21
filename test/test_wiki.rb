@@ -305,7 +305,7 @@ context "Wiki page writing with whitespace (filename contains whitespace)" do
 
     assert_equal :textile, @wiki.page("Samwise Gamgee").format
     assert_equal "h1. Samwise Gamgee2", @wiki.page("Samwise Gamgee").raw_data
-    assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
+    assert_equal "Samwise-Gamgee.textile", @wiki.page("Samwise Gamgee").filename
   end
 
   test "update page with format change, verify non-canonicalization of filename,  where filename contains Whitespace" do
@@ -317,7 +317,7 @@ context "Wiki page writing with whitespace (filename contains whitespace)" do
 
     assert_equal :textile, @wiki.page("Samwise Gamgee").format
     assert_equal "h1. Samwise Gamgee", @wiki.page("Samwise Gamgee").raw_data
-    assert_equal "Samwise Gamgee.textile", @wiki.page("Samwise Gamgee").filename
+    assert_equal "Samwise-Gamgee.textile", @wiki.page("Samwise Gamgee").filename
   end
 
   test "update page with name change, verify canonicalization of filename, where filename contains Whitespace" do
@@ -424,8 +424,8 @@ context "Wiki sync with working directory (filename contains whitespace)" do
   test "update a page with same name and different format" do
     page = @wiki.page("Samwise Gamgee")
     @wiki.update_page(page, page.name, :textile, "What we need is a few good taters.", commit_details)
-    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Samwise Gamgee.textile"))
-    assert !File.exist?(File.join(@path, "Samwise Gamgee.mediawiki"))
+    assert_equal "What we need is a few good taters.", File.read(File.join(@path, "Samwise-Gamgee.textile"))
+    assert !File.exist?(File.join(@path, "Samwise-Gamgee.mediawiki"))
   end
 
   test "update a page with different name and different format" do
