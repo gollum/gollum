@@ -420,7 +420,7 @@ module Gollum
         path = cname[0..slash]
         page = @wiki.paged(name, path)
       else
-        page = @wiki.paged(cname, '/')
+        page = @wiki.paged(cname, '/') || @wiki.page(cname)
       end
 
       if page
