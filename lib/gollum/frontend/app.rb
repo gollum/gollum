@@ -88,7 +88,8 @@ module Precious
     end
 
     get '/' do
-      redirect ::File.join(@base_url, 'Home')
+      page_dir = settings.wiki_options[:page_file_dir].to_s
+      redirect clean_url(::File.join(@base_url, page_dir, 'Home'))
     end
 
     # path is set to name if path is nil.
@@ -178,6 +179,12 @@ module Precious
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
+
+      # --page-file-dir docs
+      # /docs/Home should be created in /Home
+      # not /docs/Home because write_page will append /docs
+      page_dir = settings.wiki_options[:page_file_dir].to_s
+      @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
 
       page = wikip.page
       if page
