@@ -180,11 +180,13 @@ module Precious
       @name = wikip.name.to_url
       @path = wikip.path
 
-      # --page-file-dir docs
-      # /docs/Home should be created in /Home
-      # not /docs/Home because write_page will append /docs
       page_dir = settings.wiki_options[:page_file_dir].to_s
-      @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
+      unless page_dir.empty?
+        # --page-file-dir docs
+        # /docs/Home should be created in /Home
+        # not /docs/Home because write_page will append /docs
+        @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
+      end
 
       page = wikip.page
       if page
