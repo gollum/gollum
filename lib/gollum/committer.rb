@@ -85,6 +85,10 @@ module Gollum
     #
     # Returns nothing (modifies the Index in place).
     def add_to_index(dir, name, format, data, allow_same_ext = false)
+      # spaces must be dashes
+      dir.gsub!(' ', '-')
+      name.gsub!(' ', '-')
+
       path = @wiki.page_file_name(name, format)
 
       dir = '/' if dir.strip.empty?

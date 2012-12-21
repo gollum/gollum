@@ -287,6 +287,10 @@ module Gollum
     # Returns the String SHA1 of the newly written version, or the
     # Gollum::Committer instance if this is part of a batch update.
     def write_page(name, format, data, commit = {}, dir = '')
+      # spaces must be dashes
+      name.gsub!(' ', '-')
+      dir.gsub!(' ', '-')
+
       multi_commit = false
 
       committer = if obj = commit[:committer]
