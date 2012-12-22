@@ -117,7 +117,7 @@ describe Repo do
     end
     
     it "should add files to itself" do
-      File.open("#{@temp_repo_path}/rspec-addfile.txt", 'w') {|file| file.write("This is a new file to add.") }
+      File.open(File.join(@temp_repo_path, "rspec-addfile.txt"), 'w') {|file| file.write("This is a new file to add.") }
       @repo.add("rspec-addfile.txt")
       @repo.jrepo.read_dir_cache.find_entry("rspec-addfile.txt").should > 0
     end
@@ -137,16 +137,38 @@ describe Repo do
       @repo.branches.should include('refs/heads/rspec-branch')
     end
     
+    it "should checkout a branch if clean" do
+      result = @repo.git.checkout('refs/heads/alternative')
+      result[:success].should be_true
+      result[:result].should == 'refs/heads/alternative'
+    end
+    
+    it "should not switch branches if there are conflicts" do
+      File.open(File.join(@temp_repo_path, "rspec-conflictingfile.txt"), 'w') {|file| file.write("This is a new file.") }
+      @repo.add("rspec-conflictingfile.txt")
+      @repo.commit("Creating a conflict - step 1")
+      @repo.create_branch('conflict_branch')
+      File.open(File.join(@temp_repo_path, "rspec-conflictingfile.txt"), 'a') {|file| file.write("A second line - no conflict yet.") }
+      @repo.add("rspec-conflictingfile.txt")
+      @repo.commit("Creating a conflict - step 2")
+      @repo.checkout('refs/heads/conflict_branch')
+      File.open(File.join(@temp_repo_path, "rspec-conflictingfile.txt"), 'a') {|file| file.write("A second line - this should lead to a conflict.") }
+      result = @repo.checkout('refs/heads/master')
+      result[:success].should be_false
+      result[:result].should include 'rspec-conflictingfile.txt'
+      @repo.branch.should == 'refs/heads/conflict_branch'
+    end
+    
     it "should commit files to the repository" do
       RJGit::Porcelain.ls_tree(@repo).should have(5).items
-      File.open("#{@temp_repo_path}/newfile.txt", 'w') {|file| file.write("This is a new file to commit.") }
+      File.open(File.join(@temp_repo_path, "newfile.txt"), 'w') {|file| file.write("This is a new file to commit.") }
       @repo.add("newfile.txt")
       @repo.commit("Committing a test file to a test repository.")
       RJGit::Porcelain.ls_tree(@repo).should have_at_least(6).items
     end
     
     it "should remove files from the index and the file system" do
-      File.open("#{@temp_repo_path}/remove_file.txt", 'w') {|file| file.write("This is a file to remove.") }
+      File.open(File.join(@temp_repo_path, "remove_file.txt"), 'w') {|file| file.write("This is a file to remove.") }
       @repo.add("remove_file.txt")
       @repo.commit("Added remove_file.txt")
       "#{@temp_repo_path}/remove_file.txt".should exist

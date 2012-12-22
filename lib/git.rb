@@ -104,6 +104,22 @@ module RJGit
       @jgit.branch_rename.set_old_name(old_name).set_new_name(new_name).call
     end
     
+    def checkout(branch_name, options = {})
+      checkout_command = @jgit.checkout.set_name(branch_name)
+      checkout_command.set_create_branch(true) if options[:create]
+      checkout_command.set_force(true) if options[:force]
+      result = {}
+      begin
+        checkout_command.call
+        result[:success] = true
+        result[:result] = @jgit.get_repository.get_full_branch
+      rescue Java::OrgEclipseJgitApiErrors::CheckoutConflictException => conflict
+        result[:success] = false
+        result[:result] = conflict.get_conflicting_paths
+      end
+      result
+    end
+    
     def apply(input_stream)
       apply_result = @jgit.apply.set_patch(input_stream).call
       updated_files = apply_result.get_updated_files 

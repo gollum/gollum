@@ -67,6 +67,12 @@ module RJGit
       @git.rename_branch(old_name, new_name)
     end
     
+    def checkout(branch_name, options = {})
+      @git.checkout(branch_name, options)
+    end
+    alias_method :switch, :checkout
+    
+    
     def tags(lightweight = false)
       jtags = @jrepo.get_tags.to_hash
       if lightweight
