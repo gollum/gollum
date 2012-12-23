@@ -34,10 +34,16 @@ module RJGit
     end
     
     def load
-      return nil if @loaded
+      return self if @loaded
       load_config(@path)
     end
 
+    # Re-reads from disk
+    def reload!
+      @settings, @groups = [], []
+      load_config(@path)
+    end
+    
     def show(io = $stdout)
       @settings.each do |setting|
         setting.comments.each {|comment| io.puts comment }

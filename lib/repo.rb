@@ -27,7 +27,7 @@ module RJGit
       end
 
       @path = bare ? epath : File.join(epath, '/.git')
-
+      @config = RJGit::Config.new(File.join(@path, 'config'))
       repo_path = java.io.File.new(@path)
       @jrepo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).build()
       @jrepo.create(bare) if create
@@ -47,6 +47,10 @@ module RJGit
       Commit.find_all(@jrepo, ref, options)
     end
 
+    def config
+      @config.load
+    end
+    
     def branch
       @jrepo.get_full_branch
     end

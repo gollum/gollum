@@ -61,6 +61,10 @@ describe Repo do
       @repo.jrepo.should be_a org.eclipse.jgit.lib.Repository
     end
 
+    it "should have a config" do
+      @repo.config.should be_a RJGit::Config
+    end
+    
     it "should list the current branch" do
       @repo.branch.should == "refs/heads/master"
     end

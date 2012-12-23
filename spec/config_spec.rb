@@ -15,7 +15,8 @@ describe RJGit::Config do
     end
   
     it "should not load the config twice" do
-      @config.load.should be_nil
+      @config.groups.should have(3).groups
+      @config.groups.first.should have(4).settings
     end
   
     it "should respond to Hash syntax" do
@@ -64,7 +65,6 @@ describe RJGit::Config do
       it "should add a setting" do
         @group.add_setting('rspec', 'true', 'Adding a setting to a specific group')
         @group['rspec'].comments.join.should match /^(\#|;)/
-        @config.show($stderr)
       end 
     end
   end  
@@ -97,6 +97,19 @@ describe RJGit::Config do
       @config.store(path)
       path.should exist
       IO.readlines(path).first.should match /general setting/
+      remove_temp_repo(File.dirname(path))
+    end
+    
+    it "should reload the config file" do
+      path = File.join(get_new_tmprepo_path, 'temp_config')
+      Dir.mkdir(File.dirname(path))
+      @config.store(path)
+      config = RJGit::Config.new(path).load
+      config.should have(5).groups
+      File.open(path, "a") {|cfg| cfg.write "[ rspec ]\n rspec = true" }
+      config.reload!
+      config.should have(6).groups
+      config['rspec']['rspec'].value.should == 'true'
       remove_temp_repo(File.dirname(path))
     end
     
