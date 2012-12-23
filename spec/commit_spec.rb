@@ -49,7 +49,9 @@ describe Commit do
       @commits.should be_empty
     end
     
-    it "should return nil if something other than a repository is passed in"
+    it "should return nil if something other than a repository is passed in" do
+      Commit.find_all('A String Object', 'remote42', {:limit => 10 }).should be_nil
+    end
     
   end 
 
