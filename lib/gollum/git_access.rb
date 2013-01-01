@@ -13,7 +13,13 @@ module Gollum
     def initialize(path, page_file_dir = nil, bare = false)
       @page_file_dir = page_file_dir
       @path = path
-      @repo = Grit::Repo.new(path, { :is_bare => bare })
+
+      if bare
+        @repo = Rugged::Repository.init_at(path, bare)
+      else
+        @repo = Rugged::Repository.new(path)
+      end
+
       clear
     end
 
@@ -21,7 +27,9 @@ module Gollum
     #
     # Returns true if it exists, or false.
     def exist?
-      @repo.git.exist?
+      # Is there an equivalent Rugged call?
+      # @repo.git.exist?
+      @repo != nil
     end
 
     # Public: Converts a given Git reference to a SHA, using the cache if
@@ -62,7 +70,7 @@ module Gollum
     #
     # Returns the String content of the blob.
     def blob(sha)
-      cat_file!(sha)
+      @repo.lookup(sha).content
     end
 
     # Public: Looks up the Git commit using the given Git SHA or ref.
@@ -111,7 +119,7 @@ module Gollum
     # Gets the String path to the Git repository.
     attr_reader :path
 
-    # Gets the Grit::Repo instance for the Git repository.
+    # Gets the Rugged::Repo instance for the Git repository.
     attr_reader :repo
 
     # Gets a Hash cache of refs to commit SHAs.

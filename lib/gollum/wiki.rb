@@ -107,7 +107,7 @@ module Gollum
       end
     end
 
-    self.default_ref = 'master'
+    self.default_ref = 'refs/heads/master'
     self.default_committer_name  = 'Anonymous'
     self.default_committer_email = 'anon@anon.com'
 
