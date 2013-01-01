@@ -189,9 +189,15 @@ module Gollum
     #
     # sha - The string SHA of the Git commit.
     #
-    # Returns a Grit::Commit.
+    # Returns a Rugged::Commit.
     def commit!(sha)
-      @repo.commit(sha)
+      commit_maybe = @repo.lookup(sha)
+
+      if commit_maybe.type == :commit
+        return commit_maybe
+      else
+        nil
+      end
     end
 
     # Attempts to get the given data from a cache.  If it doesn't exist, it'll
