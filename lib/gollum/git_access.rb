@@ -77,7 +77,7 @@ module Gollum
     #
     # ref - A String Git SHA or ref.
     #
-    # Returns a Grit::Commit.
+    # Returns a Rugged::Commit.
     def commit(ref)
       if sha?(ref)
         get_cache(:commit, ref) { commit!(ref) }
@@ -134,9 +134,9 @@ module Gollum
     #
     attr_reader :tree_map
 
-    # Gets a Hash cache of commit SHAs to the Grit::Commit instance.
+    # Gets a Hash cache of commit SHAs to the Rugged::Commit instance.
     #
-    #     {"abcd123" => <Grit::Commit>}
+    #     {"abcd123" => <Rugged::Commit>}
     #
     attr_reader :commit_map
 
