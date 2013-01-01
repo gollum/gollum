@@ -6,6 +6,7 @@ require 'ostruct'
 
 # external
 require 'grit'
+require 'rugged'
 require 'github/markup'
 require 'sanitize'
 
