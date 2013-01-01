@@ -165,21 +165,15 @@ module Gollum
     #
     # Returns an Array of BlobEntry instances.
     def tree!(sha)
-      tree  = @repo.git.native(:ls_tree,
-        {:r => true, :l => true, :z => true}, sha)
-      if tree.respond_to?(:force_encoding)
-        tree.force_encoding("UTF-8")
-      end
-      items = tree.split("\0").inject([]) do |memo, line|
-        memo << parse_tree_line(line)
+      tree  = @repo.lookup(sha).tree
+
+      # Convert the tree into an array of BlobEntry instances
+      blobs = []
+      tree.each_blob do |blob|
+        blobs << Gollum::BlobEntry.new(blob[:oid], blob[:name])
       end
 
-      if dir = @page_file_dir
-        regex = /^#{dir}\//
-        items.select { |i| i.path =~ regex }
-      else
-        items
-      end
+      blobs
     end
 
     # Reads the content from the Git db at the given SHA.
@@ -227,17 +221,6 @@ module Gollum
     def set_cache(name, key, value)
       cache      = instance_variable_get("@#{name}_map")
       cache[key] = value || :_nil
-    end
-
-    # Parses a line of output from the `ls-tree` command.
-    #
-    # line - A String line of output:
-    #          "100644 blob 839c2291b30495b9a882c17d08254d3c90d8fb53  Home.md"
-    #
-    # Returns an Array of BlobEntry instances.
-    def parse_tree_line(line)
-      mode, type, sha, size, *name = line.split(/\s+/)
-      BlobEntry.new(sha, name.join(' '), size.to_i)
     end
 
     # Decode octal sequences (\NNN) in tree path names.
