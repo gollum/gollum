@@ -27,14 +27,13 @@ module Gollum
       @name ||= ::File.basename(@path)
     end
 
-    # Gets a Grit::Blob instance for this blob.
+    # Gets a Rugged::Blob instance for this blob.
     #
-    # repo - Grit::Repo instance for the Grit::Blob.
+    # repo - Rugged::Repository instance for the Rugged::Blob.
     #
-    # Returns an unbaked Grit::Blob instance.
+    # Returns an unbaked Rugged::Blob instance.
     def blob(repo)
-      @blob ||= Grit::Blob.create(repo,
-        :id => @sha, :name => name, :size => @size)
+      @blob ||= repo.lookup(sha)
     end
 
     # Gets a Page instance for this blob.
