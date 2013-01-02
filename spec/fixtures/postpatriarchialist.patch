@@ -1,0 +1,22 @@
+From 0156c922f1f63cdaf9c07267380571a84248463c Mon Sep 17 00:00:00 2001
+From: Bart Kamphorst <bart@kamphorst.com>
+Date: Wed, 2 Jan 2013 09:47:15 +0100
+Subject: [PATCH] Added title to text.
+
+---
+ postpatriarchialist.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/postpatriarchialist.txt b/postpatriarchialist.txt
+index 164219c..7bc93e0 100644
+--- a/postpatriarchialist.txt
++++ b/postpatriarchialist.txt
+@@ -1,3 +1,5 @@
++# postpatriarchialist.txt
++
+ Postpatriarchialist theory and subcapitalist materialism
+ Catherine M. Tilton
+ Department of Future Studies, Massachusetts Institute of Technology
+-- 
+1.8.0.1
+

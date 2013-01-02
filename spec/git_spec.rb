@@ -101,17 +101,19 @@ describe RubyGit do
     end
     
     it "should apply from a String" do
-      patch = fixture('new_material.patch')
-      pending "fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[5,7->5,7]"
+      patch = fixture('postpatriarchialist.patch')
+      #pending "new_material.patch fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[5,7->5,7]"
       result = @repo.git.apply_patch(patch)
-      $stderr.puts result
+      result.should have(1).changed_file
+      result.first.should match /postpatriarchialist.txt/
     end
     
     it "should apply a patch from a file" do
-      patch = File.join(File.dirname(__FILE__), 'fixtures', 'mod_materialist.patch')
-      pending "fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[1,7->1,10]"
+      patch = File.join(File.dirname(__FILE__), 'fixtures', 'postpatriarchialist.patch')
+      # pending "mod_materialist.patch fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[1,7->1,10]"
       result = @repo.git.apply_file(patch)
-      $stderr.puts result
+      result.should have(1).changed_file
+      result.first.should match /postpatriarchialist.txt/
     end
     
   end
