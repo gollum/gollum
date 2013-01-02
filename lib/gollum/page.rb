@@ -265,7 +265,7 @@ module Gollum
 
     # Public: The current version of the page.
     #
-    # Returns the Grit::Commit.
+    # Returns the Rugged::Commit.
     attr_reader :version
 
     # Public: All of the versions that have touched the Page.
@@ -276,16 +276,33 @@ module Gollum
     #           :follow   - Follow's a file across renames, but falls back
     #                       to a slower Grit native call.  (default: false)
     #
-    # Returns an Array of Grit::Commit.
+    # Returns an Array of Rugged::Commit.
     def versions(options = {})
+      # not sure how to handle the options yet since i'm a noob!
       if options[:follow]
         options[:pretty] = 'raw'
         options.delete :max_count
         options.delete :skip
+
         log = @wiki.repo.git.native "log", options, @wiki.ref, "--", @path
         Grit::Commit.list_from_string(@wiki.repo, log)
       else
-        @wiki.repo.log(@wiki.ref, @path, log_pagination_options(options))
+        walker = Rugged::Walker.new(@wiki.repo)
+        walker.push(@wiki.repo.ref(@wiki.ref).target) # Start at the wiki's configured ref
+
+        commits = [] # Represents an array of commit for this page
+        walker.each do |commit|
+          # Get the tree and see if any of the files match our name
+          commit.tree.each_blob do |blob|
+            # If there's a blob in there with the name we're looking for, then push the commit to the array
+            #page_match(name, entry.name) (?)
+            if blob[:name] == @blob_entry.name
+              commits << commit
+            end
+          end
+        end
+
+        return commits
       end
     end
 
@@ -397,12 +414,14 @@ module Gollum
     def find(name, version, dir = nil, exact = false)
       map = @wiki.tree_map_for(version.to_s)
       if page = find_page_in_tree(map, name, dir, exact)
-        page.version    = version.is_a?(Grit::Commit) ?
+        page.version    = version.is_a?(Rugged::Commit) ?
           version : @wiki.commit_for(version)
         page.historical = page.version.to_s == version.to_s
         page
       end
-    rescue Grit::GitRuby::Repository::NoSuchShaFound
+    rescue Rugged::ReferenceError
+      # is this right?
+    #rescue Grit::GitRuby::Repository::NoSuchShaFound
     end
 
     # Find a page in a given tree.
