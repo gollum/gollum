@@ -42,8 +42,7 @@ module Gollum
     #
     # Returns a Gollum::Page instance.
     def page(wiki, commit)
-      blob = self.blob(wiki.repo)
-      page = wiki.page_class.new(wiki).populate(blob, self.dir)
+      page = wiki.page_class.new(wiki).populate(self)
       page.version = commit
       page
     end

@@ -105,7 +105,7 @@ module Gollum
     # Returns a newly initialized Gollum::Page.
     def initialize(wiki)
       @wiki = wiki
-      @blob = @header = @footer = @sidebar = nil
+      @blob_entry = @header = @footer = @sidebar = nil
       @doc = nil
       @parent_page = nil
     end
@@ -114,7 +114,7 @@ module Gollum
     #
     # Returns the String name.
     def filename
-      @blob && @blob.name
+      @blob_entry && @blob_entry.name
     end
 
     # Public: The on-disk filename of the page with extension stripped.
@@ -200,7 +200,7 @@ module Gollum
     #
     # Returns the String data.
     def raw_data
-      @blob && @blob.data
+      @blob_entry && @blob_entry.blob(@wiki.repo).content
     end
 
     # Public: A text data encoded in specified encoding.
@@ -222,7 +222,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data(encoding = nil, &block)
-      @blob && markup_class.render(historical?, encoding) do |doc|
+      @blob_entry && markup_class.render(historical?, encoding) do |doc|
         @doc = doc
         yield doc if block_given?
       end
@@ -253,7 +253,7 @@ module Gollum
     #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
     #     :roff ]
     def format
-      self.class.format_for(@blob.name)
+      self.class.format_for(@blob_entry.name)
     end
 
     # Gets the Gollum::Markup instance that will render this page's content.
@@ -383,7 +383,7 @@ module Gollum
     # Returns the Gollum::Wiki containing the page.
     attr_reader :wiki
 
-    # Set the Grit::Commit version of the page.
+    # Set the Rugged::Commit version of the page.
     #
     # Returns nothing.
     attr_writer :version
@@ -433,13 +433,12 @@ module Gollum
 
     # Populate the Page with information from the Blob.
     #
-    # blob - The Grit::Blob that contains the info.
-    # path - The String directory path of the page file.
+    # blob_entry - The BlobEntry that contains the info.
     #
     # Returns the populated Gollum::Page.
-    def populate(blob, path=nil)
-      @blob = blob
-      @path = "#{path}/#{blob.name}"[1..-1]
+    def populate(blob_entry)
+      @blob_entry = blob_entry
+      @path = "#{blob_entry.path}"
       self
     end
 
