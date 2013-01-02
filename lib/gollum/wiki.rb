@@ -594,9 +594,9 @@ module Gollum
     #
     #########################################################################
 
-    # The Grit::Repo associated with the wiki.
+    # The Rugged::Repo associated with the wiki.
     #
-    # Returns the Grit::Repo.
+    # Returns the Rugged::Repo.
     attr_reader :repo
 
     # The String path to the Git repository that holds the Gollum site.
@@ -731,7 +731,7 @@ module Gollum
     #
     # ref - A string ref or SHA pointing to a valid commit.
     #
-    # Returns a Grit::Commit instance.
+    # Returns a Rugged::Commit instance.
     def commit_for(ref)
       @access.commit(ref)
     rescue Rugged::ReferenceError
