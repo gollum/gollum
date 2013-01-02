@@ -734,7 +734,7 @@ module Gollum
     # Returns a Grit::Commit instance.
     def commit_for(ref)
       @access.commit(ref)
-    rescue Grit::GitRuby::Repository::NoSuchShaFound
+    rescue Rugged::ReferenceError
     end
 
     # Finds a full listing of files and their blob SHA for a given ref.  Each
@@ -751,7 +751,10 @@ module Gollum
       else
         @access.tree(ref)
       end
-    rescue Grit::GitRuby::Repository::NoSuchShaFound
+      
+    #rescue Grit::GitRuby::Repository::NoSuchShaFound
+      # is this right?
+    rescue Rugged::ReferenceError
       []
     end
 
