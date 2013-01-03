@@ -27,7 +27,7 @@
       {{#versions}}
       <tr>
         <td class="checkbox">
-          <input type="checkbox" name="versions[]" value="{{id}}">
+          <input type="checkbox" name="versions[]" value="{{oid}}">
         </td>
         <td class="author">
             {{>author_template}}
@@ -35,7 +35,7 @@
         <td class="commit-name">
           <span class="time-elapsed">{{date}}:</span>&nbsp;
           {{message}}
-          [<a href="{{base_url}}/{{escaped_url_path}}/{{id}}" title="View commit">{{id7}}</a>]
+          [<a href="{{base_url}}/{{escaped_url_path}}/{{oid}}" title="View commit">{{id7}}</a>]
         </td>
       </tr>
       {{/versions}}
