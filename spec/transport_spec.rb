@@ -16,7 +16,7 @@ RECEIVE_PACK_ADVERTISEMENT = "0090f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/
 
 CORRECT_RECEIVE_REQUEST = "00820000000000000000000000000000000000000000 0ed348defdb66282b02803a8836c5d5fc5b97d0d refs/heads/test\x00 report-status side-band-64k0000PACK\x00\x00\x00\x02\x00\x00\x00\x00\x02\x9D\b\x82;\xD8\xA8\xEA\xB5\x10\xADj\xC7\\\x82<\xFD>\xD3\x1E" # Client pushes a valid object-id
 
-CORRECT_RECEIVE_REQUEST_RESPONSE = "0090f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/.svn/text-base/alternative.svn-base\u0000 side-band-64k delete-refs report-status ofs-delta \n0057f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/.svn/text-base/master.svn-base\n0044f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/alternative\n003ff5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/master\n00000028\u0002Updating references: 100% (1/1)   \r0025\u0002Updating references: 100% (1/1)\n002e\u0001000eunpack ok\n0017ok refs/heads/test\n00000000" # Server's expected response to CORRECT_RECEIVE_REQUEST
+CORRECT_RECEIVE_REQUEST_RESPONSE = "0028\u0002Updating references: 100% (1/1)   \r0025\u0002Updating references: 100% (1/1)\n002e\u0001000eunpack ok\n0017ok refs/heads/test\n00000000" # Server's expected response to CORRECT_RECEIVE_REQUEST
 
 RECEIVE_REQUEST_INVALID_LENGTH = "00010000000000000000000000000000000000000000 0ed348defdb66282b02803a8836c5d5fc5b97d0d refs/heads/test\x00 report-status side-band-64k0000PACK\x00\x00\x00\x02\x00\x00\x00\x00\x02\x9D\b\x82;\xD8\xA8\xEA\xB5\x10\xADj\xC7\\\x82<\xFD>\xD3\x1E" # Request has invalid packet length header
 
@@ -46,9 +46,19 @@ describe RJGitUploadPack do
   
   it "should return the server-side response to a client's wants" do
     res, msg = @pack.process(CORRECT_UPLOAD_REQUEST)
-    res.include?(CORRECT_UPLOAD_REQUEST_RESPONSE).should eql true
+    res.read.include?(CORRECT_UPLOAD_REQUEST_RESPONSE).should eql true
     msg.should eql nil
   end
+  
+  it "should advertise its references when processing requests in bidirectional mode" do
+    res, msg = @pack.process(CORRECT_UPLOAD_REQUEST)
+    res.read.include?(UPLOAD_PACK_ADVERTISEMENT.split("\n").first).should eql false
+    @pack.bidirectional = true
+    res, msg = @pack.process(CORRECT_UPLOAD_REQUEST)
+    res.read.include?(UPLOAD_PACK_ADVERTISEMENT.split("\n").first).should eql true
+  end
+  
+  it "should return a bidirectional pipe when in bidirectional mode"
   
   it "should return nil and a Java IO error exception object when the client's request has the wrong length" do
     res, msg = @pack.process(UPLOAD_REQUEST_INVALID_LENGTH)
@@ -98,9 +108,19 @@ describe RJGitReceivePack do
   
   it "should respond correctly to a client's push request" do
     res, msg = @pack.process(CORRECT_RECEIVE_REQUEST)
-    res.should eql CORRECT_RECEIVE_REQUEST_RESPONSE
+    res.read.should eql CORRECT_RECEIVE_REQUEST_RESPONSE
     msg.should eql nil
   end
+  
+  it "should advertise its references when processing requests in bidirectional mode" do
+    res, msg = @pack.process(CORRECT_RECEIVE_REQUEST)
+    res.read.include?(RECEIVE_PACK_ADVERTISEMENT.split("\n").first).should eql false
+    @pack.bidirectional = true
+    res, msg = @pack.process(CORRECT_RECEIVE_REQUEST)
+    res.read.include?(RECEIVE_PACK_ADVERTISEMENT.split("\n").first).should eql true
+  end
+  
+  it "should return a bidirectional pipe when in bidirectional mode"
   
   it "should return nil and a Java IO error exception object when the client's request has the wrong length" do
     res, msg = @pack.process(RECEIVE_REQUEST_INVALID_LENGTH)
