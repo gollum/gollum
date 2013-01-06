@@ -63,7 +63,7 @@ describe RJGit do
     
     after(:all) do
       @repo = nil
-      remove_temp_repo(@temp_repo_path)
+      remove_temp_repo(File.dirname(@temp_repo_path))
     end
     
  context "producing diffs" do
@@ -95,7 +95,7 @@ describe RJGit do
       
       after(:each) do
         @repo = nil
-	      remove_temp_repo(@tmp_repo_path)
+	      remove_temp_repo(File.dirname(@tmp_repo_path))
       end 
     end  
   end # end Porcelain

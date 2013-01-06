@@ -1,5 +1,42 @@
 require 'spec_helper'
 
+describe LocalRefWriter do
+
+  before(:each) do
+    @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+    @repo = Repo.new(@temp_repo_path)
+    @writer = LocalRefWriter.new(@repo.jrepo.get_all_refs, @repo.path)
+  end
+  
+  it "has a path variable set at initialization" do
+    @writer.path.should eql @repo.path
+  end
+  
+  it "writes to the specified file path under the repository's path" do
+    filename = File.join('info','nonexistent')
+    newfile = File.join(@repo.path, filename)
+    File.exists?(newfile).should eql false
+    @writer.writeFile(filename, "Test")
+    File.exists?(newfile).should eql true
+  end
+  
+  it "inherits the write_info_refs method from its JGit superclass" do
+    @writer.method(:write_info_refs).owner.should eql Java::OrgEclipseJgitLib::RefWriter
+  end
+  
+  it "throws a Java IOException when the destination file is not writable" do
+    expect{ @writer.writeFile("","Test") }.to raise_error(IOException)
+  end
+  
+  after(:each) do
+    remove_temp_repo(File.dirname(@temp_repo_path))
+    @repo = nil
+    @writer = nil
+    @temp_repo_path = nil
+  end
+
+end
+
 describe Repo do
 
   context "with read-only access" do
@@ -182,6 +219,23 @@ describe Repo do
       diff[:oldpath].should == 'remove_file.txt'
       diff[:changetype].should == 'DELETE'
       "#{@temp_repo_path}/remove_file.txt".should_not exist
+    end
+    
+    it "should update the server info files" do
+      server_info_files = [File.join(@repo.path, 'info','refs'), File.join(@repo.path, 'objects','info','packs')]
+      contents = []
+      server_info_files.each {|path| f = File.new(path, "r"); contents << f.read; f.close }
+      server_info_files.each {|path| f = File.delete(path)}
+      @repo.update_server_info
+      server_info_files.each_with_index do |path,i|
+        f = File.new(path, "r")
+        new_contents = ""
+        f.each_line do |line|
+          new_contents = new_contents + line unless line.include?("refs/heads/.svn/") # JGit (unlike git) also searches directories under refs/heads starting with ".", so it finds some refs in /refs/heads/.svn that git-update-server does not find. See Repo.update_server_info. For now, just filter these lines out.
+        end
+        new_contents.should eql contents[i]
+        f.close
+      end
     end
     
     after(:each) do

@@ -6,13 +6,38 @@ module RJGit
   import 'org.eclipse.jgit.treewalk.TreeWalk'
   import 'org.eclipse.jgit.treewalk.filter.PathFilter'
   import 'org.eclipse.jgit.lib.Constants'
-
+  import 'org.eclipse.jgit.lib.RefWriter'
+  import 'java.io.IOException'
+  
+  # Implementation of RefWriter for local files. This class is able to generate and write the $GIT_DIR/info/refs. For use in Repo::update_server_info.
+  class LocalRefWriter < RefWriter
+    attr_accessor :path
+    
+    def initialize(refs, path)
+      super(refs)
+      @path = path
+    end
+    
+    def writeFile(file, content)
+        file = File.join(@path, file)
+      begin
+        f = File.open(file, "w")
+        f.write content
+        f.close
+      rescue
+        raise IOException.new # JGit API requires RefWriter.writeFile to throw IOException
+      end
+    end
+    
+  end
   
   class Repo
     
     attr_accessor :git
     attr_accessor :jrepo
     attr_accessor :path
+    
+    PACK_LIST = 'objects/info/packs'
 
     RJGit.delegate_to(Repository, :@jrepo)
     
@@ -121,6 +146,24 @@ module RJGit
     def tree(file_path)
       Tree.find_tree(@jrepo, file_path)
     end
+    
+    # Update the info files required for fetching files over the dump-HTTP protocol
+    def update_server_info
+      # First update the $GIT_DIR/refs/info file
+      refs = @jrepo.get_all_refs # Note: JGit will include directories under $GIT_DIR/refs/heads that start with a '.' in its search for refs. Filter these out in LocalRefWriter?
+      writer = LocalRefWriter.new(refs, @path)
+      writer.write_info_refs
+      
+      # Now update the $GIT_OBJECT_DIRECTORY/info/packs file
+      f = File.new(File.join(@path, PACK_LIST), "w")
+      @jrepo.get_object_database.get_packs.each do |pack|
+        f.write "P " + pack.get_pack_file.get_name + "\n"
+      end
+      f.write "\n"
+      f.close
+      
+      return true
+    end 
 
   end
 

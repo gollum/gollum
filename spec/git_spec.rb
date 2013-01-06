@@ -116,6 +116,10 @@ describe RubyGit do
       result.first.should match /postpatriarchialist.txt/
     end
     
+    after(:each) do
+      remove_temp_repo(File.dirname(@temp_repo_path))
+    end
+    
   end
   
   context "cleaning a repository" do
