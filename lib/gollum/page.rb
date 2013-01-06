@@ -284,25 +284,36 @@ module Gollum
         options.delete :max_count
         options.delete :skip
 
+        puts "The Grit way :("
+
         log = @wiki.repo.git.native "log", options, @wiki.ref, "--", @path
         Grit::Commit.list_from_string(@wiki.repo, log)
       else
         walker = Rugged::Walker.new(@wiki.repo)
-        walker.push(@wiki.repo.ref(@wiki.ref).target) # Start at the wiki's configured ref
+        walker.push(@wiki.repo.ref(@wiki.ref).target)
 
-        commits = [] # Represents an array of commit for this page
+        versions = []
+
+        # "diff" for this blob name by oid against each parent commit, add the commit to the versions
         walker.each do |commit|
-          # Get the tree and see if any of the files match our name
           commit.tree.each_blob do |blob|
-            # If there's a blob in there with the name we're looking for, then push the commit to the array
-            #page_match(name, entry.name) (?)
             if blob[:name] == @blob_entry.name
-              commits << commit
+              commit.parents.each do |parent|
+                parent = @wiki.repo.lookup(parent.oid)
+
+                parent.tree.each_blob do |parent_blob|
+                  if parent_blob[:name] == blob[:name] and parent_blob[:oid] != blob[:oid]
+                    # Add the commit into the list of versions if it isn't already present
+                    versions << commit if not versions.include?(commit)
+                  end
+                end
+              end
             end
           end
         end
 
-        return commits
+        # Return them reverse sorted by time of commit
+        versions.sort! {|a, b| b.time <=> a.time}
       end
     end
 
