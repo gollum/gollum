@@ -636,16 +636,8 @@ module Gollum
     #
     # Returns the String of formatted data with metadata removed.
     def extract_metadata(data)
-      @metadata ||= {}
-      # The markers are `<!-- ---` and `-->`
-      data.gsub(/\<\!--+\s+---(.*?)--+\>/m) do
-        yaml = @wiki.sanitizer.clean($1)
-        hash = YAML.load(yaml)
-        if Hash === hash
-          @metadata.update(hash)
-        end
-        ''
-      end
+      @metadata = {}
+      data
     end
 
     # Hook for getting the formatted value of extracted tag data.
