@@ -627,7 +627,7 @@ np.array([[2,2],[1,3]],np.float)
     assert_not_nil rendered.match(output)
   end
 
-  #########################################################################
+if $METADATA  #########################################################################
   #
   # Metadata Blocks
   #
@@ -677,7 +677,7 @@ np.array([[2,2],[1,3]],np.float)
     assert_equal output, rendered 
     assert_equal result, page.metadata
   end
-
+end # if $METADATA
   #########################################################################
   #
   # Various

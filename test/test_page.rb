@@ -228,11 +228,12 @@ context "within a sub-directory" do
     assert page.footer.raw_data =~ /^Lord of the Rings/
   end
 
+if $METADATA
   test "get metadata on page" do
     page = @wiki.page('Elrond')
     assert_equal Gollum::Page, page.class
     assert_equal 'elf', page.metadata['race']
   end
-
 end
 
+end

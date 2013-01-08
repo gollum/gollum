@@ -13,6 +13,9 @@ ENV['RACK_ENV'] = 'test'
 require 'gollum'
 require 'gollum/frontend/app'
 
+# Disable the metadata feature
+$METADATA = false
+
 # Make sure we're in the test dir, the tests expect that to be the current
 # directory.
 TEST_DIR = File.join(File.dirname(__FILE__), *%w[.])
