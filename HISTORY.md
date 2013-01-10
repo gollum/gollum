@@ -1,3 +1,7 @@
+# 2.4.11 / 2013-01-08
+
+* Numerous security issues have been fixed. Please update to `2.4.11`
+
 # 1.4.0 / 2012-04-10
 
 * Minor
