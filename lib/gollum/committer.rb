@@ -18,7 +18,7 @@ module Gollum
     #           :message   - The String commit message.
     #           :name      - The String author full name.
     #           :email     - The String email address.
-    #           :parent    - Optional Grit::Commit parent to this update.
+    #           :parent    - Optional Rugged::Commit parent to this update.
     #           :tree      - Optional String SHA of the tree to create the
     #                        index from.
     #           :committer - Optional Gollum::Committer instance.  If provided,
@@ -34,14 +34,14 @@ module Gollum
 
     # Public: References the Git index for this commit.
     #
-    # Returns a Grit::Index.
+    # Returns a Rugged::Index.
     def index
       @index ||= begin
         idx = @wiki.repo.index
         if tree   = options[:tree]
           idx.read_tree(tree)
         elsif parent = parents.first
-          idx.read_tree(parent.tree.id)
+          idx.read_tree(parent.tree)
         end
         idx
       end
@@ -49,21 +49,25 @@ module Gollum
 
     # Public: The committer for this commit.
     #
-    # Returns a Grit::Actor.
+    # Returns a hash representing an actor.
     def actor
       @actor ||= begin
         @options[:name]  = @wiki.default_committer_name  if @options[:name].to_s.empty?
         @options[:email] = @wiki.default_committer_email if @options[:email].to_s.empty?
-        Grit::Actor.new(@options[:name], @options[:email])
+
+        # Returns hash with the author information
+        {:name => @options[:name], :email => @options[:email], :time => Time.now}
       end
     end
 
     # Public: The parent commits to this pending commit.
     #
-    # Returns an array of Grit::Commit instances.
+    # Returns an array of Rugged::Commit instances.
     def parents
       @parents ||= begin
-        arr = [@options[:parent] || @wiki.repo.commit(@wiki.ref)]
+        # i think it would be a good idea to move the following line somewhere else
+        ref_oid = @wiki.repo.ref(@wiki.ref).target
+        arr = [@options[:parent] || @wiki.repo.lookup(ref_oid).parents]
         arr.flatten!
         arr.compact!
         arr
@@ -132,7 +136,7 @@ module Gollum
     #
     # Returns nothing.
     def update_working_dir(dir, name, format)
-      unless @wiki.repo.bare
+      unless @wiki.repo.bare?
         if @wiki.page_file_dir
           dir = dir.size.zero? ? @wiki.page_file_dir : ::File.join(dir, @wiki.page_file_dir)
         end
@@ -160,7 +164,17 @@ module Gollum
     #
     # Returns the String SHA1 of the new commit.
     def commit
-      sha1 = index.commit(@options[:message], parents, actor, nil, @wiki.ref)
+      # Commit!
+      tree_to_commit = @wiki.repo.lookup(index.write_tree)
+      sha1 = Rugged::Commit.create(@wiki.repo,
+          :author => actor,
+          :message => @options[:message],
+          :committer => actor,
+          :parents => parents,
+          :tree => tree_to_commit,
+          :update_ref => @wiki.ref)
+
+      # Not sure what to do about these yet
       @callbacks.each do |cb|
         cb.call(self, sha1)
       end
@@ -230,7 +244,15 @@ module Gollum
     # Proxies methods t
     def method_missing(name, *args)
       args.map! { |item| item.respond_to?(:force_encoding) ? item.force_encoding('ascii-8bit') : item }
-      index.send(name, *args)
+
+      # Find the entry matching the filename
+      #todo: This is ugly. Is there a better way?
+      file_entry = index.select do |entry|
+        entry[:path] == args.first
+      end
+
+      # Add the path to the index
+      index.add(file_entry.first[:path])
     end
   end
 end
