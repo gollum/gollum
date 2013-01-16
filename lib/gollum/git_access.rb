@@ -13,12 +13,7 @@ module Gollum
     def initialize(path, page_file_dir = nil, bare = false)
       @page_file_dir = page_file_dir
       @path = path
-
-      if bare
-        @repo = Rugged::Repository.init_at(path, bare)
-      else
-        @repo = Rugged::Repository.new(path)
-      end
+      @repo = Rugged::Repository.new(path)
 
       clear
     end
@@ -91,6 +86,7 @@ module Gollum
           end
         end
       end
+    rescue Rugged::InvalidError
     end
 
     # Public: Clears all of the cached data that this GitAccess is tracking.
@@ -169,8 +165,12 @@ module Gollum
 
       # Convert the tree into an array of BlobEntry instances
       blobs = []
-      tree.each_blob do |blob|
-        blobs << Gollum::BlobEntry.new(blob[:oid], blob[:name])
+
+      tree.walk(:preorder) do |root, entry|
+        if entry[:type] == :blob
+          #puts "Creating blob with #{entry[:name]} in #{root} and oid: #{entry[:oid]}"
+          blobs << Gollum::BlobEntry.new(entry[:oid], root + entry[:name])
+        end
       end
 
       blobs
