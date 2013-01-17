@@ -29,7 +29,7 @@ context "Wiki" do
   end
 
   test "git repo" do
-    assert_equal Grit::Repo, @wiki.repo.class
+    assert_equal Rugged::Repository, @wiki.repo.class
     assert @wiki.exist?
   end
 
