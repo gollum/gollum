@@ -19,7 +19,9 @@ context "Page" do
     assert page.formatted_data =~ %r{<h1>Bilbo Baggins<a class="anchor" id="Bilbo-Baggins" href="#Bilbo-Baggins"></a></h1>\n\n<p>Bilbo Baggins}
     assert_equal 'Bilbo-Baggins.md', page.path
     assert_equal :markdown, page.format
-    assert_equal @wiki.repo.commits.first.id, page.version.id
+
+    first_commit = @wiki.repo.lookup(@wiki.repo.head.target)
+    assert_equal first_commit.oid, page.version.oid
   end
 
   test "get existing page case insensitive" do
@@ -64,7 +66,7 @@ context "Page" do
   test "page versions" do
     page = @wiki.page('Bilbo Baggins')
     assert_equal ["f25eccd98e9b667f9e22946f3e2f945378b8a72d", "5bc1aaec6149e854078f1d0f8b71933bbc6c2e43"],
-      page.versions.map { |v| v.id }
+      page.versions.map { |v| v.oid }
   end
 
   test "page versions across renames" do
