@@ -47,6 +47,34 @@ describe RubyGit do
     end
   end
   
+  context "when merging" do
+
+    before(:each) do
+      @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+      @repo = Repo.new(@temp_repo_path)
+      @repo.create_branch('branch_for_merging')
+      @repo.checkout('branch_for_merging')
+    end
+    
+    it "should merge a commit with current branch" do
+      # add and commit new file to new branch
+      File.open(File.join(@temp_repo_path, "rspec-mergetest.txt"), 'w') {|file| file.write("This file is for merging.")}
+      @repo.add("rspec-mergetest.txt")
+      commit = Commit.new(@repo.commit("Creating a commit for merging"))
+      # change to 'master' branch
+      @repo.checkout('master')
+      # merge commit from branch with 'master'
+      result = @repo.git.merge(commit)
+      # check for successful merge
+      listing =  RJGit::Porcelain.ls_tree(@repo)
+      listing.select! {|entry| entry[:path] == "rspec-mergetest.txt" }
+      listing.should have(1).entry
+    end
+    
+    it "should return conflicts when there are conflicts"
+    
+  end
+  
   context "cloning a non-bare repository" do
     before(:each) do
       @repo = Repo.new(TEST_REPO_PATH) 
