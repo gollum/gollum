@@ -22,7 +22,7 @@ module RJGit
         file = File.join(@path, file)
       begin
         f = File.open(file, "w")
-        f.write content
+        f.write String.from_java_bytes(content)
         f.close
       rescue
         raise IOException.new # JGit API requires RefWriter.writeFile to throw IOException

@@ -16,7 +16,7 @@ describe LocalRefWriter do
     filename = File.join('info','nonexistent')
     newfile = File.join(@repo.path, filename)
     File.exists?(newfile).should eql false
-    @writer.writeFile(filename, "Test")
+    @writer.writeFile(filename, "Test".to_java_bytes)
     File.exists?(newfile).should eql true
   end
   
@@ -25,7 +25,7 @@ describe LocalRefWriter do
   end
   
   it "throws a Java IOException when the destination file is not writable" do
-    expect{ @writer.writeFile("","Test") }.to raise_error(IOException)
+    expect{ @writer.writeFile("","Test".to_java_bytes) }.to raise_error(IOException)
   end
   
   after(:each) do
@@ -230,7 +230,7 @@ describe Repo do
       server_info_files.each_with_index do |path,i|
         f = File.new(path, "r")
         new_contents = ""
-        f.each_line do |line|
+	f.each_line do |line|
           new_contents = new_contents + line unless line.include?("refs/heads/.svn/") # JGit (unlike git) also searches directories under refs/heads starting with ".", so it finds some refs in /refs/heads/.svn that git-update-server does not find. See Repo.update_server_info. For now, just filter these lines out.
         end
         new_contents.should eql contents[i]
