@@ -221,6 +221,17 @@ describe RubyGit do
       f.write("fluffy bunny")
       f.close
     end
+
+    it "should revert commits" do
+      @repo.add("materialist.txt")
+      to_revert = @repo.commit("Added test for reverting.")
+      reverted_commit = @repo.git.revert([to_revert])
+      @repo.commits.first.id.should == reverted_commit.id
+    end
+    
+    it "should handle errors for revert" do
+      pending
+    end
     
     it "should reset the hard way" do
       #reset the 'materialist.txt' file to the current head, through the HARD way

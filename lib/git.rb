@@ -172,6 +172,14 @@ module RJGit
       reset_command.call
     end
     
+    def revert(commits)
+      revert_command = @jgit.revert
+      commits.each do |commit|
+        revert_command.include commit.jcommit
+      end
+      Commit.new(revert_command.call)
+    end
+    
     def status
       @jgit.status.call
     end
