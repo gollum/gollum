@@ -7,9 +7,6 @@ module RJGit
   import 'org.eclipse.jgit.api.AddCommand'
   import 'org.eclipse.jgit.api.RmCommand'
   
-  import org.eclipse.jgit.transport.UploadPack
-  import org.eclipse.jgit.transport.ReceivePack
-  
   class RubyGit
     
     attr_accessor :jgit
@@ -147,18 +144,6 @@ module RJGit
       clean_command.set_dry_run(true) if options[:dryrun]
       clean_command.set_paths(java.util.Arrays.asList(options[:paths])) if options[:paths]
       clean_command.call
-    end
-    
-    def upload_pack
-      up = org.eclipse.jgit.transport.UploadPack.new(@jrepo)
-      #jinput_stream = java.io.InputStream.new
-      #joutput_stream = java.io.InputStream.new
-      up.upload(jinput_stream, joutput_stream, nil)
-      return jinput_stream, joutput_stream
-    end
-    
-    def receive_pack(repo)
-    
     end
 
   end
