@@ -60,18 +60,28 @@ describe RubyGit do
       # add and commit new file to new branch
       File.open(File.join(@temp_repo_path, "rspec-mergetest.txt"), 'w') {|file| file.write("This file is for merging.")}
       @repo.add("rspec-mergetest.txt")
-      commit = Commit.new(@repo.commit("Creating a commit for merging"))
+      commit = @repo.commit("Creating a commit for merging")
       # change to 'master' branch
       @repo.checkout('master')
       # merge commit from branch with 'master'
-      result = @repo.git.merge(commit)
+      @repo.git.merge(commit)
       # check for successful merge
-      listing =  RJGit::Porcelain.ls_tree(@repo)
+      listing = RJGit::Porcelain.ls_tree(@repo)
       listing.select! {|entry| entry[:path] == "rspec-mergetest.txt" }
       listing.should have(1).entry
     end
     
-    it "should return conflicts when there are conflicts"
+    it "should return an Array with conflict names when there are conflicts" do
+      File.open(File.join(@temp_repo_path, "materialist.txt"), 'a') {|file| file.write("\n Beautiful materialist.") }
+      @repo.add("materialist.txt")
+      commit = @repo.commit("Creating a conflict - step 1")
+      @repo.checkout('master')
+      File.open(File.join(@temp_repo_path, "materialist.txt"), 'a') {|file| file.write("\n Same line - different string.") }
+      @repo.add("materialist.txt")
+      @repo.commit("Creating a conflict - step 2")
+      result = @repo.git.merge(commit)
+      result.should include('materialist.txt')
+    end
     
   end
   

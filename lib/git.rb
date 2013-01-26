@@ -38,7 +38,7 @@ module RJGit
     end
     
     def commit(message)
-      @jgit.commit.set_message(message).call
+      Commit.new(@jgit.commit.set_message(message).call)
     end
     
     def clone(remote, local, options = {})
@@ -73,7 +73,11 @@ module RJGit
       merge_command = @jgit.merge
       merge_command.include(commit.jcommit)
       result = merge_command.call
-      result.get_merge_status.to_string
+      if result.get_merge_status.to_string == 'Conflicting'
+        return result.get_conflicts.to_hash.keys
+      else
+        return result
+      end
     end
 
     def tag(name, message = "", commit_or_revision = nil, actor = nil, force = false)
