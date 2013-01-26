@@ -3,10 +3,16 @@ require 'spec_helper'
 describe RubyGit do
   
   it "should return log information" do
-    repo = Repo.new(TEST_REPO_PATH) 
+    repo = Repo.new(TEST_REPO_PATH)
     messages = repo.git.log
     messages.should_not be_empty
     messages.first.message.should match /Cleaning working directory/
+  end
+  
+  it "should return a status object" do
+    repo = Repo.new(TEST_REPO_PATH)
+    repo.git.status.getModified.to_a.should == []
+    repo.git.status.isClean.should == true
   end
   
   context "when creating tags" do
@@ -203,6 +209,58 @@ describe RubyGit do
     end
   end
   
+  context "resetting a (part of) a repository" do
+    before(:each) do
+      #Create a temporary repository
+      @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+      @repo = Repo.new(@temp_repo_path)
+      
+      #Open the 'materialist.txt' file in the repo and add the text "fluffy bunny"
+      f = File.open(File.join(@temp_repo_path,"materialist.txt"),"a+")
+      @before_write = f.read
+      f.write("fluffy bunny")
+      f.close
+    end
+    
+    it "should reset the hard way" do
+      #reset the 'materialist.txt' file to the current head, through the HARD way
+      ref = @repo.commits.first
+      @repo.git.reset(ref)
+      
+      #Check if the hard reset worked correctly
+      f = File.open(File.join(@temp_repo_path,"materialist.txt"),"r")
+      f.read.should == @before_write
+      f.close
+    end
+      
+    it "should unstage files" do
+      paths = ["materialist.txt"]
+      @repo.add("#{paths.first}")
+      @repo.git.status.getChanged.to_a.should include paths.first
+      ref = @repo.commits.first
+      @repo.git.reset(ref, nil, paths)
+      @repo.git.status.getChanged.to_a.should_not include paths.first
+    end
+    
+    it "should return nil if mode is not valid" do
+      ref = @repo.commits.first
+      @repo.git.reset(ref, "NONEXISTENT").should be_nil
+    end
+    
+    it "should not any reset type together with specified file paths" do
+      mode = "MERGE"
+      paths = ["materialist.txt"]
+      ref = @repo.commits.first
+      expect { @repo.git.reset(ref, mode, paths) }.to raise_error org.eclipse.jgit.api.errors.JGitInternalException
+    end
+    
+    after(:each) do
+      @repo = nil
+      remove_temp_repo(@temp_repo_path)
+    end
+    
+  end
+
 end
 
 

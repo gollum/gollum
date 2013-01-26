@@ -11,6 +11,8 @@ module RJGit
     
     attr_accessor :jgit
     attr_accessor :jrepo
+    
+    RESET_MODES = ["HARD", "SOFT", "KEEP", "MERGE", "MIXED"]
 
     RJGit.delegate_to(Git, :@jgit)
       
@@ -155,6 +157,23 @@ module RJGit
       clean_command.set_dry_run(true) if options[:dryrun]
       clean_command.set_paths(java.util.Arrays.asList(options[:paths])) if options[:paths]
       clean_command.call
+    end
+    
+    def reset(ref, mode = "HARD", paths = nil)
+      return nil if mode != nil && !RESET_MODES.include?(mode)
+      reset_command = @jgit.reset
+      if paths then
+        paths.each do |path|
+          reset_command.addPath(path)
+        end
+      end
+      reset_command.setRef(ref.id)
+      reset_command.setMode(org.eclipse.jgit.api.ResetCommand::ResetType.valueOf(mode)) unless mode == nil
+      reset_command.call
+    end
+    
+    def status
+      @jgit.status.call
     end
 
   end
