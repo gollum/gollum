@@ -72,18 +72,18 @@ context "Page" do
   test "page versions across renames" do
     page = @wiki.page 'My-Precious'
     assert_equal ['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b', '94523d7ae48aeba575099dd12926420d8fd0425d'],
-      page.versions(:follow => true).map { |v| v.id }
+      page.versions(:follow => true).map { |v| v.oid }
   end
 
   test "page versions without renames" do
     page = @wiki.page 'My-Precious'
     assert_equal ['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'],
-      page.versions(:follow => false).map { |v| v.id }
+      page.versions(:follow => false).map { |v| v.oid }
   end
 
   test "specific page version" do
     page = @wiki.page('Bilbo Baggins', 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb')
-    assert_equal 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb', page.version.id
+    assert_equal 'fbabba862dfa7ac35b39042dd4ad780c9f67b8cb', page.version.oid
   end
 
   test "no page match" do
@@ -210,7 +210,7 @@ context "within a sub-directory" do
     assert page.raw_data =~ /^# Elrond\n\nElrond/
     assert_equal 'Rivendell/Elrond.md', page.path
     assert_equal :markdown, page.format
-    assert_equal @wiki.repo.commits.first.id, page.version.id
+    assert_equal @wiki.repo.head.target, page.version.oid
   end
 
   test "should not get page from parent dir" do

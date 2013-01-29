@@ -431,8 +431,6 @@ module Gollum
         page
       end
     rescue Rugged::ReferenceError
-      # is this right?
-    #rescue Grit::GitRuby::Repository::NoSuchShaFound
     end
 
     # Find a page in a given tree.
