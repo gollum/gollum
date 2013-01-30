@@ -153,21 +153,77 @@ context "Frontend" do
   end
 
   test "renames page" do
-    page_1 = @wiki.page('B')
-    post "/edit/B", :content => 'abc',
-      :rename => "C", :page => 'B',
-      :format => page_1.format, :message => 'def'
+    page_1 = @wiki.page("B")
+    post "/rename/B", :rename => "/C", :message => 'def'
+
     follow_redirect!
-    assert_equal '/c', last_request.fullpath
+    assert_equal '/C', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
     assert_nil @wiki.page("B")
     page_2 = @wiki.page('C')
-    assert_equal 'abc', page_2.raw_data
+    assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
+
+  test "renames page catches invalid page" do
+    # No such page
+    post "/rename/no-such-file-here", :rename => "/C", :message => 'def'
+    assert !last_response.ok?
+    assert_equal last_response.status, 500
+  end
+
+  test "rename page catches empty target" do
+    # Empty rename target
+    post "/rename/B", :rename => "", :message => 'def'
+    assert !last_response.ok?
+    assert_equal last_response.status, 500
+  end
+
+  test "rename page catches non-existent target" do
+    # Non-existent rename target
+    post "/rename/B", :message => 'def'
+    assert !last_response.ok?
+    assert_equal last_response.status, 500
+  end
+
+
+  test "renames page in subdirectory" do
+    page_1 = @wiki.paged("H", "G")
+    assert_not_equal page_1, nil
+    post "/rename/G/H", :rename => "/I/C", :message => 'def'
+
+    follow_redirect!
+    assert_equal '/I/C', last_request.fullpath
+    assert last_response.ok?
+
+    @wiki.clear_cache
+    assert_nil @wiki.paged("H", "G")
+    page_2 = @wiki.paged('C', 'I')
+    assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
+    assert_equal 'def', page_2.version.message
+    assert_not_equal page_1.version.sha, page_2.version.sha
+  end
+
+  test "renames page relative in subdirectory" do
+    page_1 = @wiki.paged("H", "G")
+    assert_not_equal page_1, nil
+    post "/rename/G/H", :rename => "K/C", :message => 'def'
+
+    follow_redirect!
+    assert_equal '/G/K/C', last_request.fullpath
+    assert last_response.ok?
+
+    @wiki.clear_cache
+    assert_nil @wiki.paged("H", "G")
+    page_2 = @wiki.paged('C', 'G/K')
+    assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
+    assert_equal 'def', page_2.version.message
+    assert_not_equal page_1.version.sha, page_2.version.sha
+  end
+
 
   test "creates page" do
     post "/create", :content => 'abc', :page => "D",
@@ -210,6 +266,16 @@ context "Frontend" do
     follow_redirect!
     assert_equal "/#{name}", last_request.fullpath
     assert last_response.ok?
+  end
+
+  test "edit returns nil for non-existant page" do
+    # post '/edit' fails. post '/edit/' works.
+    page = 'not-real-page'
+    path = '/'
+    post '/edit/', :content => 'edit_msg',
+      :page => page, :path => path, :message => ''
+    page_e = @wiki.paged(page, path)
+    assert_equal nil, page_e
   end
 
   test "page create and edit with dash & page rev" do

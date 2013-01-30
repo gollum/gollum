@@ -4,6 +4,8 @@
 	bare = false
 	logallrefupdates = true
 	ignorecase = true
+[receive]
+    denyCurrentBranch = ignore
 [remote "origin"]
 	fetch = +refs/heads/*:refs/remotes/origin/*
 	url = /Users/rick/p/gollum/test/examples/revert.git

@@ -527,3 +527,136 @@ context "Wiki page writing with different branch" do
     assert_equal nil, @wiki.page("Bilbo")
   end
 end
+
+context "Renames directory traversal" do
+  setup do
+    @path = cloned_testpath("examples/revert.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {})
+  end
+
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+
+  test "rename aborts on nil" do
+    cd = {:message => "def"}
+    res = @wiki.rename_page(@wiki.page("some-super-fake-page"), "B", cd)
+    assert !res, "rename did not abort with non-existant page"
+    res = @wiki.rename_page(@wiki.page("B"), "", cd)
+    assert !res, "rename did not abort with empty rename"
+    res = @wiki.rename_page(@wiki.page("B"), nil, cd)
+    assert !res, "rename did not abort with nil rename"
+  end
+
+  test "rename page no-act" do
+    # Make sure renames don't do anything if the name is the same.
+    cd = {:message => "def"}
+
+    # B.md => B.md
+    res = @wiki.rename_page(@wiki.page("B"), "B", cd)
+    assert !res, "NOOP rename did not abort"
+  end
+
+  test "rename page without directories" do
+    # Make sure renames work with relative paths.
+    cd = {:message => "def"}
+    source = @wiki.page("B")
+
+    # B.md => C.md
+    res = @wiki.rename_page(source, "C", cd)
+    assert res
+
+    renamed_ok(source, @wiki.page("C"))
+  end
+
+  test "rename page with subdirs" do
+    # Make sure renames in subdirectories happen ok
+    cd = {:message => "def"}
+    source = @wiki.paged("H", "G")
+
+    # G/H.md => G/F.md
+    @wiki.rename_page(source, "G/F", cd)
+
+    renamed_ok(source, @wiki.paged("F", "G"))
+  end
+
+  test "rename page absolute path is still no-act" do
+    # Make sure renames don't do anything if the name is the same.
+    cd = {:message => "def"}
+
+    # B.md => B.md
+    res = @wiki.rename_page(@wiki.page("B"), "/B", cd)
+    assert !res, "NOOP rename did not abort"
+  end
+
+  test "rename page absolute path NOOPs ok" do
+    # Make sure renames don't do anything if the name is the same and we are in a subdirectory.
+    cd = {:message => "def"}
+    source = @wiki.paged("H", "G")
+
+    # G/H.md => G/H.md
+    res = @wiki.rename_page(source, "/G/H", cd)
+    assert !res, "NOOP rename did not abort"
+  end
+
+  test "rename page absolute directory" do
+    # Make sure renames work with absolute paths.
+    cd = {:message => "def"}
+    source = @wiki.page("B")
+
+    # B.md => C.md
+    res = @wiki.rename_page(source, "/C", cd)
+    assert res
+
+    renamed_ok(source, @wiki.page("C"))
+  end
+
+  test "rename page absolute directory with subdirs" do
+    # Make sure renames in subdirectories happen ok
+    cd = {:message => "def"}
+    source = @wiki.paged("H", "G")
+
+    # G/H.md => G/F.md
+    @wiki.rename_page(source, "/G/F", cd)
+
+    renamed_ok(source, @wiki.paged("F", "G"))
+  end
+
+  test "rename page relative directory with new dir creation" do
+    # Make sure renames in subdirectories create more subdirectories ok
+    cd = {:message => "def"}
+    source = @wiki.paged("H", "G")
+
+    # G/H.md => G/K/F.md
+    assert_not_equal k = @wiki.rename_page(source, "K/F", cd), false
+
+    new_page = @wiki.paged("F", "K")
+    assert_not_equal new_page, nil
+    renamed_ok(source, new_page)
+  end
+
+  test "rename page absolute directory with subdir creation" do
+    # Make sure renames in subdirectories create more subdirectories ok
+    cd = {:message => "def"}
+    source = @wiki.paged("H", "G")
+
+    # G/H.md => G/K/F.md
+    assert_not_equal @wiki.rename_page(source, "/G/K/F", cd), false
+
+    new_page = @wiki.paged("F", "G/K")
+    assert_not_equal new_page, nil
+    renamed_ok(source, new_page)
+  end
+
+  def renamed_ok(page_source, page_target)
+    @wiki.clear_cache
+    page1 = @wiki.paged(page_source.name, page_source.path)
+    assert_nil page1
+    assert_equal "INITIAL\n\nSPAM2\n", page_target.raw_data
+    assert_equal 'def', page_target.version.message
+    assert_not_equal page_source.version.sha, page_target.version.sha
+  end
+end
+
