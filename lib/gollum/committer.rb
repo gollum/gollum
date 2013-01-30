@@ -64,10 +64,17 @@ module Gollum
     #
     # Returns an array of Rugged::Commit instances.
     def parents
-      @parents ||= begin
-        # i think it would be a good idea to move the following line somewhere else
+      # Get the ref's oid if it's not a sha
+      ref_oid = ""
+
+      if GitAccess.sha?(@wiki.ref)
+        ref_oid = @wiki.ref
+      else
         ref_oid = @wiki.repo.ref(@wiki.ref).target
-        arr = [@options[:parent] || @wiki.repo.lookup(ref_oid).parents]
+      end
+
+      @parents ||= begin
+        arr = [@options[:parent] || @wiki.repo.lookup(ref_oid)]
         arr.flatten!
         arr.compact!
         arr

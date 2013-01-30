@@ -141,7 +141,7 @@ module Gollum
     # str - Possible String SHA.
     #
     # Returns true if the String is a SHA, or false.
-    def sha?(str)
+    def self.sha?(str)
       !!(str =~ /^[0-9a-f]{40}$/)
     end
 
