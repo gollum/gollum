@@ -312,6 +312,62 @@ module Gollum
       multi_commit ? committer : committer.commit
     end
 
+    # Public: Rename an existing page without altering content.
+    #
+    # page   - The Gollum::Page to update.
+    # rename - The String extension-less full path of the page (leading '/' is ignored).
+    # commit - The commit Hash details:
+    #          :message   - The String commit message.
+    #          :name      - The String author full name.
+    #          :email     - The String email address.
+    #          :parent    - Optional Grit::Commit parent to this update.
+    #          :tree      - Optional String SHA of the tree to create the
+    #                       index from.
+    #          :committer - Optional Gollum::Committer instance.  If provided,
+    #                       assume that this operation is part of batch of
+    #                       updates and the commit happens later.
+    #
+    # Returns the String SHA1 of the newly written version, or the
+    # Gollum::Committer instance if this is part of a batch update.
+    # Returns false if the operation is a NOOP.
+    def rename_page(page, rename, commit = {})
+      return false if page.nil?
+      return false if rename.nil? or rename.empty?
+
+      (target_dir, target_name) = ::File.split(rename)
+      (source_dir, source_name) = ::File.split(page.path)
+      source_name = page.filename_stripped
+
+      # File.split gives us relative paths with ".", commiter.add_to_index doesn't like that.
+      target_dir = '' if target_dir == '.'
+      source_dir = '' if source_dir == '.'
+      target_dir = target_dir.gsub(/^\//, '')
+
+      # if the rename is a NOOP, abort
+      if source_dir == target_dir and source_name == target_name
+        return false
+      end
+
+      multi_commit = false
+      committer = if obj = commit[:committer]
+        multi_commit = true
+        obj
+      else
+        Committer.new(self, commit)
+      end
+
+      committer.delete(page.path)
+      committer.add_to_index(target_dir, target_name, page.format, page.raw_data, :allow_same_ext)
+
+      committer.after_commit do |index, sha|
+        @access.refresh
+        index.update_working_dir(source_dir, source_name, page.format)
+        index.update_working_dir(target_dir, target_name, page.format)
+      end
+
+      multi_commit ? committer : committer.commit
+    end
+
     # Public: Update an existing page with new content. The location of the
     # page inside the repository will not change. If the given format is
     # different than the current format of the page, the filename will be

@@ -20,9 +20,9 @@ Mousetrap.bind(['e'], function( e ) {
     class="action-all-pages">Files</a></li>
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-new-page">New</a></li>
+    {{#editable}}
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-rename-page">Rename</a></li>
-    {{#editable}}
     <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit</a></li>
     {{/editable}}
@@ -73,3 +73,8 @@ Mousetrap.bind(['e'], function( e ) {
   </p>
 </div>
 </div>
+
+<form name="rename" method="POST" action="{{base_url}}/rename/{{escaped_url_path}}">
+  <input type="hidden" name="rename"/>
+  <input type="hidden" name="message"/>
+</from>

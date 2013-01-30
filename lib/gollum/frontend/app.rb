@@ -143,24 +143,56 @@ module Precious
       end
     end
 
+    post '/rename/*' do
+      wikip     = wiki_page(params[:splat].first)
+      halt 500 if wikip.nil?
+      wiki      = wikip.wiki
+      page      = wiki.paged(wikip.name, wikip.path, exact = true)
+      rename    = params[:rename]
+      halt 500 if page.nil?
+      halt 500 if rename.nil? or rename.empty?
+
+      # Fixup the rename if it is a relative path
+      # In 1.8.7 rename[0] != rename[0..0]
+      if rename[0..0] != '/'
+        source_dir = ::File.dirname(page.path)
+        source_dir = '' if source_dir == '.'
+        (target_dir, target_name) = ::File.split(rename)
+        target_dir = target_dir == '' ? source_dir : "#{source_dir}/#{target_dir}"
+        rename = "#{target_dir}/#{target_name}"
+      end
+
+      committer = Gollum::Committer.new(wiki, commit_message)
+      commit    = {:committer => committer}
+
+      success = wiki.rename_page(page, rename, commit)
+      if !success
+          # This occurs on NOOPs, for example renaming A => A
+          redirect to("/#{page.escaped_url_path}")
+          return
+      end
+      committer.commit
+
+      wikip = wiki_page(rename)
+      page = wiki.paged(wikip.name, wikip.path, exact = true)
+      return if page.nil?
+      redirect to("/#{page.escaped_url_path}")
+    end
+
     post '/edit/*' do
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
       page      = wiki.paged(page_name, path, exact = true)
       return if page.nil?
-      rename    = params[:rename].to_url if params[:rename]
-      name      = rename || page.name
       committer = Gollum::Committer.new(wiki, commit_message)
       commit    = {:committer => committer}
 
-      update_wiki_page(wiki, page, params[:content], commit, name, params[:format])
+      update_wiki_page(wiki, page, params[:content], commit, page.name, params[:format])
       update_wiki_page(wiki, page.header,  params[:header],  commit) if params[:header]
       update_wiki_page(wiki, page.footer,  params[:footer],  commit) if params[:footer]
       update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
       committer.commit
-
-      page = wiki.page(rename) if rename
 
       redirect to("/#{page.escaped_url_path}") unless page.nil?
     end
@@ -298,7 +330,6 @@ module Precious
         @page = page
         @name = name
         @content = page.formatted_data
-        @editable = true
         mustache :page
       else
         halt 404
