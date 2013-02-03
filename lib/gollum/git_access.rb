@@ -37,7 +37,7 @@ module Gollum
       ref = ref.to_s
       return if ref.empty?
       sha =
-        if sha?(ref)
+        if self.class.sha?(ref)
           ref
         else
           get_cache(:ref, ref) { ref_to_sha!(ref) }
@@ -74,7 +74,7 @@ module Gollum
     #
     # Returns a Rugged::Commit.
     def commit(ref)
-      if sha?(ref)
+      if self.class.sha?(ref)
         get_cache(:commit, ref) { commit!(ref) }
       else
         if sha = get_cache(:ref, ref)
