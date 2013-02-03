@@ -160,7 +160,7 @@ module Gollum
     #                             document type. Default: { Gollum::Markup }
     #           :sanitization  - An instance of Sanitization.
     #           :page_file_dir - String the directory in which all page files reside
-    #           :ref - String the repository ref to retrieve pages from
+    #           :ref           - String the repository ref to retrieve pages from
     #           :ws_subs       - Array of chars to sub for ws in filenames.
     #           :mathjax       - Set to false to disable mathjax.
     #           :user_icons    - Enable user icons on the history page. [gravatar, identicon, none].
@@ -557,6 +557,7 @@ module Gollum
     #
     # Returns an Array of Grit::Commit.
     def log(options = {})
+      # i want a log function in the GitAccess class!
       @repo.log(@ref, nil, log_pagination_options(options))
     end
 
