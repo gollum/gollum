@@ -116,7 +116,7 @@ module Precious
       # Finds header node inside Nokogiri::HTML document.
       #
       def find_header_node(doc)
-        case self.format
+        case @page.format
           when :asciidoc
             doc.css("div#gollum-root > div#header > h1:first-child")
           when :org
