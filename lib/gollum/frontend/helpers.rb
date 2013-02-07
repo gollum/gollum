@@ -12,6 +12,12 @@ module Precious
 
     # Extract the 'page' name from the file_path
     def extract_name(file_path)
+      if file_path[-1, 1] == "/"
+        return nil
+      end
+      
+      # File.basename is too eager to please and will return the last 
+      # component of the path even if it ends with a directory separator.
       ::File.basename(file_path)
     end
 

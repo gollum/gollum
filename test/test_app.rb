@@ -252,6 +252,24 @@ context "Frontend" do
     assert last_response.ok?
   end
 
+  test "accessing non-existant directory redirects to create index page" do
+    get "/foo/"
+
+    follow_redirect!
+    assert_equal "/create/foo/Home", last_request.fullpath
+    assert last_response.ok?
+  end
+
+  test "accessing redirectory redirects to index page" do
+    post "/create", :content => 'abc', :page => 'Home', :path => '/foo/',
+      :format => 'markdown', :message => 'foo'
+
+    assert_equal "http://example.org/foo/home", last_response.headers['Location']
+   
+    follow_redirect!
+    assert last_response.ok?
+  end
+
   test "edit redirects to create on non-existant page" do
     name = "E"
     get "/edit/#{name}"
