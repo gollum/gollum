@@ -89,7 +89,7 @@ module Precious
 
     get '/' do
       page_dir = settings.wiki_options[:page_file_dir].to_s
-      redirect clean_url(::File.join(@base_url, page_dir, 'Home'))
+      redirect clean_url(::File.join(@base_url, page_dir, wiki_new.index_page))
     end
 
     # path is set to name if path is nil.
@@ -98,12 +98,12 @@ module Precious
     #   extract_path will trim path to 'a'
     # name, path, version
     def wiki_page(name, path = nil, version = nil, exact = true)
+      wiki = wiki_new
+      
       path = name if path.nil?
-      name = extract_name(name)
+      name = extract_name(name) || wiki.index_page
       path = extract_path(path)
       path = '/' if exact && path.nil?
-
-      wiki = wiki_new
 
       OpenStruct.new(:wiki => wiki, :page => wiki.paged(name, path, exact, version),
                      :name => name, :path => path)
@@ -123,6 +123,7 @@ module Precious
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
+      
       wiki = wikip.wiki
       if page = wikip.page
         if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
@@ -379,9 +380,10 @@ module Precious
     end
 
     def show_page_or_file(fullpath)
-      name         = extract_name(fullpath)
-      path         = extract_path(fullpath) || '/'
-      wiki         = wiki_new
+      wiki = wiki_new
+
+      name = extract_name(fullpath) || wiki.index_page
+      path = extract_path(fullpath) || '/'
 
       if page = wiki.paged(name, path, exact = true)
         @page = page
