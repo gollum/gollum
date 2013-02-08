@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.email             = "repotag-dev@googlegroups.com"
   s.homepage          = ""
   s.require_paths     = ["lib"]
-  s.files             = Dir['lib/**/*.rb'] + ["README.md", "Gemfile", "lib/java/jars/org.eclipse.jgit-2.1.0.201209190230-r.jar"]
+  s.files             = Dir['lib/**/*.rb'] + ["README.md", "Gemfile"] + Dir['lib/java/jars/*.jar']
   s.has_rdoc          = true
   s.extra_rdoc_files  = ["README.md"]
   s.rdoc_options = ["--charset=UTF-8"]

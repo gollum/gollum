@@ -20,13 +20,15 @@ With special thanks to:
 
 ### Dependencies 
 
+* Requires JRuby 1.7.0 or higher
+
 ## Usage
 
 ### Configure the basics
 
 ## License
 
-Copyright (c) 2011 - 2012, Team Repotag
+Copyright (c) 2011 - 2013, Team Repotag
 
 (Modified BSD License)
 

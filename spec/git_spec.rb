@@ -89,6 +89,10 @@ describe RubyGit do
       result.should include('materialist.txt')
     end
     
+    after(:each) do
+      remove_temp_repo(@temp_repo_path)
+    end
+    
   end
   
   context "cloning a non-bare repository" do
