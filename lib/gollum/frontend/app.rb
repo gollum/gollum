@@ -388,11 +388,15 @@ module Precious
       if page = wiki.paged(name, path, exact = true)
         @page = page
         @name = name
+        @content  = page.formatted_data
+  
+        # Extensions and layout data
         @editable = true
-        @content = page.formatted_data
         @toc_content = wiki.universal_toc ? @page.toc_data : nil
-        @mathjax = wiki.mathjax
+        @mathjax  = wiki.mathjax
         @h1_title = wiki.h1_title
+        @bar_side  = wiki.bar_side
+        
         mustache :page
       elsif file = wiki.file(fullpath)
         content_type file.mime_type

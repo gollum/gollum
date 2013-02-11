@@ -544,11 +544,7 @@ Gollum optionally takes a `--config file`. See [config.rb](https://github.com/gi
 
 ## CUSTOM CSS
 
-The `--css` flag will inject `custom.css` from the root of your git repository into each page. `custom.css` must be commited to git or you will get a 302 redirect to the create page. Here's an example of floating the sidebar to the left.
-
-```css
-#wiki-rightbar { float: left !important; }
-```
+The `--css` flag will inject `custom.css` from the root of your git repository into each page. `custom.css` must be commited to git or you will get a 302 redirect to the create page.
 
 ## CONTRIBUTE
 
