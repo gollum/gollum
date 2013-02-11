@@ -64,6 +64,10 @@ module Precious
       def footer_format
         has_footer && @footer.format.to_s
       end
+      
+      def bar_side
+        @bar_side.to_s
+      end
 
       def has_sidebar
         @sidebar = (@page.sidebar || false) if @sidebar.nil?
