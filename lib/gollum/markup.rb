@@ -27,7 +27,7 @@ module Gollum
       @wiki    = page.wiki
       @name    = page.filename
       @data    = page.text_data
-      @version = page.version.id if page.version
+      @version = page.version.oid if page.version
       @format  = page.format
       @sub_page = page.sub_page
       @parent_page = page.parent_page

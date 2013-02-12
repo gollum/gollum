@@ -34,7 +34,7 @@ module Gollum
     #
     # Returns the String name.
     def name
-      @blob && @blob.name
+      @path && ::File.basename(@path)
     end
     alias filename name
 
@@ -42,10 +42,10 @@ module Gollum
     #
     # Returns the String data.
     def raw_data
-      @blob && @blob.data
+      @blob && @blob.content
     end
 
-    # Public: The Grit::Commit version of the file.
+    # Public: The Rugged::Commit version of the file.
     attr_accessor :version
 
     # Public: The String path of the file.
@@ -58,7 +58,7 @@ module Gollum
 
     # Populate the File with information from the Blob.
     #
-    # blob - The Grit::Blob that contains the info.
+    # blob - The Rugged::Blob that contains the info.
     # path - The String directory path of the file.
     #
     # Returns the populated Gollum::File.
@@ -86,7 +86,7 @@ module Gollum
       if entry = map.detect { |entry| entry.path.downcase == checked }
         @path    = name
         @blob    = entry.blob(@wiki.repo)
-        @version = version.is_a?(Grit::Commit) ? version : @wiki.commit_for(version)
+        @version = version.is_a?(Rugged::Commit) ? version : @wiki.commit_for(version)
         self
       end
     end

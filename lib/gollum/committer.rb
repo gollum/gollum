@@ -18,7 +18,7 @@ module Gollum
     #           :message   - The String commit message.
     #           :name      - The String author full name.
     #           :email     - The String email address.
-    #           :parent    - Optional Grit::Commit parent to this update.
+    #           :parent    - Optional Rugged::Commit parent to this update.
     #           :tree      - Optional String SHA of the tree to create the
     #                        index from.
     #           :committer - Optional Gollum::Committer instance.  If provided,
@@ -34,14 +34,14 @@ module Gollum
 
     # Public: References the Git index for this commit.
     #
-    # Returns a Grit::Index.
+    # Returns a Rugged::Index.
     def index
       @index ||= begin
         idx = @wiki.repo.index
         if tree   = options[:tree]
           idx.read_tree(tree)
         elsif parent = parents.first
-          idx.read_tree(parent.tree.id)
+          idx.read_tree(parent.tree)
         end
         idx
       end
@@ -49,21 +49,32 @@ module Gollum
 
     # Public: The committer for this commit.
     #
-    # Returns a Grit::Actor.
+    # Returns a hash representing an actor.
     def actor
       @actor ||= begin
         @options[:name]  = @wiki.default_committer_name  if @options[:name].to_s.empty?
         @options[:email] = @wiki.default_committer_email if @options[:email].to_s.empty?
-        Grit::Actor.new(@options[:name], @options[:email])
+
+        # Returns hash with the author information
+        {:name => @options[:name], :email => @options[:email], :time => Time.now}
       end
     end
 
     # Public: The parent commits to this pending commit.
     #
-    # Returns an array of Grit::Commit instances.
+    # Returns an array of Rugged::Commit instances.
     def parents
+      # Get the ref's oid if it's not a sha
+      ref_oid = ""
+
+      if GitAccess.sha?(@wiki.ref)
+        ref_oid = @wiki.ref
+      else
+        ref_oid = @wiki.repo.ref(@wiki.ref).target
+      end
+
       @parents ||= begin
-        arr = [@options[:parent] || @wiki.repo.commit(@wiki.ref)]
+        arr = [@options[:parent] || @wiki.repo.lookup(ref_oid)]
         arr.flatten!
         arr.compact!
         arr
@@ -96,30 +107,25 @@ module Gollum
       fullpath = ::File.join(*[@wiki.page_file_dir, dir, path].compact)
       fullpath = fullpath[1..-1] if fullpath =~ /^\//
 
-      if index.current_tree && tree = index.current_tree / (@wiki.page_file_dir || '/')
-        tree = tree / dir unless tree.nil?
-      end
+      index.entries.each do |entry|
+        next if entry[:stage] == 2
 
-      if tree
         downpath = path.downcase.sub(/\.\w+$/, '')
+        existing_file = entry[:path].downcase.sub(/\.\w+$/, '')
+        existing_file_ext = ::File.extname(entry[:path]).sub(/^\./, '')
 
-        tree.blobs.each do |blob|
-          next if page_path_scheduled_for_deletion?(index.tree, fullpath)
-          
-          existing_file = blob.name.downcase.sub(/\.\w+$/, '')
-          existing_file_ext = ::File.extname(blob.name).sub(/^\./, '')
+        new_file_ext = ::File.extname(path).sub(/^\./, '')
 
-          new_file_ext = ::File.extname(path).sub(/^\./, '')
-
-          if downpath == existing_file && !(allow_same_ext && new_file_ext == existing_file_ext)
-            raise DuplicatePageError.new(dir, blob.name, path)
-          end
+        if downpath == existing_file && !(allow_same_ext && new_file_ext == existing_file_ext)
+          raise DuplicatePageError.new(dir, entry[:path], path)
         end
       end
 
       fullpath = fullpath.force_encoding('ascii-8bit') if fullpath.respond_to?(:force_encoding)
 
-      index.add(fullpath, @wiki.normalize(data))
+      # Write the file to the file system and then add it to the index
+      ::File.open(@wiki.repo.workdir + fullpath, 'w+') {|f| f.write(@wiki.normalize(data)) }
+      index.add(fullpath)
     end
 
     # Update the given file in the repository's working directory if there
@@ -132,7 +138,7 @@ module Gollum
     #
     # Returns nothing.
     def update_working_dir(dir, name, format)
-      unless @wiki.repo.bare
+      unless @wiki.repo.bare?
         if @wiki.page_file_dir
           dir = dir.size.zero? ? @wiki.page_file_dir : ::File.join(dir, @wiki.page_file_dir)
         end
@@ -160,7 +166,21 @@ module Gollum
     #
     # Returns the String SHA1 of the new commit.
     def commit
-      sha1 = index.commit(@options[:message], parents, actor, nil, @wiki.ref)
+      # Build the tree for the commit
+      tree_for_commit = index.write_tree
+
+      # Options for the commit
+      options = {:author => actor,
+                 :message => @options[:message] || "",
+                 :committer => actor,
+                 :parents => parents,
+                 :tree => tree_for_commit,
+                 :update_ref => @wiki.ref}
+
+      # Commit
+      sha1 = Rugged::Commit.create(@wiki.repo, options)
+
+      # Not sure what to do about these yet
       @callbacks.each do |cb|
         cb.call(self, sha1)
       end
@@ -175,32 +195,6 @@ module Gollum
     # Returns nothing.
     def after_commit(&block)
       @callbacks << block
-    end
-
-    # Determine if a given page (regardless of format) is scheduled to be
-    # deleted in the next commit for the given Index.
-    #
-    # map   - The Hash map:
-    #         key - The String directory or filename.
-    #         val - The Hash submap or the String contents of the file.
-    # path - The String path of the page file. This may include the format
-    #         extension in which case it will be ignored.
-    #
-    # Returns the Boolean response.
-    def page_path_scheduled_for_deletion?(map, path)
-      parts = path.split('/')
-      if parts.size == 1
-        deletions = map.keys.select { |k| !map[k] }
-        downfile = parts.first.downcase.sub(/\.\w+$/, '')
-        deletions.any? { |d| d.downcase.sub(/\.\w+$/, '') == downfile }
-      else
-        part = parts.shift
-        if rest = map[part]
-          page_path_scheduled_for_deletion?(rest, parts.join('/'))
-        else
-          false
-        end
-      end
     end
 
     # Determine if a given file is scheduled to be deleted in the next commit
@@ -230,7 +224,15 @@ module Gollum
     # Proxies methods t
     def method_missing(name, *args)
       args.map! { |item| item.respond_to?(:force_encoding) ? item.force_encoding('ascii-8bit') : item }
-      index.send(name, *args)
+
+      # Find the entry matching the filename
+      #todo: This is ugly. Is there a better way?
+      file_entry = index.select do |entry|
+        entry[:path] == args.first
+      end
+
+      # Add the path to the index
+      index.add(file_entry.first[:path])
     end
   end
 end

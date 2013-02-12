@@ -107,7 +107,7 @@ module Gollum
       end
     end
 
-    self.default_ref = 'master'
+    self.default_ref = 'refs/heads/master'
     self.default_committer_name  = 'Anonymous'
     self.default_committer_email = 'anon@anon.com'
 
@@ -166,7 +166,7 @@ module Gollum
     #                             document type. Default: { Gollum::Markup }
     #           :sanitization  - An instance of Sanitization.
     #           :page_file_dir - String the directory in which all page files reside
-    #           :ref - String the repository ref to retrieve pages from
+    #           :ref           - String the repository ref to retrieve pages from
     #           :ws_subs       - Array of chars to sub for ws in filenames.
     #           :mathjax       - Set to false to disable mathjax.
     #           :user_icons    - Enable user icons on the history page. [gravatar, identicon, none].
@@ -628,6 +628,7 @@ module Gollum
     #
     # Returns an Array of Grit::Commit.
     def log(options = {})
+      # i want a log function in the GitAccess class!
       @repo.log(@ref, nil, log_pagination_options(options))
     end
 
@@ -665,9 +666,9 @@ module Gollum
     #
     #########################################################################
 
-    # The Grit::Repo associated with the wiki.
+    # The Rugged::Repo associated with the wiki.
     #
-    # Returns the Grit::Repo.
+    # Returns the Rugged::Repo.
     attr_reader :repo
 
     # The String path to the Git repository that holds the Gollum site.
@@ -802,10 +803,10 @@ module Gollum
     #
     # ref - A string ref or SHA pointing to a valid commit.
     #
-    # Returns a Grit::Commit instance.
+    # Returns a Rugged::Commit instance.
     def commit_for(ref)
       @access.commit(ref)
-    rescue Grit::GitRuby::Repository::NoSuchShaFound
+    rescue Rugged::ReferenceError
     end
 
     # Finds a full listing of files and their blob SHA for a given ref.  Each
@@ -822,7 +823,10 @@ module Gollum
       else
         @access.tree(ref)
       end
-    rescue Grit::GitRuby::Repository::NoSuchShaFound
+      
+    #rescue Grit::GitRuby::Repository::NoSuchShaFound
+      # is this right?
+    rescue Rugged::ReferenceError
       []
     end
 

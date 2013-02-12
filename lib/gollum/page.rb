@@ -105,7 +105,7 @@ module Gollum
     # Returns a newly initialized Gollum::Page.
     def initialize(wiki)
       @wiki = wiki
-      @blob = @header = @footer = @sidebar = nil
+      @blob_entry = @header = @footer = @sidebar = nil
       @doc = nil
       @parent_page = nil
     end
@@ -114,7 +114,7 @@ module Gollum
     #
     # Returns the String name.
     def filename
-      @blob && @blob.name
+      @blob_entry && @blob_entry.name
     end
 
     # Public: The on-disk filename of the page with extension stripped.
@@ -200,7 +200,7 @@ module Gollum
     #
     # Returns the String data.
     def raw_data
-      @blob && @blob.data
+      @blob_entry && @blob_entry.blob(@wiki.repo).content
     end
 
     # Public: A text data encoded in specified encoding.
@@ -222,7 +222,7 @@ module Gollum
     #
     # Returns the String data.
     def formatted_data(encoding = nil, &block)
-      @blob && markup_class.render(historical?, encoding) do |doc|
+      @blob_entry && markup_class.render(historical?, encoding) do |doc|
         @doc = doc
         yield doc if block_given?
       end
@@ -253,7 +253,7 @@ module Gollum
     #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
     #     :roff ]
     def format
-      self.class.format_for(@blob.name)
+      self.class.format_for(@blob_entry.name)
     end
 
     # Gets the Gollum::Markup instance that will render this page's content.
@@ -265,7 +265,7 @@ module Gollum
 
     # Public: The current version of the page.
     #
-    # Returns the Grit::Commit.
+    # Returns the Rugged::Commit.
     attr_reader :version
 
     # Public: All of the versions that have touched the Page.
@@ -276,16 +276,44 @@ module Gollum
     #           :follow   - Follow's a file across renames, but falls back
     #                       to a slower Grit native call.  (default: false)
     #
-    # Returns an Array of Grit::Commit.
+    # Returns an Array of Rugged::Commit.
     def versions(options = {})
+      # not sure how to handle the options yet since i'm a noob!
       if options[:follow]
         options[:pretty] = 'raw'
         options.delete :max_count
         options.delete :skip
+
+        puts "The Grit way :("
+
         log = @wiki.repo.git.native "log", options, @wiki.ref, "--", @path
         Grit::Commit.list_from_string(@wiki.repo, log)
       else
-        @wiki.repo.log(@wiki.ref, @path, log_pagination_options(options))
+        walker = Rugged::Walker.new(@wiki.repo)
+        walker.push(@wiki.repo.ref(@wiki.ref).target)
+
+        versions = []
+
+        # "diff" for this blob name by oid against each parent commit, add the commit to the versions
+        walker.each do |commit|
+          commit.tree.each_blob do |blob|
+            if blob[:name] == @blob_entry.name
+              commit.parents.each do |parent|
+                parent = @wiki.repo.lookup(parent.oid)
+
+                parent.tree.each_blob do |parent_blob|
+                  if parent_blob[:name] == blob[:name] and parent_blob[:oid] != blob[:oid]
+                    # Add the commit into the list of versions if it isn't already present
+                    versions << commit if not versions.include?(commit)
+                  end
+                end
+              end
+            end
+          end
+        end
+
+        # Return them reverse sorted by time of commit
+        versions.sort! {|a, b| b.time <=> a.time}
       end
     end
 
@@ -383,7 +411,7 @@ module Gollum
     # Returns the Gollum::Wiki containing the page.
     attr_reader :wiki
 
-    # Set the Grit::Commit version of the page.
+    # Set the Rugged::Commit version of the page.
     #
     # Returns nothing.
     attr_writer :version
@@ -397,12 +425,12 @@ module Gollum
     def find(name, version, dir = nil, exact = false)
       map = @wiki.tree_map_for(version.to_s)
       if page = find_page_in_tree(map, name, dir, exact)
-        page.version    = version.is_a?(Grit::Commit) ?
+        page.version    = version.is_a?(Rugged::Commit) ?
           version : @wiki.commit_for(version)
         page.historical = page.version.to_s == version.to_s
         page
       end
-    rescue Grit::GitRuby::Repository::NoSuchShaFound
+    rescue Rugged::ReferenceError
     end
 
     # Find a page in a given tree.
@@ -433,13 +461,12 @@ module Gollum
 
     # Populate the Page with information from the Blob.
     #
-    # blob - The Grit::Blob that contains the info.
-    # path - The String directory path of the page file.
+    # blob_entry - The BlobEntry that contains the info.
     #
     # Returns the populated Gollum::Page.
-    def populate(blob, path=nil)
-      @blob = blob
-      @path = "#{path}/#{blob.name}"[1..-1]
+    def populate(blob_entry)
+      @blob_entry = blob_entry
+      @path = "#{blob_entry.path}"
       self
     end
 

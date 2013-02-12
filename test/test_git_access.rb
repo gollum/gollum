@@ -8,23 +8,25 @@ context "GitAccess" do
 
   test "#commit fills commit_map cache" do
     assert @access.commit_map.empty?
-    actual   = @access.repo.commits.first
-    expected = @access.commit(actual.id)
+    actual   = @access.repo.lookup(@access.repo.head.target)
+    expected = @access.commit(actual.oid)
     assert_equal actual.message, expected.message
-    assert_equal actual.message, @access.commit_map[actual.id].message
+    assert_equal actual.message, @access.commit_map[actual.oid].message
   end
 
   test "#tree_map_for caches ref and tree" do
     assert @access.ref_map.empty?
     assert @access.tree_map.empty?
-    @access.tree 'master'
-    assert_equal({"master"=>"7d6aeab8b84c895f21f6c66b84a457b0fced9693"}, @access.ref_map)
+    @access.tree 'refs/heads/master'
+    assert_equal({"refs/heads/master"=>"7d6aeab8b84c895f21f6c66b84a457b0fced9693"}, @access.ref_map)
 
     @access.tree '1db89ebba7e2c14d93b94ff98cfa3708a4f0d4e3'
     map = @access.tree_map['1db89ebba7e2c14d93b94ff98cfa3708a4f0d4e3']
+
     assert_equal 'Bilbo-Baggins.md',        map[0].path
     assert_equal '',                        map[0].dir
     assert_equal map[0].path,               map[0].name
+
     assert_equal 'Mordor/Eye-Of-Sauron.md', map[3].path
     assert_equal '/Mordor',                 map[3].dir
     assert_equal 'Eye-Of-Sauron.md',        map[3].name

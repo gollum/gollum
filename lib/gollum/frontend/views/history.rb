@@ -13,15 +13,15 @@ module Precious
         i = @versions.size + 1
         @versions.map do |v|
           i -= 1
-          { :id       => v.id,
-            :id7      => v.id[0..6],
+          { :oid       => v.oid, #hehe, that spells void and looks confusing!
+            :id7      => v.oid[0..6],
             :num      => i,
-            :selected => @page.version.id == v.id,
-            :author   => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :selected => @page.version.oid == v.oid,
+            :author   => v.author[:name].respond_to?(:force_encoding) ? v.author[:name].force_encoding('UTF-8') : v.author[:name],
             :message  => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date     => v.authored_date.strftime("%B %d, %Y"),
-            :gravatar => Digest::MD5.hexdigest(v.author.email),
-            :identicon => self._identicon_code(v.author.email),
+            :date     => v.time.strftime("%B %d, %Y"),
+            :gravatar => Digest::MD5.hexdigest(v.author[:email]),
+            :identicon => self._identicon_code(v.author[:email]),
           }
         end
       end
