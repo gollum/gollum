@@ -24,24 +24,24 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_dependency('grit', '~> 2.5.0')
-  s.add_dependency('github-markup', ['>= 0.7.4', '< 1.0.0'])
+  s.add_dependency('github-markup', ['>= 0.7.5', '< 1.0.0'])
   s.add_dependency('github-markdown', '~> 0.5.3')
-  s.add_dependency('pygments.rb', '~> 0.3.2')
-  s.add_dependency('sinatra', '~> 1.3.3')
+  s.add_dependency('pygments.rb', '~> 0.3.7')
+  s.add_dependency('sinatra', '~> 1.3.4')
   s.add_dependency('mustache', ['>= 0.99.4', '< 1.0.0'])
   s.add_dependency('sanitize', '~> 2.0.3')
-  s.add_dependency('nokogiri', '~> 1.5.5')
-  s.add_dependency('useragent', '~> 0.4.15')
+  s.add_dependency('nokogiri', '~> 1.5.6')
+  s.add_dependency('useragent', '~> 0.4.16')
   s.add_dependency('stringex', '~> 1.5.1')
 
   s.add_development_dependency('RedCloth', '~> 4.2.9')
-  s.add_development_dependency('mocha', '~> 0.13.0')
-  s.add_development_dependency('org-ruby', '~> 0.7.2')
+  s.add_development_dependency('mocha', '~> 0.13.2')
+  s.add_development_dependency('org-ruby', '~> 0.8.0')
   s.add_development_dependency('shoulda', '~> 3.3.2')
   s.add_development_dependency('rack-test', '~> 0.6.2')
   s.add_development_dependency('wikicloth', '~> 0.8.0')
-  s.add_development_dependency('rake', '~> 10.0.2')
-  s.add_development_dependency('pry', '~> 0.9.10')
+  s.add_development_dependency('rake', '~> 10.0.3')
+  s.add_development_dependency('pry', '~> 0.9.12')
   # required by pry
   s.add_development_dependency('rb-readline', '~> 0.4.2')
 
