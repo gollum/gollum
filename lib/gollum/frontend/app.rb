@@ -120,11 +120,12 @@ module Precious
     end
 
     get '/edit/*' do
-      wikip = wiki_page(params[:splat].first)
-      @name = wikip.name
-      @path = wikip.path
+      wikip     = wiki_page(params[:splat].first)
+      wiki      = wikip.wiki
+      halt 404 if wiki.read_only
+      @name     = wikip.name
+      @path     = wikip.path
       
-      wiki = wikip.wiki
       if page = wikip.page
         if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
           live_preview_url = '/livepreview/index.html?page=' + encodeURIComponent(@name)
@@ -148,6 +149,7 @@ module Precious
       wikip     = wiki_page(params[:splat].first)
       halt 500 if wikip.nil?
       wiki      = wikip.wiki
+      halt 404 if wiki.read_only
       page      = wiki.paged(wikip.name, wikip.path, exact = true)
       rename    = params[:rename]
       halt 500 if page.nil?
@@ -181,9 +183,10 @@ module Precious
     end
 
     post '/edit/*' do
+      wiki      = wiki_new
+      halt 404 if wiki.read_only
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
-      wiki      = wiki_new
       page      = wiki.paged(page_name, path, exact = true)
       return if page.nil?
       committer = Gollum::Committer.new(wiki, commit_message)
@@ -200,8 +203,9 @@ module Precious
 
     get '/delete/*' do
       wikip = wiki_page(params[:splat].first)
-      name = wikip.name
       wiki = wikip.wiki
+      halt 404 if wiki.read_only
+      name = wikip.name
       page = wikip.page
       wiki.delete_page(page, { :message => "Destroyed #{name} (#{page.format})" })
 
@@ -210,6 +214,8 @@ module Precious
 
     get '/create/*' do
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
+      wiki = wikip.wiki
+      halt 404 if wiki.read_only
       @name = wikip.name.to_url
       @path = wikip.path
 
@@ -231,10 +237,11 @@ module Precious
     end
 
     post '/create' do
+      wiki = wiki_new
+      halt 404 if wiki.read_only
       name         = params[:page].to_url
       path         = sanitize_empty_params(params[:path]) || ''
       format       = params[:format].intern
-      wiki = wiki_new
 
       begin
         wiki.write_page(name, format, params[:content], commit_message, path)
@@ -249,9 +256,10 @@ module Precious
 
     post '/revert/:page/*' do
       wikip        = wiki_page(params[:page])
+      wiki         = wikip.wiki
+      halt 404 if wiki.read_only
       @path        = wikip.path
       @name        = wikip.name
-      wiki         = wikip.wiki
       @page        = wiki.paged(@name,@path)
       shas         = params[:splat].first.split("/")
       sha1         = shas.shift
@@ -271,6 +279,7 @@ module Precious
 
     post '/preview' do
       wiki     = wiki_new
+      halt 404 if wiki.read_only
       @name    = params[:page] || "Preview"
       @page    = wiki.preview_page(@name, params[:content], params[:format])
       @content = @page.formatted_data
@@ -282,9 +291,12 @@ module Precious
     end
 
     get '/history/*' do
-      @page        = wiki_page(params[:splat].first).page
+      wikip        = wiki_page(params[:splat].first)
+      wiki         = wikip.wiki
+      @page        = wikip.page
       @page_num    = [params[:page].to_i, 1].max
       @versions    = @page.versions :page => @page_num
+      @not_read_only = !wiki.read_only
       mustache :history
     end
 
@@ -318,6 +330,7 @@ module Precious
       @page        = wikip.page
       diffs        = wiki.repo.diff(@versions.first, @versions.last, @page.path)
       @diff        = diffs.first
+      @not_read_only = !wiki.read_only
       mustache :compare
     end
 
@@ -358,6 +371,7 @@ module Precious
       @results     = wiki.pages
       @results     += wiki.files if settings.wiki_options[:show_all]
       @ref         = wiki.ref
+      @not_read_only = !wiki.read_only
       mustache :pages
     end
 
@@ -391,6 +405,7 @@ module Precious
         @content  = page.formatted_data
   
         # Extensions and layout data
+        @not_read_only = !wiki.read_only
         @editable = true
         @toc_content = wiki.universal_toc ? @page.toc_data : nil
         @mathjax  = wiki.mathjax
@@ -402,6 +417,7 @@ module Precious
         content_type file.mime_type
         file.raw_data
       else
+        halt 404 if wiki.read_only
         page_path = [path, name].compact.join('/')
         redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
       end
