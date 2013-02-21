@@ -174,6 +174,7 @@ module Gollum
     #           :show_all      - Show all files in file view, not just valid pages.
     #                            Default: false
     #           :collapse_tree - Start with collapsed file view. Default: false
+    #           :read_only     - Disables ability to edit wiki in web client.
     #           :css           - Include the custom.css file from the repo.
     #           :h1_title      - Concatenate all h1's on a page to form the
     #                            page title.
@@ -215,6 +216,7 @@ module Gollum
       @mathjax              = options.fetch :mathjax, false
       @show_all             = options.fetch :show_all, false
       @collapse_tree        = options.fetch :collapse_tree, false
+      @read_only            = options.fetch :read_only, false
       @css                  = options.fetch :css, false
       @h1_title             = options.fetch :h1_title, false
       @index_page           = options.fetch :index_page, 'Home'
@@ -699,6 +701,9 @@ module Gollum
 
     # Start with collapsed file view. Default: false
     attr_reader :collapse_tree
+
+    # Enables read-only mode.
+    attr_reader :read_only
 
     # Normalize the data.
     #

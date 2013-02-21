@@ -8,8 +8,10 @@
     </li>
     <li class="minibutton"><a href="{{base_url}}/{{escaped_url_path}}"
        class="action-view-page">View Page</a></li>
+    {{#not_read_only}}
     <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit Page</a></li>
+    {{/not_read_only}}
     <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
        class="action-page-history">Page History</a></li>
   </ul>
