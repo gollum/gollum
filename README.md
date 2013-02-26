@@ -80,8 +80,8 @@ choose. Special footers can be created in `footer files`. Other content
 ## PAGE FILES
 
 Page files may be written in any format supported by
-[GitHub-Markup](http://github.com/github/markup) (except roff). The
-current list of formats and allowed extensions is:
+[GitHub-Markup](http://github.com/github/markup) (except roff). By default,
+Gollum recognizes the following extensions:
 
 * ASCIIDoc: .asciidoc
 * Creole: .creole
@@ -93,8 +93,14 @@ current list of formats and allowed extensions is:
 * Textile: .textile
 * MediaWiki: .mediawiki, .wiki
 
+You may also register your own extensions and parsers:
+
+    Gollum::Markup.register(:angry, "Angry") do |content|
+      content.upcase
+    end
+
 Gollum detects the page file format via the extension, so files must have one
-of the supported extensions in order to be converted.
+of the default or registered extensions in order to be converted.
 
 Page file names may contain any printable UTF-8 character except space
 (U+0020) and forward slash (U+002F). If you commit a page file with any of

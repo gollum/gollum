@@ -61,7 +61,7 @@ context "Wiki" do
   test "list files" do
     files = @wiki.files
     assert_equal \
-      ['Data.csv', 'eye.jpg', 'todo.txt'],
+      ['Data.csv', 'Riddles.rd', 'eye.jpg', 'todo.txt'],
       files.map { |p| p.filename }.sort
   end
 

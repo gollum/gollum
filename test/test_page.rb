@@ -237,3 +237,17 @@ if $METADATA
 end
 
 end
+
+context "with custom markup engines" do
+  setup do
+    Gollum::Markup.register(:redacted, "Redacted", :regexp => /rd/) { |content| content.gsub /\S/, '-' }
+    @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"))
+  end
+
+  test "should use the specified engine" do
+    page = @wiki.page('Riddles')
+    assert_equal :redacted, page.format
+    assert page.raw_data.include? 'Time'
+    assert page.raw_data =~ /^[\s\-]*$/
+  end
+end
