@@ -208,7 +208,7 @@ context "Markup" do
           DATA
       ), commit_details)
     output = @wiki.page(page).formatted_data
-    expected = %Q{<pre><code>      <div class=\"highlight\"><pre><span class=\"n\">rot13</span><span class=\"p\">=</span><span class=\"s\">'tr '</span><span class=\"o\">\\</span><span class=\"s\">''</span><span class=\"n\">A</span><span class=\"o\">-</span><span class=\"n\">Za</span><span class=\"o\">-</span><span class=\"n\">z</span><span class=\"o\">'\\</span><span class=\"s\">''</span> <span class=\"s\">'\\''N-ZA-Mn-za-m'</span><span class=\"o\">\\</span><span class=\"s\">'</span>\n</pre></div>\n</code></pre>}
+    expected = %Q{<pre><code>      <div class=\"highlight\"><pre><span class=\"n\">rot13</span><span class=\"o\">=</span><span class=\"err\">'</span><span class=\"n\">tr</span> <span class=\"sc\">'\\''</span><span class=\"n\">A</span><span class=\"o\">-</span><span class=\"n\">Za</span><span class=\"o\">-</span><span class=\"n\">z</span><span class=\"sc\">'\\''</span> <span class=\"sc\">'\\''</span><span class=\"n\">N</span><span class=\"o\">-</span><span class=\"n\">ZA</span><span class=\"o\">-</span><span class=\"n\">Mn</span><span class=\"o\">-</span><span class=\"n\">za</span><span class=\"o\">-</span><span class=\"n\">m</span><span class=\"err\">'\\'</span>\n</pre></div>\n</code></pre>}
     assert_equal expected, output
   end
 
@@ -221,7 +221,7 @@ context "Markup" do
 ~~~
       ), commit_details)
     output = @wiki.page(page).formatted_data
-    expected = %Q{<div class=\"highlight\"><pre><span class=\"s\">'hi'</span>\n</pre></div>}
+    expected = %Q{<div class=\"highlight\"><pre><span class=\"err\">'</span><span class=\"n\">hi</span><span class=\"err\">'</span>\n</pre></div>}
     assert_equal expected, output
   end
 
@@ -542,9 +542,7 @@ context "Markup" do
 
   test "code blocks with ascii characters" do
     content = "a\n\n```\n├─foo\n```\n\nb"
-    output = "<p>a</p>\n\n<div class=\"highlight\"><pre>" +
-             "├─<span class=\"n\">foo</span>" +
-             "\n</pre>\n</div>\n\n<p>b</p>"
+    output = %(<p>a</p><divclass=\"highlight\"><pre><spanclass=\"err\">├─</span><spanclass=\"n\">foo</span></pre></div><p>b</p>)
     compare(content, output)
   end
 
