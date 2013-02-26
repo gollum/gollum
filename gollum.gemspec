@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency('grit', '~> 2.5.0')
   s.add_dependency('github-markup', ['>= 0.7.5', '< 1.0.0'])
   s.add_dependency('github-markdown', '~> 0.5.3')
-  s.add_dependency('pygments.rb', '~> 0.4.2')
+  s.add_dependency('pygments.rb', '0.3.7')
   s.add_dependency('sinatra', '~> 1.3.4')
   s.add_dependency('mustache', ['>= 0.99.4', '< 1.0.0'])
   s.add_dependency('sanitize', '~> 2.0.3')
