@@ -725,25 +725,25 @@ end # if $METADATA
 
   test "org mode style double links" do
     content = "a [[http://google.com][Google]] b"
-    output = "<p class=\"title\">a <a href=\"http://google.com\">Google</a> b</p>"
+    output = "<p>a <a href=\"http://google.com\">Google</a> b</p>"
     compare(content, output, 'org')
   end
 
   test "org mode style double file links" do
     content = "a [[file:f.org][Google]] b"
-    output = "<p class=\"title\">a <a class=\"internal absent\" href=\"/f\">Google</a> b</p>"
+    output = "<p>a <a class=\"internal absent\" href=\"/f\">Google</a> b</p>"
     compare(content, output, 'org')
   end
 
   test "short double links" do
     content = "a [[b]] c"
-    output  = %(<p class="title">a <a class="internal absent" href="/b">b</a> c</p>)
+    output  = %(<p>a <a class="internal absent" href="/b">b</a> c</p>)
     compare(content, output, 'org')
   end
 
   test "double linked pipe" do
     content = "a [[|]] b"
-    output  = %(<p class="title">a <a class="internal absent" href="/"></a> b</p>)
+    output  = %(<p>a <a class="internal absent" href="/"></a> b</p>)
     compare(content, output, 'org')
   end
 
