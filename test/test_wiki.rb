@@ -362,6 +362,11 @@ context "Wiki sync with working directory" do
     assert_equal "Hi", File.read(File.join(@path, "New-Page.md"))
   end
 
+  test "write a page in subdirectory" do
+    @wiki.write_page("New Page", :markdown, "Hi", commit_details, "Subdirectory")
+    assert_equal "Hi", File.read(File.join(@path, "Subdirectory", "New-Page.md"))
+  end
+
   test "update a page with same name and format" do
     @wiki.write_page("New Page", :markdown, "Hi", commit_details)
     page = @wiki.page("New Page")
