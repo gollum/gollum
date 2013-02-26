@@ -5,17 +5,6 @@ module Gollum
 
     Wiki.page_class = self
 
-    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod|(media)?wiki)$/i
-    FORMAT_NAMES = { :markdown  => "Markdown",
-                     :textile   => "Textile",
-                     :rdoc      => "RDoc",
-                     :org       => "Org-mode",
-                     :creole    => "Creole",
-                     :rest      => "reStructuredText",
-                     :asciidoc  => "AsciiDoc",
-                     :mediawiki => "MediaWiki",
-                     :pod       => "Pod" }
-
     # Sets a Boolean determing whether this page is a historical version.
     #
     # Returns nothing.
@@ -26,13 +15,29 @@ module Gollum
     # Returns a Page
     attr_accessor :parent_page
 
-    # Checks if a filename has a valid extension understood by GitHub::Markup.
+
+    # Checks a filename against the registered markup extensions
+    #
+    # filename - String filename, like "Home.md"
+    #
+    # Returns e.g. ["Home", :markdown], or [] if the extension is unregistered
+    def self.parse_filename(filename)
+      return [] unless filename =~ /^(.+)\.([a-zA-Z]\w*)$/i
+      pref, ext = $1, $2
+
+      Gollum::Markup.formats.each_pair do |name, format|
+        return [pref, name] if ext =~ format[:regexp]
+      end
+      []
+    end
+
+    # Checks if a filename has a valid, registered extension
     #
     # filename - String filename, like "Home.md".
     #
     # Returns the matching String basename of the file without the extension.
     def self.valid_filename?(filename)
-      filename && filename.to_s =~ VALID_PAGE_RE && $1
+      self.parse_filename(filename).first
     end
 
     # Checks if a filename has a valid extension understood by GitHub::Markup.
@@ -51,34 +56,9 @@ module Gollum
     #
     # filename - The String filename.
     #
-    # Returns the Symbol format of the page. One of:
-    #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
-    #     :roff ]
+    # Returns the Symbol format of the page; one of the registered format types
     def self.format_for(filename)
-      case filename.to_s
-        when /\.(md|mkdn?|mdown|markdown)$/i
-          :markdown
-        when /\.(textile)$/i
-          :textile
-        when /\.(rdoc)$/i
-          :rdoc
-        when /\.(org)$/i
-          :org
-        when /\.(creole)$/i
-          :creole
-        when /\.(re?st(\.txt)?)$/i
-          :rest
-        when /\.(asciidoc)$/i
-          :asciidoc
-        when /\.(pod)$/i
-          :pod
-        when /\.(\d)$/i
-          :roff
-        when /\.(media)?wiki$/i
-          :mediawiki
-        else
-          nil
-      end
+      self.parse_filename(filename).last
     end
 
     # Reusable filter to turn a filename (without path) into a canonical name.
@@ -249,9 +229,7 @@ module Gollum
 
     # Public: The format of the page.
     #
-    # Returns the Symbol format of the page. One of:
-    #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
-    #     :roff ]
+    # Returns the Symbol format of the page; one of the registered format types
     def format
       self.class.format_for(@blob.name)
     end
@@ -359,17 +337,7 @@ module Gollum
     #
     # Returns the String extension (no leading period).
     def self.format_to_ext(format)
-      case format
-        when :markdown  then 'md'
-        when :textile   then 'textile'
-        when :rdoc      then 'rdoc'
-        when :org       then 'org'
-        when :creole    then 'creole'
-        when :rest      then 'rest'
-        when :asciidoc  then 'asciidoc'
-        when :pod       then 'pod'
-        when :mediawiki then 'mediawiki'
-      end
+      format == :markdown ? "md" : format.to_s
     end
 
     #########################################################################
