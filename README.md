@@ -589,3 +589,8 @@ your changes merged back into core is as follows:
     $ cd gollum
     gollum$ rake build
     gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem
+    
+## RUN THE TESTS
+
+    bundle install
+    bundle exec rake test
