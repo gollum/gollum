@@ -43,7 +43,7 @@ to install the dependencies for the formats that you plan to use.
 * [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc` on mac or `apt-get install -y asciidoc` on Ubuntu
 * [Creole](http://wikicreole.org/) -- `gem install creole`
 * [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet`
-* [GitHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) -- `gem install github-markdown`
+* [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown) -- `gem install github-markdown`
 * [Org](http://orgmode.org/) -- `gem install org-ruby`
 * [Pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML` comes with Perl >= 5.10. Lower versions should install Pod::Simple from CPAN.
 * [RDoc](http://rdoc.sourceforge.net/)
