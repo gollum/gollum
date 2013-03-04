@@ -257,7 +257,9 @@ module Precious
       sha1         = shas.shift
       sha2         = shas.shift
 
-      if wiki.revert_page(@page, sha1, sha2, commit_message)
+      commit = commit_message
+      commit[:message] = "Revert commit #{sha1.chars.take(7).join}"
+      if wiki.revert_page(@page, sha1, sha2, commit)
         redirect to("/#{@page.escaped_url_path}")
       else
         sha2, sha1 = sha1, "#{sha1}^" if !sha2
@@ -425,7 +427,8 @@ module Precious
     # message is sourced from the incoming request parameters
     # author details are sourced from the session, to be populated by rack middleware ahead of us
     def commit_message
-      commit_message = { :message => params[:message] }
+      msg = (params[:message].nil? or params[:message].empty?) ? "[no message]" : params[:message]
+      commit_message = { :message => msg }
       author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
