@@ -138,8 +138,9 @@ module Precious
       #
       def page_header_from_content(content)
         doc = build_document(content)
-        title = find_header_node(doc)
-        Sanitize.clean(title.to_xml( @@to_xml )).strip unless title.empty?
+        title = find_header_node(doc).inner_text.strip
+        title = nil if title.empty?
+        title
       end
 
       # Returns page content without title if it was extracted.
