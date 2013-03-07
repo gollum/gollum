@@ -18,9 +18,9 @@ Mousetrap.bind(['e'], function( e ) {
        class="action-edit-page">Home</a></li>
     <li class="minibutton"><a href="{{base_url}}/pages"
       class="action-all-pages">All</a></li>
+    {{#editable}}
     <li class="minibutton"><a href="{{base_url}}/fileview"
     class="action-all-pages">Files</a></li>
-    {{#editable}}
     <li class="minibutton" class="jaws">
       <a href="#" id="minibutton-new-page">New</a></li>
     <li class="minibutton" class="jaws">
