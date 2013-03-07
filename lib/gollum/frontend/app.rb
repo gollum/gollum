@@ -120,6 +120,7 @@ module Precious
     end
 
     get '/edit/*' do
+      halt 403 if settings.read_only
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
@@ -145,6 +146,7 @@ module Precious
     end
 
     post '/rename/*' do
+      halt 403 if settings.read_only
       wikip     = wiki_page(params[:splat].first)
       halt 500 if wikip.nil?
       wiki      = wikip.wiki
@@ -181,6 +183,7 @@ module Precious
     end
 
     post '/edit/*' do
+      halt 403 if settings.read_only
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
@@ -199,6 +202,7 @@ module Precious
     end
 
     get '/delete/*' do
+      halt 403 if settings.read_only
       wikip = wiki_page(params[:splat].first)
       name = wikip.name
       wiki = wikip.wiki
@@ -209,6 +213,7 @@ module Precious
     end
 
     get '/create/*' do
+      halt 403 if settings.read_only
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
@@ -231,6 +236,7 @@ module Precious
     end
 
     post '/create' do
+      halt 403 if settings.read_only
       name         = params[:page].to_url
       path         = sanitize_empty_params(params[:path]) || ''
       format       = params[:format].intern
@@ -248,6 +254,7 @@ module Precious
     end
 
     post '/revert/:page/*' do
+      halt 403 if settings.read_only
       wikip        = wiki_page(params[:page])
       @path        = wikip.path
       @name        = wikip.name
@@ -272,6 +279,7 @@ module Precious
     end
 
     post '/preview' do
+      halt 403 if settings.read_only
       wiki     = wiki_new
       @name    = params[:page] || "Preview"
       @page    = wiki.preview_page(@name, params[:content], params[:format])
@@ -393,7 +401,7 @@ module Precious
         @content  = page.formatted_data
   
         # Extensions and layout data
-        @editable = true
+        @editable = !settings.read_only
         @toc_content = wiki.universal_toc ? @page.toc_data : nil
         @mathjax  = wiki.mathjax
         @h1_title = wiki.h1_title
@@ -404,6 +412,7 @@ module Precious
         content_type file.mime_type
         file.raw_data
       else
+        halt 404 if settings.read_only
         page_path = [path, name].compact.join('/')
         redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
       end
