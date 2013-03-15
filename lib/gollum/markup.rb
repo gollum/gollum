@@ -460,7 +460,7 @@ module Gollum
     #           Acceptable formats:
     #              ```language:local-file.ext```
     #              ```language:/abs/other-file.ext```
-    #              ```language:github/gollum/master/somefile.txt```
+    #              ```language:gollum/gollum/master/somefile.txt```
     #
     #########################################################################
 
