@@ -23,7 +23,7 @@ http://creativecommons.org/licenses/by-sa/3.0/legalcode.txt
 ---
 
 Gollum (MIT License)
-https://github.com/github/gollum/blob/master/LICENSE
+https://github.com/gollum/gollum/blob/master/LICENSE
 
 ---
 
