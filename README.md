@@ -1,8 +1,8 @@
 gollum -- A wiki built on top of Git
 ====================================
 
-[![Build Status](https://secure.travis-ci.org/github/gollum.png?branch=master)](http://travis-ci.org/github/gollum)
-[![Dependency Status](https://gemnasium.com/github/gollum.png)](https://gemnasium.com/github/gollum)
+[![Build Status](https://secure.travis-ci.org/gollum/gollum.png?branch=master)](http://travis-ci.org/gollum/gollum)
+[![Dependency Status](https://gemnasium.com/gollum/gollum.png)](https://gemnasium.com/gollum/gollum)
 
 ## DESCRIPTION
 
@@ -358,7 +358,7 @@ As an extra feature, you can syntax highlight a file from your repository, allow
 you keep some of your sample code in the main repository. The code-snippet is
 updated when the wiki is rebuilt. You include github code like this:
 
-    ```html:github/gollum/master/test/file_view/1_file.txt```
+    ```html:gollum/gollum/master/test/file_view/1_file.txt```
 
 This will make the builder look at the **github user**, in the **gollum project**,
 in the **master branch**, at path **test/file_view/1_file.txt**. It will be
@@ -426,7 +426,7 @@ By default, internal wiki links are all absolute from the root. To specify a dif
 Note that base_path just modifies the links. To map gollum to a non-root location:
 
 - Use the gollum binary: `gollum path/to/wiki --base-path mywiki`
-- Define config.ru with `map`. See [#532](https://github.com/github/gollum/issues/532) for an example.
+- Define config.ru with `map`. See [#532](https://github.com/gollum/gollum/issues/532) for an example.
 
 > :base_path     - String base path for all Wiki links.
 >
@@ -546,7 +546,7 @@ Note that filenames on windows must not contain any of the following characters 
 
 ## CONFIG FILE
 
-Gollum optionally takes a `--config file`. See [config.rb](https://github.com/github/gollum/blob/master/config.rb) for an example.
+Gollum optionally takes a `--config file`. See [config.rb](https://github.com/gollum/gollum/blob/master/config.rb) for an example.
 
 ## CUSTOM CSS
 
@@ -554,9 +554,9 @@ The `--css` flag will inject `custom.css` from the root of your git repository i
 
 ## CONTRIBUTE
 
-If you'd like to hack on Gollum, start by forking my repo on GitHub:
+If you'd like to hack on Gollum, start by forking the repo on GitHub:
 
-http://github.com/github/gollum
+http://github.com/gollum/gollum
 
 To get all of the dependencies, install the gem first. The best way to get
 your changes merged back into core is as follows:
@@ -569,7 +569,7 @@ your changes merged back into core is as follows:
 1. Do not change the version number, I will do that on my end
 1. If necessary, rebase your commits into logical chunks, without errors
 1. Push the branch up to GitHub
-1. Send a pull request to the github/gollum project.
+1. Send a pull request to the gollum/gollum project.
 
 ## RELEASING
     x.y.z
@@ -585,7 +585,7 @@ your changes merged back into core is as follows:
     
 ## BUILDING THE GEM FROM MASTER
     $ gem uninstall -aIx gollum
-    $ git clone https://github.com/github/gollum.git
+    $ git clone https://github.com/gollum/gollum.git
     $ cd gollum
     gollum$ rake build
     gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem

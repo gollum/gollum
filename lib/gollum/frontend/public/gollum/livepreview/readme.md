@@ -4,7 +4,7 @@
 Uses code/assets from:
 
 0. [ace](https://github.com/ajaxorg/ace)
-0. [gollum](https://github.com/github/gollum)
+0. [gollum](https://github.com/gollum/gollum)
 0. [jquery](https://github.com/jquery/jquery)
 0. [sizzle](https://github.com/jquery/sizzle)
 0. [notepages](https://github.com/fivesixty/notepages)

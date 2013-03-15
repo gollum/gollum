@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.authors  = ["Tom Preston-Werner", "Rick Olson"]
   s.email    = 'tom@github.com'
-  s.homepage = 'http://github.com/github/gollum'
+  s.homepage = 'http://github.com/gollum/gollum'
 
   s.require_paths = %w[lib]
 
