@@ -470,7 +470,7 @@ module Gollum
         # Use empty string if $2 is nil.
         uri = $2 || ''
         # Detect local file.
-        if uri[0..6] != 'github/'
+        if uri[0..6] != 'gollum/'
             if file = self.find_file(uri, @wiki.ref)
               contents = file.raw_data
             else
