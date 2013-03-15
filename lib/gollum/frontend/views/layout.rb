@@ -28,6 +28,10 @@ module Precious
         @css
       end
 
+      def js # custom js
+        @js
+      end
+
     end
   end
 end
