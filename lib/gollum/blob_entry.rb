@@ -10,10 +10,14 @@ module Gollum
     # Gets the Fixnum size of this blob.
     attr_reader :size
 
-    def initialize(sha, path, size = nil)
+    # Gets the Fixnum mode of this blob.
+    attr_reader :mode
+
+    def initialize(sha, path, size = nil, mode = nil)
       @sha  = sha
       @path = path
       @size = size
+      @mode = mode
       @dir  = @name = @blob = nil
     end
 
@@ -34,7 +38,7 @@ module Gollum
     # Returns an unbaked Grit::Blob instance.
     def blob(repo)
       @blob ||= Grit::Blob.create(repo,
-        :id => @sha, :name => name, :size => @size)
+        :id => @sha, :name => name, :size => @size, :mode => @mode)
     end
 
     # Gets a Page instance for this blob.

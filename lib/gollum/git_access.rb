@@ -229,7 +229,7 @@ module Gollum
     # Returns an Array of BlobEntry instances.
     def parse_tree_line(line)
       mode, type, sha, size, *name = line.split(/\s+/)
-      BlobEntry.new(sha, name.join(' '), size.to_i)
+      BlobEntry.new(sha, name.join(' '), size.to_i, mode.to_i(8))
     end
 
     # Decode octal sequences (\NNN) in tree path names.
