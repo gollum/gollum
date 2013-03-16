@@ -594,3 +594,18 @@ your changes merged back into core is as follows:
 
     bundle install
     bundle exec rake test
+
+## WORK WITH TEST REPOS
+
+An example of how to add a test file to the bare repository lotr.git.
+
+```bash
+$ mkdir tmp; cd tmp
+$ git clone ../lotr.git/ .
+Cloning into '.'...
+done.
+$ git log
+$ echo "test" > test.md
+$ git add . ; git commit -am "Add test"
+$ git push ../lotr.git/ master
+```
