@@ -21,21 +21,25 @@ context "File" do
     assert_equal commit.author.name, file.version.author.name
   end
 
+  test "accessing tree" do
+    assert_nil @wiki.file("Mordor")
+  end
+end
+
+context "File with checkout" do
+  setup do
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+  end
+
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+
   test "symbolic link" do
     commit = @wiki.repo.commits.first
     file   = @wiki.file("Data-Two.csv")
 
-    # Since we don't have a checkout here (bare repos in testing), these
-    # symbolic links won't resolve.  Stub IO.read to simulate the behavior
-    # and make sure all is working well.
-    path_to_link = File.expand_path(File.join('..', '..', 'Data.csv'), __FILE__)
-    File.expects(:file?).with(path_to_link).returns(true)
-    IO.expects(:read).with(path_to_link).returns('symlink test')
-
-    assert_equal file.raw_data, 'symlink test'
-  end
-
-  test "accessing tree" do
-    assert_nil @wiki.file("Mordor")
+    assert_match /^FirstName,LastName\n/, file.raw_data
   end
 end

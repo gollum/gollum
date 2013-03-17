@@ -44,8 +44,8 @@ module Gollum
     def raw_data
       return nil unless @blob
 
-      if @blob.is_symlink
-        new_path = @blob.symlink_target(self.path)
+      if !@wiki.repo.bare && @blob.is_symlink
+        new_path = @blob.symlink_target(::File.join(@wiki.repo.path, '..', self.path))
         return IO.read(new_path) if new_path
       end
 
