@@ -180,7 +180,14 @@ module Gollum
     #
     # Returns the String data.
     def raw_data
-      @blob && @blob.data
+      return nil unless @blob
+
+      if @blob.is_symlink
+        new_path = @blob.symlink_target(::File.join(@wiki.repo.path, self.path))
+        return IO.read(new_path) if new_path
+      end
+
+      @blob.data
     end
 
     # Public: A text data encoded in specified encoding.
