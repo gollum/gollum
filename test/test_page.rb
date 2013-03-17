@@ -34,6 +34,23 @@ context "Page" do
     assert_nil @wiki.page('Bilbo_Baggins')
   end
 
+  test "get existing page with symbolic link" do
+    page = @wiki.page("Hobbit")
+    assert_equal Gollum::Page, page.class
+    assert_equal 'Hobbit.md', page.path
+    assert_equal :markdown, page.format
+
+    # Since we don't have a checkout here (bare repos in testing), these
+    # symbolic links won't resolve.  Stub IO.read to simulate the behavior
+    # and make sure all is working well.
+    path_to_link = File.expand_path(File.join('..', 'examples', 'lotr.git', 'Bilbo-Baggins.md'), __FILE__)
+    File.expects(:file?).with(path_to_link).returns(true).at_least_once
+    IO.expects(:read).with(path_to_link).returns("# Bilbo Baggins\n\nBilbo Baggins").at_least_once
+
+    assert page.raw_data =~ /^# Bilbo Baggins\n\nBilbo Baggins/
+    assert page.formatted_data =~ %r{<h1>Bilbo Baggins<a class="anchor" id="Bilbo-Baggins" href="#Bilbo-Baggins"></a></h1>\n\n<p>Bilbo Baggins}
+  end
+
   test "get existing page where filename contains whitespace, with hypen" do
     assert_equal @wiki.page('Samwise Gamgee').path, @wiki.page('Samwise-Gamgee').path
   end

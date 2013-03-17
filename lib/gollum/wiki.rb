@@ -276,7 +276,7 @@ module Gollum
       page = @page_class.new(self)
       ext  = @page_class.format_to_ext(format.to_sym)
       name = @page_class.cname(name) + '.' + ext
-      blob = OpenStruct.new(:name => name, :data => data)
+      blob = OpenStruct.new(:name => name, :data => data, :is_symlink => false)
       page.populate(blob)
       page.version = @access.commit('master')
       page

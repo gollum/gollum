@@ -18,7 +18,7 @@ context "GitAccess" do
     assert @access.ref_map.empty?
     assert @access.tree_map.empty?
     @access.tree 'master'
-    assert_equal({"master"=>"563cc3701db990caf63e4ce9c3697a062890ca48"}, @access.ref_map)
+    assert_equal({"master"=>"874f597a5659b4c3b153674ea04e406ff393975e"}, @access.ref_map)
 
     @access.tree '1db89ebba7e2c14d93b94ff98cfa3708a4f0d4e3'
     map = @access.tree_map['1db89ebba7e2c14d93b94ff98cfa3708a4f0d4e3']
@@ -49,5 +49,16 @@ context "GitAccess" do
 
   test "cannot access tree from invalid ref" do
     assert_equal [], @access.tree('foo')
+  end
+  
+  test "sets #mode for blob entries" do
+    @access.tree '60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'
+    file = @access.tree_map['60f12f4254f58801b9ee7db7bca5fa8aeefaa56b'][0]
+    assert_equal 0100644, file.mode
+    
+    @access.tree '874f597a5659b4c3b153674ea04e406ff393975e'
+    symlink = @access.tree_map['874f597a5659b4c3b153674ea04e406ff393975e'].find { |entry| entry.name == 'Data-Two.csv' }
+    assert_not_nil symlink
+    assert_equal 0120000, symlink.mode
   end
 end
