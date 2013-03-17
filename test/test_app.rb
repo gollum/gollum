@@ -485,11 +485,13 @@ context "Frontend with lotr" do
   # .
   # ├── Bilbo-Baggins.md
   # ├── Data.csv
+  # |-- Data-Two.csv -> Data.csv
   # ├── Gondor
   # │   ├── Boromir.md
   # │   ├── _Footer.md
   # │   ├── _Header.md
   # │   └── _Sidebar.md
+  # |-- Hobbit.md -> Bilbo-Baggins.md
   # ├── Home.textile
   # ├── Mordor
   # │   ├── Eye-Of-Sauron.md
@@ -526,6 +528,11 @@ context "Frontend with lotr" do
 
     assert !body.include?("Bilbo Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
     assert body.include?("Eye Of Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
+  end
+
+  test "symbolic link pages" do
+    get "/Hobbit"
+    assert_match /Bilbo Baggins/, last_response.body
   end
 
   # base path requires 'map' in a config.ru to work correctly.
