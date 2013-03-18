@@ -16,16 +16,18 @@ context "gitcode" do
   setup do
     # context
     @wiki, @path, @cleanup = WikiFactory.create 'examples/test.git'
-
-    # given
-    p = page_with_content "a\n\n```html:gollum/gollum/master/test/file_view/1_file.txt```\n\nb"
-
-    # when rendering the page
-    @rendered = Gollum::Markup.new(p).render
   end
 
   test 'that the rendered output is correctly fetched and rendered as html code' do
-    assert_equal %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"nt\">&lt;ol</span> <span class=\"na\">class=</span><span class=\"s\">\"tree\"</span><span class=\"nt\">&gt;</span>\n  <span class=\"nt\">&lt;li</span> <span class=\"na\">class=</span><span class=\"s\">\"file\"</span><span class=\"nt\">&gt;</span>\n    <span class=\"nt\">&lt;a</span> <span class=\"na\">href=</span><span class=\"s\">\"0\"</span><span class=\"nt\">&gt;&lt;span</span> <span class=\"na\">class=</span><span class=\"s\">\"icon\"</span><span class=\"nt\">&gt;&lt;/span&gt;</span>0<span class=\"nt\">&lt;/a&gt;</span>\n  <span class=\"nt\">&lt;/li&gt;</span>\n<span class=\"nt\">&lt;/ol&gt;</span>\n</pre></div>\n\n<p>b</p>}, @rendered
+    # given
+    p = page_with_content "a\n\n```html:github:gollum/gollum/master/test/file_view/1_file.txt```\n\nb"
+
+    # when rendering the page
+    rendered = Gollum::Markup.new(p).render
+
+    # we expect
+    expected = %Q{<p>a</p>\n\n<div class=\"highlight\"><pre><span class=\"nt\">&lt;ol</span> <span class=\"na\">class=</span><span class=\"s\">\"tree\"</span><span class=\"nt\">&gt;</span>\n  <span class=\"nt\">&lt;li</span> <span class=\"na\">class=</span><span class=\"s\">\"file\"</span><span class=\"nt\">&gt;</span>\n    <span class=\"nt\">&lt;a</span> <span class=\"na\">href=</span><span class=\"s\">\"0\"</span><span class=\"nt\">&gt;&lt;span</span> <span class=\"na\">class=</span><span class=\"s\">\"icon\"</span><span class=\"nt\">&gt;&lt;/span&gt;</span>0<span class=\"nt\">&lt;/a&gt;</span>\n  <span class=\"nt\">&lt;/li&gt;</span>\n<span class=\"nt\">&lt;/ol&gt;</span>\n</pre></div>\n\n<p>b</p>}
+    assert_equal expected, rendered
   end
 
   test 'contents' do

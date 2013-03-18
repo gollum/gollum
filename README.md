@@ -358,9 +358,9 @@ As an extra feature, you can syntax highlight a file from your repository, allow
 you keep some of your sample code in the main repository. The code-snippet is
 updated when the wiki is rebuilt. You include github code like this:
 
-    ```html:gollum/gollum/master/test/file_view/1_file.txt```
+    ```html:github:gollum/gollum/master/test/file_view/1_file.txt```
 
-This will make the builder look at the **github user**, in the **gollum project**,
+This will make the builder look at the **gollum user**, in the **gollum project**,
 in the **master branch**, at path **test/file_view/1_file.txt**. It will be
 rewritten to:
 
