@@ -1,14 +1,14 @@
 # ~*~ encoding: utf-8 ~*~
 require 'cgi'
 require 'sinatra'
-require 'gollum'
+require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
 
-require 'gollum/frontend/views/layout'
-require 'gollum/frontend/views/editable'
-require 'gollum/frontend/views/has_page'
+require 'gollum/views/layout'
+require 'gollum/views/editable'
+require 'gollum/views/has_page'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -27,7 +27,7 @@ end
 # There are a number of wiki options that can be set for the frontend
 #
 # Example
-# require 'gollum/frontend/app'
+# require 'gollum/app'
 # Precious::App.set(:wiki_options, {
 #     :universal_toc => false,
 # }

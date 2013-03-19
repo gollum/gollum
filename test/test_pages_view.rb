@@ -1,6 +1,6 @@
 # ~*~ encoding: utf-8 ~*~
 require File.expand_path(File.join(File.dirname(__FILE__), 'helper'))
-require File.expand_path '../../lib/gollum/frontend/views/pages', __FILE__
+require File.expand_path '../../lib/gollum/views/pages', __FILE__
 
 FakeResult = Struct.new(:path) do
   def name

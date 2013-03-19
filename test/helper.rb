@@ -4,6 +4,9 @@ require 'test/unit'
 require 'shoulda'
 require 'mocha/setup'
 require 'fileutils'
+require 'minitest/reporters'
+
+MiniTest::Reporters.use!
 
 dir = File.dirname(File.expand_path(__FILE__))
 $LOAD_PATH.unshift(File.join(dir, '..', 'lib'))
@@ -11,7 +14,7 @@ $LOAD_PATH.unshift(dir)
 
 ENV['RACK_ENV'] = 'test'
 require 'gollum'
-require 'gollum/frontend/app'
+require 'gollum/app'
 
 # Disable the metadata feature
 $METADATA = false
