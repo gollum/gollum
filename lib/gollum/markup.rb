@@ -236,6 +236,8 @@ module Gollum
     def process_tag(tag)
       if tag =~ /^_TOC_$/
         %{[[#{tag}]]}
+      elsif tag =~ /^_$/
+        %{<div class="clearfloats"></div>}
       elsif html = process_image_tag(tag)
         html
       elsif html = process_file_link_tag(tag)
