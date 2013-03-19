@@ -284,6 +284,12 @@ specified, default alignment is `left`.
 
     [[gollum.png|float]]
 
+By default text will fill up all the space around the image. To control how
+much should show up use this tag to stop and start a new block so that
+additional content doesn't fill in.
+
+    [[_]]
+
 To specify a max-width, use the `width=` option. Units must be specified in
 either `px` or `em`.
 
