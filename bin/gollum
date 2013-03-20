@@ -153,7 +153,7 @@ if options['irb']
     exit 0
   end
 else
-  require 'gollum/frontend/app'
+  require 'gollum/app'
   Precious::App.set(:gollum_path, gollum_path)
   Precious::App.set(:wiki_options, wiki_options)
 

@@ -12,10 +12,10 @@ The following PNGs are based on Ubuntu 11.10 SVG files located in /usr/share/ico
 - group-files.svg
 - group-downloads.svg
 
-  lib/gollum/frontend/public/css/document.png
-  lib/gollum/frontend/public/css/folder-horizontal.png
-  lib/gollum/frontend/public/css/toggle-small-expand.png
-  lib/gollum/frontend/public/css/toggle-small.png
+  lib/gollum/public/css/document.png
+  lib/gollum/public/css/folder-horizontal.png
+  lib/gollum/public/css/toggle-small-expand.png
+  lib/gollum/public/css/toggle-small.png
 
 Creative Commons - Attribution Share Alike
 https://launchpad.net/unity-asset-pool
@@ -29,7 +29,7 @@ The css-tree-menu code is used under the MIT license.
 http://www.thecssninja.com/css/css-tree-menu
 http://www.thecssninja.com/demo/license.txt
 
-  lib/gollum/frontend/public/css/_styles.css
+  lib/gollum/public/css/_styles.css
 
 ---
 
@@ -39,7 +39,7 @@ CC BY-SA 3.0 Unported
 http://blog.twg.ca/2010/11/retina-display-icon-set/
 http://creativecommons.org/licenses/by-sa/3.0/legalcode.txt
 
-    lib/gollum/frontend/public/images/man_24.png
+    lib/gollum/public/images/man_24.png
 
 ---
 
@@ -48,5 +48,5 @@ The canvas_identicon code is used under the MIT license.
 https://github.com/donpark/identicon/blob/master/identicon-canvas/identicon_canvas.js
 https://github.com/donpark/identicon/blob/master/README
 
-  lib/gollum/frontend/public/gollum/javascript/identicon_canvas.js
+  lib/gollum/public/gollum/javascript/identicon_canvas.js
 
