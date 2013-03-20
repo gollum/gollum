@@ -25,6 +25,11 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 - Unix like operating system (OS X, Ubuntu, Debian, and more)
 - Will not work on Windows (because of [grit](https://github.com/github/grit))
 
+## SECURITY
+
+Don't enable `--custom-css` or `--custom-js` unless you trust every user who has the ability to edit the wiki.
+A better solution with more security is being tracked in #665.
+
 ## INSTALLATION
 
 The best way to install Gollum is with RubyGems:
