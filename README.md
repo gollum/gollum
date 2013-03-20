@@ -28,7 +28,7 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 ## SECURITY
 
 Don't enable `--custom-css` or `--custom-js` unless you trust every user who has the ability to edit the wiki.
-A better solution with more security is being tracked in #665.
+A better solution with more security is being tracked in [#665](https://github.com/gollum/gollum/issues/665).
 
 ## INSTALLATION
 
