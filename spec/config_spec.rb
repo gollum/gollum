@@ -86,6 +86,10 @@ describe RJGit::Config do
       @config['third'].groups.first.name.should == 'nested'
     end
     
+    it "should find groups and subgroups based on a a regexp expression" do
+      @config.find_groups(/nested/).should have(3).groups
+    end
+    
     it "should have all groups" do
       @config.groups.should have(5).groups
       @config.all_groups.should have(10).groups

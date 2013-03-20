@@ -25,6 +25,10 @@ module RJGit
       @groups << group
     end
     
+    def find_groups(regexp)
+      all_groups ? all_groups.find_all{ |group| group.name =~ regexp } : nil
+    end
+    
     def sections
       @groups.map{|group| group.name}
     end
