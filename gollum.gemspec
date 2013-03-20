@@ -23,14 +23,9 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('grit', '~> 2.5.0')
-  s.add_dependency('github-markup', ['>= 0.7.5', '< 1.0.0'])
-  s.add_dependency('github-markdown', '~> 0.5.3')
-  s.add_dependency('pygments.rb', '~> 0.4.2')
+  s.add_dependency('gollum-lib', '~> 0.0.1')
   s.add_dependency('sinatra', '~> 1.3.5')
   s.add_dependency('mustache', ['>= 0.99.4', '< 1.0.0'])
-  s.add_dependency('sanitize', '~> 2.0.3')
-  s.add_dependency('nokogiri', '~> 1.5.6')
   s.add_dependency('useragent', '~> 0.4.16')
   s.add_dependency('stringex', '~> 1.5.1')
 
@@ -44,6 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('pry', '~> 0.9.12')
   # required by pry
   s.add_development_dependency('rb-readline', '~> 0.4.2')
+  s.add_development_dependency('minitest-reporters', '>= 0.5.0')
 
   # = MANIFEST =
   s.files = %w[
