@@ -554,9 +554,11 @@ Note that filenames on windows must not contain any of the following characters 
 
 Gollum optionally takes a `--config file`. See [config.rb](https://github.com/gollum/gollum/blob/master/config.rb) for an example.
 
-## CUSTOM CSS
+## CUSTOM CSS/JS
 
 The `--css` flag will inject `custom.css` from the root of your git repository into each page. `custom.css` must be commited to git or you will get a 302 redirect to the create page.
+
+The `--js` flag will inject `custom.js` from the root of your git repository into each page. `custom.js` must be commited to git or you will get a 302 redirect to the create page.
 
 ## CONTRIBUTE
 
