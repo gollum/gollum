@@ -85,6 +85,7 @@ module Precious
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
+      @js = settings.wiki_options[:js]
     end
 
     get '/' do

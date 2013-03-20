@@ -25,6 +25,11 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 - Unix like operating system (OS X, Ubuntu, Debian, and more)
 - Will not work on Windows (because of [grit](https://github.com/github/grit))
 
+## SECURITY
+
+Don't enable `--custom-css` or `--custom-js` unless you trust every user who has the ability to edit the wiki.
+A better solution with more security is being tracked in [#665](https://github.com/gollum/gollum/issues/665).
+
 ## INSTALLATION
 
 The best way to install Gollum is with RubyGems:
@@ -364,9 +369,9 @@ As an extra feature, you can syntax highlight a file from your repository, allow
 you keep some of your sample code in the main repository. The code-snippet is
 updated when the wiki is rebuilt. You include github code like this:
 
-    ```html:gollum/gollum/master/test/file_view/1_file.txt```
+    ```html:github:gollum/gollum/master/test/file_view/1_file.txt```
 
-This will make the builder look at the **github user**, in the **gollum project**,
+This will make the builder look at the **gollum user**, in the **gollum project**,
 in the **master branch**, at path **test/file_view/1_file.txt**. It will be
 rewritten to:
 
@@ -554,9 +559,11 @@ Note that filenames on windows must not contain any of the following characters 
 
 Gollum optionally takes a `--config file`. See [config.rb](https://github.com/gollum/gollum/blob/master/config.rb) for an example.
 
-## CUSTOM CSS
+## CUSTOM CSS/JS
 
 The `--css` flag will inject `custom.css` from the root of your git repository into each page. `custom.css` must be commited to git or you will get a 302 redirect to the create page.
+
+The `--js` flag will inject `custom.js` from the root of your git repository into each page. `custom.js` must be commited to git or you will get a 302 redirect to the create page.
 
 ## CONTRIBUTE
 

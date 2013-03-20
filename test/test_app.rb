@@ -461,6 +461,30 @@ context "Frontend" do
     assert_equal 'jkl', author.email
   end
 
+  test "do not add custom.js by default" do
+    page = 'nocustom'
+    text = 'nope none'
+
+    @wiki.write_page(page, :markdown, text,
+                     { :name => 'user1', :email => 'user1' });
+
+    get page
+    assert_no_match /custom.js/, last_response.body
+  end
+
+  test "add custom.js if setting" do
+    Precious::App.set(:wiki_options, { :js => true })
+    page = 'yaycustom'
+    text = 'customized!'
+
+    @wiki.write_page(page, :markdown, text,
+                     { :name => 'user1', :email => 'user1' });
+
+    get page
+    assert_match /custom.js/, last_response.body
+    Precious::App.set(:wiki_options, { :js => nil })
+  end
+
   def app
     Precious::App
   end
