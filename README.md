@@ -35,12 +35,16 @@ A better solution with more security is being tracked in [#665](https://github.c
 
 The best way to install Gollum is with RubyGems:
 
-    $ [sudo] gem install gollum
+```bash
+$ [sudo] gem install gollum
+```
 
 If you're installing from source, you can use [Bundler][bundler] to pick up all the
 gems:
 
-    $ bundle install
+```bash
+$ bundle install
+```
 
 In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
@@ -65,13 +69,17 @@ To view and edit your Gollum repository locally via the built in web
 interface, simply install the Gollum gem, navigate to your repository via the
 command line, and run the executable:
 
-    $ gollum
+```bash
+$ gollum
+```
 
 This will start up a web server running the Gollum frontend and you can view
 and edit your wiki at http://localhost:4567. To get help on the command line
 utility, you can run it like so:
 
-    $ gollum --help
+```bash
+$ gollum --help
+```
 
 Note that the gollum server will not run on Windows because of [an issue](https://github.com/rtomayko/posix-spawn/issues/9) with posix-spawn (which is used by Grit).
 
@@ -81,7 +89,6 @@ A Gollum repository's contents are designed to be human editable. Page content
 is written in `page files` and may be organized into directories any way you
 choose. Special footers can be created in `footer files`. Other content
 (images, PDFs, etc) may also be present and organized in the same way.
-
 
 ## PAGE FILES
 
@@ -101,9 +108,11 @@ Gollum recognizes the following extensions:
 
 You may also register your own extensions and parsers:
 
-    Gollum::Markup.register(:angry, "Angry") do |content|
-      content.upcase
-    end
+```ruby
+Gollum::Markup.register(:angry, "Angry") do |content|
+  content.upcase
+end
+```
 
 Gollum detects the page file format via the extension, so files must have one
 of the default or registered extensions in order to be converted.
@@ -150,11 +159,13 @@ allowed.
 
 ## TITLES
 
-The first defined `h1` will override the default header on a page. There are two ways to set a page title. The metadata syntax:
+The first defined `h1` will override the default header on a page. There are
+two ways to set a page title. The metadata syntax:
 
-`<!-- --- title: New Title -->`
+    <!-- --- title: New Title -->
 
-The first `h1` tag can be set to always override the page title, without needing to use the metadata syntax. Start gollum with the `--h1-title` flag.
+The first `h1` tag can be set to always override the page title, without
+needing to use the metadata syntax. Start gollum with the `--h1-title` flag.
 
 ## BRACKET TAGS
 
@@ -187,8 +198,8 @@ The above tag will create a link to the corresponding page file named
 `Frodo-Baggins.ext` where `ext` may be any of the allowed extension types. The
 conversion is as follows:
 
-  1. Replace any spaces (U+0020) with dashes (U+002D)
-  2. Replace any slashes (U+002F) with dashes (U+002D)
+1. Replace any spaces (U+0020) with dashes (U+002D)
+2. Replace any slashes (U+002F) with dashes (U+002D)
 
 If you'd like the link text to be something that doesn't map directly to the
 page name, you can specify the actual page name after a pipe:
@@ -337,7 +348,9 @@ The `:universal_toc` is not enabled by default.  To set the option,
 add the option to the `:wiki_options` hash before starting the
 frontend app:
 
-    Precious::App.set(:wiki_options, {:universal_toc => true})
+```ruby
+Precious::App.set(:wiki_options, {:universal_toc => true})
+```
 
 ## SYNTAX HIGHLIGHTING
 
@@ -420,21 +433,25 @@ repository, and collect various meta data about the wiki as a whole.
 
 Initialize the `Gollum::Repo` object:
 
-    # Require rubygems if necessary
-    require 'rubygems'
+```ruby
+# Require rubygems if necessary
+require 'rubygems'
 
-    # Require the Gollum library
-    require 'gollum-lib'
+# Require the Gollum library
+require 'gollum-lib'
 
-    # Create a new Gollum::Wiki object by initializing it with the path to the
-    # Git repository.
-    wiki = Gollum::Wiki.new("my-gollum-repo.git")
-    # => <Gollum::Wiki>
+# Create a new Gollum::Wiki object by initializing it with the path to the
+# Git repository.
+wiki = Gollum::Wiki.new("my-gollum-repo.git")
+# => <Gollum::Wiki>
+```
 
 By default, internal wiki links are all absolute from the root. To specify a different
 base path, you can specify the `:base_path` option:
 
-    wiki = Gollum::Wiki.new("my-gollum-repo.git", :base_path => "/wiki")
+```ruby
+wiki = Gollum::Wiki.new("my-gollum-repo.git", :base_path => "/wiki")
+```
 
 Note that base_path just modifies the links. To map gollum to a non-root location:
 
@@ -449,92 +466,116 @@ Note that base_path just modifies the links. To map gollum to a non-root locatio
 
 Get the latest version of the given human or canonical page name:
 
-    page = wiki.page('page-name')
-    # => <Gollum::Page>
+```ruby
+page = wiki.page('page-name')
+# => <Gollum::Page>
 
-    page.raw_data
-    # => "# My wiki page"
+page.raw_data
+# => "# My wiki page"
 
-    page.formatted_data
-    # => "<h1>My wiki page</h1>"
+page.formatted_data
+# => "<h1>My wiki page</h1>"
 
-    page.format
-    # => :markdown
+page.format
+# => :markdown
 
-    vsn = page.version
-    # => <Grit::Commit>
+vsn = page.version
+# => <Grit::Commit>
 
-    vsn.id
-    # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
+vsn.id
+# => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
+```
 
 Get the footer (if any) for a given page:
 
-    page.footer
-    # => <Gollum::Page>
+```ruby
+page.footer
+# => <Gollum::Page>
+```
 
 Get the header (if any) for a given page:
 
-    page.header
-    # => <Gollum::Page>
+```ruby
+page.header
+# => <Gollum::Page>
+```
 
 Get a list of versions for a given page:
 
-    vsns = wiki.page('page-name').versions
-    # => [<Grit::Commit, <Grit::Commit, <Grit::Commit>]
+```ruby
+vsns = wiki.page('page-name').versions
+# => [<Grit::Commit, <Grit::Commit, <Grit::Commit>]
 
-    vsns.first.id
-    # => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
+vsns.first.id
+# => '3ca43e12377ea1e32ea5c9ce5992ec8bf266e3e5'
 
-    vsns.first.authored_date
-    # => Sun Mar 28 19:11:21 -0700 2010
+vsns.first.authored_date
+# => Sun Mar 28 19:11:21 -0700 2010
+```
 
 Get a specific version of a given canonical page file:
 
-    wiki.page('page-name', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+```ruby
+wiki.page('page-name', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+```
 
 Get the latest version of a given static file:
 
-    file = wiki.file('asset.js')
-    # => <Gollum::File>
+```ruby
+file = wiki.file('asset.js')
+# => <Gollum::File>
 
-    file.raw_data
-    # => "alert('hello');"
+file.raw_data
+# => "alert('hello');"
 
-    file.version
-    # => <Grit::Commit>
+file.version
+# => <Grit::Commit>
+```
 
 Get a specific version of a given static file:
 
-    wiki.file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+```ruby
+wiki.file('asset.js', '5ec521178e0eec4dc39741a8978a2ba6616d0f0a')
+```
 
 Get an in-memory Page preview (useful for generating previews for web
 interfaces):
 
-    preview = wiki.preview_page("My Page", "# Contents", :markdown)
-    preview.formatted_data
-    # => "<h1>Contents</h1>"
+```ruby
+preview = wiki.preview_page("My Page", "# Contents", :markdown)
+preview.formatted_data
+# => "<h1>Contents</h1>"
+```
 
 Methods that write to the repository require a Hash of commit data that takes
 the following form:
 
-    commit = { :message => 'commit message',
-               :name => 'Tom Preston-Werner',
-               :email => 'tom@github.com' }
+```ruby
+commit = { :message => 'commit message',
+           :name => 'Tom Preston-Werner',
+           :email => 'tom@github.com' }
+```
 
 Write a new version of a page (the file will be created if it does not already
 exist) and commit the change. The file will be written at the repo root.
 
-    wiki.write_page('Page Name', :markdown, 'Page contents', commit)
+```ruby
+wiki.write_page('Page Name', :markdown, 'Page contents', commit)
+```
 
 Update an existing page. If the format is different than the page's current
 format, the file name will be changed to reflect the new format.
 
-    page = wiki.page('Page Name')
-    wiki.update_page(page, page.name, page.format, 'Page contents', commit)
+```ruby
+page = wiki.page('Page Name')
+wiki.update_page(page, page.name, page.format, 'Page contents', commit)
+```
 
 To delete a page and commit the change:
 
-    wiki.delete_page(page, commit)
+```ruby
+wiki.delete_page(page, commit)
+```
 
 ### RACK
 
@@ -542,15 +583,17 @@ You can also run gollum with any rack-compatible server by placing this config.r
 file inside your wiki repository. This allows you to utilize any Rack middleware
 like Rack::Auth, OmniAuth, etc.
 
-    #!/usr/bin/env ruby
-    require 'rubygems'
-    require 'gollum/frontend/app'
+```ruby
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'gollum/frontend/app'
 
-    gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
-    Precious::App.set(:gollum_path, gollum_path)
-    Precious::App.set(:default_markup, :markdown) # set your favorite markup language
-    Precious::App.set(:wiki_options, {:universal_toc => false})
-    run Precious::App
+gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
+Precious::App.set(:gollum_path, gollum_path)
+Precious::App.set(:default_markup, :markdown) # set your favorite markup language
+Precious::App.set(:wiki_options, {:universal_toc => false})
+run Precious::App
+```
 
 Your Rack middleware can pass author details to Gollum in a Hash in the session under the 'gollum.author' key.
 
@@ -595,26 +638,35 @@ Gollum uses [Semantic Versioning](http://semver.org/).
 
 For z releases:
 
-    $ rake bump
-    $ rake release
+```bash
+$ rake bump
+$ rake release
+```
 
 For x.y releases:
 
-    Update VERSION in lib/gollum.rb
-    $ rake gemspec
-    $ rake release
+```bash
+Update VERSION in lib/gollum.rb
+$ rake gemspec
+$ rake release
+```
 
 ## BUILDING THE GEM FROM MASTER
-    $ gem uninstall -aIx gollum
-    $ git clone https://github.com/gollum/gollum.git
-    $ cd gollum
-    gollum$ rake build
-    gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem
+
+```bash
+$ gem uninstall -aIx gollum
+$ git clone https://github.com/gollum/gollum.git
+$ cd gollum
+gollum$ rake build
+gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem
+```
 
 ## RUN THE TESTS
 
-    $ bundle install
-    $ bundle exec rake test
+```bash
+$ bundle install
+$ bundle exec rake test
+```
 
 ## WORK WITH TEST REPOS
 
