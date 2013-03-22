@@ -20,6 +20,7 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 [TomDoc](http://tomdoc.org/) for inline documentation.
 
 ## SYSTEM REQUIREMENTS
+
 - Python 2.5+ (2.7.3 recommended)
 - Ruby 1.8.7+ (1.9.3 recommended)
 - Unix like operating system (OS X, Ubuntu, Debian, and more)
@@ -121,7 +122,7 @@ automatically generated table of contents will be shown instead.
 
 ## SIDEBAR FILES
 
-Sidebar files allow you to add a simple sidebar to your wiki.  Sidebar files
+Sidebar files allow you to add a simple sidebar to your wiki. Sidebar files
 are named `_Sidebar.ext` where the extension is one of the supported formats.
 Sidebars affect all pages in their directory and any subdirectories that do not
 have a sidebar file of their own.
@@ -154,6 +155,7 @@ The first defined `h1` will override the default header on a page. There are two
 `<!-- --- title: New Title -->`
 
 The first `h1` tag can be set to always override the page title, without needing to use the metadata syntax. Start gollum with the `--h1-title` flag.
+
 ## BRACKET TAGS
 
 A variety of Gollum tags use a double bracket syntax. For example:
@@ -381,7 +383,7 @@ rewritten to:
     </ol>
     ```
 
-Which will be parsed as HTML code during the Pygments run, and thereby coloured 
+Which will be parsed as HTML code during the Pygments run, and thereby coloured
 appropriately.
 
 ## MATHEMATICAL EQUATIONS
@@ -412,24 +414,25 @@ You can replace the string "blue-modern" with any supported style.
 
 ## API DOCUMENTATION
 
-The Gollum API allows you to retrieve raw or formatted wiki content from a Git
-repository, write new content to the repository, and collect various meta data
-about the wiki as a whole.
+The [Gollum API](https://github.com/gollum/gollum-lib/) allows you to retrieve
+raw or formatted wiki content from a Git repository, write new content to the
+repository, and collect various meta data about the wiki as a whole.
 
-Initialize the Gollum::Repo object:
+Initialize the `Gollum::Repo` object:
 
     # Require rubygems if necessary
     require 'rubygems'
 
     # Require the Gollum library
-    require 'gollum'
+    require 'gollum-lib'
 
     # Create a new Gollum::Wiki object by initializing it with the path to the
     # Git repository.
     wiki = Gollum::Wiki.new("my-gollum-repo.git")
     # => <Gollum::Wiki>
 
-By default, internal wiki links are all absolute from the root. To specify a different base path, you can specify the `:base_path` option:
+By default, internal wiki links are all absolute from the root. To specify a different
+base path, you can specify the `:base_path` option:
 
     wiki = Gollum::Wiki.new("my-gollum-repo.git", :base_path => "/wiki")
 
@@ -468,7 +471,7 @@ Get the footer (if any) for a given page:
 
     page.footer
     # => <Gollum::Page>
-    
+
 Get the header (if any) for a given page:
 
     page.header
@@ -552,6 +555,7 @@ like Rack::Auth, OmniAuth, etc.
 Your Rack middleware can pass author details to Gollum in a Hash in the session under the 'gollum.author' key.
 
 ## WINDOWS FILENAME VALIDATION
+
 Note that filenames on windows must not contain any of the following characters `\ / : * ? " < > |`. See [this support article](http://support.microsoft.com/kb/177506) for details.
 
 ## CONFIG FILE
@@ -584,28 +588,33 @@ your changes merged back into core is as follows:
 1. Send a pull request to the gollum/gollum project.
 
 ## RELEASING
+
+Gollum uses [Semantic Versioning](http://semver.org/).
+
     x.y.z
 
-    For z releases:
+For z releases:
+
     $ rake bump
     $ rake release
 
-    For x.y releases:
+For x.y releases:
+
     Update VERSION in lib/gollum.rb
     $ rake gemspec
     $ rake release
-    
+
 ## BUILDING THE GEM FROM MASTER
     $ gem uninstall -aIx gollum
     $ git clone https://github.com/gollum/gollum.git
     $ cd gollum
     gollum$ rake build
     gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem
-    
+
 ## RUN THE TESTS
 
-    bundle install
-    bundle exec rake test
+    $ bundle install
+    $ bundle exec rake test
 
 ## WORK WITH TEST REPOS
 
