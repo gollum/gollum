@@ -390,13 +390,12 @@ Start gollum with the `--mathjax` flag. Read more about [MathJax](http://docs.ma
 
 Inline math:
 
-- $2^2$
-- `\\(2^2\\)`
+- \\(2^2\\)
 
 Display math:
 
 - $$2^2$$
-- [2^2]
+- \\[2^2\\]
 
 ## SEQUENCE DIAGRAMS
 
