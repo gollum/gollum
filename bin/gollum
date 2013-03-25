@@ -133,6 +133,7 @@ if options['irb']
   end
 
   begin
+    require 'gollum-lib'
     wiki = Gollum::Wiki.new(gollum_path, wiki_options)
     if !wiki.exist? then raise Grit::InvalidGitRepositoryError end
     puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
