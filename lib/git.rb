@@ -6,21 +6,22 @@ module RJGit
   import 'org.eclipse.jgit.api.Git'
   import 'org.eclipse.jgit.api.AddCommand'
   import 'org.eclipse.jgit.api.RmCommand'
-  
+  import 'org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider'
+
   class RubyGit
-    
+
     attr_accessor :jgit
     attr_accessor :jrepo
-    
+
     RESET_MODES = ["HARD", "SOFT", "KEEP", "MERGE", "MIXED"]
 
     RJGit.delegate_to(Git, :@jgit)
-      
+
     def initialize(repository)
       @jrepo = RJGit.repository_type(repository)
       @jgit = Git.new(@jrepo)
     end
-    
+
     def log
       logs = @jgit.log
       commits = Array.new
@@ -29,7 +30,7 @@ module RJGit
       end
       commits
     end
-  
+
     def branch_list
       branch = @jgit.branch_list
       array = Array.new
@@ -38,15 +39,15 @@ module RJGit
       end
       array
     end
-    
+
     def commit(message)
       Commit.new(@jgit.commit.set_message(message).call)
     end
-    
+
     def clone(remote, local, options = {})
       RubyGit.clone(remote, local, options)
     end
-    
+
     def self.clone(remote, local, options = {})
       clone_command = Git.clone_repository
       clone_command.setURI(remote)
@@ -56,8 +57,11 @@ module RJGit
         if options[:branch] == :all
           clone_command.set_clone_all_branches(true)
         else
-          clone_command.set_branch(options[:branch]) 
+          clone_command.set_branch(options[:branch])
         end
+      end
+      if options[:username]
+        clone_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
       end
       clone_command.call
       Repo.new(local)
@@ -66,11 +70,11 @@ module RJGit
     def add(file_pattern)
       @jgit.add.add_filepattern(file_pattern).call
     end
-    
+
     def remove(file_pattern)
       @jgit.rm.add_filepattern(file_pattern).call
     end
-    
+
     def merge(commit)
       merge_command = @jgit.merge
       merge_command.include(commit.jcommit)
@@ -103,19 +107,19 @@ module RJGit
         nil
       end
     end
-    
+
     def create_branch(name)
       @jgit.branch_create.setName(name).call
     end
-    
+
     def delete_branch(name)
       @jgit.branch_delete.set_branch_names(name).call
     end
-    
+
     def rename_branch(old_name, new_name)
       @jgit.branch_rename.set_old_name(old_name).set_new_name(new_name).call
     end
-    
+
     def checkout(branch_name, options = {})
       checkout_command = @jgit.checkout.set_name(branch_name)
       checkout_command.set_create_branch(true) if options[:create]
@@ -131,10 +135,10 @@ module RJGit
       end
       result
     end
-    
+
     def apply(input_stream)
       apply_result = @jgit.apply.set_patch(input_stream).call
-      updated_files = apply_result.get_updated_files 
+      updated_files = apply_result.get_updated_files
       updated_files_parsed = []
       updated_files.each do |file|
         updated_files_parsed << file.get_absolute_path
@@ -158,7 +162,7 @@ module RJGit
       clean_command.set_paths(java.util.Arrays.asList(options[:paths])) if options[:paths]
       clean_command.call
     end
-    
+
     def reset(ref, mode = "HARD", paths = nil)
       return nil if mode != nil && !RESET_MODES.include?(mode)
       reset_command = @jgit.reset
@@ -171,7 +175,7 @@ module RJGit
       reset_command.setMode(org.eclipse.jgit.api.ResetCommand::ResetType.valueOf(mode)) unless mode == nil
       reset_command.call
     end
-    
+
     def revert(commits)
       revert_command = @jgit.revert
       commits.each do |commit|
@@ -179,11 +183,46 @@ module RJGit
       end
       Commit.new(revert_command.call)
     end
-    
+
     def status
       @jgit.status.call
     end
 
-  end
+    def push_all(remote, options = {})
+      push_command = @jgit.push
+      push_command.set_dry_run(true) if options[:dryrun]
+      push_command.set_remote(remote)
+      push_command.set_push_all
+      push_command.set_push_tags
+      if options[:username]
+        push_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
+      end
+      push_command.call
+    end
 
+    def push(remote, refs = [], options = {})
+      if(refs.size > 0)
+        push_command = @jgit.push
+        push_command.set_dry_run(true) if options[:dryrun]
+        push_command.set_remote(remote)
+        push_command.set_ref_specs(refs)
+        if options[:username]
+          push_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
+        end
+        push_command.call
+      end
+    end
+
+    def pull(options = {})
+        pull_command = @jgit.pull(@jrepo)
+        pull_command.set_dry_run(true) if options[:dryrun]
+        if options[:username]
+          pull_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
+        end
+        if(!options[:rebase].nil?)
+          pull_command.set_rebase(options[:rebase])
+        end
+        pull_command.call
+    end
+  end
 end
