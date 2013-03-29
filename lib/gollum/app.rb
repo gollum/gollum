@@ -6,6 +6,7 @@ require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
 
+require 'gollum'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
