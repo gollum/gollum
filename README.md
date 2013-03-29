@@ -1,33 +1,62 @@
-# RJGit
+JGit
+=====
 
-JRuby wrapper around the JGit library for manipulating git repositories in code.
+###A JRuby wrapper around the JGit library for manipulating Git repositories
 
-## Authors
+
+Authors
+-------
 
 RJGit is being developed by Team Repotag:
 
-* Maarten Engelen
-* Bart Kamphorst 
-* Dawa Ometto 
-* Arlette van Wissen
-* Steven Woudenberg
+- Maarten Engelen
+- Bart Kamphorst
+- Dawa Ometto
+- Arlette van Wissen
+- Steven Woudenberg
 
-With special thanks to: 
-* Patrick Pepels 
+With special thanks to:
+- Patrick Pepels
 
-## Installation
-	#> gem install rjgit
+Installation
+------------
+Installing the rjgit gem requires the command:
 
-### Dependencies 
+$ gem install rjgit
 
-* Requires JRuby 1.7.0 or higher
+#### Dependencies for using RJGit:
+- JRuby 1.7.0 or higher
+- mime-types 1.15 or higher
 
-## Usage
+#### Dependencies for developing RJGIT:
+- JRuby 1.7.0 or higher
+- mime-types 1.15 or higher
+- rspec 2.0 or higher
+- simplecov
 
-### Configure the basics
+Usage
+-----
+The usage of the RJGit gem.
 
-## License
+Initialize a repository on the filesystem:
 
+```ruby
+require "rjgit"
+repo = Repo.new("repo.git")
+```
+
+...or create a new repository:
+
+```ruby
+repo = Repo.new("repo.git", :create => true)
+```
+
+Future features
+---------------
+Features which will be implemented in the near future
+
+License
+-------
 Copyright (c) 2011 - 2013, Team Repotag
 
 (Modified BSD License)
