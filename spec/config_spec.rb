@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+  import 'org.eclipse.jgit.errors.ConfigInvalidException'
+  
 describe RJGit::Configuration do
   
   context "with a fairly standard config file" do
@@ -10,114 +12,53 @@ describe RJGit::Configuration do
     end
   
     it "should correctly parse a standard config file" do
-      pending
-      $stderr.puts @config.jconfig.to_text
-      @config.groups.should have(3).groups
-      @config.groups.first.should have(4).settings
+      @config.to_s.should_not be_nil
+      @config.names('remote', 'origin').first.should == 'fetch'
     end
   
-    it "should not load the config twice" do
-      pending
-      @config.groups.should have(3).groups
-      @config.groups.first.should have(4).settings
+    it "should raise an error when the config file is invalid" do
+      @config = RJGit::Configuration.new(File.join(FIXTURES_PATH, 'nested_groups_config.cfg'))
+      expect { @config.load }.to raise_error(IOException)
     end
   
-    it "should respond to Hash syntax" do
-      pending
-      @config['core'].settings.first.key.should == 'repositoryformatversion'
-    end
-  
-    it "should return all top-level sections" do
-      pending
+    it "should have sections" do
       @config.sections.should have(3).sections
       @config.sections.first.should == 'core'
     end
-  
-    it "should fetch values of settings in a group" do
-      pending
-      @config['core'].fetch('filemode').should be_true
+    
+    it "should have subsections" do
+      @config.subsections('remote').first.should == 'origin'
+    end
+    
+    it "should have settings" do
+      @config['remote origin']['url'].should == "git@github.com:schacon/grit.git"
+    end
+    
+    it "should respond to Hash syntax" do
+      $stderr.puts @config['core']
+      @config['core'].should be_a Hash
+    end
+    
+    it "should not load the config twice" do
+      @config.sections.should have(3).sections
+      @config.load
+      @config.sections.should have(3).sections
     end
   
-    it "should fetch a default when no value is set" do
-      pending
-      @config['core'].fetch('rspec', {}).should be_a Hash
-      @config['core'].fetch('rspec', {}).should be_empty
+    it "should set loaded variable to true" do
+      @config.loaded?.should be_true
     end
   
-    it "should raise IndexError when no value can be fetched" do
-      pending
-      expect { @config['core'].fetch('rspec') }.to raise_error(IndexError)
-    end
-  
-    it "should add a new group" do
-      pending
-      @config.add_group('github')
-      @config['github'].should be_a RJGit::Configuration::Group
+    it "should return nil if no value is set" do
+      @config['core']['rspec'].should be_a NilClass
     end
   
     it "should add a new setting" do
-      pending
-      @config.add_setting('rspec', 'true', 'Currently using Rspec')
-      @config.settings.first.key.should == 'rspec'
+      @config.add_setting('rspec', 'true', 'rspec-section', 'rspec-subsection')
+      @config.sections.should include('rspec-section')
+      @config.names('rspec-section', 'rspec-subsection').first.should == 'rspec'
     end
     
   end 
-   
-  context "with a complex config file with comments and nested groups" do 
-    before(:each) do
-      @config = RJGit::Configuration.new(File.join(FIXTURES_PATH, 'nested_groups_config.cfg')).load
-    end
-    
-    it "should preserve comments" do
-      pending
-      @config['core'].comments.first.should match /# This is the first core group/ 
-    end
-    
-    it "should preserve in-line comments" do
-      pending
-      @config['fourth'].group('core').settings[1].comments.first.should match /; for the rest/
-    end
-    
-    it "should correctly parse a config file with nested groups" do
-      pending
-      @config['third'].groups.first.name.should == 'nested'
-    end
-    
-    it "should find groups and subgroups based on a a regexp expression" do
-      pending
-      @config.find_groups(/nested/).should have(3).groups
-    end
-    
-    it "should have all groups" do
-      pending
-      @config.groups.should have(5).groups
-      @config.all_groups.should have(10).groups
-    end
-    
-    it "should store the config to file" do
-      pending
-      path = File.join(get_new_tmprepo_path, 'temp_config')
-      Dir.mkdir(File.dirname(path))
-      @config.store(path)
-      path.should exist
-      IO.readlines(path).first.should match /general setting/
-      remove_temp_repo(File.dirname(path))
-    end
-    
-    it "should reload the config file" do
-      pending
-      path = File.join(get_new_tmprepo_path, 'temp_config')
-      Dir.mkdir(File.dirname(path))
-      @config.store(path)
-      config = RJGit::Configuration.new(path).load
-      config.should have(5).groups
-      File.open(path, "a") {|cfg| cfg.write "[ rspec ]\n rspec = true" }
-      config.reload!
-      config.should have(6).groups
-      config['rspec']['rspec'].value.should == 'true'
-      remove_temp_repo(File.dirname(path))
-    end
-    
-  end
     
 end

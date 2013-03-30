@@ -99,7 +99,7 @@ describe Repo do
     end
 
     it "should have a config" do
-      @repo.config.should be_a RJGit::Config
+      @bare_repo.config.should be_a RJGit::Configuration
     end
     
     it "should list the current branch" do
