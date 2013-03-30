@@ -9,18 +9,18 @@ Authors
 
 RJGit is being developed by Team Repotag:
 
-- Maarten Engelen
-- Bart Kamphorst
-- Dawa Ometto
-- Arlette van Wissen
-- Steven Woudenberg
+- [Maarten Engelen](https://github.com/maarten)
+- [Bart Kamphorst](https://github.com/bartkamphorst)
+- [Dawa Ometto](https://github.com/dometto)
+- [Arlette van Wissen](https://github.com/arlettevanwissen)
+- [Steven Woudenberg](https://github.com/stevenwoudenberg)
 
 With special thanks to:
 - Patrick Pepels
 
 Installation
 ------------
-Installing the rjgit gem requires the command:
+Install the rjgit gem with the command:
 
 $ gem install rjgit
 
