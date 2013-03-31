@@ -33,12 +33,12 @@ module RJGit
       settings = {}
       names.each do |name|
         value = @jconfig.get_string(section, subsection, name)
-        setting = case value
-          when is_num?(value) then value.to_i
-          when is_bool?(value) then to_boolean(value)
-          else value
+        if is_num?(value)
+          value = value.to_i 
+        elsif is_bool?(value)
+          value = to_boolean(value)
         end
-        settings[name] = setting
+        settings[name] = value
       end
       settings
     end
@@ -52,7 +52,8 @@ module RJGit
     end
     
     def is_bool?(str)
-      str == ("true" || "false")
+      str = str.strip
+      str == 'true' || str == 'false'
     end
     
     def to_boolean(str)

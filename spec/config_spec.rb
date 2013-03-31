@@ -35,8 +35,8 @@ describe RJGit::Configuration do
     end
     
     it "should respond to Hash syntax" do
-      $stderr.puts @config['core']
       @config['core'].should be_a Hash
+      @config['core']['bare'].should be_false
     end
     
     it "should not load the config twice" do
