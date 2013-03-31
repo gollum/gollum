@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 ad982fe7d4787928daba69bf0ba44a59c572ccd7 Dawa Ometto <d.ometto@gmail.com> 1348402681 +0200	commit (initial): Initial commit
+ad982fe7d4787928daba69bf0ba44a59c572ccd7 a3e8225b7dc99260cfa04393a30db3da71b0da61 Dawa Ometto <d.ometto@gmail.com> 1348402753 +0200	commit: Added Foucault.
+a3e8225b7dc99260cfa04393a30db3da71b0da61 43ff3a395dcf10978fdc2bcfae911f92757714b5 Dawa Ometto <d.ometto@gmail.com> 1348402842 +0200	commit: More interesting postmodern comments.
+43ff3a395dcf10978fdc2bcfae911f92757714b5 959329025f67539fb82e76b02782322fad032821 Bart Kamphorst <bart@kamphorst.com> 1354277352 +0100	commit: Added a png to have a file with a different mime type.
+959329025f67539fb82e76b02782322fad032821 6e96773ed2163b58d2e98b887cb4f944fe0a1d42 Bart Kamphorst <bart@kamphorst.com> 1354404287 +0100	commit: moved prematerial.txt to chapters/ so that this repo has at least one subtree.
+6e96773ed2163b58d2e98b887cb4f944fe0a1d42 f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 Bart Kamphorst <bart@kamphorst.com> 1355070640 +0100	commit: Moved prematerial.txt to chapters. Cleaning working directory.
