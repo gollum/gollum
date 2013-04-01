@@ -34,7 +34,7 @@ $ gem install rjgit
 
 Usage
 -----
-RJGit wraps most (if not all) core functionality from JGit; see below for some examples of what you can do with it. Make sure you have [JRuby](http://jruby.org/) installed.
+RJGit wraps most (if not all) of JGit's core functionality; see below for some examples of what you can do with it. Make sure you have [JRuby](http://jruby.org/) installed.
 
 ### Require the gem and include the RJGit module
 
