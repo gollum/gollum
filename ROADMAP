@@ -1,4 +1,2 @@
-* Describe behaviors in Rspec
-* Implement fixtures (mocks etc.)
-* Implement behaviors in Ruby
+* Add push and pull specs
 * Publish gem to rubygems

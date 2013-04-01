@@ -31,29 +31,49 @@ $ gem install rjgit
 #### Dependencies for developing RJGIT:
 - JRuby 1.7.0 or higher
 - mime-types 1.15 or higher
+- rake 0.9.2.2 or higher
 - rspec 2.0 or higher
 - simplecov
 
 Usage
 -----
-The usage of the RJGit gem.
+Make sure you have [JRuby](http://jruby.org/) installed.
 
-Initialize a repository on the filesystem:
+### Initializing a repository on the filesystem
 
 ```ruby
-require "rjgit"
+require "rjgit"  
 repo = Repo.new("repo.git")
 ```
 
-...or create a new repository:
+### Creating a new repository
 
 ```ruby
 repo = Repo.new("repo.git", :create => true)
 ```
 
-Future features
+### Getting a list of commits
+```ruby
+repo.commits('master')
+repo.commits('959329025f67539fb82e76b02782322fad032821')
+```
+
+Issues
 ---------------
-Features which will be implemented in the near future
+Please let us know by creating a [github issue](https://github.com/repotag/rjgit/issues).
+
+Contributing
+---------------
+
+
+1. Fork the project
+1. Create a new branch
+1. Modify the sources
+1. Add specs with full coverage for your new code
+1. Make sure the whole test suite passes by running rake
+1. Push the branch up to GitHub
+1. Send us a pull request
+
 
 License
 -------
