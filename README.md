@@ -1,8 +1,7 @@
 JGit
 =====
 
-###A JRuby wrapper around the JGit library for manipulating Git repositories
-
+###A JRuby wrapper around the [JGit library](https://github.com/eclipse/jgit) for manipulating Git repositories, the Ruby way.
 
 Authors
 -------
@@ -25,24 +24,28 @@ Install the rjgit gem with the command:
 $ gem install rjgit
 
 #### Dependencies for using RJGit:
-- JRuby 1.7.0 or higher
-- mime-types 1.15 or higher
+- JRuby >= 1.7.0
+- mime-types >= 1.15
 
-#### Dependencies for developing RJGIT:
-- JRuby 1.7.0 or higher
-- mime-types 1.15 or higher
-- rake 0.9.2.2 or higher
-- rspec 2.0 or higher
+#### Further dependencies for developing RJGIT:
+- rake >= 0.9.2.2
+- rspec >= 2.0
 - simplecov
 
 Usage
 -----
-Make sure you have [JRuby](http://jruby.org/) installed.
+RJGit wraps most (if not all) of JGit's core functionality; see below for some examples of what you can do with it. Make sure you have [JRuby](http://jruby.org/) installed.
 
-### Initializing a repository on the filesystem
+### Require the gem and include the RJGit module
 
 ```ruby
-require "rjgit"  
+require "rjgit"
+include RJGit
+```
+
+### Initializing an existing repository on the filesystem
+
+```ruby
 repo = Repo.new("repo.git")
 ```
 
@@ -50,12 +53,47 @@ repo = Repo.new("repo.git")
 
 ```ruby
 repo = Repo.new("repo.git", :create => true)
+repo = Repo.new("repo.git", :create => true, :bare => true) # Create a 'bare' git repo, which stores all git-data under the '.git' directory.
 ```
 
 ### Getting a list of commits
 ```ruby
 repo.commits('master')
 repo.commits('959329025f67539fb82e76b02782322fad032821')
+# Similarly for getting tags, branches, trees (directories), and blobs (files).
+```
+
+### Getting tags
+```ruby
+tag = repo.tags['example_tag']
+tag.id # tag's object id
+tag.author.name # Etcetera
+```
+
+### Getting a repository's contents
+```ruby
+repo.blob("example/file.txt") # Retrieve a file by filepath
+repo.blob("example/file.txt").data # Cat the file
+repo.tree("example") # Retrieve a tree by filepath
+repo.tree("example").data # List the tree's contents (blobs and trees)
+Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :branch => 'mybranch') # Outputs a file list to $stdout. Passing nil as the second argument lists the entire repository. Branch defaults to HEAD.
+```
+
+### Manipulating repositories
+```ruby
+repo.create_branch('new_branch') # Similarly for deleting, renaming
+repo.checkout('new_branch')
+repo.add('new_file.txt') # Similarly for removing
+repo.commit('My message')
+```
+
+### And more...
+```ruby
+pack = RJGitReceivePack.new(repo) # Implement the smart-http protocol with RJGitReceivePack and RJGitUploadPack
+pack.receive(client_msg) # Respond to a client's GET request
+repo.config['remote origin']['url'] # Retrieve config values
+Porcelain::diff(repo, options)
+Porcelain::blame(repo, options)
 ```
 
 Issues
