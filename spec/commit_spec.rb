@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Commit do
 
   before(:each) do
-    @bare_repo = Repo.new(TEST_BARE_REPO_PATH, {:bare => true}, false)
+    @bare_repo = Repo.new(TEST_BARE_REPO_PATH, :bare => true, :create => false)
     @commit = @bare_repo.commits.first
   end
 

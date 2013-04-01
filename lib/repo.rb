@@ -41,7 +41,7 @@ module RJGit
 
     RJGit.delegate_to(Repository, :@jrepo)
     
-    def initialize(path, options = {}, create = false)
+    def initialize(path, options = {})
       epath = File.expand_path(path)
 
       bare = false
@@ -55,7 +55,7 @@ module RJGit
       @config = RJGit::Configuration.new(File.join(@path, 'config'))
       repo_path = java.io.File.new(@path)
       @jrepo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).build()
-      @jrepo.create(bare) if create
+      @jrepo.create(bare) if options[:create]
       @git = RubyGit.new(@jrepo)
     end
     
@@ -64,7 +64,8 @@ module RJGit
     end
 
     def self.create(path, options = {:bare => false})
-      Repo.new(path, options, true)
+      options[:create] = true
+      Repo.new(path, options)
     end
 
     def commits(ref="master", limit=100)
