@@ -1,11 +1,11 @@
 module RJGit
 
-  java_import "org.eclipse.jgit.transport.ReceivePack"
-  java_import "org.eclipse.jgit.transport.UploadPack"
-  java_import "org.eclipse.jgit.transport.PacketLineOut"
-  java_import "org.eclipse.jgit.transport.RefAdvertiser$PacketLineOutRefAdvertiser"
-  java_import "java.io.ByteArrayInputStream"
-  java_import "java.io.ByteArrayOutputStream"
+  import "org.eclipse.jgit.transport.ReceivePack"
+  import "org.eclipse.jgit.transport.UploadPack"
+  import "org.eclipse.jgit.transport.PacketLineOut"
+  import "org.eclipse.jgit.transport.RefAdvertiser$PacketLineOutRefAdvertiser"
+  import "java.io.ByteArrayInputStream"
+  import "java.io.ByteArrayOutputStream"
 
   class RJGitPack
     attr_accessor :jpack, :jrepo, :bidirectional

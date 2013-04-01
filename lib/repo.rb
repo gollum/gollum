@@ -146,7 +146,6 @@ module RJGit
     # Convenience method to retrieve a Tree by name
     def tree(file_path)
       Tree.find_tree(@jrepo, file_path)
-      
     end
     
     # Update the info files required for fetching files over the dump-HTTP protocol
