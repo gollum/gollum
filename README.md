@@ -83,7 +83,7 @@ Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => tru
 ```ruby
 repo.create_branch('new_branch') # Similarly for deleting, renaming
 repo.checkout('new_branch')
-repo.add('new_file.txt')
+repo.add('new_file.txt') # Similarly for removing
 repo.commit('My message')
 ```
 
@@ -92,6 +92,8 @@ repo.commit('My message')
 pack = RJGitReceivePack.new(repo) # Implement the smart-http protocol with RJGitReceivePack and RJGitUploadPack
 pack.receive(client_msg) # Respond to a client's GET request
 repo.config['remote origin']['url'] # Retrieve config values
+Porcelain::diff(repo, options)
+Porcelain::blame(repo, options)
 ```
 
 Issues
