@@ -19,7 +19,7 @@ module RJGit
     
     def data
       strio = StringIO.new
-      RJGit::Porcelain.ls_tree(@repo, @jtree, Constants::HEAD, options={:print => true, :io => strio})
+      RJGit::Porcelain.ls_tree(@repo, @jtree, options={:print => true, :io => strio})
       strio.string
     end
     

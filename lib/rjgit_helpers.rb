@@ -22,13 +22,12 @@ module RJGit
   end
   
   def self.stringify(entries)
-    strio = StringIO.new
+    str = ""
     entries.each do |entry|
       line = entry.values.join("\t")
-      strio.write line
-      strio.write "\n"
+      str = "#{str}#{line}\n"
     end
-    strio.string
+    str
   end
   
   def self.convert_diff_entries(entries)
@@ -69,7 +68,7 @@ module RJGit
   
   def self.tree_type(tree)
     treeobj = case tree
-      when Tree then tree.revtree
+      when Tree then tree.jtree
       when org.eclipse.jgit.revwalk.RevTree then tree
       else nil
     end

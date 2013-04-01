@@ -11,6 +11,7 @@ module RJGit
     VERSION
   end
   
+  require 'stringio'
   # gem requires
   require 'mime/types'
   # require helpers first because RJGit#delegate_to is needed
@@ -47,14 +48,14 @@ module RJGit
       return bytes.to_a.pack('c*').force_encoding('UTF-8')
     end
     
-    def self.ls_tree(repository, tree=nil, branch=Constants::HEAD, options={})
-      options = {:recursive => false, :print => false, :io => $stdout}.merge(options)
+    def self.ls_tree(repository, tree=nil, options={})
+      options = {:recursive => false, :print => false, :io => $stdout, :branch => Constants::HEAD}.merge(options)
       jrepo = RJGit.repository_type(repository)
       return nil unless jrepo
       if tree 
         jtree = RJGit.tree_type(tree)
       else
-        last_commit_hash = jrepo.resolve(branch)
+        last_commit_hash = jrepo.resolve(options[:branch])
         return nil unless last_commit_hash
         walk = RevWalk.new(jrepo)
         jcommit = walk.parse_commit(last_commit_hash)
