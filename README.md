@@ -116,11 +116,11 @@ Running RSpec tests (the recommended way)
 ---------------
 
 1. Start the nailgun server
-```bash
+```
 jruby --ng-server &
 ```
 1. Run rake against the nailgun instance
-```bash
+```
 jruby --ng -S rake
 ```
 
