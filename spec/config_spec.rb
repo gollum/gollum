@@ -53,10 +53,27 @@ describe RJGit::Configuration do
       @config['core']['rspec'].should be_a NilClass
     end
   
-    it "should add a new setting" do
-      @config.add_setting('rspec', 'true', 'rspec-section', 'rspec-subsection')
+    it "should add a new boolean setting" do
+      @config.add_setting('rspec', true, 'rspec-section', 'rspec-subsection')
       @config.sections.should include('rspec-section')
       @config.names('rspec-section', 'rspec-subsection').first.should == 'rspec'
+    end
+
+    it "should add a new String setting" do
+      @config.add_setting('rspec', 'enabled', 'rspec-section', 'rspec-subsection')
+      @config.sections.should include('rspec-section')
+      @config.names('rspec-section', 'rspec-subsection').first.should == 'rspec'
+    end
+    
+    it "should add a new numeric setting" do
+      @config.add_setting('rspec', 42, 'rspec-section', 'rspec-subsection')
+      @config.sections.should include('rspec-section')
+      @config['rspec-section rspec-subsection']['rspec'].should eql 42
+    end
+    
+    it "should fail to add any other type of setting" do
+      @config.add_setting('rspec', nil, 'rspec-section', 'rspec-subsection')
+      @config.sections.should_not include('rspec-section')
     end
     
   end 

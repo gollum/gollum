@@ -77,7 +77,13 @@ module RJGit
     end
     
     def add_setting(name, value, section, subsection = "")
-      @jconfig.set_string(section, subsection, name, value)
+      case value
+        when Integer then @jconfig.set_int(section, subsection, name, value)
+        when TrueClass then @jconfig.set_boolean(section, subsection, name, value)
+        when FalseClass then @jconfig.set_boolean(section, subsection, name, value)
+        when String then @jconfig.set_string(section, subsection, name, value)
+        else nil
+      end
     end
     
     def names(section, subsection)
