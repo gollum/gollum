@@ -125,6 +125,12 @@ describe RubyGit do
       remove_temp_repo(@local)
     end
     
+    it "should clone with credentials" do
+      clone = @repo.git.clone(@remote, @local, :username => 'rspec', :password => 'Hahmeid7')
+      clone.path.should == File.join(@local, '/.git')
+      File.exist?(File.join(@local, 'homer-excited.png')).should be_true
+    end
+    
   end
   
   context "cloning a bare repository" do
@@ -151,7 +157,6 @@ describe RubyGit do
     
     it "should apply from a String" do
       patch = fixture('postpatriarchialist.patch')
-      #pending "new_material.patch fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[5,7->5,7]"
       result = @repo.git.apply_patch(patch)
       result.should have(1).changed_file
       result.first.should match /postpatriarchialist.txt/
@@ -159,7 +164,6 @@ describe RubyGit do
     
     it "should apply a patch from a file" do
       patch = File.join(File.dirname(__FILE__), 'fixtures', 'postpatriarchialist.patch')
-      # pending "mod_materialist.patch fails with Java::OrgEclipseJgitApiErrors::PatchApplyException: Cannot apply: HunkHeader[1,7->1,10]"
       result = @repo.git.apply_file(patch)
       result.should have(1).changed_file
       result.first.should match /postpatriarchialist.txt/
@@ -169,6 +173,69 @@ describe RubyGit do
       remove_temp_repo(File.dirname(@temp_repo_path))
     end
     
+  end
+  
+  describe "pushing and pulling" do 
+    before(:each) do
+      @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+      @remote = Repo.new(@temp_repo_path)
+      @local = @remote.git.clone(@remote.path, get_new_tmprepo_path)
+      
+    end
+    
+    context "pulling from another repository" do
+      before(:each) do
+        File.open(File.join(@remote.path, "materialist.txt"), 'a') {|file| file.write("\n Beautiful materialist.") }
+        @remote.add("materialist.txt")
+        @commit = @remote.commit("Making a change for pushing and pulling specs")
+      end
+    
+      it "should pull commits from a local clone" do
+        @local.commits.should have(6).commits
+        @local.git.pull
+        @local.commits.should have(7).commits
+      end
+      
+      it "should pull commits from a local clone with rebase" do
+        @local.commits.should have(6).commits
+        @local.git.pull(:rebase => true)
+        @local.commits.should have(7).commits
+      end
+    
+      it "should pull commits from a local clone with credentials" do
+        @local.commits.should have(6).commits
+        @local.git.pull(:username => 'rspec', :password => 'Hahmeid7')
+        @local.commits.should have(7).commits
+      end
+    
+    end
+  
+    context "pushing to another repository" do
+        before(:each) do
+          File.open(File.join(@local.path, "materialist.txt"), 'a') {|file| file.write("\n Beautiful materialist.") }
+          @local.add("materialist.txt")
+          @commit = @local.commit("Making a change for pushing and pulling specs")
+        end
+      
+      it "should push all changes to a local clone" do
+        @remote.commits.should have(6).commits
+        @local.git.push_all('origin')
+        @remote.commits.should have(7).commits
+      end
+      
+      it "should push all changes to a local clone with credentials" do
+        @remote.commits.should have(6).commits
+        @local.git.push_all('origin', :username => 'rspec', :password => 'Hahmeid7')
+        @remote.commits.should have(7).commits
+      end
+      
+      it "should push a specific ref to a local clone" do
+        @remote.commits.should have(6).commits
+        @local.git.push('origin', ["master"], :username => 'rspec', :password => 'Hahmeid7')
+        @remote.commits.should have(7).commits
+      end
+      
+    end
   end
   
   context "cleaning a repository" do
@@ -220,10 +287,10 @@ describe RubyGit do
       @repo = Repo.new(@temp_repo_path)
       
       #Open the 'materialist.txt' file in the repo and add the text "fluffy bunny"
-      f = File.open(File.join(@temp_repo_path,"materialist.txt"),"a+")
-      @before_write = f.read
-      f.write("fluffy bunny")
-      f.close
+      File.open(File.join(@temp_repo_path,"materialist.txt"), "a+") do |f|
+        @before_write = f.read
+        f.write("fluffy bunny")
+      end
     end
 
     it "should revert commits" do
@@ -233,19 +300,17 @@ describe RubyGit do
       @repo.commits.first.id.should == reverted_commit.id
     end
     
-    it "should handle errors for revert" do
-      pending
-    end
-    
+    it "should handle errors for revert"
+        
     it "should reset the hard way" do
       #reset the 'materialist.txt' file to the current head, through the HARD way
       ref = @repo.commits.first
       @repo.git.reset(ref)
       
       #Check if the hard reset worked correctly
-      f = File.open(File.join(@temp_repo_path,"materialist.txt"),"r")
-      f.read.should == @before_write
-      f.close
+      File.open(File.join(@temp_repo_path,"materialist.txt"), "r") do |f|
+        f.read.should == @before_write
+      end
     end
       
     it "should unstage files" do

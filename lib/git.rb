@@ -7,6 +7,7 @@ module RJGit
   import 'org.eclipse.jgit.api.AddCommand'
   import 'org.eclipse.jgit.api.RmCommand'
   import 'org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider'
+  import 'org.eclipse.jgit.transport.RefSpec'
 
   class RubyGit
 
@@ -202,6 +203,7 @@ module RJGit
 
     def push(remote, refs = [], options = {})
       if(refs.size > 0)
+        refs.map!{|ref| RefSpec.new(ref)}
         push_command = @jgit.push
         push_command.set_dry_run(true) if options[:dryrun]
         push_command.set_remote(remote)
@@ -214,13 +216,11 @@ module RJGit
     end
 
     def pull(options = {})
-        pull_command = @jgit.pull(@jrepo)
+        pull_command = @jgit.pull
         pull_command.set_dry_run(true) if options[:dryrun]
+        pull_command.set_rebase(options[:rebase]) if options[:rebase]
         if options[:username]
           pull_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-        end
-        if(!options[:rebase].nil?)
-          pull_command.set_rebase(options[:rebase])
         end
         pull_command.call
     end
