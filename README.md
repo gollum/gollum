@@ -1,4 +1,4 @@
-JGit
+RJGit
 =====
 
 ###A JRuby wrapper around the [JGit library](https://github.com/eclipse/jgit) for manipulating Git repositories, the Ruby way.
