@@ -3,6 +3,7 @@ RJGit
 
 ###A JRuby wrapper around the [JGit library](https://github.com/eclipse/jgit) for manipulating Git repositories, the Ruby way.
 
+[![Build Status](https://travis-ci.org/repotag/rjgit.png)](https://travis-ci.org/repotag/rjgit)
 Authors
 -------
 
