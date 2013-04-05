@@ -1,6 +1,11 @@
 require 'simplecov'
 SimpleCov.start
 
+if ENV['TRAVIS']
+  require 'coveralls'
+  Coveralls.wear!
+end
+
 require 'rjgit'
 include RJGit
 
