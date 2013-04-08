@@ -18,7 +18,7 @@ RJGit is being developed by Team Repotag:
 - [Steven Woudenberg](https://github.com/stevenwoudenberg)
 
 With special thanks to:
-- Patrick Pepels
+- [Patrick Pepels](https://github.com/bluedread)
 
 Installation
 ------------
