@@ -124,7 +124,8 @@ a.absent {
 .markdown-body ol,
 .markdown-body dl,
 .markdown-body table,
-.markdown-body pre {
+.markdown-body pre,
+.markdown-body hr {
   margin: 0px 0;
   margin-bottom: 15px;
 }
