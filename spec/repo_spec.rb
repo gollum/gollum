@@ -94,6 +94,11 @@ describe Repo do
       @bare_repo.should be_bare
     end
 
+    it "should tell us whether it is valid" do
+      @repo.should be_valid
+      Repo.new(get_new_tmprepo_path).should_not be_valid
+    end
+
     it "should have a reference to a JGit Repository object" do
       @repo.jrepo.should be_a org.eclipse.jgit.lib.Repository
     end
