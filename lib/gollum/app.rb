@@ -101,7 +101,7 @@ module Precious
     # name, path, version
     def wiki_page(name, path = nil, version = nil, exact = true)
       wiki = wiki_new
-      
+
       path = name if path.nil?
       name = extract_name(name) || wiki.index_page
       path = extract_path(path)
@@ -125,7 +125,7 @@ module Precious
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
-      
+
       wiki = wikip.wiki
       if page = wikip.page
         if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
@@ -222,6 +222,7 @@ module Precious
         # not /docs/Home because write_page will append /docs
         @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
       end
+      @path = clean_path(@path)
 
       page = wikip.page
       if page
@@ -393,14 +394,14 @@ module Precious
         @page = page
         @name = name
         @content  = page.formatted_data
-  
+
         # Extensions and layout data
         @editable = true
         @toc_content = wiki.universal_toc ? @page.toc_data : nil
         @mathjax  = wiki.mathjax
         @h1_title = wiki.h1_title
         @bar_side  = wiki.bar_side
-        
+
         mustache :page
       elsif file = wiki.file(fullpath)
         content_type file.mime_type

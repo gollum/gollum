@@ -9,5 +9,17 @@ context "Precious::Helpers" do
     assert_equal 'Mordor', extract_path('Mordor/Sauron')
     assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
   end
+
+  test "clean path without leading slash" do
+    assert_equal '/Mordor', clean_path('Mordor')
+  end
+
+  test "clean path with leading slash" do
+    assert_equal '/Mordor', clean_path('/Mordor')
+  end
+
+  test "clean path with double leading slash" do
+    assert_equal '/Mordor', clean_path('//Mordor')
+  end
 end
 

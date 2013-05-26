@@ -15,14 +15,21 @@ module Precious
       if file_path[-1, 1] == "/"
         return nil
       end
-      
-      # File.basename is too eager to please and will return the last 
+
+      # File.basename is too eager to please and will return the last
       # component of the path even if it ends with a directory separator.
       ::File.basename(file_path)
     end
 
     def sanitize_empty_params(param)
       [nil,''].include?(param) ? nil : CGI.unescape(param)
+    end
+
+    # Ensure path begins with a single leading slash
+    def clean_path(path)
+      if path
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/,'/')
+      end
     end
 
     # Remove all slashes from the start of string.

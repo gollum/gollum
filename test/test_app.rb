@@ -279,7 +279,7 @@ context "Frontend" do
       :format => 'markdown', :message => 'foo'
 
     assert_equal "http://example.org/foo/home", last_response.headers['Location']
-   
+
     follow_redirect!
     assert last_response.ok?
   end
@@ -298,6 +298,25 @@ context "Frontend" do
     follow_redirect!
     assert_equal "/#{name}", last_request.fullpath
     assert last_response.ok?
+  end
+
+  test "create sets the correct path for a relative path subdirectory" do
+    dir = "foodir"
+    name = "#{dir}/bar"
+    get "/create/#{name}"
+    assert_match(/\/#{dir}/, last_response.body)
+    assert_no_match(/[^\/]#{dir}/, last_response.body)
+  end
+
+  test "create sets the correct path for a relative path subdirectory with the page file directory set" do
+    Precious::App.set(:wiki_options, {:page_file_dir => "foo"})
+    dir = "bardir"
+    name = "#{dir}/baz"
+    get "/create/foo/#{name}"
+    assert_match(/\/#{dir}/, last_response.body)
+    assert_no_match(/[^\/]#{dir}/, last_response.body)
+    # reset page_file_dir
+    Precious::App.set(:wiki_options, {:page_file_dir => nil})
   end
 
   test "edit returns nil for non-existant page" do
@@ -442,20 +461,20 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :base_path => nil })
   end
 =end
-  
+
   test "author details in session are used" do
     page1 = @wiki.page('A')
-    
+
     gollum_author = { :name => 'ghi', :email => 'jkl' }
     session = { 'gollum.author' => gollum_author }
-    
+
     post "/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
     follow_redirect!
     assert last_response.ok?
-    
+
     @wiki.clear_cache
     page2 = @wiki.page(page1.name)
-    
+
     author = page2.version.author
     assert_equal 'ghi', author.name
     assert_equal 'jkl', author.email
