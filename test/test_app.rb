@@ -5,14 +5,14 @@ context "Frontend" do
   include Rack::Test::Methods
 
   setup do
-    @wikipath = cloned_testpath("examples/revert.git")
-    @wiki = Gollum::Wiki.new(@wikipath)
-    Precious::App.set(:gollum_path, @wikipath)
+    @path = cloned_testpath("examples/revert.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
   end
 
   teardown do
-    FileUtils.rm_rf(@wikipath)
+    FileUtils.rm_rf(@path)
   end
 
   test "urls transform unicode" do
@@ -391,9 +391,9 @@ context "Frontend" do
   end
 
   test "previews content on the first page of an empty wiki" do
-    @wikipath = cloned_testpath("examples/empty.git")
-    @wiki = Gollum::Wiki.new(@wikipath)
-    Precious::App.set(:gollum_path, @wikipath)
+    @path = cloned_testpath("examples/empty.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
 
     post "/preview", :content => 'abc', :format => 'markdown'
@@ -513,14 +513,14 @@ context "Frontend with lotr" do
   include Rack::Test::Methods
 
   setup do
-    @wikipath = cloned_testpath("examples/lotr.git")
-    @wiki = Gollum::Wiki.new(@wikipath)
-    Precious::App.set(:gollum_path, @wikipath)
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
   end
 
   teardown do
-    FileUtils.rm_rf(@wikipath)
+    FileUtils.rm_rf(@path)
   end
 
   # Here's the dir structure of lotr.git
