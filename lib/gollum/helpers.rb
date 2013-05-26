@@ -28,7 +28,7 @@ module Precious
     # Ensure path begins with a single leading slash
     def clean_path(path)
       if path
-        (path[0] != '/' ? path.insert(0, '/') : path).gsub('//','/')
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/,'/')
       end
     end
 
