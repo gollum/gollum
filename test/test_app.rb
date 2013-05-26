@@ -305,7 +305,7 @@ context "Frontend" do
     name = "#{dir}/bar"
     get "/create/#{name}"
     assert_match(/\/#{dir}/, last_response.body)
-    assert_not_match(/[^\/]#{dir}/, last_response.body)
+    assert_no_match(/[^\/]#{dir}/, last_response.body)
   end
 
   test "create sets the correct path for a relative path subdirectory with the page file directory set" do
@@ -314,7 +314,7 @@ context "Frontend" do
     name = "#{dir}/baz"
     get "/create/foo/#{name}"
     assert_match(/\/#{dir}/, last_response.body)
-    assert_not_match(/[^\/]#{dir}/, last_response.body)
+    assert_no_match(/[^\/]#{dir}/, last_response.body)
     # reset page_file_dir
     Precious::App.set(:wiki_options, {:page_file_dir => nil})
   end
