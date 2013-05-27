@@ -62,6 +62,10 @@ module RJGit
     def bare?
       @jrepo.is_bare
     end
+    
+    def valid?
+      File.exist?(@path)
+    end
 
     def self.create(path, options = {:bare => false})
       options[:create] = true
