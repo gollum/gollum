@@ -44,14 +44,19 @@ module RJGit
     def initialize(path, options = {})
       epath = File.expand_path(path)
 
-      bare = false
-      if File.exist?(File.join(epath, '/.git'))
-        bare = false
-      elsif File.exist?(epath) || options[:bare]
-        bare = true
+      if options[:create]
+        bare = options[:bare] ? true : false
+      else
+        if options[:bare] == nil
+          bare = File.exist?(File.join(epath, '.git')) ? false : true
+        elsif File.exist?(File.join(epath, '.git'))
+          bare = false
+        else
+          bare = options[:bare] ? true : false
+        end
       end
-
-      @path = bare ? epath : File.join(epath, '/.git')
+      
+      @path = bare ? epath : File.join(epath, '.git')
       @config = RJGit::Configuration.new(File.join(@path, 'config'))
       repo_path = java.io.File.new(@path)
       @jrepo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).build()
@@ -67,6 +72,10 @@ module RJGit
       options[:create] = true
       Repo.new(path, options)
     end
+    
+    def create!
+      @jrepo.create(self.bare?)
+    end
 
     def commits(ref="master", limit=100)
       options = { :limit => limit }
@@ -74,7 +83,7 @@ module RJGit
     end
     
     def valid?
-      @jrepo.getObjectDatabase.exists
+      @jrepo.get_object_database.exists
     end
 
     def config

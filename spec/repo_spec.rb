@@ -49,37 +49,50 @@ describe Repo do
 
     it "should tell if the repository is valid" do
       tmp_path = get_new_tmprepo_path
+      
       tmp_path.should_not exist
       new_repo = Repo.new(tmp_path, :bare => false, :create => false)
       new_repo.valid?.should eql false
-      new_repo.create
+      new_repo.create!
       new_repo.valid?.should eql true
-      remove_temp_repo(tmp_path)
+      FileUtils.rm_rf(File.join(tmp_path, '.git'))
       new_repo.valid?.should eql false
+      remove_temp_repo(tmp_path)
+      
       tmp_path.should_not exist
-      new_repo = Repo.new(tmp_path, :bare => true, :create => false)
-      new_repo.valid?.should eql false
-      new_repo.create
-      new_repo.valid?.should eql true
+      bare_new_repo = Repo.new(tmp_path, :bare => true, :create => false)
+      bare_new_repo.valid?.should eql false
+      bare_new_repo.create!
+      bare_new_repo.valid?.should eql true
+      FileUtils.rm_rf(File.join(tmp_path, 'objects'))
+      bare_new_repo.valid?.should eql false
       remove_temp_repo(tmp_path)
-      new_repo.valid?.should eql false
     end
 
     it "should default to a non-bare repository path" do
-      @repo.path.should eql TEST_REPO_PATH + '/.git'
+      @repo.path.should eql File.join(TEST_REPO_PATH, '.git')
     end
 
     it "should have a bare repository path if specified" do
       File.basename(@bare_repo.path).should_not eql ".git"
     end
 
-    it "should create a new repository if specified" do
+    it "should create a new repository on disk immediately" do
       tmp_path = get_new_tmprepo_path
       tmp_path.should_not exist
       new_repo = Repo.new(tmp_path, :bare => false, :create => @create_new)
       result = tmp_path.should exist
       remove_temp_repo(tmp_path)
       result
+    end
+    
+    it "should create an existing repository object on disk" do
+      tmp_path = get_new_tmprepo_path
+      new_repo = Repo.new(tmp_path, :bare => false, :create => false)
+      tmp_path.should_not exist
+      new_repo.create!
+      tmp_path.should exist
+      remove_temp_repo(tmp_path)
     end
 
     it "should create a new bare repository if specified" do
@@ -91,7 +104,7 @@ describe Repo do
       result
     end
 
-    it "should create the repository on disk" do
+    it "should create a new repository on disk" do
       tmp_path = get_new_tmprepo_path(true) # bare repository
       tmp_path.should_not be_a_directory
       new_bare_repo = Repo.create(tmp_path, :bare => true)
@@ -110,11 +123,6 @@ describe Repo do
     it "should tell us whether it is bare" do
       @repo.should_not be_bare
       @bare_repo.should be_bare
-    end
-
-    it "should tell us whether it is valid" do
-      @repo.should be_valid
-      Repo.new(get_new_tmprepo_path).should_not be_valid
     end
 
     it "should have a reference to a JGit Repository object" do
