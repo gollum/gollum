@@ -72,6 +72,10 @@ module RJGit
       options = { :limit => limit }
       Commit.find_all(@jrepo, ref, options)
     end
+    
+    def valid?
+      @jrepo.getObjectDatabase.exists
+    end
 
     def config
       @config.load

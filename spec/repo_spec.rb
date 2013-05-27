@@ -47,6 +47,24 @@ describe Repo do
       @bare_repo = Repo.new(TEST_BARE_REPO_PATH, :bare => true, :create => false)
     end
 
+    it "should tell if the repository is valid" do
+      tmp_path = get_new_tmprepo_path
+      tmp_path.should_not exist
+      new_repo = Repo.new(tmp_path, :bare => false, :create => false)
+      new_repo.valid?.should eql false
+      new_repo.create
+      new_repo.valid?.should eql true
+      remove_temp_repo(tmp_path)
+      new_repo.valid?.should eql false
+      tmp_path.should_not exist
+      new_repo = Repo.new(tmp_path, :bare => true, :create => false)
+      new_repo.valid?.should eql false
+      new_repo.create
+      new_repo.valid?.should eql true
+      remove_temp_repo(tmp_path)
+      new_repo.valid?.should eql false
+    end
+
     it "should default to a non-bare repository path" do
       @repo.path.should eql TEST_REPO_PATH + '/.git'
     end
