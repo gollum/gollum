@@ -1,6 +1,7 @@
 gollum -- A wiki built on top of Git
 ====================================
 
+[![Gem Version](https://badge.fury.io/rb/gollum.png)](http://rubygems.org/gems/gollum)
 [![Build Status](https://secure.travis-ci.org/gollum/gollum.png?branch=master)](http://travis-ci.org/gollum/gollum)
 [![Dependency Status](https://gemnasium.com/gollum/gollum.png)](https://gemnasium.com/gollum/gollum)
 
