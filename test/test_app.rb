@@ -578,6 +578,12 @@ context "Frontend with lotr" do
     assert_match /Bilbo Baggins/, last_response.body
   end
 
+  test "streaming files to browser" do
+    get "/Data.csv"
+    assert last_response.ok?
+    assert last_response.headers.include? 'Content-Disposition'
+  end
+
   # base path requires 'map' in a config.ru to work correctly.
   test "create pages within sub-directories using base path" do
     Precious::App.set(:wiki_options, { :base_path => 'wiki' })

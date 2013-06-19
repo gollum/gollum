@@ -403,9 +403,13 @@ module Precious
         @bar_side  = wiki.bar_side
 
         mustache :page
-      elsif file = wiki.file(fullpath)
-        content_type file.mime_type
-        file.raw_data
+      elsif file = wiki.file(fullpath, wiki.ref, true)
+        if file.on_disk?
+          send_file file.on_disk_path, :disposition => 'inline'
+        else
+          content_type file.mime_type
+          file.raw_data
+        end
       else
         page_path = [path, name].compact.join('/')
         redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
