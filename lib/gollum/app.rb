@@ -5,6 +5,7 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'fileutils'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -12,6 +13,10 @@ require 'gollum/views/editable'
 require 'gollum/views/has_page'
 
 require File.expand_path '../helpers', __FILE__
+
+# Required to upload bigger binary files
+Grit::Git.git_timeout = 120 # timeout in secs
+Grit::Git.git_max_size = 190 * 10**6 # size in bytes (10^6=1 MB)
 
 # Fix to_url
 class String
@@ -89,6 +94,12 @@ module Precious
       @js = settings.wiki_options[:js]
     end
 
+    after do
+      wikip     = wiki_page('home')
+      wiki      = wikip.wiki
+      wiki.repo.git.push
+    end
+
     get '/' do
       page_dir = settings.wiki_options[:page_file_dir].to_s
       redirect clean_url(::File.join(@base_url, page_dir, wiki_new.index_page))
@@ -144,6 +155,30 @@ module Precious
       else
         redirect to("/create/#{encodeURIComponent(@name)}")
       end
+    end
+
+    post '/uploadFile' do
+      if params[:file]
+        filename = params[:file][:filename]
+        tempfile = params[:file][:tempfile]
+        uploadDir = "uploads"
+        #uploadDir = ::File.join(settings.gollum_path,"uploads")
+        STDOUT.write uploadDir
+        fileTarget = ::File.join(uploadDir,filename)
+        if !FileTest::directory?(uploadDir)
+          Dir::mkdir(uploadDir)
+        end
+
+        FileUtils.mv(tempfile.path,fileTarget)
+
+      end
+      wikip     = wiki_page('home')
+      wiki      = wikip.wiki
+
+      wiki.repo.add(fileTarget)
+      wiki.repo.commit_index("Uploading binary file to uploads/#{filename}")
+
+      redirect to("/home")
     end
 
     post '/rename/*' do
