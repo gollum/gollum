@@ -1,10 +1,12 @@
 module RJGit
 
-  import 'org.eclipse.jgit.lib.Config'
+  # Wraps 'org.eclipse.jgit.lib.Config'
   
   class Configuration
       
     attr_reader :jconfig, :path
+    
+    RJGit.delegate_to(org.eclipse.jgit.lib.Config, :@jconfig)
     
     def initialize(path)
       @path = path
