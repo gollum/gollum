@@ -2,7 +2,6 @@ module RJGit
 
   import 'org.eclipse.jgit.lib.Repository'
   import 'org.eclipse.jgit.lib.RepositoryBuilder'
-  import 'org.eclipse.jgit.storage.file.FileRepository'
   import 'org.eclipse.jgit.treewalk.TreeWalk'
   import 'org.eclipse.jgit.treewalk.filter.PathFilter'
   import 'org.eclipse.jgit.lib.Constants'
