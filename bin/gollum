@@ -19,7 +19,10 @@ require 'gollum'
 
 exec = {}
 options = { 'port' => 4567, 'bind' => '0.0.0.0' }
-wiki_options = { :live_preview => false }
+wiki_options = {
+    :live_preview => false,
+    :allow_uploads => false,
+}
 
 opts = OptionParser.new do |opts|
   opts.banner = help
@@ -75,6 +78,10 @@ opts = OptionParser.new do |opts|
 
   opts.on("--live-preview", "Enables livepreview.") do
     wiki_options[:live_preview] = true
+  end
+
+  opts.on("--allow-uploads", "Allows file uploads.") do
+    wiki_options[:allow_uploads] = true
   end
 
   opts.on("--mathjax", "Enables mathjax.") do

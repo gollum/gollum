@@ -13,6 +13,10 @@ require 'gollum/views/has_page'
 
 require File.expand_path '../helpers', __FILE__
 
+#required to upload bigger binary files
+Grit::Git.git_timeout = 120 # timeout in secs
+Grit::Git.git_max_size = 190 * 10**6 # size in bytes (10^6=1 MB)
+
 # Fix to_url
 class String
   alias :upstream_to_url :to_url
@@ -143,6 +147,53 @@ module Precious
         end
       else
         redirect to("/create/#{encodeURIComponent(@name)}")
+      end
+    end
+
+    post '/uploadFile' do
+      wiki = wiki_new
+
+      unless wiki.allow_uploads
+        @message = "File uploads are disabled"
+        mustache :error
+        return
+      end
+
+      if params[:file]
+        fullname = params[:file][:filename]
+        tempfile = params[:file][:tempfile]
+      end
+
+      dir = 'uploads'
+      ext = ::File.extname(fullname)
+      format = ext.split('.').last || 'txt'
+      filename = ::File.basename(fullname, ext)
+      contents = ::File.read(tempfile)
+      reponame = filename + '.' + format
+
+      head = wiki.repo.head
+
+      options = {
+        :message => "Uploaded file to uploads/#{reponame}",
+        :parent => wiki.repo.head.commit,
+      }
+      author = session['gollum.author']
+      unless author.nil?
+        options.merge! author
+      end
+
+      begin
+        committer = Gollum::Committer.new(wiki, options)
+        committer.add_to_index(dir, filename, format, contents)
+        committer.after_commit do |committer, sha|
+          wiki.clear_cache
+          committer.update_working_dir(dir, filename, format)
+        end
+        committer.commit
+        redirect to('/')
+      rescue Gollum::DuplicatePageError => e
+        @message = "Duplicate page: #{e.message}"
+        mustache :error
       end
     end
 
@@ -283,6 +334,7 @@ module Precious
       @mathjax = wiki.mathjax
       @h1_title = wiki.h1_title
       @editable = false
+      @allow_uploads = wiki.allow_uploads
       mustache :page
     end
 
@@ -401,6 +453,7 @@ module Precious
         @mathjax  = wiki.mathjax
         @h1_title = wiki.h1_title
         @bar_side  = wiki.bar_side
+        @allow_uploads = wiki.allow_uploads
 
         mustache :page
       elsif file = wiki.file(fullpath, wiki.ref, true)
