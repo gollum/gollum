@@ -43,12 +43,12 @@ module RJGit
     def initialize(path, options = {})
       epath = File.expand_path(path)
 
-      if options[:create]
-        bare = options[:bare] ? true : false
-      elsif options[:bare] == nil
-        bare = File.exist?(File.join(epath, '.git')) ? false : true
+      bare = if options[:create]
+        !! options[:bare]
+      elsif options[:bare].nil?
+        ! File.exist?(File.join(epath, '.git'))
       else
-        bare = File.exist?(File.join(epath, '.git')) ? false : options[:bare] ? true : false
+        File.exist?(File.join(epath, '.git')) ? false : !! options[:bare]
       end
       
       @path = bare ? epath : File.join(epath, '.git')
