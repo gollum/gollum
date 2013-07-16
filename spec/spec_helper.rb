@@ -25,26 +25,25 @@ def fixture(name)
   File.read(File.join(File.dirname(__FILE__), 'fixtures', name))
 end
 
-def create_temp_repo(clone_path)
-  filename = 'git_test' + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
-  tmp_path = File.join("/tmp/", filename)
+def create_temp_repo(clone_path, bare = false)
+  tmp_path = get_new_temp_repo_path(bare)
   FileUtils.mkdir_p(tmp_path)
-  FileUtils.cp_r(clone_path, tmp_path)
-  File.join(tmp_path, File.basename(clone_path))
+  FileUtils.cp_r(File.join(clone_path, '.'), tmp_path)
+  tmp_path
 end
 
 def remove_temp_repo(path)
   if File.exists?(path)
     FileUtils.rm_rf(path)
   else
-    puts "\nWARNING: remove_temp_repo could not delete path (directory #{path} does not exist). Called by #{caller[0]}.\n"
+    puts "\nWARNING: could not delete path (directory #{path} does not exist). Called by #{caller[0]}.\n"
   end
 end
 
-def get_new_tmprepo_path(bare = false)
+def get_new_temp_repo_path(bare = false)
   dirname = bare ? 'git_bare_test' : 'git_non_bare_test'
   filename = dirname + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
-  result = File.join('/','tmp', filename)
+  File.join('/','tmp', filename)
 end
 
 # Require any custom RSpec matchers

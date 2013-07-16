@@ -79,7 +79,7 @@ describe RJGitUploadPack do
   end
   
   after(:all) do
-    remove_temp_repo(File.dirname(@temp_repo_path))
+    remove_temp_repo(@temp_repo_path)
     @repo = nil
   end
 end
@@ -135,7 +135,7 @@ describe RJGitReceivePack do
   end
   
   after(:all) do
-    remove_temp_repo(File.dirname(@temp_repo_path))
+    remove_temp_repo(@temp_repo_path)
     @repo = nil
   end
 end

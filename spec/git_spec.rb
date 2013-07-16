@@ -48,7 +48,7 @@ describe RubyGit do
     end
     
     after(:each) do
-      remove_temp_repo(File.dirname(@temp_repo_path))
+      remove_temp_repo(@temp_repo_path)
       @repo = nil
     end
   end
@@ -99,7 +99,7 @@ describe RubyGit do
     before(:each) do
       @repo = Repo.new(TEST_REPO_PATH) 
       @remote = TEST_REPO_PATH
-      @local  = get_new_tmprepo_path 
+      @local  = get_new_temp_repo_path
     end
     
     it "should create a new local repository" do
@@ -121,14 +121,14 @@ describe RubyGit do
       pending "This specs fails because of a JGit bug with CloneCommand#set_clone_all_branches(true)"
     end
     
-    after(:each) do
-      remove_temp_repo(@local)
-    end
-    
     it "should clone with credentials" do
       clone = @repo.git.clone(@remote, @local, :username => 'rspec', :password => 'Hahmeid7')
       clone.path.should == File.join(@local, '/.git')
       File.exist?(File.join(@local, 'homer-excited.png')).should be_true
+    end
+    
+    after(:each) do
+      remove_temp_repo(@local)
     end
     
   end
@@ -136,7 +136,7 @@ describe RubyGit do
   context "cloning a bare repository" do
     before(:each) do
       remote = TEST_BARE_REPO_PATH
-      @local  = get_new_tmprepo_path(true)
+      @local  = get_new_temp_repo_path(true)
       @clone = RubyGit.clone(remote, @local, :bare => true)
     end
     
@@ -170,17 +170,16 @@ describe RubyGit do
     end
     
     after(:each) do
-      remove_temp_repo(File.dirname(@temp_repo_path))
+      remove_temp_repo(@temp_repo_path)
     end
     
   end
   
-  describe "pushing and pulling" do 
+  describe "push and pull" do 
     before(:each) do
       @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
       @remote = Repo.new(@temp_repo_path)
-      @local = @remote.git.clone(@remote.path, get_new_tmprepo_path)
-      
+      @local = @remote.git.clone(@remote.path, get_new_temp_repo_path)
     end
     
     context "pulling from another repository" do
@@ -236,24 +235,30 @@ describe RubyGit do
       end
       
     end
+    
+    after(:each) do
+      remove_temp_repo(@temp_repo_path)
+      remove_temp_repo(File.dirname(@local.path))
+    end
+    
   end
   
   context "cleaning a repository" do
     before(:each) do
-      @tmp_repo_path = get_new_tmprepo_path
-      @repo = Repo.create(@tmp_repo_path)
-  	  File.open(File.join(@tmp_repo_path, "rspec-addfile.txt"), 'w') {|file| file.write("This is a new file to add.") }
+      @temp_repo_path = get_new_temp_repo_path
+      @repo = Repo.create(@temp_repo_path)
+  	  File.open(File.join(@temp_repo_path, "rspec-addfile.txt"), 'w') {|file| file.write("This is a new file to add.") }
     end
     
     it "should remove untracked files from the working tree" do
       @repo.clean
-      File.exist?(File.join(@tmp_repo_path, "rspec-addfile.txt")).should be_false
+      File.exist?(File.join(@temp_repo_path, "rspec-addfile.txt")).should be_false
     end
     
     context "after adding files" do
       
       before(:each) do
-        @repo.add("#{@tmp_repo_path}/rspec-addfile.txt")
+        @repo.add("#{@temp_repo_path}/rspec-addfile.txt")
         @entry = RJGit::Porcelain.diff(@repo).first
       end
       it "should remove added files from the index" do
@@ -276,7 +281,7 @@ describe RubyGit do
     
     after(:each) do
       @repo = nil
-      remove_temp_repo(@tmp_repo_path)
+      remove_temp_repo(@temp_repo_path)
     end
   end
   

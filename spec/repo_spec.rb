@@ -29,7 +29,7 @@ describe LocalRefWriter do
   end
   
   after(:each) do
-    remove_temp_repo(File.dirname(@temp_repo_path))
+    remove_temp_repo(@temp_repo_path)
     @repo = nil
     @writer = nil
     @temp_repo_path = nil
@@ -48,7 +48,7 @@ describe Repo do
     end
 
     it "should tell if the repository is valid" do
-      tmp_path = get_new_tmprepo_path
+      tmp_path = get_new_temp_repo_path
       
       tmp_path.should_not exist
       new_repo = Repo.new(tmp_path, :bare => false, :create => false)
@@ -78,7 +78,7 @@ describe Repo do
     end
 
     it "should create a new repository on disk immediately" do
-      tmp_path = get_new_tmprepo_path
+      tmp_path = get_new_temp_repo_path
       tmp_path.should_not exist
       new_repo = Repo.new(tmp_path, :bare => false, :create => @create_new)
       result = tmp_path.should exist
@@ -87,7 +87,7 @@ describe Repo do
     end
     
     it "should create an existing repository object on disk" do
-      tmp_path = get_new_tmprepo_path
+      tmp_path = get_new_temp_repo_path
       new_repo = Repo.new(tmp_path, :bare => false, :create => false)
       tmp_path.should_not exist
       new_repo.create!
@@ -96,7 +96,7 @@ describe Repo do
     end
 
     it "should create a new bare repository if specified" do
-      tmp_path = get_new_tmprepo_path(true)
+      tmp_path = get_new_temp_repo_path(true)
       tmp_path.should_not be_a_directory
       new_bare_repo = Repo.new(tmp_path, :bare => true, :create => @create_new)
       result = tmp_path.should be_a_directory
@@ -105,14 +105,14 @@ describe Repo do
     end
 
     it "should create a new repository on disk" do
-      tmp_path = get_new_tmprepo_path(true) # bare repository
+      tmp_path = get_new_temp_repo_path(true) # bare repository
       tmp_path.should_not be_a_directory
       new_bare_repo = Repo.create(tmp_path, :bare => true)
       result = tmp_path.should be_a_directory
       remove_temp_repo(tmp_path)
       result
       
-      tmp_path = get_new_tmprepo_path # non-bare repository
+      tmp_path = get_new_temp_repo_path # non-bare repository
       tmp_path.should_not exist
       new_repo = Repo.create(tmp_path, :bare => false)
       result = tmp_path.should exist
@@ -270,7 +270,7 @@ describe Repo do
     end
     
     after(:each) do
-      remove_temp_repo(File.dirname(@temp_repo_path))
+      remove_temp_repo(@temp_repo_path)
       @repo = nil
     end
   end
