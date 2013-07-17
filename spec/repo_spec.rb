@@ -78,7 +78,7 @@ describe Repo do
     end
     
     it "should be bare for a new repository only if specified" do
-      r = Repo.new(get_new_repo_path(true), :bare => true)
+      r = Repo.new(get_new_temp_repo_path(true), :bare => true)
       r.should be_bare
       r = Repo.new(get_new_temp_repo_path)
       r.should_not be_bare
