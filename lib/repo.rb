@@ -42,16 +42,17 @@ module RJGit
     
     def initialize(path, options = {})
       epath = File.expand_path(path)
-
-      bare = if options[:create]
-        !! options[:bare]
-      elsif options[:bare].nil?
-        ! File.exist?(File.join(epath, '.git'))
+      gitpath = File.join(epath, '.git')
+      
+      bare = if options[:create] || !File.exists?(epath)
+        !!options[:bare]
+      elsif File.exists?(gitpath)
+        options[:bare].nil? ? false : !!options[:bare]
       else
-        File.exist?(File.join(epath, '.git')) ? false : !! options[:bare]
+        options[:bare].nil? ? true : !!options[:bare]
       end
       
-      @path = bare ? epath : File.join(epath, '.git')
+      @path = bare ? epath : gitpath
       @config = RJGit::Configuration.new(File.join(@path, 'config'))
       repo_path = java.io.File.new(@path)
       @jrepo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).build()

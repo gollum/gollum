@@ -44,7 +44,7 @@ describe Repo do
     before(:each) do
       @create_new = true
       @repo = Repo.new(TEST_REPO_PATH) # Test with both a bare and a non-bare repository
-      @bare_repo = Repo.new(TEST_BARE_REPO_PATH, :bare => true, :create => false)
+      @bare_repo = Repo.new(TEST_BARE_REPO_PATH)
     end
 
     it "should tell if the repository is valid" do
@@ -73,35 +73,62 @@ describe Repo do
       @repo.path.should eql File.join(TEST_REPO_PATH, '.git')
     end
 
-    it "should have a bare repository path if specified" do
+    it "should have a bare path for bare repositories" do
       File.basename(@bare_repo.path).should_not eql ".git"
     end
-
+    
+    it "should be bare for a new repository only if specified" do
+      r = Repo.new(get_new_repo_path(true), :bare => true)
+      r.should be_bare
+      r = Repo.new(get_new_temp_repo_path)
+      r.should_not be_bare
+    end
+    
+    it "should allow the user to set bare even if a .git dir exists in the path" do
+      r = Repo.new(TEST_REPO_PATH, :bare => true)
+      r.should be_bare
+    end
+    
+    it "should allow the user to set non-bare even if a .git dir does not exist in the path" do
+      r = Repo.new(TEST_BARE_REPO_PATH, :bare => false)
+      r.should_not be_bare
+    end
+    
     it "should create a new repository on disk immediately" do
       tmp_path = get_new_temp_repo_path
-      tmp_path.should_not exist
-      new_repo = Repo.new(tmp_path, :bare => false, :create => @create_new)
-      result = tmp_path.should exist
+      tmp_path.should_not be_a_directory
+      new_repo = Repo.new(tmp_path, :create => @create_new)
+      tmp_path.should be_a_directory
       remove_temp_repo(tmp_path)
-      result
+      new_repo.should_not be_bare
+    end
+    
+    it "should create a new bare repository on disk immediately" do
+      tmp_path = get_new_temp_repo_path(true)
+      tmp_path.should_not be_a_directory
+      new_repo = Repo.new(tmp_path, :bare => true, :create => @create_new)
+      tmp_path.should be_a_directory
+      remove_temp_repo(tmp_path)
+      new_repo.should be_bare
     end
     
     it "should create an existing repository object on disk" do
       tmp_path = get_new_temp_repo_path
       new_repo = Repo.new(tmp_path, :bare => false, :create => false)
-      tmp_path.should_not exist
+      tmp_path.should_not be_a_directory
       new_repo.create!
-      tmp_path.should exist
+      tmp_path.should be_a_directory
       remove_temp_repo(tmp_path)
+      new_repo.should_not be_bare
     end
 
     it "should create a new bare repository if specified" do
       tmp_path = get_new_temp_repo_path(true)
       tmp_path.should_not be_a_directory
       new_bare_repo = Repo.new(tmp_path, :bare => true, :create => @create_new)
-      result = tmp_path.should be_a_directory
+      tmp_path.should be_a_directory
       remove_temp_repo(tmp_path)
-      result
+      new_bare_repo.should be_bare
     end
 
     it "should create a new repository on disk" do
