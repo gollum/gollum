@@ -44,12 +44,18 @@ module RJGit
       epath = File.expand_path(path)
       gitpath = File.join(epath, '.git')
       
-      bare = if options[:create] || !File.exists?(epath)
-        !!options[:bare]
-      elsif File.exists?(gitpath)
-        options[:bare].nil? ? false : !!options[:bare]
+      # Default value for bare
+      bare = false
+      # If the repo path is new
+      unless File.exists?(epath) 
+        # take user setting if defined
+        bare = !! options[:bare] unless options[:bare].nil?
+      # If the repo path exists
       else
-        options[:bare].nil? ? true : !!options[:bare]
+        # scan the directory for a .git directory
+        bare = File.exists?(gitpath) ? false : true
+        # but allow overriding user setting
+        bare = !! options[:bare] unless options[:bare].nil? 
       end
       
       @path = bare ? epath : gitpath
