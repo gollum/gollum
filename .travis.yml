@@ -1,8 +1,4 @@
 rvm:
-  - 1.8.7
   - 1.9.3
-notifications:
-  email:
-    - code@bootstraponline.com
 before_install:
  - sudo apt-get update
