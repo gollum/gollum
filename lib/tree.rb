@@ -23,10 +23,10 @@ module RJGit
       strio.string
     end
     
-    def self.find_tree(repository, file_path, branch=Constants::HEAD)
+    def self.find_tree(repository, file_path, revstring=Constants::HEAD)
       jrepo = RJGit.repository_type(repository)
       return nil if jrepo.nil?
-      last_commit_hash = jrepo.resolve(branch)
+      last_commit_hash = jrepo.resolve(revstring)
       return nil if last_commit_hash.nil?
 
       walk = RevWalk.new(jrepo)

@@ -154,13 +154,13 @@ module RJGit
     end
 
     # Convenience method to retrieve a Blob by name
-    def blob(file_path)
-      Blob.find_blob(@jrepo, file_path)
+    def blob(file_path, revstring=Constants::HEAD)
+      Blob.find_blob(@jrepo, file_path, revstring)
     end
 
     # Convenience method to retrieve a Tree by name
-    def tree(file_path)
-      Tree.find_tree(@jrepo, file_path)
+    def tree(file_path, revstring=Constants::HEAD)
+      Tree.find_tree(@jrepo, file_path, revstring)
     end
     
     # Update the info files required for fetching files over the dump-HTTP protocol

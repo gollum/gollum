@@ -49,9 +49,9 @@ module RJGit
     end
     
     # Finds a particular Blob in repository matching file_path
-    def self.find_blob(repository, file_path, branch=Constants::HEAD)
+    def self.find_blob(repository, file_path, revstring=Constants::HEAD)
       jrepo = RJGit.repository_type(repository)
-      last_commit_hash = jrepo.resolve(branch)
+      last_commit_hash = jrepo.resolve(revstring)
       return nil if last_commit_hash.nil?
 
       walk = RevWalk.new(jrepo)
