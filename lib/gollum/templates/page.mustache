@@ -20,6 +20,10 @@ Mousetrap.bind(['e'], function( e ) {
     class="action-fileview">Files</a></li>
     <li class="minibutton jaws">
       <a href="#" id="minibutton-new-page">New</a></li>
+    {{#allow_uploads}}
+    <li class="minibutton jaws">
+      <a href="#" id="minibutton-upload-page">Upload</a></li>
+    {{/allow_uploads}}
     {{#editable}}
     <li class="minibutton jaws">
       <a href="#" id="minibutton-rename-page">Rename</a></li>

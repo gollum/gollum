@@ -39,6 +39,10 @@ module Precious
         @editable
       end
 
+      def allow_uploads
+        @allow_uploads
+      end
+
       def has_header
         @header = (@page.header || false) if @header.nil?
         !!@header
