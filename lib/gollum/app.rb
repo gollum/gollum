@@ -23,7 +23,7 @@ class String
   # _Header => header which causes errors
   def to_url
     return nil if self.nil?
-    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar']
+    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar'], :force_downcase => false
   end
 end
 

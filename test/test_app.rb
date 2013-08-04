@@ -29,13 +29,13 @@ context "Frontend" do
     # spaces are converted to dashes in URLs
     # and in file names saved to disk
     # urls are not case sensitive
-    assert_equal 'title-space', 'Title Space'.to_url
+    assert_equal 'Title-Space', 'Title Space'.to_url
 
     # ascii only file names prevent UTF8 issues
     # when using git repos across operating systems
     # as this test demonstrates, translation is not
     # great
-    assert_equal 'm-plus-f', 'μ†ℱ'.to_url
+    assert_equal 'm-plus-F', 'μ†ℱ'.to_url
   end
 
   test "utf-8 kcode" do
@@ -253,7 +253,7 @@ context "Frontend" do
   test "creates pages with escaped characters in title" do
     post "/create", :content => 'abc', :page => 'Title with spaces',
       :format => 'markdown', :message => 'foo'
-    assert_equal 'http://example.org/title-with-spaces', last_response.headers['Location']
+    assert_equal 'http://example.org/Title-with-spaces', last_response.headers['Location']
     get "/Title-with-spaces"
     assert_match /abc/, last_response.body
   end
@@ -278,7 +278,7 @@ context "Frontend" do
     post "/create", :content => 'abc', :page => 'Home', :path => '/foo/',
       :format => 'markdown', :message => 'foo'
 
-    assert_equal "http://example.org/foo/home", last_response.headers['Location']
+    assert_equal "http://example.org/foo/Home", last_response.headers['Location']
 
     follow_redirect!
     assert last_response.ok?
@@ -612,13 +612,13 @@ context "Frontend with lotr" do
   test "create pages within sub-directories" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/Mordor/orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
     get "/Mordor/Orc"
     assert_match /big smelly creatures/, last_response.body
 
     post "/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, very scary'
-    assert_equal 'http://example.org/Mordor/uruk-hai', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Uruk-Hai', last_response.headers['Location']
     get "/Mordor/Uruk-Hai"
     assert_match /really big smelly creatures/, last_response.body
   end
@@ -627,11 +627,11 @@ context "Frontend with lotr" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
       :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
 
-    assert_equal 'http://example.org/Mordor/orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
 
     post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',
       :page => 'Orc', :path => 'Mordor', :message => 'minor edit'
-    assert_equal 'http://example.org/Mordor/orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body
