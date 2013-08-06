@@ -75,7 +75,7 @@ module RJGit
         entries << entry
       end
       options[:io].puts RJGit.stringify(entries) if options[:print]
-      entries
+      return entries
     end
       
     def self.blame(repository, file_path, options={})
@@ -112,7 +112,7 @@ module RJGit
       diff_entries = diff_command.call
       diff_entries = diff_entries.to_array.to_ary
       diff_entries = RJGit.convert_diff_entries(diff_entries)
-      diff_entries
+      return diff_entries
     end
     
   end
