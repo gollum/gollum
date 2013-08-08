@@ -14,8 +14,8 @@ require 'gollum/views/has_page'
 require File.expand_path '../helpers', __FILE__
 
 #required to upload bigger binary files
-Grit::Git.git_timeout = 120 # timeout in secs
-Grit::Git.git_max_size = 190 * 10**6 # size in bytes (10^6=1 MB)
+Gollum::set_git_timeout(120)
+Gollum::set_git_max_filesize(190 * 10**6)
 
 # Fix to_url
 class String

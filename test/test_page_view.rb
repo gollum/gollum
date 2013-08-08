@@ -4,9 +4,9 @@ require File.expand_path '../../lib/gollum/views/page', __FILE__
 
 context "Precious::Views::Page" do
   setup do
-    @path = testpath("examples/test.git")
-    FileUtils.rm_rf(@path)
-    @repo = Grit::Repo.init_bare(@path)
+    examples = testpath "examples"
+    @path = File.join(examples, "test.git")
+    FileUtils.cp_r File.join(examples, "empty.git"), @path, :remove_destination => true
     @wiki = Gollum::Wiki.new(@path)
   end
 
