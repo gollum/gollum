@@ -69,6 +69,7 @@ module RJGit
     def bare?
       @jrepo.is_bare
     end
+    alias_method :bare, :bare?
     
     def self.create(path, options = {:bare => false})
       options[:create] = true
