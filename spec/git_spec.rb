@@ -137,7 +137,7 @@ describe RubyGit do
     before(:each) do
       remote = TEST_BARE_REPO_PATH
       @local  = get_new_temp_repo_path(true)
-      @clone = RubyGit.clone(remote, @local, :bare => true)
+      @clone = RubyGit.clone(remote, @local, :is_bare => true)
     end
     
     it "should be bare" do

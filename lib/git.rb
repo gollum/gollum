@@ -53,7 +53,7 @@ module RJGit
       clone_command = Git.clone_repository
       clone_command.setURI(remote)
       clone_command.set_directory(java.io.File.new(local))
-      clone_command.set_bare(true) if options[:bare]
+      clone_command.set_bare(true) if options[:is_bare]
       if options[:branch]
         if options[:branch] == :all
           clone_command.set_clone_all_branches(true)

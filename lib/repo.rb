@@ -49,13 +49,13 @@ module RJGit
       # If the repo path is new
       unless File.exists?(epath) 
         # take user setting if defined
-        bare = !! options[:bare] unless options[:bare].nil?
+        bare = !! options[:is_bare] unless options[:is_bare].nil?
       # If the repo path exists
       else
         # scan the directory for a .git directory
         bare = File.exists?(gitpath) ? false : true
         # but allow overriding user setting
-        bare = !! options[:bare] unless options[:bare].nil? 
+        bare = !! options[:is_bare] unless options[:is_bare].nil? 
       end
       
       @path = bare ? epath : gitpath
@@ -71,7 +71,7 @@ module RJGit
     end
     alias_method :bare, :bare?
     
-    def self.create(path, options = {:bare => false})
+    def self.create(path, options = {:is_bare => false})
       options[:create] = true
       Repo.new(path, options)
     end

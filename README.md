@@ -5,6 +5,7 @@ RJGit
 
 [![Build Status](https://travis-ci.org/repotag/rjgit.png)](https://travis-ci.org/repotag/rjgit)
 [![Coverage Status](https://coveralls.io/repos/repotag/rjgit/badge.png?branch=master)](https://coveralls.io/r/repotag/rjgit)
+[![Gem Version](https://badge.fury.io/rb/rjgit.png)](http://badge.fury.io/rb/rjgit)
 
 Authors
 -------
@@ -56,7 +57,7 @@ repo = Repo.new("repo.git")
 
 ```ruby
 repo = Repo.new("repo.git", :create => true)
-repo = Repo.new("repo.git", :create => true, :bare => true) # Create a 'bare' git repo, which stores all git-data under the '.git' directory.
+repo = Repo.new("repo.git", :create => true, :is_bare => true) # Create a 'bare' git repo, which stores all git-data under the '.git' directory.
 ```
 
 ### Getting a list of commits
