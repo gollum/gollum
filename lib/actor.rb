@@ -9,15 +9,18 @@ module RJGit
     
     RJGit.delegate_to(PersonIdent, :@person_ident)
     
-    def self.new_from_name_and_email(name, email)
-      return self.new(PersonIdent.new(name, email))
-    end
     alias_method :to_s, :name
-
-    def initialize(person_ident)
-      @name = person_ident.get_name
-      @email = person_ident.get_email_address
-      @person_ident = person_ident
+      
+    def self.new_from_person_ident(person_ident)
+      name = person_ident.get_name
+      email = person_ident.get_email_address
+      return self.new(name, email)
+    end
+    
+    def initialize(name, email)
+      @name = name
+      @email = email
+      @person_ident = PersonIdent.new(name, email)
     end
     
     # Create an Actor from a string.
@@ -28,7 +31,7 @@ module RJGit
     def self.from_string(str)
       if str =~ /<.+>/
         m, name, email = *str.match(/(.*) <(.+?)>/)
-        return self.new_from_name_and_email(name, email)
+        return self.new(name, email)
       end
     end
 

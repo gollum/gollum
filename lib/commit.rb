@@ -21,8 +21,8 @@ module RJGit
     def initialize(commit)
       @jcommit = commit
       @id = ObjectId.to_string(commit.get_id)
-      @actor = Actor.new(@jcommit.get_author_ident)
-      @committer = Actor.new(@jcommit.get_committer_ident)
+      @actor = Actor.new_from_person_ident(@jcommit.get_author_ident)
+      @committer = Actor.new_from_person_ident(@jcommit.get_committer_ident)
       @committed_date = Time.at(@jcommit.commit_time)
       @message = @jcommit.get_full_message
       @short_message = @jcommit.get_short_message

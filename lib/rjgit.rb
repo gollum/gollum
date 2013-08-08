@@ -90,7 +90,7 @@ module RJGit
       blame = []
       for index in (0..content.size - 1) do
         blameline = {}
-        blameline[:actor] = Actor.new(result.get_source_author(index))
+        blameline[:actor] = Actor.new_from_person_ident(result.get_source_author(index))
         blameline[:line] = result.get_source_line(index)
         blameline[:commit] = Commit.new(result.get_source_commit(index))
         blameline[:line] = content.get_string(index)

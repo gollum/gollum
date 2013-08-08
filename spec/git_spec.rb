@@ -41,7 +41,7 @@ describe RubyGit do
     end
     
     it "should tag with specific actor information" do
-      actor = Actor.new_from_name_and_email('Rspec Examplar', 'rspec@tagging.example')
+      actor = Actor.new('Rspec Examplar', 'rspec@tagging.example')
       @repo.git.tag('v0.0', 'initial state commit', nil, actor)
       @repo.tags.should have_exactly(1).tags
       @repo.tags["v0.0"].actor.name.should == 'Rspec Examplar'

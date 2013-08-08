@@ -22,7 +22,7 @@ module RJGit
     end 
     
     def actor
-      @actor ||= Actor.new(@jtag.get_tagger_ident)
+      @actor ||= Actor.new_from_person_ident(@jtag.get_tagger_ident)
     end
     
     def name
