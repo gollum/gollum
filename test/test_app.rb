@@ -504,6 +504,24 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :js => nil })
   end
 
+  test "show edit page with header and footer and sidebar of multibyte" do
+    post "/create",
+      :content => 'りんご',
+      :page => 'Multibyte', :format => :markdown, :message => 'mesg'
+
+    post "/edit/Multibyte",
+      :content => 'りんご', :header => 'みかん', :footer => 'バナナ', :sidebar => 'スイカ',
+      :page => 'Multibyte', :format => :markdown, :message => 'mesg'
+
+    get "edit/Multibyte"
+
+    assert last_response.ok?
+    assert_match /りんご/, last_response.body
+    assert_match /みかん/, last_response.body
+    assert_match /バナナ/, last_response.body
+    assert_match /スイカ/, last_response.body
+  end
+
   def app
     Precious::App
   end

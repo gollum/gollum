@@ -22,7 +22,7 @@ module Precious
       def header
         if @header.nil?
           if page = @page.header
-            @header = page.raw_data
+            @header = page.text_data
           else
             @header = false
           end
@@ -33,7 +33,7 @@ module Precious
       def footer
         if @footer.nil?
           if page = @page.footer
-            @footer = page.raw_data
+            @footer = page.text_data
           else
             @footer = false
           end
@@ -44,7 +44,7 @@ module Precious
       def sidebar
         if @sidebar.nil?
           if page = @page.sidebar
-            @sidebar = page.raw_data
+            @sidebar = page.text_data
           else
             @sidebar = false
           end
