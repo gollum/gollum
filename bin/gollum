@@ -146,7 +146,7 @@ if options['irb']
   begin
     require 'gollum-lib'
     wiki = Gollum::Wiki.new(gollum_path, wiki_options)
-    if !wiki.exist? then raise Grit::InvalidGitRepositoryError end
+    if !wiki.exist? then raise Gollum::InvalidGitRepositoryError end
     puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
     puts
     puts %(    page = wiki.page('page-name'))
@@ -160,7 +160,7 @@ if options['irb']
     puts
     puts "Check out the Gollum README for more."
     IRB.start_session(binding)
-  rescue Grit::InvalidGitRepositoryError, Grit::NoSuchPathError
+  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
     puts "Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}"
     exit 0
   end
