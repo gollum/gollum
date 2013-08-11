@@ -5,7 +5,6 @@ require 'digest/sha1'
 require 'ostruct'
 
 # external
-require 'grit'
 require 'github/markup'
 require 'sanitize'
 
