@@ -175,8 +175,8 @@ describe Repo do
       @repo.commits.length.should > 3
     end
     
-    it "should return the latest commit (HEAD)" do
-      @repo.head.committed_date.to_s.should == '2012-12-09 17:30:40 +0100'
+    it "should return the latest commit (HEAD)" do    
+      @repo.head.committed_date.should == DateTime.parse("2012-12-09 16:30:40 +0000").to_time
     end
     
     it "should list its tags in name-id pairs" do
