@@ -33,6 +33,18 @@ module RJGit
       @parents ||= @jcommit.get_parents.map{|parent| Commit.new(parent) }
     end
     
+    def self.find_head(repository)
+      repository = RJGit.repository_type(repository)
+      return nil if repository.nil?
+      begin
+        walk = RevWalk.new(repository)
+        objhead = repository.resolve(Constants::HEAD)
+        return Commit.new(walk.parseCommit(objhead))
+      rescue NativeException => e
+        return nil
+      end
+    end
+    
     def self.find_all(repository, ref, options)
       repository = RJGit.repository_type(repository)
       return nil if repository.nil?

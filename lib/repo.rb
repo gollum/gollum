@@ -85,6 +85,10 @@ module RJGit
       Commit.find_all(@jrepo, ref, options)
     end
     
+    def head
+      Commit.find_head(@jrepo)
+    end
+    
     def valid?
       @jrepo.get_object_database.exists
     end

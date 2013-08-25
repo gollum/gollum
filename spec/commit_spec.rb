@@ -54,5 +54,17 @@ describe Commit do
     end
     
   end 
+  
+  describe "#find_head(repository)" do
+    it "should return a single RJGit::Commit object" do
+      @commit = Commit.find_head(@bare_repo)
+      @commit.should be_a RJGit::Commit
+    end
+    
+    it "should return nil if no head can be found" do
+      @commit = Commit.find_head(Repo.new(get_new_temp_repo_path))
+      @commit.should be_nil
+    end
+  end
 
 end

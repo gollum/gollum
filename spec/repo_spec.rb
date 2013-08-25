@@ -175,6 +175,10 @@ describe Repo do
       @repo.commits.length.should > 3
     end
     
+    it "should return the latest commit (HEAD)" do
+      @repo.head.committed_date.to_s.should == '2012-12-09 17:30:40 +0100'
+    end
+    
     it "should list its tags in name-id pairs" do
       @bare_repo.tags(lightweight=true).should be_a Hash
       @bare_repo.tags(true)["annotated"].should == "b7f932bd02b3e0a4228ee7b55832749028d345de"
