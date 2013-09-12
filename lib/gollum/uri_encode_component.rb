@@ -34,7 +34,7 @@
 
 # component must be String
 def encodeURIComponent(componentString)
-  URI::URIEncodeComponent(componentString)
+  ::URI::URIEncodeComponent(componentString)
 end
 
 # define charCodeAt on String
