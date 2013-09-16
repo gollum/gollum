@@ -251,15 +251,15 @@ describe RJGit do
       end
       
       it "does not log information about trees that contain no added objects" do
-        @tb.treemap = {"newtest" => "test"}
+        @tb.treemap = {"newtree/test/newblob" => "test"}
         tree = @tb.build_tree(@repo.jrepo.resolve("refs/heads/master^{tree}"))
         @tb.init_log
-        @tb.treemap = {"newtest" => :delete}
+        @tb.treemap = {"newtree/test/newblob" => :delete}
         @tb.build_tree(tree)
         @tb.log[:added].should be_empty
       end
       
-      it "tells whether a give hashmap contains no added blobs" do
+      it "tells whether a given hashmap contains no added blobs" do
         @tb.only_contains_deletions({'test' => {'test' => :delete}}).should == true
         @tb.only_contains_deletions({'test' => {'test' => :delete, 'test2' => 'content'}}).should == false
       end
