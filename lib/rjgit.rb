@@ -25,7 +25,7 @@ module RJGit
   
   import 'org.eclipse.jgit.lib.ObjectId'
    
-  class Porcelain
+  module Porcelain
    
     import 'org.eclipse.jgit.api.AddCommand'
     import 'org.eclipse.jgit.api.CommitCommand'
@@ -113,6 +113,168 @@ module RJGit
       diff_entries = diff_entries.to_array.to_ary
       diff_entries = RJGit.convert_diff_entries(diff_entries)
       return diff_entries
+    end
+    
+  end
+  
+  module Plumbing
+    import org.eclipse.jgit.lib.Constants
+    
+    class TreeBuilder
+      import org.eclipse.jgit.lib.FileMode
+      import org.eclipse.jgit.lib.TreeFormatter
+      
+    
+      attr_accessor :treemap
+      attr_reader :object_inserter, :log
+      
+      def initialize(repository)
+        @jrepo = RJGit.repository_type(repository)
+        @object_inserter = @jrepo.newObjectInserter
+        @treemap = {}
+        init_log
+      end
+      
+      def init_log
+        @log = {:deleted => [], :added => [] }
+      end
+      
+      def only_contains_deletions(hashmap)
+        hashmap.each do |key, value|
+          if value.is_a?(Hash) then
+            return false unless only_contains_deletions(value)
+          elsif value.is_a?(String)
+            return false
+          end
+        end
+        true
+      end
+      
+      def build_tree(start_tree, treemap = nil)
+        existing_trees = {}
+        formatter = TreeFormatter.new
+        treemap ||= self.treemap
+    
+        if start_tree then
+          treewalk = TreeWalk.new(@jrepo)
+          treewalk.add_tree(start_tree)
+          while treewalk.next
+            filename = treewalk.get_name_string
+            if treemap.keys.include?(filename) then
+              kind = treewalk.isSubtree ? :tree : :blob
+                if treemap[filename] == :delete then
+                  @log[:deleted] << [kind, filename, treewalk.get_object_id(0)]
+                else
+                  existing_trees[filename] = treewalk.get_object_id(0) if kind == :tree
+                end
+            else
+              mode = treewalk.isSubtree ? FileMode::TREE : FileMode::REGULAR_FILE
+              formatter.append(filename.to_java_string, treewalk.get_file_mode(0), treewalk.get_object_id(0))
+            end
+          end
+        end
+    
+        treemap.each do |object_name, data|
+          case data
+            when String
+              blobid = @object_inserter.insert(Constants::OBJ_BLOB, data.to_java_bytes)
+              formatter.append(object_name.to_java_string, FileMode::REGULAR_FILE, blobid)
+              @log[:added] << [:blob, object_name, blobid]
+            when Hash
+              next_tree = build_tree(existing_trees[object_name], data)
+              formatter.append(object_name.to_java_string, FileMode::TREE, next_tree)
+              @log[:added] << [:tree, object_name, next_tree] unless only_contains_deletions(data)
+            end
+        end
+    
+        @object_inserter.insert(formatter)
+      end
+      
+    end
+    
+    class Index
+      import org.eclipse.jgit.lib.CommitBuilder
+      
+      attr_accessor :treemap
+      
+      def initialize(repository)
+        @treemap = {}
+        @jrepo = RJGit.repository_type(repository)
+        @treebuilder = TreeBuilder.new(@jrepo)
+      end
+      
+      def add(path, data)
+        path = path[1..-1] if path[0] == '/'
+        path = path.split('/')
+        filename = path.pop
+
+        current = self.treemap
+
+        path.each do |dir|
+          current[dir] ||= {}
+          node = current[dir]
+          current = node
+        end
+
+        current[filename] = data
+        @treemap
+      end
+  
+      def delete(path)
+        path = path[1..-1] if path[0] == '/'
+        path = path.split('/')
+        last = path.pop
+    
+        current = self.treemap
+    
+        path.each do |dir|
+          current[dir] ||= {}
+          node = current[dir]
+          current = node
+        end
+    
+        current[last] = :delete
+        @treemap
+      end
+      
+      def commit(message, author, parents = nil, last_tree = nil, ref = "refs/heads/#{Constants::MASTER}")
+        last_tree = last_tree ? last_tree : @jrepo.resolve(ref+"^{tree}")
+        @treebuilder.treemap = @treemap
+        new_tree = @treebuilder.build_tree(last_tree)
+        return false if last_tree && new_tree.name == last_tree.name
+      
+        parents = parents ? parents : @jrepo.resolve(ref+"^{commit}")
+    
+        cb = CommitBuilder.new
+        pi = author.person_ident
+        cb.setCommitter(pi)
+        cb.setAuthor(pi)
+        cb.setMessage(message)
+        cb.setTreeId(new_tree)
+          if parents.is_a?(Array) then
+            parents.each {|p| cb.addParentId RJGit.commit_type(p)}
+          elsif parents
+            cb.addParentId(RJGit.commit_type(parents))
+          end
+    
+        newhead = @treebuilder.object_inserter.insert(cb)
+      
+        # Point ref to the newest commit
+        ru = @jrepo.updateRef(ref)
+        ru.setNewObjectId(newhead)
+        res = ru.forceUpdate.to_string
+      
+        @treebuilder.object_inserter.flush
+        @treemap = {}
+        log = @treebuilder.log
+        @treebuilder.init_log
+        return res, log
+      end
+      
+      def self.successful?(result)
+        ["NEW", "FAST_FORWARD"].include?(result)
+      end
+      
     end
     
   end

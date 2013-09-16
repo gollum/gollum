@@ -73,5 +73,13 @@ module RJGit
       else nil
     end
   end
+  
+  def self.commit_type(commit)
+    commitobj = case commit
+      when Commit then commit.jcommit
+      when org.eclipse.jgit.lib.ObjectId then commit
+      else nil
+    end
+  end
     
 end
