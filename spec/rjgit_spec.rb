@@ -194,6 +194,11 @@ describe RJGit do
       before(:all) do
         @temp_repo_path = get_new_temp_repo_path(true)
         @repo = Repo.new(@temp_repo_path, :create => true, :is_bare => true)
+        @msg = "Message"
+        @auth = RJGit::Actor.new("test", "test@repotag.org")
+        @index = RJGit::Plumbing::Index.new(@repo)
+        @index.add('bla', 'test')
+        @index.commit(@msg, @auth)
         @tb = RJGit::Plumbing::TreeBuilder.new(@repo)
       end
       
@@ -217,6 +222,9 @@ describe RJGit do
         end
         objects.should include("newtest/bla")
         
+        @index.add('newtest/bla', 'contents')
+        @index.commit(@msg, @auth)
+        
         @tb.treemap = {"newtest" => :delete}
         tree = @tb.build_tree(@repo.jrepo.resolve("refs/heads/master^{tree}"))
         
@@ -231,6 +239,7 @@ describe RJGit do
       end
       
       it "logs information about added and deleted objects" do
+        @tb.init_log
         @tb.treemap = {"newtest" => "test"}
         tree = @tb.build_tree(@repo.jrepo.resolve("refs/heads/master^{tree}"))
         @tb.log[:added].first.should include(:blob)
