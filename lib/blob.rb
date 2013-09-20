@@ -7,11 +7,11 @@ module RJGit
     attr_reader :id, :mode, :name, :path, :jblob
     RJGit.delegate_to(RevBlob, :@jblob)
 
-    def initialize(jrepo, path, mode, jblob)
-      @jrepo = jrepo
+    def initialize(repository, mode, path, jblob)
+      @jrepo = RJGit.repository_type(repository)
       @jblob = jblob
       @path = path
-      @name = File.basename(path)
+      @name = @path ? File.basename(@path) : nil
       @mode = mode
       @id = ObjectId.toString(jblob.get_id)
     end
@@ -48,6 +48,15 @@ module RJGit
       guesses.first ? guesses.first.simplified : DEFAULT_MIME_TYPE
     end
     
+    def self.make_blob(repository, contents)
+      repository = RJGit.repository_type(repository)
+      oi = repository.newObjectInserter
+      blobid = oi.insert(Constants::OBJ_BLOB, contents.to_java_bytes)
+      oi.flush
+      walk = RevWalk.new(repository)
+      Blob.new(repository, FileMode::REGULAR_FILE, nil, walk.lookup_blob(blobid))
+    end
+    
     # Finds a particular Blob in repository matching file_path
     def self.find_blob(repository, file_path, revstring=Constants::HEAD)
       jrepo = RJGit.repository_type(repository)
@@ -65,7 +74,7 @@ module RJGit
         jblob = walk.lookup_blob(treewalk.objectId(0))
         if jblob
           mode = RJGit.get_file_mode(jrepo, file_path, jtree) 
-          Blob.new(jrepo, file_path, mode, jblob)
+          Blob.new(jrepo, mode, file_path, jblob)
         end
       else
         nil

@@ -157,6 +157,22 @@ module RJGit
     def clean(options = {})
       @git.clean(options)
     end
+    
+    def find(sha, type)
+      oi = ObjectId.from_string(sha)
+      walk = RevWalk.new(@jrepo)
+      result = case type
+      when :tree
+        Tree.new(@jrepo, nil, nil, walk.lookup_tree(oi))
+      when :blob
+        Blob.new(@jrepo, nil, nil, walk.lookup_blob(oi))
+      when :tag
+        Tag.new(walk.lookup_tag(oi))
+      when :commit
+        Commit.new(walk.lookup_commit(oi))
+      else nil
+      end
+    end
 
     # Convenience method to retrieve a Blob by name
     def blob(file_path, revstring=Constants::HEAD)
