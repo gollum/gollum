@@ -92,7 +92,7 @@ module RJGit
         blameline = {}
         blameline[:actor] = Actor.new_from_person_ident(result.get_source_author(index))
         blameline[:line] = result.get_source_line(index)
-        blameline[:commit] = Commit.new(result.get_source_commit(index), repository)
+        blameline[:commit] = Commit.new(repository, result.get_source_commit(index))
         blameline[:line] = content.get_string(index)
         blame << blameline
       end
@@ -258,8 +258,7 @@ module RJGit
           elsif parents
             commit_builder.addParentId(RJGit.commit_type(parents))
           end
-        new_head = @treebuilder.object_inserter.insert(commit_builder)
-        new_head
+        @treebuilder.object_inserter.insert(commit_builder)
       end
       
       def commit(message, author, parents = nil, ref = "refs/heads/#{Constants::MASTER}")
