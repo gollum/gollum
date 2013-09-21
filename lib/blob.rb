@@ -50,9 +50,7 @@ module RJGit
     
     def self.make_blob(repository, contents)
       repository = RJGit.repository_type(repository)
-      oi = repository.newObjectInserter
-      blobid = oi.insert(Constants::OBJ_BLOB, contents.to_java_bytes)
-      oi.flush
+      blobid = TreeBuilder.new(repository).write_blob(contents, true)
       walk = RevWalk.new(repository)
       Blob.new(repository, FileMode::REGULAR_FILE, nil, walk.lookup_blob(blobid))
     end

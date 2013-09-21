@@ -155,7 +155,7 @@ describe RJGit do
       it "commits to a non-default branch" do
         msg = "Branch test"
         @index.add("tree/blob3", "More testing")
-        res, log = @index.commit(msg, @auth, nil, nil, "refs/heads/newbranch")
+        res, log = @index.commit(msg, @auth, nil, "refs/heads/newbranch")
         @repo.commits("newbranch").first.message.should == msg
       end
       
@@ -170,10 +170,12 @@ describe RJGit do
         @index.add("newtree/blobinnewtree", "contents")
         res, log = @index.commit(@msg, @auth)
         tree = @repo.tree("newtree").jtree
+        @index.current_tree = tree
         @index.add("secondblob", "other contents")
-        res, log = @index.commit(@msg, @auth, nil, tree)
+        res, log = @index.commit(@msg, @auth)
         @repo.blob("blobinnewtree").data.should == "contents"
         @repo.blob("secondblob").data.should == "other contents"
+        @index.current_tree = nil
       end
       
       it "tells whether a response code indicates a successful response" do

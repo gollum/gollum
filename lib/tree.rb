@@ -40,12 +40,19 @@ module RJGit
       contents_array.each(&block)
     end
     
+    def blobs
+      contents_array.select {|x| x.is_a?(Blob)}
+    end
+    
+    def trees
+      contents_array.select {|x| x.is_a?(Tree)}
+    end
+    
     def self.make_tree(repository, hashmap, base_tree = nil)
       jrepo = RJGit.repository_type(repository)
       tb = Plumbing::TreeBuilder.new(jrepo)
       base_tree = RJGit.tree_type(base_tree)
-      new_tree = tb.build_tree(base_tree, hashmap)
-      tb.object_inserter.flush
+      new_tree = tb.build_tree(base_tree, hashmap, true)
       walk = RevWalk.new(jrepo)
       new_tree = walk.lookup_tree(new_tree)
       puts new_tree.inspect

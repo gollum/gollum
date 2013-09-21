@@ -150,7 +150,7 @@ module RJGit
         true
       end
       
-      def build_tree(start_tree, treemap = nil)
+      def build_tree(start_tree, treemap = nil, flush = false)
         existing_trees = {}
         formatter = TreeFormatter.new
         treemap ||= self.treemap
@@ -177,7 +177,7 @@ module RJGit
         treemap.each do |object_name, data|
           case data
             when String
-              blobid = @object_inserter.insert(Constants::OBJ_BLOB, data.to_java_bytes)
+              blobid = write_blob(data)
               formatter.append(object_name.to_java_string, FileMode::REGULAR_FILE, blobid)
               @log[:added] << [:blob, object_name, blobid]
             when Hash
@@ -187,7 +187,15 @@ module RJGit
             end
         end
     
-        @object_inserter.insert(formatter)
+        result = @object_inserter.insert(formatter)
+        @object_inserter.flush if flush
+        result
+      end
+      
+      def write_blob(contents, flush = false)
+        blobid = @object_inserter.insert(Constants::OBJ_BLOB, contents.to_java_bytes)
+        @object_inserter.flush if flush
+        blobid
       end
       
     end
@@ -195,9 +203,10 @@ module RJGit
     class Index
       import org.eclipse.jgit.lib.CommitBuilder
       
-      attr_accessor :treemap
+      attr_accessor :treemap, :current_tree
+      attr_reader :jrepo
       
-      def initialize(repository)
+      def initialize(repository, branch = nil)
         @treemap = {}
         @jrepo = RJGit.repository_type(repository)
         @treebuilder = TreeBuilder.new(@jrepo)
@@ -237,11 +246,13 @@ module RJGit
         @treemap
       end
       
-      def commit(message, author, parents = nil, last_tree = nil, ref = "refs/heads/#{Constants::MASTER}")
-        last_tree = last_tree ? last_tree : @jrepo.resolve(ref+"^{tree}")
+      def commit(message, author, parents = nil, ref = "refs/heads/#{Constants::MASTER}")
+        @current_tree = @current_tree ? RJGit.tree_type(@current_tree) : @jrepo.resolve(ref+"^{tree}")
         @treebuilder.treemap = @treemap
-        new_tree = @treebuilder.build_tree(last_tree)
-        return false if last_tree && new_tree.name == last_tree.name
+        new_tree = @treebuilder.build_tree(@current_tree)
+        return false if @current_tree && new_tree.name == @current_tree.name
+        
+        puts @current_tree.inspect
       
         parents = parents ? parents : @jrepo.resolve(ref+"^{commit}")
     
