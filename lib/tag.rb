@@ -33,6 +33,13 @@ module RJGit
       @type ||= @jtag.get_type
     end
     
+    def object
+      @object ||= @jtag.get_object
+    end
+    
+    def object_type
+      @object_type ||= object.get_type
+    end
     
   end
 end

@@ -42,6 +42,10 @@ module RJGit
       repository.commit(message)
     end
     
+    def self.object_for_tag(repository, tag)
+      repository.find(tag.object.name, RJGit.sym_for_type(tag.object_type))
+    end
+    
     # http://dev.eclipse.org/mhonarc/lists/jgit-dev/msg00558.html
     def self.cat_file(repository, object)
       bytes = repository.open(object.id).get_bytes
