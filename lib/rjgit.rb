@@ -162,7 +162,7 @@ module RJGit
             filename = treewalk.get_name_string
             if treemap.keys.include?(filename) then
               kind = treewalk.isSubtree ? :tree : :blob
-                if treemap[filename] == :delete then
+                if treemap[filename] == false then
                   @log[:deleted] << [kind, filename, treewalk.get_object_id(0)]
                 else
                   existing_trees[filename] = treewalk.get_object_id(0) if kind == :tree
@@ -242,7 +242,7 @@ module RJGit
           current = node
         end
     
-        current[last] = :delete
+        current[last] = false
         @treemap
       end
       

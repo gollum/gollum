@@ -128,7 +128,7 @@ describe RJGit do
       
       it "adds items to delete to the treemap" do
         @index.delete("tree/blob")
-        @index.treemap["tree"]["blob"].should == :delete
+        @index.treemap["tree"]["blob"].should == false
       end
       
       it "adds commits to an empty repository" do
@@ -227,7 +227,7 @@ describe RJGit do
         @index.add('newtest/bla', 'contents')
         @index.commit(@msg, @auth)
         
-        @tb.treemap = {"newtest" => :delete}
+        @tb.treemap = {"newtest" => false}
         tree = @tb.build_tree(@repo.jrepo.resolve("refs/heads/master^{tree}"))
         
         treewalk = TreeWalk.new(@repo.jrepo)
@@ -246,7 +246,7 @@ describe RJGit do
         tree = @tb.build_tree(@repo.jrepo.resolve("refs/heads/master^{tree}"))
         @tb.log[:added].first.should include(:blob)
         @tb.log[:deleted].should be_empty
-        @tb.treemap = {"newtest" => :delete}
+        @tb.treemap = {"newtest" => false}
         @tb.build_tree(tree)
         @tb.log[:deleted].first.should include(:blob)
         @tb.log[:deleted].first.should include("newtest")
@@ -256,14 +256,14 @@ describe RJGit do
         @tb.treemap = {"newtree/test/newblob" => "test"}
         tree = @tb.build_tree(@repo.jrepo.resolve("refs/heads/master^{tree}"))
         @tb.init_log
-        @tb.treemap = {"newtree/test/newblob" => :delete}
+        @tb.treemap = {"newtree/test/newblob" => false}
         @tb.build_tree(tree)
         @tb.log[:added].should be_empty
       end
       
       it "tells whether a given hashmap contains no added blobs" do
-        @tb.only_contains_deletions({'test' => {'test' => :delete}}).should == true
-        @tb.only_contains_deletions({'test' => {'test' => :delete, 'test2' => 'content'}}).should == false
+        @tb.only_contains_deletions({'test' => {'test' => false}}).should == true
+        @tb.only_contains_deletions({'test' => {'test' => false, 'test2' => 'content'}}).should == false
       end
       
       after(:all) do
