@@ -169,7 +169,7 @@ module RJGit
       when :tag
         Tag.new(walk.lookup_tag(oi))
       when :commit
-        Commit.new(walk.lookup_commit(oi), jrepo)
+        Commit.new(walk.lookup_commit(oi), @jrepo)
       else nil
       end
     end
@@ -182,6 +182,13 @@ module RJGit
     # Convenience method to retrieve a Tree by name
     def tree(file_path, revstring=Constants::HEAD)
       Tree.find_tree(@jrepo, file_path, revstring)
+    end
+    
+    def update_ref(commit, force = false, ref = "refs/heads/#{Constants::MASTER}")
+      ref_updater = @jrepo.updateRef(ref)
+      ref_updater.setNewObjectId(RJGit.commit_type(commit))
+      msg = force ? :update : :forceUpdate
+      ref_updater.send(msg).to_string
     end
     
     # Update the info files required for fetching files over the dump-HTTP protocol

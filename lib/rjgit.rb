@@ -126,13 +126,16 @@ module RJGit
       
     
       attr_accessor :treemap
-      attr_reader :object_inserter, :log
+      attr_reader :log
       
       def initialize(repository)
         @jrepo = RJGit.repository_type(repository)
-        @object_inserter = @jrepo.newObjectInserter
         @treemap = {}
         init_log
+      end
+      
+      def object_inserter
+        @jrepo.newObjectInserter
       end
       
       def init_log
@@ -187,14 +190,11 @@ module RJGit
             end
         end
     
-        result = @object_inserter.insert(formatter)
-        @object_inserter.flush if flush
-        result
+        result = object_inserter.insert(formatter)
       end
       
       def write_blob(contents, flush = false)
-        blobid = @object_inserter.insert(Constants::OBJ_BLOB, contents.to_java_bytes)
-        @object_inserter.flush if flush
+        blobid = object_inserter.insert(Constants::OBJ_BLOB, contents.to_java_bytes)
         blobid
       end
       
@@ -246,36 +246,38 @@ module RJGit
         @treemap
       end
       
+      def do_commit(message, author, parents, new_tree)
+        commit_builder = CommitBuilder.new
+        person = author.person_ident
+        commit_builder.setCommitter(person)
+        commit_builder.setAuthor(person)
+        commit_builder.setMessage(message)
+        commit_builder.setTreeId(RJGit.tree_type(new_tree))
+          if parents.is_a?(Array) then
+            parents.each {|p| commit_builder.addParentId RJGit.commit_type(p)}
+          elsif parents
+            commit_builder.addParentId(RJGit.commit_type(parents))
+          end
+        new_head = @treebuilder.object_inserter.insert(commit_builder)
+        new_head
+      end
+      
       def commit(message, author, parents = nil, ref = "refs/heads/#{Constants::MASTER}")
-        @current_tree = @current_tree ? RJGit.tree_type(@current_tree) : @jrepo.resolve(ref+"^{tree}")
+        @current_tree = @current_tree ? RJGit.tree_type(@current_tree) : @jrepo.resolve("refs/heads/#{Constants::MASTER}^{tree}")
         @treebuilder.treemap = @treemap
         new_tree = @treebuilder.build_tree(@current_tree)
         return false if @current_tree && new_tree.name == @current_tree.name
-        
-        # puts @current_tree.inspect
       
         parents = parents ? parents : @jrepo.resolve(ref+"^{commit}")
-    
-        cb = CommitBuilder.new
-        pi = author.person_ident
-        cb.setCommitter(pi)
-        cb.setAuthor(pi)
-        cb.setMessage(message)
-        cb.setTreeId(new_tree)
-          if parents.is_a?(Array) then
-            parents.each {|p| cb.addParentId RJGit.commit_type(p)}
-          elsif parents
-            cb.addParentId(RJGit.commit_type(parents))
-          end
-    
-        newhead = @treebuilder.object_inserter.insert(cb)
+        
+        new_head = do_commit(message, author, parents, new_tree)
       
         # Point ref to the newest commit
         ru = @jrepo.updateRef(ref)
-        ru.setNewObjectId(newhead)
+        ru.setNewObjectId(new_head)
         res = ru.forceUpdate.to_string
       
-        @treebuilder.object_inserter.flush
+        @current_tree = new_tree
         @treemap = {}
         log = @treebuilder.log
         @treebuilder.init_log

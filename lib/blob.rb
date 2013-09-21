@@ -48,11 +48,11 @@ module RJGit
       guesses.first ? guesses.first.simplified : DEFAULT_MIME_TYPE
     end
     
-    def self.make_blob(repository, contents)
+    def self.new_from_string(repository, contents)
       repository = RJGit.repository_type(repository)
-      blobid = TreeBuilder.new(repository).write_blob(contents, true)
+      blob_id = TreeBuilder.new(repository).write_blob(contents, true)
       walk = RevWalk.new(repository)
-      Blob.new(repository, FileMode::REGULAR_FILE, nil, walk.lookup_blob(blobid))
+      Blob.new(repository, FileMode::REGULAR_FILE, nil, walk.lookup_blob(blob_id))
     end
     
     # Finds a particular Blob in repository matching file_path

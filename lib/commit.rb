@@ -38,6 +38,13 @@ module RJGit
       @parents ||= @jcommit.get_parents.map{|parent| Commit.new(parent, @jrepo) }
     end
     
+    def self.new_with_tree(repository, tree, message, actor, parents = nil)
+      repository = RJGit.repository_type(repository)
+      parents = parents ? parents : repository.resolve("refs/heads/#{Constants::MASTER}")
+      new_commit = RJGit::Plumbing::Index.new(repository).do_commit(message, actor, parents, tree)
+      Commit.new(RevWalk.new(repository).parseCommit(new_commit), repository)
+    end
+    
     def self.find_head(repository)
       repository = RJGit.repository_type(repository)
       return nil if repository.nil?

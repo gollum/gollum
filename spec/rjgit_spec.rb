@@ -163,6 +163,8 @@ describe RJGit do
         @index.delete("tree/blob2")
         parents = [@repo.commits.first, @repo.commits.last]
         res, log = @index.commit(@msg, @auth, parents)
+        puts res
+        puts log
         @repo.commits.first.parents.length.should == 2
       end
       

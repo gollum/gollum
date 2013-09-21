@@ -49,6 +49,18 @@ module RJGit
      entry
   end
   
+  def self.sym_for_type(type)
+    result = case type
+    when Constants::OBJ_BLOB
+      :blob
+    when Constants::OBJ_TREE
+      :tree
+    when Constants::OBJ_COMMIT
+      :commit
+    when Constants::OBJ_TAG
+      :tag
+    end 
+  end
   
   def self.repository_type(repository)
     repo = case repository
@@ -70,6 +82,7 @@ module RJGit
     treeobj = case tree
       when Tree then tree.jtree
       when org.eclipse.jgit.revwalk.RevTree then tree
+      when org.eclipse.jgit.lib.ObjectId then tree
       else nil
     end
   end
