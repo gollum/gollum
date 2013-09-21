@@ -18,8 +18,9 @@ module RJGit
   
     RJGit.delegate_to(RevCommit, :@jcommit)
     
-    def initialize(commit)
+    def initialize(commit, repository)
       @jcommit = commit
+      @jrepo = RJGit.repository_type(repository)
       @id = ObjectId.to_string(commit.get_id)
       @actor = Actor.new_from_person_ident(@jcommit.get_author_ident)
       @committer = Actor.new_from_person_ident(@jcommit.get_committer_ident)
@@ -30,7 +31,7 @@ module RJGit
     end
   
     def parents
-      @parents ||= @jcommit.get_parents.map{|parent| Commit.new(parent) }
+      @parents ||= @jcommit.get_parents.map{|parent| Commit.new(parent, @jrepo) }
     end
     
     def self.find_head(repository)
@@ -39,7 +40,7 @@ module RJGit
       begin
         walk = RevWalk.new(repository)
         objhead = repository.resolve(Constants::HEAD)
-        return Commit.new(walk.parseCommit(objhead))
+        return Commit.new(walk.parseCommit(objhead), repository)
       rescue NativeException => e
         return nil
       end
@@ -53,7 +54,7 @@ module RJGit
         objhead = repository.resolve(ref)
         root = walk.parse_commit(objhead)
         walk.mark_start(root)
-        commits = walk.map { |commit| Commit.new(commit) }
+        commits = walk.map { |commit| Commit.new(commit, repository) }
         return commits.first(options[:limit])
       rescue NativeException => e
         return Array.new

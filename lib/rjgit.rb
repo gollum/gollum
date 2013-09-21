@@ -92,7 +92,7 @@ module RJGit
         blameline = {}
         blameline[:actor] = Actor.new_from_person_ident(result.get_source_author(index))
         blameline[:line] = result.get_source_line(index)
-        blameline[:commit] = Commit.new(result.get_source_commit(index))
+        blameline[:commit] = Commit.new(result.get_source_commit(index), repository)
         blameline[:line] = content.get_string(index)
         blame << blameline
       end
@@ -252,7 +252,7 @@ module RJGit
         new_tree = @treebuilder.build_tree(@current_tree)
         return false if @current_tree && new_tree.name == @current_tree.name
         
-        puts @current_tree.inspect
+        # puts @current_tree.inspect
       
         parents = parents ? parents : @jrepo.resolve(ref+"^{commit}")
     

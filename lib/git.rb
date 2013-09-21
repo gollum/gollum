@@ -27,7 +27,7 @@ module RJGit
       logs = @jgit.log
       commits = Array.new
       logs.call.each do |jcommit|
-        commits << Commit.new(jcommit)
+        commits << Commit.new(jcommit, jrepo)
       end
       commits
     end
@@ -42,7 +42,7 @@ module RJGit
     end
 
     def commit(message)
-      Commit.new(@jgit.commit.set_message(message).call)
+      Commit.new(@jgit.commit.set_message(message).call, jrepo)
     end
 
     def clone(remote, local, options = {})
@@ -182,7 +182,7 @@ module RJGit
       commits.each do |commit|
         revert_command.include commit.jcommit
       end
-      Commit.new(revert_command.call)
+      Commit.new(revert_command.call, jrepo)
     end
 
     def status

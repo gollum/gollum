@@ -55,7 +55,6 @@ module RJGit
       new_tree = tb.build_tree(base_tree, hashmap, true)
       walk = RevWalk.new(jrepo)
       new_tree = walk.lookup_tree(new_tree)
-      puts new_tree.inspect
       Tree.new(jrepo, FileMode::TREE, nil, new_tree)
     end
     

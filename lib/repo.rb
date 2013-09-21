@@ -169,7 +169,7 @@ module RJGit
       when :tag
         Tag.new(walk.lookup_tag(oi))
       when :commit
-        Commit.new(walk.lookup_commit(oi))
+        Commit.new(walk.lookup_commit(oi), jrepo)
       else nil
       end
     end
