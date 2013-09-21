@@ -29,6 +29,10 @@ module RJGit
       @short_message = @jcommit.get_short_message
       @count = @jcommit.get_parent_count
     end
+    
+    def tree
+      @tree ||= Tree.new(@jrepo, FileMode::TREE, nil, @jcommit.get_tree)
+    end
   
     def parents
       @parents ||= @jcommit.get_parents.map{|parent| Commit.new(parent, @jrepo) }

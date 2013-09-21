@@ -14,6 +14,10 @@ describe Commit do
   it "should have an id" do
     @commit.id.should match /ca8a30f5a7f0f163bbe3b6f0abf18a6c83b0687a/
   end
+  
+  it "points to a tree" do
+    @commit.tree.should be_an RJGit::Tree
+  end
 
   it "should have an actor" do
     actor = @commit.actor
