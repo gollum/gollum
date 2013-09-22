@@ -17,7 +17,7 @@ end
 desc "Run specs."
 RSpec::Core::RakeTask.new(:rspec) do |spec|
   rename_git_dir
-  ruby_opts = "-w"
+  spec.ruby_opts = "--debug"
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rspec_opts = ['--backtrace --color']
 end
