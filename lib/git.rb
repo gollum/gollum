@@ -92,7 +92,7 @@ module RJGit
       tag_command.set_name(name)
       tag_command.set_force_update(force)
       tag_command.set_message(message)
-      tag_command.set_object_id(commit_or_revision) if commit_or_revision
+      tag_command.set_object_id(RJGit.commit_type(commit_or_revision)) if commit_or_revision
       if actor
         actor = RJGit.actor_type(actor)
         tag_command.set_tagger(actor)

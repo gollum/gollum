@@ -36,7 +36,7 @@ describe RubyGit do
 
     it "should tag with a specific commit or revision" do
       commit = @repo.commits.first
-      @repo.git.tag('v0.0', 'initial state commit for a specific commit', commit.jcommit)
+      @repo.git.tag('v0.0', 'initial state commit for a specific commit', commit)
       @repo.tags.should have_exactly(1).tags
     end
     
