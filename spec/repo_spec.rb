@@ -206,6 +206,15 @@ describe Repo do
       tree.name.should == 'lib'
       tree.jtree.should be_a org.eclipse.jgit.revwalk.RevTree
     end
+    
+    it "should find objects of all types by SHA" do
+      @bare_repo.find(@bare_repo.head.tree.trees.first.id, :tree).should be_a Tree
+      @bare_repo.find(@bare_repo.head.tree.blobs.first.id, :blob).should be_a Blob
+      @bare_repo.find(@bare_repo.tags.first.last.id, :tag).should be_a Tag
+      @bare_repo.find(@bare_repo.head.id, :commit).should be_a Commit
+      @bare_repo.find(@bare_repo.head.id, :notdefined).should be_nil
+      expect {@bare_repo.find("dsa", :commit)}.to raise_error java.lang.IllegalArgumentException
+    end
 
     after(:each) do
       @repo = nil
@@ -281,6 +290,14 @@ describe Repo do
       diff[:oldpath].should == 'remove_file.txt'
       diff[:changetype].should == 'DELETE'
       "#{@temp_repo_path}/remove_file.txt".should_not exist
+    end
+    
+    it "should update a ref" do
+      new_tree = Tree.new_from_hashmap(@repo, {"bla" => "bla"}, @repo.head.tree)
+      c = Commit.new_with_tree(@repo, new_tree, "Commit message", Actor.new("test","test@test"))
+      @repo.head.id.should_not == c.id
+      @repo.update_ref(c).should == "FAST_FORWARD"
+      @repo.head.id.should == c.id
     end
     
     it "should update the server info files" do

@@ -14,7 +14,7 @@ module RJGit
     attr_reader :message
     attr_reader :short_message
     attr_reader :jcommit
-    attr_reader :count
+    attr_reader :parent_count
   
     RJGit.delegate_to(RevCommit, :@jcommit)
     
@@ -27,7 +27,7 @@ module RJGit
       @committed_date = Time.at(@jcommit.commit_time)
       @message = @jcommit.get_full_message
       @short_message = @jcommit.get_short_message
-      @count = @jcommit.get_parent_count
+      @parent_count = @jcommit.get_parent_count
     end
     
     def tree
@@ -35,14 +35,21 @@ module RJGit
     end
   
     def parents
-      @parents ||= @jcommit.get_parents.map{|parent| Commit.new(@jrepo, parent) }
+      return @parents if @parents
+      i = 0
+      result = []
+      @parent_count.times do |i|
+        result << Commit.new(@jrepo, @jcommit.get_parent(i))
+      end
+      @parents = result
     end
     
+    # Pass an empty array for parents if the commit should have no parents
     def self.new_with_tree(repository, tree, message, actor, parents = nil)
       repository = RJGit.repository_type(repository)
       parents = parents ? parents : repository.resolve("refs/heads/#{Constants::MASTER}")
       new_commit = RJGit::Plumbing::Index.new(repository).do_commit(message, actor, parents, tree)
-      Commit.new(RevWalk.new(repository).parseCommit(new_commit), repository)
+      Commit.new(repository, RevWalk.new(repository).parseCommit(new_commit))
     end
     
     def self.find_head(repository)

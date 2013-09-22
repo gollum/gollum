@@ -48,6 +48,15 @@ module RJGit
       contents_array.select {|x| x.is_a?(Tree)}
     end
     
+    # From Grit
+    def /(file)
+      if file =~ /\//
+        file.split("/").inject(self) { |acc, x| acc/x } rescue nil
+      else
+        self.contents_array.find { |c| c.name == file }
+      end
+    end
+    
     def self.new_from_hashmap(repository, hashmap, base_tree = nil)
       jrepo = RJGit.repository_type(repository)
       tree_builder = Plumbing::TreeBuilder.new(jrepo)

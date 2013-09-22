@@ -30,6 +30,11 @@ describe RJGit do
       File.open(File.join(@temp_repo_path, @testfile), 'w') {|file| file.write("This is a new file to add.") }
     end
     
+    it "looks up the object belonging to a tag" do
+      @repo.git.tag('v0.0', 'initial state commit for a specific commit', @repo.head.jcommit)
+      RJGit::Porcelain.object_for_tag(@repo, @repo.tags.first.last).should be_kind_of Commit
+    end
+    
     it "should mimic git-cat-file" do
       blob = @bare_repo.blob('lib/grit.rb')
       RJGit::Porcelain.cat_file(@bare_repo, blob.jblob).should =~ /# core\n/
@@ -163,8 +168,6 @@ describe RJGit do
         @index.delete("tree/blob2")
         parents = [@repo.commits.first, @repo.commits.last]
         res, log = @index.commit(@msg, @auth, parents)
-        puts res
-        puts log
         @repo.commits.first.parents.length.should == 2
       end
       
@@ -283,6 +286,7 @@ describe RJGit do
     specify {RJGit.actor_type("A String").should be_nil}
     specify {RJGit.commit_type("A String").should be_nil}
     specify {RJGit.underscore("CamelCaseToSnakeCase").should == 'camel_case_to_snake_case'}
+    specify {{Constants::OBJ_BLOB => :blob, Constants::OBJ_COMMIT => :commit, Constants::OBJ_TREE => :tree, Constants::OBJ_TAG => :tag }.each {|k,v| RJGit.sym_for_type(k).should == v}}
   end
   
   after(:all) do

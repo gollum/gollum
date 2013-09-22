@@ -50,7 +50,7 @@ module RJGit
     
     def self.new_from_string(repository, contents)
       repository = RJGit.repository_type(repository)
-      blob_id = TreeBuilder.new(repository).write_blob(contents, true)
+      blob_id = RJGit::Plumbing::TreeBuilder.new(repository).write_blob(contents, true)
       walk = RevWalk.new(repository)
       Blob.new(repository, FileMode::REGULAR_FILE, nil, walk.lookup_blob(blob_id))
     end
