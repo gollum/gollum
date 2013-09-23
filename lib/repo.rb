@@ -161,17 +161,21 @@ module RJGit
     def find(sha, type)
       oi = ObjectId.from_string(sha)
       walk = RevWalk.new(@jrepo)
-      result = case type
-      when :tree
-        Tree.new(@jrepo, nil, nil, walk.lookup_tree(oi))
-      when :blob
-        Blob.new(@jrepo, nil, nil, walk.lookup_blob(oi))
-      when :tag
-        Tag.new(walk.lookup_tag(oi))
-      when :commit
-        Commit.new(jrepo, walk.parse_commit(walk.lookup_commit(oi)))
-      else nil
-      end
+        begin
+        result = case type
+          when :tree
+            Tree.new(@jrepo, nil, nil, walk.parse_tree(oi))
+          when :blob
+            Blob.new(@jrepo, nil, nil, walk.parse_any(oi))
+          when :tag
+            Tag.new(walk.parse_tag(oi))
+          when :commit
+            Commit.new(jrepo, walk.parse_commit(walk.lookup_commit(oi)))
+          else nil
+          end
+        rescue Java::OrgEclipseJgitErrors::MissingObjectException, Java::JavaLang::IllegalArgumentException
+          nil
+        end
     end
 
     # Convenience method to retrieve a Blob by name
