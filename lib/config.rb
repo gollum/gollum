@@ -42,7 +42,7 @@ module RJGit
         end
         settings[name] = value
       end
-      settings
+      settings.empty? ? nil : settings
     end
     
     def is_num?(str)
