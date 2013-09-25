@@ -158,23 +158,38 @@ module RJGit
       @git.clean(options)
     end
     
-    def find(sha, type)
-      oi = ObjectId.from_string(sha)
-      walk = RevWalk.new(@jrepo)
+    def find(sha, type = :any)
         begin
-        result = case type
+          oi = ObjectId.from_string(sha)
+          walk = RevWalk.new(@jrepo)
+          rev_object = case type
+          when :any
+            walk.parse_any(oi)
           when :tree
-            Tree.new(@jrepo, nil, nil, walk.parse_tree(oi))
+            walk.parse_tree(oi)
           when :blob
-            Blob.new(@jrepo, nil, nil, walk.parse_any(oi))
+            walk.parse_any(oi)
           when :tag
-            Tag.new(walk.parse_tag(oi))
+            walk.parse_tag(oi)
           when :commit
-            Commit.new(jrepo, walk.parse_commit(walk.lookup_commit(oi)))
+            walk.parse_commit(oi)
           else nil
           end
         rescue Java::OrgEclipseJgitErrors::MissingObjectException, Java::JavaLang::IllegalArgumentException
-          nil
+          return nil
+        end
+      return nil if rev_object.nil?
+      object_type = (type == :any || type == :blob) ? RJGit.sym_for_type(rev_object.get_type) : type
+      return nil if type == :blob && object_type != :blob # Blobs need to be found with parse_any, so make sure that the result of this is actually a blob.
+        return case object_type
+        when :tree
+          Tree.new(@jrepo, nil, nil, rev_object)
+        when :blob
+          Blob.new(@jrepo, nil, nil, rev_object)
+        when :tag
+          Tag.new(rev_object)
+        when :commit
+          Commit.new(jrepo, rev_object)
         end
     end
 

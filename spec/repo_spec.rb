@@ -212,8 +212,11 @@ describe Repo do
       @bare_repo.find(@bare_repo.head.tree.blobs.first.id, :blob).should be_a Blob
       @bare_repo.find(@bare_repo.tags.first.last.id, :tag).should be_a Tag
       @bare_repo.find(@bare_repo.head.id, :commit).should be_a Commit
+      @bare_repo.find(@bare_repo.head.id).should be_a Commit
       @bare_repo.find(@bare_repo.head.id, :notdefined).should be_nil
-      expect {@bare_repo.find("dsa", :commit)}.to raise_error java.lang.IllegalArgumentException
+      @bare_repo.find("dsa", :commit).should be_nil
+      @bare_repo.find("aa74200714ce8190b38211795f974nonexistent").should be_nil
+      @bare_repo.find(@bare_repo.head.id, :blob).should be_nil
     end
 
     after(:each) do
