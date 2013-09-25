@@ -35,13 +35,7 @@ module RJGit
     end
   
     def parents
-      return @parents if @parents
-      i = 0
-      result = []
-      @parent_count.times do |i|
-        result << Commit.new(@jrepo, @jcommit.get_parent(i))
-      end
-      @parents = result
+      @parents ||= @jcommit.get_parents.map {|parent| Commit.new(@jrepo, parent)}
     end
     
     # Pass an empty array for parents if the commit should have no parents
