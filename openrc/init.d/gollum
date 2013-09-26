@@ -1,0 +1,31 @@
+#!/sbin/runscript
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+NAME=gollum
+PID=/var/run/${NAME}.pid
+
+depend() {
+	need net
+}
+
+start() {
+	ebegin "Starting Gollum"
+	start-stop-daemon --start \
+		--name "${NAME}" \
+		--user "${GOLLUM_USER}" \
+		--pidfile "${PID}" \
+		--make-pidfile --background \
+		--exec gollum -- $GOLLUM_OPTS "$GOLLUM_BASE"
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Gollum"
+	start-stop-daemon --stop \
+		--name "${NAME}" \
+		--user "${GOLLUM_USER}" \
+		--pidfile "${PID}"
+	eend $?
+}
