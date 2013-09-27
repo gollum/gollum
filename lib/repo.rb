@@ -175,7 +175,7 @@ module RJGit
             walk.parse_commit(oi)
           else nil
           end
-        rescue Java::OrgEclipseJgitErrors::MissingObjectException, Java::JavaLang::IllegalArgumentException
+        rescue Java::OrgEclipseJgitErrors::MissingObjectException, Java::JavaLang::IllegalArgumentException, Java::JavaLang::NullPointerException
           return nil
         end
       return nil if rev_object.nil?
