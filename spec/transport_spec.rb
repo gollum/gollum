@@ -69,7 +69,7 @@ describe RJGitUploadPack do
   it "should return nil and a JGit internal server error exception object when the client requests an unknown object" do
     res, msg = @pack.process(UPLOAD_REQUEST_UNKNOWN_OBJECT)
     res.should eql nil
-    msg.should be_a org.eclipse.jgit.transport.UploadPackInternalServerErrorException
+    msg.should be_a org.eclipse.jgit.errors.PackProtocolException
   end
   
   it "should return nil and a JGit invalid object exception object when the client requests an invalid object id" do
