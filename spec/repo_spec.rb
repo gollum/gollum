@@ -130,6 +130,12 @@ describe Repo do
       remove_temp_repo(tmp_path)
       new_bare_repo.should be_bare
     end
+    
+    it "should wrap a JGit repository object" do
+      jrepo = @repo.jrepo
+      repo = Repo.new_from_jgit_repo(jrepo)
+      repo.should be_valid
+    end
 
     it "should create a new repository on disk" do
       tmp_path = get_new_temp_repo_path(true) # bare repository
