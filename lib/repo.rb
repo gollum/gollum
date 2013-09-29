@@ -80,6 +80,11 @@ module RJGit
       @jrepo.create(self.bare?)
     end
 
+    def self.new_from_jgit_repo(jrepo)
+      path = File.dirname(jrepo.get_directory.get_path)
+      Repo.new(path, {:is_bare => jrepo.is_bare})
+    end
+
     def commits(ref="master", limit=100)
       options = { :limit => limit }
       Commit.find_all(@jrepo, ref, options)
@@ -185,7 +190,8 @@ module RJGit
         when :tree
           Tree.new(@jrepo, nil, nil, rev_object)
         when :blob
-          Blob.new(@jrepo, nil, nil, rev_object)
+          mode = RJGit.get_file_mode(@jrepo, rev_object)
+          Blob.new(@jrepo, mode, nil, rev_object)
         when :tag
           Tag.new(rev_object)
         when :commit
