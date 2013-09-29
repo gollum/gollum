@@ -36,7 +36,11 @@ module RJGit
     def data
       @data ||= RJGit::Porcelain.cat_file(@jrepo, @jblob) 
     end
-
+    
+    def is_symlink?
+      @mode == SYMLINK_TYPE
+    end
+    
     # The mime type of this file (based on the filename)
     # Returns String
     def mime_type
@@ -71,7 +75,7 @@ module RJGit
       if treewalk.next
         jblob = walk.lookup_blob(treewalk.objectId(0))
         if jblob
-          mode = RJGit.get_file_mode(jrepo, file_path, jtree) 
+          mode = RJGit.get_file_mode_with_path(jrepo, file_path, jtree) 
           Blob.new(jrepo, mode, file_path, jblob)
         end
       else

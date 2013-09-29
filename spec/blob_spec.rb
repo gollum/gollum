@@ -12,6 +12,10 @@ describe Blob do
     it "should have a mode" do
       @blob.mode.should eql REG_FILE_TYPE
     end
+    
+    it "should report symlinks" do
+      @blob.is_symlink?.should be_false
+    end
 
     it "should have a size in bytes" do
       @blob.bytesize.should eql 4680
