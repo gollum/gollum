@@ -47,8 +47,18 @@ module RJGit
     end
     
     # http://dev.eclipse.org/mhonarc/lists/jgit-dev/msg00558.html
-    def self.cat_file(repository, object)
-      bytes = repository.open(object.id).get_bytes
+    def self.cat_file(repository, blob)
+      jrepo = RJGit.repository_type(repository)
+      jblob = RJGit.blob_type(blob)
+      # Try to resolve symlinks; return nil otherwise
+      mode = RJGit.get_file_mode(jrepo, jblob)
+      if mode == SYMLINK_TYPE
+        symlink_source = jrepo.open(jblob.id).get_bytes.to_a.pack('c*').force_encoding('UTF-8')
+        blob = Blob.find_blob(jrepo, symlink_source)
+        return nil if blob.nil?
+        jblob = blob.jblob
+      end
+      bytes = jrepo.open(jblob.id).get_bytes
       return bytes.to_a.pack('c*').force_encoding('UTF-8')
     end
     
@@ -258,7 +268,7 @@ module RJGit
         commit_builder.setMessage(message)
         commit_builder.setTreeId(RJGit.tree_type(new_tree))
           if parents.is_a?(Array) then
-            parents.each {|p| commit_builder.addParentId RJGit.commit_type(p)}
+            parents.each {|parent| commit_builder.addParentId(RJGit.commit_type(parent)) }
           elsif parents
             commit_builder.addParentId(RJGit.commit_type(parents))
           end
@@ -270,11 +280,10 @@ module RJGit
         @treebuilder.treemap = @treemap
         new_tree = @treebuilder.build_tree(@current_tree)
         return false if @current_tree && new_tree.name == @current_tree.name
-      
-        parents = parents ? parents : @jrepo.resolve(ref+"^{commit}")
         
+        parents = parents ? parents : @jrepo.resolve(ref+"^{commit}")
         new_head = do_commit(message, author, parents, new_tree)
-      
+
         # Point ref to the newest commit
         ru = @jrepo.updateRef(ref)
         ru.setNewObjectId(new_head)
