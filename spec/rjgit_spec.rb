@@ -281,6 +281,7 @@ describe RJGit do
   end
   
   describe "helper methods" do
+    specify {RJGit.blob_type("A String").should be_nil}
     specify {RJGit.repository_type("A String").should be_nil}
     specify {RJGit.tree_type("A String").should be_nil}
     specify {RJGit.actor_type("A String").should be_nil}
