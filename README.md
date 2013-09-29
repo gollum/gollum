@@ -57,7 +57,7 @@ repo = Repo.new("repo.git")
 
 ```ruby
 repo = Repo.new("repo.git", :create => true)
-repo = Repo.new("repo.git", :create => true, :is_bare => true) # Create a 'bare' git repo, which stores all git-data under the '.git' directory.
+repo = Repo.new("repo.git", :create => true, :is_bare => true) # Create a 'bare' git repo.
 ```
 
 ### Getting a list of commits
