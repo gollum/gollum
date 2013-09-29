@@ -82,7 +82,7 @@ module RJGit
       if treewalk.next
         jsubtree = walk.lookup_tree(treewalk.object_id(0))
         if jsubtree
-          mode = RJGit.get_file_mode(jrepo, file_path, jtree) 
+          mode = RJGit.get_file_mode_with_path(jrepo, file_path, jtree) 
           Tree.new(jrepo, mode, file_path, jsubtree)
         end
       else

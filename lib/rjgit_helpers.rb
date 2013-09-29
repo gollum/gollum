@@ -16,9 +16,27 @@ module RJGit
     def_delegators delegate_name, *java_methods
   end
 
-  def self.get_file_mode(repository, path, jtree)
-    treewalk = TreeWalk.forPath(repository, path, jtree)
+  def self.get_file_mode_with_path(jrepo, path, jtree)
+    treewalk = TreeWalk.forPath(jrepo, path, jtree)
     return treewalk.get_file_mode(0).get_bits
+  end
+  
+  def self.get_file_mode(jrepo, jblob, revstring=Constants::HEAD)
+    last_commit_hash = jrepo.resolve(revstring)
+    return nil if last_commit_hash.nil?
+    walk = RevWalk.new(jrepo)
+    jcommit = walk.parse_commit(last_commit_hash)
+    treewalk = TreeWalk.new(jrepo)
+    jtree = jcommit.get_tree
+    treewalk.add_tree(jtree)
+    treewalk.set_recursive(true)
+    while treewalk.next
+      jblob_lookup = walk.lookup_blob(treewalk.objectId(0))
+      if jblob_lookup.get_name == jblob.get_name
+        mode = treewalk.get_file_mode(0).get_bits
+        return mode
+      end
+    end
   end
   
   def self.stringify(entries)
@@ -83,6 +101,14 @@ module RJGit
       when Tree then tree.jtree
       when org.eclipse.jgit.revwalk.RevTree then tree
       when org.eclipse.jgit.lib.ObjectId then tree
+      else nil
+    end
+  end
+  
+  def self.blob_type(blob)
+    blobobj = case blob
+      when Blob then blob.jblob
+      when org.eclipse.jgit.revwalk.RevBlob then blob
       else nil
     end
   end
