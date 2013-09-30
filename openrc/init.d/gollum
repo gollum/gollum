@@ -1,0 +1,36 @@
+#!/sbin/runscript
+# Distributed under the terms of the MIT License
+
+NAME=gollum
+PID=/var/run/${NAME}.pid
+EXEC=/usr/local/bin/gollum
+LOG=/var/log/gollum.log
+
+depend() {
+	need net
+}
+
+start() {
+	# Change log file to be owned by GOLLUM_USER
+	touch "${LOG}"
+	chown "${GOLLUM_USER}" "${LOG}"
+
+	ebegin "Starting Gollum"
+	start-stop-daemon --start \
+		--name "${NAME}" \
+		--user "${GOLLUM_USER}" \
+		--pidfile "${PID}" \
+		--make-pidfile --background \
+		--stderr "${LOG}" \
+		--exec "${EXEC}" -- $GOLLUM_OPTS "$GOLLUM_BASE"
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Gollum"
+	start-stop-daemon --stop \
+		--name "${NAME}" \
+		--user "${GOLLUM_USER}" \
+		--pidfile "${PID}"
+	eend $?
+}
