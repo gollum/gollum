@@ -1,4 +1,5 @@
 #!/sbin/runscript
+# Distributed under the terms of the MIT License
 
 NAME=gollum
 PID=/var/run/${NAME}.pid
