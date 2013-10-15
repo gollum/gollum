@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 1.9"
 
   s.name              = 'gollum'
-  s.version           = '2.5.0'
-  s.date              = '2013-07-21'
+  s.version           = '2.5.1'
+  s.date              = '2013-10-15'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -530,6 +530,8 @@ Gem::Specification.new do |s|
     licenses/css_tree_menu_thecssninja/license.txt
     licenses/licenses.txt
     licenses/unity_asset_pool/COPYRIGHT
+    openrc/conf.d/gollum
+    openrc/init.d/gollum
     templates/formatting.html
     templates/helper_wiki.rb
   ]
