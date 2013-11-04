@@ -429,7 +429,7 @@ context "Frontend" do
     assert_equal "INITIAL", page2.raw_data.strip
   end
 =end
-
+=begin
   test "cannot revert conflicting commit" do
     page1 = @wiki.page('A')
 
@@ -440,6 +440,7 @@ context "Frontend" do
     page2 = @wiki.page('A')
     assert_equal page1.version.sha, page2.version.sha
   end
+=end
 =begin
   # redirects are now handled by class MapGollum in bin/gollum
   # they should be set in config.ru

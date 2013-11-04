@@ -300,15 +300,14 @@ module Precious
       end
     end
 
-    post '/revert/:page/*' do
-      wikip        = wiki_page(params[:page])
+    post '/revert/*/:sha1/:sha2' do
+      wikip        = wiki_page(params[:splat].first)
       @path        = wikip.path
       @name        = wikip.name
       wiki         = wikip.wiki
       @page        = wiki.paged(@name,@path)
-      shas         = params[:splat].first.split("/")
-      sha1         = shas.shift
-      sha2         = shas.shift
+      sha1         = params[:sha1]
+      sha2         = params[:sha2]
 
       commit = commit_message
       commit[:message] = "Revert commit #{sha1.chars.take(7).join}"
