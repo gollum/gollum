@@ -56,6 +56,10 @@ opts = OptionParser.new do |opts|
     wiki_options[:js] = true
   end
 
+  opts.on("--template-dir [PATH]", "Specify custom template directory") do |path|
+    wiki_options[:template_dir] = path
+  end
+
   opts.on("--page-file-dir [PATH]", "Specify the sub directory for all page files (default: repository root).") do |path|
     wiki_options[:page_file_dir] = path
   end
@@ -168,6 +172,7 @@ else
   require 'gollum/app'
   Precious::App.set(:gollum_path, gollum_path)
   Precious::App.set(:wiki_options, wiki_options)
+  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
 
   if cfg = options['config']
     # If the path begins with a '/' it will be considered an absolute path,
