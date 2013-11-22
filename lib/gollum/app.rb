@@ -386,6 +386,7 @@ module Precious
         @page = page
         @name = name
         @content = page.formatted_data
+        @version = version
         mustache :page
       else
         halt 404
