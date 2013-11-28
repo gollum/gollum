@@ -289,8 +289,9 @@ module Precious
       format       = params[:format].intern
       wiki = wiki_new
 
+      path.gsub!(/^\//, '')
+
       begin
-        path.gsub!(/^\//, '')
         wiki.write_page(name, format, params[:content], commit_message, path)
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
