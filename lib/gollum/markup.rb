@@ -415,7 +415,7 @@ module Gollum
         blocks.map { |lang, code|
           Pygments.highlight(code, :lexer => lang, :options => {:encoding => encoding.to_s})
         }
-      rescue ::RubyPython::PythonError
+      rescue MentosError
         []
       end
 
