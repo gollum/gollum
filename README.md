@@ -38,7 +38,9 @@ $ gem install rjgit
 
 Usage
 -----
-RJGit wraps most (if not all) of JGit's core functionality; it has classes for all important Git objects, i.e., Repository, Blob, Tree, Commit, and Tag. It allows parsing and manipulation of these objects in an intuitive manner, either simulating ordinary git usage (i.e., with a working directory on disk) or on a lower level through creating new Commits, Blobs, and Trees manually (also works with 'bare' repositories, i.e. without a working directory). See below for some examples of what you can do with RJGit. Make sure you have [JRuby](http://jruby.org/) installed.
+RJGit wraps most (if not all) of JGit's core functionality; it has classes for all important Git objects, i.e., Repo, Blob, Tree, Commit, and Tag. It allows parsing and manipulation of these objects in an intuitive manner, either simulating ordinary git usage (with a working directory on disk) or on a lower level, through creating new git objects manually (also works with 'bare' repositories, without a working directory).
+
+See below for some examples of what you can do with RJGit. Make sure you have [JRuby](http://jruby.org/) installed.
 
 ### Require the gem and include the RJGit module
 
