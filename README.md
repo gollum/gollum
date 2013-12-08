@@ -60,11 +60,18 @@ repo = Repo.new("repo.git", :create => true)
 repo = Repo.new("repo.git", :create => true, :is_bare => true) # Create a 'bare' git repo.
 ```
 
-### Getting a list of commits
+### Getting commits
 ```ruby
 repo.commits('master')
 repo.commits('959329025f67539fb82e76b02782322fad032821')
+commit = repo.commits('master').first # a Commit object; try commit.actor, commit.id, etc.
 # Similarly for getting tags, branches, trees (directories), and blobs (files).
+```
+
+### Finding a single object by SHA
+```ruby
+repo.find('959329025f67539fb82e76b02782322fad032821')
+repo.find('959329025f67539fb82e76b02782322fad032821', :commit) # Find a specific :commit, :blob, :tree, or :tag
 ```
 
 ### Getting tags
@@ -72,23 +79,47 @@ repo.commits('959329025f67539fb82e76b02782322fad032821')
 tag = repo.tags['example_tag']
 tag.id # tag's object id
 tag.author.name # Etcetera
+some_object = Porcelain.object_for_tag(repo, tag) # Returns the tagged object; e.g. a Commit
 ```
 
-### Getting a repository's contents
+### Blobs and Trees
 ```ruby
-repo.blob("example/file.txt") # Retrieve a file by filepath
-repo.blob("example/file.txt").data # Cat the file
-repo.tree("example") # Retrieve a tree by filepath
-repo.tree("example").data # List the tree's contents (blobs and trees)
-Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :branch => 'mybranch') # Outputs a file list to $stdout. Passing nil as the second argument lists the entire repository. Branch defaults to HEAD.
+blob = repo.blob("example/file.txt") # Retrieve a file by filepath...
+blob = repo.find("959329025f67539fb82e76b02782322fad032822", :blob) # ...or by SHA
+blob.data # Cat the file; also blob.id, blob.mode, etc.
+tree = repo.tree("example") # Retrieve a tree by filepath...
+tree = repo.find("959329025f67539fb82e76b02782322fad032000", :tree) #...or by SHA
+tree.data # List the tree's contents (blobs and trees). Also tree.id, tree.mode, etc.
+tree.each {|entry| puts entry.inspect} # Loop over the Tree's children (Blobs and Trees)
+tree.trees # An array of the Tree's child Trees
+tree.blobs # An array of the Tree's child Blobs
+Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :branch => 'mybranch') # Outputs the Tree's contents to $stdout. Faster for recursive listing than Tree#each. Passing nil as the second argument lists the entire repository. Branch defaults to HEAD.
 ```
 
-### Manipulating repositories
+### Committing and adding branches to repositories, 'porcelain' style (only works with non-bare repo's)
 ```ruby
 repo.create_branch('new_branch') # Similarly for deleting, renaming
 repo.checkout('new_branch')
 repo.add('new_file.txt') # Similarly for removing
 repo.commit('My message')
+```
+
+### Committing and adding branches to repositories, 'plumbing' style (also works with bare repo's)
+```ruby
+repo = repo.new("repo.git")
+index = Plumbing::Index.new(repo) # A class simulating the index for bare repo's
+index.add("test.txt", "Test") # Adds a blob "test.txt" with contents "Test" to the index
+index.add("testtree/newblob.txt", "This new blob is contained in a new tree.") # Add new blobs under subtrees
+index.delete("stupid_blob.txt") # Remove an unwanted blob or tree
+actor = RJGit::Actor.new("test", "test@repotag.org")
+result = index.commit("My commit message", actor) # Commit the changes to the index; resets the index. #commit takes an optional third argument for a branch, e.g. "refs/heads/newbranch".
+Plumbing::Index.successful?(result) # Returns true/false depending on the git result message.
+```
+
+### Creating blobs and trees from scratch
+```ruby
+blob = Blob.new_from_string(repo, "Contents of the new blob.") # Inserts the blob into the repository, returns an RJGit::Blob
+tree = Tree.new_from_hashmap(repo, {"newblob" => "contents", "newtree" => { "otherblob" => "this blob is contained in the tree 'newtree'" } } ) # Constructs the tree and its children based on the hashmap and inserts it into the repository, returning an RJGit::Tree. Tree.new_from_hashmap takes an RJGit::Tree as an optional third argument, in which case the new tree will consist of the children of that Tree *plus* the contents of the hashmap.
 ```
 
 ### And more...
