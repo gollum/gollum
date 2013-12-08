@@ -105,7 +105,7 @@ blob = Blob.new_from_string(repo, "Contents of the new blob.") # Inserts the blo
 tree = Tree.new_from_hashmap(repo, {"newblob" => "contents", "newtree" => { "otherblob" => "this blob is contained in the tree 'newtree'" } } ) # Constructs the tree and its children based on the hashmap and inserts it into the repository, returning an RJGit::Tree. Tree.new_from_hashmap takes an RJGit::Tree as an optional third argument, in which case the new tree will consist of the children of that Tree *plus* the contents of the hashmap.
 ```
 
-### Committing and adding branches to repositories, 'porcelain' style (only works with non-bare repo's)
+### Committing and adding branches to repositories, 'porcelain' style (only works with non-bare repos)
 ```ruby
 repo.create_branch('new_branch') # Similarly for deleting, renaming
 repo.checkout('new_branch')
@@ -113,7 +113,7 @@ repo.add('new_file.txt') # Similarly for removing
 repo.commit('My message')
 ```
 
-### Committing and adding branches to repositories, 'plumbing' style (also works with bare repo's)
+### Committing and adding branches to repositories, 'plumbing' style (also works with bare repos)
 ```ruby
 repo = repo.new("repo.git")
 tree = Tree.new_from_hashmap(repo, {"newblob" => "contents"}, repo.head.tree ) # As above, use the current head commit's tree as a starting point and add "newblob"
