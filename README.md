@@ -38,7 +38,9 @@ $ gem install rjgit
 
 Usage
 -----
-RJGit wraps most (if not all) of JGit's core functionality; see below for some examples of what you can do with it. Make sure you have [JRuby](http://jruby.org/) installed.
+RJGit wraps most (if not all) of JGit's core functionality; it has classes for all important Git objects, i.e., Repository, Blob, Tree, Commit, and Tag. It allows parsing and manipulation of these objects in an intuitive manner. The Porcelain module provides easy access to repositories in the way an ordinary git user would work with a repository (i.e., through a working directory on disk). The Plumbing module provides lower level access and allows you to manipulate even bare repositories (with no working directory).
+
+See below for some examples of what you can do with RJGit. Make sure you have [JRuby](http://jruby.org/) installed.
 
 ### Require the gem and include the RJGit module
 
@@ -58,6 +60,7 @@ repo = Repo.new("repo.git")
 ```ruby
 repo = Repo.new("repo.git", :create => true)
 repo = Repo.new("repo.git", :create => true, :is_bare => true) # Create a 'bare' git repo.
+repo.bare? # Is this a bare repository?
 ```
 
 ### Getting commits
