@@ -1,3 +1,10 @@
+# v.0.3.0
+* Upgrade JGit (from v. 3.0.0 to 3.1.0)
+* Implemented Plumbing module for manipulating bare repositories
+* Allow Commits, Blobs and Trees to be created from scratch based on content using the Plumbing module (Commit.new_with_tree, Tree.new_from_hashmap and Blob.new_from_string)
+* Find any objects by SHA (Repo#find)
+* Handles symlinks
+* Bugfixes and improved consistency of argument ordering
 # v.0.2.0
 * Upgraded JGit (from v. 2.3.1 to 3.0.0)
 * Minor bugfixes
