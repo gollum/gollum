@@ -38,9 +38,7 @@ $ gem install rjgit
 
 Usage
 -----
-RJGit wraps most (if not all) of JGit's core functionality; it has classes for all important Git objects, i.e., Repository, Blob, Tree, Commit, and Tag. It allows parsing and manipulation of these objects in an intuitive manner. The Porcelain module provides easy access to repositories in the way an ordinary git user would work with a repository (i.e., through a working directory on disk). The Plumbing module provides lower level access and allows you to manipulate even bare repositories (with no working directory).
-
-See below for some examples of what you can do with RJGit. Make sure you have [JRuby](http://jruby.org/) installed.
+RJGit wraps most (if not all) of JGit's core functionality; it has classes for all important Git objects, i.e., Repository, Blob, Tree, Commit, and Tag. It allows parsing and manipulation of these objects in an intuitive manner, either simulating ordinary git usage (i.e., with a working directory on disk) or on a lower level through creating new Commits, Blobs, and Trees manually (also works with 'bare' repositories, i.e. without a working directory). See below for some examples of what you can do with RJGit. Make sure you have [JRuby](http://jruby.org/) installed.
 
 ### Require the gem and include the RJGit module
 
@@ -99,6 +97,12 @@ tree.blobs # An array of the Tree's child Blobs
 Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :branch => 'mybranch') # Outputs the Tree's contents to $stdout. Faster for recursive listing than Tree#each. Passing nil as the second argument lists the entire repository. Branch defaults to HEAD.
 ```
 
+### Creating blobs and trees from scratch
+```ruby
+blob = Blob.new_from_string(repo, "Contents of the new blob.") # Inserts the blob into the repository, returns an RJGit::Blob
+tree = Tree.new_from_hashmap(repo, {"newblob" => "contents", "newtree" => { "otherblob" => "this blob is contained in the tree 'newtree'" } } ) # Constructs the tree and its children based on the hashmap and inserts it into the repository, returning an RJGit::Tree. Tree.new_from_hashmap takes an RJGit::Tree as an optional third argument, in which case the new tree will consist of the children of that Tree *plus* the contents of the hashmap.
+```
+
 ### Committing and adding branches to repositories, 'porcelain' style (only works with non-bare repo's)
 ```ruby
 repo.create_branch('new_branch') # Similarly for deleting, renaming
@@ -110,19 +114,9 @@ repo.commit('My message')
 ### Committing and adding branches to repositories, 'plumbing' style (also works with bare repo's)
 ```ruby
 repo = repo.new("repo.git")
-index = Plumbing::Index.new(repo) # A class simulating the index for bare repo's
-index.add("test.txt", "Test") # Adds a blob "test.txt" with contents "Test" to the index
-index.add("testtree/newblob.txt", "This new blob is contained in a new tree.") # Add new blobs under subtrees
-index.delete("stupid_blob.txt") # Remove an unwanted blob or tree
+tree = Tree.new_from_hashmap(repo, {"newblob" => "contents"}, repo.head.tree ) # As above, use the current head commit's tree as a starting point and add "newblob"
 actor = RJGit::Actor.new("test", "test@repotag.org")
-result = index.commit("My commit message", actor) # Commit the changes to the index; resets the index. #commit takes an optional third argument for a branch, e.g. "refs/heads/newbranch".
-Plumbing::Index.successful?(result) # Returns true/false depending on the git result message.
-```
-
-### Creating blobs and trees from scratch
-```ruby
-blob = Blob.new_from_string(repo, "Contents of the new blob.") # Inserts the blob into the repository, returns an RJGit::Blob
-tree = Tree.new_from_hashmap(repo, {"newblob" => "contents", "newtree" => { "otherblob" => "this blob is contained in the tree 'newtree'" } } ) # Constructs the tree and its children based on the hashmap and inserts it into the repository, returning an RJGit::Tree. Tree.new_from_hashmap takes an RJGit::Tree as an optional third argument, in which case the new tree will consist of the children of that Tree *plus* the contents of the hashmap.
+commit = Commit.new_with_tree(repo, tree, "My commit message", actor) # Create a new commit with tree as base tree
 ```
 
 ### And more...
