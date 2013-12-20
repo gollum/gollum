@@ -104,7 +104,7 @@ module Gollum
     attr_reader :transformers
 
     # Gets or sets a String prefix which is added to ID attributes.
-    # Default: 'wiki-'
+    # Default: ''
     attr_accessor :id_prefix
 
     # Gets a Hash describing HTML attributes that Sanitize should add.
@@ -127,7 +127,7 @@ module Gollum
       @add_attributes   = {}
       @remove_contents  = REMOVE_CONTENTS.dup
       @allow_comments   = false
-      @id_prefix        = 'wiki-'
+      @id_prefix        = ''
       yield self if block_given?
     end
 
