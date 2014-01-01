@@ -523,6 +523,18 @@ context "Frontend" do
     assert_match /スイカ/, last_response.body
   end
 
+  test "add noindex tags to history pages" do
+    get "A"
+
+    assert last_response.ok?
+    assert_no_match /meta name="robots" content="noindex, nofollow"/, last_response.body
+
+    get "A/fc66539528eb96f21b2bbdbf557788fe8a1196ac"
+
+    assert last_response.ok?
+    assert_match /meta name="robots" content="noindex, nofollow"/, last_response.body
+  end
+
   def app
     Precious::App
   end
