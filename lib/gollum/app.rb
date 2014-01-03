@@ -163,7 +163,7 @@ module Precious
         tempfile = params[:file][:tempfile]
       end
 
-      dir = 'uploads'
+      dir = wiki.per_page_uploads ? params[:upload_dest] : 'uploads'
       ext = ::File.extname(fullname)
       format = ext.split('.').last || 'txt'
       filename = ::File.basename(fullname, ext)
@@ -173,7 +173,7 @@ module Precious
       head = wiki.repo.head
 
       options = {
-        :message => "Uploaded file to uploads/#{reponame}",
+        :message => "Uploaded file to #{dir}/#{reponame}",
         :parent => wiki.repo.head.commit,
       }
       author = session['gollum.author']
@@ -444,6 +444,10 @@ module Precious
         @page = page
         @name = name
         @content  = page.formatted_data
+        @upload_dest = settings.wiki_options[:allow_uploads] ?
+                         (settings.wiki_options[:per_page_uploads] ?
+                            @name : 'uploads'
+                         ) : ''
 
         # Extensions and layout data
         @editable = true
