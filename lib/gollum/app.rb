@@ -289,6 +289,8 @@ module Precious
       format       = params[:format].intern
       wiki = wiki_new
 
+      path.gsub!(/^\//, '')
+
       begin
         wiki.write_page(name, format, params[:content], commit_message, path)
 
@@ -386,6 +388,7 @@ module Precious
         @page = page
         @name = name
         @content = page.formatted_data
+        @version = version
         mustache :page
       else
         halt 404
