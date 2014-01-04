@@ -160,7 +160,7 @@ jruby --ng -S rake
 
 License
 -------
-Copyright (c) 2011 - 2013, Team Repotag
+Copyright (c) 2011 - 2014, Team Repotag
 
 (Modified BSD License)
 
