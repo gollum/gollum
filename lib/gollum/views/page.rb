@@ -46,6 +46,10 @@ module Precious
       def allow_uploads
         @allow_uploads
       end
+      
+      def upload_dest
+        @upload_dest
+      end
 
       def has_header
         @header = (@page.header || false) if @header.nil?
