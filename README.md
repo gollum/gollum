@@ -23,7 +23,7 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 ## SYSTEM REQUIREMENTS
 
 - Python 2.5+ (2.7.3 recommended)
-- Ruby 1.8.7+ (1.9.3 recommended)
+- Ruby 1.9.3+ (1.9.3 recommended)
 - Unix like operating system (OS X, Ubuntu, Debian, and more)
 - Will not work on Windows (because of [grit](https://github.com/github/grit))
 
