@@ -10,6 +10,7 @@ require 'gollum'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
+require 'gollum/auth'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -59,6 +60,11 @@ module Precious
       @@min_ua.detect {|min| ua >= min }
     end
 
+    def is_authed?(session)
+      name = session[:name]
+      !(name.nil? or name.empty?)
+    end
+
     # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
     set :static,         true
@@ -74,6 +80,8 @@ module Precious
       # Tell mustache where the views are
       :views => "#{dir}/views"
     }
+
+    set :auth_domain, nil
 
     # Sinatra error handling
     configure :development, :staging do
@@ -91,6 +99,13 @@ module Precious
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
       @js = settings.wiki_options[:js]
+
+      return if request.path_info == '/favicon.ico'
+      redirect '/auth/gapps' unless is_authed?(session)
+    end
+
+    get '/favicon.ico' do
+      halt 403
     end
 
     get '/' do
@@ -496,6 +511,10 @@ module Precious
       commit_message = { :message => msg }
       author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
+
+      author = { :email => session[:email], :name => session[:name] }
+      commit_message.merge! author unless author.empty?
+
       commit_message
     end
   end

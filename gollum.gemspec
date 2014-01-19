@@ -30,9 +30,16 @@ Gem::Specification.new do |s|
   s.add_dependency 'mustache', ['>= 0.99.4', '< 1.0.0']
   s.add_dependency 'useragent', '~> 0.8.2'
 
+  s.add_dependency 'omniauth-openid'
+  s.add_dependency 'ruby-openid-apps-discovery'
+
   s.add_development_dependency 'rack-test', '~> 0.6.2'
   s.add_development_dependency 'shoulda', '~> 3.4.0'
   s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
+  s.add_development_dependency 'debugger'
+  s.add_development_dependency 'thin'
+  s.add_development_dependency 'yard'
+  s.add_development_dependency 'yard-sinatra'
 
   # = MANIFEST =
   s.files = %w[
@@ -47,6 +54,7 @@ Gem::Specification.new do |s|
     gollum.gemspec
     lib/gollum.rb
     lib/gollum/app.rb
+    lib/gollum/auth.rb
     lib/gollum/helpers.rb
     lib/gollum/public/gollum/css/_styles.css
     lib/gollum/public/gollum/css/dialog.css

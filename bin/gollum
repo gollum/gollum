@@ -15,6 +15,12 @@ HELP
 
 require 'optparse'
 require 'rubygems'
+
+require 'omniauth-openid'
+require 'openid'
+require 'openid/store/filesystem'
+require 'gapps_openid'
+
 require 'gollum'
 
 exec = {}
