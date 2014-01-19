@@ -169,3 +169,21 @@ task :validate do
     exit!
   end
 end
+
+desc "Show routes"
+task "routes" do
+  require "yard/sinatra"
+  YARD::Registry.load ["lib/gollum/app.rb"], true
+  routes = []
+
+  YARD::Sinatra.routes.each do |route|
+    routes << [route.http_verb, route.http_path, route.file]
+  end
+
+  max_verb_len = routes.map{|r| r[0].length}.max
+  max_path_len = routes.map{|r| r[1].length}.max
+
+  routes.each do |r|
+    puts "%-#{max_verb_len}s %s" % r
+  end
+end

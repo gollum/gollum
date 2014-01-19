@@ -9,6 +9,8 @@ context "Frontend" do
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
+
+    Precious::App.any_instance.stubs(:is_authed?).returns(true)
   end
 
   teardown do
@@ -467,7 +469,7 @@ context "Frontend" do
     page1 = @wiki.page('A')
 
     gollum_author = { :name => 'ghi', :email => 'jkl' }
-    session = { 'gollum.author' => gollum_author }
+    session = { 'gollum.author' => gollum_author, 'name' => 'authed_user', 'email' => 'authed_user@authed_domain' }
 
     post "/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
     follow_redirect!
@@ -477,8 +479,8 @@ context "Frontend" do
     page2 = @wiki.page(page1.name)
 
     author = page2.version.author
-    assert_equal 'ghi', author.name
-    assert_equal 'jkl', author.email
+    assert_equal 'authed_user', author.name
+    assert_equal 'authed_user@authed_domain', author.email
   end
 
   test "do not add custom.js by default" do
@@ -548,6 +550,8 @@ context "Frontend with lotr" do
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
+
+    Precious::App.any_instance.stubs(:is_authed?).returns(true)
   end
 
   teardown do

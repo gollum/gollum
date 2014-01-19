@@ -5,3 +5,5 @@ pkg
 Gemfile.lock
 *.gem
 *.swp
+.yardoc
+data
