@@ -189,7 +189,7 @@ module Precious
           committer.update_working_dir(dir, filename, format)
         end
         committer.commit
-        redirect to('/')
+        redirect to(wiki.per_page_uploads ? params[:upload_dest] : '/')
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
