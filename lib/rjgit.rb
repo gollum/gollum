@@ -122,16 +122,19 @@ module RJGit
       git = repository.git.jgit
       repo = RJGit.repository_type(repository)
       diff_command = git.diff
-        if options[:old_rev] && options[:new_rev] then
-          new_tree = repo.resolve("#{options[:new_rev]}^{tree}")
-          old_tree = repo.resolve("#{options[:old_rev]}^{tree}")
+        if options[:old_rev] then
           reader = repo.new_object_reader
-          new_tree_iter = CanonicalTreeParser.new
-          new_tree_iter.reset(reader, new_tree)
+          old_tree = repo.resolve("#{options[:old_rev]}^{tree}")
           old_tree_iter = CanonicalTreeParser.new
           old_tree_iter.reset(reader, old_tree)
-          diff_command.set_new_tree(new_tree_iter)
           diff_command.set_old_tree(old_tree_iter)
+        end
+        if options[:new_rev] then
+          reader = repo.new_object_reader unless reader
+          new_tree = repo.resolve("#{options[:new_rev]}^{tree}")
+          new_tree_iter = CanonicalTreeParser.new
+          new_tree_iter.reset(reader, new_tree)
+          diff_command.set_new_tree(new_tree_iter)
         end
       diff_command.set_path_filter(PathFilter.create(options[:file_path])) if options[:file_path]
       diff_command.set_show_name_and_status_only(true) if options[:namestatus] 
