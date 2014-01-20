@@ -73,8 +73,30 @@ describe RJGit do
           File.open(File.join(@temp_repo_path, "rspec-addfile.txt"), 'w') {|file| file.write("This is a new file to add.") }
           @repo.add("rspec-addfile.txt")
         end
+
+        it "returns diffs for a specific path" do
+          sha1 = @repo.head.id
+          sha2 = @repo.commits.last.id
+          options = {:old_rev => sha2, :new_rev => sha1, :file_path => "chapters/prematerial.txt"}
+          diff = RJGit::Porcelain.diff(@repo, options).first
+          diff[:newpath].should == 'chapters/prematerial.txt'
+          diff[:changetype].should == "ADD"
+        end
+
+        it "returns a patch for a diff entry" do
+          sha1 = @repo.head.id
+          sha2 = @repo.commits.last.id
+          options = {:old_rev => sha2, :new_rev => sha1, :file_path => "chapters/prematerial.txt", :patch => true}
+          diff = RJGit::Porcelain.diff(@repo, options).first
+          result = "diff --git a/chapters/prematerial.txt b/chapters/prematerial.txt"
+          diff[:patch].should =~ /#{result}/
+        end
+
+        it "returns a patch for a diff entry with optional formatting" do
+          pending
+        end
       
-        it "should return diff information of working tree when adding file" do
+        it "returns cached diff when adding file" do
           entry = RJGit::Porcelain.diff(@repo, {:cached => true}).first
           entry.should be_a Hash
           entry[:changetype].should == "ADD"
@@ -83,7 +105,7 @@ describe RJGit do
           RJGit::Porcelain.diff(@repo).should == []
         end
       
-        it "should return diff information of working tree when removing file" do 
+        it "returns cached diff when removing file" do 
           @repo.commit("Adding rspec-addfile.txt so it can be deleted.")
           @repo.remove("rspec-addfile.txt")
           entry = RJGit::Porcelain.diff(@repo, {:cached => true}).first

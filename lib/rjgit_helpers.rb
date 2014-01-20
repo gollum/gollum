@@ -50,21 +50,22 @@ module RJGit
   
   def self.convert_diff_entries(entries)
     entries.map do |diff_entry|
-      RJGit. diff_entry_to_hash(diff_entry)
+      RJGit.diff_entry_to_hash(diff_entry[0], diff_entry[1])
     end
   end
   
-  def self.diff_entry_to_hash(diff_entry)
+  def self.diff_entry_to_hash(diff_entry, patch)
     entry = {}
     entry[:changetype] = diff_entry.get_change_type.to_string
     entry[:oldpath] = diff_entry.get_old_path
     entry[:newpath] = diff_entry.get_new_path
-     entry[:oldmode] = diff_entry.get_old_mode.get_bits
-     entry[:newmode] = diff_entry.get_new_mode.get_bits
-     entry[:score] = diff_entry.get_score
-     entry[:oldid] = diff_entry.get_old_id.name
-     entry[:newid] = diff_entry.get_new_id.name
-     entry
+    entry[:oldmode] = diff_entry.get_old_mode.get_bits
+    entry[:newmode] = diff_entry.get_new_mode.get_bits
+    entry[:score] = diff_entry.get_score
+    entry[:oldid] = diff_entry.get_old_id.name
+    entry[:newid] = diff_entry.get_new_id.name
+    entry[:patch] = patch unless patch == nil
+    entry
   end
   
   def self.sym_for_type(type)

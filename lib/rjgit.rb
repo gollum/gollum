@@ -32,6 +32,9 @@ module RJGit
     import 'org.eclipse.jgit.api.BlameCommand'
     import 'org.eclipse.jgit.blame.BlameGenerator'
     import 'org.eclipse.jgit.blame.BlameResult'
+    import 'org.eclipse.jgit.treewalk.CanonicalTreeParser'
+    import 'org.eclipse.jgit.diff.DiffFormatter'
+
     
     # http://wiki.eclipse.org/JGit/User_Guide#Porcelain_API
     def self.add(repository, file_pattern)
@@ -115,18 +118,39 @@ module RJGit
     end
     
     def self.diff(repository, options = {})
-      options = {:namestatus => false}.merge(options)
+      options = {:namestatus => false, :patch => false}.merge(options)
       git = repository.git.jgit
+      repo = RJGit.repository_type(repository)
       diff_command = git.diff
-      diff_command.set_old_tree(old_tree) if options[:old_tree]
-      diff_command.set_new_tree(new_tree) if options[:new_tree]
-      diff_command.set_path_filter(PathFilter.create(file_path)) if options[:file_path]
+        if options[:old_rev] && options[:new_rev] then
+          new_tree = repo.resolve("#{options[:new_rev]}^{tree}")
+          old_tree = repo.resolve("#{options[:old_rev]}^{tree}")
+          reader = repo.new_object_reader
+          new_tree_iter = CanonicalTreeParser.new
+          new_tree_iter.reset(reader, new_tree)
+          old_tree_iter = CanonicalTreeParser.new
+          old_tree_iter.reset(reader, old_tree)
+          diff_command.set_new_tree(new_tree_iter)
+          diff_command.set_old_tree(old_tree_iter)
+        end
+      diff_command.set_path_filter(PathFilter.create(options[:file_path])) if options[:file_path]
       diff_command.set_show_name_and_status_only(true) if options[:namestatus] 
       diff_command.set_cached(true) if options[:cached]
       diff_entries = diff_command.call
       diff_entries = diff_entries.to_array.to_ary
-      diff_entries = RJGit.convert_diff_entries(diff_entries)
-      return diff_entries
+        if options[:patch] then
+          result = []
+          out_stream = ByteArrayOutputStream.new
+          formatter = DiffFormatter.new(out_stream)
+          formatter.set_repository(repo)
+          diff_entries.each do |diff_entry|
+            formatter.format(diff_entry)
+            result.push [diff_entry, out_stream.to_string]
+            out_stream.reset
+          end
+        end
+      diff_entries = options[:patch] ? result : diff_entries.map {|entry| [entry]}
+      RJGit.convert_diff_entries(diff_entries)
     end
     
   end
