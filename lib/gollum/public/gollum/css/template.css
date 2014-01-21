@@ -241,7 +241,7 @@ a.absent {
 .markdown-body table tr th,
 .markdown-body table tr td {
   border: 1px solid #ccc;
-  text-align: left;
+  text-align: none;
   margin: 0;
   padding: 6px 13px;
 }
