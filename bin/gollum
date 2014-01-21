@@ -84,8 +84,9 @@ opts = OptionParser.new do |opts|
     wiki_options[:live_preview] = true
   end
 
-  opts.on("--allow-uploads", "Allows file uploads.") do
+  opts.on("--allow-uploads [MODE]", [:dir, :page], "Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).") do |mode|
     wiki_options[:allow_uploads] = true
+    wiki_options[:per_page_uploads] = true if mode == :page
   end
 
   opts.on("--mathjax", "Enables mathjax.") do
