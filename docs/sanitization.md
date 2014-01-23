@@ -16,9 +16,9 @@ a href, abbr, accept, accept-charset, accesskey, action, align, alt, axis, borde
 
 ## ALLOWED PROTOCOLS
 
-a href: http, https, mailto, ftp, irc, apt, :relative
-img src: http, https, :relative
-form action: http, https, :relative
+* a href: http, https, mailto, ftp, irc, apt, :relative
+* img src: http, https, :relative
+* form action: http, https, :relative
 
 # Customizing
 
