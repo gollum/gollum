@@ -2,14 +2,20 @@ require 'spec_helper'
 
 describe RubyGit do
   
-  it "should return log information" do
+  it "returns log information" do
     repo = Repo.new(TEST_REPO_PATH)
     messages = repo.git.log
     messages.should_not be_empty
     messages.first.message.should match /Cleaning working directory/
+    messages = repo.git.log("deconstructions.txt")
+    messages.first.message.should match /More interesting postmodern comments./
+    messages = repo.git.log(nil, "HEAD", {:max_count => 1})
+    messages.count.should == 1
+    messages = repo.git.log(nil, "HEAD", {:max_count => 1, :skip => 1})
+    messages.first.message.should_not match /More interesting postmodern comments./
   end
   
-  it "should return a status object" do
+  it "returns a status object" do
     repo = Repo.new(TEST_REPO_PATH)
     repo.git.status.getModified.to_a.should == []
     repo.git.status.isClean.should == true
@@ -21,26 +27,26 @@ describe RubyGit do
       @repo = Repo.new(@temp_repo_path)
     end
 
-    it "should tag with only a name" do
+    it "tag with only a name" do
       @repo.tags.should have(0).tags
       @repo.git.tag('v0.0')
       @repo.tags.should have_exactly(1).tags
     end
   
-    it "should tag with a name and message" do
+    it "tag with a name and message" do
       @repo.tags.should have(0).tags
       @repo.git.tag('v0.0', 'initial state commit')
       @repo.tags.should have_exactly(1).tags
       @repo.tags['v0.0'].full_message.should match /initial state commit/
     end
 
-    it "should tag with a specific commit or revision" do
+    it "tag with a specific commit or revision" do
       commit = @repo.commits.first
       @repo.git.tag('v0.0', 'initial state commit for a specific commit', commit)
       @repo.tags.should have_exactly(1).tags
     end
     
-    it "should tag with specific actor information" do
+    it "tag with specific actor information" do
       actor = Actor.new('Rspec Examplar', 'rspec@tagging.example')
       @repo.git.tag('v0.0', 'initial state commit', nil, actor)
       @repo.tags.should have_exactly(1).tags

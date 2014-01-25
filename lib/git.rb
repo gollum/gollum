@@ -3,6 +3,7 @@ module RJGit
   import 'java.io.ByteArrayInputStream'
   import 'java.io.FileInputStream'
 
+  import 'org.eclipse.jgit.lib.Constants'
   import 'org.eclipse.jgit.api.Git'
   import 'org.eclipse.jgit.api.AddCommand'
   import 'org.eclipse.jgit.api.RmCommand'
@@ -23,8 +24,13 @@ module RJGit
       @jgit = Git.new(@jrepo)
     end
 
-    def log
+    def log(path = nil, revstring = Constants::HEAD, options = {})
       logs = @jgit.log
+      ref = jrepo.resolve(revstring)
+      logs.add(ref)
+      logs.addPath(path) if path
+      logs.setMaxCount(options[:max_count]) if options[:max_count]
+      logs.setSkip(options[:skip]) if options[:skip]
       commits = Array.new
       logs.call.each do |jcommit|
         commits << Commit.new(jrepo, jcommit)
