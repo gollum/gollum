@@ -449,7 +449,7 @@ module Precious
         @content  = page.formatted_data
         @upload_dest = settings.wiki_options[:allow_uploads] ?
                          (settings.wiki_options[:per_page_uploads] ?
-                            @name : 'uploads'
+                            "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
                          ) : ''
 
         # Extensions and layout data
