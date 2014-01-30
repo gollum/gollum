@@ -50,17 +50,31 @@ describe RJGit do
       Porcelain.commit(@repo, message)
       @repo.commits.last.message.chomp.should == message
     end
+
+      context "listing trees" do
     
-    it "should mimic git-ls-tree" do
-      listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo)
-      listing.should be_an Array
-      first_entry = listing.first
-      first_entry.should be_a Hash
-      first_entry[:mode].should == REG_FILE_TYPE
-      first_entry[:type].should == 'blob'
-      first_entry[:id].should match /baaa47163a922b716898936f4ab032db4e08ae8a/
-      first_entry[:path].should == '.gitignore'
-    end
+        it "mimics git-ls-tree" do
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo)
+          listing.should be_an Array
+          first_entry = listing.first
+          first_entry.should be_a Hash
+          first_entry[:mode].should == REG_FILE_TYPE
+          first_entry[:type].should == 'blob'
+          first_entry[:id].should match /baaa47163a922b716898936f4ab032db4e08ae8a/
+          first_entry[:path].should == '.gitignore'
+        end
+
+        it "mimics git-ls-tree recursively" do
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, {:recursive => true})
+          listing.length.should >= 1
+        end
+
+        it "mimics git-ls-tree for a specific path" do
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, {:file_path => 'lib'})
+          listing.length.should == 1
+        end
+
+      end
     
     it "should mimic git-blame" do
       RJGit::Porcelain.blame(@bare_repo, 'lib/grit.rb')

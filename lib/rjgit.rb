@@ -66,13 +66,13 @@ module RJGit
     end
     
     def self.ls_tree(repository, tree=nil, options={})
-      options = {:recursive => false, :print => false, :io => $stdout, :branch => Constants::HEAD}.merge(options)
+      options = {:recursive => false, :print => false, :io => $stdout, :ref => Constants::HEAD}.merge options
       jrepo = RJGit.repository_type(repository)
       return nil unless jrepo
       if tree 
         jtree = RJGit.tree_type(tree)
       else
-        last_commit_hash = jrepo.resolve(options[:branch])
+        last_commit_hash = jrepo.resolve(options[:ref])
         return nil unless last_commit_hash
         walk = RevWalk.new(jrepo)
         jcommit = walk.parse_commit(last_commit_hash)
@@ -80,6 +80,7 @@ module RJGit
       end
       treewalk = TreeWalk.new(jrepo)
       treewalk.set_recursive(options[:recursive])
+      treewalk.set_filter(PathFilter.create(options[:file_path])) if options[:file_path]
       treewalk.add_tree(jtree)
       entries = []
       while treewalk.next
@@ -247,7 +248,7 @@ module RJGit
       attr_accessor :treemap, :current_tree
       attr_reader :jrepo
       
-      def initialize(repository, branch = nil)
+      def initialize(repository)
         @treemap = {}
         @jrepo = RJGit.repository_type(repository)
         @treebuilder = TreeBuilder.new(@jrepo)
@@ -302,7 +303,8 @@ module RJGit
         @treebuilder.object_inserter.insert(commit_builder)
       end
       
-      def commit(message, author, parents = nil, ref = "refs/heads/#{Constants::MASTER}")
+      def commit(message, author, parents = nil, ref = nil)
+        ref = ref ? ref : "refs/heads/#{Constants::MASTER}"
         @current_tree = @current_tree ? RJGit.tree_type(@current_tree) : @jrepo.resolve("refs/heads/#{Constants::MASTER}^{tree}")
         @treebuilder.treemap = @treemap
         new_tree = @treebuilder.build_tree(@current_tree)

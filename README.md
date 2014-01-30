@@ -96,7 +96,7 @@ tree.data # List the tree's contents (blobs and trees). Also tree.id, tree.mode,
 tree.each {|entry| puts entry.inspect} # Loop over the Tree's children (Blobs and Trees)
 tree.trees # An array of the Tree's child Trees
 tree.blobs # An array of the Tree's child Blobs
-Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :branch => 'mybranch') # Outputs the Tree's contents to $stdout. Faster for recursive listing than Tree#each. Passing nil as the second argument lists the entire repository. Branch defaults to HEAD.
+Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :ref => 'mybranch') # Outputs the Tree's contents to $stdout. Faster for recursive listing than Tree#each. Passing nil as the second argument lists the entire repository. ref defaults to HEAD.
 ```
 
 ### Creating blobs and trees from scratch
