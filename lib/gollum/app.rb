@@ -341,8 +341,12 @@ module Precious
     get '/history/*' do
       @page        = wiki_page(params[:splat].first).page
       @page_num    = [params[:page].to_i, 1].max
-      @versions    = @page.versions :page => @page_num
-      mustache :history
+      unless @page.nil?
+        @versions    = @page.versions :page => @page_num
+        mustache :history
+      else
+        redirect to("/")
+      end
     end
 
     post '/compare/*' do
@@ -454,6 +458,7 @@ module Precious
 
         # Extensions and layout data
         @editable = true
+        @page_exists = !page.versions.empty?
         @toc_content = wiki.universal_toc ? @page.toc_data : nil
         @mathjax  = wiki.mathjax
         @h1_title = wiki.h1_title
