@@ -255,7 +255,9 @@ module Precious
       name = wikip.name
       wiki = wikip.wiki
       page = wikip.page
-      wiki.delete_page(page, { :message => "Destroyed #{name} (#{page.format})" })
+      unless page.nil?
+        wiki.delete_page(page, { :message => "Destroyed #{name} (#{page.format})" })
+      end
 
       redirect to('/')
     end
