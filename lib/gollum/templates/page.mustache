@@ -30,8 +30,11 @@ Mousetrap.bind(['e'], function( e ) {
     <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit</a></li>
     {{/editable}}
+    {{#page_exists}}
+    <li class="minibutton jaws">
     <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
        class="action-page-history">History</a></li>
+    {{/page_exists}}
   </ul>
 </div>
 <div id="wiki-content">

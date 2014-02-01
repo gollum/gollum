@@ -43,6 +43,10 @@ module Precious
         @editable
       end
 
+      def page_exists
+        @page_exists
+      end
+
       def allow_uploads
         @allow_uploads
       end
