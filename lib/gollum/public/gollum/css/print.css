@@ -10,5 +10,5 @@ display: none;
 }
 
 #delete-link {
-visibility: hidden;
+display: none;
 }
