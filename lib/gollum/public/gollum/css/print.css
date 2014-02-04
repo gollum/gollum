@@ -1,0 +1,14 @@
+
+/*
+  print.css
+  Removes the action buttons at the top and 
+  the delete link at the bottom for better printing.
+*/
+
+ul.actions {
+	display: none;
+}
+
+#delete-link {
+	display: none;
+}
