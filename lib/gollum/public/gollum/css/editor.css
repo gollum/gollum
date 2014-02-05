@@ -236,6 +236,16 @@ a#function-help:hover span { background-position: -405px -28px; }
   content: ':';
 }
 
+/* @section uploads */
+
+#gollum-editor-body.dragging {
+  box-shadow: 0 0 10px #AAE000;
+}
+
+#gollum-editor-body.uploading {
+  opacity: 0.5;
+}
+
 
 /* @section form-fields */
 
