@@ -338,6 +338,31 @@ a#function-help:hover span { background-position: -402px -25px; }
 }
 
 
+/* @section uploads */
+
+#gollum-editor-body.dragging {
+  box-shadow: 0 0 10px #AAE000;
+}
+
+#gollum-editor-body.uploading {
+  opacity: 0.5;
+}
+
+#gollum-editor-body + div {
+  display: none;
+  font-size: 1.5em;
+}
+
+#gollum-editor-body + div > i {
+  font-size: 1em;
+}
+
+#gollum-editor-body.uploading + div {
+  display: block;
+}
+
+
+
 /* @section form-fields */
 
 #gollum-editor textarea {
