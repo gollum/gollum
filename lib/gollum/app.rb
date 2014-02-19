@@ -54,7 +54,7 @@ module Precious
 
       def authorized?
         @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-        @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', 'admin']
+        @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [settings.admin_username, settings.admin_password]
       end
 
     end
@@ -79,6 +79,8 @@ module Precious
     set :public_folder, "#{dir}/public/gollum"
     set :static,         true
     set :default_markup, :markdown
+    set :admin_username, "admin"
+    set :admin_password, "password"
 
     set :mustache, {
       # Tell mustache where the Views constant lives
