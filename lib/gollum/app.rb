@@ -43,6 +43,22 @@ module Precious
     register Mustache::Sinatra
     include Precious::Helpers
 
+    helpers do
+
+      def protected!
+        unless authorized?
+          response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
+          throw(:halt, [401, "Not authorized\n"])
+        end
+      end
+
+      def authorized?
+        @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+        @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [settings.admin_username, settings.admin_password]
+      end
+
+    end
+
     dir = File.dirname(File.expand_path(__FILE__))
 
     # Detect unsupported browsers.
@@ -63,6 +79,8 @@ module Precious
     set :public_folder, "#{dir}/public/gollum"
     set :static,         true
     set :default_markup, :markdown
+    set :admin_username, "admin"
+    set :admin_password, "password"
 
     set :mustache, {
       # Tell mustache where the Views constant lives
@@ -126,6 +144,7 @@ module Precious
     end
 
     get '/edit/*' do
+      protected!
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
@@ -197,6 +216,7 @@ module Precious
     end
 
     post '/rename/*' do
+      protected!
       wikip     = wiki_page(params[:splat].first)
       halt 500 if wikip.nil?
       wiki      = wikip.wiki
@@ -233,6 +253,7 @@ module Precious
     end
 
     post '/edit/*' do
+      protected!
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
@@ -251,6 +272,7 @@ module Precious
     end
 
     get '/delete/*' do
+      protected!
       wikip = wiki_page(params[:splat].first)
       name = wikip.name
       wiki = wikip.wiki
@@ -263,6 +285,7 @@ module Precious
     end
 
     get '/create/*' do
+      protected!
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
@@ -286,6 +309,7 @@ module Precious
     end
 
     post '/create' do
+      protected!
       name         = params[:page].to_url
       path         = sanitize_empty_params(params[:path]) || ''
       format       = params[:format].intern
