@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 1.9"
 
   s.name              = 'gollum'
-  s.version           = '2.6.0'
-  s.date              = '2014-01-02'
+  s.version           = '2.7.0'
+  s.date              = '2014-02-20'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -53,6 +53,7 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/css/editor.css
     lib/gollum/public/gollum/css/gollum.css
     lib/gollum/public/gollum/css/ie7.css
+    lib/gollum/public/gollum/css/print.css
     lib/gollum/public/gollum/css/template.css
     lib/gollum/public/gollum/images/dirty-shade.png
     lib/gollum/public/gollum/images/fileview/document.png
