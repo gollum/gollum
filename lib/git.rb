@@ -47,8 +47,16 @@ module RJGit
       array
     end
 
-    def commit(message)
-      Commit.new(jrepo, @jgit.commit.set_message(message).call)
+    def commit(message, options = {})
+      commit_cmd = @jgit.commit.set_message(message)
+      commit_cmd.set_all(options[:all]) unless options[:all].nil?
+      commit_cmd.set_amend(options[:amend]) unless options[:amend].nil?
+      commit_cmd.set_author(options[:author].person_ident) unless options[:author].nil?
+      commit_cmd.set_committer(options[:committer].person_ident) unless options[:committer].nil?
+      commit_cmd.set_insert_change_id(options[:insert_change_id]) unless options[:insert_change_id].nil?
+      options[:only_paths].each {|path| commit_cmd.set_only(path)} unless options[:only_paths].nil?
+      commit_cmd.set_reflog_comment(options[:reflog_comment]) unless options[:reflog_comment].nil?
+      Commit.new(jrepo, commit_cmd.call)
     end
 
     def clone(remote, local, options = {})

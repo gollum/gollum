@@ -59,6 +59,29 @@ describe RubyGit do
     end
   end
   
+  context "committing with settings" do
+
+    before(:each) do
+      @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
+      @repo = Repo.new(@temp_repo_path)
+      @git = @repo.git
+      @actor = Actor.new('Rspec Examplar', 'rspec@tagging.example')
+    end
+    
+    it "commits files with all jgit settings" do
+      File.open(File.join(@temp_repo_path, "rspec-committest.txt"), 'w') {|file| file.write("This file is for comitting.")}
+      @repo.add("rspec-comittest.txt")
+      options = {:all => false, :amend => false, :author => @actor, :committer => @actor, :insert_change_id => false, :only_paths => ["rspec-comittest.txt"], :reflog_comment => "test"}
+      [:set_all, :set_amend, :set_author, :set_committer, :set_insert_change_id, :set_only, :set_reflog_comment].each {|message| org.eclipse.jgit.api.CommitCommand.any_instance.should_receive(message)}
+      commit = @git.commit("Creating a commit for testing jgit setters", options)
+    end
+    
+     after(:each) do
+      remove_temp_repo(@temp_repo_path)
+    end
+    
+  end
+  
   context "when merging" do
 
     before(:each) do
