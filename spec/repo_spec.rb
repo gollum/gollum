@@ -286,6 +286,7 @@ describe Repo do
       @repo.add("newfile.txt")
       @repo.commit("Committing a test file to a test repository.")
       RJGit::Porcelain.ls_tree(@repo).should have_at_least(6).items
+      @repo.should respond_to(:commit).with(2).arguments
     end
     
     it "should remove files from the index and the file system" do

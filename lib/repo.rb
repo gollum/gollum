@@ -155,8 +155,8 @@ module RJGit
       @git.remove(file_pattern)
     end
     
-    def commit(message)
-      @git.commit(message)
+    def commit(message, options = {})
+      @git.commit(message, options)
     end
     
     def clean(options = {})
