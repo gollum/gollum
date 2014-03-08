@@ -13,7 +13,7 @@ html, body {
 }
 
 body {
-  font: 13.34px helvetica,arial,freesans,clean,sans-serif;
+  font: 13px Helvetica, arial, freesans, clean, sans-serif;
   line-height: 1.4;
 }
 
@@ -36,8 +36,8 @@ a.absent {
 }
 
 .markdown-body {
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.7;
 }
 .markdown-body>*:first-child {
   margin-top: 0!important;
@@ -126,8 +126,7 @@ a.absent {
 .markdown-body table,
 .markdown-body pre,
 .markdown-body hr {
-  margin: 0px 0;
-  margin-bottom: 15px;
+  margin: 15px 0;
 }
 .markdown-body li {
   margin: 0px;
@@ -172,14 +171,6 @@ a.absent {
 .markdown-body ul,
 .markdown-body ol {
   padding-left: 30px;
-}
-.markdown-body ul li>:first-child,
-.markdown-body ol li>:first-child {
-  margin-top: 0;
-}
-.markdown-body ul li>:last-child,
-.markdown-body ol li>:last-child {
-  margin-bottom: 0;
 }
 .markdown-body dl {
   padding: 0;
@@ -330,6 +321,14 @@ a.absent {
   margin: 13px auto 0;
   text-align: right;
 }
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body tt {
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+  font-size: 12px;
+}
+
 .markdown-body code,
 .markdown-body tt {
   margin: 0 2px;

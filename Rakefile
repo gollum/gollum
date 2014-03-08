@@ -128,6 +128,11 @@ task :build => :gemspec do
   sh "mv #{gem_file} pkg"
 end
 
+desc "Build and install"
+task :install => :build do
+  sh "gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem"
+end
+
 desc 'Update gemspec'
 task :gemspec => :validate do
   # read spec file and split out manifest section
