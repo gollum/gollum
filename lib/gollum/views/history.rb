@@ -13,16 +13,16 @@ module Precious
         i = @versions.size + 1
         @versions.map do |v|
           i -= 1
-          { :id       => v.id,
-            :id7      => v.id[0..6],
-            :num      => i,
-            :selected => @page.version.id == v.id,
-            :author   => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message  => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date     => v.authored_date.strftime("%B %d, %Y"),
-            :gravatar => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :selected  => @page.version.id == v.id,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime("%B %d, %Y"),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
             :identicon => self._identicon_code(v.author.email),
-            :date_full=> v.authored_date,
+            :date_full => v.authored_date,
           }
         end
       end
@@ -36,16 +36,16 @@ module Precious
 
       def string_to_code string
         # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0,20]].pack('H*').bytes.to_a
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
         # Thanks donpark's IdenticonUtil.java for this.
         # Match the following Java code
         # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
         #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
 
         return left_shift(b[0], 24) |
-               left_shift(b[1], 16) |
-               left_shift(b[2], 8)  |
-               b[3] & 0xFF
+            left_shift(b[1], 16) |
+            left_shift(b[2], 8) |
+            b[3] & 0xFF
       end
 
       def _identicon_code(blob)
@@ -53,7 +53,7 @@ module Precious
       end
 
       def use_identicon
-          @page.wiki.user_icons == 'identicon'
+        @page.wiki.user_icons == 'identicon'
       end
 
       def partial(name)

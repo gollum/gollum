@@ -17,10 +17,10 @@ require 'optparse'
 require 'rubygems'
 require 'gollum'
 
-exec = {}
-options = { 'port' => 4567, 'bind' => '0.0.0.0' }
+exec         = {}
+options      = { 'port' => 4567, 'bind' => '0.0.0.0' }
 wiki_options = {
-    :live_preview => false,
+    :live_preview  => false,
     :allow_uploads => false,
 }
 
@@ -85,7 +85,7 @@ opts = OptionParser.new do |opts|
   end
 
   opts.on("--allow-uploads [MODE]", [:dir, :page], "Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).") do |mode|
-    wiki_options[:allow_uploads] = true
+    wiki_options[:allow_uploads]    = true
     wiki_options[:per_page_uploads] = true if mode == :page
   end
 
@@ -120,8 +120,8 @@ end
 
 # --gollum-path wins over ARGV[0]
 gollum_path = wiki_options[:gollum_path] ?
-              wiki_options[:gollum_path] :
-              ARGV[0] || Dir.pwd
+    wiki_options[:gollum_path] :
+    ARGV[0] || Dir.pwd
 
 if options['irb']
   require 'irb'
@@ -151,7 +151,9 @@ if options['irb']
   begin
     require 'gollum-lib'
     wiki = Gollum::Wiki.new(gollum_path, wiki_options)
-    if !wiki.exist? then raise Gollum::InvalidGitRepositoryError end
+    if !wiki.exist? then
+      raise Gollum::InvalidGitRepositoryError
+    end
     puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
     puts
     puts %(    page = wiki.page('page-name'))
@@ -193,7 +195,7 @@ else
       def initialize base_path
         @mg = Rack::Builder.new do
           map '/' do
-            run Proc.new { [ 302, {'Location'=> "/#{base_path}" }, [] ] }
+            run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
           end
 
           map "/#{base_path}" do
