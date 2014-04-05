@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'shoulda', '~> 3.5.0'
   s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
   s.add_development_dependency 'twitter_cldr', '~> 2.4.2'
+  s.add_development_dependency 'mocha', '~> 1.0.0'
 
   # = MANIFEST =
   s.files = %w[
