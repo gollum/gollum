@@ -2,6 +2,26 @@
   Gollum v3 Template
 */
 
+@font-face {
+  /* replace */
+  font-family: 'fa';
+  src: url('fa.woff') format('woff');
+  font-weight: normal;
+  font-style: normal
+}
+
+.fa {
+  font: normal normal 16px fa;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fa-link:before {
+  content: "\f0c1";
+}
+
 /* margin & padding reset*/
 * {
   margin: 0;
@@ -36,6 +56,7 @@ a.absent {
 }
 
 .markdown-body {
+  padding: 30px;
   font-size: 15px;
   line-height: 1.7;
 }
@@ -95,28 +116,29 @@ a.absent {
   font-size: inherit;
 }
 .markdown-body h1 {
-  font-size: 28px;
+  font-size: 2.5em;
+  border-bottom: 1px solid #ddd;
   color: #000;
   margin-top: 20px;
   margin-bottom: 10px;
 }
 .markdown-body h2 {
-  font-size: 24px;
-  border-bottom: 1px solid #ccc;
+  font-size: 2em;
+  border-bottom: 1px solid #eee;
   color: #000;
 }
 .markdown-body h3 {
-  font-size: 18px;
+  font-size: 1.5em;
 }
 .markdown-body h4 {
-  font-size: 16px;
+  font-size: 1.2em;
 }
 .markdown-body h5 {
-  font-size: 14px;
+  font-size: 1em;
 }
 .markdown-body h6 {
   color: #777;
-  font-size: 14px;
+  font-size: 1em;
 }
 .markdown-body p,
 .markdown-body blockquote,
