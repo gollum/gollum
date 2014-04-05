@@ -3,19 +3,20 @@
 */
 
 @font-face {
-  /* replace */
-  font-family: 'fa';
-  src: url('fa.woff') format('woff');
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot?v=4.0.3');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
   font-weight: normal;
-  font-style: normal
+  font-style: normal;
 }
 
 .fa {
-  font: normal normal 16px fa;
-  line-height: 1;
   display: inline-block;
+  font: normal normal 16px FontAwesome;
+  line-height: 1;
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .fa-link:before {
@@ -28,13 +29,26 @@
   padding: 0;
 }
 
+div {
+  display: block;
+}
+
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
 html, body {
   color: #333;
 }
 
 body {
-  font: 13px Helvetica, arial, freesans, clean, sans-serif;
+  background-color: white;
+  font: 13.34px Helvetica, arial, freesans, clean, sans-serif;
+  font-size: small;
   line-height: 1.4;
+  min-width: 980px;
 }
 
 img {
@@ -50,6 +64,18 @@ a.absent {
   color: #c00;
 }
 
+a:focus {
+  outline: thin dotted;
+}
+
+a:active, a:hover {
+  outline: 0;
+}
+
+.markdown-body a.anchor:focus {
+  outline: none;
+}
+
 .markdown-body a[id].wiki-toc-anchor {
   color: inherit;
   text-decoration: none;
@@ -59,6 +85,8 @@ a.absent {
   padding: 30px;
   font-size: 15px;
   line-height: 1.7;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 
 .markdown-body > *:first-child {
@@ -90,22 +118,29 @@ a.absent {
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
-  margin: 20px 0 10px;
+  margin: 1em 0 15px;
   padding: 0;
   font-weight: bold;
-  -webkit-font-smoothing: antialiased;
+  line-height: 1.7;
   cursor: text;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.markdown-body h1:hover a.anchor,
-.markdown-body h2:hover a.anchor,
-.markdown-body h3:hover a.anchor,
-.markdown-body h4:hover a.anchor,
-.markdown-body h5:hover a.anchor,
-.markdown-body h6:hover a.anchor {
-  background: url(../images/pin-20.png) no-repeat left center;
+.markdown-body h1 .fa-link, .markdown-body h2 .fa-link, .markdown-body h3 .fa-link, .markdown-body h4 .fa-link, .markdown-body h5 .fa-link, .markdown-body h6 .fa-link {
+  display: none;
   text-decoration: none;
+  color: #000;
+}
+
+.markdown-body h1:hover a.anchor, .markdown-body h2:hover a.anchor, .markdown-body h3:hover a.anchor, .markdown-body h4:hover a.anchor, .markdown-body h5:hover a.anchor, .markdown-body h6:hover a.anchor {
+  text-decoration: none;
+  line-height: 1;
+  padding-left: 8px;
+  margin-left: -30px;
+  top: 15%;
+  display: inline-block;
 }
 
 .markdown-body h1 tt,
