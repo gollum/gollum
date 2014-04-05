@@ -38,7 +38,7 @@ context "Frontend Unicode support" do
 
   test "creates korean page which contains korean content" do
     post "/create", :content => '한글 text', :page => "k",
-      :format => 'markdown', :message => 'def'
+         :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
 
@@ -49,7 +49,7 @@ context "Frontend Unicode support" do
 
   test "heavy use 1" do
     post "/create", :content => '한글 text', :page => "PG",
-      :format => 'markdown', :message => 'def'
+         :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
 
@@ -62,36 +62,36 @@ context "Frontend Unicode support" do
     assert last_response.ok?
 
     @wiki = Gollum::Wiki.new(@path)
-    page = @wiki.page('PG')
+    page  = @wiki.page('PG')
     assert_equal '바뀐 text', utf8(page.raw_data)
     assert_equal 'ghi', page.version.message
   end
 
   test "heavy use 2" do
     post "/create", :content => '한글 text', :page => "k",
-      :format => 'markdown', :message => 'def'
+         :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
 
     @wiki.update_page(@wiki.page('k'), nil, nil, '다른 text', {})
     @wiki = Gollum::Wiki.new(@path)
-    page = @wiki.page('k')
+    page  = @wiki.page('k')
     assert_equal '다른 text', utf8(page.raw_data)
 
     post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
-      :format => 'markdown', :message => 'ghi'
+         :format                            => 'markdown', :message => 'ghi'
     follow_redirect!
     assert last_response.ok?
 
     @wiki = Gollum::Wiki.new(@path)
-    page = @wiki.page('k')
+    page  = @wiki.page('k')
     assert_equal '바뀐 text', utf8(page.raw_data)
     assert_equal 'ghi', page.version.message
   end
 
   test 'transliteration' do
     # TODO: Remove to_url once write_page changes are merged.
-    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', { :name => '', :email => '' } )
+    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', { :name => '', :email => '' })
     page = @wiki.page('eeeee')
     assert_equal '한글 text', utf8(page.raw_data)
   end
