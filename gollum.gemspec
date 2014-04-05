@@ -10,10 +10,10 @@ Gem::Specification.new do |s|
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
-  s.summary     = "A simple, Git-powered wiki."
-  s.description = "A simple, Git-powered wiki with a sweet API and local frontend."
+  s.summary     = 'A simple, Git-powered wiki.'
+  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
 
-  s.authors  = ["Tom Preston-Werner", "Rick Olson"]
+  s.authors  = ['Tom Preston-Werner', 'Rick Olson']
   s.email    = 'tom@github.com'
   s.homepage = 'http://github.com/gollum/gollum'
 
@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rack-test', '~> 0.6.2'
   s.add_development_dependency 'shoulda', '~> 3.4.0'
   s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
+  s.add_development_dependency 'twitter_cldr', '~> 2.4.2'
 
   # = MANIFEST =
   s.files = %w[

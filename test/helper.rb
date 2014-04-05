@@ -5,6 +5,7 @@ require 'shoulda'
 require 'mocha/setup'
 require 'fileutils'
 require 'minitest/reporters'
+require 'twitter_cldr'
 
 # Silence locale validation warning
 require 'i18n'

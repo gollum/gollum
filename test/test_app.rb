@@ -63,9 +63,13 @@ context "Frontend" do
     assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
   end
 
+  def nfd utf8
+    TwitterCldr::Normalization::NFD.normalize utf8
+  end
+
   test "UTF-8 headers href preserved" do
     page = 'utfh1'
-    text = '한글'
+    text = nfd('한글')
 
     # don't use h1 or it will be promoted to replace file name
     # which doesn't generate a normal header link
@@ -74,7 +78,10 @@ context "Frontend" do
 
     get page
 
-    assert_match /<h2>#{text}<a class="anchor" id="#{text}" href="##{text}"><\/a><\/h2>/, last_response.body
+    expected = "<h2><a class=\"anchor\" id=\"#{text}\" href=\"##{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    actual = nfd(last_response.body)
+
+    assert_match /#{expected}/, actual
   end
 
   test "retain edit information" do
