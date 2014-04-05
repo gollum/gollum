@@ -6,6 +6,10 @@ require 'mocha/setup'
 require 'fileutils'
 require 'minitest/reporters'
 
+# Silence locale validation warning
+require 'i18n'
+I18n.enforce_available_locales = false
+
 MiniTest::Reporters.use!
 
 dir = File.dirname(File.expand_path(__FILE__))
