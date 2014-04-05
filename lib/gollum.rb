@@ -13,7 +13,7 @@ require File.expand_path('../gollum/uri_encode_component', __FILE__)
 
 # Set ruby to UTF-8 mode
 # This is required for Ruby 1.8.7 which gollum still supports.
-$KCODE = 'U' if RUBY_VERSION[0,3] == '1.8'
+$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
 
 module Gollum
   VERSION = '3.0.0'
@@ -22,7 +22,8 @@ module Gollum
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
   end
 
-  class Error < StandardError; end
+  class Error < StandardError;
+  end
 
   class DuplicatePageError < Error
     attr_accessor :dir

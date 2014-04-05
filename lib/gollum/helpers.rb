@@ -22,13 +22,13 @@ module Precious
     end
 
     def sanitize_empty_params(param)
-      [nil,''].include?(param) ? nil : CGI.unescape(param)
+      [nil, ''].include?(param) ? nil : CGI.unescape(param)
     end
 
     # Ensure path begins with a single leading slash
     def clean_path(path)
       if path
-        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/,'/')
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
       end
     end
 
@@ -36,7 +36,7 @@ module Precious
     # Remove all double slashes
     def clean_url url
       return url if url.nil?
-      url.gsub('%2F','/').gsub(/^\/+/,'').gsub('//','/')
+      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
     end
 
   end

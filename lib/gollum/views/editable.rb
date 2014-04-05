@@ -4,7 +4,7 @@ module Precious
       Gollum::Markup.formats.map do |key, val|
         { :name     => val[:name],
           :id       => key.to_s,
-          :selected => selected == key}
+          :selected => selected == key }
       end.sort do |a, b|
         a[:name].downcase <=> b[:name].downcase
       end

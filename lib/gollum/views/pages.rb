@@ -11,7 +11,7 @@ module Precious
 
       def breadcrumb
         if @path
-          path = Pathname.new(@path)
+          path       = Pathname.new(@path)
           breadcrumb = [%{<a href="#{@base_url}/pages/">Home</a>}]
           path.descend do |crumb|
             title = crumb.basename
@@ -34,7 +34,7 @@ module Precious
           folder_links = []
 
           @results.map { |page|
-            page_path = page.path.sub(/^#{@path}\//,'')
+            page_path = page.path.sub(/^#{@path}\//, '')
 
             if page_path.include?('/')
               folder      = page_path.split('/').first
