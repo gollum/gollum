@@ -56,6 +56,11 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/css/ie7.css
     lib/gollum/public/gollum/css/print.css
     lib/gollum/public/gollum/css/template.css
+    lib/gollum/public/gollum/fonts/FontAwesome.otf
+    lib/gollum/public/gollum/fonts/fontawesome-webfont.eot
+    lib/gollum/public/gollum/fonts/fontawesome-webfont.svg
+    lib/gollum/public/gollum/fonts/fontawesome-webfont.ttf
+    lib/gollum/public/gollum/fonts/fontawesome-webfont.woff
     lib/gollum/public/gollum/images/dirty-shade.png
     lib/gollum/public/gollum/images/fileview/document.png
     lib/gollum/public/gollum/images/fileview/folder-horizontal.png
@@ -534,8 +539,6 @@ Gem::Specification.new do |s|
     licenses/unity_asset_pool/COPYRIGHT
     openrc/conf.d/gollum
     openrc/init.d/gollum
-    templates/formatting.html
-    templates/helper_wiki.rb
   ]
   # = MANIFEST =
 

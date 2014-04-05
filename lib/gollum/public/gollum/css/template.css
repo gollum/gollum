@@ -103,6 +103,7 @@ a:active, a:hover {
 
 .markdown-body a.anchor {
   display: block;
+  padding-right: 6px;
   padding-left: 30px;
   margin-left: -30px;
   cursor: pointer;
@@ -134,7 +135,12 @@ a:active, a:hover {
   color: #000;
 }
 
-.markdown-body h1:hover a.anchor, .markdown-body h2:hover a.anchor, .markdown-body h3:hover a.anchor, .markdown-body h4:hover a.anchor, .markdown-body h5:hover a.anchor, .markdown-body h6:hover a.anchor {
+.markdown-body h1:hover a.anchor .fa-link,
+.markdown-body h2:hover a.anchor .fa-link,
+.markdown-body h3:hover a.anchor .fa-link,
+.markdown-body h4:hover a.anchor .fa-link,
+.markdown-body h5:hover a.anchor .fa-link,
+.markdown-body h6:hover a.anchor .fa-link {
   text-decoration: none;
   line-height: 1;
   padding-left: 8px;
