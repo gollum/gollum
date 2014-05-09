@@ -63,6 +63,7 @@ Mousetrap.bind(['e'], function( e ) {
       {{{content}}}
     </div>
   </div>
+
   {{#has_footer}}
   <div id="wiki-footer" class="gollum-{{footer_format}}-content">
     <div id="footer-content" class="markdown-body">
@@ -73,6 +74,9 @@ Mousetrap.bind(['e'], function( e ) {
   </div>
 
 </div>
+
+{{> disqus}}
+
 <div id="footer">
   <p id="last-edit">Last edited by <b>{{author}}</b>, {{date}}</p>
   <p>

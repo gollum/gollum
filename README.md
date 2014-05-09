@@ -139,6 +139,8 @@ run Precious::App
 
 Your Rack middleware can pass author details to Gollum in a Hash in the session under the 'gollum.author' key.
 
+Your gollum app can have Disqus based commenting support. Fill `set :disqus_shortname, 'your_disqus_shortname'` in lib/gollum/app.rb with your disqus shortname.
+
 ## CONFIG FILE
 
 Gollum optionally takes a `--config file`. See [config.rb](https://github.com/gollum/gollum/blob/master/config.rb) for an example.
