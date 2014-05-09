@@ -68,6 +68,14 @@ module Precious
         has_header && @header.format.to_s
       end
 
+      def has_disqus
+        Precious::App.settings.respond_to?(:disqus_shortname) && !Precious::App.settings.disqus_shortname.empty?
+      end
+ 
+      def disqus_shortname
+        Precious::App.settings.disqus_shortname
+      end
+
       def has_footer
         @footer = (@page.footer || false) if @footer.nil?
         !!@footer

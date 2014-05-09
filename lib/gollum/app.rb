@@ -63,6 +63,7 @@ module Precious
     set :public_folder, "#{dir}/public/gollum"
     set :static, true
     set :default_markup, :markdown
+    set :disqus_shortname, '' # enter your forum shortname in '' to enable diqus or leave just like this to ignore disqus
 
     set :mustache, {
         # Tell mustache where the Views constant lives
