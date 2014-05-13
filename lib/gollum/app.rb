@@ -17,6 +17,8 @@ require File.expand_path '../helpers', __FILE__
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
 
+enable :sessions
+
 # Fix to_url
 class String
   alias :upstream_to_url :to_url
@@ -24,6 +26,12 @@ class String
   def to_url
     return nil if self.nil?
     upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar'], :force_downcase => false
+  end
+end
+
+module Password
+  def self.correct?(password)
+    password == "rejuvenation"
   end
 end
 
@@ -75,6 +83,13 @@ module Precious
         :views     => "#{dir}/views"
     }
 
+    # Lets make sure Sessions are enabled
+  # configure do
+  #   use Rack::Session::Cookie, :key => 'rack.session',
+  #   :path => '/',
+  #   :secret => 'rejuvenation_wiki'
+  # end
+
     # Sinatra error handling
     configure :development, :staging do
       enable :show_exceptions, :dump_errors
@@ -86,6 +101,9 @@ module Precious
     end
 
     before do
+      if !authorized? && !request.fullpath.include?('/sign_in') && !request.fullpath.include?('/authenticate')
+        redirect "/sign_in"
+      end
       @base_url = url('/', false).chomp('/')
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
@@ -96,6 +114,26 @@ module Precious
     get '/' do
       page_dir = settings.wiki_options[:page_file_dir].to_s
       redirect clean_url(::File.join(@base_url, page_dir, wiki_new.index_page))
+    end
+
+    get '/sign_in' do
+      mustache :sign_in
+    end
+
+    get '/session' do
+      session.inspect
+    end
+
+    get '/authenticate' do
+      puts "Authenticating ", session['gollum.author']
+      users = File.readlines('users.txt').map(&:split).flatten
+      if users.include?(params[:username]) && Password.correct?(params[:password])
+        session['gollum.author'] = params[:username]
+        puts "Authenticated ", session['gollum.author'].inspect
+        redirect '/'
+      else
+        redirect '/sign_in'
+      end
     end
 
     # path is set to name if path is nil.
@@ -501,9 +539,13 @@ module Precious
     def commit_message
       msg               = (params[:message].nil? or params[:message].empty?) ? "[no message]" : params[:message]
       commit_message    = { :message => msg }
-      author_parameters = session['gollum.author']
+      author_parameters = {:name => session['gollum.author']}
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
+    end
+
+    def authorized?
+      !session['gollum.author'].nil?
     end
   end
 end
