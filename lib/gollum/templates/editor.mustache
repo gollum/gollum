@@ -88,7 +88,9 @@
     </div>
   </div>
     <textarea id="gollum-editor-body"
-     data-markup-lang="{{format}}" name="content" class="mousetrap">{{content}}</textarea>
+     data-markup-lang="{{format}}" name="content" class="mousetrap">
+     {{content}}
+     </textarea>
 
     {{#header}}
     <div id="gollum-editor-edit-header" class="collapsed">
@@ -125,8 +127,8 @@
     </div>
 
     <span class="jaws"><br></span>
-    <input type="submit" id="gollum-editor-submit" value="Save" title="Save current changes">
-    <a href="{{base_url}}/preview" id="gollum-editor-preview" class="minibutton" title="Preview this Page">Preview</a>
+    <input type="submit" value="Save" title="Save current changes" class="btn btn-sm btn-primary"/>
+    <a href="{{base_url}}/preview" id="gollum-editor-preview" class="btn btn-sm btn-info" title="Preview this Page">Preview</a>
   </fieldset>
 </form>
 </div>

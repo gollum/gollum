@@ -117,7 +117,7 @@ module Precious
     end
 
     get '/sign_in' do
-      mustache :sign_in
+      mustache :sign_in, { :layout => false }
     end
 
     get '/session' do

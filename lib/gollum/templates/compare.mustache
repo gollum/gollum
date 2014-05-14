@@ -3,15 +3,15 @@
   <h1>History for <strong>{{path}}</strong></h1>
 
   <ul class="actions">
-    <li class="minibutton">
+    <li>
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}/{{escaped_url_path}}"
-       class="action-view-page">View Page</a></li>
-    <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
-       class="action-edit-page">Edit Page</a></li>
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
-       class="action-page-history">Page History</a></li>
+    <li><a href="{{base_url}}/{{escaped_url_path}}"
+       class="action-view-page btn btn-sm btn-info">View Page</a></li>
+    <li><a href="{{base_url}}/edit/{{escaped_url_path}}"
+       class="action-edit-page btn btn-sm btn-info">Edit Page</a></li>
+    <li><a href="{{base_url}}/history/{{escaped_url_path}}"
+       class="action-page-history btn btn-sm btn-info">Page History</a></li>
   </ul>
 </div>
 
@@ -23,11 +23,11 @@
 
   {{#show_revert}}
   <ul class="actions">
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
-       class="action-page-history">Back to Page History</a></li>
-    <li class="minibutton">
+    <li><a href="{{base_url}}/history/{{escaped_url_path}}"
+       class="action-page-history btn btn-sm btn-info">Back to Page History</a></li>
+    <li>
       <form name="gollum-revert" action="{{base_url}}/revert/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
-      <a href="#" class="gollum-revert-button">Revert Changes</a>
+      <a href="#" class="gollum-revert-button btn btn-info btn-sm">Revert Changes</a>
       </form>
     </li>
   </ul>
@@ -49,14 +49,14 @@
 </div>
 <div id="footer">
   <ul class="actions">
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
-       class="action-page-history">Back to Page History</a></li>
+    <li><a href="{{base_url}}/history/{{escaped_url_path}}"
+       class="action-page-history btn btn-sm btn-info">Back to Page History</a></li>
     {{#show_revert}}
-    <li class="minibutton">
-      <a href="#" class="gollum-revert-button">Revert Changes</a>
+    <li>
+      <a href="#" class="gollum-revert-button btn btn-sm btn-info">Revert Changes</a>
     </li>
     {{/show_revert}}
-    <li class="minibutton"><a href="#">Back to Top</a></li>
+    <li><a href="#">Back to Top</a></li>
   </ul>
 </div>
 </div>

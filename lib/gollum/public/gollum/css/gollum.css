@@ -25,14 +25,14 @@ body, html {
   padding-left:20px;
   padding-right:20px;
 }
-
-a:link {
+a {
   color: #4183c4;
+}
+a:link {
   text-decoration: none;
 }
 
 a:hover, a:visited {
-  color: #4183c4;
   text-decoration: underline;
 }
 

@@ -9,30 +9,29 @@ Mousetrap.bind(['e'], function( e ) {
 <div id="head">
   <h1>{{page_header}}</h1>
   <ul class="actions">
-    <li class="minibutton">
+    <li>
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}/"
+    <li><a class="btn btn-info btn-sm" href="{{base_url}}/"
        class="action-home-page">Home</a></li>
-    <li class="minibutton"><a href="{{base_url}}/pages"
+    <li><a class="btn btn-info btn-sm" href="{{base_url}}/pages"
       class="action-all-pages">All</a></li>
-    <li class="minibutton"><a href="{{base_url}}/fileview"
+    <li><a class="btn btn-info btn-sm" href="{{base_url}}/fileview"
     class="action-fileview">Files</a></li>
-    <li class="minibutton jaws">
-      <a href="#" id="minibutton-new-page">New</a></li>
+    <li>
+      <a class="btn btn-info btn-sm" href="#" id="minibutton-new-page">New</a></li>
     {{#allow_uploads}}
-    <li class="minibutton jaws">
-      <a href="#" id="minibutton-upload-page">Upload</a></li>
+    <li>
+      <a class="btn btn-info btn-sm" href="#" id="minibutton-upload-page">Upload</a></li>
     {{/allow_uploads}}
     {{#editable}}
-    <li class="minibutton jaws">
-      <a href="#" id="minibutton-rename-page">Rename</a></li>
-    <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
+    <li>
+      <a class="btn btn-info btn-sm" href="#" id="minibutton-rename-page">Rename</a></li>
+    <li><a class="btn btn-info btn-sm" href="{{base_url}}/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit</a></li>
     {{/editable}}
     {{#page_exists}}
-    <li class="minibutton jaws">
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
+    <li><a class="btn btn-info btn-sm" href="{{base_url}}/history/{{escaped_url_path}}"
        class="action-page-history">History</a></li>
     {{/page_exists}}
   </ul>
