@@ -87,10 +87,7 @@
       </div>
     </div>
   </div>
-    <textarea id="gollum-editor-body"
-     data-markup-lang="{{format}}" name="content" class="mousetrap">
-     {{content}}
-     </textarea>
+<textarea id="gollum-editor-body" data-markup-lang="{{format}}" name="content" class="mousetrap">{{#is_create_page}}{{>pi_template}}{{/is_create_page}} {{content}} </textarea>
 
     {{#header}}
     <div id="gollum-editor-edit-header" class="collapsed">

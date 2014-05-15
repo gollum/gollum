@@ -304,6 +304,7 @@ module Precious
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
+      @new_page = true
 
       page_dir = settings.wiki_options[:page_file_dir].to_s
       unless page_dir.empty?
