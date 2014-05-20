@@ -17,8 +17,6 @@ require File.expand_path '../helpers', __FILE__
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
 
-enable :sessions
-
 # Fix to_url
 class String
   alias :upstream_to_url :to_url
@@ -31,7 +29,7 @@ end
 
 module Password
   def self.correct?(password)
-    password == "rejuvenation"
+    password == ENV['password']
   end
 end
 
@@ -50,6 +48,7 @@ module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
+    include Password
 
     dir     = File.dirname(File.expand_path(__FILE__))
 
@@ -83,13 +82,6 @@ module Precious
         :views     => "#{dir}/views"
     }
 
-    # Lets make sure Sessions are enabled
-  # configure do
-  #   use Rack::Session::Cookie, :key => 'rack.session',
-  #   :path => '/',
-  #   :secret => 'rejuvenation_wiki'
-  # end
-
     # Sinatra error handling
     configure :development, :staging do
       enable :show_exceptions, :dump_errors
@@ -101,8 +93,8 @@ module Precious
     end
 
     before do
-      if !authorized? && !request.fullpath.include?('/sign_in') && !request.fullpath.include?('/authenticate')
-        redirect "/sign_in"
+      if !authorized? && !request.fullpath.include?('sign_in') && !request.fullpath.include?('authenticate')
+        redirect '/sign_in'
       end
       @base_url = url('/', false).chomp('/')
       # above will detect base_path when it's used with map in a config.ru
@@ -116,20 +108,15 @@ module Precious
       redirect clean_url(::File.join(@base_url, page_dir, wiki_new.index_page))
     end
 
-    get '/sign_in' do
-      mustache :sign_in, { :layout => false }
+
+    get '/sign_in?*' do
+      mustache :sign_in
     end
 
-    get '/session' do
-      session.inspect
-    end
-
-    get '/authenticate' do
-      puts "Authenticating ", session['gollum.author']
-      users = File.readlines('users.txt').map(&:split).flatten
-      if users.include?(params[:username]) && Password.correct?(params[:password])
-        session['gollum.author'] = params[:username]
-        puts "Authenticated ", session['gollum.author'].inspect
+    post '/authenticate' do
+      users = File.readlines(ENV['user_file']).map &:split
+      if users.flatten.include?(params[:username]) && Password.correct?(params[:password]).to_s
+        session['gollum.author'] = {:name => params[:username]}
         redirect '/'
       else
         redirect '/sign_in'
@@ -304,7 +291,6 @@ module Precious
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
-      @new_page = true
 
       page_dir = settings.wiki_options[:page_file_dir].to_s
       unless page_dir.empty?
@@ -540,7 +526,7 @@ module Precious
     def commit_message
       msg               = (params[:message].nil? or params[:message].empty?) ? "[no message]" : params[:message]
       commit_message    = { :message => msg }
-      author_parameters = {:name => session['gollum.author']}
+      author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
     end
