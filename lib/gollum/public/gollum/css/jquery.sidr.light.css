@@ -1,4 +1,4 @@
-.sidr{
+.sidr {
 	display: none;
 	position: absolute;
 	position: fixed;
@@ -10,6 +10,69 @@
 	overflow-y: auto;
 	background: white;
 }
+
 .sidr .sidr-inner {
 	padding: 0 0 15px;
+}
+
+.sidr .sidr-dragger {
+	position: absolute;
+	width: 5px;
+	background: #ccc;
+	top: 0;
+	height: 100%;
+	z-index: 998;
+	cursor: ew-resize;
+}
+
+.sidr .sidr-dragger:hover,
+.sidr-divider-dragging .sidr .sidr-dragger {
+	background: #999;
+}
+
+.sidr .sidr-switcher {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	background: #888;
+	top: 0;
+	z-index: 999;
+	cursor: pointer;
+	color: white;
+
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+
+.sidr .sidr-switcher:hover {
+	background: #444;
+}
+
+.sidr.left .sidr-switcher:before {
+	content: "\f061";
+}
+
+.sidr.right .sidr-switcher:before {
+	content: "\f060";
+}
+
+.sidr.left .sidr-dragger,
+.sidr.left .sidr-switcher {
+	right: 0;
+}
+.sidr.right .sidr-dragger,
+.sidr.right .sidr-switcher {
+	left: 0;
+}
+
+.sidr-divider-dragging {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
