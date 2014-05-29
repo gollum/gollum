@@ -109,9 +109,14 @@ a {
 
 #gollum-editor #gollum-editor-function-bar.active #gollum-editor-function-buttons {
   display: block;
-  float: left;
   overflow: hidden;
   padding: 0 0 1.1em 0;
+}
+
+@media all and (min-width: 940px) {
+  #gollum-editor #gollum-editor-function-bar.active #gollum-editor-function-buttons {
+    float: left;
+  }
 }
 
 #gollum-editor #gollum-editor-function-bar a.function-button {
@@ -192,9 +197,7 @@ a#function-help:hover span { background-position: -405px -28px; }
 }
 
 #gollum-editor #gollum-editor-function-bar span.function-divider {
-  display: block;
-  float: left;
-  width: 0.5em;
+  display: none;
 }
 
 #gollum-editor #gollum-editor-function-bar #gollum-editor-format-selector {
@@ -208,7 +211,6 @@ a#function-help:hover span { background-position: -405px -28px; }
   border: 1px solid #ddd;
   color: #333;
 
-  float: right;
   font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
@@ -224,7 +226,6 @@ a#function-help:hover span { background-position: -405px -28px; }
 #gollum-editor #gollum-editor-function-bar
   #gollum-editor-format-selector label {
   color: #999;
-  float: right;
   font-size: 1em;
   font-weight: bold;
   line-height: 1.6em;
@@ -234,6 +235,27 @@ a#function-help:hover span { background-position: -405px -28px; }
 #gollum-editor #gollum-editor-function-bar
 #gollum-editor-format-selector label:after {
   content: ':';
+}
+
+@media all and (min-width: 940px) {
+  #gollum-editor #gollum-editor-function-bar span.function-divider {
+    display: block;
+    width: 0.5em;
+  }
+
+  #gollum-editor #gollum-editor-function-bar span.function-divider {
+    float: left;
+  }
+
+  #gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector select {
+    float: right;
+  }
+
+  #gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector label {
+    float: right;
+  }
 }
 
 
