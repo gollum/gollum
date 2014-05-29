@@ -1,3 +1,8 @@
+# Next release candidate
+
+* Major enhancements
+  * Made the Gollum theme responsive [rtrvrtg] (#831)
+
 # 2.4.11 / 2013-01-08
 
 * Numerous security issues have been fixed. Please update to `2.4.11`

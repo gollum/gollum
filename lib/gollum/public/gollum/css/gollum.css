@@ -21,9 +21,15 @@ body, html {
 #wiki-wrapper {
   margin: 0 auto;
   overflow: visible;
-  width: 920px;
-  padding-left:20px;
-  padding-right:20px;
+  width: 100%;
+}
+
+@media all and (min-width: 940px) {
+  #wiki-wrapper {
+    max-width: 920px;
+    padding-left:20px;
+    padding-right:20px;
+  }
 }
 
 a:link {
@@ -39,22 +45,41 @@ a:hover, a:visited {
 
 /* @section head */
 #head {
-  border-bottom: 1px solid #ddd;
-  margin: 4em 0 1.5em;
-  padding-bottom: 0.3em;
+  margin: 1em 0 0;
+  padding: 0;
   overflow: hidden;
 }
 
 #head h1 {
-  font-size: 2.5em;
+  font-size: 1.5em;
   float: left;
   line-height: normal;
   margin: 0;
-  padding: 2px 0 0 0;
+  padding: 0 0 0 0.667em;
 }
 
 #head ul.actions {
-  float: right;
+  clear: both;
+  margin: 0 1em;
+}
+
+@media all and (min-width: 940px) {
+  #head {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.3em;
+    margin: 4em 0 1.5em;
+  }
+
+  #head h1 {
+    font-size: 2.5em;
+    padding: 2px 0 0 0;
+  }
+
+  #head ul.actions {
+    clear: none;
+    float: right;
+    margin: 0;
+  }
 }
 
 /* @section content */
@@ -244,6 +269,16 @@ a:hover, a:visited {
   font-weight: bold;
 }
 
+#footer .actions {
+  margin-left: 1em;
+}
+
+@media all and (min-width: 940px) {
+  #footer .actions {
+    margin: 0;
+  }
+}
+
 
 /* @section history */
 .history h1 {
@@ -257,7 +292,7 @@ a:hover, a:visited {
 }
 
 #wiki-history {
-  margin-top: 2em;
+  margin: 2em 1em 0 1em;
 }
 
 #wiki-history fieldset {
@@ -283,7 +318,8 @@ a:hover, a:visited {
 }
 
 #wiki-history table tr td {
-  border: 1px solid #c0dce9;
+  border-top: 1px solid #c0dce9;
+  border-bottom: 1px solid #c0dce9;
   font-size: 1em;
   line-height: 1.6em;
   margin: 0;
@@ -291,8 +327,8 @@ a:hover, a:visited {
 }
 
 #wiki-history table tr td.checkbox {
-  width: 4em;
-  padding: 0.3em;
+  width: auto;
+  padding: 0 0.2em 0 0;
 }
 
 #wiki-history table tr td.checkbox input {
@@ -364,6 +400,25 @@ a:hover, a:visited {
   margin: 0 0.6em 0 0;
 }
 
+@media all and (min-width: 940px) {
+  #wiki-history {
+    margin: 2em 0 0 0;
+  }
+
+  #wiki-history table tr td {
+    border: 1px solid #c0dce9;
+    font-size: 1em;
+    line-height: 1.6em;
+    margin: 0;
+    padding: 0.3em 0.7em;
+  }
+
+  #wiki-history table tr td.checkbox {
+    width: 4em;
+    padding: 0.3em;
+  }
+}
+
 
 /* @section edit */
 .edit h1 {
@@ -378,6 +433,7 @@ a:hover, a:visited {
 
 
 /* @section search */
+
 .results h1 {
   color: #999;
   font-weight: normal;
@@ -390,6 +446,8 @@ a:hover, a:visited {
 
 .results #results {
   border-bottom: 1px solid #ccc;
+  margin-left: 1em;
+  margin-right: 1em;
   margin-bottom: 2em;
   padding-bottom: 2em;
 }
@@ -400,10 +458,31 @@ a:hover, a:visited {
 }
 
 .results #results ul li {
-  font-size: 1.2em;
-  line-height: 1.6em;
-  list-style-position: outside;
+  list-style: none;
   padding: 0.2em 0;
+}
+
+.results #results ul li a {
+  word-wrap: break-word;
+}
+
+@media all and (min-width: 640px) {
+  .results #results ul li {
+    font-size: 1.2em;
+  }
+}
+
+@media all and (min-width: 940px) {
+  .results #results {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .results #results ul li {
+    list-style: disc;
+    list-style-position: outside;
+    line-height: 1.6em;
+  }
 }
 
 .results #results ul li span.count {
@@ -522,8 +601,8 @@ ul.actions {
  ul.actions li {
    float: left;
    font-size: 0.9em;
-   margin-left: 0.6em;
-   margin-bottom: 0.6em;
+   margin-left: 1px;
+   margin-bottom: 1px;
  }
 
 .minibutton a {
@@ -533,7 +612,7 @@ ul.actions {
   display: block;
   font-weight: bold;
   margin: 0;
-  padding: 0.4em 1em;
+  padding: 0.6em 1em;
   height: 1.4em;
 
   text-shadow: 0 1px 0 #fff;
@@ -545,6 +624,18 @@ ul.actions {
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+}
+
+@media all and (min-width: 940px) {
+  ul.actions li {
+    margin-left: 0.6em;
+    margin-bottom: 0.6em;
+  }
+
+  .minibutton a {
+    padding: 0.4em 1em;
+    height: 1.4em;
+  }
 }
 
 #search-submit {
@@ -627,7 +718,7 @@ ul.actions {
 /* @control searchbar */
 #head #searchbar {
   float: right;
-  padding: 0;
+  padding: 2px 0 0 0;
   overflow: hidden;
 }
 
@@ -684,7 +775,7 @@ ul.actions {
   height: inherit;
   overflow: hidden;
   text-indent: -5000px;
-  width: 28px;
+  width: 32px;
 }
 
 .ff #head #searchbar #searchbar-fauxtext #search-submit span,
@@ -697,11 +788,31 @@ ul.actions {
   padding: 0;
 }
 
+@media all and (min-width: 940px) {
+  #head #searchbar {
+    padding: 0;
+  }
+
+  #head #searchbar #searchbar-fauxtext #search-submit span {
+    width: 28px;
+  }
+
+  #head #searchbar #searchbar-fauxtext #search-submit:hover span {
+    background-position: -431px -28px;
+  }
+}
+
 /* @section pages */
 
 #pages {
   font-size: 1.2em;
-  margin-bottom: 20px;
+  margin: 0 1em 20px 1em;
+}
+
+@media all and (min-width: 940px) {
+  #pages {
+    margin: 0 0 20px 0;
+  }
 }
 
 #pages ul {

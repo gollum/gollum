@@ -4,8 +4,11 @@
   display: block;
   overflow: visible;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  width: 100%;
+  height: 100%;
 }
 
 #gollum-dialog-dialog.active {
@@ -13,24 +16,117 @@
 }
 
 #gollum-dialog-dialog-inner {
-  margin: 0 0 0 -225px;
-  position: relative;
-  width: 450px;
-
-  border: 7px solid #999;
-  border: 7px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
+  margin: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
 }
 
 #gollum-dialog-dialog-bg {
   background-color: #fff;
-  overflow: hidden;
   padding: 1em;
 
-  background: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#ffffff));
-  background: -moz-linear-gradient(top, #f7f7f7, #ffffff);
+  height: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+@media all and (min-width: 480px) {
+  #gollum-dialog-dialog {
+    display: block;
+    overflow: visible;
+    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    width: auto;
+    height: auto;
+  }
+
+  #gollum-dialog-dialog.active {
+    display: block;
+  }
+
+  #gollum-dialog-dialog-inner {
+    margin: auto;
+    position: fixed;
+
+    width: auto;
+    height: auto;
+
+    min-width: 280px;
+    min-height: 380px;
+
+    max-width: 450px;
+    max-height: 450px;
+
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+
+    border: 7px solid #999;
+    border: 7px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+  }
+
+  #gollum-dialog-dialog-bg {
+    background-color: #fff;
+    overflow: hidden;
+    padding: 1em;
+
+    background: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#ffffff));
+    background: -moz-linear-gradient(top, #f7f7f7, #ffffff);
+
+    height: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+}
+
+@media all and (min-width: 940px) {
+  #gollum-dialog-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+  }
+
+  #gollum-dialog-dialog-inner {
+    margin: 0 0 0 -225px;
+    position: relative;
+
+    width: 450px;
+    height: auto;
+
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+
+    border: 7px solid #999;
+    border: 7px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+  }
+
+  #gollum-dialog-dialog-bg {
+    height: auto;
+
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+  }
 }
 
 #gollum-dialog-dialog-inner h4 {
@@ -52,8 +148,14 @@
   display: block;
   border: 0;
   margin: 0;
-  overflow: hidden;
   padding: 0;
+}
+
+#gollum-dialog-dialog-body fieldset:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
 }
 
 #gollum-dialog-dialog-body fieldset .field {
