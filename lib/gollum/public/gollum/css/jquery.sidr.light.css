@@ -1,0 +1,15 @@
+.sidr{
+	display: none;
+	position: absolute;
+	position: fixed;
+	top: 0;
+	height: 100%;
+	z-index: 999999;
+	width: 260px;
+	overflow-x: none;
+	overflow-y: auto;
+	background: white;
+}
+.sidr .sidr-inner {
+	padding: 0 0 15px;
+}

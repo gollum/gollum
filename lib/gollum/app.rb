@@ -5,6 +5,7 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'json'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -132,18 +133,11 @@ module Precious
 
       wiki = wikip.wiki
       if page = wikip.page
-        if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
-          live_preview_url = '/livepreview/index.html?page=' + encodeURIComponent(@name)
-          if @path
-            live_preview_url << '&path=' + encodeURIComponent(@path)
-          end
-          redirect to(live_preview_url)
-        else
-          @page         = page
-          @page.version = wiki.repo.log(wiki.ref, @page.path).first
-          @content      = page.text_data
-          mustache :edit
-        end
+        @page         = page
+        @page.version = wiki.repo.log(wiki.ref, @page.path).first
+        @content      = page.text_data
+        @livepreview  = wiki.live_preview && supported_useragent?(request.user_agent)
+        mustache :edit
       else
         redirect to("/create/#{encodeURIComponent(@name)}")
       end
@@ -338,6 +332,25 @@ module Precious
       @editable      = false
       @allow_uploads = wiki.allow_uploads
       mustache :page
+    end
+
+    post '/fragments' do
+      content_type :json
+      processed_fragments = []
+
+      params[:fragments].each do |frag|
+        wiki           = wiki_new
+        @name          = params[:page] || "Preview"
+        @page          = wiki.preview_page(@name, frag, params[:format])
+        processed      = @page.formatted_data
+
+        processed_fragments << {
+          source: frag,
+          destination: processed
+        }
+      end
+
+      processed_fragments.to_json
     end
 
     get '/history/*' do
