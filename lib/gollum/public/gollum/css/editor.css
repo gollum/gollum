@@ -230,6 +230,7 @@ a#function-help:hover span { background-position: -405px -28px; }
   font-weight: bold;
   line-height: 1.6em;
   padding: .3em 0.5em 0 0;
+  float: left;
 }
 
 #gollum-editor #gollum-editor-function-bar
