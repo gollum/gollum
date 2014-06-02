@@ -1,5 +1,11 @@
 /* IE7-specific styles */
 
+.ie #wiki-wrapper {
+  width: 920px;
+  padding-left:20px;
+  padding-right:20px;
+}
+
 .ie #head #searchbar #searchbar-fauxtext input#search-query {
   border: 0;
   float: left;
