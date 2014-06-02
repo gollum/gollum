@@ -662,7 +662,7 @@ ul.actions {
 /* @control searchbar */
 #head #searchbar {
   float: right;
-  padding: 0;
+  padding: 2px 0 0 0.5em;
   overflow: hidden;
 }
 
@@ -719,7 +719,7 @@ ul.actions {
   height: inherit;
   overflow: hidden;
   text-indent: -5000px;
-  width: 28px;
+  width: 32px;
 }
 
 .ff #head #searchbar #searchbar-fauxtext #search-submit span,
@@ -730,6 +730,20 @@ ul.actions {
 #head #searchbar #searchbar-fauxtext #search-submit:hover span {
   background-position: -431px -28px;
   padding: 0;
+}
+
+@media all and (min-width: 940px) {
+  #head #searchbar {
+    padding: 0;
+  }
+
+  #head #searchbar #searchbar-fauxtext #search-submit span {
+    width: 28px;
+  }
+
+  #head #searchbar #searchbar-fauxtext #search-submit:hover span {
+    background-position: -431px -28px;
+  }
 }
 
 /* @section pages */
