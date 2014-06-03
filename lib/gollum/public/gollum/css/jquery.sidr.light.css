@@ -87,6 +87,8 @@
 @media all and (max-width: 719px) {
 	.sidr {
 		width: 100% !important;
+		position: absolute;
+		overflow-y: visible;
 	}
 
 	.sidr .sidr-dragger, 
