@@ -12,7 +12,7 @@
 }
 
 .sidr .sidr-inner {
-	padding: 0 0 15px;
+	padding: 1.6em 0 15px;
 }
 
 .sidr .sidr-dragger {
@@ -47,6 +47,11 @@
 	-webkit-font-smoothing: antialiased;
 }
 
+.sidr .sidr-closer {
+	position: absolute;
+	top: 0;
+}
+
 .sidr .sidr-switcher:hover {
 	background: #444;
 }
@@ -60,11 +65,13 @@
 }
 
 .sidr.left .sidr-dragger,
-.sidr.left .sidr-switcher {
+.sidr.left .sidr-switcher,
+.sidr.right .sidr-closer {
 	right: 0;
 }
 .sidr.right .sidr-dragger,
-.sidr.right .sidr-switcher {
+.sidr.right .sidr-switcher,
+.sidr.left .sidr-closer {
 	left: 0;
 }
 
@@ -75,4 +82,21 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+@media all and (max-width: 719px) {
+	.sidr {
+		width: 100% !important;
+	}
+
+	.sidr .sidr-dragger, 
+	.sidr .sidr-switcher {
+		display: none;
+	}
+
+	.sidr.left .sidr-closer,
+	.sidr.right .sidr-closer {
+		left: auto;
+		right: 0;
+	}
 }
