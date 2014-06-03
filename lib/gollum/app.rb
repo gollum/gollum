@@ -420,7 +420,13 @@ module Precious
       # Sort wiki search results by count (desc) and then by name (asc)
       @results = wiki.search(@query).sort { |a, b| (a[:count] <=> b[:count]).nonzero? || b[:name] <=> a[:name] }.reverse
       @name    = @query
-      mustache :search
+      
+      if request.xhr?
+        content_type :json
+        @results.to_json
+      else
+        mustache :search
+      end
     end
 
     get %r{
@@ -435,7 +441,32 @@ module Precious
       @results     = wiki.pages
       @results     += wiki.files if settings.wiki_options[:show_all]
       @ref         = wiki.ref
-      mustache :pages
+      
+      if request.xhr?
+        content_type :json
+        @results.map { |page|
+          original_page_path = page_path = page.path.gsub(/\..+$/, "")
+          page_path = page_path.gsub(/^#{@path}\//, '') if @path
+
+          page_name = page.name
+          folder_path = nil
+
+          next if page_path == ".gitkeep"
+
+          if original_page_path.include?('/')
+            folder      = original_page_path.split('/').first
+            folder_path = @path ? "#{@path}" : folder
+          end
+
+          {
+            path: page_path,
+            name: page_name,
+            folder: folder_path
+          }
+        }.to_json
+      else
+        mustache :pages
+      end
     end
 
     get '/fileview' do
