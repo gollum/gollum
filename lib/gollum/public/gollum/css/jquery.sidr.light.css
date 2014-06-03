@@ -17,7 +17,7 @@
 
 .sidr .sidr-dragger {
 	position: absolute;
-	width: 5px;
+	width: 16px;
 	background: #ccc;
 	top: 0;
 	height: 100%;
@@ -32,8 +32,8 @@
 
 .sidr .sidr-switcher {
 	position: absolute;
-	width: 15px;
-	height: 15px;
+	width: 16px;
+	height: 16px;
 	background: #888;
 	top: 0;
 	z-index: 999;
@@ -44,6 +44,7 @@
 	font-style: normal;
 	font-weight: normal;
 	line-height: 1;
+	font-size: 16px;
 	-webkit-font-smoothing: antialiased;
 }
 
