@@ -84,7 +84,7 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/javascript/editor/langs/pod.js
     lib/gollum/public/gollum/javascript/editor/langs/rdoc.js
     lib/gollum/public/gollum/javascript/editor/langs/textile.js
-    lib/gollum/public/gollum/javascript/parsers/markdown/markdown.min.js
+    lib/gollum/public/gollum/javascript/editor/parsers/markdown/markdown.min.js
     lib/gollum/public/gollum/javascript/gollum.dialog.js
     lib/gollum/public/gollum/javascript/gollum.js
     lib/gollum/public/gollum/javascript/gollum.placeholder.js
