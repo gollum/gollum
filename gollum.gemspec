@@ -75,6 +75,8 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/images/pin-24.png
     lib/gollum/public/gollum/images/pin-32.png
     lib/gollum/public/gollum/javascript/editor/gollum.editor.js
+    lib/gollum/public/gollum/javascript/editor/gollum.format_selector.js
+    lib/gollum/public/gollum/javascript/editor/gollum.preview.js
     lib/gollum/public/gollum/javascript/editor/langs/asciidoc.js
     lib/gollum/public/gollum/javascript/editor/langs/creole.js
     lib/gollum/public/gollum/javascript/editor/langs/markdown.js
@@ -82,13 +84,19 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/javascript/editor/langs/pod.js
     lib/gollum/public/gollum/javascript/editor/langs/rdoc.js
     lib/gollum/public/gollum/javascript/editor/langs/textile.js
+    lib/gollum/public/gollum/javascript/parsers/markdown/markdown.min.js
     lib/gollum/public/gollum/javascript/gollum.dialog.js
     lib/gollum/public/gollum/javascript/gollum.js
     lib/gollum/public/gollum/javascript/gollum.placeholder.js
+    lib/gollum/public/gollum/javascript/highlight.pack.js
     lib/gollum/public/gollum/javascript/identicon_canvas.js
-    lib/gollum/public/gollum/javascript/jquery-1.7.2.min.js
+    lib/gollum/public/gollum/javascript/jquery-1.11.1.min.js
+    lib/gollum/public/gollum/javascript/jquery.browser.min.js
     lib/gollum/public/gollum/javascript/jquery.color.js
+    lib/gollum/public/gollum/javascript/jquery.sidr.js
+    lib/gollum/public/gollum/javascript/jquery.textmanipulator.js
     lib/gollum/public/gollum/javascript/mousetrap.min.js
+    lib/gollum/public/gollum/javascript/require.js
     lib/gollum/public/gollum/livepreview/css/custom.css
     lib/gollum/public/gollum/livepreview/images/cancel_24.png
     lib/gollum/public/gollum/livepreview/images/globe_24.png
