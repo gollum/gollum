@@ -55,6 +55,7 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/css/editor.css
     lib/gollum/public/gollum/css/gollum.css
     lib/gollum/public/gollum/css/ie7.css
+    lib/gollum/public/gollum/css/jquery.sidr.light.css
     lib/gollum/public/gollum/css/print.css
     lib/gollum/public/gollum/css/template.css
     lib/gollum/public/gollum/fonts/FontAwesome.otf
