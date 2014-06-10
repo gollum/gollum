@@ -263,6 +263,9 @@ module Precious
       @name = wikip.name.to_url
       @path = wikip.path
 
+      wiki = wikip.wiki
+      @livepreview = wiki.live_preview && supported_useragent?(request.user_agent)
+
       page_dir = settings.wiki_options[:page_file_dir].to_s
       unless page_dir.empty?
         # --page-file-dir docs
