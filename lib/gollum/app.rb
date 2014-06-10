@@ -286,6 +286,8 @@ module Precious
       path   = sanitize_empty_params(params[:path]) || ''
       format = params[:format].intern
       wiki   = wiki_new
+      
+      @livepreview = wiki.live_preview && supported_useragent?(request.user_agent)
 
       path.gsub!(/^\//, '')
 
