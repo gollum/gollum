@@ -114,7 +114,7 @@ a {
 
 #gollum-editor #gollum-editor-function-bar.active #gollum-editor-function-buttons {
   display: block;
-  margin: 0 -1em;
+  margin: 0;
   padding: 0;
 }
 
@@ -256,8 +256,15 @@ a#function-help:hover span { background-position: -402px -25px; }
 }
 
 #gollum-editor #gollum-editor-function-bar #gollum-editor-format-selector {
-  overflow: hidden;
-  padding: .2em 0 .5em 0;
+  padding: .2em 0 .5em .5em;
+  clear: both;
+}
+
+#gollum-editor #gollum-editor-function-bar #gollum-editor-format-selector:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
 }
 
 #gollum-editor #gollum-editor-function-bar
@@ -271,7 +278,7 @@ a#function-help:hover span { background-position: -402px -25px; }
   font-weight: bold;
   line-height: 1.6em;
   padding: 0.3em 0.4em;
-
+  display: inline-block;
 
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
@@ -285,7 +292,7 @@ a#function-help:hover span { background-position: -402px -25px; }
   font-weight: bold;
   line-height: 1.6em;
   padding: .3em 0.5em 0 0;
-  float: left;
+  display: inline-block;
 }
 
 #gollum-editor #gollum-editor-function-bar
@@ -304,13 +311,17 @@ a#function-help:hover span { background-position: -402px -25px; }
   }
 
   #gollum-editor #gollum-editor-function-bar
+  #gollum-editor-format-selector {
+    clear: none;
+    text-align: right;
+  }
+
+  #gollum-editor #gollum-editor-function-bar
   #gollum-editor-format-selector select {
-    float: right;
   }
 
   #gollum-editor #gollum-editor-function-bar
   #gollum-editor-format-selector label {
-    float: right;
   }
 }
 
