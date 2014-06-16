@@ -45,7 +45,6 @@ a:hover, a:visited {
 
 /* @section head */
 #head {
-  border-bottom: 1px solid #ddd;
   margin: 1em 0 0;
   padding: 0;
   overflow: hidden;
@@ -61,10 +60,12 @@ a:hover, a:visited {
 
 #head ul.actions {
   clear: both;
+  margin: 0 1em;
 }
 
 @media all and (min-width: 940px) {
   #head {
+    border-bottom: 1px solid #ddd;
     padding-bottom: 0.3em;
     margin: 4em 0 1.5em;
   }
@@ -77,6 +78,7 @@ a:hover, a:visited {
   #head ul.actions {
     clear: none;
     float: right;
+    margin: 0;
   }
 }
 

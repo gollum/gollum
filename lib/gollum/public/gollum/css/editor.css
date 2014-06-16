@@ -19,15 +19,15 @@ a {
 }
 
 #gollum-editor {
-  border: 1px solid #e4e4e4;
-  background: #f9f9f9;
   margin: 0 0 5em;
-  overflow: hidden;
   padding: 0em 1em 0.4em;
+}
 
-  border-radius: 1em;
-  -moz-border-radius: 1em;
-  -webkit-border-radius: 1em;
+#gollum-editor:after {
+  content: ".";
+  display: block;
+  visibility: hidden;
+  clear: both;
 }
 
 .ff #gollum-editor,
@@ -37,7 +37,13 @@ a {
 
 @media all and (min-width: 940px) {
   #gollum-editor {
+    border: 1px solid #e4e4e4;
+    background: #f9f9f9;
     margin: 1em 0 5em;
+
+    border-radius: 1em;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
   }
 }
 
@@ -51,7 +57,13 @@ a {
 #gollum-editor .singleline {
   display: block;
   margin: 0 0 0.7em 0;
-  overflow: hidden;
+}
+
+#gollum-editor .singleline:after {
+  content: ".";
+  display: block;
+  visibility: hidden;
+  clear: both;
 }
 
 #gollum-editor .singleline input {
@@ -256,7 +268,7 @@ a#function-help:hover span { background-position: -402px -25px; }
 }
 
 #gollum-editor #gollum-editor-function-bar #gollum-editor-format-selector {
-  padding: .2em 0 .5em .5em;
+  padding: 0.2em 0 0.5em 0;
   clear: both;
 }
 
