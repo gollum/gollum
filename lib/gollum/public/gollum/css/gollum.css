@@ -664,7 +664,7 @@ ul.actions {
 /* @control searchbar */
 #head #searchbar {
   float: right;
-  padding: 2px 0 0 0.5em;
+  padding: 2px 0 0 0;
   overflow: hidden;
 }
 
