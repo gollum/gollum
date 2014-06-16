@@ -151,6 +151,13 @@
   padding: 0;
 }
 
+#gollum-dialog-dialog-body fieldset:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+}
+
 #gollum-dialog-dialog-body fieldset .field {
   margin: 0 0 1.5em 0;
   padding: 0;

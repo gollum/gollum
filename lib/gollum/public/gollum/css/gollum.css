@@ -45,7 +45,6 @@ a:hover, a:visited {
 
 /* @section head */
 #head {
-  border-bottom: 1px solid #ddd;
   margin: 1em 0 0;
   padding: 0;
   overflow: hidden;
@@ -61,10 +60,12 @@ a:hover, a:visited {
 
 #head ul.actions {
   clear: both;
+  margin: 0 1em;
 }
 
 @media all and (min-width: 940px) {
   #head {
+    border-bottom: 1px solid #ddd;
     padding-bottom: 0.3em;
     margin: 4em 0 1.5em;
   }
@@ -77,6 +78,7 @@ a:hover, a:visited {
   #head ul.actions {
     clear: none;
     float: right;
+    margin: 0;
   }
 }
 
@@ -267,6 +269,16 @@ a:hover, a:visited {
   font-weight: bold;
 }
 
+#footer .actions {
+  margin-left: 1em;
+}
+
+@media all and (min-width: 940px) {
+  #footer .actions {
+    margin: 0;
+  }
+}
+
 
 /* @section history */
 .history h1 {
@@ -280,7 +292,7 @@ a:hover, a:visited {
 }
 
 #wiki-history {
-  margin-top: 2em;
+  margin: 2em 1em 0 1em;
 }
 
 #wiki-history fieldset {
@@ -306,7 +318,8 @@ a:hover, a:visited {
 }
 
 #wiki-history table tr td {
-  border: 1px solid #c0dce9;
+  border-top: 1px solid #c0dce9;
+  border-bottom: 1px solid #c0dce9;
   font-size: 1em;
   line-height: 1.6em;
   margin: 0;
@@ -314,8 +327,8 @@ a:hover, a:visited {
 }
 
 #wiki-history table tr td.checkbox {
-  width: 4em;
-  padding: 0.3em;
+  width: auto;
+  padding: 0 0.2em 0 0;
 }
 
 #wiki-history table tr td.checkbox input {
@@ -387,6 +400,25 @@ a:hover, a:visited {
   margin: 0 0.6em 0 0;
 }
 
+@media all and (min-width: 940px) {
+  #wiki-history {
+    margin: 2em 0 0 0;
+  }
+
+  #wiki-history table tr td {
+    border: 1px solid #c0dce9;
+    font-size: 1em;
+    line-height: 1.6em;
+    margin: 0;
+    padding: 0.3em 0.7em;
+  }
+
+  #wiki-history table tr td.checkbox {
+    width: 4em;
+    padding: 0.3em;
+  }
+}
+
 
 /* @section edit */
 .edit h1 {
@@ -401,6 +433,7 @@ a:hover, a:visited {
 
 
 /* @section search */
+
 .results h1 {
   color: #999;
   font-weight: normal;
@@ -413,6 +446,8 @@ a:hover, a:visited {
 
 .results #results {
   border-bottom: 1px solid #ccc;
+  margin-left: 1em;
+  margin-right: 1em;
   margin-bottom: 2em;
   padding-bottom: 2em;
 }
@@ -423,10 +458,31 @@ a:hover, a:visited {
 }
 
 .results #results ul li {
-  font-size: 1.2em;
-  line-height: 1.6em;
-  list-style-position: outside;
+  list-style: none;
   padding: 0.2em 0;
+}
+
+.results #results ul li a {
+  word-wrap: break-word;
+}
+
+@media all and (min-width: 640px) {
+  .results #results ul li {
+    font-size: 1.2em;
+  }
+}
+
+@media all and (min-width: 940px) {
+  .results #results {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .results #results ul li {
+    list-style: disc;
+    list-style-position: outside;
+    line-height: 1.6em;
+  }
 }
 
 .results #results ul li span.count {
@@ -662,7 +718,7 @@ ul.actions {
 /* @control searchbar */
 #head #searchbar {
   float: right;
-  padding: 2px 0 0 0.5em;
+  padding: 2px 0 0 0;
   overflow: hidden;
 }
 
@@ -750,7 +806,13 @@ ul.actions {
 
 #pages {
   font-size: 1.2em;
-  margin-bottom: 20px;
+  margin: 0 1em 20px 1em;
+}
+
+@media all and (min-width: 940px) {
+  #pages {
+    margin: 0 0 20px 0;
+  }
 }
 
 #pages ul {
