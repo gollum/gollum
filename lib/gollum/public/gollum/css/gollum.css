@@ -292,7 +292,7 @@ a:hover, a:visited {
 }
 
 #wiki-history {
-  margin-top: 2em;
+  margin: 2em 1em 0 1em;
 }
 
 #wiki-history fieldset {
@@ -318,7 +318,8 @@ a:hover, a:visited {
 }
 
 #wiki-history table tr td {
-  border: 1px solid #c0dce9;
+  border-top: 1px solid #c0dce9;
+  border-bottom: 1px solid #c0dce9;
   font-size: 1em;
   line-height: 1.6em;
   margin: 0;
@@ -326,8 +327,8 @@ a:hover, a:visited {
 }
 
 #wiki-history table tr td.checkbox {
-  width: 4em;
-  padding: 0.3em;
+  width: auto;
+  padding: 0 0.2em 0 0;
 }
 
 #wiki-history table tr td.checkbox input {
@@ -397,6 +398,25 @@ a:hover, a:visited {
 .history #wiki-history ul.actions li,
 .history #footer ul.actions li {
   margin: 0 0.6em 0 0;
+}
+
+@media all and (min-width: 940px) {
+  #wiki-history {
+    margin: 2em 0 0 0;
+  }
+
+  #wiki-history table tr td {
+    border: 1px solid #c0dce9;
+    font-size: 1em;
+    line-height: 1.6em;
+    margin: 0;
+    padding: 0.3em 0.7em;
+  }
+
+  #wiki-history table tr td.checkbox {
+    width: 4em;
+    padding: 0.3em;
+  }
 }
 
 
