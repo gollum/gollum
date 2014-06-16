@@ -148,8 +148,14 @@
   display: block;
   border: 0;
   margin: 0;
-  overflow: hidden;
   padding: 0;
+}
+
+#gollum-dialog-dialog-body fieldset:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
 }
 
 #gollum-dialog-dialog-body fieldset .field {
