@@ -1,9 +1,0 @@
-coverage
-pkg
-.DS_Store
-.bundle
-Gemfile.lock
-*.gem
-*.swp
-.*
-config.ru
