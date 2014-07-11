@@ -114,9 +114,9 @@ module Precious
     end
 
     post '/authenticate' do
-      users = File.readlines(ENV['users_file']).map(&:split).flatten
-      if users.include?(params[:username]) && Password.correct?(params[:password])
-        session['gollum.author'] = params[:username]
+      users = File.readlines(ENV['user_file']).map &:split
+      if users.flatten.include?(params[:username]) && Password.correct?(params[:password]).to_s
+        session['gollum.author'] = {:name => params[:username]}
         redirect '/'
       else
         redirect '/sign_in'
@@ -203,7 +203,7 @@ module Precious
           :message => "Uploaded file to #{dir}/#{reponame}",
           :parent  => wiki.repo.head.commit,
       }
-      author  = {:name => session['gollum.author'], :email => "#{session['gollum.author']}@rejuvenation.com" }
+      author  = session['gollum.author']
       unless author.nil?
         options.merge! author
       end
@@ -527,7 +527,7 @@ module Precious
     def commit_message
       msg               = (params[:message].nil? or params[:message].empty?) ? "[no message]" : params[:message]
       commit_message    = { :message => msg }
-      author_parameters = {:name => session['gollum.author'], :email => "#{session['gollum.author']}@rejuvenation.com" }
+      author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
     end
