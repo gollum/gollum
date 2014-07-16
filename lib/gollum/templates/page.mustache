@@ -14,16 +14,9 @@ Mousetrap.bind(['e'], function( e ) {
     </li>
     <li><a class="btn btn-info btn-sm" href="{{base_url}}/"
        class="action-home-page">Home</a></li>
-    <li><a class="btn btn-info btn-sm" href="{{base_url}}/pages"
-      class="action-all-pages">All</a></li>
-    <li><a class="btn btn-info btn-sm" href="{{base_url}}/fileview"
-    class="action-fileview">Files</a></li>
-    <li>
-      <a class="btn btn-info btn-sm" href="#" id="minibutton-new-page">New</a></li>
-    {{#allow_uploads}}
-    <li>
-      <a class="btn btn-info btn-sm" href="#" id="minibutton-upload-page">Upload</a></li>
-    {{/allow_uploads}}
+    <li><a class="btn btn-info btn-sm blue dark" href="{{base_url}}/pages"
+      class="action-all-pages">View All Products</a></li>
+    <li> <a class="btn btn-info btn-sm" href="#" id="minibutton-new-page">New</a></li>
     {{#editable}}
     <li>
       <a class="btn btn-info btn-sm" href="#" id="minibutton-rename-page">Rename</a></li>
