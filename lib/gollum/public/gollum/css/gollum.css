@@ -448,6 +448,11 @@ a:hover, a:visited {
 .compare .data pre {
   margin: 0;
   padding: 0;
+  border:none;
+  border-radius:0;
+  line-height:1;
+  border-radius:0;
+  line-height:1.6;
 }
 
 .compare .data pre div {
