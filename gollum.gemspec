@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '3.0.0'
-  s.date              = '2014-07-10'
+  s.date              = '2014-07-17'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
   # = MANIFEST =
   s.files = %w[
     Gemfile
+    Gemfile.lock
     HISTORY.md
     LICENSE
     README.md
