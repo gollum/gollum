@@ -1,8 +1,9 @@
 coverage
 pkg
+config.ru
+users.txt
 .DS_Store
 .bundle
 Gemfile.lock
 *.gem
 *.swp
-.*

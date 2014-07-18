@@ -2,20 +2,20 @@
 <div id="head">
   <h1>History for <strong>{{title}}</strong></h1>
   <ul class="actions">
-    <li class="minibutton">
+    <li>
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}/{{escaped_url_path}}"
+    <li><a class="btn btn-sm btn-info" href="{{base_url}}/{{escaped_url_path}}"
        class="action-view-page">View Page</a></li>
-    <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
+    <li><a class="btn btn-sm btn-info" href="{{base_url}}/edit/{{escaped_url_path}}"
        class="action-edit-page">Edit Page</a></li>
   </ul>
 </div>
 <div id="wiki-history">
 
   <ul class="actions">
-    <li class="minibutton"><a href="javascript:void(0);"
-       class="action-compare-revision">Compare Revisions</a></li>
+    <li><a href="javascript:void(0);"
+       class="action-compare-revision btn btn-sm btn-info">Compare Revisions</a></li>
   </ul>
 
   <form name="compare-versions" id="version-form" method="post"
@@ -26,7 +26,7 @@
 
       {{#versions}}
       <tr>
-        <td class="checkbox">
+        <td>
           <input type="checkbox" name="versions[]" value="{{id}}">
         </td>
         <td class="author">
@@ -47,11 +47,11 @@
 </div>
 <div id="footer">
   <ul class="actions">
-    <li class="minibutton"><a href="javascript:void(0);"
-       class="action-compare-revision">Compare Revisions</a></li>
+    <li><a href="javascript:void(0);"
+       class="action-compare-revision btn btn-info btn-sm">Compare Revisions</a></li>
 
     <!-- only show this button if we have more than 20 revisions -->
-    <li class="minibutton"><a href="#"
+    <li><a href="#"
        class="action-back-to-top">Back to Top</a></li>
   </ul>
 </div>

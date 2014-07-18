@@ -27,6 +27,12 @@ class String
   end
 end
 
+module Password
+  def self.correct?(password)
+    password == ENV['password']
+  end
+end
+
 # Run the frontend, based on Sinatra
 #
 # There are a number of wiki options that can be set for the frontend
@@ -42,6 +48,7 @@ module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
+    include Password
 
     dir     = File.dirname(File.expand_path(__FILE__))
 
@@ -86,6 +93,9 @@ module Precious
     end
 
     before do
+      if !authorized? && !request.fullpath.include?('sign_in') && !request.fullpath.include?('authenticate')
+        redirect '/sign_in'
+      end
       @base_url = url('/', false).chomp('/')
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
@@ -96,6 +106,21 @@ module Precious
     get '/' do
       page_dir = settings.wiki_options[:page_file_dir].to_s
       redirect clean_url(::File.join(@base_url, page_dir, wiki_new.index_page))
+    end
+
+
+    get '/sign_in?*' do
+      mustache :sign_in
+    end
+
+    post '/authenticate' do
+      users = File.readlines(ENV['user_file']).map &:split
+      if users.flatten.include?(params[:username]) && Password.correct?(params[:password]).to_s
+        session['gollum.author'] = {:name => params[:username]}
+        redirect '/'
+      else
+        redirect '/sign_in'
+      end
     end
 
     # path is set to name if path is nil.
@@ -129,8 +154,10 @@ module Precious
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
+      @upload_dest   = find_upload_dest(@path)
 
       wiki = wikip.wiki
+      @allow_uploads = wiki.allow_uploads
       if page = wikip.page
         if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
           live_preview_url = '/livepreview/index.html?page=' + encodeURIComponent(@name)
@@ -266,6 +293,8 @@ module Precious
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
+      @allow_uploads = wikip.wiki.allow_uploads
+      @upload_dest   = find_upload_dest(@path)
 
       page_dir = settings.wiki_options[:page_file_dir].to_s
       unless page_dir.empty?
@@ -453,10 +482,7 @@ module Precious
         @page          = page
         @name          = name
         @content       = page.formatted_data
-        @upload_dest   = settings.wiki_options[:allow_uploads] ?
-            (settings.wiki_options[:per_page_uploads] ?
-                "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
-            ) : ''
+        @upload_dest   = find_upload_dest(path)
 
         # Extensions and layout data
         @editable      = true
@@ -504,6 +530,17 @@ module Precious
       author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
+    end
+
+    def authorized?
+      !session['gollum.author'].nil?
+    end
+
+    def find_upload_dest(path)
+      settings.wiki_options[:allow_uploads] ?
+          (settings.wiki_options[:per_page_uploads] ?
+              "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
+          ) : ''
     end
   end
 end

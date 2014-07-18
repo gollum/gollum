@@ -1,0 +1,32 @@
+.blue.light { background-color: #5D9CEC; border-color:  #5D9CEC;}
+.blue.dark {background-color:#4A89DC; border-color: #4A89DC;}
+.lt-blue.light { background-color: #4FC1E9; border-color:  #4FC1E9;}
+.lt-blue.dark {background-color:#3BAFDA; border-color: #3BAFDA;}
+.lt-green.light { background-color: #48CFAD; border-color:  #48CFAD;}
+.lt-green.dark {background-color:#37BC9B; border-color: #37BC9B;}
+.green.light { background-color: #A0D468; border-color:  #A0D468;}
+.green.dark {background-color:#8CC152; border-color: #8CC152;}
+.sun.light { background-color: #FFCE54; border-color:  #FFCE54;}
+.sun.dark {background-color:#F6BB42; border-color: #F6BB42;}
+.orange.light { background-color: #FC6E51; border-color:  #FC6E51;}
+.orange.dark {background-color:#E9573F; border-color: #E9573F;}
+.red.light { background-color: #ED5565; border-color:  #ED5565;}
+.red.dark {background-color:#DA4453; border-color: #DA4453;}
+.purple.light { background-color: #AC92EC; border-color:  #AC92EC;}
+.purple.dark {background-color:#967ADC; border-color: #967ADC;}
+.pink.light { background-color: #EC87C0; border-color:  #EC87C0;}
+.pink.dark {background-color:#D770AD; border-color: #D770AD;}
+.lt-gray.light { background-color: #F5F7FA; border-color:  #F5F7FA;}
+.lt-gray.dark {background-color:#E6E9ED; border-color: #E6E9ED;}
+.md-gray.light { background-color: #CCD1D9; border-color:  #CCD1D9;}
+.md-gray.dark {background-color:#AAB2BD; border-color: #AAB2BD;}
+.dk-gray.light { background-color: #656D78; border-color:  #656D78;}
+.dk-gray.dark {background-color:#434A54; border-color: #434A54;}
+
+.form-control {
+  margin:10px 0px;
+}
+.signin-form {
+  margin-top:50px;
+  padding:10px;
+}

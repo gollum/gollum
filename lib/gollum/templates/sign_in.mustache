@@ -2,13 +2,13 @@
 <html>
 <head>
   <meta http-equiv="Content-type" content="text/html;charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/bootstrap.min.css" media="all">
+  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/bootflat.min.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/gollum.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/editor.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/dialog.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/template.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/print.css" media="print">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/bootstrap.min.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/bootflat.min.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/custom.css" media="all">
   {{#css}}<link rel="stylesheet" type="text/css" href="{{base_url}}/custom.css" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
@@ -19,9 +19,9 @@
 
   <script>
       var baseUrl = '{{base_url}}';
-      var uploadDest   = '{{upload_dest}}';
       {{#page}}
       var pageFullPath = '{{url_path_display}}';
+      var uploadDest   = '{{upload_dest}}';
       {{/page}}
   </script>
   <script type="text/javascript" src="{{base_url}}/javascript/jquery-1.7.2.min.js"></script>
@@ -51,11 +51,23 @@
   </script>{{/mathjax}}
   {{#js}}<script type="text/javascript" src="{{base_url}}/custom.js"></script>{{/js}}
 
-  <title>{{title}}</title>
+  <title>Rejuvenation Product Wiki: Sign In</title>
 </head>
-<body>
+<body class="dk-gray dark"
 
-{{{yield}}}
+<div class="container">
+  <div class="col-md-4 col-sm-4 col-sm-offset-3 col-md-offset-4 signin-form md-gray light">
+    <h4>Rejuvenation Product Wiki</h4>
+
+    <p>Please sign in to continue</p>
+
+    <form action="/authenticate" method="post" class="form-signin" >
+      <input type="text" name="username" class="form-control" placeholder="Username" />
+      <input type="password" name="password" class="form-control" placeholder="Password" />
+      <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+  </div>
+</div>
 
 </body>
 </html>

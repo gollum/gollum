@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '3.0.0'
-  s.date              = '2014-04-05'
+  s.date              = '2014-07-17'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
   # = MANIFEST =
   s.files = %w[
     Gemfile
+    Gemfile.lock
     HISTORY.md
     LICENSE
     README.md
@@ -51,6 +52,9 @@ Gem::Specification.new do |s|
     lib/gollum/app.rb
     lib/gollum/helpers.rb
     lib/gollum/public/gollum/css/_styles.css
+    lib/gollum/public/gollum/css/bootflat.min.css
+    lib/gollum/public/gollum/css/bootstrap.min.css
+    lib/gollum/public/gollum/css/custom.css
     lib/gollum/public/gollum/css/dialog.css
     lib/gollum/public/gollum/css/editor.css
     lib/gollum/public/gollum/css/gollum.css
@@ -62,6 +66,10 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/fonts/fontawesome-webfont.svg
     lib/gollum/public/gollum/fonts/fontawesome-webfont.ttf
     lib/gollum/public/gollum/fonts/fontawesome-webfont.woff
+    lib/gollum/public/gollum/fonts/glyphicons-halflings-regular.eot
+    lib/gollum/public/gollum/fonts/glyphicons-halflings-regular.svg
+    lib/gollum/public/gollum/fonts/glyphicons-halflings-regular.ttf
+    lib/gollum/public/gollum/fonts/glyphicons-halflings-regular.woff
     lib/gollum/public/gollum/images/dirty-shade.png
     lib/gollum/public/gollum/images/fileview/document.png
     lib/gollum/public/gollum/images/fileview/folder-horizontal.png
@@ -520,8 +528,10 @@ Gem::Specification.new do |s|
     lib/gollum/templates/layout.mustache
     lib/gollum/templates/page.mustache
     lib/gollum/templates/pages.mustache
+    lib/gollum/templates/pi_template.mustache
     lib/gollum/templates/search.mustache
     lib/gollum/templates/searchbar.mustache
+    lib/gollum/templates/sign_in.mustache
     lib/gollum/uri_encode_component.rb
     lib/gollum/views/compare.rb
     lib/gollum/views/create.rb
@@ -535,11 +545,13 @@ Gem::Specification.new do |s|
     lib/gollum/views/page.rb
     lib/gollum/views/pages.rb
     lib/gollum/views/search.rb
+    lib/gollum/views/sign_in.rb
     licenses/css_tree_menu_thecssninja/license.txt
     licenses/licenses.txt
     licenses/unity_asset_pool/COPYRIGHT
     openrc/conf.d/gollum
     openrc/init.d/gollum
+    users.txt
   ]
   # = MANIFEST =
 

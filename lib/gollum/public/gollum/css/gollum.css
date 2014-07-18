@@ -25,14 +25,14 @@ body, html {
   padding-left:20px;
   padding-right:20px;
 }
-
-a:link {
+a {
   color: #4183c4;
+}
+a:link {
   text-decoration: none;
 }
 
 a:hover, a:visited {
-  color: #4183c4;
   text-decoration: underline;
 }
 
@@ -86,7 +86,6 @@ a:hover, a:visited {
   clear: left;
   margin-right: 3%;
   margin-bottom: 40px;
-  width: 100%;
 }
 
 .has-sidebar #wiki-body {
@@ -99,7 +98,7 @@ a:hover, a:visited {
   border: 1px solid #DDD;
   font-size: 13px;
   padding: 0px 5px;
-  float: left;
+  float: right;
   margin-bottom: 20px;
   min-width: 33%;
 
@@ -449,6 +448,11 @@ a:hover, a:visited {
 .compare .data pre {
   margin: 0;
   padding: 0;
+  border:none;
+  border-radius:0;
+  line-height:1;
+  border-radius:0;
+  line-height:1.6;
 }
 
 .compare .data pre div {
