@@ -56,6 +56,7 @@ module Precious
 
     def supported_useragent?(user_agent)
       ua = UserAgent.parse(user_agent)
+      return false if ["Android", "Mobile"].include? ua.platform
       @@min_ua.detect { |min| ua >= min }
     end
 
