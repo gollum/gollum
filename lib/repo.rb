@@ -211,12 +211,12 @@ module RJGit
     
     def update_ref(commit, force = false, ref = "refs/heads/#{Constants::MASTER}")
       ref_updater = @jrepo.updateRef(ref)
+      ref_updater.setForceUpdate(force)
       ref_updater.setNewObjectId(RJGit.commit_type(commit))
-      msg = force ? :update : :forceUpdate
-      ref_updater.send(msg).to_string
+      ref_updater.update.to_string
     end
     
-    # Update the info files required for fetching files over the dump-HTTP protocol
+    # Update the info files required for fetching files over the dumb-HTTP protocol
     def update_server_info
       # First update the $GIT_DIR/refs/info file
       refs = @jrepo.get_all_refs # Note: JGit will include directories under $GIT_DIR/refs/heads that start with a '.' in its search for refs. Filter these out in LocalRefWriter?

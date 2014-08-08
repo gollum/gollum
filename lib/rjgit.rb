@@ -308,7 +308,7 @@ module RJGit
         result
       end
       
-      def commit(message, author, parents = nil, ref = nil)
+      def commit(message, author, parents = nil, ref = nil, force = false)
         ref = ref ? ref : "refs/heads/#{Constants::MASTER}"
         @current_tree = @current_tree ? RJGit.tree_type(@current_tree) : @jrepo.resolve("refs/heads/#{Constants::MASTER}^{tree}")
         @treebuilder.treemap = @treemap
@@ -321,13 +321,12 @@ module RJGit
         # Point ref to the newest commit
         ru = @jrepo.updateRef(ref)
         ru.setNewObjectId(new_head)
-        ru.setForceUpdate(true)
+        ru.setForceUpdate(force)
         ru.setRefLogIdent(author.person_ident)
         ru.setRefLogMessage("commit: #{message}", false)
         res = ru.update.to_string
         
         @treebuilder.object_inserter.release
-      
         @current_tree = new_tree
         @treemap = {}
         log = @treebuilder.log
@@ -336,7 +335,7 @@ module RJGit
       end
       
       def self.successful?(result)
-        ["NEW", "FAST_FORWARD"].include?(result)
+        ["NEW", "FAST_FORWARD", "FORCED"].include?(result)
       end
       
     end
