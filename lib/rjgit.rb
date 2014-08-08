@@ -177,7 +177,7 @@ module RJGit
       end
       
       def object_inserter
-        @jrepo.newObjectInserter
+        @object_inserter ||= @jrepo.newObjectInserter
       end
       
       def init_log
@@ -199,7 +199,7 @@ module RJGit
         existing_trees = {}
         formatter = TreeFormatter.new
         treemap ||= self.treemap
-    
+
         if start_tree then
           treewalk = TreeWalk.new(@jrepo)
           treewalk.add_tree(start_tree)
@@ -213,22 +213,24 @@ module RJGit
                   existing_trees[filename] = treewalk.get_object_id(0) if kind == :tree
                 end
             else
-              mode = treewalk.isSubtree ? FileMode::TREE : FileMode::REGULAR_FILE
               formatter.append(filename.to_java_string, treewalk.get_file_mode(0), treewalk.get_object_id(0))
             end
           end
         end
     
-        treemap.each do |object_name, data|
+
+        sorted_treemap = treemap.inject({}) {|h, (k,v)| v.is_a?(Hash) ? h["#{k}/"] = v : h[k] = v; h }.sort
+        
+        treemap.sort.each do |object_name, data|
           case data
+            when Hash
+              next_tree = build_tree(existing_trees[object_name], data)
+              formatter.append(object_name[0...-1].to_java_string, FileMode::TREE, next_tree)
+              @log[:added] << [:tree, object_name, next_tree] unless only_contains_deletions(data)
             when String
               blobid = write_blob(data)
               formatter.append(object_name.to_java_string, FileMode::REGULAR_FILE, blobid)
               @log[:added] << [:blob, object_name, blobid]
-            when Hash
-              next_tree = build_tree(existing_trees[object_name], data)
-              formatter.append(object_name.to_java_string, FileMode::TREE, next_tree)
-              @log[:added] << [:tree, object_name, next_tree] unless only_contains_deletions(data)
             end
         end
     
@@ -300,7 +302,9 @@ module RJGit
           elsif parents
             commit_builder.addParentId(RJGit.commit_type(parents))
           end
-        @treebuilder.object_inserter.insert(commit_builder)
+        result = @treebuilder.object_inserter.insert(commit_builder)
+        @treebuilder.object_inserter.flush
+        result
       end
       
       def commit(message, author, parents = nil, ref = nil)
@@ -316,7 +320,12 @@ module RJGit
         # Point ref to the newest commit
         ru = @jrepo.updateRef(ref)
         ru.setNewObjectId(new_head)
-        res = ru.forceUpdate.to_string
+        ru.setForceUpdate(true)
+        ru.setRefLogIdent(author.person_ident)
+        ru.setRefLogMessage("commit: #{message}", false)
+        res = ru.update.to_string
+        
+        @treebuilder.object_inserter.release
       
         @current_tree = new_tree
         @treemap = {}
