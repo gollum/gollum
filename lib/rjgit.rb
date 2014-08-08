@@ -221,11 +221,12 @@ module RJGit
 
         sorted_treemap = treemap.inject({}) {|h, (k,v)| v.is_a?(Hash) ? h["#{k}/"] = v : h[k] = v; h }.sort
         
-        treemap.sort.each do |object_name, data|
+        sorted_treemap.each do |object_name, data|
           case data
             when Hash
+              object_name = object_name[0...-1]
               next_tree = build_tree(existing_trees[object_name], data)
-              formatter.append(object_name[0...-1].to_java_string, FileMode::TREE, next_tree)
+              formatter.append(object_name.to_java_string, FileMode::TREE, next_tree)
               @log[:added] << [:tree, object_name, next_tree] unless only_contains_deletions(data)
             when String
               blobid = write_blob(data)
