@@ -67,6 +67,7 @@ repo.bare? # Is this a bare repository?
 ```ruby
 repo.commits('master')
 repo.commits('959329025f67539fb82e76b02782322fad032821')
+repo.head
 commit = repo.commits('master').first # a Commit object; try commit.actor, commit.id, etc.
 # Similarly for getting tags, branches, trees (directories), and blobs (files).
 ```
