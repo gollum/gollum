@@ -25,6 +25,7 @@ module RJGit
       @actor = Actor.new_from_person_ident(@jcommit.get_author_ident)
       @committer = Actor.new_from_person_ident(@jcommit.get_committer_ident)
       @committed_date = Time.at(@jcommit.commit_time)
+      @authored_date = Time.at(@jcommit.get_author_ident.when.time/1000)
       @message = @jcommit.get_full_message
       @short_message = @jcommit.get_short_message
       @parent_count = @jcommit.get_parent_count
