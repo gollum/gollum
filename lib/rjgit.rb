@@ -197,6 +197,7 @@ module RJGit
       
       def build_tree(start_tree, treemap = nil, flush = false)
         existing_trees = {}
+        untouched_objects = {}
         formatter = TreeFormatter.new
         treemap ||= self.treemap
 
@@ -213,16 +214,20 @@ module RJGit
                   existing_trees[filename] = treewalk.get_object_id(0) if kind == :tree
                 end
             else
-              formatter.append(filename.to_java_string, treewalk.get_file_mode(0), treewalk.get_object_id(0))
+              mode = treewalk.get_file_mode(0)
+              filename = "#{filename}/" if mode == FileMode::TREE
+              untouched_objects[filename] = [mode, treewalk.get_object_id(0)]
             end
           end
         end
     
-
-        sorted_treemap = treemap.inject({}) {|h, (k,v)| v.is_a?(Hash) ? h["#{k}/"] = v : h[k] = v; h }.sort
+        sorted_treemap = treemap.inject({}) {|h, (k,v)| v.is_a?(Hash) ? h["#{k}/"] = v : h[k] = v; h }.merge(untouched_objects).sort
         
         sorted_treemap.each do |object_name, data|
           case data
+            when Array
+              object_name = object_name[0...-1] if data[0] == FileMode::TREE
+              formatter.append(object_name.to_java_string, data[0], data[1])
             when Hash
               object_name = object_name[0...-1]
               next_tree = build_tree(existing_trees[object_name], data)
@@ -235,11 +240,12 @@ module RJGit
             end
         end
     
-        result = object_inserter.insert(formatter)
+        object_inserter.insert(formatter)
       end
       
       def write_blob(contents, flush = false)
         blobid = object_inserter.insert(Constants::OBJ_BLOB, contents.to_java_bytes)
+        object_inserter.flush if flush
         blobid
       end
       
