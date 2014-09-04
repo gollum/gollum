@@ -64,7 +64,7 @@ module RJGit
       new_tree = tree_builder.build_tree(base_tree, hashmap, true)
       walk = RevWalk.new(jrepo)
       new_tree = walk.lookup_tree(new_tree)
-      Tree.new(jrepo, FileMode::TREE, nil, new_tree)
+      Tree.new(jrepo, TREE_TYPE, nil, new_tree)
     end
     
     def self.find_tree(repository, file_path, revstring=Constants::HEAD)

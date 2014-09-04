@@ -32,7 +32,7 @@ module RJGit
     end
     
     def tree
-      @tree ||= Tree.new(@jrepo, FileMode::TREE, nil, @jcommit.get_tree)
+      @tree ||= Tree.new(@jrepo, TREE_TYPE, nil, @jcommit.get_tree)
     end
   
     def parents

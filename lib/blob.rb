@@ -56,7 +56,7 @@ module RJGit
       repository = RJGit.repository_type(repository)
       blob_id = RJGit::Plumbing::TreeBuilder.new(repository).write_blob(contents, true)
       walk = RevWalk.new(repository)
-      Blob.new(repository, FileMode::REGULAR_FILE, nil, walk.lookup_blob(blob_id))
+      Blob.new(repository, REG_FILE_TYPE, nil, walk.lookup_blob(blob_id))
     end
     
     # Finds a particular Blob in repository matching file_path
