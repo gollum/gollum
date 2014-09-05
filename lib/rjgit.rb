@@ -337,7 +337,8 @@ module RJGit
         @treemap = {}
         log = @treebuilder.log
         @treebuilder.init_log
-        return res, log
+        sha =  ObjectId.to_string(new_head)
+        return res, log, sha
       end
       
       def self.successful?(result)
