@@ -3,7 +3,7 @@
 
 FROM google/ruby
 
-ENV DEBS libicu-dev
+ENV DEBS git libicu-dev
 RUN apt-get -qy update && apt-get -y install ${DEBS} && apt-get -qy clean
 
 ENV GEMS github-markdown
@@ -20,6 +20,6 @@ RUN bundle install
 # Mount the git repo as /data volume
 VOLUME /data
 EXPOSE 4567
-ENV BUNDLE_GEMFILE=/app/Gemfile
+ENV BUNDLE_GEMFILE /app/Gemfile
 WORKDIR /data
 CMD ["bundle", "exec", "gollum"]
