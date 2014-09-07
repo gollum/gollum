@@ -1,6 +1,5 @@
 # TODO:
 # * git-push via cron should be done from different container
-# * mount git dir as a volume
 
 FROM google/ruby
 
@@ -18,6 +17,9 @@ RUN bundle install
 ADD . /app
 RUN bundle install
 
-EXPOSE 4567
+# Mount the git repo as /data volume
 VOLUME /data
-CMD ["bundle", "exec", "gollum", "--gollum-path=/data"]
+EXPOSE 4567
+ENV BUNDLE_GEMFILE=/app/Gemfile
+WORKDIR /data
+CMD ["bundle", "exec", "gollum"]
