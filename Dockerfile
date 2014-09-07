@@ -1,5 +1,7 @@
-# TODO:
-# * git-push via cron should be done from different container
+# Build as:
+#   docker build -t gollum .
+# Run as:
+#   docker run --rm -p 4567:4567 -v ~/mywiki:/data gollum
 
 FROM google/ruby
 
@@ -17,9 +19,7 @@ RUN bundle install
 ADD . /app
 RUN bundle install
 
-# Mount the git repo as /data volume
 VOLUME /data
-EXPOSE 4567
 ENV BUNDLE_GEMFILE /app/Gemfile
 WORKDIR /data
-CMD ["bundle", "exec", "gollum"]
+ENTRYPOINT ["bundle", "exec", "gollum"]
