@@ -19,4 +19,5 @@ ADD . /app
 RUN bundle install
 
 EXPOSE 4567
-CMD ["bundle", "exec", "gollum"]
+VOLUME /data
+CMD ["bundle", "exec", "gollum", "--gollum-path=/data"]
