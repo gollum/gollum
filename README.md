@@ -39,6 +39,7 @@ The best way to install Gollum is with RubyGems:
 ```bash
 $ [sudo] gem install gollum
 ```
+You may first need to install some additional [development packages](https://github.com/gollum/gollum/wiki/Installation) for your OS.
 
 If you're installing from source, you can use [Bundler][bundler] to pick up all the
 gems:
