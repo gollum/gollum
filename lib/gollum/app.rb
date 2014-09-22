@@ -329,14 +329,16 @@ module Precious
 
     post '/preview' do
       wiki           = wiki_new
+      options        = settings.wiki_options
       @name          = params[:page] || "Preview"
       @page          = wiki.preview_page(@name, params[:content], params[:format])
       @content       = @page.formatted_data
-      @toc_content   = wiki.universal_toc ? @page.toc_data : nil
-      @mathjax       = wiki.mathjax
-      @h1_title      = wiki.h1_title
+      @toc_content   = options[:universal_toc] ? @page.toc_data : nil
+      @mathjax       = options[:mathjax]
+      @h1_title      = options[:h1_title]
       @editable      = false
-      @allow_uploads = wiki.allow_uploads
+      @allow_uploads = options[:allow_uploads]
+
       mustache :page
     end
 
@@ -445,8 +447,9 @@ module Precious
 
     def show_page_or_file(fullpath)
       wiki = wiki_new
+      options = settings.wiki_options
 
-      name = extract_name(fullpath) || wiki.index_page
+      name = extract_name(fullpath) || options[:index_page]
       path = extract_path(fullpath) || '/'
 
       if page = wiki.paged(name, path, exact = true)
@@ -461,11 +464,11 @@ module Precious
         # Extensions and layout data
         @editable      = true
         @page_exists   = !page.versions.empty?
-        @toc_content   = wiki.universal_toc ? @page.toc_data : nil
-        @mathjax       = wiki.mathjax
-        @h1_title      = wiki.h1_title
-        @bar_side      = wiki.bar_side
-        @allow_uploads = wiki.allow_uploads
+        @toc_content   = options[:universal_toc] ? @page.toc_data : nil
+        @mathjax       = options[:mathjax]
+        @h1_title      = options[:h1_title]
+        @bar_side      = options[:bar_side]
+        @allow_uploads = options[:allow_uploads]
 
         mustache :page
       elsif file = wiki.file(fullpath, wiki.ref, true)
