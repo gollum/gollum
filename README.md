@@ -52,7 +52,7 @@ In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
 to install the dependencies for the formats that you plan to use.
 
-* [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc` on mac or `apt-get install -y asciidoc` on Ubuntu
+* [AsciiDoc](http://asciidoctor.org) -- `gem install asciidoctor`
 * [Creole](http://wikicreole.org/) -- `gem install creole`
 * [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet`
 * [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown) -- `gem install github-markdown`
