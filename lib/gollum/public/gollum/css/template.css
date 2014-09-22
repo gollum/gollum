@@ -52,7 +52,6 @@ body {
   font: 13.34px Helvetica, arial, freesans, clean, sans-serif;
   font-size: small;
   line-height: 1.4;
-  min-width: 980px;
 }
 
 img {
@@ -86,11 +85,17 @@ a:active, a:hover {
 }
 
 .markdown-body {
-  padding: 30px;
+  padding: 1em;
   font-size: 15px;
   line-height: 1.7;
   overflow: hidden;
   word-wrap: break-word;
+}
+
+@media all and (min-width: 940px) {
+  .markdown-body {
+    padding: 30px;
+  }
 }
 
 .markdown-body > *:first-child {
