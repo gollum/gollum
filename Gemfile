@@ -10,6 +10,7 @@ gem 'omniauth-github'
 #gem 'omniauth-facebook'
 #gem 'omniauth-twitch'
 gem 'thin'
+gem 'sqlite3'
 
 group :development do
   gem 'shotgun'
