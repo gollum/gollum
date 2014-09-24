@@ -39,6 +39,7 @@ The best way to install Gollum is with RubyGems:
 ```bash
 $ [sudo] gem install gollum
 ```
+You may first need to install some additional [development packages](https://github.com/gollum/gollum/wiki/Installation) for your OS.
 
 If you're installing from source, you can use [Bundler][bundler] to pick up all the
 gems:
@@ -51,7 +52,7 @@ In order to use the various formats that Gollum supports, you will need to
 separately install the necessary dependencies for each format. You only need
 to install the dependencies for the formats that you plan to use.
 
-* [ASCIIDoc](http://www.methods.co.nz/asciidoc/) -- `brew install asciidoc` on mac or `apt-get install -y asciidoc` on Ubuntu
+* [AsciiDoc](http://asciidoctor.org) -- `gem install asciidoctor`
 * [Creole](http://wikicreole.org/) -- `gem install creole`
 * [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet`
 * [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown) -- `gem install github-markdown`
@@ -109,7 +110,7 @@ Options:
         --ref [REF]                  Specify the repository ref to use (default: master).
         --no-live-preview            Disables livepreview.
         --live-preview               Enables livepreview.
-        --allow-uploads              Allows file uploads.
+        --allow-uploads [MODE]       Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).
         --mathjax                    Enables mathjax.
         --user-icons [SOURCE]        Set the history user icons. Valid values: gravatar, identicon, none. Default: none.
         --show-all                   Shows all files in file view. By default only valid pages are shown.
