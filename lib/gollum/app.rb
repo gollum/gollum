@@ -129,8 +129,10 @@ module Precious
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
+      @upload_dest   = find_upload_dest(@path)
 
       wiki = wikip.wiki
+      @allow_uploads = wiki.allow_uploads
       if page = wikip.page
         if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
           live_preview_url = '/livepreview/index.html?page=' + encodeURIComponent(@name)
@@ -266,6 +268,8 @@ module Precious
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
+      @allow_uploads = wikip.wiki.allow_uploads
+      @upload_dest   = find_upload_dest(@path)
 
       page_dir = settings.wiki_options[:page_file_dir].to_s
       unless page_dir.empty?
@@ -453,10 +457,7 @@ module Precious
         @page          = page
         @name          = name
         @content       = page.formatted_data
-        @upload_dest   = settings.wiki_options[:allow_uploads] ?
-            (settings.wiki_options[:per_page_uploads] ?
-                "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
-            ) : ''
+        @upload_dest   = find_upload_dest(path)
 
         # Extensions and layout data
         @editable      = true
@@ -504,6 +505,13 @@ module Precious
       author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
+    end
+
+    def find_upload_dest(path)
+      settings.wiki_options[:allow_uploads] ?
+          (settings.wiki_options[:per_page_uploads] ?
+              "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
+          ) : ''
     end
   end
 end
