@@ -1,9 +1,12 @@
 module Precious
-	module Views
-		class Page < Layout
-			def users
-				@users
-			end
-		end
-	end
+  module Views
+    class AdminPage < Layout
+      def content
+        "Teste"
+      end
+      def result
+        @result
+      end
+    end
+  end
 end

@@ -5,11 +5,14 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'sqlite3'
 
 require 'gollum'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
+
+require 'gollum/views/admin_page'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -63,7 +66,6 @@ module Precious
     set :public_folder, "#{dir}/public/gollum"
     set :static, true
     set :default_markup, :markdown
-
     set :mustache, {
         # Tell mustache where the Views constant lives
         :namespace => Precious,
@@ -82,7 +84,7 @@ module Precious
     end
 
     configure :test do
-      enable :logging, :raise_errors, :dump_errors
+      enable :raise_errors, :dump_errors
     end
 
     before do
@@ -94,9 +96,17 @@ module Precious
     end
 
     get '/admin' do
-      omnigollum_options = settings.send(:omnigollum)
-      @users = omnigollum_options[:authorized_users].keys
+      db = SQLite3::Database.open "weaki.db"
+      @result = db.execute "SELECT DISTINCT Users.email, Roles.type FROM Users INNER JOIN UsersRoles ON Users.email=UsersRoles.email INNER JOIN Roles ON UsersRoles.type=Roles.type;"
+      p @result
+      @result = @result.first
+      db.close
       mustache :admin_page
+    end
+
+    post '/admin' do
+      puts params[:first]
+      redirect '/'
     end
 
     get '/' do

@@ -1,6 +1,10 @@
 <div id="admin-page">
-{{#users}}
-  <li>Abc</li>
-{{/ users}}
-Teste
+{{content}}
+{{#result}}
+<li>{{.}}</li>
+{{/result}}
+<form name="gollum-admin" action="{{base_url}}/admin" method="post">
+First: <input type="text" name="first"><br>
+<input type="submit" id="gollum-admin-submit" value="Submit">
+</form>
 </div>
