@@ -114,6 +114,12 @@ a:hover, a:visited {
   width: 100%;
 }
 
+#wiki-body table {
+  display: block;
+  overflow: auto;
+  border: 0;
+}
+
 .has-sidebar #wiki-body {
   width: 68%;
 }
