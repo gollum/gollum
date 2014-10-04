@@ -138,7 +138,7 @@ module Precious
       def find_header_node(doc)
         case @page.format
           when :asciidoc
-            doc.css("div#gollum-root > div#header > h1:first-child")
+            doc.css("div#gollum-root > h1:first-child")
           when :org
             doc.css("div#gollum-root > p.title:first-child")
           when :pod
