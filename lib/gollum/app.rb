@@ -352,6 +352,13 @@ module Precious
       end
     end
 
+    get '/latest_changes' do
+      @wiki = wiki_new
+      max_count = defined?(Gollum::Wiki::MAX_COUNT) ? Gollum::Wiki::MAX_COUNT : 10
+      @versions = @wiki.latest_changes({:max_count => max_count})
+      mustache :latest_changes
+    end
+    
     post '/compare/*' do
       @file     = params[:splat].first
       @versions = params[:versions] || []
