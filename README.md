@@ -112,6 +112,7 @@ Options:
         --live-preview               Enables livepreview.
         --allow-uploads [MODE]       Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).
         --mathjax                    Enables mathjax.
+        --mathjax-config [SOURCE]    Inject custom mathjax config. Uses mathjax.config.js from root repository by default
         --user-icons [SOURCE]        Set the history user icons. Valid values: gravatar, identicon, none. Default: none.
         --show-all                   Shows all files in file view. By default only valid pages are shown.
         --collapse-tree              Collapse file view tree. By default, expanded tree is shown.

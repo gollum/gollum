@@ -31,15 +31,21 @@
   <script type="text/javascript" src="{{base_url}}/javascript/identicon_canvas.js"></script>
   {{/use_identicon}}
   {{#mathjax}}
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
+  {{^mathjax_config}}
+  <script type="text/javascript">
+  window.MathJax = {
     tex2jax: {
       inlineMath:  [ ['\\(','\\)'] ],
       displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
       processEscapes: true
     },
-    TeX: { extensions: ["autoload-all.js"] }});
+    TeX: { extensions: ["autoload-all.js"] }
+  };
   </script>
+  {{/mathjax_config}}
+  {{#mathjax_config}}
+  <script type="text/javascript" src="{{base_url}}/{{mathjax_config}}"></script>
+  {{/mathjax_config}}
   <script>(function(d,j){
   j = d.createElement('script');
   j.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';

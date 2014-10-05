@@ -93,6 +93,10 @@ opts = OptionParser.new do |opts|
     wiki_options[:mathjax] = true
   end
 
+  opts.on("--mathjax-config [SOURCE]", "Inject custom mathjax config file. Uses mathjax.config.js from root repository by default") do |source|
+    wiki_options[:mathjax_config] = source || 'mathjax.config.js'
+  end
+
   opts.on("--user-icons [SOURCE]", "Set the history user icons. Valid values: gravatar, identicon, none. Default: none.") do |source|
     wiki_options[:user_icons] = source
   end
