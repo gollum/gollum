@@ -353,7 +353,7 @@ module Precious
 
     get '/latest_changes' do
       @wiki = wiki_new
-      max_count = defined?(Gollum::Wiki::MAX_COUNT) ? Gollum::Wiki::MAX_COUNT : 10
+      max_count = settings.wiki_options.fetch(:latest_changes_count, 10)
       @versions = @wiki.latest_changes({:max_count => max_count})
       mustache :latest_changes
     end

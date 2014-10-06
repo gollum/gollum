@@ -8,8 +8,6 @@
 </div>
 <div id="wiki-history">
 
-  <form name="compare-versions" id="version-form" method="post"
-   action="{{base_url}}/compare/{{escaped_url_path}}">
   <fieldset>
   <table>
     <tbody>
@@ -23,6 +21,10 @@
           <span class="time-elapsed" title="{{date_full}}">{{date}}:</span>&nbsp;
           {{message}}
           [{{id7}}]
+          {{#pages}}
+          <br>
+          <a href="{{path_with_commit}}">{{path}}</a>
+          {{/pages}}
         </td>
       </tr>
       {{/versions}}
@@ -30,7 +32,6 @@
     </tbody>
   </table>
   </fieldset>
-  </form>
 </div>
 <div id="footer">
 

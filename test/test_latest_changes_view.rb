@@ -22,6 +22,7 @@ context "Precious::Views::LatestChanges" do
     assert body.include?('<span class="username">Charles Pence</span>'), "/latest_changes should include the Author Charles Pence"
     assert body.include?('4c45c2b'), "/latest_changes should include commit #4c45c2b"
     assert !body.include?('4c45c2g'), "latest_changes should not include commit #4c45c2g"
+    assert body.include?('<a href="Hobbit/874f597a5659b4c3b153674ea04e406ff393975e">Hobbit</a>'), "/latest_changes should include links to modified pages"
   end
   
   teardown do

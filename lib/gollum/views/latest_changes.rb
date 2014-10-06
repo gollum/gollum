@@ -21,6 +21,12 @@ module Precious
             :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
             :identicon => self._identicon_code(v.author.email),
             :date_full => v.authored_date,
+            :pages     => v.stats.files.map { |f,*rest|
+              path = f.gsub(/\..*$/, '')
+              { :path => path,
+                :path_with_commit => "#{path}/#{v.id}"
+              }
+            }
           }
         end
       end
