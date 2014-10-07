@@ -96,17 +96,47 @@ module Precious
     end
 
     get '/admin' do
-      db = SQLite3::Database.open "weaki.db"
-      @result = db.execute "SELECT DISTINCT Users.email, Roles.type FROM Users INNER JOIN UsersRoles ON Users.email=UsersRoles.email INNER JOIN Roles ON UsersRoles.type=Roles.type;"
-      p @result
-      @result = @result.first
+      db = SQLite3::Database.open "weaki_v2.db"
+      # @result = db.execute "SELECT DISTINCT Users.email, Roles.type FROM Users INNER JOIN UsersRoles ON Users.email=UsersRoles.email INNER JOIN Roles ON UsersRoles.type=Roles.type;"
+      # p @result
+      # @result = @result.first
+      @emails = get_users_from_db
+      @roles = get_roles_from_db
       db.close
       mustache :admin_page
     end
 
     post '/admin' do
-      puts params[:first]
-      redirect '/'
+      puts params[:email]
+      # p params
+      if params[:action] == "check_email"
+        unless params[:remove].nil?
+          # apagar user
+        else
+          @selected_email = params[:email]
+          @user_roles = get_user_roles @selected_email
+        end
+      elsif params[:action] == "check_role"
+        @selected_role = params[:role]
+        @role_perms = get_role_permissions @selected_role
+      elsif params[:action] == "add_email"
+        add_email_to_db params[:email]
+        @success = "E-mail successfully added!"
+      elsif params[:action] == "remove_perms"
+        remove_perms_by_id params[:id]
+        p params
+        @success = "Permissions successfully removed!"
+      elsif params[:action] == "remove_role"
+        p params
+      elsif params[:action] == "add_perms"
+        # add permissions to role
+        add_perms_to_role params[:selected_role], params[:regex], params[:crud]
+      end
+
+      @emails = get_users_from_db
+      @roles = get_roles_from_db
+      mustache :admin_page
+      # redirect '/'
     end
 
     get '/' do
@@ -520,6 +550,76 @@ module Precious
       author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
+    end
+
+    def get_users_from_db
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select Users.email from Users;"
+      db.close
+      return results
+    end
+
+    def get_permissions_of_user(email)
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select Roles.name, Roles.regex, Roles.crud from Users INNER JOIN UsersRoles ON Users.email=UsersRoles.email INNER JOIN Roles ON UsersRoles.role=Roles.name WHERE Users.email = ? ;", email
+      db.close
+      return results
+    end
+
+    def get_user_roles(email)
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select UsersRoles.role from Users inner join UsersRoles on Users.email=UsersRoles.email where Users.email = ?", email
+      db.close
+      return results
+    end
+
+    def get_roles_from_db
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select distinct Roles.name from Roles;"
+      db.close
+      return results
+    end
+
+    def get_role_permissions(role)
+      db = SQLite3::Database.open "weaki_v2.db"
+      db.results_as_hash = true
+      results = db.execute "select Roles. id, Roles.regex, Roles.crud from Roles where Roles.name = ?", role
+      db.close
+      return results
+    end
+
+    def add_email_to_db(email)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        db.execute "insert into Users values(?);", email
+      rescue SQLite3::Exception => e
+        puts "Error adding email #{email}"
+        p e
+      ensure
+        db.close if db
+      end
+    end
+
+    def remove_perms_by_id(id)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        db.execute "delete from Roles where Roles.id = ?", id
+      rescue SQLite3::Exception => e
+        p e
+      ensure
+        db.close if db
+      end
+    end
+
+    def add_perms_to_role(role, regex, crud)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        db.execute "insert into Roles values (NULL, ?, ?, ?);", role, regex, crud
+      rescue SQLite3::Exception => e
+        p e
+      ensure
+        db.close if db
+      end
     end
   end
 end

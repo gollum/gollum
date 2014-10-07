@@ -1,10 +1,79 @@
-<div id="admin-page">
-{{content}}
-{{#result}}
-<li>{{.}}</li>
-{{/result}}
-<form name="gollum-admin" action="{{base_url}}/admin" method="post">
-First: <input type="text" name="first"><br>
-<input type="submit" id="gollum-admin-submit" value="Submit">
+<div id="wiki-content">
+{{#success}}
+<strong>{{success}}</strong>
+{{/success}}
+<form name="add-email" action="/admin" method="post">
+	Adicionar e-mail à lista de acessos: <input type="text" name="email">
+	<input type="submit" value="Add">
+	<input type="hidden" name="action" value="add_email">
 </form>
+<br />
+<form name="gollum-admin" action="{{base_url}}/admin" method="post">
+Ver roles do e-mail:
+<select name="email">
+	{{# emails}}
+	<option value="{{.}}">{{.}}</option>
+	{{/ emails}}
+</select>
+<input type="submit" name="check" value="Check">
+<input type="submit" name="remove" value="Remove">
+<input type="hidden" name="action" value="check_email">
+</form>
+<br />
+<form name="gollum-admin-checkrole" action="/admin" method="post">
+	Ver permissões do role:
+	<select name="role">
+		{{#roles}}
+		<option value="{{.}}">{{.}}</option>
+		{{/roles}}
+	</select>
+	<input type="submit" value="Check">
+	<input type="hidden" name="action" value="check_role">
+</form>
+{{#has_email?}}
+Roles de {{selected}}: <br />
+<table>
+	<tr>
+		<th>Role</th>
+	</tr>
+	{{#user_roles}}
+	<tr>
+		<form name="remove_role" action="/admin" method="post">
+		<td>{{.}}</td>
+		<td><input type="submit" value="Remove"></td>
+		<input type="hidden" name="action" value="remove_role">
+		<input type="hidden" name="role_name" value="{{.}}">
+	</tr>
+	{{/user_roles}}
+</table>
+{{/has_email?}}
+
+{{#has_role?}}
+Permissões do role {{selected_role}}: <br />
+<table>
+	<tr>
+		<th>Regex</th>
+		<th>CRUD</th>
+	</tr>
+	{{#role_perms}}
+	<tr>
+		<form name="remove_perms" action="/admin" method="post">
+		<td>{{regex}}</td>
+		<td>{{crud}}</td>
+		<td><input type="submit" value="Remove"></td>
+		<input type="hidden" name="action" value="remove_perms">
+		<input type="hidden" name="id" value="{{id}}">
+	</tr>
+	{{/role_perms}}
+	<form name="add_perms" action="/admin" method="post">
+		<tr>
+			<td><input type="text" name="regex" placeholder="Path (regex)"></td>
+			<td><input type="text" pattern="^[0-9]+$" name="crud" placeholder="CRUD (0-3)"></td>
+			<td><input type="submit" value="Add"></td>
+			<input type="hidden" name="action" value="add_perms">
+			<input type="hidden" name="selected_role" value="{{selected_role}}">
+		</tr>
+	</form>
+</table>
+{{/has_role?}}
 </div>
