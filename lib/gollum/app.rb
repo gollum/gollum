@@ -386,15 +386,35 @@ module Precious
       mustache :page
     end
 
+    get '/history_all' do
+      wiki = wiki_new
+      pages = wiki.pages
+      @versions = Array.new
+      pages.each { |p|
+        page_versions = p.versions
+        page_versions.each { |v|
+          temp = [v, p.title]
+          @versions.push temp
+        }
+      }
+      mustache :history_all
+    end
+
     get '/history/*' do
-      @page     = wiki_page(params[:splat].first).page
-      @page_num = [params[:page].to_i, 1].max
-      unless @page.nil?
-        @versions = @page.versions :page => @page_num
-        mustache :history
-      else
-        redirect to("/")
-      end
+      wiki = wiki_new
+      pages = wiki.pages
+      @versions = pages[0].versions
+      p pages[0]
+      p @versions
+      redirect to("/")
+      # @page     = wiki_page(params[:splat].first).page
+      # @page_num = [params[:page].to_i, 1].max
+      # unless @page.nil?
+      #   @versions = @page.versions :page => @page_num
+      #   mustache :history
+      # else
+      #   redirect to("/")
+      # end
     end
 
     post '/compare/*' do

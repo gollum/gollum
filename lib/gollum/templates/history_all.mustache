@@ -1,0 +1,34 @@
+<div id="wiki-wrapper" class="history">
+<div id="head">
+  <h1>History for <strong>{{title}}</strong></h1>
+  <ul class="actions">
+    <li class="minibutton">
+      {{>searchbar}}
+    </li>
+  </ul>
+</div>
+<div id="wiki-history">
+
+  <table>
+    <tbody>
+
+      {{#versions}}
+      <tr>
+        <td class="author">
+            {{>author_template}}
+        </td>
+        <td>
+          {{page_title}}
+        </td>
+        <td class="commit-name">
+          <span class="time-elapsed" title="{{date_full}}">{{date}}:</span>&nbsp;
+          {{message}}
+          [<a href="{{base_url}}/{{escaped_url_path}}/{{id}}" title="View commit">{{id7}}</a>]
+        </td>
+      </tr>
+      {{/versions}}
+
+    </tbody>
+  </table>
+</div>
+</div>
