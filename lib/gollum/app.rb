@@ -401,20 +401,14 @@ module Precious
     end
 
     get '/history/*' do
-      wiki = wiki_new
-      pages = wiki.pages
-      @versions = pages[0].versions
-      p pages[0]
-      p @versions
-      redirect to("/")
-      # @page     = wiki_page(params[:splat].first).page
-      # @page_num = [params[:page].to_i, 1].max
-      # unless @page.nil?
-      #   @versions = @page.versions :page => @page_num
-      #   mustache :history
-      # else
-      #   redirect to("/")
-      # end
+      @page     = wiki_page(params[:splat].first).page
+      @page_num = [params[:page].to_i, 1].max
+      unless @page.nil?
+        @versions = @page.versions :page => @page_num
+        mustache :history
+      else
+        redirect to("/")
+      end
     end
 
     post '/compare/*' do
