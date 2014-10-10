@@ -61,10 +61,6 @@ module Precious
         end
       end
 
-      def page_url(title)
-        p = @wiki.paged(title)
-        p.escaped_url_path
-      end
 		end
 	end
 end
