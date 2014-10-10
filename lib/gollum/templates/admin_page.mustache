@@ -2,22 +2,25 @@
 {{#success}}
 <strong>{{success}}</strong>
 {{/success}}
-<form name="add-email" action="/admin" method="post">
-	Adicionar e-mail à lista de acessos: <input type="text" name="email">
+{{# error}}
+<strong>{{error}}</strong>
+{{/ error}}
+<form name="add-user" action="/admin" method="post">
+	Adicionar user à lista de acessos: <input type="text" name="user">
 	<input type="submit" value="Add">
-	<input type="hidden" name="action" value="add_email">
+	<input type="hidden" name="action" value="add_user">
 </form>
 <br />
 <form name="gollum-admin" action="{{base_url}}/admin" method="post">
-Ver roles do e-mail:
-<select name="email">
-	{{# emails}}
+Ver roles do user:
+<select name="user">
+	{{# users}}
 	<option value="{{.}}">{{.}}</option>
-	{{/ emails}}
+	{{/ users}}
 </select>
 <input type="submit" name="check" value="Check">
 <input type="submit" name="remove" value="Remove">
-<input type="hidden" name="action" value="check_email">
+<input type="hidden" name="action" value="check_user">
 </form>
 <br />
 <form name="gollum-admin-checkrole" action="/admin" method="post">
@@ -30,7 +33,7 @@ Ver roles do e-mail:
 	<input type="submit" value="Check">
 	<input type="hidden" name="action" value="check_role">
 </form>
-{{#has_email?}}
+{{#has_user?}}
 Roles de {{selected}}: <br />
 <table>
 	<tr>
@@ -41,12 +44,27 @@ Roles de {{selected}}: <br />
 		<form name="remove_role" action="/admin" method="post">
 		<td>{{.}}</td>
 		<td><input type="submit" value="Remove"></td>
-		<input type="hidden" name="action" value="remove_role">
-		<input type="hidden" name="role_name" value="{{.}}">
+		<input type="hidden" name="action" value="remove_role_from_user">
+		<input type="hidden" name="role" value="{{.}}">
+		<input type="hidden" name="user" value="{{selected}}">
+	  </form>
 	</tr>
 	{{/user_roles}}
+	<form name="add_role_to_user" action="/admin" method="post">
+		<tr>
+			<td><select name="role">
+				{{#roles}}
+				<option value="{{.}}">{{.}}</option>
+				{{/roles}}
+			</select>
+			</td>
+			<td><input type="submit" value="Add role"></td>
+		</tr>
+		<input type="hidden" name="action" value="add_role_to_user">
+		<input type="hidden" name="user" value="{{selected}}">
+	</form>
 </table>
-{{/has_email?}}
+{{/has_user?}}
 
 {{#has_role?}}
 Permissões do role {{selected_role}}: <br />
@@ -55,9 +73,9 @@ Permissões do role {{selected_role}}: <br />
 		<th>Regex</th>
 		<th>CRUD</th>
 	</tr>
+	<form name="remove_perms" action="/admin" method="post">
 	{{#role_perms}}
 	<tr>
-		<form name="remove_perms" action="/admin" method="post">
 		<td>{{regex}}</td>
 		<td>{{crud}}</td>
 		<td><input type="submit" value="Remove"></td>
@@ -65,12 +83,13 @@ Permissões do role {{selected_role}}: <br />
 		<input type="hidden" name="id" value="{{id}}">
 	</tr>
 	{{/role_perms}}
+  </form>
 	<form name="add_perms" action="/admin" method="post">
 		<tr>
 			<td><input type="text" name="regex" placeholder="Path (regex)"></td>
 			<td><input type="text" pattern="^[0-9]+$" name="crud" placeholder="CRUD (0-3)"></td>
 			<td><input type="submit" value="Add"></td>
-			<input type="hidden" name="action" value="add_perms">
+			<input type="hidden" name="action" value="add_perms_to_role">
 			<input type="hidden" name="selected_role" value="{{selected_role}}">
 		</tr>
 	</form>

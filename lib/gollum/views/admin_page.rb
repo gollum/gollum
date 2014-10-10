@@ -1,12 +1,15 @@
 module Precious
   module Views
     class AdminPage < Layout
+      def title
+        "Weaki administration page"
+      end
       def content
         "Teste"
       end
-      def emails
-        em = @emails.map {|e| e.first }
-        em.sort_by {|x| x.downcase }
+      def users
+        u = @users.map {|e| e.first }
+        u.sort_by {|x| x.downcase }
       end
 
       def roles
@@ -14,11 +17,11 @@ module Precious
       end
 
       def selected
-        @selected_email
+        @selected_user
       end
 
-      def has_email?
-        !@selected_email.nil?
+      def has_user?
+        !@selected_user.nil?
       end
 
       def user_roles

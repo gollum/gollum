@@ -100,40 +100,54 @@ module Precious
       # @result = db.execute "SELECT DISTINCT Users.email, Roles.type FROM Users INNER JOIN UsersRoles ON Users.email=UsersRoles.email INNER JOIN Roles ON UsersRoles.type=Roles.type;"
       # p @result
       # @result = @result.first
-      @emails = get_users_from_db
+      @users = get_users_from_db
       @roles = get_roles_from_db
       db.close
       mustache :admin_page
     end
 
     post '/admin' do
-      puts params[:email]
-      # p params
-      if params[:action] == "check_email"
+      # puts params[:email]
+      if params[:action] == "check_user"
         unless params[:remove].nil?
-          # apagar user
+          user = params[:user]
+          delete_user user
+          @success = "User #{user} successfully deleted!"
         else
-          @selected_email = params[:email]
-          @user_roles = get_user_roles @selected_email
+          @selected_user = params[:user]
+          @user_roles = get_user_roles @selected_user
         end
       elsif params[:action] == "check_role"
         @selected_role = params[:role]
         @role_perms = get_role_permissions @selected_role
-      elsif params[:action] == "add_email"
-        add_email_to_db params[:email]
-        @success = "E-mail successfully added!"
+      elsif params[:action] == "add_user"
+        add_email_to_db params[:user]
+        @success = "User successfully added!"
       elsif params[:action] == "remove_perms"
         remove_perms_by_id params[:id]
-        p params
         @success = "Permissions successfully removed!"
-      elsif params[:action] == "remove_role"
-        p params
-      elsif params[:action] == "add_perms"
+      elsif params[:action] == "remove_role_from_user"
+        user = params[:user]
+        role = params[:role]
+        remove_role_from_user(user,role)
+        @selected_user = user
+        @user_roles = get_user_roles @selected_user
+      elsif params[:action] == "add_perms_to_role"
         # add permissions to role
-        add_perms_to_role params[:selected_role], params[:regex], params[:crud]
+        # add_perms_to_role params[:selected_role], params[:regex], params[:crud]
+        role = params[:selected_role]
+        regex = params[:regex]
+        crud = params[:crud]
+        add_perms_to_role(role, regex, crud)
+      elsif params[:action] == "add_role_to_user"
+        user = params[:user]
+        role = params[:role]
+        add_role_to_user(user, role)
+        @selected_user = user
+        @user_roles = get_user_roles @selected_user
       end
 
-      @emails = get_users_from_db
+      @users = get_users_from_db
       @roles = get_roles_from_db
       mustache :admin_page
       # redirect '/'
@@ -628,10 +642,59 @@ module Precious
     def add_perms_to_role(role, regex, crud)
       begin
         db = SQLite3::Database.open "weaki_v2.db"
-        db.execute "insert into Roles values (NULL, ?, ?, ?);", role, regex, crud
+        stm = db.prepare "insert into Roles values (NULL, ?, ?, ?)"
+        stm.bind_params role, regex, crud
+        stm.execute
       rescue SQLite3::Exception => e
-        p e
+        @message = "Error adding permissions to role #{role}: #{e.message}"
       ensure
+        stm.close if stm
+        db.close if db
+      end
+    end
+
+    def delete_user(user)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        stm = db.prepare "delete from Users where email = :user"
+        stm.execute user
+        stm2 = db.prepare "delete from UsersRoles where email = :user"
+        stm2.execute user
+      rescue SQLite3::Exception => e
+        @message = "Error deleting user #{user}: #{e.message}"
+        mustache :error
+      ensure
+        stm.close if stm
+        stm2.close if stm
+        db.close if db
+      end
+    end
+
+    def add_role_to_user(user, role)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        stm = db.prepare "insert into UsersRoles values(?,?)"
+        stm.bind_params user, role
+        stm.execute
+      rescue SQLite3::Exception => e
+        @message = "Error adding role to #{user}: #{e.message}"
+        mustache :error
+      ensure
+        stm.close if stm
+        db.close if db
+      end
+    end
+
+    def remove_role_from_user(user, role)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        stm = db.prepare "delete from UsersRoles where email = ? and role = ?"
+        stm.bind_params user, role
+        stm.execute
+      rescue SQLite3::Exception => e
+        @message = "Error removing role from user #{user}: #{e.message}"
+      ensure
+        stm.close if stm
         db.close if db
       end
     end
