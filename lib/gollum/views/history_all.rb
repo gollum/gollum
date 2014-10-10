@@ -2,13 +2,14 @@ module Precious
 	module Views
 		class HistoryAll < Layout
 			def title
-				"Weaki"
+				"Recent activity on Weaki"
 			end
 
 			def versions
 				i = @versions.size + 1
 				versions_temp = @versions.map do |x|
 					v = x[0]
+          page = x[1]
 					i -= 1
 					{
 						:id => v.id,
@@ -16,11 +17,12 @@ module Precious
 						:num => i,
 						:author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
 						:message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-						:date      => v.authored_date.strftime("%B %d, %Y"),
+						:date      => v.authored_date.strftime("%B %d, %Y %H:%M:%S "),
 						:gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
 						:identicon => self._identicon_code(v.author.email),
 	          :date_full => v.authored_date,
-	          :page_title => x[1]
+	          :page_title => page.title,
+            :page_url => page.escaped_url_path
 					}
 				end
 				versions_temp.sort_by { |v| v[:date_full] }.reverse
@@ -59,6 +61,10 @@ module Precious
         end
       end
 
+      def page_url(title)
+        p = @wiki.paged(title)
+        p.escaped_url_path
+      end
 		end
 	end
 end

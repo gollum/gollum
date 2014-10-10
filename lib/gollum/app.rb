@@ -393,7 +393,8 @@ module Precious
       pages.each { |p|
         page_versions = p.versions
         page_versions.each { |v|
-          temp = [v, p.title]
+          temp = [v, p]
+          p p
           @versions.push temp
         }
       }
