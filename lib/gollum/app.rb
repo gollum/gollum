@@ -258,7 +258,9 @@ module Precious
       wiki  = wikip.wiki
       page  = wikip.page
       unless page.nil?
-        wiki.delete_page(page, { :message => "Destroyed #{name} (#{page.format})" })
+        commit           = commit_message
+        commit[:message] = "Destroyed #{name} (#{page.format})"
+        wiki.delete_page(page, commit)
       end
 
       redirect to('/')
