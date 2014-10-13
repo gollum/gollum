@@ -5,11 +5,14 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'sqlite3'
 
 require 'gollum'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
+
+require 'gollum/views/admin_page'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -63,7 +66,6 @@ module Precious
     set :public_folder, "#{dir}/public/gollum"
     set :static, true
     set :default_markup, :markdown
-
     set :mustache, {
         # Tell mustache where the Views constant lives
         :namespace => Precious,
@@ -82,7 +84,7 @@ module Precious
     end
 
     configure :test do
-      enable :logging, :raise_errors, :dump_errors
+      enable :raise_errors, :dump_errors
     end
 
     before do
@@ -92,6 +94,64 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
+    end
+
+    get '/admin' do
+      db = SQLite3::Database.open "weaki_v2.db"
+      # @result = db.execute "SELECT DISTINCT Users.email, Roles.type FROM Users INNER JOIN UsersRoles ON Users.email=UsersRoles.email INNER JOIN Roles ON UsersRoles.type=Roles.type;"
+      # p @result
+      # @result = @result.first
+      @users = get_users_from_db
+      @roles = get_roles_from_db
+      db.close
+      mustache :admin_page
+    end
+
+    post '/admin' do
+      # puts params[:email]
+      if params[:action] == "check_user"
+        unless params[:remove].nil?
+          user = params[:user]
+          delete_user user
+          @success = "User #{user} successfully deleted!"
+        else
+          @selected_user = params[:user]
+          @user_roles = get_user_roles @selected_user
+        end
+      elsif params[:action] == "check_role"
+        @selected_role = params[:role]
+        @role_perms = get_role_permissions @selected_role
+      elsif params[:action] == "add_user"
+        add_email_to_db params[:user]
+        @success = "User successfully added!"
+      elsif params[:action] == "remove_perms"
+        remove_perms_by_id params[:id]
+        @success = "Permissions successfully removed!"
+      elsif params[:action] == "remove_role_from_user"
+        user = params[:user]
+        role = params[:role]
+        remove_role_from_user(user,role)
+        @selected_user = user
+        @user_roles = get_user_roles @selected_user
+      elsif params[:action] == "add_perms_to_role"
+        # add permissions to role
+        # add_perms_to_role params[:selected_role], params[:regex], params[:crud]
+        role = params[:selected_role]
+        regex = params[:regex]
+        crud = params[:crud]
+        add_perms_to_role(role, regex, crud)
+      elsif params[:action] == "add_role_to_user"
+        user = params[:user]
+        role = params[:role]
+        add_role_to_user(user, role)
+        @selected_user = user
+        @user_roles = get_user_roles @selected_user
+      end
+
+      @users = get_users_from_db
+      @roles = get_roles_from_db
+      mustache :admin_page
+      # redirect '/'
     end
 
     get '/' do
@@ -341,6 +401,20 @@ module Precious
       mustache :page
     end
 
+    get '/history_all' do
+      wiki = wiki_new
+      pages = wiki.pages
+      @versions = Array.new
+      pages.each { |p|
+        page_versions = p.versions
+        page_versions.each { |v|
+          temp = [v, p]
+          @versions.push temp
+        }
+      }
+      mustache :history_all
+    end
+
     get '/history/*' do
       @page     = wiki_page(params[:splat].first).page
       @page_num = [params[:page].to_i, 1].max
@@ -505,6 +579,125 @@ module Precious
       author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
+    end
+
+    def get_users_from_db
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select Users.email from Users;"
+      db.close
+      return results
+    end
+
+    def get_permissions_of_user(email)
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select Roles.name, Roles.regex, Roles.crud from Users INNER JOIN UsersRoles ON Users.email=UsersRoles.email INNER JOIN Roles ON UsersRoles.role=Roles.name WHERE Users.email = ? ;", email
+      db.close
+      return results
+    end
+
+    def get_user_roles(email)
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select UsersRoles.role from Users inner join UsersRoles on Users.email=UsersRoles.email where Users.email = ?", email
+      db.close
+      return results
+    end
+
+    def get_roles_from_db
+      db = SQLite3::Database.open "weaki_v2.db"
+      results = db.execute "select distinct Roles.name from Roles;"
+      db.close
+      return results
+    end
+
+    def get_role_permissions(role)
+      db = SQLite3::Database.open "weaki_v2.db"
+      db.results_as_hash = true
+      results = db.execute "select Roles. id, Roles.regex, Roles.crud from Roles where Roles.name = ?", role
+      db.close
+      return results
+    end
+
+    def add_email_to_db(email)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        db.execute "insert into Users values(?);", email
+      rescue SQLite3::Exception => e
+        puts "Error adding email #{email}"
+        p e
+      ensure
+        db.close if db
+      end
+    end
+
+    def remove_perms_by_id(id)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        db.execute "delete from Roles where Roles.id = ?", id
+      rescue SQLite3::Exception => e
+        p e
+      ensure
+        db.close if db
+      end
+    end
+
+    def add_perms_to_role(role, regex, crud)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        stm = db.prepare "insert into Roles values (NULL, ?, ?, ?)"
+        stm.bind_params role, regex, crud
+        stm.execute
+      rescue SQLite3::Exception => e
+        @message = "Error adding permissions to role #{role}: #{e.message}"
+      ensure
+        stm.close if stm
+        db.close if db
+      end
+    end
+
+    def delete_user(user)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        stm = db.prepare "delete from Users where email = :user"
+        stm.execute user
+        stm2 = db.prepare "delete from UsersRoles where email = :user"
+        stm2.execute user
+      rescue SQLite3::Exception => e
+        @message = "Error deleting user #{user}: #{e.message}"
+        mustache :error
+      ensure
+        stm.close if stm
+        stm2.close if stm
+        db.close if db
+      end
+    end
+
+    def add_role_to_user(user, role)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        stm = db.prepare "insert into UsersRoles values(?,?)"
+        stm.bind_params user, role
+        stm.execute
+      rescue SQLite3::Exception => e
+        @message = "Error adding role to #{user}: #{e.message}"
+        mustache :error
+      ensure
+        stm.close if stm
+        db.close if db
+      end
+    end
+
+    def remove_role_from_user(user, role)
+      begin
+        db = SQLite3::Database.open "weaki_v2.db"
+        stm = db.prepare "delete from UsersRoles where email = ? and role = ?"
+        stm.bind_params user, role
+        stm.execute
+      rescue SQLite3::Exception => e
+        @message = "Error removing role from user #{user}: #{e.message}"
+      ensure
+        stm.close if stm
+        db.close if db
+      end
     end
   end
 end

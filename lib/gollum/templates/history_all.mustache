@@ -1,0 +1,36 @@
+<div id="wiki-wrapper" class="history">
+<div id="head">
+  <h1>Recent activity on <strong>Weaki</strong></h1>
+  <ul class="actions">
+    <li class="minibutton"><a href="/">Home</a></li>
+    <li class="minibutton"><a href="javascript:history.back()">Back</a></li>
+    <li class="minibutton">
+      {{>searchbar}}
+    </li>
+  </ul>
+</div>
+<div id="wiki-history">
+
+  <table>
+    <tbody>
+
+      {{#versions}}
+      <tr>
+        <td class="author">
+            {{>author_template}}
+        </td>
+        <td>
+          <a href="{{page_url}}">{{page_title}}</a>
+        </td>
+        <td class="commit-name">
+          <span class="time-elapsed" title="{{date_full}}">{{date}}:</span>&nbsp;
+          {{message}}
+          [<a href="/{{page_url}}/{{id}}" title="View commit">{{id7}}</a>]
+        </td>
+      </tr>
+      {{/versions}}
+
+    </tbody>
+  </table>
+</div>
+</div>
