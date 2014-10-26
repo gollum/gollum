@@ -91,6 +91,7 @@ module Precious
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
+      @mathjax_config = settings.wiki_options[:mathjax_config]
     end
 
     get '/' do

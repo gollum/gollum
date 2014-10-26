@@ -105,13 +105,14 @@ Options:
         --js                         Inject custom js. Uses custom.js from root repository
         --template-dir [PATH]        Specify custom template directory
         --page-file-dir [PATH]       Specify the sub directory for all page files (default: repository root).
-        --base-path [PATH]           Specify the base path.
-        --gollum-path [PATH]         Specify the gollum path.
+        --base-path [PATH]           Specify the base path for the served pages (default: /) Example: --base-path wiki yields the home page accessible at http://localhost:4567/wiki/.
+        --gollum-path [PATH]         Specify the path to the git repository to be served.
         --ref [REF]                  Specify the repository ref to use (default: master).
         --no-live-preview            Disables livepreview.
         --live-preview               Enables livepreview.
         --allow-uploads [MODE]       Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).
-        --mathjax                    Enables mathjax.
+        --mathjax                    Enables mathjax for rendering mathematical equations. Uses the TeX-AMS-MML_HTMLorMML config with the autoload-all extension by default.
+        --mathjax-config [SOURCE]    Inject custom mathjax config. Uses mathjax.config.js from root repository by default
         --user-icons [SOURCE]        Set the history user icons. Valid values: gravatar, identicon, none. Default: none.
         --show-all                   Shows all files in file view. By default only valid pages are shown.
         --collapse-tree              Collapse file view tree. By default, expanded tree is shown.
