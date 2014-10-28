@@ -64,11 +64,11 @@ opts = OptionParser.new do |opts|
     wiki_options[:page_file_dir] = path
   end
 
-  opts.on("--base-path [PATH]", "Specify the base path.") do |path|
+  opts.on("--base-path [PATH]", "Specify the base path for the served pages (default: /) Example: --base-path wiki yields the home page accessible at http://localhost:4567/wiki/.") do |path|
     wiki_options[:base_path] = path
   end
 
-  opts.on("--gollum-path [PATH]", "Specify the gollum path.") do |path|
+  opts.on("--gollum-path [PATH]", "Specify the path to the git repository to be served.") do |path|
     wiki_options[:gollum_path] = path
   end
 
@@ -89,8 +89,12 @@ opts = OptionParser.new do |opts|
     wiki_options[:per_page_uploads] = true if mode == :page
   end
 
-  opts.on("--mathjax", "Enables mathjax.") do
+  opts.on("--mathjax", "Enables mathjax for rendering mathematical equations. Uses the TeX-AMS-MML_HTMLorMML config with the autoload-all extension by default.") do
     wiki_options[:mathjax] = true
+  end
+
+  opts.on("--mathjax-config [SOURCE]", "Inject custom mathjax config file. Uses mathjax.config.js from root repository by default") do |source|
+    wiki_options[:mathjax_config] = source || 'mathjax.config.js'
   end
 
   opts.on("--user-icons [SOURCE]", "Set the history user icons. Valid values: gravatar, identicon, none. Default: none.") do |source|
