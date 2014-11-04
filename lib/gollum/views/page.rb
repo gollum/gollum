@@ -14,7 +14,7 @@ module Precious
       end
 
       def page_header
-        page_header_from_content(@content) || title
+        title
       end
 
       def content
@@ -162,9 +162,11 @@ module Precious
       # Returns page content without title if it was extracted.
       #
       def content_without_page_header(content)
-        doc   = build_document(content)
-        title = find_header_node(doc)
-        title.remove unless title.empty?
+        doc = build_document(content)
+          if @h1_title
+            title = find_header_node(doc)
+            title.remove unless title.empty?
+          end
         # .inner_html will cause href escaping on UTF-8
         doc.css("div#gollum-root").children.to_xml(@@to_xml)
       end
