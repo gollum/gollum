@@ -56,8 +56,12 @@ module Precious
       end
 
       def has_header
-        @header = (@page.header || false) if @header.nil?
-        !!@header
+        if @header
+          return false if @header.formatted_data.strip.empty?
+        else
+          @header = (@page.header || false)
+          !!@header
+        end
       end
 
       def header_content
@@ -69,8 +73,12 @@ module Precious
       end
 
       def has_footer
-        @footer = (@page.footer || false) if @footer.nil?
-        !!@footer
+        if @footer
+          return false if @footer.formatted_data.strip.empty?
+        else
+          @footer = (@page.footer || false)
+          !!@footer
+        end
       end
 
       def footer_content
@@ -86,8 +94,12 @@ module Precious
       end
 
       def has_sidebar
-        @sidebar = (@page.sidebar || false) if @sidebar.nil?
-        !!@sidebar
+        if @sidebar
+          return false if @sidebar.formatted_data.strip.empty?
+        else
+          @sidebar = (@page.sidebar || false)
+          !!@sidebar
+        end
       end
 
       def sidebar_content
