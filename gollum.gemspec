@@ -538,8 +538,9 @@ Gem::Specification.new do |s|
     licenses/css_tree_menu_thecssninja/license.txt
     licenses/licenses.txt
     licenses/unity_asset_pool/COPYRIGHT
-    openrc/conf.d/gollum
-    openrc/init.d/gollum
+    contrib/openrc/conf.d/gollum
+    contrib/openrc/init.d/gollum
+    contrib/systemd/gollum@.service
   ]
   # = MANIFEST =
 
