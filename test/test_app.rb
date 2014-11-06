@@ -542,6 +542,19 @@ context "Frontend" do
     assert_match /meta name="robots" content="noindex, nofollow"/, last_response.body
   end
 
+  test "show revision of specific file" do
+    shas = {}
+      ["First revision of testfile", "Second revision of testfile"].each do |content|
+        new_commit = commit_test_file(@wiki, "revisions", "testfile", "log", content)
+        shas[new_commit] = content
+      end
+      shas.each do |sha, content|
+        get "revisions/testfile.log/#{sha}"
+        assert last_response.ok?
+        assert_match /#{content}/, last_response.body
+      end
+  end
+
   def app
     Precious::App
   end

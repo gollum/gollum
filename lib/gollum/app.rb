@@ -402,6 +402,8 @@ module Precious
         @content = page.formatted_data
         @version = version
         mustache :page
+      elsif file = wikip.wiki.file("#{file_path}", version, true)
+        show_file(file)
       else
         halt 404
       end
@@ -472,15 +474,20 @@ module Precious
 
         mustache :page
       elsif file = wiki.file(fullpath, wiki.ref, true)
-        if file.on_disk?
-          send_file file.on_disk_path, :disposition => 'inline'
-        else
-          content_type file.mime_type
-          file.raw_data
-        end
+        show_file(file)
       else
         page_path = [path, name].compact.join('/')
         redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
+      end
+    end
+
+    def show_file(file)
+      return unless file
+      if file.on_disk?
+        send_file file.on_disk_path, :disposition => 'inline'
+      else
+        content_type file.mime_type
+        file.raw_data
       end
     end
 
