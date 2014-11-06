@@ -87,3 +87,14 @@ def context(*args, &block)
 end
 
 $contexts = []
+
+# Commit file to wiki, overwriting previous versions of that file
+def commit_test_file(wiki, dir, filename, ext, content)
+  committer = Gollum::Committer.new(wiki, :message => "Added testfile", :parent  => wiki.repo.head.commit)
+  committer.add_to_index(dir, filename, ext, content, true)
+    committer.after_commit do |committer, sha|
+      wiki.clear_cache
+      committer.update_working_dir(dir, filename, ext)
+    end
+  committer.commit
+end
