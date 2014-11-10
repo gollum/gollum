@@ -84,6 +84,13 @@ context "Frontend" do
     assert_match /#{expected}/, actual
   end
 
+  test "show sidebar, header, footer when present" do
+    divs = [@wiki.page("_Header").formatted_data, @wiki.page("_Footer").formatted_data, @wiki.page("_Sidebar").formatted_data]
+    @wiki.write_page("HeaderTest", :markdown, "Test", commit_details)
+    get "/HeaderTest"
+    divs.each {|div| assert_match div, last_response.body}
+  end
+
   test "retain edit information" do
     page1 = 'page1'
     user1 = 'user1'

@@ -57,7 +57,7 @@ module Precious
 
       def has_header
         if @header
-          return false if @header.formatted_data.strip.empty?
+          @header.formatted_data.strip.empty? ? false : true
         else
           @header = (@page.header || false)
           !!@header
@@ -74,7 +74,7 @@ module Precious
 
       def has_footer
         if @footer
-          return false if @footer.formatted_data.strip.empty?
+          @footer.formatted_data.strip.empty? ? false : true
         else
           @footer = (@page.footer || false)
           !!@footer
@@ -95,7 +95,7 @@ module Precious
 
       def has_sidebar
         if @sidebar
-          return false if @sidebar.formatted_data.strip.empty?
+          @sidebar.formatted_data.strip.empty? ? false : true
         else
           @sidebar = (@page.sidebar || false)
           !!@sidebar
