@@ -8,7 +8,7 @@ context "Frontend" do
     @path = cloned_testpath("examples/revert.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {})
+    Precious::App.set(:wiki_options, {allow_editing: true})
   end
 
   teardown do
