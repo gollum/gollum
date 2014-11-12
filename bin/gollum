@@ -22,6 +22,7 @@ options      = { 'port' => 4567, 'bind' => '0.0.0.0' }
 wiki_options = {
     :live_preview  => false,
     :allow_uploads => false,
+    :allow_editing => true,
 }
 
 opts = OptionParser.new do |opts|
@@ -74,6 +75,10 @@ opts = OptionParser.new do |opts|
 
   opts.on("--ref [REF]", "Specify the repository ref to use (default: master).") do |ref|
     wiki_options[:ref] = ref
+  end
+
+  opts.on("--no-edit", "Restricts editing capability through frontend.")  do
+    wiki_options[:allow_editing] = false
   end
 
   opts.on("--no-live-preview", "Disables livepreview.") do

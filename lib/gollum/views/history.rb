@@ -3,7 +3,7 @@ module Precious
     class History < Layout
       include HasPage
 
-      attr_reader :page, :page_num
+      attr_reader :page, :page_num, :allow_editing
 
       def title
         @page.title
