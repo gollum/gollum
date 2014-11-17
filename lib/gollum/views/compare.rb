@@ -3,7 +3,7 @@ module Precious
     class Compare < Layout
       include HasPage
 
-      attr_reader :page, :diff, :versions, :message
+      attr_reader :page, :diff, :versions, :message, :allow_editing
 
       def title
         "Comparison of #{@page.title}"

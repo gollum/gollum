@@ -8,8 +8,10 @@
     </li>
     <li class="minibutton"><a href="{{base_url}}/{{escaped_url_path}}"
        class="action-view-page">View Page</a></li>
-    <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
-       class="action-edit-page">Edit Page</a></li>
+    {{#allow_editing}}
+      <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
+         class="action-edit-page">Edit Page</a></li>
+    {{/allow_editing}}
     <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
        class="action-page-history">Page History</a></li>
   </ul>
@@ -25,11 +27,13 @@
   <ul class="actions">
     <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
        class="action-page-history">Back to Page History</a></li>
-    <li class="minibutton">
-      <form name="gollum-revert" action="{{base_url}}/revert/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
-      <a href="#" class="gollum-revert-button">Revert Changes</a>
-      </form>
-    </li>
+    {{#allow_editing}}
+      <li class="minibutton">
+        <form name="gollum-revert" action="{{base_url}}/revert/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
+        <a href="#" class="gollum-revert-button">Revert Changes</a>
+        </form>
+      </li>
+    {{/allow_editing}}
   </ul>
   {{/show_revert}}
 
@@ -52,9 +56,11 @@
     <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
        class="action-page-history">Back to Page History</a></li>
     {{#show_revert}}
-    <li class="minibutton">
-      <a href="#" class="gollum-revert-button">Revert Changes</a>
-    </li>
+    {{#allow_editing}}
+      <li class="minibutton">
+        <a href="#" class="gollum-revert-button">Revert Changes</a>
+      </li>
+    {{/allow_editing}}
     {{/show_revert}}
     <li class="minibutton"><a href="#">Back to Top</a></li>
   </ul>
