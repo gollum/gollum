@@ -3,7 +3,7 @@ require "pathname"
 module Precious
   module Views
     class Pages < Layout
-      attr_reader :results, :ref
+      attr_reader :results, :ref, :allow_editing
 
       def title
         "All pages in #{@ref}"

@@ -13,6 +13,8 @@ require 'gollum/views/has_page'
 
 require File.expand_path '../helpers', __FILE__
 
+require 'gollum/editing_auth'
+
 #required to upload bigger binary files
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
@@ -42,6 +44,7 @@ module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
+    use Precious::EditingAuth
 
     dir     = File.dirname(File.expand_path(__FILE__))
 
@@ -91,6 +94,8 @@ module Precious
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
+      @mathjax_config = settings.wiki_options[:mathjax_config]
+      @allow_editing = settings.wiki_options[:allow_editing]
     end
 
     get '/' do
@@ -105,7 +110,6 @@ module Precious
     # name, path, version
     def wiki_page(name, path = nil, version = nil, exact = true)
       wiki = wiki_new
-
       path = name if path.nil?
       name = extract_name(name) || wiki.index_page
       path = extract_path(path)
@@ -126,6 +130,7 @@ module Precious
     end
 
     get '/edit/*' do
+      forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
@@ -253,6 +258,7 @@ module Precious
     end
 
     get '/delete/*' do
+      forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
       name  = wikip.name
       wiki  = wikip.wiki
@@ -267,6 +273,7 @@ module Precious
     end
 
     get '/create/*' do
+      forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
@@ -476,6 +483,7 @@ module Precious
       elsif file = wiki.file(fullpath, wiki.ref, true)
         show_file(file)
       else
+        not_found unless @allow_editing
         page_path = [path, name].compact.join('/')
         redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
       end
