@@ -29,7 +29,7 @@ Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
 
 ## SECURITY
 
-Don't enable `--custom-css` or `--custom-js` unless you trust every user who has the ability to edit the wiki.
+Don't enable `--custom-css`, `--custom-js` or `--mathjax-config` unless you trust every user who has the ability to edit the wiki.
 A better solution with more security is being tracked in [#665](https://github.com/gollum/gollum/issues/665).
 
 ## INSTALLATION
@@ -108,11 +108,12 @@ Options:
         --base-path [PATH]           Specify the base path for the served pages (default: /) Example: --base-path wiki yields the home page accessible at http://localhost:4567/wiki/.
         --gollum-path [PATH]         Specify the path to the git repository to be served.
         --ref [REF]                  Specify the repository ref to use (default: master).
+        --no-edit                    Restricts editing capability through frontend.
         --no-live-preview            Disables livepreview.
         --live-preview               Enables livepreview.
         --allow-uploads [MODE]       Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).
         --mathjax                    Enables mathjax for rendering mathematical equations. Uses the TeX-AMS-MML_HTMLorMML config with the autoload-all extension by default.
-        --mathjax-config [SOURCE]    Inject custom mathjax config. Uses mathjax.config.js from root repository by default
+        --mathjax-config [SOURCE]    Inject custom mathjax config file. Uses mathjax.config.js from root repository by default
         --user-icons [SOURCE]        Set the history user icons. Valid values: gravatar, identicon, none. Default: none.
         --show-all                   Shows all files in file view. By default only valid pages are shown.
         --collapse-tree              Collapse file view tree. By default, expanded tree is shown.
