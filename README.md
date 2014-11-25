@@ -100,6 +100,7 @@ Options:
         --host [HOST]                Hostname or IP address to listen on (default 0.0.0.0).
         --version                    Display current version.
         --config [CONFIG]            Path to additional configuration file
+        --adapter [ADAPTER]          Git adapter to use in the backend. Defaults to grit.
         --irb                        Start an irb process with gollum loaded for the current wiki.
         --css                        Inject custom css. Uses custom.css from root repository
         --js                         Inject custom js. Uses custom.js from root repository
