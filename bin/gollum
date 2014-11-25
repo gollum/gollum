@@ -45,6 +45,10 @@ opts = OptionParser.new do |opts|
     options['config'] = config
   end
 
+  opts.on("--adapter [ADAPTER]", "Git adapter to use in the backend. Defaults to grit.") do |adapter|
+    Gollum::GIT_ADAPTER = adapter
+  end
+
   opts.on("--irb", "Start an irb process with gollum loaded for the current wiki.") do
     options['irb'] = true
   end
