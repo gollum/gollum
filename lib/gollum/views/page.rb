@@ -18,7 +18,7 @@ module Precious
       def breadcrumb
         # Not sure exactly why @path is not available here
         path       = Pathname.new(@page.path)
-        breadcrumb = [%{<a href="#{@base_url}/">Home</a>}]
+        breadcrumb = [%{<a href="#{@base_url}/">home</a>}]
         path.descend do |crumb|
           title = crumb.basename
 
