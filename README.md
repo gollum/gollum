@@ -99,12 +99,12 @@ Options:
         --port [PORT]                Bind port (default 4567).
         --host [HOST]                Hostname or IP address to listen on (default 0.0.0.0).
         --version                    Display current version.
-        --config [CONFIG]            Path to additional configuration file
+        --config [CONFIG]            Path to additional configuration file.
         --adapter [ADAPTER]          Git adapter to use in the backend. Defaults to grit.
         --irb                        Start an irb process with gollum loaded for the current wiki.
-        --css                        Inject custom css. Uses custom.css from root repository
-        --js                         Inject custom js. Uses custom.js from root repository
-        --template-dir [PATH]        Specify custom template directory
+        --css                        Inject custom css. Uses custom.css from root repository.
+        --js                         Inject custom js. Uses custom.js from root repository.
+        --template-dir [PATH]        Specify custom template directory.
         --page-file-dir [PATH]       Specify the sub directory for all page files (default: repository root).
         --base-path [PATH]           Specify the base path for the served pages (default: /) Example: --base-path wiki yields the home page accessible at http://localhost:4567/wiki/.
         --gollum-path [PATH]         Specify the path to the git repository to be served.
@@ -114,11 +114,11 @@ Options:
         --live-preview               Enables livepreview.
         --allow-uploads [MODE]       Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).
         --mathjax                    Enables mathjax for rendering mathematical equations. Uses the TeX-AMS-MML_HTMLorMML config with the autoload-all extension by default.
-        --mathjax-config [SOURCE]    Inject custom mathjax config file. Uses mathjax.config.js from root repository by default
+        --mathjax-config [SOURCE]    Inject custom mathjax config file. Uses mathjax.config.js from root repository by default.
         --user-icons [SOURCE]        Set the history user icons. Valid values: gravatar, identicon, none. Default: none.
         --show-all                   Shows all files in file view. By default only valid pages are shown.
         --collapse-tree              Collapse file view tree. By default, expanded tree is shown.
-        --h1-title                   Sets page title to value of first h1
+        --h1-title                   Sets page title to value of first h1.
 ```
 
 Note that the gollum server will not run on Windows because of [an issue](https://github.com/rtomayko/posix-spawn/issues/9) with posix-spawn (which is used by Grit).

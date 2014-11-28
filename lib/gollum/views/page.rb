@@ -126,6 +126,10 @@ module Precious
         @mathjax
       end
 
+      def mathjax_config
+        @mathjax_config
+      end
+
       def use_identicon
         @page.wiki.user_icons == 'identicon'
       end
