@@ -22,6 +22,7 @@ options      = { 'port' => 4567, 'bind' => '0.0.0.0' }
 wiki_options = {
     :live_preview  => false,
     :allow_uploads => false,
+    :allow_editing => true,
 }
 
 opts = OptionParser.new do |opts|
@@ -44,6 +45,10 @@ opts = OptionParser.new do |opts|
     options['config'] = config
   end
 
+  opts.on("--adapter [ADAPTER]", "Git adapter to use in the backend. Defaults to grit.") do |adapter|
+    Gollum::GIT_ADAPTER = adapter
+  end
+
   opts.on("--irb", "Start an irb process with gollum loaded for the current wiki.") do
     options['irb'] = true
   end
@@ -64,16 +69,20 @@ opts = OptionParser.new do |opts|
     wiki_options[:page_file_dir] = path
   end
 
-  opts.on("--base-path [PATH]", "Specify the base path.") do |path|
+  opts.on("--base-path [PATH]", "Specify the base path for the served pages (default: /) Example: --base-path wiki yields the home page accessible at http://localhost:4567/wiki/.") do |path|
     wiki_options[:base_path] = path
   end
 
-  opts.on("--gollum-path [PATH]", "Specify the gollum path.") do |path|
+  opts.on("--gollum-path [PATH]", "Specify the path to the git repository to be served.") do |path|
     wiki_options[:gollum_path] = path
   end
 
   opts.on("--ref [REF]", "Specify the repository ref to use (default: master).") do |ref|
     wiki_options[:ref] = ref
+  end
+
+  opts.on("--no-edit", "Restricts editing capability through frontend.")  do
+    wiki_options[:allow_editing] = false
   end
 
   opts.on("--no-live-preview", "Disables livepreview.") do
@@ -89,7 +98,7 @@ opts = OptionParser.new do |opts|
     wiki_options[:per_page_uploads] = true if mode == :page
   end
 
-  opts.on("--mathjax", "Enables mathjax.") do
+  opts.on("--mathjax", "Enables mathjax for rendering mathematical equations. Uses the TeX-AMS-MML_HTMLorMML config with the autoload-all extension by default.") do
     wiki_options[:mathjax] = true
   end
 

@@ -14,7 +14,7 @@ module Precious
       end
 
       def page_header
-        page_header_from_content(@content) || title
+        title
       end
 
       def content
@@ -47,6 +47,10 @@ module Precious
         @page_exists
       end
 
+      def allow_editing
+        @allow_editing
+      end
+
       def allow_uploads
         @allow_uploads
       end
@@ -56,8 +60,12 @@ module Precious
       end
 
       def has_header
-        @header = (@page.header || false) if @header.nil?
-        !!@header
+        if @header
+          @header.formatted_data.strip.empty? ? false : true
+        else
+          @header = (@page.header || false)
+          !!@header
+        end
       end
 
       def header_content
@@ -69,8 +77,12 @@ module Precious
       end
 
       def has_footer
-        @footer = (@page.footer || false) if @footer.nil?
-        !!@footer
+        if @footer
+          @footer.formatted_data.strip.empty? ? false : true
+        else
+          @footer = (@page.footer || false)
+          !!@footer
+        end
       end
 
       def footer_content
@@ -86,8 +98,12 @@ module Precious
       end
 
       def has_sidebar
-        @sidebar = (@page.sidebar || false) if @sidebar.nil?
-        !!@sidebar
+        if @sidebar
+          @sidebar.formatted_data.strip.empty? ? false : true
+        else
+          @sidebar = (@page.sidebar || false)
+          !!@sidebar
+        end
       end
 
       def sidebar_content
@@ -142,7 +158,7 @@ module Precious
       def find_header_node(doc)
         case @page.format
           when :asciidoc
-            doc.css("div#gollum-root > div#header > h1:first-child")
+            doc.css("div#gollum-root > h1:first-child")
           when :org
             doc.css("div#gollum-root > p.title:first-child")
           when :pod
@@ -166,9 +182,11 @@ module Precious
       # Returns page content without title if it was extracted.
       #
       def content_without_page_header(content)
-        doc   = build_document(content)
-        title = find_header_node(doc)
-        title.remove unless title.empty?
+        doc = build_document(content)
+          if @h1_title
+            title = find_header_node(doc)
+            title.remove unless title.empty?
+          end
         # .inner_html will cause href escaping on UTF-8
         doc.css("div#gollum-root").children.to_xml(@@to_xml)
       end

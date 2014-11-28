@@ -8,7 +8,7 @@ context "Frontend" do
     @path = cloned_testpath("examples/revert.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {})
+    Precious::App.set(:wiki_options, {allow_editing: true})
   end
 
   teardown do
@@ -78,10 +78,17 @@ context "Frontend" do
 
     get page
 
-    expected = "<h2><a class=\"anchor\" id=\"#{text}\" href=\"##{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2><a class=\"anchor\" id=\"_#{text}\" href=\"#_#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
+  end
+
+  test "show sidebar, header, footer when present" do
+    divs = [@wiki.page("_Header").formatted_data, @wiki.page("_Footer").formatted_data, @wiki.page("_Sidebar").formatted_data]
+    @wiki.write_page("HeaderTest", :markdown, "Test", commit_details)
+    get "/HeaderTest"
+    divs.each {|div| assert_match div, last_response.body}
   end
 
   test "retain edit information" do
@@ -540,6 +547,19 @@ context "Frontend" do
 
     assert last_response.ok?
     assert_match /meta name="robots" content="noindex, nofollow"/, last_response.body
+  end
+
+  test "show revision of specific file" do
+    shas = {}
+      ["First revision of testfile", "Second revision of testfile"].each do |content|
+        new_commit = commit_test_file(@wiki, "revisions", "testfile", "log", content)
+        shas[new_commit] = content
+      end
+      shas.each do |sha, content|
+        get "revisions/testfile.log/#{sha}"
+        assert last_response.ok?
+        assert_match /#{content}/, last_response.body
+      end
   end
 
   def app
