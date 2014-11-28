@@ -6,4 +6,3 @@ rvm:
 before_install:
  - sudo apt-get update
  - sudo apt-get install libicu-dev
- - git config --global --add diff.renames copies
