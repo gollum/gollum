@@ -24,11 +24,11 @@ context "Precious::Views::LatestChanges" do
     assert !body.include?('0ed8cbe'), "/latest_changes should not include more than latest_changes_count commits"
     assert body.include?('<a href="Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e">Data-Two.csv</a>'), "/latest_changes include links to modified files in #{body}"
     assert body.include?('<a href="Hobbit/874f597a5659b4c3b153674ea04e406ff393975e">Hobbit.md</a>'), "/latest_changes should include links to modified pages in #{body}"
-    assert body.include?('<a href="My-Precious/60f12f4254f58801b9ee7db7bca5fa8aeefaa56b">My-&lt;b&gt;Precious.md =&gt; My-Precious.md</a>'), "/latest_changes should indicate renaming action in #{body}"
   end
 
   test "extract destination file name in case of path renaming" do
     view = Precious::Views::LatestChanges.new
+    assert_equal "newname.md", view.extract_renamed_path_destination("oldname.md => newname.md")
     assert_equal "newDirectoryName/fileName.md", view.extract_renamed_path_destination("{oldDirectoryName => newDirectoryName}/fileName.md")
   end
 
