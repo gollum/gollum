@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '3.1.0'
-  s.date              = '2014-11-27'
+  s.date              = '2014-11-28'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -521,6 +521,7 @@ Gem::Specification.new do |s|
     lib/gollum/templates/history_authors/gravatar.mustache
     lib/gollum/templates/history_authors/identicon.mustache
     lib/gollum/templates/history_authors/none.mustache
+    lib/gollum/templates/latest_changes.mustache
     lib/gollum/templates/layout.mustache
     lib/gollum/templates/page.mustache
     lib/gollum/templates/pages.mustache
@@ -535,6 +536,7 @@ Gem::Specification.new do |s|
     lib/gollum/views/file_view.rb
     lib/gollum/views/has_page.rb
     lib/gollum/views/history.rb
+    lib/gollum/views/latest_changes.rb
     lib/gollum/views/layout.rb
     lib/gollum/views/page.rb
     lib/gollum/views/pages.rb
