@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '3.1.0'
-  s.date              = '2014-11-28'
+  s.version           = '3.1.1'
+  s.date              = '2014-12-04'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency 'gollum-lib', '~> 4.0'
+  s.add_dependency 'gollum-lib', '~> 4.0', '>= 4.0.1'
   s.add_dependency 'github-markdown', '~> 0.6.5'
   s.add_dependency 'sinatra', '~> 1.4', '>= 1.4.4'
   s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
