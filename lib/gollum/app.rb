@@ -95,7 +95,7 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
-      @allow_editing = settings.wiki_options[:allow_editing]
+      @allow_editing = settings.wiki_options.fetch(:allow_editing, true)
     end
 
     get '/' do
