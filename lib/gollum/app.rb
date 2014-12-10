@@ -1,10 +1,12 @@
 # ~*~ encoding: utf-8 ~*~
 require 'cgi'
 require 'sinatra'
+require 'sinatra/assetpack'
 require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'sass'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -42,6 +44,7 @@ end
 # See the wiki.rb file for more details on wiki options
 module Precious
   class App < Sinatra::Base
+    register Sinatra::AssetPack
     register Mustache::Sinatra
     include Precious::Helpers
     use Precious::EditingAuth
@@ -77,6 +80,10 @@ module Precious
         # Tell mustache where the views are
         :views     => "#{dir}/views"
     }
+
+    assets do
+      css :gollum, ['/css/gollum.scss']
+    end
 
     # Sinatra error handling
     configure :development, :staging do
@@ -370,7 +377,7 @@ module Precious
       @versions = @wiki.latest_changes({:max_count => max_count})
       mustache :latest_changes
     end
-    
+
     post '/compare/*' do
       @file     = params[:splat].first
       @versions = params[:versions] || []
