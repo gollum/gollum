@@ -223,8 +223,9 @@ $ bundle exec rake test
 An example of how to add a test file to the bare repository lotr.git.
 
 ```bash
-$ mkdir tmp; cd tmp
-$ git clone ../lotr.git/ .
+$ mkdir tmp
+$ cd tmp
+$ git clone ../test/examples/lotr.git/ .
 Cloning into '.'...
 done.
 $ git log
