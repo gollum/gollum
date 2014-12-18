@@ -1,3 +1,7 @@
+# 3.1.1 /2014-12-04
+
+* Security fix for [remote code execution issue](https://github.com/gollum/gollum/issues/913). Please update!
+
 # 3.1 / 2014-11-28
 
 * New features
