@@ -109,6 +109,7 @@ Options:
         --base-path [PATH]           Specify the base path for the served pages (default: /) Example: --base-path wiki yields the home page accessible at http://localhost:4567/wiki/.
         --gollum-path [PATH]         Specify the path to the git repository to be served.
         --ref [REF]                  Specify the repository ref to use (default: master).
+        --bare                       Specify that the repository is bare (only necessary when using the grit adapter).
         --no-edit                    Restricts editing capability through frontend.
         --no-live-preview            Disables livepreview.
         --live-preview               Enables livepreview.
