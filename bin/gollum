@@ -81,6 +81,10 @@ opts = OptionParser.new do |opts|
     wiki_options[:ref] = ref
   end
 
+  opts.on("--bare", "Specify that the repository is bare (only necessary when using the grit adapter).") do
+    wiki_options[:repo_is_bare] = true
+  end
+
   opts.on("--no-edit", "Restricts editing capability through frontend.")  do
     wiki_options[:allow_editing] = false
   end
