@@ -81,6 +81,10 @@ module Precious
         :views     => "#{dir}/views"
     }
 
+    set :scss, {
+        :load_paths => ["#{dir}/app/css"]
+    }
+
     assets do
       css :gollum, ['/css/gollum.scss']
     end

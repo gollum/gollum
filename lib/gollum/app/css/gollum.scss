@@ -3,11 +3,7 @@
   A basic stylesheet for Gollum
 */
 
-// Colors
-$grey: #ddd;
-$light-grey: #f7f7f7;
-$blue: #4183c4;
-
+@import "_base";
 
 #wiki-wrapper #template blockquote {
   margin: 1em 0;
