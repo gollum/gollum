@@ -1,0 +1,13 @@
+/* Desktop-sized displays */
+@mixin desktop-breakpoint {
+	@media all and (min-width: 940px) {
+		@content;
+	}
+}
+
+/* Large mobile displays */
+@mixin largemobile-breakpoint {
+	@media all and (min-width: 640px) {
+		@content;
+	}
+}
