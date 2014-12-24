@@ -3,6 +3,17 @@ $grey: #ddd;
 $light-grey: #f7f7f7;
 $blue: #4183c4;
 
+$button-border: #d4d4d4;
+$button-color: #333;
+
+$button-border-hover: #518cc6;
+$button-border-hover-hi: #2a65a0;
+$button-background-hover: #3072b3;
+$button-background-hover-hi: #599bdc;
+
 // Font stack
 $font-default: "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-console: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
+
+// Borders
+$border-standard: 1px solid $grey;

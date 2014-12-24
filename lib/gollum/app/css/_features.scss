@@ -1,0 +1,45 @@
+@mixin section-header {
+  h1 {
+    color: #999;
+    font-weight: normal;
+
+    strong {
+      color: #000;
+      font-weight: bold;
+    }
+  }
+}
+
+@mixin button-base {
+  background-color: $light-grey;
+  border: 1px solid $button-border;
+  color: $button-text;
+  display: block;
+  font-weight: bold;
+
+  text-shadow: 0 1px 0 #fff;
+
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
+  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
+  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
+
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+
+  &:hover {
+    background: $button-background-hover;
+    border-color: $button-border-hover $button-border-hover $button-border-hover-hi;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='$button-background-hover-hi', endColorstr='$button-background-hover');
+    background: -webkit-gradient(linear, left top, left bottom, from($button-background-hover-hi), to($button-background-hover));
+    background: -moz-linear-gradient(top, $button-background-hover-hi, $button-background-hover);
+  }
+
+  &:visited {
+    text-decoration: none;
+  }
+}

@@ -87,6 +87,7 @@ module Precious
 
     assets do
       css :gollum, ['/css/gollum.scss']
+      css_compression :sass
     end
 
     # Sinatra error handling
