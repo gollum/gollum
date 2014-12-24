@@ -3,6 +3,8 @@
   Wiki editor formatting
 */
 
+@import "_base", "_features", "_breakpoint";
+
 a {
   -moz-outline: none !important;
 }
@@ -21,168 +23,138 @@ a {
 #gollum-editor {
   margin: 0 0 5em;
   padding: 0em 1em 0.4em;
-}
 
-#gollum-editor:after {
-  content: ".";
-  display: block;
-  visibility: hidden;
-  clear: both;
-}
+  @include clearfix;
 
-.ff #gollum-editor,
-.ie #gollum-editor {
-  padding-bottom: 1em;
-}
+  .ff &, .ie & {
+    padding-bottom: 1em;
+  }
 
-@media all and (min-width: 940px) {
-  #gollum-editor {
+  @include desktop-breakpoint {
     border: 1px solid #e4e4e4;
     background: #f9f9f9;
     margin: 1em 0 5em;
 
-    border-radius: 1em;
-    -moz-border-radius: 1em;
-    -webkit-border-radius: 1em;
+    @include border-radius(1em);
+  }
+
+  form {
+    fieldset {
+      width: 100%;
+      @include reset-box;
+    }
+  }
+
+  .singleline {
+    display: block;
+    margin: 0 0 0.7em 0;
+    @include clearfix;
+
+    input {
+      background: #fff;
+      border: 1px solid #ddd;
+      color: #000;
+      font-size: 1.1em;
+      font-family: $font-default;
+      line-height: 1.5em;
+      margin: 1em 0 0.4em;
+      padding: 0.5em;
+      width: 98%;
+
+      &.ph {
+        color: #999;
+      }
+
+      .ie & {
+        padding-top: 0.25em;
+        padding-bottom: 0.75em;
+      }
+    }
+  }
+
+  .path_note {
+    text-align: right;
+    font-size: small;
+    padding-right: 5px;
+  }
+
+  /* @control editor-view-tab */
+  #gollum-editor-type-switcher {
+    display: none;
+  }
+
+  /* @control function-bar */
+  #gollum-editor-function-bar  {
+    border-bottom: 1px solid #ddd;
+    padding: 0;
+
+    @include desktop-breakpoint {
+      overflow: hidden;
+    }
+
+    #gollum-editor-function-buttons {
+      display: none;
+    }
+
+    &.active {
+      #gollum-editor-function-buttons {
+        display: block;
+        margin: 0;
+        padding: 0;
+
+        @include desktop-breakpoint {
+          overflow: hidden;
+          margin: 0;
+          padding: 0 0 1.1em 0;
+          float: left;
+        }
+      }
+    }
+
+    a.function-button {
+      float: left;
+      
+      overflow: hidden;
+      margin: 1px 1px 0 0;
+      
+      width: 32px;
+      height: 32px;
+
+      @include button-base;
+
+      span {
+        background-image: url(../images/icon-sprite.png);
+        background-repeat: no-repeat;
+        display: block;
+        height: 32px;
+        overflow: hidden;
+        text-indent: -5000px;
+        width: 32px;
+      }
+    }
   }
 }
 
-#gollum-editor form fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
-#gollum-editor .singleline {
-  display: block;
-  margin: 0 0 0.7em 0;
-}
-
-#gollum-editor .singleline:after {
-  content: ".";
-  display: block;
-  visibility: hidden;
-  clear: both;
-}
-
-#gollum-editor .singleline input {
-  background: #fff;
-  border: 1px solid #ddd;
-  color: #000;
-  font-size: 1.1em;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  line-height: 1.5em;
-  margin: 1em 0 0.4em;
-  padding: 0.5em;
-  width: 98%;
-}
-
-#gollum-editor .singleline input.ph {
-  color: #999;
-}
-
-#gollum-editor .path_note {
-  text-align: right;
-  font-size: small;
-  padding-right: 5px;
-}
-
-#gollum-editor-title-field input#gollum-editor-page-title {
-  font-weight: bold;
-  margin-top: 0;
-}
-
-#gollum-editor-title-field.active {
-  border-bottom: 1px solid #ddd;
-  display: block;
-  margin: 0 0 0.3em 0;
-  padding: 0 0 0.5em 0;
-}
-
-#gollum-editor-title-field input#gollum-editor-page-title.ph {
-  color: #000;
-}
-
-/* @control editor-view-tab */
-#gollum-editor #gollum-editor-type-switcher {
-  display: none;
-}
-
-/* @control function-bar */
-#gollum-editor #gollum-editor-function-bar  {
-  border-bottom: 1px solid #ddd;
-  padding: 0;
-}
-
-
-#gollum-editor-title-field + #gollum-editor-function-bar {
-  margin-top: 0.6em;
-}
-
-#gollum-editor #gollum-editor-function-bar #gollum-editor-function-buttons {
-  display: none;
-}
-
-#gollum-editor #gollum-editor-function-bar.active #gollum-editor-function-buttons {
-  display: block;
-  margin: 0;
-  padding: 0;
-}
-
-@media all and (min-width: 940px) {
-  #gollum-editor #gollum-editor-function-bar  {
-    overflow: hidden;
+#gollum-editor-title-field {
+  &.active {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    margin: 0 0 0.3em 0;
+    padding: 0 0 0.5em 0;
   }
 
-  #gollum-editor #gollum-editor-function-bar.active #gollum-editor-function-buttons {
-    overflow: hidden;
-    margin: 0;
-    padding: 0 0 1.1em 0;
-    float: left;
+  input#gollum-editor-page-title {
+    font-weight: bold;
+    margin-top: 0;
+
+    &.ph {
+      color: #000;
+    }
   }
-}
 
-#gollum-editor #gollum-editor-function-bar a.function-button {
-  background: #f7f7f7;
-  border: 1px solid #ddd;
-  color: #333;
-  display: block;
-  float: left;
-  height: 32px;
-  overflow: hidden;
-  margin: 1px 1px 0 0;
-  /* text-indent: -5000px; */
-  text-shadow: 0 1px 0 #fff;
-  width: 32px;
-
-  border-radius: 0.3em;
-  -moz-border-radius: 0.3em;
-  -webkit-border-radius: 0.3em;
-
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
-  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
-  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
-}
-
-#gollum-editor #gollum-editor-function-bar a.function-button:hover {
-  color: #fff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
-  text-decoration: none;
-
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
-  background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
-  background: -moz-linear-gradient(top, #599bdc, #3072b3);
-}
-
-#gollum-editor #gollum-editor-function-bar a span {
-  background-image: url(../images/icon-sprite.png);
-  background-repeat: no-repeat;
-  display: block;
-  height: 32px;
-  overflow: hidden;
-  text-indent: -5000px;
-  width: 32px;
+  & + #gollum-editor-function-bar {
+    margin-top: 0.6em;
+  }
 }
 
 a#function-bold span { background-position: 3px 3px; }
@@ -583,39 +555,37 @@ a#function-help:hover span { background-position: -402px -25px; }
   padding: 0;
   border: 1px solid #ddd;
   border-width: 0 1px 1px 1px;
+
+  @include desktop-breakpoint {
+    clear: none;
+  }
 }
 
-  #gollum-editor-help-parent,
-  #gollum-editor-help-list {
-    display: block;
-    list-style-type: none;
-    margin: 0;
-    float: left;
-    width: 50%;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
+#gollum-editor-help-parent,
+#gollum-editor-help-list {
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  float: left;
+  width: 50%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+
+  @include desktop-breakpoint {
+    height: 17em;
+    width: 18%;
+    overflow: auto;
+    padding: 1em 0;
   }
 
-  #gollum-editor-help-parent {
-    border-right: 1px solid #eee;
-  }
-
-  #gollum-editor-help-list {
-    background: #fafafa;
-    border-right: 1px solid #eee;
-  }
-
-  #gollum-editor-help-parent li,
-  #gollum-editor-help-list li {
+  li {
     font-size: 1.2em;
     line-height: 1.6em;
     margin: 0;
     padding: 0;
-  }
 
-    #gollum-editor-help-parent li a,
-    #gollum-editor-help-list li a {
+    a {
       border: 1px solid transparent;
       border-width: 1px 0;
       display: block;
@@ -625,73 +595,61 @@ a#function-help:hover span { background-position: -402px -25px; }
       padding: 0.2em 1em;
       text-shadow: 0 -1px 0 #fff;
       font-size: 0.8em;
-    }
 
-    #gollum-editor-help-parent li a:hover,
-    #gollum-editor-help-list li a:hover {
-      background: #fff;
-      border-color: #f0f0f0;
-      text-decoration: none;
+      @include desktop-breakpoint {
+        font-size: 1em;
+      }
 
-      box-shadow: none;
-    }
+      &:hover {
+        background: #fff;
+        border-color: #f0f0f0;
+        text-decoration: none;
 
-    #gollum-editor-help-parent li a.selected,
-    #gollum-editor-help-list li a.selected {
-      border: 1px solid #eee;
-      border-bottom-color: #e7e7e7;
-      border-width: 1px 0;
-      background: #fff;
-      color: #000;
+        box-shadow: none;
+      }
 
-      box-shadow: 0 1px 2px #f0f0f0;
-    }
+      &.selected {
+        border: 1px solid #eee;
+        border-bottom-color: #e7e7e7;
+        border-width: 1px 0;
+        background: #fff;
+        color: #000;
 
-  #gollum-editor-help-wrapper {
-    background: #fff;
-    overflow: auto;
-    height: 17em;
-    padding: 1em;
-    clear: both;
-  }
-
-    #gollum-editor-help-content {
-      font-size: 1.2em;
-      margin: 0 1em 0 0.5em;
-      padding: 0;
-      line-height: 1.8em;
-    }
-
-    #gollum-editor-help-content p {
-      margin: 0 0 1em 0;
-      padding: 0;
-    }
-
-  @media all and (min-width: 940px) {
-    #gollum-editor-help {
-      clear: none;
-    }
-
-    #gollum-editor-help-parent,
-    #gollum-editor-help-list {
-      height: 17em;
-      width: 18%;
-      overflow: auto;
-      padding: 1em 0;
-    }
-
-    #gollum-editor-help-parent li a,
-    #gollum-editor-help-list li a {
-      font-size: 1em;
-    }
-
-    #gollum-editor-help-wrapper {
-      clear: none;
+        box-shadow: 0 1px 2px #f0f0f0;
+      }
     }
   }
+}
 
-/* IE */
-.ie #gollum-editor .singleline input {
-  padding-top: 0.25em;
-  padding-bottom: 0.75em;
+#gollum-editor-help-parent {
+  border-right: 1px solid #eee;
+}
+
+#gollum-editor-help-list {
+  background: #fafafa;
+  border-right: 1px solid #eee;
+}
+
+#gollum-editor-help-wrapper {
+  background: #fff;
+  overflow: auto;
+  height: 17em;
+  padding: 1em;
+  clear: both;
+
+  @include desktop-breakpoint {
+    clear: none;
+  }
+}
+
+#gollum-editor-help-content {
+  font-size: 1.2em;
+  margin: 0 1em 0 0.5em;
+  padding: 0;
+  line-height: 1.8em;
+
+  p {
+    margin: 0 0 1em 0;
+    padding: 0;
+  }
 }

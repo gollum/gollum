@@ -88,6 +88,7 @@ module Precious
     assets do
       css :gollum, ['/css/gollum.scss']
       css :dialog, ['/css/dialog.scss']
+      css :editor, ['/css/editor.scss']
       css_compression :sass
     end
 

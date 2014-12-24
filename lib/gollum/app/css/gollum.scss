@@ -9,8 +9,7 @@
 body, html {
   font-family: $font-default;
   font-size: 10px;
-  margin: 0;
-  padding: 0;
+  @include reset-box;
 }
 
 #wiki-wrapper {

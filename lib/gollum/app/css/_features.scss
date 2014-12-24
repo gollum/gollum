@@ -4,6 +4,12 @@
   -webkit-box-sizing: border-box;
 }
 
+@mixin reset-box {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
 @mixin four-edge-position($padding: 0px) {
   top: $padding;
   right: $padding;
@@ -50,7 +56,6 @@
   color: $button-text;
   display: block;
   font-weight: bold;
-
   text-shadow: 0 1px 0 #fff;
 
   @include vertical-gradient(#f4f4f4, #ececec);

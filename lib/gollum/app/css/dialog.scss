@@ -118,10 +118,7 @@
 
   fieldset {
     display: block;
-    border: 0;
-    margin: 0;
-    padding: 0;
-
+    @include reset-box;
     @include clearfix;
 
     .field {
