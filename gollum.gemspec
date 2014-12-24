@@ -54,12 +54,15 @@ Gem::Specification.new do |s|
     gollum.gemspec
     lib/gollum.rb
     lib/gollum/app.rb
+    lib/gollum/app/css/_base.scss
+    lib/gollum/app/css/_breakpoint.scss
+    lib/gollum/app/css/_features.scss
+    lib/gollum/app/css/dialog.scss
+    lib/gollum/app/css/editor.scss
+    lib/gollum/app/css/gollum.scss
     lib/gollum/editing_auth.rb
     lib/gollum/helpers.rb
     lib/gollum/public/gollum/css/_styles.css
-    lib/gollum/public/gollum/css/dialog.css
-    lib/gollum/public/gollum/css/editor.css
-    lib/gollum/public/gollum/css/gollum.css
     lib/gollum/public/gollum/css/ie7.css
     lib/gollum/public/gollum/css/print.css
     lib/gollum/public/gollum/css/template.css
