@@ -11,3 +11,10 @@
 		@content;
 	}
 }
+
+/* Medium mobile displays */
+@mixin mediummobile-breakpoint {
+	@media all and (min-width: 480px) {
+		@content;
+	}
+}

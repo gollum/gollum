@@ -132,9 +132,7 @@ a {
   margin-bottom: 20px;
   min-width: 33%;
 
-  border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
+  @include border-radius(0.5em);
 
   > div {
     border: none;
@@ -159,9 +157,7 @@ a {
   width: 25%;
   color: #555;
 
-  border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
+  @include border-radius(0.5em);
 
   p {
     margin: 13px 0 0;
@@ -200,9 +196,7 @@ a {
     border: $border-standard;
     padding: 1em;
 
-    border-radius: 0.5em;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
+    @include border-radius(0.5em);
   }
   #header-content {
     margin-bottom: 1.5em;
@@ -629,9 +623,7 @@ ul.actions {
   position: absolute;
   width: 70%;
 
-  border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
+  @include border-radius(0.5em);
 
   h1 {
     font-size: 3em;
@@ -664,9 +656,7 @@ ul.actions {
     overflow: hidden;
     height: 2.2em;
 
-    border-radius: 0.3em;
-    -moz-border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
+    @include border-radius(0.3em);
 
     input#search-query {
       border: none;
@@ -697,9 +687,7 @@ ul.actions {
       float: right;
       height: inherit;
 
-      border-radius: 0 3px 3px 0;
-      -moz-border-radius: 0 3px 3px 0;
-      -webkit-border-radius: 0 3px 3px 0;
+      @include border-radius(0 3px 3px 0);
 
       span {
         background-image: url(../images/icon-sprite.png);
