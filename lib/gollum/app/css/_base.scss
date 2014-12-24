@@ -11,9 +11,12 @@ $button-border-hover-hi: #2a65a0;
 $button-background-hover: #3072b3;
 $button-background-hover-hi: #599bdc;
 
+$color-editor-border: #eee;
+
 // Font stack
 $font-default: "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-console: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
 
 // Borders
 $border-standard: 1px solid $grey;
+$border-editor: 1px solid $color-editor-border;

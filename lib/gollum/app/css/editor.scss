@@ -52,7 +52,7 @@ a {
 
     input {
       background: #fff;
-      border: 1px solid #ddd;
+      border: $border-standard;
       color: #000;
       font-size: 1.1em;
       font-family: $font-default;
@@ -85,7 +85,7 @@ a {
 
   /* @control function-bar */
   #gollum-editor-function-bar  {
-    border-bottom: 1px solid #ddd;
+    border-bottom: $border-standard;
     padding: 0;
 
     @include desktop-breakpoint {
@@ -162,7 +162,7 @@ a {
 
       select {
         background-color: #f9f9f9;
-        border: 1px solid #ddd;
+        border: $border-standard;
         color: #333;
 
         font-size: 1em;
@@ -196,9 +196,9 @@ a {
 
   textarea {
     background: #fff;
-    border: 1px solid #ddd;
+    border: $border-standard;
     font-size: 1em;
-    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    font-family: $font-console;
     line-height: 1.4em;
     margin: 0 0 0.4em;
     padding: 0.5em;
@@ -230,7 +230,7 @@ a {
   }
 
   .collapsed, .expanded {
-    border-bottom: 1px solid #ddd;
+    border-bottom: $border-standard;
     display: block;
     overflow: hidden;
     padding: 0.5em 0 0;
@@ -300,7 +300,7 @@ a {
 
     textarea {
       background-color: #fff;
-      border: 1px solid #ddd;
+      border: $border-standard;
       clear: both;
       display: block;
       font-size: 1em;
@@ -315,7 +315,7 @@ a {
 
   #gollum-editor-body {
     & + .collapsed, & + .expanded {
-      border-top: 1px solid #ddd;
+      border-top: $border-standard;
       margin-top: 0.7em;
     }
   }
@@ -331,11 +331,21 @@ a {
 
     @include button-base;
   }
+
+  /* @control preview */
+
+  #gollum-editor-preview {
+    float: left;
+    font-weight: normal;
+    padding: left;
+  }
 }
+
+/* @control title */
 
 #gollum-editor-title-field {
   &.active {
-    border-bottom: 1px solid #ddd;
+    border-bottom: $border-standard;
     display: block;
     margin: 0 0 0.3em 0;
     padding: 0 0 0.5em 0;
@@ -453,23 +463,13 @@ a#function-help:hover span { background-position: -402px -25px; }
   }
 }
 
-
-
-
-#gollum-editor #gollum-editor-preview {
-  float: left;
-  font-weight: normal;
-  padding: left;
-}
-
-
 /* @section help */
 #gollum-editor-help {
   clear: both;
   margin: 0;
   overflow: hidden;
   padding: 0;
-  border: 1px solid #ddd;
+  border: $border-standard;
   border-width: 0 1px 1px 1px;
 
   @include desktop-breakpoint {
@@ -525,7 +525,7 @@ a#function-help:hover span { background-position: -402px -25px; }
       }
 
       &.selected {
-        border: 1px solid #eee;
+        border: $border-editor;
         border-bottom-color: #e7e7e7;
         border-width: 1px 0;
         background: #fff;
@@ -538,12 +538,12 @@ a#function-help:hover span { background-position: -402px -25px; }
 }
 
 #gollum-editor-help-parent {
-  border-right: 1px solid #eee;
+  border-right: $border-editor;
 }
 
 #gollum-editor-help-list {
   background: #fafafa;
-  border-right: 1px solid #eee;
+  border-right: $border-editor;
 }
 
 #gollum-editor-help-wrapper {
