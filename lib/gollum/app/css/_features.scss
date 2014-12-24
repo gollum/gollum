@@ -45,27 +45,32 @@
 }
 
 @mixin vertical-gradient($start-color, $end-color) {
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='$start-color', endColorstr='$end-color');
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#{$start-color}', endColorstr='#{$end-color}');
   background: -webkit-gradient(linear, left top, left bottom, from($start-color), to($end-color));
   background: -moz-linear-gradient(top, $start-color, $end-color);
 }
 
 @mixin button-base {
+  display: block;
+
+  font-weight: bold;
+
+  color: $button-text;
   background-color: $light-grey;
   border: 1px solid $button-border;
-  color: $button-text;
-  display: block;
-  font-weight: bold;
   text-shadow: 0 1px 0 #fff;
+
+  cursor: pointer;
 
   @include vertical-gradient(#f4f4f4, #ececec);
   @include border-radius(3px);
 
   &:hover {
+    color: #fff;
     background: $button-background-hover;
     border-color: $button-border-hover $button-border-hover $button-border-hover-hi;
-    color: #fff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+
     text-decoration: none;
 
     @include vertical-gradient($button-background-hover-hi, $button-background-hover);
