@@ -7,7 +7,7 @@ module Precious
     def call(env)
       @env = env
       # Blocks all potentially editable pages. Use EditingAuth::whitelist_pages to unblock pages.
-      unless (env["REQUEST_METHOD"] == "GET") || App::settings.wiki_options[:allow_editing]
+      unless (env["REQUEST_METHOD"] == "GET") || @app.settings.wiki_options[:allow_editing]
         return block unless excluded_page?
       end
       @app.call(env)
