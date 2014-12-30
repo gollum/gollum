@@ -118,14 +118,10 @@ a {
         overflow: hidden;
         margin: 1px 1px 0 0;
         
-        width: $editor-button-size;
-        height: $editor-button-size;
-
+        @include editor-button-size;
         @include button-base;
 
         @include desktop-breakpoint {
-          height: $editor-button-desktop-size;
-          width: $editor-button-desktop-size;
           margin: 0.2em 0.5em 0 0;
         }
 
@@ -135,14 +131,7 @@ a {
           display: block;
           
           @include text-conceal-simple;
-
-          width: $editor-button-size;
-          height: $editor-button-size;
-
-          @include desktop-breakpoint {
-            width: $editor-button-desktop-size;
-            height: $editor-button-desktop-size;
-          }
+          @include editor-button-size;
         }
       }
 
@@ -250,23 +239,21 @@ a {
     a {
       &.button {
         float: left;
-        height: 25px;
+        
         overflow: hidden;
         margin: 0.2em 0.5em 0.75em 0;
-        width: 25px;
 
+        @include editor-button-size;
         @include button-base;
       }
 
       span {
         background-image: url(../images/icon-sprite.png);
-        background-position: -351px -1px;
+
         background-repeat: no-repeat;
         display: block;
-        
-        width: $editor-button-desktop-size;
-        height: $editor-button-desktop-size;
 
+        @include editor-button-size;
         @include text-conceal-simple;
       }
     }
@@ -275,8 +262,15 @@ a {
       font-size: 1.6em;
       float: left;
       margin: 0;
-      padding: 0.15em 0 0 0.3em;
+
+      padding: 0.25em 0 0 0.3em;
+
       text-shadow: 0 -1px 0 #fff;
+      line-height: $editor-button-size;
+
+      @include desktop-breakpoint {
+        line-height: $editor-button-desktop-size;
+      }
     }
   }
 
@@ -285,12 +279,8 @@ a {
       color: #bbb;
     }
 
-    a {
-      &:hover {
-        span {
-          background-position: -351px -28px;
-        }
-      }
+    a.button {
+      @include editor-button(13);
     }
 
     textarea {
@@ -299,16 +289,8 @@ a {
   }
 
   .expanded {
-    a {
-      span {
-        background-position: -378px 0;
-      }
-
-      &:hover {
-        span {
-          background-position: -378px -28px;
-        }
-      }
+    a.button {
+      @include editor-button(14);
     }
 
     textarea {

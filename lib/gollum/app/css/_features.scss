@@ -120,6 +120,16 @@
   }
 }
 
+@mixin editor-button-size {
+  width: $editor-button-size;
+  height: $editor-button-size;
+
+  @include desktop-breakpoint {
+    width: $editor-button-desktop-size;
+    height: $editor-button-desktop-size;
+  }
+}
+
 @mixin editor-button($row-pos: 0) {
   $left: $editor-button-img-width * -1 * $row-pos;
   $left-mobile: $left + $editor-button-mobile-margin;
