@@ -1,3 +1,5 @@
+// Describes feature mixins
+
 @mixin desktop-page-layout {
   max-width: $layout-body-width;
   padding-left: $layout-body-padding;
@@ -30,12 +32,6 @@
   right: $padding;
   bottom: $padding;
   left: $padding;
-}
-
-@mixin border-radius($radius: 0px){
-  border-radius: $radius;
-  -moz-border-radius: $radius;
-  -webkit-border-radius: $radius;
 }
 
 @mixin clearfix {
@@ -88,7 +84,7 @@
   cursor: pointer;
 
   @include vertical-gradient(#f4f4f4, #ececec);
-  @include border-radius(3px);
+  border-radius: 3px;
 
   &:hover {
     color: #fff;

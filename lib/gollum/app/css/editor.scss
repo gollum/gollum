@@ -1,7 +1,4 @@
-/*
-  editor.css
-  Wiki editor formatting
-*/
+// Wiki editor formatting
 
 @import "_base", "_features", "_breakpoint", "_component";
 
@@ -10,7 +7,7 @@ a {
 }
 
 .jaws {
-  /* JAWS should see it, but you can't */
+  // JAWS should see it, but you can't
   display: block;
   height: 1px;
   left: -5000px;
@@ -35,7 +32,7 @@ a {
     background: $color-editor-component;
     margin: 1em 0 5em;
 
-    @include border-radius(1em);
+    border-radius: 1em;
   }
 
   form {
@@ -173,8 +170,6 @@ a {
         display: inline-block;
 
         border-radius: 0.5em;
-        -moz-border-radius: 0.5em;
-        -webkit-border-radius: 0.5em;
       }
 
       label {

@@ -1,12 +1,9 @@
-/*
-  _component.css
-  Describes common component styles for Gollum pages
-*/
+// Describes common component styles for Gollum pages
 
 @mixin component-base {
   background-color: $light-grey;
   border: $border-standard;
-  @include border-radius(0.5em);
+  border-radius: 0.5em;
 }
 
 @mixin component-textarea {

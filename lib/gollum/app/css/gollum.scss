@@ -1,7 +1,4 @@
-/*
-  gollum.css
-  A basic stylesheet for Gollum
-*/
+// Basic stylesheet for Gollum
 
 @import "_base", "_breakpoint", "_features", "_layout", "_component";
 
@@ -560,7 +557,7 @@ ul.actions {
   position: absolute;
   width: 70%;
 
-  @include border-radius(0.5em);
+  border-radius: 0.5em;
 
   h1 {
     font-size: 3em;
@@ -598,7 +595,7 @@ ul.actions {
 
     input#search-query {
       border: 1px solid $color-button-border;
-      @include border-radius(3px 0 0 3px);
+      border-radius: 3px 0 0 3px;
 
       color: #000;
       float: left;
@@ -624,7 +621,7 @@ ul.actions {
       @include button-base;
 
       border-left: none;
-      @include border-radius(0 3px 3px 0);
+      border-radius: 0 3px 3px 0;
 
       margin: 0 !important;
       padding: 0;

@@ -68,7 +68,7 @@
 
     border: 7px solid #999;
     border: 7px solid rgba(0, 0, 0, 0.3);
-    @include border-radius(5px);
+    border-radius: 5px;
   }
 
   @include desktop-breakpoint {
