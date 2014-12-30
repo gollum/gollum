@@ -4,10 +4,14 @@
   -webkit-box-sizing: border-box;
 }
 
-@mixin reset-box {
-  border: 0;
+@mixin reset-box-leave-border {
   margin: 0;
   padding: 0;
+}
+
+@mixin reset-box {
+  border: 0;
+  @include reset-box-leave-border;
 }
 
 @mixin four-edge-position($padding: 0px) {
@@ -29,6 +33,16 @@
     display: block;
     clear: both;
     visibility: hidden;
+  }
+}
+
+@mixin children-truncate-margin {
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -78,5 +92,25 @@
 
   &:visited {
     text-decoration: none;
+  }
+}
+
+@mixin generic-animation($animation) {
+  -webkit-animation: $animation;
+  -moz-animation: $animation;
+  -o-animation: $animation;
+  animation: $animation;
+}
+
+/* http://maximilianhoffmann.com/posts/better-font-rendering-on-osx */
+
+@mixin font-smoothing($value: on) {
+  @if $value == on {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  @else {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
   }
 }

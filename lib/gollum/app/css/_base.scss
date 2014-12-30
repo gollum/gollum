@@ -2,6 +2,7 @@
 $grey: #ddd;
 $light-grey: #f7f7f7;
 $blue: #4183c4;
+$red: #c00;
 
 $button-border: #d4d4d4;
 $button-text: #333;
@@ -14,8 +15,8 @@ $button-background-hover-hi: #599bdc;
 $color-editor-border: #eee;
 
 // Font stack
-$font-default: "Helvetica Neue", Helvetica, Arial, sans-serif;
-$font-console: Inconsolata, Consolas, 'Monaco', 'Andale Mono', 'Courier New', monospace;
+$font-default: "Helvetica Neue", Helvetica, Arial, freesans, clean, sans-serif;
+$font-console: Inconsolata, Consolas, "Liberation Mono", 'Monaco', 'Andale Mono', 'Courier New', monospace;
 
 // Borders
 $border-standard: 1px solid $grey;
