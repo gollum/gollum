@@ -61,6 +61,7 @@ Gem::Specification.new do |s|
     lib/gollum/app/css/editor.scss
     lib/gollum/app/css/gollum.scss
     lib/gollum/app/css/ie7.scss
+    lib/gollum/app/css/template.scss
     lib/gollum/editing_auth.rb
     lib/gollum/helpers.rb
     lib/gollum/public/gollum/css/_styles.css
