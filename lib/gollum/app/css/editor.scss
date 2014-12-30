@@ -365,37 +365,61 @@ a {
   }
 }
 
-a#function-bold span { background-position: 3px 3px; }
-a#function-italic span { background-position: -24px 3px; }
-a#function-underline span { background-position: -51px 3px; }
-a#function-code span { background-position: -79px 3px; }
-a#function-ul span { background-position: -106px 3px; }
-a#function-ol span { background-position: -133px 3px; }
-a#function-blockquote span { background-position: -160px 3px; }
-a#function-hr span { background-position: -187px 3px; }
-a#function-h1 span { background-position: -214px 3px; }
-a#function-h2 span { background-position: -241px 3px; }
-a#function-h3 span { background-position: -268px 3px; }
-a#function-link span { background-position: -295px 3px; }
-a#function-image span { background-position: -321px 3px; }
-a#function-help span { background-position: -402px 3px; }
+/* @control editor-buttons */
 
-a#function-bold:hover span { background-position: 3px -25px; }
-a#function-italic:hover span { background-position: -24px -25px; }
-a#function-underline:hover span { background-position: -51px -25px; }
-a#function-code:hover span { background-position: -79px -25px; }
-a#function-ul:hover span { background-position: -106px -25px; }
-a#function-ol:hover span { background-position: -133px -25px; }
-a#function-blockquote:hover span { background-position: -160px -25px; }
-a#function-hr:hover span { background-position: -187px -25px; }
-a#function-h1:hover span { background-position: -214px -25px; }
-a#function-h2:hover span { background-position: -241px -25px; }
-a#function-h3:hover span { background-position: -268px -25px; }
-a#function-link:hover span { background-position: -295px -25px; }
-a#function-image:hover span { background-position: -321px -25px; }
-a#function-help:hover span { background-position: -402px -25px; }
+$editor-button-mobile-margin: 3px;
+$editor-button-width: 27px;
+$editor-button-height: 28px;
 
-@media all and (min-width: 940px) {
+@mixin editor-button($row-pos: 0) {
+  
+  $left: $editor-button-width * -1 * $row-pos;
+  $left-mobile: $left + $editor-button-mobile-margin;
+
+  $top: 0;
+  $top-hover: -1 * $editor-button-height;
+  $top-mobile: $editor-button-mobile-margin;
+  $top-mobile-hover: -1 * $editor-button-height + $editor-button-mobile-margin;
+
+  span {
+    background-position: $left-mobile $top-mobile;
+  }
+  &:hover {
+    span {
+      background-position: $left-mobile $top-mobile-hover;
+    }
+  }
+  @include desktop-breakpoint {
+    span {
+      background-position: $left $top;
+    }
+    &:hover {
+      span {
+        background-position: $left $top-hover;
+      }
+    }
+  }
+}
+
+a#function-bold { @include editor-button(0); }
+a#function-italic { @include editor-button(1); }
+a#function-underline { @include editor-button(2); }
+a#function-code { @include editor-button(3); }
+a#function-ul { @include editor-button(4); }
+a#function-ol { @include editor-button(5); }
+a#function-blockquote { @include editor-button(6); }
+a#function-hr { @include editor-button(7); }
+a#function-h1 { @include editor-button(8); }
+a#function-h2 { @include editor-button(9); }
+a#function-h3 { @include editor-button(10); }
+a#function-link { @include editor-button(11); }
+a#function-image { @include editor-button(12); }
+a#function-plus { @include editor-button(13); }
+a#function-minus { @include editor-button(14); }
+a#function-help { @include editor-button(15); }
+a#function-search { @include editor-button(16); }
+
+@include desktop-breakpoint {
   #gollum-editor #gollum-editor-function-bar a.function-button {
     height: 25px;
     width: 25px;
@@ -406,36 +430,6 @@ a#function-help:hover span { background-position: -402px -25px; }
     width: 25px;
     height: 25px;
   }
-
-  a#function-bold span { background-position: 0 0; }
-  a#function-italic span { background-position: -27px 0; }
-  a#function-underline span { background-position: -54px 0; }
-  a#function-code span { background-position: -82px 0; }
-  a#function-ul span { background-position: -109px 0; }
-  a#function-ol span { background-position: -136px 0; }
-  a#function-blockquote span { background-position: -163px 0; }
-  a#function-hr span { background-position: -190px 0; }
-  a#function-h1 span { background-position: -217px 0; }
-  a#function-h2 span { background-position: -244px 0; }
-  a#function-h3 span { background-position: -271px 0; }
-  a#function-link span { background-position: -298px 0; }
-  a#function-image span { background-position: -324px 0; }
-  a#function-help span { background-position: -405px 0; }
-
-  a#function-bold:hover span { background-position: 0 -28px; }
-  a#function-italic:hover span { background-position: -27px -28px; }
-  a#function-underline:hover span { background-position: -54px -28px; }
-  a#function-code:hover span { background-position: -82px -28px; }
-  a#function-ul:hover span { background-position: -109px -28px; }
-  a#function-ol:hover span { background-position: -136px -28px; }
-  a#function-blockquote:hover span { background-position: -163px -28px; }
-  a#function-hr:hover span { background-position: -190px -28px; }
-  a#function-h1:hover span { background-position: -217px -28px; }
-  a#function-h2:hover span { background-position: -244px -28px; }
-  a#function-h3:hover span { background-position: -271px -28px; }
-  a#function-link:hover span { background-position: -298px -28px; }
-  a#function-image:hover span { background-position: -324px -28px; }
-  a#function-help:hover span { background-position: -405px -28px; }
 }
 
 /* @section uploads */
