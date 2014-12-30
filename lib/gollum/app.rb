@@ -91,6 +91,7 @@ module Precious
       css :editor,   ['/css/editor.css']
       css :ie7,      ['/css/ie7.css']
       css :template, ['/css/template.css']
+      css :print,    ['/css/print.css']
       css_compression :sass
     end
 

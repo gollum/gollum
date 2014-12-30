@@ -61,13 +61,11 @@ Gem::Specification.new do |s|
     lib/gollum/app/css/editor.scss
     lib/gollum/app/css/gollum.scss
     lib/gollum/app/css/ie7.scss
+    lib/gollum/app/css/print.scss
     lib/gollum/app/css/template.scss
     lib/gollum/editing_auth.rb
     lib/gollum/helpers.rb
     lib/gollum/public/gollum/css/_styles.css
-    lib/gollum/public/gollum/css/ie7.css
-    lib/gollum/public/gollum/css/print.css
-    lib/gollum/public/gollum/css/template.css
     lib/gollum/public/gollum/fonts/FontAwesome.otf
     lib/gollum/public/gollum/fonts/fontawesome-webfont.eot
     lib/gollum/public/gollum/fonts/fontawesome-webfont.svg
