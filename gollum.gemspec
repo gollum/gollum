@@ -56,7 +56,9 @@ Gem::Specification.new do |s|
     lib/gollum/app.rb
     lib/gollum/app/css/_base.scss
     lib/gollum/app/css/_breakpoint.scss
+    lib/gollum/app/css/_component.scss
     lib/gollum/app/css/_features.scss
+    lib/gollum/app/css/_layout.scss
     lib/gollum/app/css/dialog.scss
     lib/gollum/app/css/editor.scss
     lib/gollum/app/css/gollum.scss
