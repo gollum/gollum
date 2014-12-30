@@ -1,0 +1,92 @@
+/* IE7-specific styles */
+
+.ie {
+
+  #wiki-wrapper {
+    width: 920px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  #head {
+    #searchbar {
+      margin: 1em 0 0 0;
+
+      #searchbar-fauxtext {
+        input#search-query {
+          border: 0;
+          float: left;
+          padding: 0.4em 0 0 0.5em;
+        }
+
+        #search-submit span {
+          height: 2.25em;
+        }
+      }
+    }
+
+    ul.actions {
+      margin: 1em 0 0 0;
+    }
+  }
+
+  ul.actions {
+    margin-left: 0;
+  }
+
+  .compare {
+    #footer ul.actions {
+      margin-top: 1em;
+    }
+
+    div.data {
+      overflow: auto;
+    }
+  }
+
+  .history {
+    #version-form {
+      margin: -0.5em 0 -0.5em !important;
+    }
+  }
+
+  #gollum-editor {
+    padding-bottom: 0;
+
+    #gollum-editor-format-selector {
+      margin-top: 6px;
+
+      label {
+        padding-top: 0.1em !important;
+      }
+    }
+
+    .singleline input {
+      padding-top: 0.25em;
+    }
+
+    .collapsed {
+      padding-bottom: 1.1em;
+    }
+
+    #gollum-editor-submit {
+      padding: 0.5em 1em 0.3em !important;
+    }
+
+    #gollum-editor-preview {
+      line-height: 1.3em;
+    }
+
+    form {
+      margin: 0;
+    }
+  }
+
+  #gollum-editor-help-parent, 
+  #gollum-editor-help-list {
+    li a {
+      height: auto;
+    }
+  }
+  
+}
