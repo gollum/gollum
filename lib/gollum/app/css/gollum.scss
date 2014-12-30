@@ -3,32 +3,13 @@
   A basic stylesheet for Gollum
 */
 
-@import "_base", "_breakpoint", "_features";
+@import "_base", "_breakpoint", "_features", "_layout";
 
 /* @section core */
 body, html {
   font-family: $font-default;
   font-size: 10px;
   @include reset-box;
-}
-
-#wiki-wrapper {
-  margin: 0 auto;
-  overflow: visible;
-  width: 100%;
-
-  @include desktop-breakpoint {
-    max-width: 920px;
-    padding-left:20px;
-    padding-right:20px;
-  }
-
-  #template blockquote {
-    margin: 1em 0;
-    border-left: 4px solid $grey;
-    padding-left: .8em;
-    color: #555;
-  }
 }
 
 a {
@@ -39,6 +20,15 @@ a {
   &:hover, &:visited {
     color: $blue;
     text-decoration: underline;
+  }
+}
+
+#wiki-wrapper {
+  #template blockquote {
+    margin: 1em 0;
+    border-left: 4px solid $grey;
+    padding-left: .8em;
+    color: #555;
   }
 }
 
@@ -79,28 +69,8 @@ a {
   }
 }
 
-/* @section content */
-#wiki-content {
-  height: 1%;
-  overflow: visible;
-
-  .wrap {
-    height: 1%;
-    overflow: auto;
-  }
-}
-
-/* @section comments */
-#wiki-body #inline-comment {
-  display: none; /* todo */
-}
-
 /* @section body */
-
 #wiki-body {
-  display: block;
-  float: left;
-  clear: left;
   margin-right: 3%;
   margin-bottom: 40px;
   width: 100%;
@@ -111,13 +81,9 @@ a {
     border: 0;
   }
 
-  .has-sidebar & {
-    width: 68%;
-  }
-
-  .has-leftbar & {
-    float: right;
-    clear: right;
+  /* @section comments */
+  #inline-comment {
+    display: none; /* todo */
   }
 }
 
@@ -141,19 +107,10 @@ a {
 /* @section sidebar */
 
 #wiki-sidebar {
-  .has-leftbar & {
-    float: left;
-  }
-
-  .has-rightbar & {
-    float: right;
-  }
-
   background-color: $light-grey;
   border: $border-standard;
   font-size: 13px;
   padding: 7px;
-  width: 25%;
   color: #555;
 
   @include border-radius(0.5em);
@@ -183,11 +140,6 @@ a {
 /* @section footer */
 
 #wiki-footer {
-  .has-sidebar & {
-    width: 70%;
-  }
-
-  clear: both;
   margin: 2em 0 5em;
 
   #header-content, #footer-content {
@@ -388,22 +340,21 @@ a {
 @include desktop-breakpoint {
   #wiki-history {
     margin: 2em 0 0 0;
-  }
 
-  #wiki-history table tr td {
-    border: 1px solid #c0dce9;
-    font-size: 1em;
-    line-height: 1.6em;
-    margin: 0;
-    padding: 0.3em 0.7em;
-  }
+    table tr td {
+      border: 1px solid #c0dce9;
+      font-size: 1em;
+      line-height: 1.6em;
+      margin: 0;
+      padding: 0.3em 0.7em;
 
-  #wiki-history table tr td.checkbox {
-    width: 4em;
-    padding: 0.3em;
+      &.checkbox {
+        width: 4em;
+        padding: 0.3em;
+      }
+    }
   }
 }
-
 
 /* @section edit */
 .edit {
@@ -559,7 +510,6 @@ a {
   .gt { color: #aa0000 }
 }
 
-
 /* @control minibutton */
 ul.actions {
    display: block;
@@ -572,6 +522,11 @@ ul.actions {
     font-size: 0.9em;
     margin-left: 1px;
     margin-bottom: 1px;
+
+    @include desktop-breakpoint {
+      margin-left: 0.6em;
+      margin-bottom: 0.6em;
+    }
   }
 }
 
@@ -581,17 +536,9 @@ ul.actions {
   margin: 0;
   padding: 0.6em 1em;
   height: 1.4em;
-}
 
-@include desktop-breakpoint {
-  ul.actions li {
-    margin-left: 0.6em;
-    margin-bottom: 0.6em;
-  }
-
-  .minibutton a {
+  @include desktop-breakpoint {
     padding: 0.4em 1em;
-    height: 1.4em;
   }
 }
 
@@ -601,7 +548,6 @@ ul.actions {
   margin: 0;
   padding: 0.4em 1em;
 }
-
 
 /* @special error */
 #wiki-wrapper.error {

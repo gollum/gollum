@@ -3,9 +3,7 @@
 .ie {
 
   #wiki-wrapper {
-    width: 920px;
-    padding-left: 20px;
-    padding-right: 20px;
+    @include desktop-page-layout;
   }
 
   #head {
