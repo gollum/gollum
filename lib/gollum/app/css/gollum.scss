@@ -3,7 +3,7 @@
   A basic stylesheet for Gollum
 */
 
-@import "_base", "_breakpoint", "_features", "_layout";
+@import "_base", "_breakpoint", "_features", "_layout", "_component";
 
 /* @section core */
 body, html {
@@ -71,9 +71,7 @@ a {
 
 /* @section body */
 #wiki-body {
-  margin-right: 3%;
   margin-bottom: 40px;
-  width: 100%;
 
   table {
     display: block;
@@ -89,15 +87,13 @@ a {
 
 /* @section toc */
 #wiki-toc-main {
-  background-color: $light-grey;
-  border: $border-standard;
+  @include component-base;
+
   font-size: 13px;
   padding: 0px 5px;
   float: left;
   margin-bottom: 20px;
   min-width: 33%;
-
-  @include border-radius(0.5em);
 
   > div {
     border: none;
@@ -107,13 +103,11 @@ a {
 /* @section sidebar */
 
 #wiki-sidebar {
-  background-color: $light-grey;
-  border: $border-standard;
+  @include component-base;
+
   font-size: 13px;
   padding: 7px;
   color: #555;
-
-  @include border-radius(0.5em);
 
   p {
     margin: 13px 0 0;
@@ -143,11 +137,9 @@ a {
   margin: 2em 0 5em;
 
   #header-content, #footer-content {
-    background-color: $light-grey;
-    border: $border-standard;
-    padding: 1em;
+    @include component-base;
 
-    @include border-radius(0.5em);
+    padding: 1em;
   }
   #header-content {
     margin-bottom: 1.5em;
@@ -559,8 +551,8 @@ ul.actions {
 }
 
 #error {
-  background-color: #f9f9f9;
-  border: 1px solid #e4e4e4;
+  background-color: $color-editor-component;
+  border: $border-editor-component;
   left: 50%;
   overflow: hidden;
   padding: 2%;
@@ -588,7 +580,6 @@ ul.actions {
 /* @control searchbar */
 #searchbar {
   float: right;
-  padding: 2px 0 0 0;
   overflow: hidden;
 
   @include desktop-breakpoint {
@@ -597,14 +588,18 @@ ul.actions {
 
   #searchbar-fauxtext {
     background: #fff;
-    border: 1px solid #d4d4d4;
+    border: none;
     overflow: hidden;
-    height: 2.2em;
+    height: $editor-button-size;
 
-    @include border-radius(0.3em);
+    @include desktop-breakpoint {
+      height: $editor-button-img-height;
+    }
 
     input#search-query {
-      border: none;
+      border: 1px solid $color-button-border;
+      @include border-radius(3px 0 0 3px);
+
       color: #000;
       float: left;
       font-family: $font-default;
@@ -613,6 +608,8 @@ ul.actions {
       padding: 0 .5em;
 
       -webkit-focus-ring: none;
+
+      @include alt-box-model;
 
       .ie8 & {
         padding: 0.5em 0 0 0.5em;
@@ -624,25 +621,30 @@ ul.actions {
     }
 
     #search-submit {
-      border: 0;
-      border-left: 1px solid #d4d4d4;
-      cursor: pointer;
+      @include button-base;
+
+      border-left: none;
+      @include border-radius(0 3px 3px 0);
+
       margin: 0 !important;
       padding: 0;
       float: right;
       height: inherit;
 
-      @include border-radius(0 3px 3px 0);
+      @include alt-box-model;
+
+      @include editor-button(16);
 
       span {
-        background-image: url(../images/icon-sprite.png);
-        background-position: -431px -1px;
-        background-repeat: no-repeat;
+        @include button-sprites;
+        
         display: block;
         height: inherit;
-        overflow: hidden;
-        text-indent: -5000px;
+
         width: 32px;
+        text-align: center;
+
+        @include text-conceal-simple;
 
         .ff &, .ie & {
           height: 2.2em;
@@ -654,7 +656,6 @@ ul.actions {
       }
 
       &:hover span {
-        background-position: -431px -28px;
         padding: 0;
       }
     }

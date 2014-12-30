@@ -12,15 +12,17 @@ $light-grey: #f7f7f7;
 $blue: #4183c4;
 $red: #c00;
 
-$button-border: #d4d4d4;
+$color-button-border: #d4d4d4;
 $button-text: #333;
 
-$button-border-hover: #518cc6;
-$button-border-hover-hi: #2a65a0;
-$button-background-hover: #3072b3;
-$button-background-hover-hi: #599bdc;
+$color-button-border-hover: #518cc6;
+$color-button-border-hover-hi: #2a65a0;
+$color-button-background-hover: #3072b3;
+$color-button-background-hover-hi: #599bdc;
 
-$color-editor-border: #eee;
+$color-editor-element-border: #eee;
+$color-editor-component-border: #e4e4e4;
+$color-editor-component: #f9f9f9;
 
 // Font stack
 $font-default: "Helvetica Neue", Helvetica, Arial, freesans, clean, sans-serif;
@@ -28,7 +30,8 @@ $font-console: Inconsolata, Consolas, "Liberation Mono", 'Monaco', 'Andale Mono'
 
 // Borders
 $border-standard: 1px solid $grey;
-$border-editor: 1px solid $color-editor-border;
+$border-editor-component: 1px solid $color-editor-component-border;
+$border-editor-element: 1px solid $color-editor-element-border;
 
 // Editor buttons
 $editor-button-size: 32px;

@@ -3,6 +3,7 @@
   Describes layout for Gollum pages
 */
 
+/* @section wrapper */
 #wiki-wrapper {
   margin: 0 auto;
   overflow: visible;
@@ -27,6 +28,8 @@
 /* @section body */
 #wiki-body {
   display: block;
+  width: 100%;
+  margin-right: 3%;
 
   @include largemobile-breakpoint {
     float: left;
@@ -44,7 +47,6 @@
 }
 
 /* @section sidebar */
-
 #wiki-sidebar {
   @include largemobile-breakpoint {
     width: $layout-sidebar;

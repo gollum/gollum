@@ -1,0 +1,33 @@
+/*
+  _component.css
+  Describes common component styles for Gollum pages
+*/
+
+@mixin component-base {
+  background-color: $light-grey;
+  border: $border-standard;
+  @include border-radius(0.5em);
+}
+
+@mixin component-textarea {
+  @include alt-box-model;
+
+  display: block;
+  clear: both;
+
+  background: #fff;
+  border: $border-standard;
+
+  font-size: 1em;
+  font-family: $font-console;
+  line-height: 1.4em;
+
+  margin: 0 0 0.4em;
+  padding: 0.5em;
+
+  width: 100%;
+
+  @include desktop-breakpoint {
+    margin: 1em 0 0.4em;
+  }
+}

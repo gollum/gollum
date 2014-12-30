@@ -3,7 +3,7 @@
   Wiki editor formatting
 */
 
-@import "_base", "_features", "_breakpoint";
+@import "_base", "_features", "_breakpoint", "_component";
 
 a {
   -moz-outline: none !important;
@@ -31,8 +31,8 @@ a {
   }
 
   @include desktop-breakpoint {
-    border: 1px solid #e4e4e4;
-    background: #f9f9f9;
+    border: $border-editor-component;
+    background: $color-editor-component;
     margin: 1em 0 5em;
 
     @include border-radius(1em);
@@ -126,10 +126,9 @@ a {
         }
 
         span {
-          background-image: url(../images/icon-sprite.png);
-          background-repeat: no-repeat;
           display: block;
           
+          @include button-sprites;
           @include text-conceal-simple;
           @include editor-button-size;
         }
@@ -162,7 +161,7 @@ a {
       }
 
       select {
-        background-color: #f9f9f9;
+        background-color: $color-editor-component;
         border: $border-standard;
         color: #333;
 
@@ -196,19 +195,8 @@ a {
   /* @section form-fields */
 
   textarea {
-    background: #fff;
-    border: $border-standard;
-    font-size: 1em;
-    font-family: $font-console;
-    line-height: 1.4em;
-    margin: 0 0 0.4em;
-    padding: 0.5em;
-    width: 98%;
+    @include component-textarea;
     height: 20em;
-
-    @include desktop-breakpoint {
-      margin: 1em 0 0.4em;
-    }
   }
 
   input#gollum-editor-submit {
@@ -220,6 +208,7 @@ a {
     padding: 0.4em 1em;
 
     @include button-base;
+    @include alt-box-model;
 
     .webkit & {
       padding: 0.5em 1em 0.45em;
@@ -248,11 +237,9 @@ a {
       }
 
       span {
-        background-image: url(../images/icon-sprite.png);
-
-        background-repeat: no-repeat;
         display: block;
 
+        @include button-sprites;
         @include editor-button-size;
         @include text-conceal-simple;
       }
@@ -294,17 +281,8 @@ a {
     }
 
     textarea {
-      background-color: #fff;
-      border: $border-standard;
-      clear: both;
-      display: block;
-      font-size: 1em;
-      font-family: $font-default;
+      @include component-textarea;
       height: 7em;
-      line-height: 1.4em;
-      margin: 0.7em 0;
-      padding: 0.5em;
-      width: 98%;
     }
   }
 
@@ -333,6 +311,8 @@ a {
     float: left;
     font-weight: normal;
     padding: left;
+
+    @include alt-box-model;
   }
 }
 
@@ -467,7 +447,7 @@ a#function-search { @include editor-button(16); }
       }
 
       &.selected {
-        border: $border-editor;
+        border: $border-editor-element;
         border-bottom-color: #e7e7e7;
         border-width: 1px 0;
         background: #fff;
@@ -480,12 +460,12 @@ a#function-search { @include editor-button(16); }
 }
 
 #gollum-editor-help-parent {
-  border-right: $border-editor;
+  border-right: $border-editor-element;
 }
 
 #gollum-editor-help-list {
   background: #fafafa;
-  border-right: $border-editor;
+  border-right: $border-editor-element;
 }
 
 #gollum-editor-help-wrapper {

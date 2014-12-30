@@ -82,7 +82,7 @@
 
   color: $button-text;
   background-color: $light-grey;
-  border: 1px solid $button-border;
+  border: 1px solid $color-button-border;
   text-shadow: 0 1px 0 #fff;
 
   cursor: pointer;
@@ -92,18 +92,23 @@
 
   &:hover {
     color: #fff;
-    background: $button-background-hover;
-    border-color: $button-border-hover $button-border-hover $button-border-hover-hi;
+    background: $color-button-background-hover;
+    border-color: $color-button-border-hover $color-button-border-hover $color-button-border-hover-hi;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
 
     text-decoration: none;
 
-    @include vertical-gradient($button-background-hover-hi, $button-background-hover);
+    @include vertical-gradient($color-button-background-hover-hi, $color-button-background-hover);
   }
 
   &:visited {
     text-decoration: none;
   }
+}
+
+@mixin button-sprites {
+  background-image: url(../images/icon-sprite.png);
+  background-repeat: no-repeat;
 }
 
 @mixin generic-animation($animation) {
