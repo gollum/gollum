@@ -1,0 +1,44 @@
+// Describes basic parameters (colours, sizes, font stacks, etc.)
+
+// Layout
+$layout-body-width: 920px;
+$layout-body-padding: 20px;
+
+$layout-sidebar: 25%;
+$layout-with-sidebar: 70%;
+$layout-with-sidebar-leeway: 1%;
+
+// Colors
+$grey: #ddd;
+$light-grey: #f7f7f7;
+$blue: #4183c4;
+$red: #c00;
+
+$color-button-border: #d4d4d4;
+$button-text: #333;
+
+$color-button-border-hover: #518cc6;
+$color-button-border-hover-hi: #2a65a0;
+$color-button-background-hover: #3072b3;
+$color-button-background-hover-hi: #599bdc;
+
+$color-editor-element-border: #eee;
+$color-editor-component-border: #e4e4e4;
+$color-editor-component: #f9f9f9;
+
+// Font stack
+$font-default: "Helvetica Neue", Helvetica, Arial, freesans, clean, sans-serif;
+$font-console: Inconsolata, Consolas, "Liberation Mono", 'Monaco', 'Andale Mono', 'Courier New', monospace;
+
+// Borders
+$border-standard: 1px solid $grey;
+$border-editor-component: 1px solid $color-editor-component-border;
+$border-editor-element: 1px solid $color-editor-element-border;
+
+// Editor buttons
+$editor-button-size: 32px;
+$editor-button-desktop-size: 25px;
+
+$editor-button-mobile-margin: 3px;
+$editor-button-img-width: 27px;
+$editor-button-img-height: 28px;

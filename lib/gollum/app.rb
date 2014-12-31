@@ -81,8 +81,18 @@ module Precious
         :views     => "#{dir}/views"
     }
 
+    set :scss, {
+        :load_paths => ["#{dir}/app/css"]
+    }
+
     assets do
-      css :gollum, ['/css/gollum.scss']
+      css :gollum,   ['/css/gollum.css']
+      css :dialog,   ['/css/dialog.css']
+      css :editor,   ['/css/editor.css']
+      css :ie7,      ['/css/ie7.css']
+      css :template, ['/css/template.css']
+      css :print,    ['/css/print.css']
+      css_compression :sass
     end
 
     # Sinatra error handling

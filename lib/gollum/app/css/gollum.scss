@@ -1,406 +1,320 @@
-/*
-  gollum.css
-  A basic stylesheet for Gollum
-*/
+// Basic stylesheet for Gollum
 
-// Colors
-$grey: #ddd;
-$light-grey: #f7f7f7;
-$blue: #4183c4;
-
-
-#wiki-wrapper #template blockquote {
-  margin: 1em 0;
-  border-left: 4px solid $grey;
-  padding-left: .8em;
-  color: #555;
-}
+@import "_base", "_breakpoint", "_features", "_layout", "_component";
 
 /* @section core */
 body, html {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: $font-default;
   font-size: 10px;
-  margin: 0;
-  padding: 0;
+  @include reset-box;
 }
 
-#wiki-wrapper {
-  margin: 0 auto;
-  overflow: visible;
-  width: 100%;
-}
-
-@media all and (min-width: 940px) {
-  #wiki-wrapper {
-    max-width: 920px;
-    padding-left:20px;
-    padding-right:20px;
+a {
+  &:link {
+    color: $blue;
+    text-decoration: none;
+  }
+  &:hover, &:visited {
+    color: $blue;
+    text-decoration: underline;
   }
 }
 
-a:link {
-  color: $blue;
-  text-decoration: none;
+#wiki-wrapper {
+  #template blockquote {
+    margin: 1em 0;
+    border-left: 4px solid $grey;
+    padding-left: .8em;
+    color: #555;
+  }
 }
-
-a:hover, a:visited {
-  color: $blue;
-  text-decoration: underline;
-}
-
 
 /* @section head */
 #head {
   margin: 1em 0 0;
   padding: 0;
   overflow: hidden;
-}
 
-#head h1 {
-  font-size: 1.5em;
-  float: left;
-  line-height: normal;
-  margin: 0;
-  padding: 0 0 0 0.667em;
-}
-
-#head ul.actions {
-  clear: both;
-  margin: 0 1em;
-}
-
-@media all and (min-width: 940px) {
-  #head {
-    border-bottom: 1px solid $grey;
+  @include desktop-breakpoint {
+    border-bottom: $border-standard;
     padding-bottom: 0.3em;
     margin: 4em 0 1.5em;
   }
 
-  #head h1 {
-    font-size: 2.5em;
-    padding: 2px 0 0 0;
-  }
-
-  #head ul.actions {
-    clear: none;
-    float: right;
+  h1 {
+    font-size: 1.5em;
+    float: left;
+    line-height: normal;
     margin: 0;
+    padding: 0 0 0 0.667em;
+
+    @include desktop-breakpoint {
+      font-size: 2.5em;
+      padding: 2px 0 0 0;
+    }
   }
-}
 
-/* @section content */
-#wiki-content {
-  height: 1%;
-  overflow: visible;
-}
+  ul.actions {
+    clear: both;
+    margin: 0 1em;
 
-#wiki-content .wrap {
-  height: 1%;
-  overflow: auto;
-}
-
-/* @section comments */
-#wiki-body #inline-comment {
-  display: none; /* todo */
+    @include desktop-breakpoint {
+      clear: none;
+      float: right;
+      margin: 0;
+    }
+  }
 }
 
 /* @section body */
-
-.has-leftbar #wiki-body {
-  float: right;
-  clear: right;
-}
-
 #wiki-body {
-  display: block;
-  float: left;
-  clear: left;
-  margin-right: 3%;
   margin-bottom: 40px;
-  width: 100%;
-}
 
-#wiki-body table {
-  display: block;
-  overflow: auto;
-  border: 0;
-}
+  table {
+    display: block;
+    overflow: auto;
+    border: 0;
+  }
 
-.has-sidebar #wiki-body {
-  width: 68%;
+  /* @section comments */
+  #inline-comment {
+    display: none; /* todo */
+  }
 }
 
 /* @section toc */
 #wiki-toc-main {
-  background-color: $light-grey;
-  border: 1px solid $grey;
+  @include component-base;
+
   font-size: 13px;
   padding: 0px 5px;
   float: left;
   margin-bottom: 20px;
   min-width: 33%;
 
-  border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
-}
-#wiki-toc-main > div {
-  border: none;
+  > div {
+    border: none;
+  }
 }
 
 /* @section sidebar */
-.has-leftbar #wiki-sidebar {
-  float: left;
-}
-
-.has-rightbar #wiki-sidebar {
-  float: right;
-}
 
 #wiki-sidebar {
-  background-color: $light-grey;
-  border: 1px solid $grey;
+  @include component-base;
+
   font-size: 13px;
   padding: 7px;
-  width: 25%;
   color: #555;
 
-  border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
-}
+  p {
+    margin: 13px 0 0;
 
-#wiki-sidebar p {
-  margin: 13px 0 0;
-}
+    &.parent {
+      border-bottom: 1px solid #bbb;
+      font-weight: bold;
+      margin: 0 0 0.5em 0;
+      padding: 0 0 0.5em 0;
+      text-shadow: 0 1px 0 #fff;
 
-#wiki-sidebar > p:first-child {
-  margin-top: 10px;
-}
+      &:before {
+        color: #666;
+        content: "← ";
+      }
+    }
+  }
 
-#wiki-sidebar p.parent {
-  border-bottom: 1px solid #bbb;
-  font-weight: bold;
-  margin: 0 0 0.5em 0;
-  padding: 0 0 0.5em 0;
-  text-shadow: 0 1px 0 #fff;
-}
-
-/* Back arrow */
-#wiki-sidebar p.parent:before {
-  color: #666;
-  content: "← ";
+  > p:first-child {
+    margin-top: 10px;
+  }
 }
 
 /* @section footer */
 
 #wiki-footer {
-  clear: both;
   margin: 2em 0 5em;
-}
 
-.has-sidebar #wiki-footer {
-  width: 70%;
-}
+  #header-content, #footer-content {
+    @include component-base;
 
-#wiki-header #header-content,
-#wiki-footer #footer-content {
-  background-color: $light-grey;
-  border: 1px solid $grey;
-  padding: 1em;
+    padding: 1em;
+  }
+  #header-content {
+    margin-bottom: 1.5em;
+  }
+  #footer-content {
+    margin-top: 1.5em;
 
-  border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
-}
-#wiki-header #header-content {
-  margin-bottom: 1.5em;
-}
+    h3 {
+      font-size: 1.2em;
+      color: #333;
+      margin: 0;
+      padding: 0 0 0.2em;
+      text-shadow: 0 1px 0 #fff;
+    }
 
-#wiki-footer #footer-content {
-  margin-top: 1.5em;
-}
+    p {
+      margin: 0.5em 0 0;
+      padding: 0;
+    }
 
-#wiki-footer #footer-content h3 {
-  font-size: 1.2em;
-  color: #333;
-  margin: 0;
-  padding: 0 0 0.2em;
-  text-shadow: 0 1px 0 #fff;
-}
+    ul.links {
+      margin: 0.5em 0 0;
+      overflow: hidden;
+      padding: 0;
 
-#wiki-footer #footer-content p {
-  margin: 0.5em 0 0;
-  padding: 0;
-}
+      li {
+        color: #999;
+        float: left;
+        list-style-position: inside;
+        list-style-type: square;
+        padding: 0;
+        margin-left: 0.75em;
 
-#wiki-footer #footer-content ul.links {
-  margin: 0.5em 0 0;
-  overflow: hidden;
-  padding: 0;
-}
+        &:first-child {
+          list-style-type: none;
+          margin: 0;
 
-#wiki-footer #footer-content ul.links li {
-  color: #999;
-  float: left;
-  list-style-position: inside;
-  list-style-type: square;
-  padding: 0;
-  margin-left: 0.75em;
-}
+          .ff & {
+            margin: 0 -0.75em 0 0;
+          }
+        }
 
-#wiki-footer #footer-content ul.links li a {
-  font-weight: bold;
-  text-shadow: 0 1px 0 #fff;
-}
-
-#wiki-footer #footer-content ul.links li:first-child {
-  list-style-type: none;
-  margin: 0;
-}
-
-.ff #wiki-footer #footer-content ul.links li:first-child {
-  margin: 0 -0.75em 0 0;
+        a {
+          font-weight: bold;
+          text-shadow: 0 1px 0 #fff;
+        }
+      }
+    }
+  }
 }
 
 /* @section page-footer */
 .page #footer {
   clear: both;
-  border-top: 1px solid $grey;
+  border-top: $border-standard;
   margin: 1em 0 7em;
 }
 
-#footer p#last-edit {
-  font-size: .9em;
-  line-height: 1.6em;
-  color: #999;
-  margin: 0.9em 0;
-}
+#footer {
+  p#last-edit {
+    font-size: .9em;
+    line-height: 1.6em;
+    color: #999;
+    margin: 0.9em 0;
 
-#footer p#last-edit span.username {
-  font-weight: bold;
-}
+    span.username {
+      font-weight: bold;
+    }
+  }
 
-#footer .actions {
-  margin-left: 1em;
-}
+  .actions {
+    margin-left: 1em;
 
-@media all and (min-width: 940px) {
-  #footer .actions {
-    margin: 0;
+    @include desktop-breakpoint {
+      margin: 0;
+    }
   }
 }
 
-
 /* @section history */
-.history h1 {
-  color: #999;
-  font-weight: normal;
-}
-
-.history h1 strong {
-  color: #000;
-  font-weight: bold;
+.history {
+  @include section-header;
 }
 
 #wiki-history {
   margin: 2em 1em 0 1em;
-}
 
-#wiki-history fieldset {
-  border: 0;
-  margin: 1em 0;
-  padding: 0;
-}
+  fieldset {
+    border: 0;
+    margin: 1em 0;
+    padding: 0;
+  }
 
-#wiki-history table, #wiki-history tbody {
-  border-collapse: collapse;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-}
+  table, tbody {
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 
-#wiki-history table tr {
-  padding: 0;
-  margin: 0;
-}
+    tr {
+      padding: 0;
+      margin: 0;
+      background-color: #ebf2f6;
 
-#wiki-history table tr {
-  background-color: #ebf2f6;
-}
+      &:nth-child(2n), &.alt-row {
+        background-color: #f3f7fa;
+      }
 
-#wiki-history table tr td {
-  border-top: 1px solid #c0dce9;
-  border-bottom: 1px solid #c0dce9;
-  font-size: 1em;
-  line-height: 1.6em;
-  margin: 0;
-  padding: 0.3em 0.7em;
-}
+      &.selected {
+        background-color: #ffffea !important;
+        z-index: 100;
+      }
 
-#wiki-history table tr td.checkbox {
-  width: auto;
-  padding: 0 0.2em 0 0;
-}
+      td {
+        border-top: 1px solid #c0dce9;
+        border-bottom: 1px solid #c0dce9;
+        font-size: 1em;
+        line-height: 1.6em;
+        margin: 0;
+        padding: 0.3em 0.7em;
 
-#wiki-history table tr td.checkbox input {
-  cursor: pointer;
-  display: block;
-  padding-right: 0;
-  padding-top: 0.4em;
-  margin: 0 auto;
-  width: 1.2em;
-  height: 1.2em;
-}
+        &.checkbox {
+          width: auto;
+          padding: 0 0.2em 0 0;
 
-#wiki-history table tr:nth-child(2n),
-#wiki-history table tr.alt-row {
-  background-color: #f3f7fa;
-}
+          input {
+            cursor: pointer;
+            display: block;
+            padding-right: 0;
+            padding-top: 0.4em;
+            margin: 0 auto;
+            width: 1.2em;
+            height: 1.2em;
+          }
+        }
 
-#wiki-history table tr.selected {
-  background-color: #ffffea !important;
-  z-index: 100;
-}
+        &.commit-name {
+          border-left: 0;
 
-#wiki-history table tr td.commit-name {
-  border-left: 0;
-}
+          span.time-elapsed {
+            color: #999;
+          }
 
-#wiki-history table tr td.commit-name span.time-elapsed {
-  color: #999;
-}
+          a {
+            font-size: 0.9em;
+            font-family: $font-console;
+            padding: 0 0.2em;
+          }
+        }
 
-#wiki-history table tr td.author {
-  width: 20%;
-}
+        &.author {
+          width: 20%;
 
-#wiki-history table tr td.author a {
-  color: #000;
-  font-weight: bold;
-}
+          a {
+            color: #000;
+            font-weight: bold;
 
-#wiki-history table tr td.author a span.username {
-  display: block;
-  padding-top: 3px;
-}
+            span.username {
+              display: block;
+              padding-top: 3px;
+            }
+          }
+        }
 
-#wiki-history table tr td img {
-  background-color: #fff;
-  border: 1px solid #999;
-  display: block;
-  float: left;
-  height: 18px;
-  overflow: hidden;
-  margin: 0 0.5em 0 0;
-  width: 18px;
-  padding: 2px;
-}
-
-#wiki-history table tr td.commit-name a {
-  font-size: 0.9em;
-  font-family: 'Monaco', 'Andale Mono', Consolas, 'Courier New', monospace;
-  padding: 0 0.2em;
+        img {
+          background-color: #fff;
+          border: 1px solid #999;
+          display: block;
+          float: left;
+          height: 18px;
+          overflow: hidden;
+          margin: 0 0.5em 0 0;
+          width: 18px;
+          padding: 2px;
+        }
+      }
+    }
+  }
 }
 
 .history #footer {
@@ -412,157 +326,136 @@ a:hover, a:visited {
   margin: 0 0.6em 0 0;
 }
 
-@media all and (min-width: 940px) {
+@include desktop-breakpoint {
   #wiki-history {
     margin: 2em 0 0 0;
-  }
 
-  #wiki-history table tr td {
-    border: 1px solid #c0dce9;
-    font-size: 1em;
-    line-height: 1.6em;
-    margin: 0;
-    padding: 0.3em 0.7em;
-  }
+    table tr td {
+      border: 1px solid #c0dce9;
+      font-size: 1em;
+      line-height: 1.6em;
+      margin: 0;
+      padding: 0.3em 0.7em;
 
-  #wiki-history table tr td.checkbox {
-    width: 4em;
-    padding: 0.3em;
+      &.checkbox {
+        width: 4em;
+        padding: 0.3em;
+      }
+    }
   }
 }
-
 
 /* @section edit */
-.edit h1 {
-  color: #999;
-  font-weight: normal;
+.edit {
+  @include section-header;
 }
-
-.edit h1 strong {
-  color: #000;
-  font-weight: bold;
-}
-
 
 /* @section search */
 
-.results h1 {
-  color: #999;
-  font-weight: normal;
-}
+.results {
+  @include section-header;
 
-.results h1 strong {
-  color: #000;
-  font-weight: bold;
-}
+  #results {
+    border-bottom: 1px solid #ccc;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 2em;
+    padding-bottom: 2em;
 
-.results #results {
-  border-bottom: 1px solid #ccc;
-  margin-left: 1em;
-  margin-right: 1em;
-  margin-bottom: 2em;
-  padding-bottom: 2em;
-}
+    @include desktop-breakpoint {
+      margin-left: 0;
+      margin-right: 0;
+    }
 
-.results #results ul {
-  margin: 2em 0 0 0;
-  padding: 0;
-}
+    ul {
+      margin: 2em 0 0 0;
+      padding: 0;
 
-.results #results ul li {
-  list-style: none;
-  padding: 0.2em 0;
-}
+      li {
+        list-style: none;
+        padding: 0.2em 0;
 
-.results #results ul li a {
-  word-wrap: break-word;
-}
+        @include largemobile-breakpoint {
+          font-size: 1.2em;
+        }
 
-@media all and (min-width: 640px) {
-  .results #results ul li {
+        @include desktop-breakpoint {
+          list-style: disc;
+          list-style-position: outside;
+          line-height: 1.6em;
+        }
+
+        a {
+          word-wrap: break-word;
+        }
+
+        span.count {
+          color: #999;
+        }
+      }
+    }
+  }
+
+  p#no-results {
     font-size: 1.2em;
-  }
-}
-
-@media all and (min-width: 940px) {
-  .results #results {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .results #results ul li {
-    list-style: disc;
-    list-style-position: outside;
     line-height: 1.6em;
+    margin-top: 2em;
+  }
+
+  #footer ul.actions li {
+    margin: 0 1em 0 0;
   }
 }
-
-.results #results ul li span.count {
-  color: #999;
-}
-
-.results p#no-results {
-  font-size: 1.2em;
-  line-height: 1.6em;
-  margin-top: 2em;
-}
-
-.results #footer ul.actions li {
-  margin: 0 1em 0 0;
-}
-
 
 /* @section compare */
-.compare h1 {
-  color: #999;
-  font-weight: normal;
-}
+.compare {
+  @include section-header;
 
-.compare h1 strong {
-  color: #000;
-  font-weight: bold;
-}
+  #compare-content {
+    margin-top: 3em;
+  }
 
-.compare #compare-content {
-  margin-top: 3em;
-}
+  .data {
+    border: $border-standard;
+    margin: 1em 0 2em;
+    overflow: auto;
 
-.compare .data {
-  border: 1px solid $grey;
-  margin: 1em 0 2em;
-  overflow: auto;
-}
+    table {
+      width: 100%;
 
-.compare .data table {
-  width: 100%;
-}
+      tr td {
+        font-family: $font-console;
+        font-size: 1.2em;
+        line-height: 1.2em;
+        margin: 0;
+        padding: 0;
 
-.compare .data pre {
-  margin: 0;
-  padding: 0;
-}
+        & + td + td {
+          width: 100%;
+        }
 
-.compare .data pre div {
-  padding: 0 0 0 1em;
-}
+        &.line_numbers {
+          background: $light-grey;
+          border-right: 1px solid #999;
+          color: #999;
+          padding: 0 0 0 0.5em;
+        }
+      }
+    }
 
-.compare .data tr td {
-  font-family: "Consolas", "Monaco", "Andale Mono", "Courier New", monospace;
-  font-size: 1.2em;
-  line-height: 1.2em;
-  margin: 0;
-  padding: 0;
-}
+    pre {
+      margin: 0;
+      padding: 0;
 
-.compare .data tr td + td + td {
-  width: 100%;
-}
+      div {
+        padding: 0 0 0 1em;
+      }
+    }
+  }
 
-.compare .data td.line_numbers {
-  background: $light-grey;
-  border-right: 1px solid #999;
-  color: #999;
-  padding: 0 0 0 0.5em;
+  #footer {
+    margin-bottom: 7em;
+  }
 }
 
 .compare #compare-content ul.actions li,
@@ -571,36 +464,40 @@ a:hover, a:visited {
   margin-right: 0.6em;
 }
 
-.compare #footer {
-  margin-bottom: 7em;
-}
-
-
-
 /* @control syntax */
-.highlight  { background: #ffffff; }
-.highlight .c { color: #999988; font-style: italic }
-.highlight .err { color: #a61717; background-color: #e3d2d2 }
-.highlight .k { font-weight: bold }
-.highlight .o { font-weight: bold }
-.highlight .cm { color: #999988; font-style: italic }
-.highlight .cp { color: #999999; font-weight: bold }
-.highlight .c1 { color: #999988; font-style: italic }
-.highlight .cs { color: #999999; font-weight: bold; font-style: italic }
-.highlight .gd { color: #000000; background-color: #ffdddd }
-.highlight .gd .x { color: #000000; background-color: #ffaaaa }
-.highlight .ge { font-style: italic }
-.highlight .gr { color: #aa0000 }
-.highlight .gh { color: #999999 }
-.highlight .gi { color: #000000; background-color: #ddffdd }
-.highlight .gi .x { color: #000000; background-color: #aaffaa }
-.highlight .gc { color: #999; background-color: #EAF2F5 }
-.highlight .go { color: #888888 }
-.highlight .gp { color: #555 }
-.highlight .gs { font-weight: bold }
-.highlight .gu { color: #aaaaaa }
-.highlight .gt { color: #aa0000 }
-
+.highlight {
+  background: #ffffff;
+  .c, .cm, .c1 { color: #999988; font-style: italic }
+  .err { color: #a61717; background-color: #e3d2d2 }
+  .k, .o { font-weight: bold }
+  .cp { color: #999999; font-weight: bold }
+  .cs { color: #999999; font-weight: bold; font-style: italic }
+  .gd {
+    color: #000000;
+    background-color: #ffdddd;
+    .x {
+      color: #000000;
+      background-color: #ffaaaa;
+    }
+  }
+  .ge { font-style: italic }
+  .gr { color: #aa0000 }
+  .gh { color: #999999 }
+  .gi {
+    color: #000000;
+    background-color: #ddffdd;
+    .x {
+      color: #000000;
+      background-color: #aaffaa;
+    }
+  }
+  .gc { color: #999; background-color: #EAF2F5 }
+  .go { color: #888888 }
+  .gp { color: #555 }
+  .gs { font-weight: bold }
+  .gu { color: #aaaaaa }
+  .gt { color: #aa0000 }
+}
 
 /* @control minibutton */
 ul.actions {
@@ -608,85 +505,38 @@ ul.actions {
    list-style-type: none;
    overflow: hidden;
    padding: 0;
+
+  li {
+    float: left;
+    font-size: 0.9em;
+    margin-left: 1px;
+    margin-bottom: 1px;
+
+    @include desktop-breakpoint {
+      margin-left: 0.6em;
+      margin-bottom: 0.6em;
+    }
+  }
 }
 
- ul.actions li {
-   float: left;
-   font-size: 0.9em;
-   margin-left: 1px;
-   margin-bottom: 1px;
- }
-
 .minibutton a {
-  background-color: $light-grey;
-  border: 1px solid #d4d4d4;
-  color: #333;
-  display: block;
-  font-weight: bold;
+  @include button-base;
+
   margin: 0;
   padding: 0.6em 1em;
   height: 1.4em;
 
-  text-shadow: 0 1px 0 #fff;
-
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
-  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
-  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
-
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-}
-
-@media all and (min-width: 940px) {
-  ul.actions li {
-    margin-left: 0.6em;
-    margin-bottom: 0.6em;
-  }
-
-  .minibutton a {
+  @include desktop-breakpoint {
     padding: 0.4em 1em;
-    height: 1.4em;
   }
 }
 
 #search-submit {
-  background-color: $light-grey;
-  border: 1px solid #d4d4d4;
-  color: #333;
-  display: block;
-  font-weight: bold;
+  @include button-base;
+  
   margin: 0;
   padding: 0.4em 1em;
-
-  text-shadow: 0 1px 0 #fff;
-
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#f4f4f4', endColorstr='#ececec');
-  background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ececec));
-  background: -moz-linear-gradient(top, #f4f4f4, #ececec);
-
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
 }
-
-.minibutton a:hover,
-#search-submit:hover {
-  background: #3072b3;
-  border-color: #518cc6 #518cc6 #2a65a0;
-  color: #fff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
-  text-decoration: none;
-
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#599bdc', endColorstr='#3072b3');
-  background: -webkit-gradient(linear, left top, left bottom, from(#599bdc), to(#3072b3));
-  background: -moz-linear-gradient(top, #599bdc, #3072b3);
-}
-
-.minibutton a:visited {
-  text-decoration: none;
-}
-
 
 /* @special error */
 #wiki-wrapper.error {
@@ -698,8 +548,8 @@ ul.actions {
 }
 
 #error {
-  background-color: #f9f9f9;
-  border: 1px solid #e4e4e4;
+  background-color: $color-editor-component;
+  border: $border-editor-component;
   left: 50%;
   overflow: hidden;
   padding: 2%;
@@ -708,109 +558,104 @@ ul.actions {
   width: 70%;
 
   border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
-}
 
-#error h1 {
-  font-size: 3em;
-  line-height: normal;
-  margin: 0;
-  padding: 0;
-}
-
-#error p {
-  font-size: 1.2em;
-  line-height: 1.6em;
-  margin: 1em 0 0.5em;
-  padding: 0;
-}
-
-
-/* @control searchbar */
-#head #searchbar {
-  float: right;
-  padding: 2px 0 0 0;
-  overflow: hidden;
-}
-
-#head #searchbar #searchbar-fauxtext {
-  background: #fff;
-  border: 1px solid #d4d4d4;
-  overflow: hidden;
-  height: 2.2em;
-
-  border-radius: 0.3em;
-  -moz-border-radius: 0.3em;
-  -webkit-border-radius: 0.3em;
-}
-
-#head #searchbar #searchbar-fauxtext input#search-query {
-  border: none;
-  color: #000;
-  float: left;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1em;
-  height: inherit;
-  padding: 0 .5em;
-
-  -webkit-focus-ring: none;
-}
-
-.ie8 #head #searchbar #searchbar-fauxtext input#search-query {
-  padding: 0.5em 0 0 0.5em;
-}
-
-#head #searchbar #searchbar-fauxtext input#search-query.ph {
-  color: #999;
-}
-
-#head #searchbar #searchbar-fauxtext #search-submit {
-  border: 0;
-  border-left: 1px solid #d4d4d4;
-  cursor: pointer;
-  margin: 0 !important;
-  padding: 0;
-  float: right;
-  height: inherit;
-
-  border-radius: 0 3px 3px 0;
-  -moz-border-radius: 0 3px 3px 0;
-  -webkit-border-radius: 0 3px 3px 0;
-}
-
-#head #searchbar #searchbar-fauxtext #search-submit span {
-  background-image: url(../images/icon-sprite.png);
-  background-position: -431px -1px;
-  background-repeat: no-repeat;
-  display: block;
-  height: inherit;
-  overflow: hidden;
-  text-indent: -5000px;
-  width: 32px;
-}
-
-.ff #head #searchbar #searchbar-fauxtext #search-submit span,
-.ie #head #searchbar #searchbar-fauxtext #search-submit span {
-  height: 2.2em;
-}
-
-#head #searchbar #searchbar-fauxtext #search-submit:hover span {
-  background-position: -431px -28px;
-  padding: 0;
-}
-
-@media all and (min-width: 940px) {
-  #head #searchbar {
+  h1 {
+    font-size: 3em;
+    line-height: normal;
+    margin: 0;
     padding: 0;
   }
 
-  #head #searchbar #searchbar-fauxtext #search-submit span {
-    width: 28px;
+  p {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin: 1em 0 0.5em;
+    padding: 0;
+  }
+}
+
+/* @control searchbar */
+#searchbar {
+  float: right;
+  overflow: hidden;
+
+  @include desktop-breakpoint {
+    padding: 0;
   }
 
-  #head #searchbar #searchbar-fauxtext #search-submit:hover span {
-    background-position: -431px -28px;
+  #searchbar-fauxtext {
+    background: #fff;
+    border: none;
+    overflow: hidden;
+    height: $editor-button-size;
+
+    @include desktop-breakpoint {
+      height: $editor-button-img-height;
+    }
+
+    input#search-query {
+      border: 1px solid $color-button-border;
+      border-radius: 3px 0 0 3px;
+
+      color: #000;
+      float: left;
+      font-family: $font-default;
+      font-size: 1em;
+      height: inherit;
+      padding: 0 .5em;
+
+      -webkit-focus-ring: none;
+
+      @include alt-box-model;
+
+      .ie8 & {
+        padding: 0.5em 0 0 0.5em;
+      }
+
+      &.ph {
+        color: #999;
+      }
+    }
+
+    #search-submit {
+      @include button-base;
+
+      border-left: none;
+      border-radius: 0 3px 3px 0;
+
+      margin: 0 !important;
+      padding: 0;
+      float: right;
+      height: inherit;
+
+      @include alt-box-model;
+
+      @include editor-button(16);
+
+      span {
+        @include button-sprites;
+        
+        display: block;
+        height: inherit;
+
+        width: 32px;
+        text-align: center;
+
+        @include text-conceal-simple;
+
+        .ff &, .ie & {
+          height: 2.2em;
+        }
+
+        @include desktop-breakpoint {
+          width: 28px;
+        }
+      }
+
+      &:hover span {
+        padding: 0;
+      }
+    }
   }
 }
 
@@ -819,37 +664,41 @@ ul.actions {
 #pages {
   font-size: 1.2em;
   margin: 0 1em 20px 1em;
-}
 
-@media all and (min-width: 940px) {
-  #pages {
+  @include desktop-breakpoint {
     margin: 0 0 20px 0;
   }
-}
 
-#pages ul {
+  ul {
     list-style: none;
     margin: 0;
     padding: 0;
-}
 
-#pages li a.file,
-#pages li a.folder {
-    background-image: url(../images/fileview/document.png);
-    background-position: 0 1px;
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
+    li {
+      a {
+        &.file, &.folder {
+          background-position: 0 1px;
+          background-repeat: no-repeat;
+          padding-left: 20px;
+        }
 
-#pages li a.folder {
-    background-image: url(../images/fileview/folder-horizontal.png);
-}
+        &.file {
+          background-image: url(../images/fileview/document.png);
+        }
 
-#pages .breadcrumb {
-  border-top: 1px solid $grey;
-  border-bottom: 1px solid $grey;
-  margin: 1em 0;
-  padding: 0.25em;
+        &.folder {
+          background-image: url(../images/fileview/folder-horizontal.png);
+        }
+      }
+    }
+  }
+
+  .breadcrumb {
+    border-top: $border-standard;
+    border-bottom: $border-standard;
+    margin: 1em 0;
+    padding: 0.25em;
+  }
 }
 
 .clearfloats {

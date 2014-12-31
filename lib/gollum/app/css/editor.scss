@@ -1,0 +1,488 @@
+// Wiki editor formatting
+
+@import "_base", "_features", "_breakpoint", "_component";
+
+a {
+  -moz-outline: none !important;
+}
+
+.jaws {
+  // JAWS should see it, but you can't
+  display: block;
+  height: 1px;
+  left: -5000px;
+  overflow: hidden;
+  position: absolute;
+  top: -5000px;
+  width: 1px;
+}
+
+#gollum-editor {
+  margin: 0 0 5em;
+  padding: 0em 1em 0.4em;
+
+  @include clearfix;
+
+  .ff &, .ie & {
+    padding-bottom: 1em;
+  }
+
+  @include desktop-breakpoint {
+    border: $border-editor-component;
+    background: $color-editor-component;
+    margin: 1em 0 5em;
+
+    border-radius: 1em;
+  }
+
+  form {
+    fieldset {
+      width: 100%;
+      @include reset-box;
+    }
+  }
+
+  .singleline {
+    display: block;
+    margin: 0 0 0.7em 0;
+    @include clearfix;
+
+    input {
+      background: #fff;
+      border: $border-standard;
+      color: #000;
+      font-size: 1.1em;
+      font-family: $font-default;
+      line-height: 1.5em;
+      margin: 1em 0 0.4em;
+      padding: 0.5em;
+      width: 98%;
+
+      &.ph {
+        color: #999;
+      }
+
+      .ie & {
+        padding-top: 0.25em;
+        padding-bottom: 0.75em;
+      }
+    }
+  }
+
+  .path_note {
+    text-align: right;
+    font-size: small;
+    padding-right: 5px;
+  }
+
+  /* @control editor-view-tab */
+  #gollum-editor-type-switcher {
+    display: none;
+  }
+
+  /* @control function-bar */
+  #gollum-editor-function-bar  {
+    border-bottom: $border-standard;
+    padding: 0;
+
+    @include desktop-breakpoint {
+      overflow: hidden;
+    }
+
+    #gollum-editor-function-buttons {
+      display: none;
+    }
+
+    &.active {
+      #gollum-editor-function-buttons {
+        display: block;
+        margin: 0;
+        padding: 0;
+
+        @include desktop-breakpoint {
+          overflow: hidden;
+          margin: 0;
+          padding: 0 0 1.1em 0;
+          float: left;
+        }
+      }
+    }
+
+    a {
+      &.function-button {
+        float: left;
+        
+        overflow: hidden;
+        margin: 1px 1px 0 0;
+        
+        @include editor-button-size;
+        @include button-base;
+
+        @include desktop-breakpoint {
+          margin: 0.2em 0.5em 0 0;
+        }
+
+        span {
+          display: block;
+          
+          @include button-sprites;
+          @include text-conceal-simple;
+          @include editor-button-size;
+        }
+      }
+
+      &.disabled {
+        display: none;
+      }
+    }
+
+    span.function-divider {
+      display: none;
+
+      @include desktop-breakpoint {
+        display: block;
+        width: 0.5em;
+        float: left;
+      }
+    }
+
+    #gollum-editor-format-selector {
+      padding: 0.2em 0 0.5em 0;
+      clear: both;
+
+      @include clearfix;
+
+      @include desktop-breakpoint {
+        clear: none;
+        text-align: right;
+      }
+
+      select {
+        background-color: $color-editor-component;
+        border: $border-standard;
+        color: #333;
+
+        font-size: 1em;
+        font-family: $font-default;
+        font-weight: bold;
+        line-height: 1.6em;
+        padding: 0.3em 0.4em;
+        display: inline-block;
+
+        border-radius: 0.5em;
+      }
+
+      label {
+        color: #999;
+        font-size: 1em;
+        font-weight: bold;
+        line-height: 1.6em;
+        padding: .3em 0.5em 0 0;
+        display: inline-block;
+
+        &:after {
+          content: ':';
+        }
+      }
+    }
+  }
+
+  /* @section form-fields */
+
+  textarea {
+    @include component-textarea;
+    height: 20em;
+  }
+
+  input#gollum-editor-submit {
+    float: left;
+    font-size: 1em;
+    font-family: $font-default;
+    
+    margin: 0;
+    padding: 0.4em 1em;
+
+    @include button-base;
+    @include alt-box-model;
+
+    .webkit & {
+      padding: 0.5em 1em 0.45em;
+    }
+
+    .ie & {
+      padding: 0.4em 1em 0.5em;
+    }
+  }
+
+  .collapsed, .expanded {
+    border-bottom: $border-standard;
+    display: block;
+    overflow: hidden;
+    padding: 0.5em 0 0;
+
+    a {
+      &.button {
+        float: left;
+        
+        overflow: hidden;
+        margin: 0.2em 0.5em 0.75em 0;
+
+        @include editor-button-size;
+        @include button-base;
+      }
+
+      span {
+        display: block;
+
+        @include button-sprites;
+        @include editor-button-size;
+        @include text-conceal-simple;
+      }
+    }
+
+    h4 {
+      font-size: 1.6em;
+      float: left;
+      margin: 0;
+
+      padding: 0.25em 0 0 0.3em;
+
+      text-shadow: 0 -1px 0 #fff;
+      line-height: $editor-button-size;
+
+      @include desktop-breakpoint {
+        line-height: $editor-button-desktop-size;
+      }
+    }
+  }
+
+  .collapsed {
+    h4 {
+      color: #bbb;
+    }
+
+    a.button {
+      @include editor-button(13);
+    }
+
+    textarea {
+      display: none;
+    }
+  }
+
+  .expanded {
+    a.button {
+      @include editor-button(14);
+    }
+
+    textarea {
+      @include component-textarea;
+      height: 7em;
+    }
+  }
+
+  #gollum-editor-body {
+    & + .collapsed, & + .expanded {
+      border-top: $border-standard;
+      margin-top: 0.7em;
+    }
+  }
+
+  /* @control minibutton */
+
+  a.minibutton {
+    font-size: 1em;
+    font-family: $font-default;
+    line-height: 1.2em;
+    margin: 0 0 0 0.8em;
+    padding: 0.5em 1em;
+
+    @include button-base;
+  }
+
+  /* @control preview */
+
+  #gollum-editor-preview {
+    float: left;
+    font-weight: normal;
+    padding: left;
+
+    @include alt-box-model;
+  }
+}
+
+/* @control title */
+
+#gollum-editor-title-field {
+  &.active {
+    border-bottom: $border-standard;
+    display: block;
+    margin: 0 0 0.3em 0;
+    padding: 0 0 0.5em 0;
+  }
+
+  input#gollum-editor-page-title {
+    font-weight: bold;
+    margin-top: 0;
+
+    &.ph {
+      color: #000;
+    }
+  }
+
+  & + #gollum-editor-function-bar {
+    margin-top: 0.6em;
+  }
+}
+
+/* @control editor-buttons */
+
+a#function-bold { @include editor-button(0); }
+a#function-italic { @include editor-button(1); }
+a#function-underline { @include editor-button(2); }
+a#function-code { @include editor-button(3); }
+a#function-ul { @include editor-button(4); }
+a#function-ol { @include editor-button(5); }
+a#function-blockquote { @include editor-button(6); }
+a#function-hr { @include editor-button(7); }
+a#function-h1 { @include editor-button(8); }
+a#function-h2 { @include editor-button(9); }
+a#function-h3 { @include editor-button(10); }
+a#function-link { @include editor-button(11); }
+a#function-image { @include editor-button(12); }
+a#function-plus { @include editor-button(13); }
+a#function-minus { @include editor-button(14); }
+a#function-help { @include editor-button(15); }
+a#function-search { @include editor-button(16); }
+
+/* @section uploads */
+
+#gollum-editor-body {
+  & + div {
+    display: none;
+    font-size: 1.5em;
+
+    > i {
+      font-size: 1em;
+    }
+  }
+
+  &.dragging {
+    box-shadow: 0 0 10px #AAE000;
+  }
+
+  &.uploading {
+    opacity: 0.5;
+    
+    & + div {
+      display: block;
+    }
+  }
+}
+
+/* @section help */
+#gollum-editor-help {
+  clear: both;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  border: $border-standard;
+  border-width: 0 1px 1px 1px;
+
+  @include desktop-breakpoint {
+    clear: none;
+  }
+}
+
+#gollum-editor-help-parent,
+#gollum-editor-help-list {
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  float: left;
+  width: 50%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+
+  @include desktop-breakpoint {
+    height: 17em;
+    width: 18%;
+    overflow: auto;
+    padding: 1em 0;
+  }
+
+  li {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin: 0;
+    padding: 0;
+
+    a {
+      border: 1px solid transparent;
+      border-width: 1px 0;
+      display: block;
+      font-weight: bold;
+      height: 100%;
+      width: auto;
+      padding: 0.2em 1em;
+      text-shadow: 0 -1px 0 #fff;
+      font-size: 0.8em;
+
+      @include desktop-breakpoint {
+        font-size: 1em;
+      }
+
+      &:hover {
+        background: #fff;
+        border-color: #f0f0f0;
+        text-decoration: none;
+
+        box-shadow: none;
+      }
+
+      &.selected {
+        border: $border-editor-element;
+        border-bottom-color: #e7e7e7;
+        border-width: 1px 0;
+        background: #fff;
+        color: #000;
+
+        box-shadow: 0 1px 2px #f0f0f0;
+      }
+    }
+  }
+}
+
+#gollum-editor-help-parent {
+  border-right: $border-editor-element;
+}
+
+#gollum-editor-help-list {
+  background: #fafafa;
+  border-right: $border-editor-element;
+}
+
+#gollum-editor-help-wrapper {
+  background: #fff;
+  overflow: auto;
+  height: 17em;
+  padding: 1em;
+  clear: both;
+
+  @include desktop-breakpoint {
+    clear: none;
+  }
+}
+
+#gollum-editor-help-content {
+  font-size: 1.2em;
+  margin: 0 1em 0 0.5em;
+  padding: 0;
+  line-height: 1.8em;
+
+  p {
+    margin: 0 0 1em 0;
+    padding: 0;
+  }
+}
