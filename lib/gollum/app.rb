@@ -372,7 +372,7 @@ module Precious
     end
     
     post '/compare/*' do
-      @file     = params[:splat].first
+      @file     = encodeURIComponent(params[:splat].first)
       @versions = params[:versions] || []
       if @versions.size < 2
         redirect to("/history/#{@file}")
