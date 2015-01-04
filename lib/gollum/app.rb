@@ -22,6 +22,13 @@ Gollum::set_git_max_filesize(190 * 10**6)
 # Fix to_url
 class String
   alias :upstream_to_url :to_url
+
+  if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+    def to_ascii
+      self # Do not transliterate utf-8 url's unless using Grit
+    end
+  end
+  
   # _Header => header which causes errors
   def to_url
     return nil if self.nil?
@@ -310,7 +317,7 @@ module Precious
         wiki.write_page(name, format, params[:content], commit_message, path)
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
-        redirect to("/#{clean_url(::File.join(page_dir, path, name))}")
+        redirect to("/#{clean_url(::File.join(page_dir, path, encodeURIComponent(name)))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
