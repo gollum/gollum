@@ -619,6 +619,7 @@ context "Frontend with lotr" do
     assert !body.include?("Boromir"), "/pages should NOT include the page 'Boromir'"
     assert body.include?("Mordor"), "/pages should include the folder 'Mordor'"
     assert !body.include?("Eye Of Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
+    assert !body.match(/(Zamin).+(roast\-mutton)/m), "/pages should be sorted alphabetically"
   end
 
   test "/pages/Mordor/" do
