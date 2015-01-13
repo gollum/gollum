@@ -19,9 +19,10 @@ context "Precious::Views::LatestChanges" do
   test "displays_latest_changes" do
     get('/latest_changes')
     body = last_response.body
+
     assert body.include?('<span class="username">Charles Pence</span>'), "/latest_changes should include the Author Charles Pence"
-    assert body.include?('60f12f4'), "/latest_changes should include the :latest_changes_count commit"
-    assert !body.include?('0ed8cbe'), "/latest_changes should not include more than latest_changes_count commits"
+    assert body.include?('a8ad3c0'), "/latest_changes should include the :latest_changes_count commit"
+    assert !body.include?('60f12f4'), "/latest_changes should not include more than latest_changes_count commits"
     assert body.include?('<a href="Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e">Data-Two.csv</a>'), "/latest_changes include links to modified files in #{body}"
     assert body.include?('<a href="Hobbit/874f597a5659b4c3b153674ea04e406ff393975e">Hobbit.md</a>'), "/latest_changes should include links to modified pages in #{body}"
   end
