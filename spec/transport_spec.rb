@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-UPLOAD_PACK_ADVERTISEMENT = "009df5771ead0e6d9a8d937bf5cabfa3678ee8944a92 HEAD\u0000 include-tag multi_ack_detailed multi_ack ofs-delta side-band side-band-64k thin-pack no-progress shallow \n0044f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/alternative\n003ff5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/master\n0000"
+UPLOAD_PACK_ADVERTISEMENT = "00bbf5771ead0e6d9a8d937bf5cabfa3678ee8944a92 HEAD\u0000 include-tag multi_ack_detailed multi_ack ofs-delta side-band side-band-64k thin-pack no-progress shallow symref=HEAD:refs/heads/master \n0044f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/alternative\n003ff5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/master\n0000"
 
 CORRECT_UPLOAD_REQUEST = "0067want f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 multi_ack_detailed side-band-64k thin-pack ofs-delta\n00000009done\n" # Correct request for an object
 
