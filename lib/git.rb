@@ -138,7 +138,7 @@ module RJGit
     def checkout(branch_name = "master", options = {})
       checkout_command = @jgit.checkout.set_name(branch_name)
       checkout_command.set_start_point(options[:commit])
-      options[:paths].each {|path| checkout_command.add_path(path)} if options[:path]
+      options[:paths].each {|path| checkout_command.add_path(path)} if options[:paths]
       checkout_command.set_create_branch(true) if options[:create]
       checkout_command.set_force(true) if options[:force]
       result = {}
