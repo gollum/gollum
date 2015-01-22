@@ -39,7 +39,7 @@ module Precious
       url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
     end
 
-    def forbid(msg = "Forbidden.")
+    def forbid(msg = "Forbidden. This wiki is set to no-edit mode.")
       @message = msg
       status 403
       halt mustache :error
