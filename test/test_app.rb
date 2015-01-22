@@ -78,7 +78,7 @@ context "Frontend" do
 
     get page
 
-    expected = "<h2><a class=\"anchor\" id=\"_#{text}\" href=\"#_#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2><a class=\"anchor\" id=\"#{text}\" href=\"##{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
