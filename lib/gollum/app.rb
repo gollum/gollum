@@ -178,7 +178,8 @@ module Precious
         tempfile = params[:file][:tempfile]
       end
 
-      dir      = wiki.per_page_uploads ? params[:upload_dest] : 'uploads'
+      # Remove page file dir prefix from upload path if necessary -- committer handles this itself
+      dir      = wiki.per_page_uploads ? params[:upload_dest].match(/^(#{wiki.page_file_dir}\/+)?(.*)/)[2] : 'uploads'
       ext      = ::File.extname(fullname)
       format   = ext.split('.').last || 'txt'
       filename = ::File.basename(fullname, ext)
