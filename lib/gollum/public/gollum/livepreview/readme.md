@@ -30,7 +30,7 @@ See licenses folder for details.
 # Dependency Notes
 
 ## Ace
-Using master branch at [a091a627a09d5530747576869fefe797816ec4b6](https://github.com/ajaxorg/ace/commit/a091a627a09d5530747576869fefe797816ec4b6).
+Using master branch at [63178a05119ec425908514a16007743905672dbf](https://github.com/ajaxorg/ace/commit/63178a05119ec425908514a16007743905672dbf).
 
 - Copy `ajaxorg/ace/lib/ace` to `/public/js/ace/lib/ace`
 
