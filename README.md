@@ -53,14 +53,14 @@ separately install the necessary dependencies for each format. You only need
 to install the dependencies for the formats that you plan to use.
 
 * [AsciiDoc](http://asciidoctor.org) -- `gem install asciidoctor`
-* [Creole](http://wikicreole.org/) -- `gem install creole`
+* [Creole](http://www.wikicreole.org/) -- `gem install creole`
 * [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet`
 * [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown) -- `gem install github-markdown`
 * [Org](http://orgmode.org/) -- `gem install org-ruby`
 * [Pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML` comes with Perl >= 5.10. Lower versions should install Pod::Simple from CPAN.
 * [RDoc](http://rdoc.sourceforge.net/)
 * [ReStructuredText](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
-* [Textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
+* [Textile](http://en.wikipedia.org/wiki/Textile_(markup_language)) -- `gem install RedCloth`
 * [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth`
 
 [bundler]: http://gembundler.com/
