@@ -96,6 +96,7 @@ module Precious
     end
 
     before do
+      Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/')
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
