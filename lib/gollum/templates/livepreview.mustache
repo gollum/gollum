@@ -9,7 +9,7 @@
 <body>
 <div id='editor'></div>
 <div id='previewframe'><div id='contentframe' class='markdown-body'></div></div>
-<!-- tool panel from notepage.es. save & savecomment icons from Retina Display Icon Set. -->  
+<!-- tool panel from notepage.es. save & savecomment icons from Retina Display Icon Set. -->
 <div id='toolpanel' class='toolpanel edit' style='width: 500px; right: 0px; visibility: hidden;'>
   <a id='preview' class='edit'><img src='images/globe_24.png' alt='Preview' title='Preview'></a>
   <a id='save' class='edit'><img src='images/save_24.png' alt='Save' title='Save'></a>
@@ -40,5 +40,27 @@ var require = {
 <script src='js/sundown.js'></script>
 <script src='js/md_sundown.js'></script>
 <script src='js/livepreview.js'></script>
+{{#mathjax}}
+{{^mathjax_config}}
+<script type="text/javascript">
+window.MathJax = {
+tex2jax: {
+  inlineMath:  [ ['$','$'], ['\\(','\\)'] ],
+  displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+  processEscapes: true
+},
+TeX: { extensions: ["autoload-all.js"] }
+};
+</script>
+{{/mathjax_config}}
+{{#mathjax_config}}
+<script type="text/javascript" src="{{base_url}}/{{mathjax_config}}"></script>
+{{/mathjax_config}}
+<script>(function(d,j){
+j = d.createElement('script');
+j.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+(d.head || d.getElementsByTagName('head')[0]).appendChild(j);
+}(document));
+</script>{{/mathjax}}
 </body>
 </html>

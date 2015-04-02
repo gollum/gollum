@@ -28,7 +28,7 @@ class String
       self # Do not transliterate utf-8 url's unless using Grit
     end
   end
-  
+
   # _Header => header which causes errors
   def to_url
     return nil if self.nil?
@@ -149,7 +149,7 @@ module Precious
       @allow_uploads = wiki.allow_uploads
       if page = wikip.page
         if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
-          live_preview_url = '/livepreview/index.html?page=' + encodeURIComponent(@name)
+          live_preview_url = '/livepreview/?page=' + encodeURIComponent(@name)
           if @path
             live_preview_url << '&path=' + encodeURIComponent(@path)
           end
@@ -363,6 +363,12 @@ module Precious
       mustache :page
     end
 
+    get '/livepreview/' do
+      wiki = wiki_new
+      @mathjax = wiki.mathjax
+      mustache :livepreview, { :layout => false }
+    end
+
     get '/history/*' do
       @page     = wiki_page(params[:splat].first).page
       @page_num = [params[:page].to_i, 1].max
@@ -380,7 +386,7 @@ module Precious
       @versions = @wiki.latest_changes({:max_count => max_count})
       mustache :latest_changes
     end
-    
+
     post '/compare/*' do
       @file     = encodeURIComponent(params[:splat].first)
       @versions = params[:versions] || []
