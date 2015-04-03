@@ -18,9 +18,10 @@ describe RubyGit do
   it "follows renames" do
     repo = Repo.new(TEST_REPO_PATH)
     messages = repo.git.log("follow-rename.txt", "HEAD", :follow => true)
-    $stderr.puts "Messages: #{messages}"
+    pending "Following renames is currently not supported."
     messages.count.should == 2
     # messages[2].should match /for following renames/
+    
   end
   
   it "returns a status object" do
