@@ -6,13 +6,21 @@ describe RubyGit do
     repo = Repo.new(TEST_REPO_PATH)
     messages = repo.git.log
     messages.should_not be_empty
-    messages.first.message.should match /Cleaning working directory/
+    messages.first.message.should match /Renamed the follow rename file/
     messages = repo.git.log("deconstructions.txt")
     messages.first.message.should match /More interesting postmodern comments./
     messages = repo.git.log(nil, "HEAD", {:max_count => 1})
     messages.count.should == 1
     messages = repo.git.log(nil, "HEAD", {:max_count => 1, :skip => 1})
     messages.first.message.should_not match /More interesting postmodern comments./
+  end
+  
+  it "follows renames" do
+    repo = Repo.new(TEST_REPO_PATH)
+    messages = repo.git.log("follow-rename.txt", "HEAD", :follow => true)
+    $stderr.puts "Messages: #{messages}"
+    messages.count.should == 2
+    # messages[2].should match /for following renames/
   end
   
   it "returns a status object" do
@@ -219,21 +227,21 @@ describe RubyGit do
       end
     
       it "should pull commits from a local clone" do
-        @local.commits.should have(6).commits
+        @local.commits.should have(8).commits
         @local.git.pull
-        @local.commits.should have(7).commits
+        @local.commits.should have(9).commits
       end
       
       it "should pull commits from a local clone with rebase" do
-        @local.commits.should have(6).commits
+        @local.commits.should have(8).commits
         @local.git.pull(:rebase => true)
-        @local.commits.should have(7).commits
+        @local.commits.should have(9).commits
       end
     
       it "should pull commits from a local clone with credentials" do
-        @local.commits.should have(6).commits
+        @local.commits.should have(8).commits
         @local.git.pull(:username => 'rspec', :password => 'Hahmeid7')
-        @local.commits.should have(7).commits
+        @local.commits.should have(9).commits
       end
     
     end
@@ -246,21 +254,21 @@ describe RubyGit do
         end
       
       it "should push all changes to a local clone" do
-        @remote.commits.should have(6).commits
+        @remote.commits.should have(8).commits
         @local.git.push_all('origin')
-        @remote.commits.should have(7).commits
+        @remote.commits.should have(9).commits
       end
       
       it "should push all changes to a local clone with credentials" do
-        @remote.commits.should have(6).commits
+        @remote.commits.should have(8).commits
         @local.git.push_all('origin', :username => 'rspec', :password => 'Hahmeid7')
-        @remote.commits.should have(7).commits
+        @remote.commits.should have(9).commits
       end
       
       it "should push a specific ref to a local clone" do
-        @remote.commits.should have(6).commits
+        @remote.commits.should have(8).commits
         @local.git.push('origin', ["master"], :username => 'rspec', :password => 'Hahmeid7')
-        @remote.commits.should have(7).commits
+        @remote.commits.should have(9).commits
       end
       
     end

@@ -182,7 +182,7 @@ describe Repo do
     end
     
     it "should return the latest commit (HEAD)" do    
-      @repo.head.committed_date.should == DateTime.parse("2012-12-09 16:30:40 +0000").to_time
+      @repo.head.committed_date.should == DateTime.parse("2015-04-03 14:27:02 +0200").to_time
     end
     
     it "should list its tags in name-id pairs" do
@@ -281,11 +281,11 @@ describe Repo do
     end
     
     it "should commit files to the repository" do
-      RJGit::Porcelain.ls_tree(@repo).should have(5).items
+      RJGit::Porcelain.ls_tree(@repo).should have(6).items
       File.open(File.join(@temp_repo_path, "newfile.txt"), 'w') {|file| file.write("This is a new file to commit.") }
       @repo.add("newfile.txt")
       @repo.commit("Committing a test file to a test repository.")
-      RJGit::Porcelain.ls_tree(@repo).should have_at_least(6).items
+      RJGit::Porcelain.ls_tree(@repo).should have_at_least(7).items
       @repo.should respond_to(:commit).with(2).arguments
     end
     
@@ -319,7 +319,7 @@ describe Repo do
       server_info_files.each_with_index do |path,i|
         f = File.new(path, "r")
         new_contents = ""
-	f.each_line do |line|
+	      f.each_line do |line|
           new_contents = new_contents + line unless line.include?("refs/heads/.svn/") # JGit (unlike git) also searches directories under refs/heads starting with ".", so it finds some refs in /refs/heads/.svn that git-update-server does not find. See Repo.update_server_info. For now, just filter these lines out.
         end
         new_contents.should eql contents[i]
