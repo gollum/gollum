@@ -13,8 +13,6 @@ require 'gollum/views/has_page'
 
 require File.expand_path '../helpers', __FILE__
 
-require 'gollum/editing_auth'
-
 #required to upload bigger binary files
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
@@ -51,8 +49,7 @@ module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
-    use Precious::EditingAuth
-
+    
     dir     = File.dirname(File.expand_path(__FILE__))
 
     # Detect unsupported browsers.
@@ -96,6 +93,9 @@ module Precious
     end
 
     before do
+      settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
+      @allow_editing = settings.wiki_options[:allow_editing]
+      forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/')
       # above will detect base_path when it's used with map in a config.ru
@@ -103,8 +103,6 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
-      settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
-      @allow_editing = settings.wiki_options[:allow_editing]
     end
 
     get '/' do
