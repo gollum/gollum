@@ -9,6 +9,8 @@ module RJGit
   import 'org.eclipse.jgit.api.RmCommand'
   import 'org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider'
   import 'org.eclipse.jgit.transport.RefSpec'
+  import 'org.eclipse.jgit.diff.RenameDetector'
+  import 'org.eclipse.jgit.diff.DiffEntry'
 
   class RubyGit
 
@@ -31,12 +33,49 @@ module RJGit
       logs.addPath(path) if path
       logs.setMaxCount(options[:max_count]) if options[:max_count]
       logs.setSkip(options[:skip]) if options[:skip]
+      jcommits = logs.call
       commits = Array.new
-      logs.call.each do |jcommit|
+      jcommits.each do |jcommit|
         commits << Commit.new(jrepo, jcommit)
       end
+      
+      if path && options[:follow]
+        jcommits = @jgit.log.add(ref).addPath(path).call
+        renamed = follow_renames(jcommits, path)
+        unless renamed.empty?
+          renamed.each do |jcommit|
+            commits << Commit.new(jrepo, jcommit)
+          end
+        end
+      end
+
       commits
     end
+
+    def follow_renames(jcommits, path)
+      renames = Array.new
+      jcommits.each do |jcommit|
+        all_commits = @jgit.log.add(jcommit).call
+        all_commits.each do |jcommit_prev|
+          tree_start = jcommit.getTree
+          tree_prev  = jcommit_prev.getTree
+          treewalk = TreeWalk.new(jrepo)
+          treewalk.addTree(tree_prev)
+          treewalk.addTree(tree_start)
+          treewalk.setRecursive(true)
+          rename_detector = RenameDetector.new(jrepo)
+          rename_detector.addAll(DiffEntry.scan(treewalk))
+          diff_entries = rename_detector.compute
+          diff_entries.each do |entry|
+            if ((entry.getChangeType == DiffEntry::ChangeType::RENAME || entry.getChangeType == DiffEntry::ChangeType::COPY) && entry.getNewPath.match(path))
+              renames << jcommit_prev
+            end
+          end
+        end
+      end
+      renames
+    end
+
 
     def branch_list
       branch = @jgit.branch_list
