@@ -3,6 +3,7 @@ rvm:
   - 2.0.0
   - 2.1.0
   - 2.1.1
+  - jruby-19mode
 before_install:
  - sudo apt-get update
  - sudo apt-get install libicu-dev
