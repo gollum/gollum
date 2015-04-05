@@ -41,12 +41,7 @@ module RJGit
       
       if path && options[:follow]
         jcommits = @jgit.log.add(ref).addPath(path).call
-        renamed = follow_renames(jcommits, path)
-        unless renamed.empty?
-          renamed.each do |jcommit|
-            commits << Commit.new(jrepo, jcommit)
-          end
-        end
+        commits += follow_renames(jcommits, path)
       end
 
       commits
@@ -68,7 +63,7 @@ module RJGit
           diff_entries = rename_detector.compute
           diff_entries.each do |entry|
             if ((entry.getChangeType == DiffEntry::ChangeType::RENAME || entry.getChangeType == DiffEntry::ChangeType::COPY) && entry.getNewPath.match(path))
-              renames << jcommit_prev
+              renames << Commit.new(jrepo, jcommit_prev)
             end
           end
         end
