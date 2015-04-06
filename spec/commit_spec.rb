@@ -76,9 +76,9 @@ describe Commit do
 
     it "should have stats" do
       stats = Repo.new(TEST_REPO_PATH).commits[-2].stats
-      puts stats.inspect
       stats[0].should == 8
       stats[1].should == 2
+      stats[2]["postpatriarchialist.txt"].should == [2, 0, 2] 
     end
 
     describe ".find_all(repo, ref, options)" do

@@ -61,7 +61,7 @@ module RJGit
         end
         total_del += del
         total_ins += ins
-        results[file.getNewPath] = [ins, del]
+        results[file.getNewPath] = [ins, del, ins + del]
       end
       return total_ins, total_del, results
     end
