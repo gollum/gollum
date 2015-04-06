@@ -2,6 +2,8 @@ module RJGit
 
   import 'org.eclipse.jgit.revwalk.RevWalk'
   import 'org.eclipse.jgit.revwalk.RevCommit'
+  import 'org.eclipse.jgit.diff.DiffFormatter'
+  import 'org.eclipse.jgit.util.io.DisabledOutputStream'
 
   class Commit
 
@@ -38,7 +40,32 @@ module RJGit
     def parents
       @parents ||= @jcommit.get_parents.map {|parent| Commit.new(@jrepo, parent)}
     end
-    
+
+    def stats
+      df = DiffFormatter.new(DisabledOutputStream::INSTANCE)
+      df.set_repository(@jrepo)
+      df.set_context(0)
+      entries = df.scan(@jcommit.get_parents[0], @jcommit)
+      results = {}
+      total_del = 0
+      total_ins = 0
+      entries.each do |entry|
+        file = df.toFileHeader(entry)
+        del = 0
+        ins = 0
+        file.getHunks.each do |hunk|
+            hunk.toEditList.each do |edit|
+              del += edit.getEndA - edit.getBeginA
+              ins += edit.getEndB - edit.getBeginB
+            end
+        end
+        total_del += del
+        total_ins += ins
+        results[file.getNewPath] = [ins, del]
+      end
+      return total_ins, total_del, results
+    end
+
     # Pass an empty array for parents if the commit should have no parents
     def self.new_with_tree(repository, tree, message, actor, parents = nil)
       repository = RJGit.repository_type(repository)
@@ -76,7 +103,6 @@ module RJGit
   
     def self.diff(repo, a, b = nil, paths = [], options = {})
     end
-    
-    
+
   end
 end

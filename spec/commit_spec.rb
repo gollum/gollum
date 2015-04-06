@@ -74,6 +74,13 @@ describe Commit do
       @commit.parent_count.should == 1
     end
 
+    it "should have stats" do
+      stats = Repo.new(TEST_REPO_PATH).commits[-2].stats
+      puts stats.inspect
+      stats[0].should == 8
+      stats[1].should == 2
+    end
+
     describe ".find_all(repo, ref, options)" do
       it "should return an empty array if nothing is found" do
         @commits = Commit.find_all(@bare_repo, 'remote42', {:limit => 10 })
