@@ -11,6 +11,7 @@ module RJGit
   import 'org.eclipse.jgit.transport.RefSpec'
   import 'org.eclipse.jgit.diff.RenameDetector'
   import 'org.eclipse.jgit.diff.DiffEntry'
+  import 'org.eclipse.jgit.treewalk.filter.PathFilter'
 
   class RubyGit
 
@@ -27,48 +28,58 @@ module RJGit
     end
 
     def log(path = nil, revstring = Constants::HEAD, options = {})
-      logs = @jgit.log
       ref = jrepo.resolve(revstring)
-      logs.add(ref)
-      logs.addPath(path) if path
-      logs.setMaxCount(options[:max_count]) if options[:max_count]
-      logs.setSkip(options[:skip]) if options[:skip]
-      jcommits = logs.call
-      commits = Array.new
-      jcommits.each do |jcommit|
-        commits << Commit.new(jrepo, jcommit)
-      end
+      jcommits = Array.new
       
       if path && options[:follow]
-        jcommits = @jgit.log.add(ref).addPath(path).call
-        commits += follow_renames(jcommits, path)
+        current_path = path    
+        start = nil
+        loop do
+          logs = @jgit.log.add(ref).addPath(current_path).call
+          logs.each do |jcommit|
+            next if jcommits.include?(jcommit)
+            jcommits << jcommit
+            start = jcommit
+          end
+          current_path = follow_renames(start, current_path)
+          break if current_path.nil?
+        end
+        
+      else      
+        logs = @jgit.log
+        logs.add(ref)
+        logs.addPath(path) if path
+        logs.setMaxCount(options[:max_count]) if options[:max_count]
+        logs.setSkip(options[:skip]) if options[:skip]
+        # These options need tests
+        # logs.addRange(options[:since], options[:until]) if (options[:since] && options[:until])
+        # logs.not(options[:not]) if options[:not]
+        jcommits = logs.call
       end
-
-      commits
+      
+      jcommits.map{ |jcommit| Commit.new(jrepo, jcommit) }
     end
 
-    def follow_renames(jcommits, path)
-      renames = Array.new
-      jcommits.each do |jcommit|
-        all_commits = @jgit.log.add(jcommit).call
-        all_commits.each do |jcommit_prev|
-          tree_start = jcommit.getTree
-          tree_prev  = jcommit_prev.getTree
-          treewalk = TreeWalk.new(jrepo)
-          treewalk.addTree(tree_prev)
-          treewalk.addTree(tree_start)
-          treewalk.setRecursive(true)
-          rename_detector = RenameDetector.new(jrepo)
-          rename_detector.addAll(DiffEntry.scan(treewalk))
-          diff_entries = rename_detector.compute
-          diff_entries.each do |entry|
-            if ((entry.getChangeType == DiffEntry::ChangeType::RENAME || entry.getChangeType == DiffEntry::ChangeType::COPY) && entry.getNewPath.match(path))
-              renames << Commit.new(jrepo, jcommit_prev)
-            end
+    def follow_renames(jcommit, path)
+      commits = @jgit.log.add(jcommit).call
+      commits.each do |jcommit_prev|
+        tree_start = jcommit.getTree
+        tree_prev  = jcommit_prev.getTree
+        treewalk = TreeWalk.new(jrepo)
+        #treewalk.setFilter(PathFilter.create(File.dirname(path)))
+        treewalk.addTree(tree_prev)
+        treewalk.addTree(tree_start)
+        treewalk.setRecursive(true)
+        rename_detector = RenameDetector.new(jrepo)
+        rename_detector.addAll(DiffEntry.scan(treewalk))
+        diff_entries = rename_detector.compute
+        diff_entries.each do |entry|
+          if ((entry.getChangeType == DiffEntry::ChangeType::RENAME || entry.getChangeType == DiffEntry::ChangeType::COPY) && entry.getNewPath.match(path))
+            return entry.getOldPath
           end
         end
       end
-      renames
+      return nil
     end
 
 
