@@ -228,19 +228,19 @@ describe RubyGit do
     
       it "should pull commits from a local clone" do
         @local.commits.should have(8).commits
-        @local.git.pull
+        @local.git.pull("origin", "master")
         @local.commits.should have(9).commits
       end
       
       it "should pull commits from a local clone with rebase" do
         @local.commits.should have(8).commits
-        @local.git.pull(:rebase => true)
+        @local.git.pull(nil, nil, :rebase => true)
         @local.commits.should have(9).commits
       end
     
       it "should pull commits from a local clone with credentials" do
         @local.commits.should have(8).commits
-        @local.git.pull(:username => 'rspec', :password => 'Hahmeid7')
+        @local.git.pull(nil, nil, :username => 'rspec', :password => 'Hahmeid7')
         @local.commits.should have(9).commits
       end
     

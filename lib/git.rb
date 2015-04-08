@@ -262,28 +262,31 @@ module RJGit
       push_command.call
     end
 
-    def push(remote, refs = [], options = {})
-      if(refs.size > 0)
+    def push(remote = nil, refs = [], options = {})
+      push_command = @jgit.push
+      push_command.set_dry_run(true) if options[:dryrun]
+      push_command.set_remote(remote) if remote
+      if(refs.to_a.size > 0)
         refs.map!{|ref| RefSpec.new(ref)}
-        push_command = @jgit.push
-        push_command.set_dry_run(true) if options[:dryrun]
-        push_command.set_remote(remote)
         push_command.set_ref_specs(refs)
-        if options[:username]
-          push_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-        end
-        push_command.call
       end
+      if options[:username]
+        push_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
+      end
+      push_command.call
     end
 
-    def pull(options = {})
-        pull_command = @jgit.pull
-        pull_command.set_dry_run(true) if options[:dryrun]
-        pull_command.set_rebase(options[:rebase]) if options[:rebase]
-        if options[:username]
-          pull_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-        end
-        pull_command.call
+    def pull(remote = nil, remote_ref = nil, options = {})
+      pull_command = @jgit.pull
+      pull_command.set_dry_run(true) if options[:dryrun]
+      pull_command.set_rebase(options[:rebase]) if options[:rebase]
+      pull_command.set_remote(remote) if remote
+      pull_command.set_remote_branch_name(remote_ref) if remote_ref
+      if options[:username]
+        pull_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
+      end
+      pull_command.call
     end
+
   end
 end
