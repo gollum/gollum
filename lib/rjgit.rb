@@ -334,7 +334,6 @@ module RJGit
         
         @treebuilder.object_inserter.release
         @current_tree = new_tree
-        @treemap = {}
         log = @treebuilder.log
         @treebuilder.init_log
         sha =  ObjectId.to_string(new_head)
