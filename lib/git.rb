@@ -29,6 +29,7 @@ module RJGit
 
     def log(path = nil, revstring = Constants::HEAD, options = {})
       ref = jrepo.resolve(revstring)
+      return [] unless ref
       jcommits = Array.new
       
       if path && options[:follow]
@@ -41,7 +42,7 @@ module RJGit
             jcommits << jcommit
             start = jcommit
           end
-          current_path = follow_renames(start, current_path)
+          current_path = follow_renames(start, current_path) if start
           break if current_path.nil?
         end
         
