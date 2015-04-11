@@ -1,3 +1,7 @@
+# 4.0.0 /2015-04-11
+
+* Now compatible with JRuby (via the [rjgit](https://github.com/repotag/rjgit) [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter))
+
 # 3.1.1 /2014-12-04
 
 * Security fix for [remote code execution issue](https://github.com/gollum/gollum/issues/913). Please update!
