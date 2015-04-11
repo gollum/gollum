@@ -77,8 +77,7 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-
-    expected = "<h2><a class=\"anchor\" id=\"#{text}\" href=\"##{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
@@ -409,7 +408,6 @@ context "Frontend" do
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
-
     post "/preview", :content => 'abc', :format => 'markdown'
     assert last_response.ok?
   end
