@@ -7,7 +7,7 @@ gollum -- A wiki built on top of Git
 
 ## DESCRIPTION
 
-**New: Gollum is now [compatbile with JRuby](https://github.com/gollum/gollum/wiki/Git-adapters#rjgit-java). Just run `gem install gollum` to install.**
+**New: Gollum is now [compatible with JRuby](https://github.com/gollum/gollum/wiki/Git-adapters#rjgit-java). Just run `gem install gollum` to install.**
 
 Gollum is a simple wiki system built on top of Git.
 
