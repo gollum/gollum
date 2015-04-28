@@ -81,6 +81,13 @@ describe Commit do
       stats[2]["postpatriarchialist.txt"].should == [2, 0, 2] 
     end
 
+    it "should have stats on first commit" do
+      stats = Repo.new(TEST_REPO_PATH).commits[-1].stats
+      stats[0].should == 228
+      stats[1].should == 0
+      stats[2]["postpatriarchialist.txt"].should == [75, 0, 75]
+    end
+
     describe ".find_all(repo, ref, options)" do
       it "should return an empty array if nothing is found" do
         @commits = Commit.find_all(@bare_repo, 'remote42', {:limit => 10 })
