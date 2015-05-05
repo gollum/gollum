@@ -206,9 +206,9 @@ else
 
     class MapGollum
       def initialize base_path
-        @mg = Rack::Builder.new do
+        @mg = Rack::Builder.new do |env|
           map '/' do
-            run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
+	        run Proc.new { |env| [302, { 'Location' => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/#{base_path}" }, []] }
           end
 
           map "/#{base_path}" do
