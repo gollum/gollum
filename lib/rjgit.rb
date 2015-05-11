@@ -304,11 +304,11 @@ module RJGit
         commit_builder.setAuthor(person)
         commit_builder.setMessage(message)
         commit_builder.setTreeId(RJGit.tree_type(new_tree))
-          if parents.is_a?(Array) then
-            parents.each {|parent| commit_builder.addParentId(RJGit.commit_type(parent)) }
-          elsif parents
-            commit_builder.addParentId(RJGit.commit_type(parents))
-          end
+        if parents.is_a?(Array) then
+          parents.each {|parent| commit_builder.addParentId(RJGit.commit_type(parent)) }
+        elsif parents
+          commit_builder.addParentId(RJGit.commit_type(parents))
+        end
         result = @treebuilder.object_inserter.insert(commit_builder)
         @treebuilder.object_inserter.flush
         result
