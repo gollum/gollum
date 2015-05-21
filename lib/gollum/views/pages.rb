@@ -31,9 +31,11 @@ module Precious
 
       def files_folders
         if has_results
-          folder_links = []
+          folders = {}
+          page_files = {}
 
-          @results.map { |page|
+          # 1012: Folders and Pages need to be separated
+          @results.each do |page|
             page_path = page.path.sub(/^#{@path}\//, '')
 
             if page_path.include?('/')
@@ -41,19 +43,23 @@ module Precious
               folder_path = @path ? "#{@path}/#{folder}" : folder
               folder_link = %{<li><a href="#{@base_url}/pages/#{folder_path}/" class="folder">#{folder}</a></li>}
 
-              unless folder_links.include?(folder_link)
-                folder_links << folder_link
-
-                folder_link
-              end
+              folders[folder] = folder_link unless folders.key?(folder)
             elsif page_path != ".gitkeep"
               if defined? page.format
-                %{<li><a href="#{@base_url}/#{page.escaped_url_path}" class="file">#{page.name}</a></li>}
+                page_link = %{<li><a href="#{@base_url}/#{page.escaped_url_path}" class="file">#{page.name}</a></li>}
+                page_files[page.name] = page_link
               else
-                %{<li><a href="#{@base_url}/#{page.escaped_url_path}#{page.name}" class="file">#{page.name}</a></li>}
+                page_link = %{<li><a href="#{@base_url}/#{page.escaped_url_path}#{page.name}" class="file">#{page.name}</a></li>}
+                page_files[page.name] = page_link
               end
             end
-          }.compact.join("\n")
+          end
+
+          # 1012: All Pages should be rendered as Folders first, then Pages, each sorted alphabetically
+          result = Hash[folders.sort_by{| key, value | key.downcase} ].values.join("\n") + "\n"
+          result += Hash[page_files.sort_by{ | key, value | key.downcase } ].values.join("\n")
+
+          result
         else
           ""
         end
