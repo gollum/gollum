@@ -25,7 +25,9 @@ Installation
 ------------
 Install the rjgit gem with the command:
 
+```sh
 $ gem install rjgit
+```
 
 #### Dependencies for using RJGit:
 - JRuby >= 1.7.0
