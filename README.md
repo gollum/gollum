@@ -78,6 +78,14 @@ repo.find('959329025f67539fb82e76b02782322fad032821')
 repo.find('959329025f67539fb82e76b02782322fad032821', :commit) # Find a specific :commit, :blob, :tree, or :tag
 ```
 
+### Getting diffs
+```ruby
+sha1 = repo.head.id
+sha2 = repo.commits.last.id
+options = {:old_rev => sha2, :new_rev => sha1, :file_path => "some/path.txt", :patch => true}
+Porcelain.diff(repo, options)
+```
+
 ### Getting tags
 ```ruby
 tag = repo.tags['example_tag']
