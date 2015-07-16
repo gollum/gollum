@@ -128,7 +128,7 @@ Note that the gollum server will not run on Windows because of [an issue](https:
 
 ### RACK
 
-You can also run gollum with any rack-compatible server by placing configuring a config.ru
+You can also run gollum with any rack-compatible server by configuring a `config.ru`
 file. This allows you to utilize any Rack middleware like Rack::Auth, OmniAuth, etc. See below for an example of a `config.ru`. You can define all the [options available on the command line](#running) by configuring the app's `:wiki_options` hash. See [here](https://github.com/gollum/gollum/wiki/Using-Gollum-with-Rack) for the names of the options corresponding to the command line switches.  
 
 ```ruby
