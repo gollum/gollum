@@ -332,7 +332,7 @@ module RJGit
         ru.setRefLogMessage("commit: #{message}", false)
         res = ru.update.to_string
         
-        @treebuilder.object_inserter.release
+        # @treebuilder.object_inserter.release
         @current_tree = new_tree
         log = @treebuilder.log
         @treebuilder.init_log
