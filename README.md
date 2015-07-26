@@ -38,6 +38,10 @@ $ gem install rjgit
 - rspec >= 2.0
 - simplecov
 
+#### Version scheme
+
+RJGit's version number is the version of jgit used, plus our own patch level counter. For instance, RJGit 4.0.1.0 uses jgit 4.0.1, patch level 0.
+
 Usage
 -----
 RJGit wraps most (if not all) of JGit's core functionality; it has classes for all important Git objects, i.e., Repo, Blob, Tree, Commit, and Tag. It allows parsing and manipulation of these objects in an intuitive manner, either simulating ordinary git usage (with a working directory on disk) or on a lower level, through creating new git objects manually (also works with 'bare' repositories, without a working directory).
