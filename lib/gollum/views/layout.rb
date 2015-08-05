@@ -20,8 +20,16 @@ module Precious
         !@path.nil?
       end
 
+      def page_dir
+        @page_dir
+      end
+
       def base_url
         @base_url
+      end
+
+      def custom_path
+        "#{@base_url}#{@page_dir.nil? ? '' : '/'}#{@page_dir}"
       end
 
       def css # custom css

@@ -98,6 +98,7 @@ module Precious
       forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/')
+      @page_dir = settings.wiki_options[:page_file_dir].to_s
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
@@ -106,8 +107,7 @@ module Precious
     end
 
     get '/' do
-      page_dir = settings.wiki_options[:page_file_dir].to_s
-      redirect clean_url(::File.join(@base_url, page_dir, wiki_new.index_page))
+      redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
     end
 
     # path is set to name if path is nil.
