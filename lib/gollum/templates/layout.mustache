@@ -10,7 +10,7 @@
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/dialog.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/template.css" media="all">
   <link rel="stylesheet" type="text/css" href="{{base_url}}/css/print.css" media="print">
-  {{#css}}<link rel="stylesheet" type="text/css" href="{{base_url}}/custom.css" media="all">{{/css}}
+  {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_path}}/custom.css" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
 
   <!--[if IE 7]>
@@ -55,7 +55,7 @@
   (d.head || d.getElementsByTagName('head')[0]).appendChild(j);
   }(document));
   </script>{{/mathjax}}
-  {{#js}}<script type="text/javascript" src="{{base_url}}/custom.js"></script>{{/js}}
+  {{#js}}<script type="text/javascript" src="{{custom_path}}/custom.js"></script>{{/js}}
 
   <title>{{title}}</title>
 </head>
