@@ -4,8 +4,7 @@ module Precious
       include Editable
       include HasPage
 
-      attr_reader :page, :content
-      attr_accessor :livepreview
+      attr_reader :page, :content, :livepreview
 
       # return path set in app.rb not @page.path
       def path
@@ -67,6 +66,7 @@ module Precious
 
       def upload_dest
         @upload_dest
+      end
 
       def has_live_preview
         @livepreview
