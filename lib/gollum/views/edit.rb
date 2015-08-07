@@ -5,6 +5,7 @@ module Precious
       include HasPage
 
       attr_reader :page, :content
+      attr_accessor :livepreview
 
       # return path set in app.rb not @page.path
       def path
@@ -66,6 +67,9 @@ module Precious
 
       def upload_dest
         @upload_dest
+
+      def has_live_preview
+        @livepreview
       end
 
       def format

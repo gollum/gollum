@@ -337,7 +337,6 @@ a#function-help:hover span { background-position: -402px -25px; }
   }
 }
 
-
 /* @section uploads */
 
 #gollum-editor-body.dragging {
@@ -360,8 +359,6 @@ a#function-help:hover span { background-position: -402px -25px; }
 #gollum-editor-body.uploading + div {
   display: block;
 }
-
-
 
 /* @section form-fields */
 

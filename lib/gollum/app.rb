@@ -5,6 +5,7 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'json'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -59,6 +60,8 @@ module Precious
         Browser.new('Internet Explorer', '10.0'),
         Browser.new('Chrome', '7.0'),
         Browser.new('Firefox', '4.0'),
+        Browser.new('Android', '4.0'),
+        Browser.new('Safari', '5.0'),
     ]
 
     def supported_useragent?(user_agent)
@@ -146,18 +149,11 @@ module Precious
       wiki = wikip.wiki
       @allow_uploads = wiki.allow_uploads
       if page = wikip.page
-        if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
-          live_preview_url = '/livepreview/?page=' + encodeURIComponent(@name)
-          if @path
-            live_preview_url << '&path=' + encodeURIComponent(@path)
-          end
-          redirect to(live_preview_url)
-        else
-          @page         = page
-          @page.version = wiki.repo.log(wiki.ref, @page.path).first
-          @content      = page.text_data
-          mustache :edit
-        end
+        @page         = page
+        @page.version = wiki.repo.log(wiki.ref, @page.path).first
+        @content      = page.text_data
+        @livepreview  = wiki.live_preview && supported_useragent?(request.user_agent)
+        mustache :edit
       else
         redirect to("/create/#{encodeURIComponent(@name)}")
       end
@@ -288,6 +284,9 @@ module Precious
       @allow_uploads = wikip.wiki.allow_uploads
       @upload_dest   = find_upload_dest(@path)
 
+      wiki = wikip.wiki
+      @livepreview = wiki.live_preview && supported_useragent?(request.user_agent)
+
       page_dir = settings.wiki_options[:page_file_dir].to_s
       unless page_dir.empty?
         # --page-file-dir docs
@@ -311,6 +310,8 @@ module Precious
       path   = sanitize_empty_params(params[:path]) || ''
       format = params[:format].intern
       wiki   = wiki_new
+      
+      @livepreview = wiki.live_preview && supported_useragent?(request.user_agent)
 
       path.gsub!(/^\//, '')
 
@@ -361,10 +362,23 @@ module Precious
       mustache :page
     end
 
-    get '/livepreview/' do
-      wiki = wiki_new
-      @mathjax = wiki.mathjax
-      mustache :livepreview, { :layout => false }
+    post '/fragments' do
+      content_type :json
+      processed_fragments = []
+
+      params[:fragments].each do |frag|
+        wiki           = wiki_new
+        @name          = params[:page] || "Preview"
+        @page          = wiki.preview_page(@name, frag, params[:format])
+        processed      = @page.formatted_data
+
+        processed_fragments << {
+          source: frag,
+          destination: processed
+        }
+      end
+
+      processed_fragments.to_json
     end
 
     get '/history/*' do
@@ -443,7 +457,13 @@ module Precious
       # Sort wiki search results by count (desc) and then by name (asc)
       @results = wiki.search(@query).sort { |a, b| (a[:count] <=> b[:count]).nonzero? || b[:name] <=> a[:name] }.reverse
       @name    = @query
-      mustache :search
+      
+      if request.xhr?
+        content_type :json
+        @results.to_json
+      else
+        mustache :search
+      end
     end
 
     get %r{
@@ -459,7 +479,32 @@ module Precious
       @results     += wiki.files if settings.wiki_options[:show_all]
       @results     = @results.sort_by { |p| p.name.downcase } # Sort Results alphabetically, fixes 922
       @ref         = wiki.ref
-      mustache :pages
+      
+      if request.xhr?
+        content_type :json
+        @results.map { |page|
+          original_page_path = page_path = page.path.gsub(/\..+$/, "")
+          page_path = page_path.gsub(/^#{@path}\//, '') if @path
+
+          page_name = page.name
+          folder_path = nil
+
+          next if page_path == ".gitkeep"
+
+          if original_page_path.include?('/')
+            folder      = original_page_path.split('/').first
+            folder_path = @path ? "#{@path}" : folder
+          end
+
+          {
+            path: page_path,
+            name: page_name,
+            folder: folder_path
+          }
+        }.to_json
+      else
+        mustache :pages
+      end
     end
 
     get '/fileview' do

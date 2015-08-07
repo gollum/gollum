@@ -149,4 +149,13 @@
   $gollum_editor.setShowPrintMargin(false);
   $gollum_editor.focus();
 </script>
-<script type="text/javascript" src="/javascript/editor/gollum.editor.js"></script>
+<script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.format_selector.js"></script>
+<script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.editor.js"></script>
+<script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.preview.js"></script>
+{{#has_live_preview}}
+<div id="gollum-live-preview" style="display:none">
+  <div class="markdown-body gollum-preview-target">
+    <h1>Live Preview</h1>
+  </div>
+</div>
+{{/has_live_preview}}
