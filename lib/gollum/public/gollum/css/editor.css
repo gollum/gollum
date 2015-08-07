@@ -365,7 +365,7 @@ a#function-help:hover span { background-position: -402px -25px; }
 
 /* @section form-fields */
 
-#gollum-editor textarea {
+#gollum-editor-body {
   background: #fff;
   border: 1px solid #ddd;
   font-size: 1em;
@@ -378,7 +378,7 @@ a#function-help:hover span { background-position: -402px -25px; }
 }
 
 @media all and (min-width: 940px) {
-  #gollum-editor textarea {
+  #gollum-editor-body {
     margin: 1em 0 0.4em;
   }
 }
@@ -510,11 +510,11 @@ a#function-help:hover span { background-position: -402px -25px; }
   background-position: -378px -28px;
 }
 
-#gollum-editor .collapsed textarea {
+#gollum-editor-body .collapsed {
   display: none;
 }
 
-#gollum-editor .expanded textarea {
+#gollum-editor-body .expanded {
   background-color: #fff;
   border: 1px solid #ddd;
   clear: both;
