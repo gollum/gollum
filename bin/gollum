@@ -124,6 +124,10 @@ opts = OptionParser.new do |opts|
   opts.on("--h1-title", "Sets page title to value of first h1") do
     wiki_options[:h1_title] = true
   end
+
+  opts.on("--plantuml-url [URL]", "Sets the PlantUML server endpoint.") do |url|
+    wiki_options[:plantuml_url] = url
+  end
 end
 
 # Read command line options into `options` hash
@@ -171,6 +175,12 @@ if options['irb']
     if !wiki.exist? then
       raise Gollum::InvalidGitRepositoryError
     end
+    if wiki_options[:plantuml_url]
+      Gollum::Filter::PlantUML.configure do |config|
+        puts "Using #{wiki_options[:plantuml_url]} as PlantUML endpoint"
+        config.url = wiki_options[:plantuml_url]
+      end
+    end
     puts "Loaded Gollum wiki at #{File.expand_path(gollum_path).inspect}."
     puts
     puts %(    page = wiki.page('page-name'))
@@ -199,6 +209,13 @@ else
     # otherwise it will be relative to the CWD
     cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
     require cfg
+  end
+
+  if wiki_options[:plantuml_url]
+    Gollum::Filter::PlantUML.configure do |config|
+      puts "Using #{wiki_options[:plantuml_url]} as PlantUML endpoint"
+      config.url = wiki_options[:plantuml_url]
+    end
   end
 
   base_path = wiki_options[:base_path]
