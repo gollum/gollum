@@ -513,8 +513,21 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    assert_match /custom.js/, last_response.body
+    assert_match /"\/custom.js"/, last_response.body
     Precious::App.set(:wiki_options, { :js => nil })
+  end
+
+  test "change custom.css path if page-file-dir is set" do
+    Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
+    page = 'docs/yaycustom'
+    text = 'customized!'
+
+    @wiki.write_page(page, :markdown, text,
+                     { :name => 'user1', :email => 'user1' });
+
+    get page
+    assert_match /"\/docs\/custom.css"/, last_response.body
+    Precious::App.set(:wiki_options, { :css => nil, :page_file_dir => nil })
   end
 
   test "show edit page with header and footer and sidebar of multibyte" do
