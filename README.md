@@ -21,6 +21,7 @@ For more information on Gollum's capabilities and pitfalls:
 1. [Syntax/capability overview for pages](https://github.com/gollum/gollum/wiki).
 2. [Known limitations](https://github.com/gollum/gollum/wiki/Known-limitations).
 3. [Security overview](https://github.com/gollum/gollum/wiki/Security).
+4. [Gollum with CAS SSO](https://github.com/gollum/gollum/wiki/Gollum-via-Rack-and-CAS-SSO)
 
 ## SYSTEM REQUIREMENTS
 
