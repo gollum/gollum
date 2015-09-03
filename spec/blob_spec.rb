@@ -25,6 +25,14 @@ describe Blob do
     it "should return blob contents" do
       @blob.data.should match /Baudrillardist hyperreality/
     end
+    
+    it "should check if the blob is binary" do
+      @blob.binary?.should be_false
+    end
+    
+    it "should have a line count" do
+      @blob.line_count.should == 40
+    end
 
     it "should return blame information as an Array" do
       @blob.blame.should be_an Array

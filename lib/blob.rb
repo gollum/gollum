@@ -1,6 +1,7 @@
 module RJGit
   
   import 'org.eclipse.jgit.revwalk.RevBlob'
+  import 'org.eclipse.jgit.diff.RawText'
   
   class Blob 
     
@@ -39,6 +40,14 @@ module RJGit
     
     def is_symlink?
       @mode == SYMLINK_TYPE
+    end
+    
+    def binary?
+      RawText.is_binary(self.data.to_java_bytes)
+    end
+    
+    def line_count
+      self.binary? ? 0 : self.data.split("\n").size
     end
     
     # The mime type of this file (based on the filename)
