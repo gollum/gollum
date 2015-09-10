@@ -21,7 +21,6 @@ For more information on Gollum's capabilities and pitfalls:
 1. [Syntax/capability overview for pages](https://github.com/gollum/gollum/wiki).
 2. [Known limitations](https://github.com/gollum/gollum/wiki/Known-limitations).
 3. [Security overview](https://github.com/gollum/gollum/wiki/Security).
-4. [Gollum with CAS SSO](https://github.com/gollum/gollum/wiki/Gollum-via-Rack-and-CAS-SSO)
 
 ## SYSTEM REQUIREMENTS
 
@@ -109,6 +108,10 @@ This will start up a web server (WEBrick) running Gollum with a web interface, w
 ### Rack
 
 Gollum can also be ran with any [rack-compatible web server](https://github.com/rack/rack#supported-web-servers). More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-via-Rack).
+
+### Rack, with an authentication server
+
+Gollum can also be ran alongside a CAS (Central Authentication Service) SSO (single sign-on) server. With a bit of tweaking, this adds basic user-support to Gollum. To see an example and an explanation, navigate [over here](https://github.com/gollum/gollum/wiki/Gollum-via-Rack-and-CAS-SSO).
 
 ### Docker
 
