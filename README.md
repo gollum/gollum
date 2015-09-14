@@ -34,7 +34,7 @@ For more information on Gollum's capabilities and pitfalls:
 
 **Notes:**
 
-1. There are still some bugs and this setup is not ready for production yet. You can track the progress at #1044.
+1. There are still some bugs and this setup is not ready for production yet. You can track the progress at [Support Windows via JRuby - Meta Issue](https://github.com/gollum/gollum/issues/1044).
 
 ## INSTALLATION
 
