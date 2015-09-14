@@ -46,11 +46,11 @@ Gem::Specification.new do |s|
     README.md
     Rakefile
     bin/gollum
+    config.ru
     config.rb
     contrib/openrc/conf.d/gollum
     contrib/openrc/init.d/gollum
     contrib/systemd/gollum@.service
-    docs/sanitization.md
     gollum.gemspec
     lib/gollum.rb
     lib/gollum/app.rb
