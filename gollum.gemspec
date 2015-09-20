@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '4.0.0'
-  s.date              = '2015-04-11'
+  s.version           = '4.0.1'
+  s.date              = '2015-09-20'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -46,11 +46,12 @@ Gem::Specification.new do |s|
     README.md
     Rakefile
     bin/gollum
-    config.ru
     config.rb
+    config.ru
     contrib/openrc/conf.d/gollum
     contrib/openrc/init.d/gollum
     contrib/systemd/gollum@.service
+    contrib/sysv-debian/init.d/gollum
     gollum.gemspec
     lib/gollum.rb
     lib/gollum/app.rb
