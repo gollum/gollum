@@ -14,10 +14,6 @@ module RJGit
       @jrepo = RJGit.repository_type(repository)
       @bidirectional = bidirectional
     end
-
-    def init_buffers(client_msg)
-      return ByteArrayInputStream.new(client_msg.to_java_bytes), ByteArrayOutputStream.new
-    end    
   
     def advertise_refs
       out_stream = ByteArrayOutputStream.new
@@ -26,6 +22,27 @@ module RJGit
       @jpack.sendAdvertisedRefs(advertiser)
       return out_stream.to_string
     end
+
+    def process(client_msg)
+      self.send(:_process, @type, client_msg)
+    end
+
+    private
+
+    def init_buffers(client_msg)
+      return ByteArrayInputStream.new(client_msg.to_java_bytes), ByteArrayOutputStream.new
+    end  
+
+    def _process(action, client_msg)
+      input, output = init_buffers(client_msg)
+      @jpack.set_bi_directional_pipe(@bidirectional)
+      begin
+        @jpack.send(action, input, output, nil)
+      rescue Java::OrgEclipseJgitErrors::InvalidObjectIdException, Java::OrgEclipseJgitTransport::UploadPackInternalServerErrorException, Java::JavaIo::IOException => e
+        return nil, e
+      end
+      return ByteArrayInputStream.new(output.to_byte_array).to_io, nil
+    end
   end
 
   class RJGitReceivePack < RJGitPack
@@ -33,45 +50,17 @@ module RJGit
     def initialize(repository, bidirectional = false)
       super
       @jpack = ReceivePack.new(@jrepo)
+      @type = :receive
     end
   
-    def process(client_msg)
-      self.receive(client_msg)
-    end
-  
-    def receive(client_msg)
-      in_stream, out_stream = init_buffers(client_msg)
-      @jpack.set_bi_directional_pipe(@bidirectional)
-      begin
-        @jpack.receive(in_stream, out_stream, nil)
-      rescue Java::OrgEclipseJgitErrors::InvalidObjectIdException, Java::JavaIo::IOException => e
-        return nil, e
-      end
-      return ByteArrayInputStream.new(out_stream.to_byte_array).to_io, nil
   end
-  
-end
 
   class RJGitUploadPack < RJGitPack
   
     def initialize(repository, bidirectional = false)
       super
       @jpack = UploadPack.new(@jrepo)
-    end
-  
-    def process(client_msg)
-      self.upload(client_msg)
-    end
-  
-    def upload(client_msg)
-      in_stream, out_stream = init_buffers(client_msg)
-      @jpack.set_bi_directional_pipe(@bidirectional)
-      begin
-        @jpack.upload(in_stream, out_stream, nil)
-      rescue Java::OrgEclipseJgitErrors::InvalidObjectIdException, Java::OrgEclipseJgitTransport::UploadPackInternalServerErrorException, Java::JavaIo::IOException => e
-        return nil, e
-      end
-      return ByteArrayInputStream.new(out_stream.to_byte_array).to_io, nil
+      @type = :upload
     end
   
   end
