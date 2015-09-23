@@ -24,7 +24,14 @@ module RJGit
     end
 
     def process(client_msg)
-      self.send(:_process, @type, client_msg)
+      input, output = init_buffers(client_msg)
+      @jpack.set_bi_directional_pipe(@bidirectional)
+      begin
+        @jpack.send(@action, input, output, nil)
+      rescue Java::OrgEclipseJgitErrors::InvalidObjectIdException, Java::OrgEclipseJgitTransport::UploadPackInternalServerErrorException, Java::JavaIo::IOException => e
+        return nil, e
+      end
+      return ByteArrayInputStream.new(output.to_byte_array).to_io, nil
     end
 
     private
@@ -33,16 +40,6 @@ module RJGit
       return ByteArrayInputStream.new(client_msg.to_java_bytes), ByteArrayOutputStream.new
     end  
 
-    def _process(action, client_msg)
-      input, output = init_buffers(client_msg)
-      @jpack.set_bi_directional_pipe(@bidirectional)
-      begin
-        @jpack.send(action, input, output, nil)
-      rescue Java::OrgEclipseJgitErrors::InvalidObjectIdException, Java::OrgEclipseJgitTransport::UploadPackInternalServerErrorException, Java::JavaIo::IOException => e
-        return nil, e
-      end
-      return ByteArrayInputStream.new(output.to_byte_array).to_io, nil
-    end
   end
 
   class RJGitReceivePack < RJGitPack
@@ -50,7 +47,7 @@ module RJGit
     def initialize(repository, bidirectional = false)
       super
       @jpack = ReceivePack.new(@jrepo)
-      @type = :receive
+      @action = :receive
     end
   
   end
@@ -60,7 +57,7 @@ module RJGit
     def initialize(repository, bidirectional = false)
       super
       @jpack = UploadPack.new(@jrepo)
-      @type = :upload
+      @action = :upload
     end
   
   end
