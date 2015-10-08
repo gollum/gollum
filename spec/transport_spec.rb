@@ -136,7 +136,7 @@ describe RJGitReceivePack do
   it "should return nil and a JGit invalid object exception object if the client requests an invalid object id" do
     res, msg = @pack.process(RECEIVE_REQUEST_INVALID_OBJECT)
     res.should eql nil
-    msg.should be_a org.eclipse.jgit.errors.InvalidObjectIdException
+    msg.should be_a org.eclipse.jgit.errors.PackProtocolException #org.eclipse.jgit.errors.InvalidObjectIdException
   end
   
   after(:all) do
