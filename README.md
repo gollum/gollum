@@ -98,13 +98,16 @@ Simply:
 2. Run: `gollum`.
 3. Open `http://localhost:4567` in your browser.
 
-If you wish to run from source, simply:
-
-1. Navigate to your git repository (wiki) via the command line.
-2. Run: `bundle exec bin/gollum`
-3. Open `http://localhost:4567` in your browser.
-
 This will start up a web server (WEBrick) running Gollum with a web interface, where you can view and edit your wiki.
+
+### Running from source
+
+1. `git clone https://github.com/gollum/gollum`
+2. `cd gollum`
+3. `[sudo] bundle install` (may not always be necessary).
+4. `bundle exec bin/gollum`
+	* Like that, gollum assumes the target wiki (git repository) is the project repository itself. If it's not, execute `bundle exec bin/gollum <path-to-wiki>` instead.
+5. Open `http://localhost:4567` in your browser.
 
 ### Rack
 
