@@ -179,7 +179,7 @@ module Precious
       halt 500 unless tempfile.is_a? Tempfile
 
       # Remove page file dir prefix from upload path if necessary -- committer handles this itself
-      dir      = wiki.per_page_uploads ? params[:upload_dest].match(/^(#{wiki.page_file_dir}\/+)?(.*)/)[2] : 'uploads'
+      dir      = wiki.per_page_uploads ? params[:upload_dest] : ::File.join([wiki.page_file_dir, 'uploads'].compact)
       ext      = ::File.extname(fullname)
       format   = ext.split('.').last || 'txt'
       filename = ::File.basename(fullname, ext)
