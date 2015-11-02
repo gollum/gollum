@@ -358,6 +358,7 @@ module Precious
       @mathjax       = wiki.mathjax
       @h1_title      = wiki.h1_title
       @editable      = false
+      @bar_side      = wiki.bar_side
       @allow_uploads = wiki.allow_uploads
       mustache :page
     end
