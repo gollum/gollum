@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem "mime-types", "~> 1.15"
-gem "rake", "~> 10.1.0"
+gem "mime-types", "~> 2.6.2" 
+gem "rake", "~> 10.4.2"
 
 gem 'coveralls', require: false
 
