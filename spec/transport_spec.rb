@@ -37,50 +37,50 @@ describe RJGitUploadPack do
     @pack = RJGitUploadPack.new(@repo)
   end  
   
-  it "should have a reference to the repository's JGit-repository" do
-    @pack.jrepo.should eql @repo.jrepo
+  it "has a reference to the repository's JGit-repository" do
+    expect(@pack.jrepo).to eql @repo.jrepo
   end
   
-  it "should create a JGit pack object on creation" do
-    @pack.jpack.should be_a org.eclipse.jgit.transport.UploadPack
+  it "creates a JGit pack object on creation" do
+    expect(@pack.jpack).to be_a org.eclipse.jgit.transport.UploadPack
   end
   
-  it "should advertise all references" do    
-    @pack.advertise_refs.should == UPLOAD_PACK_ADVERTISEMENT
+  it "advertises all references" do    
+    expect(@pack.advertise_refs).to eq UPLOAD_PACK_ADVERTISEMENT
   end
   
-  it "should return the server-side response to a client's wants" do
+  it "returns the server-side response to a client's wants" do
     res, msg = @pack.process(CORRECT_UPLOAD_REQUEST)
-    res.read.include?(CORRECT_UPLOAD_REQUEST_RESPONSE).should eql true
-    msg.should eql nil
+    expect(res.read.include?(CORRECT_UPLOAD_REQUEST_RESPONSE)).to be true
+    expect(msg).to be_nil
   end
   
-  it "should advertise its references when processing requests in bidirectional mode" do
+  it "advertises its references when processing requests in bidirectional mode" do
     res, msg = @pack.process(CORRECT_UPLOAD_REQUEST)
-    res.read.include?(UPLOAD_PACK_ADVERTISEMENT.split("\n").first).should eql false
+    expect(res.read.include?(UPLOAD_PACK_ADVERTISEMENT.split("\n").first)).to be false
     @pack.bidirectional = true
     res, msg = @pack.process(CORRECT_UPLOAD_REQUEST)
-    res.read.include?(UPLOAD_PACK_ADVERTISEMENT.split("\n").first).should eql true
+    expect(res.read.include?(UPLOAD_PACK_ADVERTISEMENT.split("\n").first)).to be true
   end
   
-  it "should return a bidirectional pipe when in bidirectional mode"
+  it "returns a bidirectional pipe when in bidirectional mode"
   
-  it "should return nil and a Java IO error exception object when the client's request has the wrong length" do
+  it "returns nil and a Java IO error exception object when the client's request has the wrong length" do
     res, msg = @pack.process(UPLOAD_REQUEST_INVALID_LENGTH)
-    res.should eql nil
-    msg.should be_a java.io.IOException
+    expect(res).to be_nil
+    expect(msg).to be_a java.io.IOException
   end
   
-  it "should return nil and a JGit internal server error exception object when the client requests an unknown object" do
+  it "returns nil and a JGit internal server error exception object when the client requests an unknown object" do
     res, msg = @pack.process(UPLOAD_REQUEST_UNKNOWN_OBJECT)
-    res.should eql nil
-    msg.should be_a org.eclipse.jgit.errors.PackProtocolException
+    expect(res).to be_nil
+    expect(msg).to be_a org.eclipse.jgit.errors.PackProtocolException
   end
   
-  it "should return nil and a JGit invalid object exception object when the client requests an invalid object id" do
+  it "returns nil and a JGit invalid object exception object when the client requests an invalid object id" do
     res, msg = @pack.process(UPLOAD_REQUEST_INVALID_OBJECT)
-    res.should eql nil
-    msg.should be_a org.eclipse.jgit.errors.InvalidObjectIdException
+    expect(res).to be_nil
+    expect(msg).to be_a org.eclipse.jgit.errors.InvalidObjectIdException
   end
   
   after(:all) do
@@ -99,44 +99,44 @@ describe RJGitReceivePack do
     @pack = RJGitReceivePack.new(@repo)
   end
   
-  it "should have a reference to the repository's JGit-repository" do
-    @pack.jrepo.should eql @repo.jrepo
+  it "has a reference to the repository's JGit-repository" do
+    expect(@pack.jrepo).to eql @repo.jrepo
   end
   
-  it "should create a JGit pack object on creation" do
-    @pack.jpack.should be_a org.eclipse.jgit.transport.ReceivePack
+  it "creates a JGit pack object on creation" do
+    expect(@pack.jpack).to be_a org.eclipse.jgit.transport.ReceivePack
   end
   
-  it "should advertise all references" do
-    @pack.advertise_refs.should == RECEIVE_PACK_ADVERTISEMENT
+  it "advertises all references" do
+    expect(@pack.advertise_refs).to eq RECEIVE_PACK_ADVERTISEMENT
   end
   
-  it "should respond correctly to a client's push request" do
+  it "responds correctly to a client's push request" do
     res, msg = @pack.process(CORRECT_RECEIVE_REQUEST)
-    res.read.should eql CORRECT_RECEIVE_REQUEST_RESPONSE
-    msg.should eql nil
+    expect(res.read).to eql CORRECT_RECEIVE_REQUEST_RESPONSE
+    expect(msg).to be_nil
   end
   
-  it "should advertise its references when processing requests in bidirectional mode" do
+  it "advertises its references when processing requests in bidirectional mode" do
     res, msg = @pack.process(CORRECT_RECEIVE_REQUEST)
-    res.read.include?(RECEIVE_PACK_ADVERTISEMENT.split("\n").first).should eql false
+    expect(res.read.include?(RECEIVE_PACK_ADVERTISEMENT.split("\n").first)).to be false
     @pack.bidirectional = true
     res, msg = @pack.process(CORRECT_RECEIVE_REQUEST)
-    res.read.include?(RECEIVE_PACK_ADVERTISEMENT.split("\n").first).should eql true
+    expect(res.read.include?(RECEIVE_PACK_ADVERTISEMENT.split("\n").first)).to be true
   end
   
-  it "should return a bidirectional pipe when in bidirectional mode"
+  it "returns a bidirectional pipe when in bidirectional mode"
   
-  it "should return nil and a Java IO error exception object when the client's request has the wrong length" do
+  it "returns nil and a Java IO error exception object when the client's request has the wrong length" do
     res, msg = @pack.process(RECEIVE_REQUEST_INVALID_LENGTH)
-    res.should eql nil
-    msg.should be_a java.io.IOException
+    expect(res).to be_nil
+    expect(msg).to be_a java.io.IOException
   end
   
-  it "should return nil and a JGit invalid object exception object if the client requests an invalid object id" do
+  it "returns nil and a JGit invalid object exception object if the client requests an invalid object id" do
     res, msg = @pack.process(RECEIVE_REQUEST_INVALID_OBJECT)
-    res.should eql nil
-    msg.should be_a org.eclipse.jgit.errors.PackProtocolException
+    expect(res).to be_nil
+    expect(msg).to be_a org.eclipse.jgit.errors.PackProtocolException
   end
   
   after(:all) do

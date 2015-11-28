@@ -5,28 +5,28 @@ describe RubyGit do
   it "returns log information" do
     repo = Repo.new(TEST_REPO_PATH)
     messages = repo.git.log
-    messages.should_not be_empty
-    messages.first.message.should match /Renamed the follow rename file/
+    expect(messages).to_not be_empty
+    expect(messages.first.message).to match /Renamed the follow rename file/
     messages = repo.git.log("deconstructions.txt")
-    messages.first.message.should match /More interesting postmodern comments./
-    messages = repo.git.log(nil, "HEAD", {:max_count => 1})
-    messages.count.should == 1
-    messages = repo.git.log(nil, "HEAD", {:max_count => 1, :skip => 1})
-    messages.first.message.should_not match /More interesting postmodern comments./
+    expect(messages.first.message).to match /More interesting postmodern comments./
+    messages = repo.git.log(nil, "HEAD", {max_count: 1})
+    expect(messages.count).to eq 1
+    messages = repo.git.log(nil, "HEAD", {max_count: 1, skip: 1})
+    expect(messages.first.message).to_not match /More interesting postmodern comments./
   end
   
   it "follows renames" do
     repo = Repo.new(TEST_REPO_PATH)
-    messages = repo.git.log("follow-rename.txt", "HEAD", :follow => true)
-    messages.count.should == 2
-    messages[1].message.should match /for following renames/
+    messages = repo.git.log("follow-rename.txt", "HEAD", follow: true)
+    expect(messages.count).to eq 2
+    expect(messages[1].message).to match /for following renames/
     
   end
   
   it "returns a status object" do
     repo = Repo.new(TEST_REPO_PATH)
-    repo.git.status.getModified.to_a.should == []
-    repo.git.status.isClean.should == true
+    expect(repo.git.status.getModified.to_a).to be_empty
+    expect(repo.git.status.isClean).to be true
   end
   
   context "when creating tags" do
@@ -36,29 +36,29 @@ describe RubyGit do
     end
 
     it "tag with only a name" do
-      @repo.tags.should have(0).tags
+      expect(@repo.tags).to have(0).tags
       @repo.git.tag('v0.0')
-      @repo.tags.should have_exactly(1).tags
+      expect(@repo.tags).to have_exactly(1).tags
     end
   
     it "tag with a name and message" do
-      @repo.tags.should have(0).tags
+      expect(@repo.tags).to have(0).tags
       @repo.git.tag('v0.0', 'initial state commit')
-      @repo.tags.should have_exactly(1).tags
-      @repo.tags['v0.0'].full_message.should match /initial state commit/
+      expect(@repo.tags).to have_exactly(1).tags
+      expect(@repo.tags['v0.0'].full_message).to match /initial state commit/
     end
 
     it "tag with a specific commit or revision" do
       commit = @repo.commits.first
       @repo.git.tag('v0.0', 'initial state commit for a specific commit', commit)
-      @repo.tags.should have_exactly(1).tags
+      expect(@repo.tags).to have_exactly(1).tags
     end
     
     it "tag with specific actor information" do
       actor = Actor.new('Rspec Examplar', 'rspec@tagging.example')
       @repo.git.tag('v0.0', 'initial state commit', nil, actor)
-      @repo.tags.should have_exactly(1).tags
-      @repo.tags["v0.0"].actor.name.should == 'Rspec Examplar'
+      expect(@repo.tags).to have_exactly(1).tags
+      expect(@repo.tags["v0.0"].actor.name).to eq 'Rspec Examplar'
     end
     
     after(:each) do
@@ -79,8 +79,8 @@ describe RubyGit do
     it "commits files with all jgit settings" do
       File.open(File.join(@temp_repo_path, "rspec-committest.txt"), 'w') {|file| file.write("This file is for comitting.")}
       @repo.add("rspec-comittest.txt")
-      options = {:all => false, :amend => false, :author => @actor, :committer => @actor, :insert_change_id => false, :only_paths => ["rspec-comittest.txt"], :reflog_comment => "test"}
-      [:set_all, :set_amend, :set_author, :set_committer, :set_insert_change_id, :set_only, :set_reflog_comment].each {|message| org.eclipse.jgit.api.CommitCommand.any_instance.should_receive(message)}
+      options = {all: false, amend: false, author: @actor, committer: @actor, insert_change_id: false, only_paths: ["rspec-comittest.txt"], reflog_comment: "test"}
+      [:set_all, :set_amend, :set_author, :set_committer, :set_insert_change_id, :set_only, :set_reflog_comment].each {|message| expect_any_instance_of(org.eclipse.jgit.api.CommitCommand).to receive(message)}
       commit = @git.commit("Creating a commit for testing jgit setters", options)
     end
     
@@ -99,7 +99,7 @@ describe RubyGit do
       @repo.checkout('branch_for_merging')
     end
     
-    it "should merge a commit with current branch" do
+    it "merges a commit with current branch" do
       # add and commit new file to new branch
       File.open(File.join(@temp_repo_path, "rspec-mergetest.txt"), 'w') {|file| file.write("This file is for merging.")}
       @repo.add("rspec-mergetest.txt")
@@ -111,10 +111,10 @@ describe RubyGit do
       # check for successful merge
       listing = RJGit::Porcelain.ls_tree(@repo)
       listing.select! {|entry| entry[:path] == "rspec-mergetest.txt" }
-      listing.should have(1).entry
+      expect(listing).to have(1).entry
     end
     
-    it "should return an Array with conflict names when there are conflicts" do
+    it "returns an Array with conflict names when there are conflicts" do
       File.open(File.join(@temp_repo_path, "materialist.txt"), 'a') {|file| file.write("\n Beautiful materialist.") }
       @repo.add("materialist.txt")
       commit = @repo.commit("Creating a conflict - step 1")
@@ -123,7 +123,7 @@ describe RubyGit do
       @repo.add("materialist.txt")
       @repo.commit("Creating a conflict - step 2")
       result = @repo.git.merge(commit)
-      result.should include('materialist.txt')
+      expect(result).to include('materialist.txt')
     end
     
     after(:each) do
@@ -139,29 +139,29 @@ describe RubyGit do
       @local  = get_new_temp_repo_path
     end
     
-    it "should create a new local repository" do
+    it "creates a new local repository" do
       clone = @repo.git.clone(@remote, @local)
-      clone.path.should == File.join(@local, '/.git')
-      File.exist?(File.join(@local, 'homer-excited.png')).should be_true
+      expect(clone.path).to eq File.join(@local, '/.git')
+      expect(File.exist?(File.join(@local, 'homer-excited.png'))).to be true
     end
     
-    it "should clone a specific branch if specified" do
-      clone = @repo.git.clone(@remote, @local, {:branch => 'refs/heads/alternative'})
-      clone.branches.should have_exactly(1).branch
-      clone.branches.first.should == 'refs/heads/alternative'
+    it "clones a specific branch if specified" do
+      clone = @repo.git.clone(@remote, @local, {branch: 'refs/heads/alternative'})
+      expect(clone.branches).to have_exactly(1).branch
+      expect(clone.branches.first).to eq 'refs/heads/alternative'
     end
     
-    it "should clone all branches if specified" do
-      clone = @repo.git.clone(@remote, @local, {:branch => :all})
-      clone.branches.should have_at_least(1).branch
+    it "clones all branches if specified" do
+      clone = @repo.git.clone(@remote, @local, {branch: :all})
+      expect(clone.branches).to have_at_least(1).branch
       
-      pending "This specs fails because of a JGit bug with CloneCommand#set_clone_all_branches(true)"
+      skip "This specs fails because of a JGit bug with CloneCommand#set_clone_all_branches(true)"
     end
     
-    it "should clone with credentials" do
-      clone = @repo.git.clone(@remote, @local, :username => 'rspec', :password => 'Hahmeid7')
-      clone.path.should == File.join(@local, '/.git')
-      File.exist?(File.join(@local, 'homer-excited.png')).should be_true
+    it "clones with credentials" do
+      clone = @repo.git.clone(@remote, @local, username: 'rspec', password: 'Hahmeid7')
+      expect(clone.path).to eq File.join(@local, '/.git')
+      expect(File.exist?(File.join(@local, 'homer-excited.png'))).to be true
     end
     
     after(:each) do
@@ -174,11 +174,11 @@ describe RubyGit do
     before(:each) do
       remote = TEST_BARE_REPO_PATH
       @local  = get_new_temp_repo_path(true)
-      @clone = RubyGit.clone(remote, @local, :is_bare => true)
+      @clone = RubyGit.clone(remote, @local, is_bare: true)
     end
     
-    it "should be bare" do
-      @clone.should be_bare
+    it "is be bare" do
+      expect(@clone).to be_bare
     end
     
     after(:each) do
@@ -192,18 +192,18 @@ describe RubyGit do
       @repo = Repo.new(@temp_repo_path)
     end
     
-    it "should apply from a String" do
+    it "applies a patch from a String" do
       patch = fixture('postpatriarchialist.patch')
       result = @repo.git.apply_patch(patch)
-      result.should have(1).changed_file
-      result.first.should match /postpatriarchialist.txt/
+      expect(result).to have(1).changed_file
+      expect(result.first).to match /postpatriarchialist.txt/
     end
     
-    it "should apply a patch from a file" do
+    it "applies a patch from a file" do
       patch = File.join(File.dirname(__FILE__), 'fixtures', 'postpatriarchialist.patch')
       result = @repo.git.apply_file(patch)
-      result.should have(1).changed_file
-      result.first.should match /postpatriarchialist.txt/
+      expect(result).to have(1).changed_file
+      expect(result.first).to match /postpatriarchialist.txt/
     end
     
     after(:each) do
@@ -226,22 +226,22 @@ describe RubyGit do
         @commit = @remote.commit("Making a change for pushing and pulling specs")
       end
     
-      it "should pull commits from a local clone" do
-        @local.commits.should have(8).commits
+      it "pulls commits from a local clone" do
+        expect(@local.commits).to have(8).commits
         @local.git.pull("origin", "master")
-        @local.commits.should have(9).commits
+        expect(@local.commits).to have(9).commits
       end
       
-      it "should pull commits from a local clone with rebase" do
-        @local.commits.should have(8).commits
-        @local.git.pull(nil, nil, :rebase => true)
-        @local.commits.should have(9).commits
+      it "pulls commits from a local clone with rebase" do
+        expect(@local.commits).to have(8).commits
+        @local.git.pull(nil, nil, rebase: true)
+        expect(@local.commits).to have(9).commits
       end
     
-      it "should pull commits from a local clone with credentials" do
-        @local.commits.should have(8).commits
-        @local.git.pull(nil, nil, :username => 'rspec', :password => 'Hahmeid7')
-        @local.commits.should have(9).commits
+      it "pulls commits from a local clone with credentials" do
+        expect(@local.commits).to have(8).commits
+        @local.git.pull(nil, nil, username: 'rspec', password: 'Hahmeid7')
+        expect(@local.commits).to have(9).commits
       end
     
     end
@@ -253,22 +253,22 @@ describe RubyGit do
           @commit = @local.commit("Making a change for pushing and pulling specs")
         end
       
-      it "should push all changes to a local clone" do
-        @remote.commits.should have(8).commits
+      it "pushes all changes to a local clone" do
+        expect(@remote.commits).to have(8).commits
         @local.git.push_all('origin')
-        @remote.commits.should have(9).commits
+        expect(@remote.commits).to have(9).commits
       end
       
-      it "should push all changes to a local clone with credentials" do
-        @remote.commits.should have(8).commits
-        @local.git.push_all('origin', :username => 'rspec', :password => 'Hahmeid7')
-        @remote.commits.should have(9).commits
+      it "pushes all changes to a local clone with credentials" do
+        expect(@remote.commits).to have(8).commits
+        @local.git.push_all('origin', username: 'rspec', password: 'Hahmeid7')
+        expect(@remote.commits).to have(9).commits
       end
       
-      it "should push a specific ref to a local clone" do
-        @remote.commits.should have(8).commits
-        @local.git.push('origin', ["master"], :username => 'rspec', :password => 'Hahmeid7')
-        @remote.commits.should have(9).commits
+      it "pushes a specific ref to a local clone" do
+        expect(@remote.commits).to have(8).commits
+        @local.git.push('origin', ["master"], username: 'rspec', password: 'Hahmeid7')
+        expect(@remote.commits).to have(9).commits
       end
       
     end
@@ -287,9 +287,9 @@ describe RubyGit do
   	  File.open(File.join(@temp_repo_path, "rspec-addfile.txt"), 'w') {|file| file.write("This is a new file to add.") }
     end
     
-    it "should remove untracked files from the working tree" do
+    it "removes untracked files from the working tree" do
       @repo.clean
-      File.exist?(File.join(@temp_repo_path, "rspec-addfile.txt")).should be_false
+      expect(File.exist?(File.join(@temp_repo_path, "rspec-addfile.txt"))).to be false
     end
     
     context "after adding files" do
@@ -298,21 +298,21 @@ describe RubyGit do
         @repo.add("#{@temp_repo_path}/rspec-addfile.txt")
         @entry = RJGit::Porcelain.diff(@repo).first
       end
-      it "should remove added files from the index" do
-        @entry[:changetype].should == "ADD"
-        @entry[:newid].should match "0621fdbce5ff954c0742c75076041741142b876d"
+      it "removes added files from the index" do
+        expect(@entry[:changetype]).to eq "ADD"
+        expect(@entry[:newid]).to match "0621fdbce5ff954c0742c75076041741142b876d"
         @repo.clean
         @entry = RJGit::Porcelain.diff(@repo).first
-        @entry.should be_nil
+        expect(@entry).to be_nil
       end
     
-      it "should perform a dry run when asked" do
-        @entry[:changetype].should == "ADD"
-        @entry[:newid].should match "0621fdbce5ff954c0742c75076041741142b876d"
-        @repo.clean(:dryrun => true)
+      it "performs a dry run when asked" do
+        expect(@entry[:changetype]).to eq "ADD"
+        expect(@entry[:newid]).to match "0621fdbce5ff954c0742c75076041741142b876d"
+        @repo.clean(dryrun: true)
         @entry = RJGit::Porcelain.diff(@repo).first
-        @entry[:changetype].should == "ADD"
-        @entry[:newid].should match "0621fdbce5ff954c0742c75076041741142b876d"
+        expect(@entry[:changetype]).to eq "ADD"
+        expect(@entry[:newid]).to match "0621fdbce5ff954c0742c75076041741142b876d"
       end
     end
     
@@ -335,41 +335,41 @@ describe RubyGit do
       end
     end
 
-    it "should revert commits" do
+    it "reverts commits" do
       @repo.add("materialist.txt")
       to_revert = @repo.commit("Added test for reverting.")
       reverted_commit = @repo.git.revert([to_revert])
-      @repo.commits.first.id.should == reverted_commit.id
+      expect(@repo.commits.first.id).to eq reverted_commit.id
     end
     
-    it "should handle errors for revert"
+    it "handles errors for revert"
         
-    it "should reset the hard way" do
+    it "resets the hard way" do
       #reset the 'materialist.txt' file to the current head, through the HARD way
       ref = @repo.commits.first
       @repo.git.reset(ref)
       
       #Check if the hard reset worked correctly
       File.open(File.join(@temp_repo_path,"materialist.txt"), "r") do |f|
-        f.read.should == @before_write
+        expect(f.read).to eq @before_write
       end
     end
       
-    it "should unstage files" do
+    it "unstages files" do
       paths = ["materialist.txt"]
       @repo.add("#{paths.first}")
-      @repo.git.status.getChanged.to_a.should include paths.first
+      expect(@repo.git.status.getChanged.to_a).to include(paths.first)
       ref = @repo.commits.first
       @repo.git.reset(ref, nil, paths)
-      @repo.git.status.getChanged.to_a.should_not include paths.first
+      expect(@repo.git.status.getChanged.to_a).to_not include(paths.first)
     end
     
-    it "should return nil if mode is not valid" do
+    it "returns nil if mode is not valid" do
       ref = @repo.commits.first
-      @repo.git.reset(ref, "NONEXISTENT").should be_nil
+      expect(@repo.git.reset(ref, "NONEXISTENT")).to be_nil
     end
     
-    it "should not any reset type together with specified file paths" do
+    it "does not reset any type together with specified file paths" do
       mode = "MERGE"
       paths = ["materialist.txt"]
       ref = @repo.commits.first

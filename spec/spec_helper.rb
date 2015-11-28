@@ -6,6 +6,8 @@ if ENV['TRAVIS']
   Coveralls.wear!
 end
 
+require 'rspec/collection_matchers'
+
 require 'rjgit'
 include RJGit
 

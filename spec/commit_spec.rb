@@ -12,13 +12,13 @@ describe Commit do
     
         it "writes a new commit to the repository based on a tree" do
           commit = Commit.new_with_tree(@repo, @repo.head.tree, "creation test", @repo.head.actor, @repo.head)
-          commit.parent_count.should == 1
-          @repo.find(commit.id, :commit).id.should == commit.id
+          expect(commit.parent_count).to eq 1
+          expect(@repo.find(commit.id, :commit).id).to eq commit.id
         end
     
         it "creates commits with no parents" do
           commit = Commit.new_with_tree(@repo, @repo.head.tree, "creation test", @repo.commits.first.actor, [])
-          commit.parent_count.should == 0
+          expect(commit.parent_count).to eq 0
         end
     
       end
@@ -39,77 +39,77 @@ describe Commit do
       @bare_repo = nil
     end
 
-    it "should have an id" do
-      @commit.id.should match /ca8a30f5a7f0f163bbe3b6f0abf18a6c83b0687a/
+    it "has an id" do
+      expect(@commit.id).to match /ca8a30f5a7f0f163bbe3b6f0abf18a6c83b0687a/
     end
   
     it "points to a tree" do
-      @commit.tree.should be_an RJGit::Tree
+      expect(@commit.tree).to be_an RJGit::Tree
     end
 
-    it "should have an actor" do
+    it "has an associated actor" do
       actor = @commit.actor
-      actor.name.should == 'Scott Chacon'
-      actor.email.should == 'schacon@gmail.com'
+      expect(actor.name).to eq 'Scott Chacon'
+      expect(actor.email).to eq 'schacon@gmail.com'
     end
   
-    it "should have a committer" do
-      @commit.committer.name.should == 'Scott Chacon'
+    it "has a committer" do
+      expect(@commit.committer.name).to eq 'Scott Chacon'
     end
 
-    it "should have parent commits" do
-      @commit.parents.should be_an Array
-      @commit.parents.first.id.should match /3fa4e130fa18c92e3030d4accb5d3e0cadd40157/
+    it "has parent commits" do
+      expect(@commit.parents).to be_an Array
+      expect(@commit.parents.first.id).to match /3fa4e130fa18c92e3030d4accb5d3e0cadd40157/
     end
   
-    it "should have a message" do
-      @commit.message.should match /added a pure-ruby git library and converted the cat_file commands to use it/
+    it "has a message" do
+      expect(@commit.message).to match /added a pure-ruby git library and converted the cat_file commands to use it/
     end
   
-    it "should have a short message" do
-      @commit.short_message.should match /pure-ruby git library/
+    it "has a short message" do
+      expect(@commit.short_message).to match /pure-ruby git library/
     end
 
-    it "should have a count" do
-      @commit.parent_count.should == 1
+    it "has a count" do
+      expect(@commit.parent_count).to eq 1
     end
 
-    it "should have stats" do
+    it "has stats" do
       stats = Repo.new(TEST_REPO_PATH).commits[-2].stats
-      stats[0].should == 8
-      stats[1].should == 2
-      stats[2]["postpatriarchialist.txt"].should == [2, 0, 2] 
+      expect(stats[0]).to eq 8
+      expect(stats[1]).to eq 2
+      expect(stats[2]["postpatriarchialist.txt"]).to eq([2, 0, 2])
     end
 
-    it "should have stats on first commit" do
+    it "has stats on first commit" do
       stats = Repo.new(TEST_REPO_PATH).commits[-1].stats
-      stats[0].should == 228
-      stats[1].should == 0
-      stats[2]["postpatriarchialist.txt"].should == [75, 0, 75]
+      expect(stats[0]).to eq 228
+      expect(stats[1]).to eq 0
+      expect(stats[2]["postpatriarchialist.txt"]).to eq([75, 0, 75])
     end
 
     describe ".find_all(repo, ref, options)" do
-      it "should return an empty array if nothing is found" do
+      it "returns an empty array if nothing is found" do
         @commits = Commit.find_all(@bare_repo, 'remote42', {:limit => 10 })
-        @commits.should be_an Array
-        @commits.should be_empty
+        expect(@commits).to be_an Array
+        expect(@commits).to be_empty
       end
     
-      it "should return nil if something other than a repository is passed in" do
-        Commit.find_all('A String Object', 'remote42', {:limit => 10 }).should be_nil
+      it "returns nil if something other than a repository is passed in" do
+        expect(Commit.find_all('A String Object', 'remote42', {:limit => 10 })).to be_nil
       end
     
     end
   
     describe ".find_head(repository)" do
-      it "should return a single RJGit::Commit object" do
+      it "returns a single RJGit::Commit object" do
         @commit = Commit.find_head(@bare_repo)
-        @commit.should be_a RJGit::Commit
+        expect(@commit).to be_a RJGit::Commit
       end
     
-      it "should return nil if no head can be found" do
+      it "returns nil if no head can be found" do
         @commit = Commit.find_head(Repo.new(get_new_temp_repo_path))
-        @commit.should be_nil
+        expect(@commit).to be_nil
       end
     end
   

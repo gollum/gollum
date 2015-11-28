@@ -2,30 +2,30 @@ require 'spec_helper'
 
 describe Tag do
   before(:each) do
-    @bare_repo = Repo.new(TEST_BARE_REPO_PATH, :is_bare => true, :create => false)
+    @bare_repo = Repo.new(TEST_BARE_REPO_PATH, is_bare: true, create: false)
     @tag = @bare_repo.tags['v0.7.0']
   end
   
-  it "should have an id" do
-    @tag.id.should match /f0055fda16c18fd8b27986dbf038c735b82198d7/
+  it "has an id" do
+    expect(@tag.id).to match /f0055fda16c18fd8b27986dbf038c735b82198d7/
   end
   
-  it "should have a name" do
-    @tag.name.should == 'v0.7.0'
+  it "has a name" do
+    expect(@tag.name).to eq 'v0.7.0'
   end
   
-  it "should have a type" do
-    @tag.type.should eql OBJ_TAG
+  it "has a type" do
+    expect(@tag.type).to eql OBJ_TAG
   end
   
-  it "should have an associated Actor" do
-    @tag.actor.name.should == 'Tom Preston-Werner'
-    @tag.actor.email.should == 'tom@mojombo.com'
+  it "has an associated Actor" do
+    expect(@tag.actor.name).to eq 'Tom Preston-Werner'
+    expect(@tag.actor.email).to eq 'tom@mojombo.com'
   end
   
-  it "should have a message" do
-    @tag.full_message.should match /xEQAoIUGzPXEp7yZqzSLSXt4mCn1U6rn/
-    @tag.short_message.should match /GnuPG v1.4.8/
+  it "has a message" do
+    expect(@tag.full_message).to match /xEQAoIUGzPXEp7yZqzSLSXt4mCn1U6rn/
+    expect(@tag.short_message).to match /GnuPG v1.4.8/
   end
   
 end

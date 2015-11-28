@@ -11,69 +11,69 @@ describe RJGit::Configuration do
       @config.load
     end
   
-    it "should correctly parse a standard config file" do
-      @config.to_s.should_not be_nil
-      @config.names('remote', 'origin').first.should == 'fetch'
+    it "correctly parses a standard config file" do
+      expect(@config.to_s).to_not be_nil
+      expect(@config.names('remote', 'origin').first).to eq 'fetch'
     end
   
-    it "should raise an error when the config file is invalid" do
+    it "raises an error when the config file is invalid" do
       @config = RJGit::Configuration.new(File.join(FIXTURES_PATH, 'nested_groups_config.cfg'))
       expect { @config.load }.to raise_error(IOException)
     end
   
-    it "should have sections" do
-      @config.sections.should have(3).sections
-      @config.sections.first.should == 'core'
+    it "has sections" do
+      expect(@config.sections).to have(3).sections
+      expect(@config.sections.first).to eq 'core'
     end
     
-    it "should have subsections" do
-      @config.subsections('remote').first.should == 'origin'
+    it "has subsections" do
+      expect(@config.subsections('remote').first).to eq 'origin'
     end
     
-    it "should have settings" do
-      @config['remote origin']['url'].should == "git@github.com:schacon/grit.git"
+    it "has settings" do
+      expect(@config['remote origin']['url']).to eq "git@github.com:schacon/grit.git"
     end
     
-    it "should respond to Hash syntax" do
-      @config['core'].should be_a Hash
-      @config['core']['bare'].should be_false
+    it "responds to Hash syntax" do
+      expect(@config['core']).to be_a Hash
+      expect(@config['core']['bare']).to be false
     end
     
-    it "should not load the config twice" do
-      @config.sections.should have(3).sections
+    it "does not load the config twice" do
+      expect(@config.sections).to have(3).sections
       @config.load
-      @config.sections.should have(3).sections
+      expect(@config.sections).to have(3).sections
     end
   
-    it "should set loaded variable to true" do
-      @config.loaded?.should be_true
+    it "sets loaded variable to true" do
+      expect(@config).to be_loaded
     end
   
-    it "should return nil if no value is set" do
-      @config['core']['rspec'].should be_a NilClass
+    it "returns nil if no value is set" do
+      expect(@config['core']['rspec']).to be_a NilClass
     end
   
-    it "should add a new boolean setting" do
+    it "adds a new boolean setting" do
       @config.add_setting('rspec', true, 'rspec-section', 'rspec-subsection')
-      @config.sections.should include('rspec-section')
-      @config.names('rspec-section', 'rspec-subsection').first.should == 'rspec'
+      expect(@config.sections).to include('rspec-section')
+      expect(@config.names('rspec-section', 'rspec-subsection').first).to eq 'rspec'
     end
 
-    it "should add a new String setting" do
+    it "adds a new String setting" do
       @config.add_setting('rspec', 'enabled', 'rspec-section', 'rspec-subsection')
-      @config.sections.should include('rspec-section')
-      @config.names('rspec-section', 'rspec-subsection').first.should == 'rspec'
+      expect(@config.sections).to include('rspec-section')
+      expect(@config.names('rspec-section', 'rspec-subsection').first).to eq 'rspec'
     end
     
-    it "should add a new numeric setting" do
+    it "adds a new numeric setting" do
       @config.add_setting('rspec', 42, 'rspec-section', 'rspec-subsection')
-      @config.sections.should include('rspec-section')
-      @config['rspec-section rspec-subsection']['rspec'].should eql 42
+      expect(@config.sections).to include('rspec-section')
+      expect(@config['rspec-section rspec-subsection']['rspec']).to eql 42
     end
     
-    it "should fail to add any other type of setting" do
+    it "fails to add any other type of setting" do
       @config.add_setting('rspec', nil, 'rspec-section', 'rspec-subsection')
-      @config.sections.should_not include('rspec-section')
+      expect(@config.sections).to_not include('rspec-section')
     end
     
   end 
