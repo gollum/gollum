@@ -63,6 +63,17 @@ describe RJGit do
           first_entry[:id].should match /baaa47163a922b716898936f4ab032db4e08ae8a/
           first_entry[:path].should == '.gitignore'
         end
+        
+        it "mimics git-ls-tree for a specific tree" do
+          tree = RJGit::Tree.find_tree(@bare_repo, 'lib')
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, tree, {recursive: false})
+          first_entry = listing.first
+          first_entry[:path].should == 'grit.rb'
+          tree = RJGit::Tree.find_tree(@bare_repo, 'lib/grit')
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, tree, {recursive: true})
+          first_entry = listing.first
+          first_entry[:path].should == 'grit/actor.rb'
+        end
 
         it "mimics git-ls-tree recursively" do
           listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, {:recursive => true})
