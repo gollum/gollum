@@ -70,7 +70,7 @@ describe RJGit do
           first_entry = listing.first
           first_entry[:path].should == 'grit.rb'
           tree = RJGit::Tree.find_tree(@bare_repo, 'lib/grit')
-          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, tree, {recursive: true})
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, tree, {recursive: false})
           first_entry = listing.first
           first_entry[:path].should == 'grit/actor.rb'
         end
