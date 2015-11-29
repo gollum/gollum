@@ -25,10 +25,10 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_dependency 'gollum-lib', '~> 4.0', '>= 4.0.1'
-  s.add_dependency 'kramdown', '~> 1.8.0'
+  s.add_dependency 'kramdown', '~> 1.9.0'
   s.add_dependency 'sinatra', '~> 1.4', '>= 1.4.4'
   s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
-  s.add_dependency 'useragent', '~> 0.14.0'
+  s.add_dependency 'useragent', '~> 0.16.2'
 
   s.add_development_dependency 'rack-test', '~> 0.6.2'
   s.add_development_dependency 'shoulda', '~> 3.5.0'
