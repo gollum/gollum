@@ -26,14 +26,7 @@ module RJGit
     end
     
     def contents_array
-      return @contents_ary if @contents_ary
-      results = []
-      RJGit::Porcelain.ls_tree(@jrepo, @jtree).each do |item|
-        walk = RevWalk.new(@jrepo)
-        results << Tree.new(@jrepo, item[:mode], item[:path], walk.lookup_tree(ObjectId.from_string(item[:id]))) if item[:type] == 'tree'
-        results << Blob.new(@jrepo, item[:mode], item[:path], walk.lookup_blob(ObjectId.from_string(item[:id]))) if item[:type] == 'blob'
-      end
-      @contents_ary = results
+      @contents_ary ||= jtree_entries
     end
     
     def each(&block)
@@ -41,20 +34,17 @@ module RJGit
     end
     
     def blobs
-      contents_array.select {|x| x.is_a?(Blob)}
+      @content_blobs ||= contents_array.select {|x| x.is_a?(Blob)}
     end
     
     def trees
-      contents_array.select {|x| x.is_a?(Tree)}
+      @content_trees ||= contents_array.select {|x| x.is_a?(Tree)}
     end
     
-    # From Grit
     def /(file)
-      if file =~ /\//
-        file.split("/").inject(self) { |acc, x| acc/x } rescue nil
-      else
-        self.contents_array.find { |c| c.name == file }
-      end
+      treewalk = TreeWalk.forPath(@jrepo, file, @jtree)
+      treewalk.nil? ? nil : 
+        wrap_tree_or_blob(treewalk.get_file_mode(0), treewalk.get_path_string, treewalk.get_object_id(0))
     end
     
     def self.new_from_hashmap(repository, hashmap, base_tree = nil)
@@ -70,11 +60,11 @@ module RJGit
     def self.find_tree(repository, file_path, revstring=Constants::HEAD)
       jrepo = RJGit.repository_type(repository)
       return nil if jrepo.nil?
-      last_commit_hash = jrepo.resolve(revstring)
-      return nil if last_commit_hash.nil?
+      last_commit = jrepo.resolve(revstring)
+      return nil if last_commit.nil?
 
       walk = RevWalk.new(jrepo)
-      commit = walk.parse_commit(last_commit_hash)
+      commit = walk.parse_commit(last_commit)
       treewalk = TreeWalk.new(jrepo)
       jtree = commit.get_tree
       treewalk.add_tree(jtree)
@@ -88,6 +78,24 @@ module RJGit
       else
         nil
       end
+    end
+
+    private
+
+    def jtree_entries
+      treewalk = TreeWalk.new(@jrepo)
+      treewalk.add_tree(@jtree)
+      entries = []
+      while treewalk.next
+        entries << wrap_tree_or_blob(treewalk.get_file_mode(0), treewalk.get_path_string, treewalk.get_object_id(0))
+      end
+      entries
+    end
+
+    def wrap_tree_or_blob(mode, path, id)
+      type = mode.get_object_type == Constants::OBJ_TREE ? RJGit::Tree : RJGit::Blob
+      walk = RevWalk.new(@jrepo)
+      type.new(@jrepo, mode.get_bits, path, walk.parse_any(id)) 
     end
     
   end
