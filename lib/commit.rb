@@ -38,7 +38,9 @@ module RJGit
     end
   
     def parents
-      @parents ||= @jcommit.get_parents.map {|parent| Commit.new(@jrepo, parent)}
+      @parents ||= @jcommit.get_parents.map do |parent|
+        RJGit::Commit.new(@jrepo, RevWalk.new(@jrepo).parseCommit(parent.get_id))
+      end
     end
 
     def stats
