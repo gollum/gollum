@@ -1,0 +1,23 @@
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.20.0.js"></script>
+<script type="text/javascript" src="{{base_url}}/javascript/editor/tests/harness.js"></script>
+<script type="text/javascript" src="{{base_url}}/javascript/editor/tests/{{default_markup}}.js"></script>
+<div id="wiki-wrapper" class="create">
+<div id="head">
+  <h1>Testing JavaScript editor functions; saving disabled</h1>
+</div>
+<div id="wiki-content" class="create edit">
+  <div class="has-sidebar">
+    {{>editor}}
+  </div>
+</div>
+</div>
+name = {{name}}
+<script type="text/javascript">
+var default_markup = '{{default_markup}}';
+$(document).ready(function() {
+    $("#gollum-editor-submit").prop("disabled", true);
+});
+</script>
+{{something}}

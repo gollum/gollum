@@ -281,6 +281,16 @@ module Precious
       redirect to('/')
     end
 
+    get '/jstest/*' do
+      name = params[:splat].first
+      halt 404 if !Gollum::Markup.formats().keys.include?(name.to_sym)
+      wikip = wiki_page(name)
+      @name = wikip.name.to_url
+      
+      mustache :jstest
+    end
+
+
     get '/create/*' do
       forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
