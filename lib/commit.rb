@@ -69,6 +69,24 @@ module RJGit
       return total_ins, total_del, results
     end
 
+    def diff(options = {})
+      self.diffs(options).join
+    end
+
+    def diffs(options = {context: 2})
+      out_stream = ByteArrayOutputStream.new
+      formatter = DiffFormatter.new(out_stream)
+      formatter.set_repository(@jrepo)
+      formatter.set_context(options[:context])
+      parent_commit = @jcommit.parent_count > 0 ? @jcommit.get_parents.first : nil
+      entries = formatter.scan(parent_commit, @jcommit)
+      entries.each do |entry|
+        formatter.format(entry)
+        out_stream.write('custom_git_delimiter'.to_java_bytes)
+      end
+      out_stream.to_s.split('custom_git_delimiter')
+    end
+
     # Pass an empty array for parents if the commit should have no parents
     def self.new_with_tree(repository, tree, message, actor, parents = nil)
       repository = RJGit.repository_type(repository)
@@ -104,8 +122,5 @@ module RJGit
       end
     end
   
-    def self.diff(repo, a, b = nil, paths = [], options = {})
-    end
-
   end
 end
