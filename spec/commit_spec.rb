@@ -60,6 +60,9 @@ describe Commit do
     it "has parent commits" do
       expect(@commit.parents).to be_an Array
       expect(@commit.parents.first.id).to match /3fa4e130fa18c92e3030d4accb5d3e0cadd40157/
+      head = @bare_repo.head
+      expect(head.parents).to be_an Array
+      expect(head.parents.first.id).to match /3fa4e130fa18c92e3030d4accb5d3e0cadd40157/
     end
   
     it "has a message" do
