@@ -1,6 +1,10 @@
 require 'rubygems'
 require 'rake'
 require 'date'
+require 'sinatra/asset_pipeline/task'
+require 'lib/app.rb'
+
+Sinatra::AssetPipeline::Task.define! Precious::App
 
 #############################################################################
 #

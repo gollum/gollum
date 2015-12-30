@@ -1,7 +1,7 @@
 # ~*~ encoding: utf-8 ~*~
 require 'cgi'
 require 'sinatra'
-require 'sinatra/assetpack'
+require 'sinatra/asset_pipeline'
 require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
@@ -44,7 +44,6 @@ end
 # See the wiki.rb file for more details on wiki options
 module Precious
   class App < Sinatra::Base
-    register Sinatra::AssetPack
     register Mustache::Sinatra
     include Precious::Helpers
     use Precious::EditingAuth
@@ -65,7 +64,7 @@ module Precious
       @@min_ua.detect { |min| ua >= min }
     end
 
-    # We want to serve public assets for now
+    # # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
     set :static, true
     set :default_markup, :markdown
@@ -81,19 +80,10 @@ module Precious
         :views     => "#{dir}/views"
     }
 
-    set :scss, {
-        :load_paths => ["#{dir}/app/css"]
-    }
+    set :assets_prefix, %w(public gollum)
+    set :assets_css_compressor, :sass
 
-    assets do
-      css :gollum,   ['/css/gollum.css']
-      css :dialog,   ['/css/dialog.css']
-      css :editor,   ['/css/editor.css']
-      css :ie7,      ['/css/ie7.css']
-      css :template, ['/css/template.css']
-      css :print,    ['/css/print.css']
-      css_compression :sass
-    end
+    register Sinatra::AssetPipeline
 
     # Sinatra error handling
     configure :development, :staging do
