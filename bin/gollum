@@ -71,10 +71,8 @@ opts = OptionParser.new do |opts|
     "Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.") do |base_path|
       
     # first trim a leading slash, if any
-    if base_path.start_with?("/")
-      base_path = base_path[1..-1]
-    end
-    
+    base_path.sub!(/^\/+/, '')
+
     # make a backup of the option and sanitize it
     base_path_original = base_path.dup
     base_path = CGI.escape(base_path)
