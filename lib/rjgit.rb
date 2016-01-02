@@ -65,24 +65,36 @@ module RJGit
       return bytes.to_a.pack('c*').force_encoding('UTF-8')
     end
     
-    def self.ls_tree(repository, tree=nil, options={})
-      options = {:recursive => false, :print => false, :io => $stdout, :ref => Constants::HEAD}.merge options
+    def self.ls_tree(repository, path=nil, treeish=Constants::HEAD, options={})
+      options = {recursive: false, print: false, io: $stdout, path_filter: nil}.merge options
       jrepo = RJGit.repository_type(repository)
-      return nil unless jrepo
-      if tree 
-        jtree = RJGit.tree_type(tree)
-      else
-        last_commit_hash = jrepo.resolve(options[:ref])
-        return nil unless last_commit_hash
+      ref = treeish.respond_to?(:get_name) ? treeish.get_name : treeish
+
+      begin
+        obj = jrepo.resolve(ref)
         walk = RevWalk.new(jrepo)
-        jcommit = walk.parse_commit(last_commit_hash)
-        jtree = jcommit.get_tree
+        revobj = walk.parse_any(obj)
+        jtree = case revobj.get_type
+        when Constants::OBJ_TREE
+          walk.parse_tree(obj)
+        when Constants::OBJ_COMMIT
+          walk.parse_commit(obj).get_tree
+        end
+      rescue Java::OrgEclipseJgitErrors::MissingObjectException, Java::JavaLang::IllegalArgumentException, Java::JavaLang::NullPointerException
+        return nil
       end
-      treewalk = TreeWalk.new(jrepo)
+      if path
+        treewalk = TreeWalk.forPath(jrepo, path, jtree)
+        return nil unless treewalk
+        treewalk.enter_subtree
+      else
+        treewalk = TreeWalk.new(jrepo)
+        treewalk.add_tree(jtree)
+      end
       treewalk.set_recursive(options[:recursive])
-      treewalk.set_filter(PathFilter.create(options[:file_path])) if options[:file_path]
-      treewalk.add_tree(jtree)
+      treewalk.set_filter(PathFilter.create(options[:path_filter])) if options[:path_filter]
       entries = []
+    
       while treewalk.next
         entry = {}
         mode = treewalk.get_file_mode(0)
@@ -93,8 +105,8 @@ module RJGit
         entries << entry
       end
       options[:io].puts RJGit.stringify(entries) if options[:print]
-      return entries
-    end
+      entries
+    end  
       
     def self.blame(repository, file_path, options={})
       options = {:print => false, :io => $stdout}.merge(options)
@@ -200,15 +212,14 @@ module RJGit
         untouched_objects = {}
         formatter = TreeFormatter.new
         treemap ||= self.treemap
-
-        if start_tree then
+        if start_tree
           treewalk = TreeWalk.new(@jrepo)
           treewalk.add_tree(start_tree)
           while treewalk.next
             filename = treewalk.get_name_string
-            if treemap.keys.include?(filename) then
+            if treemap.keys.include?(filename)
               kind = treewalk.isSubtree ? :tree : :blob
-                if treemap[filename] == false then
+                if treemap[filename] == false
                   @log[:deleted] << [kind, filename, treewalk.get_object_id(0)]
                 else
                   existing_trees[filename] = treewalk.get_object_id(0) if kind == :tree
@@ -220,9 +231,8 @@ module RJGit
             end
           end
         end
-    
-        sorted_treemap = treemap.inject({}) {|h, (k,v)| v.is_a?(Hash) ? h["#{k}/"] = v : h[k] = v; h }.merge(untouched_objects).sort
         
+        sorted_treemap = treemap.inject({}) {|h, (k,v)| v.is_a?(Hash) ? h["#{k}/"] = v : h[k] = v; h }.merge(untouched_objects).sort
         sorted_treemap.each do |object_name, data|
           case data
             when Array
@@ -239,7 +249,6 @@ module RJGit
               @log[:added] << [:blob, object_name, blobid]
             end
         end
-    
         object_inserter.insert(formatter)
       end
       
@@ -349,5 +358,3 @@ module RJGit
   end
   
 end
-
-

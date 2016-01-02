@@ -9,6 +9,11 @@ describe Blob do
       @blob = Blob.find_blob(@repo.jrepo, 'materialist.txt')
     end
 
+    it "has an id" do
+      expect(@blob.id).to eq 'a423c5f31d193218799b533a6dbdb1052b45505f'
+      expect(@blob.get_name).to eq 'a423c5f31d193218799b533a6dbdb1052b45505f'
+    end
+
     it "has a mode" do
       expect(@blob.mode).to eql REG_FILE_TYPE
     end

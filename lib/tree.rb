@@ -5,7 +5,8 @@ module RJGit
   
   class Tree 
 
-    attr_reader :contents, :id, :mode, :name, :repo, :jtree
+    attr_reader :contents, :id, :mode, :name, :repo, :path, :jtree
+    alias_method :get_name, :id
     RJGit.delegate_to(RevTree, :@jtree)
     include Enumerable
     
@@ -21,7 +22,7 @@ module RJGit
     def data
       return @contents if @contents
       strio = StringIO.new
-      RJGit::Porcelain.ls_tree(@jrepo, @jtree, options={:print => true, :io => strio})
+      RJGit::Porcelain.ls_tree(@jrepo, @path, Constants::HEAD, options={:print => true, :io => strio})
       @contents = strio.string
     end
     

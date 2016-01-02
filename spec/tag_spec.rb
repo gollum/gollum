@@ -8,6 +8,7 @@ describe Tag do
   
   it "has an id" do
     expect(@tag.id).to match /f0055fda16c18fd8b27986dbf038c735b82198d7/
+    expect(@tag.get_name).to match /f0055fda16c18fd8b27986dbf038c735b82198d7/
   end
   
   it "has a name" do
