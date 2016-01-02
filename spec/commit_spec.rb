@@ -90,6 +90,16 @@ describe Commit do
       expect(stats[1]).to eq 0
       expect(stats[2]["postpatriarchialist.txt"]).to eq([75, 0, 75])
     end
+    
+    it "has diffs compared with parent commit" do
+      diffs = @commit.diffs
+      expect(diffs.size).to eq 14
+      expect(diffs[1]).to match /index 6afcf64..77aa887 100644/
+    end
+    
+    it "has one diff string" do
+      expect(@commit.diff.size).to eq 39074
+    end
 
     describe ".find_all(repo, ref, options)" do
       it "returns an empty array if nothing is found" do
