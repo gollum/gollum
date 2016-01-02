@@ -27,6 +27,14 @@ module RJGit
       @jgit = Git.new(@jrepo)
     end
 
+    def logs(refs, options = {})
+      logs = []
+      refs.each do |ref|
+        logs << log(nil, ref, options)
+      end
+      logs
+    end
+    
     def log(path = nil, revstring = Constants::HEAD, options = {})
       ref = jrepo.resolve(revstring)
       return [] unless ref
@@ -52,9 +60,19 @@ module RJGit
         logs.addPath(path) if path
         logs.setMaxCount(options[:max_count]) if options[:max_count]
         logs.setSkip(options[:skip]) if options[:skip]
-        # These options need tests
-        # logs.addRange(options[:since], options[:until]) if (options[:since] && options[:until])
-        # logs.not(options[:not]) if options[:not]
+
+        if (options[:since] && options[:until])
+          revwalk = RevWalk.new(jrepo)
+          since_commit = revwalk.parseCommit(jrepo.resolve(options[:since]))
+          until_commit = revwalk.parseCommit(jrepo.resolve(options[:until]))
+          logs.addRange(since_commit, until_commit) 
+        end
+        if options[:not]
+          revwalk = RevWalk.new(jrepo)
+          options[:not].each do |ref|
+            logs.not(revwalk.parseCommit(jrepo.resolve(ref)))
+          end
+        end
         jcommits = logs.call
       end
       

@@ -2,33 +2,62 @@ require 'spec_helper'
 
 describe RubyGit do
   
-  it "returns log information" do
-    repo = Repo.new(TEST_REPO_PATH)
-    messages = repo.git.log
-    expect(messages).to_not be_empty
-    expect(messages.first.message).to match /Renamed the follow rename file/
-    messages = repo.git.log("deconstructions.txt")
-    expect(messages.first.message).to match /More interesting postmodern comments./
-    messages = repo.git.log(nil, "HEAD", {max_count: 1})
-    expect(messages.count).to eq 1
-    messages = repo.git.log(nil, "HEAD", {max_count: 1, skip: 1})
-    expect(messages.first.message).to_not match /More interesting postmodern comments./
-  end
-  
-  it "follows renames" do
-    repo = Repo.new(TEST_REPO_PATH)
-    messages = repo.git.log("follow-rename.txt", "HEAD", follow: true)
-    expect(messages.count).to eq 2
-    expect(messages[1].message).to match /for following renames/
-    
-  end
-  
   it "returns a status object" do
     repo = Repo.new(TEST_REPO_PATH)
-    expect(repo.git.status.getModified.to_a).to be_empty
-    expect(repo.git.status.isClean).to be true
+    expect(repo.git.status.get_modified.to_a).to be_empty
+    expect(repo.git.status.is_clean).to be true
   end
   
+  context "when logging" do
+    it "returns log information" do
+      repo = Repo.new(TEST_REPO_PATH)
+      messages = repo.git.log
+      expect(messages).to_not be_empty
+      expect(messages.first.message).to match /Renamed the follow rename file/
+      messages = repo.git.log("deconstructions.txt")
+      expect(messages.first.message).to match /More interesting postmodern comments./
+      messages = repo.git.log(nil, "HEAD", {max_count: 1})
+      expect(messages.count).to eq 1
+      messages = repo.git.log(nil, "HEAD", {max_count: 1, skip: 1})
+      expect(messages.first.message).to_not match /More interesting postmodern comments./
+    end
+  
+    it "returns log information for an array of refs" do
+      repo = Repo.new(TEST_REPO_PATH)
+      ids = repo.commits.map(&:id)
+      expect(ids).to have(8).ids
+      logs = repo.git.logs(ids, max_count: 1)
+      expect(logs).to have(8).logs
+      first_log = logs.first
+      expect(first_log).to have(1).logs
+      expect(first_log.first.message).to match /Renamed the follow rename file/
+    end
+  
+    it "returns log information for a range of commits" do
+      repo = Repo.new(TEST_REPO_PATH)
+      ids = repo.commits.map(&:id)
+      logs = repo.git.log(nil, "HEAD", since: '83fc72f692a717cfffd77b32f705c4063357e6a6', until: '55ca9d4360c522d38bc73ef9cce81c2f72c413d5')
+      expect(logs).to have(1).logs
+      expect(logs.first.message).to match /Renamed the follow rename file/
+    end
+        
+    it "returns log information excluding certain refs" do
+      repo = Repo.new(TEST_REPO_PATH)
+      ids = repo.commits.map(&:id)
+      logs = repo.git.log(nil, "HEAD", not: ['ad982fe7d4787928daba69bf0ba44a59c572ccd7'])
+      expect(logs).to have(7).logs
+      expect(logs.map(&:id)).to_not include 'ad982fe7d4787928daba69bf0ba44a59c572ccd7'
+    end
+  
+    it "follows renames" do
+      repo = Repo.new(TEST_REPO_PATH)
+      messages = repo.git.log("follow-rename.txt", "HEAD", follow: true)
+      expect(messages.count).to eq 2
+      expect(messages[1].message).to match /for following renames/
+    end    
+    
+  end
+   
   context "when creating tags" do
     before(:each) do
       @temp_repo_path = create_temp_repo(TEST_REPO_PATH)
