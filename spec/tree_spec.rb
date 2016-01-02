@@ -10,7 +10,7 @@ describe Tree do
     end
 
     it "has contents" do
-      contents = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, @tree.jtree)
+      contents = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, @tree.path)
       expect(contents).to be_an Array
       expect(contents.first[:type]).to eq "blob"
       expect(contents.first[:id]).to match /77aa887449c28a922a660b2bb749e4127f7664e5/
@@ -44,6 +44,7 @@ describe Tree do
 
     it "has an id" do
       expect(@tree.id).to match /aa74200714ce8190b38211795f974b4410f5a9d0/
+      expect(@tree.get_name).to match /aa74200714ce8190b38211795f974b4410f5a9d0/
     end
 
     it "has a mode" do

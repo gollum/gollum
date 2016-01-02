@@ -64,25 +64,49 @@ describe RJGit do
           expect(first_entry[:path]).to eq '.gitignore'
         end
         
-        it "mimics git-ls-tree for a specific tree" do
-          skip("fails due to bug in ls-tree implementation")
-          tree = RJGit::Tree.find_tree(@bare_repo, 'lib')
-          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, tree, {recursive: false})
+        it "mimics git-ls-tree for a specific path" do
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, 'lib', Constants::HEAD, {recursive: false})
           first_entry = listing.first
-          expect(first_entry[:path]).to eq 'grit.rb'
-          tree = RJGit::Tree.find_tree(@bare_repo, 'lib/grit')
-          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, tree, {recursive: false})
+          expect(first_entry[:path]).to eq 'lib/grit.rb'
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, 'lib/grit', Constants::HEAD, {recursive: false})
           first_entry = listing.first
-          expect(first_entry[:path]).to eq 'grit/actor.rb'
+          expect(first_entry[:path]).to eq 'lib/grit/actor.rb'
+        end
+        
+        it "mimics git-ls-tree for a specific commit" do
+          sha = '8bfefdbc0d901a6e8ccd27b9f20879d109f49c03'
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, sha, {recursive: false})
+          expect(listing.length).to eq 7
         end
 
         it "mimics git-ls-tree recursively" do
-          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, {recursive: true})
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, Constants::HEAD, {recursive: true})
           expect(listing.length).to eq 539
+        end
+        
+        it "mimics git-ls-tree recursively for a specific path" do
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, 'lib/grit/git-ruby', Constants::HEAD, {recursive: true})
+          first_entry = listing.first
+          expect(first_entry[:path]).to eq 'lib/grit/git-ruby/internal/loose.rb'
+        end
+        
+        it "mimics git-ls-tree for a specific treeish object" do
+          commit = @bare_repo.commits.last
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, 'lib/grit', commit, {recursive: false})
+          first_entry = listing.first
+          expect(first_entry[:path]).to eq 'lib/grit/commit.rb'
+          tree = @bare_repo.head.tree
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, 'lib/grit', tree, {recursive: false})
+          first_entry = listing.first
+          expect(first_entry[:path]).to eq 'lib/grit/actor.rb'
+          jtree = @bare_repo.head.tree.jtree
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, 'lib/grit', tree, {recursive: false})
+          first_entry = listing.first
+          expect(first_entry[:path]).to eq 'lib/grit/actor.rb'
         end
 
         it "mimics git-ls-tree for a specific path" do
-          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, {file_path: 'lib'})
+          listing = RJGit::Porcelain.ls_tree(@bare_repo.jrepo, nil, Constants::HEAD, {path_filter: 'lib'})
           expect(listing.length).to eq 1
         end
 
@@ -90,7 +114,7 @@ describe RJGit do
     
     it "mimics git-blame" do
       RJGit::Porcelain.blame(@bare_repo, 'lib/grit.rb')
-      skip("no expectation defined.")
+      skip
     end
     
       context "producing diffs" do

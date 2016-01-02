@@ -6,6 +6,7 @@ module RJGit
   class Tag
 
     attr_reader :id, :jtag
+    alias_method :get_name, :id
     RJGit.delegate_to(RevTag, :@jtag)
     
     def initialize(jtag)

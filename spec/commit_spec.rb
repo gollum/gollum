@@ -41,6 +41,7 @@ describe Commit do
 
     it "has an id" do
       expect(@commit.id).to match /ca8a30f5a7f0f163bbe3b6f0abf18a6c83b0687a/
+      expect(@commit.get_name).to match /ca8a30f5a7f0f163bbe3b6f0abf18a6c83b0687a/
     end
   
     it "points to a tree" do

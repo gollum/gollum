@@ -6,6 +6,7 @@ module RJGit
   class Blob 
     
     attr_reader :id, :mode, :name, :path, :jblob
+    alias_method :get_name, :id
     RJGit.delegate_to(RevBlob, :@jblob)
 
     def initialize(repository, mode, path, jblob)

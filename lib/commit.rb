@@ -7,16 +7,9 @@ module RJGit
 
   class Commit
 
-    attr_reader :id
-    attr_reader :parents
-    attr_reader :actor
-    attr_reader :committer
-    attr_reader :authored_date
-    attr_reader :committed_date
-    attr_reader :message
-    attr_reader :short_message
-    attr_reader :jcommit
-    attr_reader :parent_count
+    attr_reader :id, :parents, :actor, :committer, :authored_date, :committed_date
+    attr_reader :message, :short_message, :jcommit, :parent_count
+    alias_method :get_name, :id
   
     RJGit.delegate_to(RevCommit, :@jcommit)
     
