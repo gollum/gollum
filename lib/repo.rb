@@ -42,7 +42,15 @@ module RJGit
     
     def initialize(path, options = {})
       epath = File.expand_path(path)
-      gitpath = File.join(epath, '.git')
+      if options[:git_dir]
+        if (Pathname.new options[:git_dir]).absolute?
+          gitpath = options[:git_dir]
+        else
+          gitpath = File.join(epath, options[:git_dir])
+        end
+      else
+        gitpath = File.join(epath, '.git')
+      end
       
       # Default value for bare
       bare = false
@@ -61,7 +69,7 @@ module RJGit
       @path = bare ? epath : gitpath
       @config = RJGit::Configuration.new(File.join(@path, 'config'))
       repo_path = java.io.File.new(@path)
-      @jrepo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).build()
+      @jrepo = bare ? RepositoryBuilder.new().set_bare.set_git_dir(repo_path).build() : RepositoryBuilder.new().set_git_dir(repo_path).set_work_tree(java.io.File.new(epath)).build()
       @jrepo.create(bare) if options[:create]
       @git = RubyGit.new(@jrepo)
     end
