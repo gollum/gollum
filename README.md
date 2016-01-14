@@ -23,6 +23,8 @@ For more information on Gollum's capabilities and pitfalls:
 3. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
 4. [Security overview](https://github.com/gollum/gollum/wiki/Security).
 
+For a quick impression of gollum, see [this video](https://www.youtube.com/watch?v=gj1qqK3Oku8). To see more advanced features in action, see [this video](https://www.youtube.com/watch?v=EauxgxsLDC4) here (installation with docker).
+
 ## SYSTEM REQUIREMENTS
 
 | Operating System | Ruby           | Adapters           | Supported | 
