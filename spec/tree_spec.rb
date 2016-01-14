@@ -22,6 +22,18 @@ describe Tree do
       expect(@tree.contents_array).to be_kind_of Array
     end
     
+    it "has a count" do
+      expect(@tree.count).to eq 2
+    end
+    
+    it "has a recursive count" do
+      expect(@tree.recursive_count).to eq 20
+    end
+    
+    it "has a recursive count that can be stopped for performance reasons" do
+      expect(@tree.recursive_count(limit = 10)).to eq 10
+    end
+    
     it "is enumerable" do
       @tree.each {|x| expect([Blob, Tree]).to include(x.class)}
       @tree.map {|x| x.name }.each {|x| expect(x).to be_kind_of String }
