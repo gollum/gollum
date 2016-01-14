@@ -29,13 +29,22 @@ module RJGit
     def contents_array
       @contents_ary ||= jtree_entries
     end
-    
-    def recursive_count(limit = nil)
-      jtree_entries({recursive: true, limit: limit}).size
-    end
-    
+
     def count
       contents_array.size
+    end
+          
+    def recursive_contents_array(limit = nil)
+      if @recursive_contents.nil? || @recursive_contents[:limit] != limit
+        @recursive_contents = {}
+        @recursive_contents[:objects] = jtree_entries({recursive: true, limit: limit})
+        @recursive_contents[:limit] = limit
+      end
+      @recursive_contents[:objects]
+    end
+    
+    def recursive_count(limit = nil)
+      recursive_contents_array(limit).size
     end
     
     def each(&block)

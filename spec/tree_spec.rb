@@ -22,6 +22,10 @@ describe Tree do
       expect(@tree.contents_array).to be_kind_of Array
     end
     
+    it "has an array of all contents (recursive)" do
+      expect(@tree.recursive_contents_array).to be_kind_of Array
+    end
+    
     it "has a count" do
       expect(@tree.count).to eq 2
     end
