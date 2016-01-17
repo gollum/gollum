@@ -29,6 +29,23 @@ module RJGit
     def contents_array
       @contents_ary ||= jtree_entries
     end
+
+    def count
+      contents_array.size
+    end
+          
+    def recursive_contents_array(limit = nil)
+      if @recursive_contents.nil? || @recursive_contents[:limit] != limit
+        @recursive_contents = {}
+        @recursive_contents[:objects] = jtree_entries({recursive: true, limit: limit})
+        @recursive_contents[:limit] = limit
+      end
+      @recursive_contents[:objects]
+    end
+    
+    def recursive_count(limit = nil)
+      recursive_contents_array(limit).size
+    end
     
     def each(&block)
       contents_array.each(&block)
@@ -83,12 +100,14 @@ module RJGit
 
     private
 
-    def jtree_entries
+    def jtree_entries(options={})
       treewalk = TreeWalk.new(@jrepo)
       treewalk.add_tree(@jtree)
+      treewalk.set_recursive(true) if options[:recursive]
       entries = []
       while treewalk.next
         entries << wrap_tree_or_blob(treewalk.get_file_mode(0), treewalk.get_path_string, treewalk.get_object_id(0))
+        break if options[:limit] && entries.size >= options[:limit].to_i
       end
       entries
     end
