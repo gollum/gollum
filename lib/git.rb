@@ -12,6 +12,9 @@ module RJGit
   import 'org.eclipse.jgit.diff.RenameDetector'
   import 'org.eclipse.jgit.diff.DiffEntry'
   import 'org.eclipse.jgit.treewalk.filter.PathFilter'
+  import 'org.eclipse.jgit.api.TransportConfigCallback'
+  import 'org.eclipse.jgit.transport.JschConfigSessionFactory'
+  import 'org.eclipse.jgit.transport.SshTransport'
 
   class RubyGit
 
@@ -19,6 +22,10 @@ module RJGit
     attr_accessor :jrepo
 
     RESET_MODES = ["HARD", "SOFT", "KEEP", "MERGE", "MIXED"]
+    SSH_TRANSPORTS = ["ssh"]
+    HTTP_TRANSPORTS = ["http", "https"]
+    FILE_TRANSPORTS = ["file"]
+    VALID_TRANSPORTS = SSH_TRANSPORTS + HTTP_TRANSPORTS + FILE_TRANSPORTS
 
     RJGit.delegate_to(Git, :@jgit)
 
@@ -34,14 +41,14 @@ module RJGit
       end
       logs
     end
-    
+
     def log(path = nil, revstring = Constants::HEAD, options = {})
       ref = jrepo.resolve(revstring)
       return [] unless ref
       jcommits = Array.new
-      
+
       if path && options[:follow]
-        current_path = path    
+        current_path = path
         start = nil
         loop do
           logs = @jgit.log.add(ref).addPath(current_path).call
@@ -53,8 +60,8 @@ module RJGit
           current_path = follow_renames(start, current_path) if start
           break if current_path.nil?
         end
-        
-      else      
+
+      else
         logs = @jgit.log
         logs.add(ref)
         logs.addPath(path) if path
@@ -65,7 +72,7 @@ module RJGit
           revwalk = RevWalk.new(jrepo)
           since_commit = revwalk.parseCommit(jrepo.resolve(options[:since]))
           until_commit = revwalk.parseCommit(jrepo.resolve(options[:until]))
-          logs.addRange(since_commit, until_commit) 
+          logs.addRange(since_commit, until_commit)
         end
         if options[:not]
           revwalk = RevWalk.new(jrepo)
@@ -75,7 +82,7 @@ module RJGit
         end
         jcommits = logs.call
       end
-      
+
       jcommits.map{ |jcommit| Commit.new(jrepo, jcommit) }
     end
 
@@ -127,6 +134,66 @@ module RJGit
       RubyGit.clone(remote, local, options)
     end
 
+    class RJGitSSHConfigCallback
+      include TransportConfigCallback
+      def initialize(options = {})
+        @sshSessionFactory = Class.new(JschConfigSessionFactory) {
+          def initialize(options)
+            super()
+            @private_key_file = options[:private_key_file]
+            @private_key_passphrase = options[:private_key_passphrase]
+            @username = options[:username]
+            @password = options[:password]
+            @known_hosts_file = options[:known_hosts_file]
+          end
+
+          def configure(host, session)
+            session.setUserName(@username) if @username
+            session.setPassword(@password) if @password
+          end
+
+          def createDefaultJSch(fs)
+            default_j_sch = super(fs)
+            if @private_key_file
+              default_j_sch.removeAllIdentity()
+              if @private_key_passphrase
+                default_j_sch.addIdentity(@private_key_file, @private_key_passphrase)
+              else
+                default_j_sch.addIdentity(@private_key_file)
+              end
+            end
+            if @known_hosts_file
+              default_j_sch.setKnownHosts(@known_hosts_file)
+            end
+
+            return default_j_sch
+          end
+        }.new(options)
+      end
+
+      def configure(ssh_transport)
+        ssh_transport.setSshSessionFactory(@sshSessionFactory)
+      end
+    end
+
+    def self.set_command_transport(command, remote, options = {})
+      uri = nil
+      begin
+        uri = URI.parse(remote) if remote
+      rescue URI::InvalidURIError
+      end
+
+      if uri && (VALID_TRANSPORTS.include? uri.scheme)
+        transport_protocol = uri.scheme
+      end
+
+      if (SSH_TRANSPORTS.include? transport_protocol.to_s) || (options[:transport_protocol] == :ssh) || options[:private_key_file]
+        command.set_transport_config_callback(RJGitSSHConfigCallback.new(options))
+      elsif (HTTP_TRANSPORTS.include? transport_protocol.to_s) || options[:username]
+        command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
+      end
+    end
+
     def self.clone(remote, local, options = {})
       clone_command = Git.clone_repository
       clone_command.setURI(remote)
@@ -139,9 +206,8 @@ module RJGit
           clone_command.set_branch(options[:branch])
         end
       end
-      if options[:username]
-        clone_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-      end
+
+      set_command_transport(clone_command, remote, options)
       clone_command.call
       Repo.new(local)
     end
@@ -275,9 +341,8 @@ module RJGit
       push_command.set_remote(remote)
       push_command.set_push_all
       push_command.set_push_tags
-      if options[:username]
-        push_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-      end
+
+      self.class.set_command_transport(push_command, remote, options)
       push_command.call
     end
 
@@ -289,9 +354,7 @@ module RJGit
         refs.map!{|ref| RefSpec.new(ref)}
         push_command.set_ref_specs(refs)
       end
-      if options[:username]
-        push_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-      end
+      self.class.set_command_transport(push_command, remote, options)
       push_command.call
     end
 
@@ -301,9 +364,7 @@ module RJGit
       pull_command.set_rebase(options[:rebase]) if options[:rebase]
       pull_command.set_remote(remote) if remote
       pull_command.set_remote_branch_name(remote_ref) if remote_ref
-      if options[:username]
-        pull_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-      end
+      self.class.set_command_transport(pull_command, remote, options)
       pull_command.call
     end
 
@@ -315,9 +376,7 @@ module RJGit
       fetch_command.set_remove_deleted_refs(true) if options[:remove_deleted_refs]
       fetch_command.set_ref_specs(RefSpec.new(options[:refspecs])) if options[:refspecs]
       fetch_command.set_remote(remote) if remote
-      if options[:username]
-        fetch_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
-      end
+      self.class.set_command_transport(fetch_command, remote, options)
       fetch_command.call
     end
 
