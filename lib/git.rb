@@ -307,5 +307,19 @@ module RJGit
       pull_command.call
     end
 
+    def fetch(remote = nil, options = {})
+      fetch_command = @jgit.fetch
+      fetch_command.set_dry_run(true) if options[:dryrun]
+      fetch_command.set_thin(true) if options[:thin]
+      fetch_command.set_check_fetched_objects(true) if options[:check_fetched_objects]
+      fetch_command.set_remove_deleted_refs(true) if options[:remove_deleted_refs]
+      fetch_command.set_ref_specs(RefSpec.new(options[:refspecs])) if options[:refspecs]
+      fetch_command.set_remote(remote) if remote
+      if options[:username]
+        fetch_command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
+      end
+      fetch_command.call
+    end
+
   end
 end
