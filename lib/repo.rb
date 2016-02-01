@@ -46,7 +46,7 @@ module RJGit
         if (Pathname.new options[:git_dir]).absolute?
           gitpath = options[:git_dir]
         else
-          gitpath = File.join(epath, options[:git_dir])
+          gitpath = File.expand_path(options[:git_dir])
         end
       else
         gitpath = File.join(epath, '.git')
