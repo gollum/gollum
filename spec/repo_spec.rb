@@ -131,7 +131,7 @@ describe Repo do
       expect(new_bare_repo).to be_bare
     end
 
-    it "creates a new repository with a different external git_dir if specified" do
+    it "creates a new repository with a different absolute git_dir if specified" do
       tmp_path = get_new_temp_repo_path(false)
       tmp_absolute_git_path = get_new_temp_repo_path(false) + "-not_normal_git_directory"
       expect(tmp_path).to_not be_a_directory
@@ -145,16 +145,19 @@ describe Repo do
       expect(new_repo).to_not be_bare
     end
 
-    it "creates a new repository with a different internal git_dir if specified" do
+    it "creates a new repository with a different relative git_dir if specified" do
       tmp_path = get_new_temp_repo_path(false)
-      tmp_relative_git_path = "not_normal_git_directory"
-      tmp_absolute_git_path = File.join(tmp_path, tmp_relative_git_path)
+      tmp_relative_work_tree_path = "not_normal_work_tree"
+      tmp_relative_git_dir_path = "not_normal_git_directory"
       expect(tmp_path).to_not be_a_directory
-      expect(tmp_absolute_git_path).to_not be_a_directory
-      new_repo = Repo.new(tmp_path, :git_dir => tmp_relative_git_path, :create => @create_new)
-      expect(tmp_path).to be_a_directory
-      expect(tmp_absolute_git_path).to be_a_directory
+      Dir.mkdir(tmp_path, 0700)
+      initial_dir = Dir.getwd
+      Dir.chdir(tmp_path)
+      new_repo = Repo.new(tmp_relative_work_tree_path, :git_dir => tmp_relative_git_dir_path, :create => @create_new)
+      expect(tmp_relative_work_tree_path).to be_a_directory
+      expect(tmp_relative_git_dir_path).to be_a_directory
       expect(new_repo).to be_valid
+      Dir.chdir(initial_dir)
       remove_temp_repo(tmp_path)
       expect(new_repo).to_not be_bare
     end
