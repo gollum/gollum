@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'git_spec/dummy_ssh_transport'
 
 describe RubyGit do
 
@@ -196,7 +197,216 @@ describe RubyGit do
     after(:each) do
       remove_temp_repo(@local)
     end
+  end
 
+  context "setting the transport with set_command_transport" do
+    let(:clone_command) { instance_double("CloneCommand") }
+
+    it "calls RJGitSSHConfigCallback for an ssh URI" do
+      remote_with_ssh = "ssh:gitserver.zzz:gituser/gitrepo.git"
+      expect(clone_command).to receive(:set_transport_config_callback).with(anything).and_return(true)
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_with_ssh)
+    end
+
+    it "calls RJGitSSHConfigCallback for options[:transport_protocol] == :ssh" do
+      remote_without_ssh = "git@gitserver.zzz:gituser/gitrepo.git"
+      options = {transport_protocol: :ssh}
+      expect(clone_command).to receive(:set_transport_config_callback).with(anything).and_return(true)
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_without_ssh, options)
+    end
+
+    it "makes no call for an ssh-like URI and options[:transport_protocol] != :ssh" do
+      remote_without_ssh = "gitserver.zzz:gituser/gitrepo.git"
+      options = {}
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_without_ssh, options)
+    end
+
+    it "makes no call for an ssh-with-user-like URI and options[:transport_protocol] != :ssh" do
+      remote_without_ssh = "git@gitserver.zzz:gituser/gitrepo.git"
+      options = {}
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_without_ssh, options)
+    end
+
+    it "calls RJGitSSHConfigCallback for options[:private_key_file] == 'something'" do
+      remote_without_ssh = "git@gitserver.zzz:gituser/gitrepo.git"
+      options = {private_key_file: 'something'}
+      expect(clone_command).to receive(:set_transport_config_callback).with(anything).and_return(true)
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_without_ssh, options)
+    end
+
+    it "calls set_credentials_provider for http URI" do
+      remote_with_http = "http://gitserver.zzz/gituser/gitrepo.git"
+      expect(clone_command).to receive(:set_credentials_provider).with(anything).and_return(true)
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_with_http)
+    end
+
+    it "calls set_credentials_provider for https URI" do
+      remote_with_https = "https://gitserver.zzz/gituser/gitrepo.git"
+      expect(clone_command).to receive(:set_credentials_provider).with(anything).and_return(true)
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_with_https)
+    end
+
+    it "calls set_credentials_provider for options[:username] == 'something'" do
+      remote_with_dir = "/tmp/gitserver.zzz/gituser/gitrepo.git"
+      options = {username: 'something'}
+      expect(clone_command).to receive(:set_credentials_provider).with(anything).and_return(true)
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_with_dir, options)
+    end
+
+    it "makes no call for file transport without options[:username] set" do
+      remote_with_dir = "file:/tmp/gitserver.zzz/gituser/gitrepo.git"
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_with_dir)
+    end
+
+    it "makes no call for unknown transport without options[:username] set" do
+      remote_with_dir = "unknown:/tmp/gitserver.zzz/gituser/gitrepo.git"
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_with_dir)
+    end
+
+    it "makes no call for no transport needed" do
+      remote_with_dir = "/tmp/gitserver.zzz/gituser/gitrepo.git"
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_with_dir)
+    end
+
+    it "makes no call based on a bad URI " do
+      remote_bad_uri = "<>"
+      expect(clone_command).to_not receive(:set_credentials_provider)
+      expect(clone_command).to_not receive(:set_transport_config_callback)
+      ::RJGit::RubyGit.set_command_transport(clone_command, remote_bad_uri)
+    end
+  end
+
+  context "configuring an ssh callback using RJGitSSHConfigCallback" do
+    let(:dummy_session) {instance_double("Session")}
+    let(:dummy_ssh_transport) { DummySSHTransport.new }
+    let(:fs) { instance_double("FS")}
+    let(:dummy_j_sch) { instance_double("JSch") }
+    def create_dummy_session(options)
+      #initialize the config callback
+      ssh_config_callback = ::RJGit::RubyGit::RJGitSSHConfigCallback.new(options)
+      #configure the config callback
+      ssh_config_callback.configure(dummy_ssh_transport)
+      #get the ssh session factory
+      dummy_ssh_session_factory = dummy_ssh_transport.dummy_factory
+      #configure the ssh session factory
+      dummy_ssh_session_factory.configure("some_host", dummy_session)
+      #create the jsch using the factory
+      dummy_ssh_session_factory.createDefaultJSch(fs)
+    end
+
+    it "configures for ssh default behavior when no specifics given" do
+      options = {}
+      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      expect(dummy_session).to_not receive(:setUserName)
+      expect(dummy_session).to_not receive(:setPassword)
+      expect(dummy_j_sch).to_not receive(:removeAllIdentity)
+      expect(dummy_j_sch).to_not receive(:addIdentity)
+      expect(dummy_j_sch).to_not receive(:setKnownHosts)
+
+      create_dummy_session(options)
+    end
+
+    it "configures for a specific known hosts file if options[:known_hosts_file]" do
+      options = {known_hosts_file: 'aknownhostsfile'}
+      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      expect(dummy_session).to_not receive(:setUserName)
+      expect(dummy_session).to_not receive(:setPassword)
+      expect(dummy_j_sch).to_not receive(:removeAllIdentity)
+      expect(dummy_j_sch).to_not receive(:addIdentity)
+      expect(dummy_j_sch).to receive(:setKnownHosts).with(options[:known_hosts_file]).and_return(true)
+
+      create_dummy_session(options)
+    end
+
+    it "configures for a specific private key file if options[:private_key_file]" do
+      options = {private_key_file: 'aprivatekeyfile'}
+      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      expect(dummy_session).to_not receive(:setUserName)
+      expect(dummy_session).to_not receive(:setPassword)
+      expect(dummy_j_sch).to receive(:removeAllIdentity).with(no_args).and_return(true)
+      expect(dummy_j_sch).to receive(:addIdentity).with(options[:private_key_file]).and_return(true)
+      expect(dummy_j_sch).to_not receive(:setKnownHosts)
+
+      create_dummy_session(options)
+    end
+
+    it "configures for a specific encrypted private key file if options[:private_key_file] and options[:priavte_key_passphrase]" do
+      options = {private_key_file: 'something', private_key_passphrase: 'another_thing'}
+      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      expect(dummy_session).to_not receive(:setUserName)
+      expect(dummy_session).to_not receive(:setPassword)
+      expect(dummy_j_sch).to receive(:removeAllIdentity).with(no_args)
+      expect(dummy_j_sch).to receive(:addIdentity).with(options[:private_key_file], options[:private_key_passphrase]).and_return(true)
+      expect(dummy_j_sch).to_not receive(:setKnownHosts)
+
+      create_dummy_session(options)
+    end
+
+    it "configures for ssh username if options[:username]" do
+      options = {username: 'gituser'}
+      allow(dummy_session).to receive(:setUserName)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      expect(dummy_session).to receive(:setUserName).with(options[:username])
+      expect(dummy_session).to_not receive(:setPassword)
+      expect(dummy_j_sch).to_not receive(:removeAllIdentity)
+      expect(dummy_j_sch).to_not receive(:addIdentity)
+      expect(dummy_j_sch).to_not receive(:setKnownHosts)
+
+      create_dummy_session(options)
+    end
+
+    it "configures for ssh password if options[:password]" do
+      options = {password: 'something'}
+      allow(dummy_session).to receive(:setUserName)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      expect(dummy_session).to_not receive(:setUserName)
+      expect(dummy_session).to receive(:setPassword).with(options[:password])
+      expect(dummy_j_sch).to_not receive(:removeAllIdentity)
+      expect(dummy_j_sch).to_not receive(:addIdentity)
+      expect(dummy_j_sch).to_not receive(:setKnownHosts)
+
+      create_dummy_session(options)
+    end
+  end
+
+  context "cloning an ssh repository" do
+    before(:each) do
+      @local  = get_new_temp_repo_path
+    end
+
+    it "calls set_command_transport for URI with ssh" do
+      clone_command = instance_double("CloneCommand")
+
+      remote_with_ssh = "ssh:gitserver.zzz:gituser/gitrepo"
+      #repo = Repo.new(remote_with_ssh)
+
+      expect(Git).to receive(:clone_repository).with(no_args).and_return(clone_command)
+      expect(clone_command).to receive(:setURI).with(remote_with_ssh).and_return(true)
+      expect(clone_command).to receive(:set_directory).and_return(true)
+      allow(clone_command).to receive(:set_bare).and_return(true)
+      allow(clone_command).to receive(:set_branch).and_return(true)
+      allow(clone_command).to receive(:set_clone_all_branches).and_return(true)
+      expect(::RJGit::RubyGit).to receive(:set_command_transport).with(clone_command, remote_with_ssh, anything).and_return(true)
+      expect(clone_command).to receive(:call).with(no_args).and_return(true)
+
+      ::RJGit::RubyGit.clone(remote_with_ssh, @local)
+    end
   end
 
   context "cloning a bare repository" do
