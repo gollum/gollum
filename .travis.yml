@@ -5,4 +5,9 @@ rvm:
 jdk:
   - oraclejdk7
   - oraclejdk8
+  - openjdk7
 
+addons:
+  # Fix OpenJDK builds
+  # https://github.com/travis-ci/travis-ci/issues/5227
+  hostname: short-hostname
