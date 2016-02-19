@@ -56,6 +56,7 @@ describe Tree do
       expect(@tree / "grit").to be_kind_of Tree
       expect(@tree / "grit/bla").to be_nil
       expect(@tree / "grit/actor.rb" ).to be_kind_of Blob
+      expect((@tree / "/").id).to eq @tree.id
     end
 
     it "has an id" do

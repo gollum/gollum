@@ -60,7 +60,11 @@ module RJGit
     end
     
     def /(file)
-      treewalk = TreeWalk.forPath(@jrepo, file, @jtree)
+      begin
+        treewalk = TreeWalk.forPath(@jrepo, file, @jtree)
+      rescue Java::JavaLang::IllegalArgumentException
+        return self
+      end
       treewalk.nil? ? nil : 
         wrap_tree_or_blob(treewalk.get_file_mode(0), treewalk.get_path_string, treewalk.get_object_id(0))
     end
