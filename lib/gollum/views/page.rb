@@ -22,15 +22,13 @@ module Precious
       end
 
       def author
-        page_versions = @page.versions
-        first         = page_versions ? page_versions.first : false
+        first = page.last_version
         return DEFAULT_AUTHOR unless first
         first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
       end
 
       def date
-        page_versions = @page.versions
-        first         = page_versions ? page_versions.first : false
+        first = page.last_version
         return Time.now.strftime(DATE_FORMAT) unless first
         first.authored_date.strftime(DATE_FORMAT)
       end

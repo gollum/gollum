@@ -496,7 +496,7 @@ module Precious
 
         # Extensions and layout data
         @editable      = true
-        @page_exists   = !page.versions.empty?
+        @page_exists   = !page.last_version.nil?
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
         @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
