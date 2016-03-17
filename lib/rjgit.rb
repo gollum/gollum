@@ -133,16 +133,16 @@ module RJGit
     def self.diff(repository, options = {})
       options = {:namestatus => false, :patch => false}.merge(options)
       repo = RJGit.repository_type(repository)
-      git = RubyGit.new(repo)
+      git = RubyGit.new(repo).jgit
       diff_command = git.diff
-        if options[:old_rev] then
+        if options[:old_rev]
           reader = repo.new_object_reader
           old_tree = repo.resolve("#{options[:old_rev]}^{tree}")
           old_tree_iter = CanonicalTreeParser.new
           old_tree_iter.reset(reader, old_tree)
           diff_command.set_old_tree(old_tree_iter)
         end
-        if options[:new_rev] then
+        if options[:new_rev]
           reader = repo.new_object_reader unless reader
           new_tree = repo.resolve("#{options[:new_rev]}^{tree}")
           new_tree_iter = CanonicalTreeParser.new
@@ -154,7 +154,7 @@ module RJGit
       diff_command.set_cached(true) if options[:cached]
       diff_entries = diff_command.call
       diff_entries = diff_entries.to_array.to_ary
-        if options[:patch] then
+        if options[:patch]
           result = []
           out_stream = ByteArrayOutputStream.new
           formatter = DiffFormatter.new(out_stream)
@@ -198,7 +198,7 @@ module RJGit
       
       def only_contains_deletions(hashmap)
         hashmap.each do |key, value|
-          if value.is_a?(Hash) then
+          if value.is_a?(Hash)
             return false unless only_contains_deletions(value)
           elsif value.is_a?(String)
             return false
@@ -313,7 +313,7 @@ module RJGit
         commit_builder.setAuthor(person)
         commit_builder.setMessage(message)
         commit_builder.setTreeId(RJGit.tree_type(new_tree))
-        if parents.is_a?(Array) then
+        if parents.is_a?(Array)
           parents.each {|parent| commit_builder.addParentId(RJGit.commit_type(parent)) }
         elsif parents
           commit_builder.addParentId(RJGit.commit_type(parents))
