@@ -132,8 +132,8 @@ module RJGit
     
     def self.diff(repository, options = {})
       options = {:namestatus => false, :patch => false}.merge(options)
-      git = repository.git.jgit
       repo = RJGit.repository_type(repository)
+      git = RubyGit.new(repo)
       diff_command = git.diff
         if options[:old_rev] then
           reader = repo.new_object_reader
