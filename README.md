@@ -27,7 +27,7 @@ For a quick impression of gollum, see [this video](https://www.youtube.com/watch
 
 ## SYSTEM REQUIREMENTS
 
-| Operating System | Ruby           | Adapters           | Supported | 
+| Operating System | Ruby           | Adapters           | Supported |
 | ---------------- | -------------- | ------------------ | --------- |
 | Unix/Linux-like  | Ruby 1.9.3+    | all except [RJGit](https://github.com/repotag/rjgit) | yes |
 | Unix/Linux-like  | [JRuby](https://github.com/jruby/jruby) (1.9.3+ compatible) | [RJGit](https://github.com/repotag/rjgit) | yes |
@@ -143,6 +143,7 @@ Gollum comes with the following command line options:
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
+| --emoji           | none      | Parse and interpret emoji tags (e.g. :heart:). |
 | --no-edit         | none      | Disable the feature of editing pages. |
 | --live-preview    | none      | Enable the live preview feature in page editor. |
 | --no-live-preview | none      | Disable the live preview feature in page editor. |

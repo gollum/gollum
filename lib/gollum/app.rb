@@ -49,7 +49,7 @@ module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
-    
+
     dir     = File.dirname(File.expand_path(__FILE__))
 
     # Detect unsupported browsers.
@@ -128,6 +128,14 @@ module Precious
 
     def wiki_new
       Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+    end
+
+    get '/emoji/:name' do
+      begin
+        [200, {'Content-Type' => 'image/png'}, emoji(params['name'])]
+      rescue ArgumentError
+        not_found
+      end
     end
 
     get '/data/*' do

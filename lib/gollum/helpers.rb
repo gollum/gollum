@@ -1,6 +1,11 @@
 # ~*~ encoding: utf-8 ~*~
+require 'gemojione'
+
 module Precious
   module Helpers
+
+    EMOJI_PATHNAME = Pathname.new(Gemojione.index.images_path).freeze
+
     # Extract the path string that Gollum::Wiki expects
     def extract_path(file_path)
       return nil if file_path.nil?
@@ -49,6 +54,14 @@ module Precious
       @message = msg || "The requested page does not exist."
       status 404
       return mustache :error
+    end
+
+    def emoji(name)
+      if emoji = Gemojione.index.find_by_name(name)
+        IO.read(EMOJI_PATHNAME.join("#{emoji['unicode']}.png"))
+      else
+        fail ArgumentError, "emoji `#{name}' not found"
+      end
     end
 
   end
