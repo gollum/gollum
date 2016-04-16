@@ -141,8 +141,9 @@ Gollum comes with the following command line options:
 | --bare            | none      | Tell Gollum that the git repository should be treated as bare. This is only necessary when using the default grit adapter. |
 | --base-path       | [PATH]    | Specify the leading portion of all Gollum URLs (path info). Setting this to `/wiki` will make the wiki accessible under `http://localhost:4567/wiki/`. Default: `/`. |
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
-| --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
+| --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
+| --allow-style     | none      | Allow style attribute in HTML tags. |
 | --no-edit         | none      | Disable the feature of editing pages. |
 | --live-preview    | none      | Enable the live preview feature in page editor. |
 | --no-live-preview | none      | Disable the live preview feature in page editor. |

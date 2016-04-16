@@ -89,15 +89,18 @@ MSG
     # and finally, let others enjoy our hard work:
     wiki_options[:base_path] = base_path
   end
-  opts.on("--page-file-dir [PATH]", "Specify the subdirectory for all pages. Default: repository root.", 
+  opts.on("--page-file-dir [PATH]", "Specify the subdirectory for all pages. Default: repository root.",
     "Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.") do |path|
     wiki_options[:page_file_dir] = path
+  end
+  opts.on("--js", "Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).") do
+    wiki_options[:js] = true
   end
   opts.on("--css", "Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).") do
     wiki_options[:css] = true
   end
-  opts.on("--js", "Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).") do
-    wiki_options[:js] = true
+  opts.on("--allow-style", "Allow style attribute in HTML tags.") do
+    wiki_options[:allow_style] = true
   end
   opts.on("--no-edit", "Disable the feature of editing pages.")  do
     wiki_options[:allow_editing] = false
