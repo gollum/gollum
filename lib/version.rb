@@ -1,3 +1,3 @@
 module RJGit
-  VERSION = "4.2.0.1"
+  VERSION = "4.3.1.0"
 end
