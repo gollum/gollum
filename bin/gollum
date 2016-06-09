@@ -99,6 +99,9 @@ MSG
   opts.on("--js", "Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).") do
     wiki_options[:js] = true
   end
+  opts.on("--emoji", "Parse and interpret emoji tags (e.g. :heart:).") do
+    wiki_options[:emoji] = true
+  end
   opts.on("--no-edit", "Disable the feature of editing pages.")  do
     wiki_options[:allow_editing] = false
   end
