@@ -49,6 +49,10 @@ module Precious
         @name.gsub('-', ' ')
       end
 
+      def has_live_preview
+        @livepreview
+      end
+
       def formats
         super(:markdown)
       end

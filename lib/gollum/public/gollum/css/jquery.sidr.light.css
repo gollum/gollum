@@ -1,0 +1,105 @@
+.sidr {
+	display: none;
+	position: absolute;
+	position: fixed;
+	top: 0;
+	height: 100%;
+	z-index: 900000;
+	width: 260px;
+	overflow-x: none;
+	overflow-y: auto;
+	background: white;
+}
+
+.sidr .sidr-inner {
+	padding: 1.6em 0 15px;
+}
+
+.sidr .sidr-dragger {
+	position: absolute;
+	width: 16px;
+	background: #ccc;
+	top: 0;
+	height: 100%;
+	z-index: 998;
+	cursor: ew-resize;
+}
+
+.sidr .sidr-dragger:hover,
+.sidr-divider-dragging .sidr .sidr-dragger {
+	background: #999;
+}
+
+.sidr .sidr-switcher {
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	background: #888;
+	top: 0;
+	z-index: 999;
+	cursor: pointer;
+	color: white;
+
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+}
+
+.sidr .sidr-closer {
+	position: absolute;
+	top: 0;
+}
+
+.sidr .sidr-switcher:hover {
+	background: #444;
+}
+
+.sidr.left .sidr-switcher:before {
+	content: "\f061";
+}
+
+.sidr.right .sidr-switcher:before {
+	content: "\f060";
+}
+
+.sidr.left .sidr-dragger,
+.sidr.left .sidr-switcher,
+.sidr.right .sidr-closer {
+	right: 0;
+}
+.sidr.right .sidr-dragger,
+.sidr.right .sidr-switcher,
+.sidr.left .sidr-closer {
+	left: 0;
+}
+
+.sidr-divider-dragging {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+@media all and (max-width: 719px) {
+	.sidr {
+		width: 100% !important;
+		position: absolute;
+		overflow-y: visible;
+	}
+
+	.sidr .sidr-dragger, 
+	.sidr .sidr-switcher {
+		display: none;
+	}
+
+	.sidr.left .sidr-closer,
+	.sidr.right .sidr-closer {
+		left: auto;
+		right: 0;
+	}
+}
