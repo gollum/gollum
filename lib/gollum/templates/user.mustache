@@ -1,4 +1,5 @@
 <div id="user">
+<<<<<<< HEAD
     <p>
     {{#user_authed}}
       {{user_name}} | {{user_provider}} | <strong><a href="/__omnigollum__/logout">[Logout]</a></strong>
@@ -6,5 +7,26 @@
     {{^user_authed}}
       not logged in | <strong><a href="/__omnigollum__/login">[Login]</a></strong>
     {{/user_authed}}
+=======
+
+    <p>
+{{#user_authed}
+<div id="user">
+
+    <p>
+{{#user_authed}
+{{user_name}} | {{user_provider} | <strong>ahref="/__omnigollum__/logout">[Logout]</a></strong>
+{{/user_authed}
+{{^user_authed}}
+not logged in | <strong><a href="/__omnigollum__/login">[Login]</a></strong>
+{{/user_authed}}
+    <p>
+</div>
+{{user_name}} | {{user_provider} | <strong>ahref="/__omnigollum__/logout">[Logout]</a></strong>
+{{/user_authed}
+{{^user_authed}}
+not logged in | <strong><a href="/__omnigollum__/login">[Login]</a></strong>
+{{/user_authed}}
+>>>>>>> de91c567f8d23c79bfbc9dc5772206e066ad16da
     <p>
 </div>

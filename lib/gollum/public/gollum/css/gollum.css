@@ -42,6 +42,14 @@ a:hover, a:visited {
   text-decoration: underline;
 }
 
+/* @section user */
+#user p {
+    text-align: right;
+    padding-right:0.5em;
+    font-size: .8em;
+    line-height: 2.0em;
+    color: #999;
+}
 
 /* @section head */
 #head {
