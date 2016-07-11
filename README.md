@@ -81,7 +81,6 @@ Gollum presently ships with support for the following markups:
 Since all markups are rendered by the [github-markup](https://github.com/github/markup) gem, you can easily add support for other markups by additional installation:
 * [AsciiDoc](http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/) -- `[sudo] gem install asciidoctor`
 * [Creole](http://www.wikicreole.org/wiki/CheatSheet) -- `[sudo] gem install creole`
-* [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown) -- `[sudo] gem install github-markdown`
 * [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `[sudo] gem install wikicloth`
 * [Org](http://orgmode.org/worg/dev/org-syntax.html) -- `[sudo] gem install org-ruby`
 * [Pod](http://perldoc.perl.org/perlpod.html) -- requires Perl >= 5.10 (the `perl` command must be available on your command line)
