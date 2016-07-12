@@ -31,7 +31,7 @@ module RJGit
     treewalk.add_tree(jtree)
     treewalk.set_recursive(true)
     while treewalk.next
-      jblob_lookup = walk.lookup_blob(treewalk.getObjectId(0))
+      jblob_lookup = walk.lookup_blob(treewalk.get_object_id(0))
       if jblob_lookup.get_name == jblob.get_name
         mode = treewalk.get_file_mode(0).get_bits
         return mode

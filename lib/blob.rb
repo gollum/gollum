@@ -83,7 +83,7 @@ module RJGit
       treewalk.set_recursive(true)
       treewalk.set_filter(PathFilter.create(file_path))
       if treewalk.next
-        jblob = walk.lookup_blob(treewalk.objectId(0))
+        jblob = walk.lookup_blob(treewalk.get_object_id(0))
         if jblob
           mode = RJGit.get_file_mode_with_path(jrepo, file_path, jtree) 
           Blob.new(jrepo, mode, file_path, jblob)
