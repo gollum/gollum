@@ -52,6 +52,7 @@ Installation examples for individual systems can be seen [here](https://github.c
 
 **Notes:**  
 * Whichever Ruby implementation you're using, Gollum ships with the appropriate default git adapter. So the above installation procedure is common for both MRI and JRuby.
+* You may want to execute: `[sudo] gem update --system` if you see some weird errors when you run `gollum` or just to have an updated version of 'gem'.
 * If you're installing from source:
 	* Optionally uninstall any previous versions of Gollum:  
 		```
