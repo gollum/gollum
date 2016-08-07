@@ -1,4 +1,4 @@
-gollum -- A wiki built on top of Git
+gollum -- A git-based Wiki
 ====================================
 
 [![Gem Version](https://badge.fury.io/rb/gollum.svg)](http://badge.fury.io/rb/gollum)
@@ -7,230 +7,167 @@ gollum -- A wiki built on top of Git
 
 ## DESCRIPTION
 
-**New: Gollum is now [compatible with JRuby](https://github.com/gollum/gollum/wiki/Git-adapters#rjgit-java). Just run `gem install gollum` to install.**
+Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository (either bare or regular) of a specific nature:
+* A Gollum repository's contents are human-editable, unless the repository is bare. Pages are unique text files which may be organized into directories any way you choose. Other content can also be included, for example images, PDFs and headers/footers for your pages.
+* Gollum pages:
+	* May be written in a variety of [markups](#markups).
+	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
+	* Can be displayed in all versions (commits).
 
-Gollum is a simple wiki system built on top of Git.
+Gollum can be launched either as a webserver (with the web interface) or in "console mode", where you can use a predefined API to query and manipulate the repository. For more information, see the [Running](#running) and [Configuration](#configuration) sections.
 
-Gollum wikis are simply Git repositories that adhere to a specific format.
-Gollum pages may be written in a variety of formats and can be edited in a
-number of ways depending on your needs. You can edit your wiki locally:
+For more information on Gollum's capabilities and pitfalls:
 
-* With your favorite text editor or IDE (changes will be visible after committing).
-* With the built-in web interface.
-* With the Gollum Ruby API.
+1. [Syntax/capability overview for pages](https://github.com/gollum/gollum/wiki).
+2. [Known limitations](https://github.com/gollum/gollum/wiki/Known-limitations).
+3. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
+4. [Security overview](https://github.com/gollum/gollum/wiki/Security).
 
-Gollum follows the rules of [Semantic Versioning](http://semver.org/) and uses
-[TomDoc](http://tomdoc.org/) for inline documentation.
+For a quick impression of gollum, see [this video](https://www.youtube.com/watch?v=gj1qqK3Oku8). To see more advanced features in action, see [this video](https://www.youtube.com/watch?v=EauxgxsLDC4) here (installation with docker).
 
 ## SYSTEM REQUIREMENTS
 
-- Python 2.5+ (2.7.3 recommended)
-- Ruby 1.9.3+ (1.9.3 recommended) (JRuby compatible!)
-- Unix like operating system (OS X, Ubuntu, Debian, and more)
-- Will not work on Windows with the default [grit](https://github.com/github/grit) adapter, but might work via JRuby (please let us know!)
+| Operating System | Ruby           | Adapters           | Supported |
+| ---------------- | -------------- | ------------------ | --------- |
+| Unix/Linux-like  | Ruby 1.9.3+    | all except [RJGit](https://github.com/repotag/rjgit) | yes |
+| Unix/Linux-like  | [JRuby](https://github.com/jruby/jruby) (1.9.3+ compatible) | [RJGit](https://github.com/repotag/rjgit) | yes |
+| Windows          | Ruby 1.9.3+    | all except [RJGit](https://github.com/repotag/rjgit) | no  |
+| Windows          | [JRuby](https://github.com/jruby/jruby) (1.9.3+ compatible) | [RJGit](https://github.com/repotag/rjgit) | almost<sup>1</sup> |
 
-## SECURITY
+**Notes:**
 
-Don't enable `--custom-css`, `--custom-js` or `--mathjax-config` unless you trust every user who has the ability to edit the wiki.
-A better solution with more security is being tracked in [#665](https://github.com/gollum/gollum/issues/665).
+1. There are still some bugs and this setup is not ready for production yet. You can track the progress at [Support Windows via JRuby - Meta Issue](https://github.com/gollum/gollum/issues/1044).
 
 ## INSTALLATION
 
-The best way to install Gollum is with RubyGems:
+Varies depending on operating system, package manager and Ruby installation. Generally, you should first install Ruby and then Gollum.
 
-```bash
-$ [sudo] gem install gollum
-```
-You may first need to install some additional [development packages](https://github.com/gollum/gollum/wiki/Installation) for your OS.
+1. Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of choice.
+2. Gollum is best installed via RubyGems:  
+	```
+	[sudo] gem install gollum
+	```
 
-If you're installing from source, you can use [Bundler][bundler] to pick up all the
-gems:
+Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
-```bash
-$ bundle install
-```
+**Notes:**  
+* Whichever Ruby implementation you're using, Gollum ships with the appropriate default git adapter. So the above installation procedure is common for both MRI and JRuby.
+* If you're installing from source:
+	* Optionally uninstall any previous versions of Gollum:  
+		```
+		[sudo] gem uninstall -aIx gollum
+		```
+	* Install [Bundler](http://bundler.io/).
+	* Navigate to the cloned source of Gollum.
+	* Install dependencies:  
+		```
+		[sudo] bundle install
+		```
+	* Build:  
+		```
+		rake build
+		```
+	* And install:  
+		```
+		[sudo] gem install --no-ri --no-rdoc pkg/gollum*.gem
+		```
 
-In order to use the various formats that Gollum supports, you will need to
-separately install the necessary dependencies for each format. You only need
-to install the dependencies for the formats that you plan to use.
+### Markups
 
-* [AsciiDoc](http://asciidoctor.org) -- `gem install asciidoctor`
-* [Creole](http://www.wikicreole.org/) -- `gem install creole`
-* [Markdown](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet`
-* [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown) -- `gem install github-markdown`
-* [Org](http://orgmode.org/) -- `gem install org-ruby`
-* [Pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML` comes with Perl >= 5.10. Lower versions should install Pod::Simple from CPAN.
+Gollum presently ships with support for the following markups:
+* [Markdown](http://daringfireball.net/projects/markdown/syntax)
 * [RDoc](http://rdoc.sourceforge.net/)
-* [ReStructuredText](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
-* [Textile](http://en.wikipedia.org/wiki/Textile_(markup_language)) -- `gem install RedCloth`
-* [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth`
 
-[bundler]: http://gembundler.com/
+Since all markups are rendered by the [github-markup](https://github.com/github/markup) gem, you can easily add support for other markups by additional installation:
+* [AsciiDoc](http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/) -- `[sudo] gem install asciidoctor`
+* [Creole](http://www.wikicreole.org/wiki/CheatSheet) -- `[sudo] gem install creole`
+* [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `[sudo] gem install wikicloth`
+* [Org](http://orgmode.org/worg/dev/org-syntax.html) -- `[sudo] gem install org-ruby`
+* [Pod](http://perldoc.perl.org/perlpod.html) -- requires Perl >= 5.10 (the `perl` command must be available on your command line)
+	* Lower versions should install `Pod::Simple` from CPAN.
+* [ReStructuredText](http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html) -- requires python >= 2 (the `python2` command must be available on your command line)
+	* Note that Gollum will also need you to install `docutils` for your Python 2. Installation procedure can, again, vary depending on operating system and package manager.
+* [Textile](http://redcloth.org/hobix.com/textile/quick.html) -- `[sudo] gem install RedCloth`
 
-
-## SYNTAX
-
-Gollum supports a variety of formats and extensions (Markdown, MediaWiki, Textile, …).
-On top of these formats Gollum lets you insert headers, footers, links, image, math and more.
-
-Check out the [Gollum Wiki](https://github.com/gollum/gollum/wiki) for all of Gollum's formats and syntactic options.
-
+By default, Gollum ships with the `kramdown` gem to render Markdown. However, you can use any [Markdown renderer supported by github-markup](https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb). The thing to remember is that the first installed renderer from the list will be used. So, for example, `redcarpet` will NOT be used if `github/markdown` is installed.
 
 ## RUNNING
 
-To view and edit your Gollum repository locally via the built in web
-interface, simply install the Gollum gem, navigate to your repository via the
-command line, and run the executable:
+Simply:
 
-```bash
-$ gollum
-```
+1. Navigate to your git repository (wiki) via the command line.
+2. Run: `gollum`.
+3. Open `http://localhost:4567` in your browser.
 
-This will start up a web server running the Gollum frontend and you can view
-and edit your wiki at http://localhost:4567. To get help on the command line
-utility, you can run it like so:
+This will start up a web server (WEBrick) running Gollum with a web interface, where you can view and edit your wiki.
 
-```bash
-$ gollum --help
-```
+### Running from source
 
-This will show you the options you can pass as arguments to the `gollum` command:
+1. `git clone https://github.com/gollum/gollum`
+2. `cd gollum`
+3. `[sudo] bundle install` (may not always be necessary).
+4. `bundle exec bin/gollum`
+	* Like that, gollum assumes the target wiki (git repository) is the project repository itself. If it's not, execute `bundle exec bin/gollum <path-to-wiki>` instead.
+5. Open `http://localhost:4567` in your browser.
 
-```bash
-Options:
-        --port [PORT]                Bind port (default 4567).
-        --host [HOST]                Hostname or IP address to listen on (default 0.0.0.0).
-        --version                    Display current version.
-        --config [CONFIG]            Path to additional configuration file.
-        --adapter [ADAPTER]          Git adapter to use in the backend. Defaults to grit.
-        --irb                        Start an irb process with gollum loaded for the current wiki.
-        --css                        Inject custom css. Uses custom.css from root repository.
-        --js                         Inject custom js. Uses custom.js from root repository.
-        --template-dir [PATH]        Specify custom template directory.
-        --page-file-dir [PATH]       Specify the sub directory for all page files (default: repository root).
-        --base-path [PATH]           Specify the base path for the served pages (default: /) Example: --base-path wiki yields the home page accessible at http://localhost:4567/wiki/.
-        --gollum-path [PATH]         Specify the path to the git repository to be served.
-        --ref [REF]                  Specify the repository ref to use (default: master).
-        --bare                       Specify that the repository is bare (only necessary when using the grit adapter).
-        --no-edit                    Restricts editing capability through frontend.
-        --no-live-preview            Disables livepreview.
-        --live-preview               Enables livepreview.
-        --allow-uploads [MODE]       Allows file uploads. Modes: dir (default, store all uploads in the same directory), page (store each upload at the same location as the page).
-        --mathjax                    Enables mathjax for rendering mathematical equations. Uses the TeX-AMS-MML_HTMLorMML config with the autoload-all extension by default.
-        --mathjax-config [SOURCE]    Inject custom mathjax config file. Uses mathjax.config.js from root repository by default.
-        --user-icons [SOURCE]        Set the history user icons. Valid values: gravatar, identicon, none. Default: none.
-        --show-all                   Shows all files in file view. By default only valid pages are shown.
-        --collapse-tree              Collapse file view tree. By default, expanded tree is shown.
-        --h1-title                   Sets page title to value of first h1.
-```
+### Rack
 
-Note that the gollum server will not run on Windows because of [an issue](https://github.com/rtomayko/posix-spawn/issues/9) with posix-spawn (which is used by Grit).
+Gollum can also be ran with any [rack-compatible web server](https://github.com/rack/rack#supported-web-servers). More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-via-Rack).
 
-### RACK
+### Rack, with an authentication server
 
-You can also run gollum with any rack-compatible server by configuring a `config.ru`
-file. This allows you to utilize any Rack middleware like Rack::Auth, OmniAuth, etc. See below for an example of a `config.ru`. You can define all the [options available on the command line](#running) by configuring the app's `:wiki_options` hash. See [here](https://github.com/gollum/gollum/wiki/Using-Gollum-with-Rack) for the names of the options corresponding to the command line switches.  
+Gollum can also be ran alongside a CAS (Central Authentication Service) SSO (single sign-on) server. With a bit of tweaking, this adds basic user-support to Gollum. To see an example and an explanation, navigate [over here](https://github.com/gollum/gollum/wiki/Gollum-via-Rack-and-CAS-SSO).
 
-```ruby
-#!/usr/bin/env ruby
-require 'rubygems'
-require 'gollum/app'
+### Docker
 
-gollum_path = File.expand_path(File.dirname(__FILE__)) # CHANGE THIS TO POINT TO YOUR OWN WIKI REPO
-Precious::App.set(:gollum_path, gollum_path)
-Precious::App.set(:default_markup, :markdown) # set your favorite markup language
-Precious::App.set(:wiki_options, {:universal_toc => false})
-run Precious::App
-```
+Gollum can also be ran via [Docker](https://www.docker.com/). More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-via-Docker).
 
-Your Rack middleware can pass author details to Gollum in a Hash in the session under the 'gollum.author' key.
+### Service
 
-## CONFIG FILE
+Gollum can also be ran as a service. More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-as-a-service).
 
-Gollum optionally takes a `--config file`. See [config.rb](https://github.com/gollum/gollum/blob/master/config.rb) for an example.
+## CONFIGURATION
 
-## CUSTOM CSS/JS
+Gollum comes with the following command line options:
 
-The `--css` flag will inject `custom.css` from the root of your git repository into each page. `custom.css` must be commited to git or you will get a 302 redirect to the create page.
+| Option            | Arguments | Description |
+| ----------------- | --------- | ----------- |
+| --host            | [HOST]    | Specify the hostname or IP address to listen on. Default: `0.0.0.0`.<sup>1</sup> |
+| --port            | [PORT]    | Specify the port to bind Gollum with. Default: `4567`. |
+| --config          | [FILE]  | Specify path to Gollum's configuration file. |
+| --ref             | [REF]     | Specify the git branch to serve. Default: `master`. |
+| --adapter         | [ADAPTER] | Launch Gollum using a specific git adapter. Default: `grit`.<sup>2</sup> |
+| --bare            | none      | Tell Gollum that the git repository should be treated as bare. This is only necessary when using the default grit adapter. |
+| --base-path       | [PATH]    | Specify the leading portion of all Gollum URLs (path info). Setting this to `/wiki` will make the wiki accessible under `http://localhost:4567/wiki/`. Default: `/`. |
+| --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
+| --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
+| --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
+| --emoji           | none      | Parse and interpret emoji tags (e.g. :heart:). |
+| --no-edit         | none      | Disable the feature of editing pages. |
+| --live-preview    | none      | Enable the live preview feature in page editor. |
+| --no-live-preview | none      | Disable the live preview feature in page editor. |
+| --allow-uploads   | [MODE]    | Enable file uploads. If set to `dir`, Gollum will store all uploads in the `/uploads/` directory in repository root. If set to `page`, Gollum will store each upload at the currently edited page.<sup>4</sup> |
+| --mathjax         | none      | Enables MathJax (renders mathematical equations). By default, uses the `TeX-AMS-MML_HTMLorMML` config with the `autoload-all` extension.<sup>5</sup> |
+| --irb             | none      | Launch Gollum in "console mode", with a [predefined API](https://github.com/gollum/gollum-lib/). |
+| --h1-title        | none      | Tell Gollum to use the first `<h1>` as page title. |
+| --show-all        | none      | Tell Gollum to also show files in the file view. By default, only valid pages are shown. |
+| --collapse-tree   | none      | Tell Gollum to collapse the file tree, when the file view is opened. By default, the tree is expanded. |
+| --user-icons      | [MODE]    | Tell Gollum to use specific user icons for history view. Can be set to `gravatar`, `identicon` or `none`. Default: `none`. |
+| --mathjax-config  | [FILE]    | Specify path to a custom MathJax configuration. If not specified, uses the `mathjax.config.js` file from repository root. |
+| --template-dir    | [PATH]    | Specify custom mustache template directory. |
+| --help            | none      | Display the list of options on the command line. |
+| --version         | none      | Display the current version of Gollum. |
 
-The `--js` flag will inject `custom.js` from the root of your git repository into each page. `custom.js` must be commited to git or you will get a 302 redirect to the create page.
+**Notes:**
 
+1. The `0.0.0.0` IP address allows remote access. Should you wish for Gollum to turn into a personal Wiki, use `127.0.0.1`.
+2. Before using `--adapter`, you should probably read [this](https://github.com/gollum/gollum/wiki/Git-adapters) first.
+3. When `--css` or `--js` is used, respective files must be committed to your git repository or you will get a 302 redirect to the create a page.
+4. Files can be uploaded simply by dragging and dropping them onto the editor's text area (this is, however exclusive to the default editor, not the live preview editor).
+5. Read the relevant [Security note](https://github.com/gollum/gollum/wiki/Security#custom-cssjs--mathjax-config) before using these.
 
-## API DOCUMENTATION
+### Config file
 
-The [Gollum API](https://github.com/gollum/gollum-lib/) allows you to retrieve
-raw or formatted wiki content from a Git repository, write new content to the
-repository, and collect various meta data about the wiki as a whole.
+When `--config` option is used, certain inner parts of Gollum can be customized. This is used throughout our wiki for certain user-level alterations, among which [customizing supported markups](https://github.com/gollum/gollum/wiki/Formats-and-extensions) will probably stand out.
 
-
-## CONTRIBUTE
-
-If you'd like to hack on Gollum, start by forking the repo on GitHub:
-
-http://github.com/gollum/gollum
-
-To get all of the dependencies, install the gem first. The best way to get
-your changes merged back into core is as follows:
-
-1. Clone down your fork
-1. Create a thoughtfully named topic branch to contain your change
-1. Hack away
-1. Add tests and make sure everything still passes by running `rake`
-1. If you are adding new functionality, document it in the README
-1. Do not change the version number, I will do that on my end
-1. If necessary, rebase your commits into logical chunks, without errors
-1. Push the branch up to GitHub
-1. Send a pull request to the gollum/gollum project.
-
-## RELEASING
-
-Gollum uses [Semantic Versioning](http://semver.org/).
-
-    x.y.z
-
-For z releases:
-
-```bash
-$ rake bump
-$ rake release
-```
-
-For x.y releases:
-
-```bash
-Update VERSION in lib/gollum.rb
-$ rake gemspec
-$ rake release
-```
-
-## BUILDING THE GEM FROM MASTER
-
-```bash
-$ gem uninstall -aIx gollum
-$ git clone https://github.com/gollum/gollum.git
-$ cd gollum
-gollum$ rake build
-gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem
-```
-
-## RUN THE TESTS
-
-```bash
-$ bundle install
-$ bundle exec rake test
-```
-
-## WORK WITH TEST REPOS
-
-An example of how to add a test file to the bare repository lotr.git.
-
-```bash
-$ mkdir tmp; cd tmp
-$ git clone ../lotr.git/ .
-Cloning into '.'...
-done.
-$ git log
-$ echo "test" > test.md
-$ git add . ; git commit -am "Add test"
-$ git push ../lotr.git/ master
-```
+**All of the mentioned alterations work both for Gollum's config file (`config.rb`) and Rack's config file (`config.ru`).**

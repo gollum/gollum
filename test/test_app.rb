@@ -513,8 +513,21 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    assert_match /custom.js/, last_response.body
+    assert_match /"\/custom.js"/, last_response.body
     Precious::App.set(:wiki_options, { :js => nil })
+  end
+
+  test "change custom.css path if page-file-dir is set" do
+    Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
+    page = 'docs/yaycustom'
+    text = 'customized!'
+
+    @wiki.write_page(page, :markdown, text,
+                     { :name => 'user1', :email => 'user1' });
+
+    get page
+    assert_match /"\/docs\/custom.css"/, last_response.body
+    Precious::App.set(:wiki_options, { :css => nil, :page_file_dir => nil })
   end
 
   test "show edit page with header and footer and sidebar of multibyte" do
@@ -692,6 +705,18 @@ context "Frontend with lotr" do
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body
+  end
+
+  test "existing emoji" do
+    get "/emoji/heart"
+    assert_equal 200, last_response.status
+    assert_equal 'image/png', last_response.headers['Content-Type']
+    assert_equal [137, 80, 78, 71, 13, 10, 26, 10], last_response.body.each_byte.to_a[0..7]
+  end
+
+  test "missing emoji" do
+    get "/emoji/oggy_was_here"
+    assert_equal 404, last_response.status
   end
 
   def app

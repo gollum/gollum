@@ -29,7 +29,7 @@ module Precious
       end
 
       def custom_path
-        "#{@base_url}#{@page_dir.nil? ? '' : '/'}#{@page_dir}"
+        "#{@base_url}#{@page_dir.empty? ? '' : '/'}#{@page_dir}"
       end
 
       def css # custom css
