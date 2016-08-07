@@ -90,25 +90,14 @@ context "Frontend" do
     divs.each {|div| assert_match div, last_response.body}
   end
 
-  test "retain edit information" do
+  test "provide last edit information" do
     page1 = 'page1'
     user1 = 'user1'
     @wiki.write_page(page1, :markdown, '',
                      { :name => user1, :email => user1 });
 
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
-
-    page2 = 'page2'
-    user2 = 'user2'
-    @wiki.write_page(page2, :markdown, '',
-                     { :name => user2, :email => user2 });
-
-    get page2
-    assert_match /Last edited by <b>user2/, last_response.body
-
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
+    get "/last-commit-info", :path => page1
+    assert_match /\"author\":\"user1\"/, last_response.body
   end
 
   test "edits page" do

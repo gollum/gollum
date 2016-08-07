@@ -5,6 +5,7 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'json'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -129,6 +130,14 @@ module Precious
 
     def wiki_new
       Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+    end
+
+    get '/last-commit-info' do
+      content_type :json
+      if page = wiki_page(params[:path]).page
+        version = page.last_version
+        {:author => version.author.name, :date => version.authored_date}.to_json
+      end
     end
 
     get '/emoji/:name' do
@@ -509,7 +518,6 @@ module Precious
 
       name = extract_name(fullpath) || wiki.index_page
       path = extract_path(fullpath) || '/'
-
       if page = wiki.paged(name, path, exact = true)
         @page          = page
         @name          = name
@@ -518,7 +526,6 @@ module Precious
 
         # Extensions and layout data
         @editable      = true
-        @page_exists   = !page.last_version.nil?
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
         @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
