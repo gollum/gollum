@@ -4,11 +4,15 @@ matrix:
   include:
     - rvm: jruby
       env: JRUBY_OPTS="--2.0"
+      jdk:
+	- oraclejdk7
+	- oraclejdk8
+	- openjdk7
 
-jdk:
-  - oraclejdk7
-  - oraclejdk8
-  - openjdk7
+#jdk:
+#  - oraclejdk7
+#  - oraclejdk8
+#  - openjdk7
 
 addons:
   # Fix OpenJDK builds
