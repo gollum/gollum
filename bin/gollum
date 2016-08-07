@@ -145,6 +145,9 @@ MSG
     "If not specified, uses the '<git-repo>/mathjax.config.js' file.") do |file|
     wiki_options[:mathjax_config] = file || 'mathjax.config.js'
   end
+  opts.on("--plantuml-url [URL]", "Sets the PlantUML server endpoint.") do |url|
+    wiki_options[:plantuml_url] = url
+  end
   opts.on("--template-dir [PATH]", "Specify custom mustache template directory.") do |path|
     wiki_options[:template_dir] = path
   end
@@ -162,7 +165,6 @@ MSG
   end
   
   opts.separator ""
-  
 end
 
 # Read command line options into `options` hash
@@ -208,6 +210,12 @@ if options[:irb]
     if !wiki.exist? then
       raise Gollum::InvalidGitRepositoryError
     end
+    if wiki_options[:plantuml_url]
+      Gollum::Filter::PlantUML.configure do |config|
+        puts "Using #{wiki_options[:plantuml_url]} as PlantUML endpoint"
+        config.url = wiki_options[:plantuml_url]
+      end
+    end
     puts
     puts "Loaded Gollum wiki at:"
     puts "#{File.expand_path(gollum_path).inspect}"
@@ -241,6 +249,13 @@ else
     # otherwise it will be relative to the CWD
     cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
     require cfg
+  end
+
+  if wiki_options[:plantuml_url]
+    Gollum::Filter::PlantUML.configure do |config|
+      puts "Using #{wiki_options[:plantuml_url]} as PlantUML endpoint"
+      config.url = wiki_options[:plantuml_url]
+    end
   end
 
   base_path = wiki_options[:base_path]
