@@ -41,10 +41,6 @@ module Precious
         @editable
       end
 
-      def page_exists
-        @page_exists
-      end
-
       def allow_editing
         @allow_editing
       end
