@@ -1,4 +1,4 @@
-# Contributing to Gollum ===
+# Contributing to Gollum
 
 Thanks for your interset in the gollum project!
 
