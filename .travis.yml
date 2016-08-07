@@ -1,6 +1,9 @@
 language: ruby
-rvm:
-  - jruby
+
+matrix:
+  include:
+    - rvm: jruby
+      env: JRUBY_OPTS="--2.0"
 
 jdk:
   - oraclejdk7
