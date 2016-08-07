@@ -110,6 +110,15 @@ module Precious
       redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
     end
 
+    get '/favicon.ico' do
+      if File.file?('favicon.ico')
+        content_type 'image/x-icon'
+        File.read('favicon.ico')
+      else
+        halt 404
+      end
+    end
+
     # path is set to name if path is nil.
     #   if path is 'a/b' and a and b are dirs, then
     #   path must have a trailing slash 'a/b/' or
