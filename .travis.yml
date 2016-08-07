@@ -5,11 +5,12 @@ matrix:
     - rvm: jruby
       env: JRUBY_OPTS="--2.0"
       jdk: oraclejdk7
-
-#jdk:
-#  - oraclejdk7
-#  - oraclejdk8
-#  - openjdk7
+    - rvm: jruby
+      env: JRUBY_OPTS="--2.1"
+      jdk: oraclejdk8
+    - rvm: jruby
+      env: JRUBY_OPTS="--2.0"
+    - jdk: openjdk
 
 addons:
   # Fix OpenJDK builds
