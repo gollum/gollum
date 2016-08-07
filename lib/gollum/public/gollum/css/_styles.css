@@ -85,6 +85,22 @@ ol.tree
         margin-right: 7px;
         vertical-align: text-top;
       }
+      li.file form
+      {
+          vertical-align:middle;
+          display: inline-block;
+      }
+        li.file form button
+        {
+          vertical-align:middle;
+          height: 20px;
+          padding-left: 36px;
+          padding-right: 10px;
+          border: 0px solid #000000;
+          background: url("../images/fileview/trashcan.png") no-repeat 16px center;
+          cursor: pointer;
+        }
+      }
       li.file a[href *= '.pdf'] span.icon { background: url(../images/fileview/document.png) 0 0 no-repeat; }
       li.file a[href *= '.html'] span.icon { background: url(../images/fileview/document.png) 0 0 no-repeat; }
       li.file a[href $= '.css'] span.icon { background: url(../images/fileview/document.png) 0 0 no-repeat; }
@@ -125,4 +141,3 @@ ol.tree
   }
     li input:checked + ol > li { display: block; margin: 0 0 0.125em;  /* 2px */}
     li input:checked + ol > li:last-child { margin: 0 0 0.063em; /* 1px */ }
-

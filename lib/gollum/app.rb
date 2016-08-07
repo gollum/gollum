@@ -221,6 +221,19 @@ module Precious
       end
     end
 
+    post '/deleteFile/*' do
+      forbid unless @allow_editing
+      wiki = wiki_new
+      filepath = params[:splat].first
+      unless filepath.nil?
+        commit           = commit_message
+        commit[:message] = "Deleted #{filepath}"
+        wiki.delete_file(filepath, commit)
+      end
+
+      redirect to('/fileview')
+    end
+
     post '/rename/*' do
       wikip = wiki_page(params[:splat].first)
       halt 500 if wikip.nil?
