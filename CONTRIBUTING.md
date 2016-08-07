@@ -1,6 +1,6 @@
 # Contributing to Gollum
 
-Thanks for your interset in the gollum project!
+Thanks for your interest in the gollum project!
 
 ## Submitting an Issue
 
