@@ -23,6 +23,7 @@ wiki_options = {
     :live_preview  => false,
     :allow_uploads => false,
     :allow_editing => true,
+    :h1_title => true,
 }
 
 opts = OptionParser.new do |opts|
@@ -41,7 +42,7 @@ opts = OptionParser.new do |opts|
     exit 0
   end
 
-  opts.on("--config [CONFIG]", "Path to additional configuration file") do |config|
+  opts.on("--config [CONFIG]", "Path to additional configuration file.") do |config|
     options['config'] = config
   end
 
@@ -53,15 +54,15 @@ opts = OptionParser.new do |opts|
     options['irb'] = true
   end
 
-  opts.on("--css", "Inject custom css. Uses custom.css from root repository") do
+  opts.on("--css", "Inject custom css. Uses custom.css from root repository.") do
     wiki_options[:css] = true
   end
 
-  opts.on("--js", "Inject custom js. Uses custom.js from root repository") do
+  opts.on("--js", "Inject custom js. Uses custom.js from root repository.") do
     wiki_options[:js] = true
   end
 
-  opts.on("--template-dir [PATH]", "Specify custom template directory") do |path|
+  opts.on("--template-dir [PATH]", "Specify custom template directory.") do |path|
     wiki_options[:template_dir] = path
   end
 
@@ -106,7 +107,7 @@ opts = OptionParser.new do |opts|
     wiki_options[:mathjax] = true
   end
 
-  opts.on("--mathjax-config [SOURCE]", "Inject custom mathjax config file. Uses mathjax.config.js from root repository by default") do |source|
+  opts.on("--mathjax-config [SOURCE]", "Inject custom mathjax config file. Uses mathjax.config.js from root repository by default.") do |source|
     wiki_options[:mathjax_config] = source || 'mathjax.config.js'
   end
 
@@ -121,8 +122,8 @@ opts = OptionParser.new do |opts|
   opts.on("--collapse-tree", "Collapse file view tree. By default, expanded tree is shown.") do
     wiki_options[:collapse_tree] = true
   end
-  opts.on("--h1-title", "Sets page title to value of first h1") do
-    wiki_options[:h1_title] = true
+  opts.on("--page-title [MODE]", [:h1, :path], "Define how page titles are set. Modes: h1 (default, page title is value of first h1), path (page title is its filepath).") do |mode|
+    wiki_options[:h1_title] = false if mode == :path
   end
 
   opts.on("--plantuml-url [URL]", "Sets the PlantUML server endpoint.") do |url|
