@@ -56,6 +56,11 @@ module Precious
       def default_markup
         Precious::App.settings.default_markup
       end
+
+      #QND - sets default template page if specified
+      def content
+        @template_page
+      end      
     end
   end
 end

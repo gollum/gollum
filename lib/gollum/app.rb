@@ -105,6 +105,7 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
+      @template_page=wiki_page("/_Template").page.raw_data if settings.wiki_options[:template_page]      
     end
 
     get '/' do
