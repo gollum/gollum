@@ -321,6 +321,28 @@ context "Frontend" do
     assert_no_match(/[^\/]#{dir}/, last_response.body)
   end
 
+  test "create with template succeed if template exists" do
+    Precious::App.set(:wiki_options, { :template_page => true })
+    page='_Template'
+    post '/create', :content => 'fake template', :page => page,
+      :path               => '/', :format => 'markdown', :message => ''
+    follow_redirect!      
+    assert last_response.ok?
+    #puts last_response
+    @wiki.clear_cache    
+    get "/create/TT"
+    assert last_response.ok?
+    get '/delete/_Template'
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+
+  test "create with template succeed if template doesn't exist" do
+    Precious::App.set(:wiki_options, { :template_page => true }) 
+    get "/create/TT"
+    assert last_response.ok?
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+  
   test "create sets the correct path for a relative path subdirectory with the page file directory set" do
     Precious::App.set(:wiki_options, { :page_file_dir => "foo" })
     dir  = "bardir"
