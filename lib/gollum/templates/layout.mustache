@@ -39,7 +39,8 @@ $(function () {
     var editDiv = $('<div>', {
       position: 'absolute',
       height: textarea.height(),
-      'class': textarea.attr('class')
+      'class': textarea.attr('class'),
+      'id': 'gollum-editor-body-ace'
     }).insertBefore(textarea);
     textarea.css('display', 'none');
 
