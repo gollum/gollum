@@ -30,7 +30,7 @@
   <script type="text/javascript" src="{{base_url}}/javascript/gollum.dialog.js"></script>
   <script type="text/javascript" src="{{base_url}}/javascript/gollum.placeholder.js"></script>
   <script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.editor.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+  <script type="text/javascript" src="{{base_url}}/javascript/ace-1.2.5/ace.js"></script>
   <script type="text/javascript">
 $(function () {
   $('textarea[id="gollum-editor-body"]').each(function () {
@@ -45,7 +45,7 @@ $(function () {
 
     var editor = ace.edit(editDiv[0]);
     editor.setTheme("ace/theme/tomorrow");
-    editor.setKeyboardHandler("ace/keyboard/vim");
+    // editor.setKeyboardHandler("ace/keyboard/vim");
     editor.getSession().setUseWrapMode(true);
     editor.getSession().setValue(textarea.val());
     editor.getSession().setMode("ace/mode/" + mode);
