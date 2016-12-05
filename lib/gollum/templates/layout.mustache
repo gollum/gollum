@@ -32,7 +32,7 @@
   <script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.editor.js"></script>
   <script type="text/javascript" src="{{base_url}}/javascript/ace-1.2.5/ace.js"></script>
   <script type="text/javascript">
-$(function () {
+$(document).ready(function () {
   $('textarea[id="gollum-editor-body"]').each(function () {
     var textarea = $(this);
     var mode = textarea.attr("data-markup-lang");
@@ -44,9 +44,12 @@ $(function () {
     }).insertBefore(textarea);
     textarea.css('display', 'none');
 
+    // NOTE: This requires the page to have only one 'gollum-editor-body'.
     var editor = ace.edit(editDiv[0]);
+    window.ace_editor = editor;
+
     editor.setTheme("ace/theme/tomorrow");
-    // editor.setKeyboardHandler("ace/keyboard/vim");
+    editor.setKeyboardHandler("ace/keyboard/vim");
     editor.getSession().setUseWrapMode(true);
     editor.getSession().setValue(textarea.val());
     editor.getSession().setMode("ace/mode/" + mode);
@@ -55,7 +58,14 @@ $(function () {
       textarea.val(editor.getSession().getValue());
     });
   });
+
+  $("#wiki_format").change(function() {
+    var mode = $(this).val();
+    window.ace_editor.getSession().setMode("ace/mode/" + mode);
+  });
+
 });
+
   </script>
   {{#use_identicon}}
   <script type="text/javascript" src="{{base_url}}/javascript/identicon_canvas.js"></script>
