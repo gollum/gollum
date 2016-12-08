@@ -511,6 +511,34 @@ module Precious
       mustache :file_view, { :layout => false }
     end
 
+    get '/tip/*' do
+      fpath = params[:splat].first
+      wiki = wiki_new
+      name = extract_name(fpath) || wiki.index_page
+      path = extract_path(fpath) || '/'
+      f = fpath + '.md'
+      if File.exist?(f)
+        page = wiki.preview_page(name, File.read(f), :markdown)
+        @page = page
+        @name = name
+        @content = page.formatted_data
+        @upload_dest = find_upload_dest(path)
+        # Extensions and layout data
+        @editable      = true
+        @page_exists   = !page.versions.empty?
+        @toc_content   = wiki.universal_toc ? @page.toc_data : nil
+        @mathjax       = wiki.mathjax
+        @h1_title      = wiki.h1_title
+        @bar_side      = wiki.bar_side
+        @allow_uploads = wiki.allow_uploads
+        mustache :page
+      elsif File.exist?(fpath)
+        send_file fpath, :disposition => 'inline'
+      else
+        show_page_or_file(fpath)
+		end
+
+    end
     get '/*' do
       show_page_or_file(params[:splat].first)
     end
