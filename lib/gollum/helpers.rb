@@ -4,7 +4,7 @@ require 'gemojione'
 module Precious
   module Helpers
 
-    EMOJI_PATHNAME = Pathname.new(Gemojione.index.images_path).freeze
+    EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
 
     # Extract the path string that Gollum::Wiki expects
     def extract_path(file_path)
