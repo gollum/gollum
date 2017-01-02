@@ -36,7 +36,8 @@ module Precious
 
           # 1012: Folders and Pages need to be separated
           @results.each do |page|
-            page_path = page.path.sub(/^#{@path}\//, '')
+            page_path = page.path
+            page_path = page_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?
 
             if page_path.include?('/')
               folder      = page_path.split('/').first
