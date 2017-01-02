@@ -107,7 +107,7 @@ module Precious
     end
 
     get '/' do
-      redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
+      redirect clean_url(::File.join(@base_url, @page_dir, wiki.index_page))
     end
 
     # path is set to name if path is nil.
@@ -116,7 +116,6 @@ module Precious
     #   extract_path will trim path to 'a'
     # name, path, version
     def wiki_page(name, path = nil, version = nil, exact = true)
-      wiki = wiki_new
       path = name if path.nil?
       name = extract_name(name) || wiki.index_page
       path = extract_path(path)
@@ -126,8 +125,11 @@ module Precious
                      :name => name, :path => path)
     end
 
-    def wiki_new
-      Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+    def wiki
+      if (@wiki.nil?) then
+          @wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+      end
+      @wiki
     end
 
     get '/emoji/:name' do
@@ -173,8 +175,6 @@ module Precious
 
     post '/uploadFile' do
       forbid unless @allow_editing
-
-      wiki = wiki_new
 
       unless wiki.allow_uploads
         @message = "File uploads are disabled"
@@ -224,7 +224,6 @@ module Precious
 
     post '/deleteFile/*' do
       forbid unless @allow_editing
-      wiki = wiki_new
       filepath = params[:splat].first
       unless filepath.nil?
         commit           = commit_message
@@ -278,7 +277,6 @@ module Precious
 
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
-      wiki      = wiki_new
       page      = wiki.paged(page_name, path, exact = true)
       return if page.nil?
       committer = Gollum::Committer.new(wiki, commit_message)
@@ -340,7 +338,6 @@ module Precious
       name   = params[:page].to_url
       path   = sanitize_empty_params(params[:path]) || ''
       format = params[:format].intern
-      wiki   = wiki_new
 
       path.gsub!(/^\//, '')
 
@@ -383,7 +380,6 @@ module Precious
     post '/preview' do
       forbid unless @allow_editing
 
-      wiki           = wiki_new
       @name          = params[:page] || "Preview"
       @page          = wiki.preview_page(@name, params[:content], params[:format])
       @content       = @page.formatted_data
@@ -397,7 +393,6 @@ module Precious
     end
 
     get '/livepreview/' do
-      wiki = wiki_new
       @mathjax = wiki.mathjax
       mustache :livepreview, { :layout => false }
     end
@@ -414,9 +409,8 @@ module Precious
     end
 
     get '/latest_changes' do
-      @wiki = wiki_new
       max_count = settings.wiki_options.fetch(:latest_changes_count, 10)
-      @versions = @wiki.latest_changes({:max_count => max_count})
+      @versions = wiki.latest_changes({:max_count => max_count})
       mustache :latest_changes
     end
 
@@ -474,7 +468,6 @@ module Precious
 
     get '/search' do
       @query   = params[:q] || ''
-      wiki     = wiki_new
       # Sort wiki search results by count (desc) and then by name (asc)
       @results = wiki.search(@query).sort { |a, b| (a[:count] <=> b[:count]).nonzero? || b[:name] <=> a[:name] }.reverse
       @name    = @query
@@ -489,8 +482,10 @@ module Precious
     }x do |path|
       @path        = extract_path(path) if path
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
-      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       @results     = wiki.pages
+      @results.select! do |page|
+          page.path.start_with?(path)
+      end unless path.nil?
       @results     += wiki.files if settings.wiki_options[:show_all]
       @results     = @results.sort_by { |p| p.name.downcase } # Sort Results alphabetically, fixes 922
       @ref         = wiki.ref
@@ -498,7 +493,6 @@ module Precious
     end
 
     get '/fileview' do
-      wiki     = wiki_new
       options  = settings.wiki_options
       content  = wiki.pages
       # if showing all files include wiki.files
@@ -516,7 +510,6 @@ module Precious
     end
 
     def show_page_or_file(fullpath)
-      wiki = wiki_new
 
       name = extract_name(fullpath) || wiki.index_page
       path = extract_path(fullpath) || '/'
