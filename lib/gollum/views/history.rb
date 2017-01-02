@@ -6,7 +6,7 @@ module Precious
       attr_reader :page, :page_num, :allow_editing
 
       def title
-        @page.title
+        "History of #{@page.path}"
       end
 
       def versions

@@ -12,7 +12,7 @@ module Precious
       end
 
       def title
-        "#{@page.title}"
+        "#{@page.title_from_name}"
       end
 
       def page_name
