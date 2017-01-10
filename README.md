@@ -23,7 +23,11 @@ For more information on Gollum's capabilities and pitfalls:
 3. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
 4. [Security overview](https://github.com/gollum/gollum/wiki/Security).
 
-For a quick impression of gollum, see [this video](https://www.youtube.com/watch?v=gj1qqK3Oku8). To see more advanced features in action, see [this video](https://www.youtube.com/watch?v=EauxgxsLDC4) here (installation with docker).
+### Videos
+
+* [Quick impression of gollum](https://www.youtube.com/watch?v=gj1qqK3Oku8)
+* [Gollum overview and simple markdown tutorial (german with english subtitles)](https://www.youtube.com/watch?v=wfWgDRmcbU4)
+* [Advanced features in action](https://www.youtube.com/watch?v=EauxgxsLDC4)
 
 ## SYSTEM REQUIREMENTS
 
