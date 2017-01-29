@@ -338,6 +338,7 @@ module RJGit
     def push_all(remote, options = {})
       push_command = @jgit.push
       push_command.set_dry_run(true) if options[:dryrun]
+      push_command.set_force(true) if options[:force]
       push_command.set_remote(remote)
       push_command.set_push_all
       push_command.set_push_tags
@@ -349,6 +350,7 @@ module RJGit
     def push(remote = nil, refs = [], options = {})
       push_command = @jgit.push
       push_command.set_dry_run(true) if options[:dryrun]
+      push_command.set_force(true) if options[:force]
       push_command.set_remote(remote) if remote
       if(refs.to_a.size > 0)
         refs.map!{|ref| RefSpec.new(ref)}
