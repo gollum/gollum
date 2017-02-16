@@ -73,7 +73,7 @@ Installation examples for individual systems can be seen [here](https://github.c
 		```
 	* And install:  
 		```
-		[sudo] gem install --no-ri --no-rdoc pkg/gollum*.gem
+		[sudo] gem install --no-document pkg/gollum*.gem
 		```
 
 ### Markups
