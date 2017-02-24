@@ -314,6 +314,10 @@ module Precious
 
     get '/create/*' do
       forbid unless @allow_editing
+      if settings.wiki_options[:template_page] then
+        temppage = wiki_page("/_Template")
+        @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
+      end          
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
