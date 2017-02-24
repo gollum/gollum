@@ -245,13 +245,6 @@ else
     require cfg
   end
 
-  if wiki_options[:plantuml_url]
-    Gollum::Filter::PlantUML.configure do |config|
-      puts "Using #{wiki_options[:plantuml_url]} as PlantUML endpoint"
-      config.url = wiki_options[:plantuml_url]
-    end
-  end
-
   base_path = wiki_options[:base_path]
 
   if base_path.nil?
