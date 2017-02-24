@@ -97,8 +97,7 @@ module Precious
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
-
-      forbid unless @allow_editing || request.request_method == "GET"      
+      forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/')
       @page_dir = settings.wiki_options[:page_file_dir].to_s
@@ -157,7 +156,6 @@ module Precious
 
     get '/edit/*' do
       forbid unless @allow_editing
-
       wikip = wiki_page(params[:splat].first)
       @name = wikip.name
       @path = wikip.path
@@ -184,8 +182,6 @@ module Precious
     end
 
     post '/uploadFile' do
-      forbid unless @allow_editing
-
       wiki = wiki_new
 
       unless wiki.allow_uploads
@@ -248,8 +244,6 @@ module Precious
     end
 
     post '/rename/*' do
-      forbid unless @allow_editing
-
       wikip = wiki_page(params[:splat].first)
       halt 500 if wikip.nil?
       wiki   = wikip.wiki
@@ -286,8 +280,6 @@ module Precious
     end
 
     post '/edit/*' do
-      forbid unless @allow_editing
-
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
@@ -322,12 +314,6 @@ module Precious
 
     get '/create/*' do
       forbid unless @allow_editing
-
-      if settings.wiki_options[:template_page] then
-        temppage = wiki_page("/_Template")
-        @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
-      end       
-      
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
       @name = wikip.name.to_url
       @path = wikip.path
@@ -353,8 +339,6 @@ module Precious
     end
 
     post '/create' do
-      forbid unless @allow_editing
-
       name   = params[:page].to_url
       path   = sanitize_empty_params(params[:path]) || ''
       format = params[:format].intern
@@ -374,8 +358,6 @@ module Precious
     end
 
     post '/revert/*/:sha1/:sha2' do
-      forbid unless @allow_editing
-
       wikip = wiki_page(params[:splat].first)
       @path = wikip.path
       @name = wikip.name
@@ -399,8 +381,6 @@ module Precious
     end
 
     post '/preview' do
-      forbid unless @allow_editing
-
       wiki           = wiki_new
       @name          = params[:page] || "Preview"
       @page          = wiki.preview_page(@name, params[:content], params[:format])
