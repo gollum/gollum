@@ -148,7 +148,9 @@ MSG
   opts.on("--template-dir [PATH]", "Specify custom mustache template directory.") do |path|
     wiki_options[:template_dir] = path
   end
-  
+  opts.on("--template-page", "Use _Template in root as a template for new pages.") do
+    wiki_options[:template_page] = true
+  end
   opts.separator ""
   opts.separator "  Common:"
   
@@ -162,7 +164,6 @@ MSG
   end
   
   opts.separator ""
-  
 end
 
 # Read command line options into `options` hash
@@ -208,6 +209,7 @@ if options[:irb]
     if !wiki.exist? then
       raise Gollum::InvalidGitRepositoryError
     end
+
     puts
     puts "Loaded Gollum wiki at:"
     puts "#{File.expand_path(gollum_path).inspect}"
