@@ -1,3 +1,9 @@
+# 4.1.0 /2016-03-09
+
+* Added file deletion functionality to file view
+* Various performance improvements
+* Emoji support
+
 # 4.0.0 /2015-04-11
 
 * Now compatible with JRuby (via the [rjgit](https://github.com/repotag/rjgit) [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter))

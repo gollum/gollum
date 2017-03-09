@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '4.0.1'
-  s.date              = '2016-05-19'
+  s.version           = '4.1.0'
+  s.date              = '2017-03-09'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
 
   # = MANIFEST =
   s.files = %w[
+    CONTRIBUTING.md
     Gemfile
     HISTORY.md
     LICENSE
@@ -74,6 +75,7 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/images/fileview/folder-horizontal.png
     lib/gollum/public/gollum/images/fileview/toggle-small-expand.png
     lib/gollum/public/gollum/images/fileview/toggle-small.png
+    lib/gollum/public/gollum/images/fileview/trashcan.png
     lib/gollum/public/gollum/images/icon-sprite.png
     lib/gollum/public/gollum/images/man_24.png
     lib/gollum/public/gollum/images/para.png
