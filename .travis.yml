@@ -3,13 +3,13 @@ language: ruby
 matrix:
   include:
     - rvm: jruby
-      env: JRUBY_OPTS="--2.0"
+      env: JRUBY_OPTS="--2.2"
       jdk: oraclejdk7
     - rvm: jruby
-      env: JRUBY_OPTS="--2.0"
+      env: JRUBY_OPTS="--2.2"
       jdk: oraclejdk8
     - rvm: jruby
-      env: JRUBY_OPTS="--2.0"
+      env: JRUBY_OPTS="--2.2"
       jdk: openjdk7
 
 addons:
