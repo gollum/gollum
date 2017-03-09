@@ -1,16 +1,15 @@
 language: ruby
-
 matrix:
   include:
-    - rvm: jruby
-      env: JRUBY_OPTS="--2.2"
+    - rvm: jruby-9k
       jdk: oraclejdk7
-    - rvm: jruby
-      env: JRUBY_OPTS="--2.2"
+      before-install: gem install bundler --no-ri --no-rdoc
+    - rvm: jruby-9k
       jdk: oraclejdk8
-    - rvm: jruby
-      env: JRUBY_OPTS="--2.2"
+      before-install: gem install bundler --no-ri --no-rdoc
+    - rvm: jruby-9k
       jdk: openjdk7
+      before-install: gem install bundler --no-ri --no-rdoc
 
 addons:
   # Fix OpenJDK builds
