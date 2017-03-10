@@ -512,11 +512,14 @@ describe RubyGit do
     end
 
     context "pushing to another repository" do
-        before(:each) do
-          File.open(File.join(@local.path, "materialist.txt"), 'a') {|file| file.write("\n Beautiful materialist.") }
-          @local.add("materialist.txt")
-          @commit = @local.commit("Making a change for pushing and pulling specs")
-        end
+      let(:options) {{}}
+      let(:message) { "Making a change for pushing and pulling specs" }
+
+      before(:each) do
+        File.open(File.join(@local.path, "materialist.txt"), 'a') {|file| file.write("\n Beautiful materialist.") }
+        @local.add("materialist.txt")
+        @commit = @local.commit(message, options)
+      end
 
       it "pushes all changes to a local clone" do
         expect(@remote.commits).to have(8).commits
@@ -534,6 +537,34 @@ describe RubyGit do
         expect(@remote.commits).to have(8).commits
         @local.git.push('origin', ["master"], username: 'rspec', password: 'Hahmeid7')
         expect(@remote.commits).to have(9).commits
+      end
+
+      context "when non-fastforwardable" do
+        let(:options) {{ amend: true }}
+
+        it "pushes all with force: true" do
+          expect do
+            @local.git.push_all('origin', username: 'rspec', password: 'Hahmeid7', force: true)
+          end.to change { @remote.head.message }.to message
+        end
+
+        it "pushes a specific ref with force: true" do
+          expect do
+            @local.git.push('origin', ["master"], username: 'rspec', password: 'Hahmeid7', force: true)
+          end.to change { @remote.head.message }.to message
+        end
+
+        it "does not push all without force option" do
+          expect do
+            @local.git.push_all('origin', username: 'rspec', password: 'Hahmeid7')
+          end.not_to change { @remote.head.message }
+        end
+
+        it "does not push a specific ref without force option" do
+          expect do
+            @local.git.push('origin', ["master"], username: 'rspec', password: 'Hahmeid7')
+          end.not_to change { @remote.head.message }
+        end
       end
 
     end
