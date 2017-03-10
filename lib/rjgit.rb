@@ -11,6 +11,7 @@ module RJGit
     VERSION
   end
   
+  require 'uri'
   require 'stringio'
   # gem requires
   require 'mime/types'
