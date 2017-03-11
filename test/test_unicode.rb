@@ -90,6 +90,9 @@ context "Frontend Unicode support" do
   end
 
   test 'transliteration' do
+    # we transliterate only when adapter is grit
+    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+
     # TODO: Remove to_url once write_page changes are merged.
     @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', commit_details)
     page = @wiki.page('eeeee')

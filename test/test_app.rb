@@ -30,6 +30,11 @@ context "Frontend" do
     # and in file names saved to disk
     # urls are not case sensitive
     assert_equal 'Title-Space', 'Title Space'.to_url
+  end
+
+  test "translation" do
+    # we transliterate only when adapter is grit
+    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
 
     # ascii only file names prevent UTF8 issues
     # when using git repos across operating systems
