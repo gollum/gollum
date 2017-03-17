@@ -361,7 +361,9 @@ a#function-help:hover span { background-position: -402px -25px; }
   display: block;
 }
 
-
+#gollum-editor-body-ace {
+  resize: vertical;
+}
 
 /* @section form-fields */
 
@@ -374,7 +376,7 @@ a#function-help:hover span { background-position: -402px -25px; }
   margin: 0 0 0.4em;
   padding: 0.5em;
   width: 98%;
-  height: 20em;
+  height: 25em;
 }
 
 @media all and (min-width: 940px) {
