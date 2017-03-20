@@ -362,7 +362,12 @@ a#function-help:hover span { background-position: -402px -25px; }
 }
 
 #gollum-editor-body-ace {
-  resize: vertical;
+  overflow: scroll;
+  resize: both;
+  border: 1px solid #ddd;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+  font-size: 1em;
+  height: 25em;
 }
 
 /* @section form-fields */
