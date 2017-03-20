@@ -363,7 +363,7 @@ a#function-help:hover span { background-position: -402px -25px; }
 
 #gollum-editor-body-ace {
   overflow: scroll;
-  resize: both;
+  resize: vertical;
   border: 1px solid #ddd;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-size: 1em;
