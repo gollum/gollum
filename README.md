@@ -1,7 +1,7 @@
 RJGit
 =====
 
-###A JRuby wrapper around the [JGit library](https://github.com/eclipse/jgit) for manipulating Git repositories, the Ruby way.
+### A JRuby wrapper around the [JGit library](https://github.com/eclipse/jgit) for manipulating Git repositories, the Ruby way.
 
 [![Build Status](https://travis-ci.org/repotag/rjgit.png)](https://travis-ci.org/repotag/rjgit)
 [![Coverage Status](https://coveralls.io/repos/repotag/rjgit/badge.png?branch=master)](https://coveralls.io/r/repotag/rjgit)
