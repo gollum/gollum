@@ -126,6 +126,7 @@ repo.create_branch('new_branch') # Similarly for deleting, renaming
 repo.checkout('new_branch')
 repo.add('new_file.txt') # Similarly for removing
 repo.commit('My message')
+repo.update_ref(commit) # Fast forward HEAD (or another ref) to the commit just created
 ```
 
 ### Committing and adding branches to repositories, 'plumbing' style (also works with bare repos)
