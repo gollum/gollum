@@ -55,6 +55,12 @@
     </div>
 
     <div id="gollum-editor-format-selector">
+      <label for="format">Keybinding</label>
+      <select id="keybinding" name="keybinding">
+        <option selected="selected">default</option>
+        <option>vim</option>
+        <option>emacs</option>
+      </select>
       <label for="format">Edit Mode</label>
       <select id="wiki_format" name="format">
       {{#formats}}
@@ -62,9 +68,10 @@
           {{name}}
         </option>
       {{/formats}}
-     </select>
+      </select>
     </div>
   </div>
+
   <div id="gollum-editor-help" class="jaws">
     <ul id="gollum-editor-help-parent">
       <li><a href="javascript:void(0);" class="selected">Help 1</a></li>
