@@ -1,4 +1,4 @@
-# 4.1.0 /2016-03-09
+# 4.1.0 /2017-03-09
 
 * Added file deletion functionality to file view
 * Various performance improvements
