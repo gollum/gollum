@@ -64,9 +64,18 @@
       <label for="format">Edit Mode</label>
       <select id="wiki_format" name="format">
       {{#formats}}
-        <option {{#selected}}selected="selected" {{/selected}}value="{{id}}">
-          {{name}}
+      {{#enabled}}
+      <option {{#selected}}selected="selected" {{/selected}}value="{{id}}">
+        {{name}}
         </option>
+      {{/enabled}}
+      {{/formats}}
+      {{#formats}}
+      {{^enabled}}
+      <option class="disabled" {{#selected}}selected="selected" {{/selected}}value="{{id}}">
+        {{name}}
+        </option>
+      {{/enabled}}
       {{/formats}}
       </select>
     </div>

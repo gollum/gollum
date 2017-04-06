@@ -18,6 +18,10 @@ a {
   width: 1px;
 }
 
+.disabled {
+  color: lightgray;
+}
+
 #gollum-editor {
   margin: 0 0 5em;
   padding: 0em 1em 0.4em;
