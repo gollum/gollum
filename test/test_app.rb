@@ -636,11 +636,11 @@ context "Frontend with lotr" do
 
     body = last_response.body
 
-    assert body.include?("Bilbo Baggins"), "/pages should include the page 'Bilbo Baggins'"
+    assert body.include?("Bilbo-Baggins"), "/pages should include the page 'Bilbo Baggins'"
     assert body.include?("Gondor"), "/pages should include the folder 'Gondor'"
     assert !body.include?("Boromir"), "/pages should NOT include the page 'Boromir'"
     assert body.include?("Mordor"), "/pages should include the folder 'Mordor'"
-    assert !body.include?("Eye Of Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
+    assert !body.include?("Eye-Of-Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
     assert !body.match(/(Zamin).+(roast\-mutton)/m), "/pages should be sorted alphabetically"
   end
 
@@ -650,8 +650,8 @@ context "Frontend with lotr" do
 
     body = last_response.body
 
-    assert !body.include?("Bilbo Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
-    assert body.include?("Eye Of Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
+    assert !body.include?("Bilbo-Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
+    assert body.include?("Eye-Of-Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
   end
 
   test "symbolic link pages" do
