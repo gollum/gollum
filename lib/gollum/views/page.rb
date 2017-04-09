@@ -194,38 +194,22 @@ module Precious
       end
 
       def table(data)
+        return data.to_s if data.empty?
         result = "<table>\n"
-        case data
-          when Hash
-            result << table_headings(data.keys)
-            result << table_row(data.values)
-          when Array
-            result << table_row(data)
-        end
-        result << "</table>\n"
-      end
-
-      def table_headings(headings)
-        result = "<tr>\n"
-        headings.each do |heading|
-          result << "<th>#{CGI.escapeHTML(heading)}</th>\n"
-        end
-        result << "</tr>\n"
-      end
-
-      def table_row(values)
-        result = "<tr>\n"
-        values.each do |value|
-          result << "<td>"
-          case value
-            when Hash, Array
-              result << table(value)
-            else
-              result << CGI.escapeHTML(value.to_s)
+        keys = data.respond_to?(:keys) ? data.keys : nil
+          if keys
+            data = data.values
+            result << "<tr>\n"
+            keys.each do |heading|
+              result << "<th>#{CGI.escapeHTML(heading)}</th>\n"
+            end
+            result << "</tr>\n"
           end
-          result << "</td>\n"
-        end
-        result << "</tr>\n"
+        result << "<tr>\n"
+          data.each do |value|
+            result << "<td>" << (value.respond_to?(:each) ? table(value) : CGI.escapeHTML(value.to_s)) << "</td>\n"
+          end
+        result << "</tr>\n</table>\n"
       end
 
     end
