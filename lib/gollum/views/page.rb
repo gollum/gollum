@@ -143,7 +143,7 @@ module Precious
       #
       # Returns HTML table.
       def rendered_metadata
-        return '' if !page.display_metadata? || metadata.empty?
+        return '' unless page.display_metadata? && !metadata.empty?
         @rendered_metadata ||= table(metadata)
       end
 
