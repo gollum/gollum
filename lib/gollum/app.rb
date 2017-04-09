@@ -18,20 +18,16 @@ require File.expand_path '../helpers', __FILE__
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
 
-# Fix to_url
+# Use stringex #to_url only to leverage its #to_ascii method when using grit
 class String
-  alias :upstream_to_url :to_url
-
   if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
     def to_ascii
       self # Do not transliterate utf-8 url's unless using Grit
     end
   end
 
-  # _Header => header which causes errors
   def to_url
-    return nil if self.nil?
-    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar'], :force_downcase => false
+    to_ascii
   end
 end
 
@@ -120,12 +116,12 @@ module Precious
     def wiki_page(name, path = nil, version = nil, exact = true)
       wiki = wiki_new
       path = name if path.nil?
-      name = extract_name(name) || wiki.index_page
+      name, ext = extract_name(name) || wiki.index_page
       path = extract_path(path)
       path = '/' if exact && path.nil?
 
-      OpenStruct.new(:wiki => wiki, :page => wiki.paged(name, path, exact, version),
-                     :name => name, :path => path)
+      OpenStruct.new(:wiki => wiki, :page => wiki.paged(join_page_name(name, ext), path, exact, version),
+                     :name => name, :path => path, :ext => ext)
     end
 
     def wiki_new
@@ -157,7 +153,7 @@ module Precious
     get '/edit/*' do
       forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
-      @name = wikip.name
+      @name = join_page_name(wikip.name, wikip.ext)
       @path = wikip.path
       @upload_dest   = find_upload_dest(@path)
 
@@ -247,7 +243,7 @@ module Precious
       wikip = wiki_page(params[:splat].first)
       halt 500 if wikip.nil?
       wiki   = wikip.wiki
-      page   = wiki.paged(wikip.name, wikip.path, exact = true)
+      page   = wiki.paged(join_page_name(wikip.name, wikip.ext), wikip.path, exact = true)
       rename = params[:rename]
       halt 500 if page.nil?
       halt 500 if rename.nil? or rename.empty?
@@ -274,7 +270,7 @@ module Precious
       committer.commit
 
       wikip = wiki_page(rename)
-      page  = wiki.paged(wikip.name, wikip.path, exact = true)
+      page  = wiki.paged(join_page_name(wikip.name, wikip.ext), wikip.path, exact = true)
       return if page.nil?
       redirect to("/#{page.escaped_url_path}")
     end
@@ -300,7 +296,7 @@ module Precious
     get '/delete/*' do
       forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
-      name  = wikip.name
+      name  = join_page_name(wikip.name, wikip.ext)
       wiki  = wikip.wiki
       page  = wikip.page
       unless page.nil?
@@ -319,7 +315,7 @@ module Precious
         @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
       end          
       wikip = wiki_page(params[:splat].first.gsub('+', '-'))
-      @name = wikip.name.to_url
+      @name, ext = wikip.name.to_url
       @path = wikip.path
       @allow_uploads = wikip.wiki.allow_uploads
       @upload_dest   = find_upload_dest(@path)
@@ -354,7 +350,7 @@ module Precious
         wiki.write_page(name, format, params[:content], commit_message, path)
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
-        redirect to("/#{clean_url(::File.join(page_dir, path, encodeURIComponent(name)))}")
+        redirect to("/#{clean_url(::File.join(encodeURIComponent(page_dir), encodeURIComponent(path), encodeURIComponent(wiki.page_file_name(name, format))))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -364,7 +360,7 @@ module Precious
     post '/revert/*/:sha1/:sha2' do
       wikip = wiki_page(params[:splat].first)
       @path = wikip.path
-      @name = wikip.name
+      @name = join_page_name(wikip.name, wikip.ext)
       wiki  = wikip.wiki
       @page = wiki.paged(@name, @path)
       sha1  = params[:sha1]
@@ -446,7 +442,7 @@ module Precious
     }x do |path, start_version, end_version|
       wikip     = wiki_page(path)
       @path     = wikip.path
-      @name     = wikip.name
+      @name     = join_page_name(wikip.name, wikip.ext)
       @versions = [start_version, end_version]
       wiki      = wikip.wiki
       @page     = wikip.page
@@ -459,7 +455,7 @@ module Precious
       file_path = params[:captures][0]
       version   = params[:captures][1]
       wikip     = wiki_page(file_path, file_path, version)
-      name      = wikip.name
+      name      = join_page_name(wikip.name, wikip.ext)
       path      = wikip.path
       if page = wikip.page
         @page    = page
@@ -520,9 +516,9 @@ module Precious
     def show_page_or_file(fullpath)
       wiki = wiki_new
 
-      name = extract_name(fullpath) || wiki.index_page
+      name, ext = extract_name(fullpath) || wiki.index_page
       path = extract_path(fullpath) || '/'
-      if page = wiki.paged(name, path, exact = true)
+      if page = wiki.paged(join_page_name(name, ext), path, exact = true)
         @page          = page
         @name          = name
         @content       = page.formatted_data
@@ -541,7 +537,7 @@ module Precious
         show_file(file)
       else
         not_found unless @allow_editing
-        page_path = [path, name].compact.join('/')
+        page_path = [path, join_page_name(name, ext)].compact.join('/')
         redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
       end
     end

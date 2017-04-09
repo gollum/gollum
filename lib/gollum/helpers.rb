@@ -6,6 +6,10 @@ module Precious
 
     EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
 
+    def join_page_name(name, ext)
+      "#{name}#{ext}"
+    end
+
     # Extract the path string that Gollum::Wiki expects
     def extract_path(file_path)
       return nil if file_path.nil?
@@ -23,7 +27,8 @@ module Precious
 
       # File.basename is too eager to please and will return the last
       # component of the path even if it ends with a directory separator.
-      ::File.basename(file_path)
+      ext = ::File.extname(file_path)
+      return ::File.basename(file_path, ext), ext
     end
 
     def sanitize_empty_params(param)

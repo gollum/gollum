@@ -15,29 +15,6 @@ context "Frontend" do
     FileUtils.rm_rf(@path)
   end
 
-  test "urls transform unicode" do
-    header  = '_Header'
-    footer  = '_Footer'
-    sidebar = '_Sidebar'
-
-    # header, footer, and sidebar must be preserved
-    # or gollum will not recognize them
-    assert_equal header, header.to_url
-    assert_equal footer, footer.to_url
-    assert_equal sidebar, sidebar.to_url
-
-    # spaces are converted to dashes in URLs
-    # and in file names saved to disk
-    # urls are not case sensitive
-    assert_equal 'Title-Space', 'Title Space'.to_url
-
-    # ascii only file names prevent UTF8 issues
-    # when using git repos across operating systems
-    # as this test demonstrates, translation is not
-    # great
-    assert_equal 'm-plus-F', 'μ†ℱ'.to_url
-  end
-
   test "utf-8 kcode" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
   end
@@ -255,8 +232,8 @@ context "Frontend" do
   test "creates pages with escaped characters in title" do
     post "/create", :content => 'abc', :page => 'Title with spaces',
          :format             => 'markdown', :message => 'foo'
-    assert_equal 'http://example.org/Title-with-spaces', last_response.headers['Location']
-    get "/Title-with-spaces"
+    assert_equal 'http://example.org/Title%20with%20spaces', last_response.headers['Location']
+    get "/Title%20with%20spaces"
     assert_match /abc/, last_response.body
   end
 
@@ -699,8 +676,8 @@ context "Frontend with lotr" do
 
     post "/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, very scary'
-    assert_equal 'http://example.org/Mordor/Uruk-Hai', last_response.headers['Location']
-    get "/Mordor/Uruk-Hai"
+    assert_equal 'http://example.org/Mordor/Uruk%20Hai', last_response.headers['Location']
+    get "/Mordor/Uruk%20Hai"
     assert_match /really big smelly creatures/, last_response.body
   end
 
