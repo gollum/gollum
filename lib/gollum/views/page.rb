@@ -196,7 +196,7 @@ module Precious
       def table(data)
         return data.to_s if data.empty?
         result = "<table>\n"
-        keys = data.respond_to?(:keys) ? data.keys : nil
+        keys = data.respond_to?(:keys) && data.respond_to?(:values) ? data.keys : nil
           if keys
             data = data.values
             result << "<tr>\n"
