@@ -150,6 +150,7 @@ Gollum comes with the following command line options:
 | --mathjax         | none      | Enables MathJax (renders mathematical equations). By default, uses the `TeX-AMS-MML_HTMLorMML` config with the `autoload-all` extension.<sup>5</sup> |
 | --irb             | none      | Launch Gollum in "console mode", with a [predefined API](https://github.com/gollum/gollum-lib/). |
 | --h1-title        | none      | Tell Gollum to use the first `<h1>` as page title. |
+| --no-display-metadata | none  | Do not render metadata tables in pages. |
 | --show-all        | none      | Tell Gollum to also show files in the file view. By default, only valid pages are shown. |
 | --collapse-tree   | none      | Tell Gollum to collapse the file tree, when the file view is opened. By default, the tree is expanded. |
 | --user-icons      | [MODE]    | Tell Gollum to use specific user icons for history view. Can be set to `gravatar`, `identicon` or `none`. Default: `none`. |

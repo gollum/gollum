@@ -130,13 +130,21 @@ module Precious
 
       # Access to embedded metadata.
       #
-      # Examples
-      #
-      #   {{#metadata}}{{name}}{{/metadata}}
-      #
       # Returns Hash.
       def metadata
         @page.metadata
+      end   
+
+      # Access to embedded metadata.
+      #
+      # Examples
+      #
+      #   {{#rendered_metadata}}{{name}}{{/rendered_metadata}}
+      #
+      # Returns HTML table.
+      def rendered_metadata
+        return '' unless page.display_metadata? && !metadata.empty?
+        @rendered_metadata ||= table(metadata)
       end
 
       private
@@ -184,6 +192,26 @@ module Precious
         # .inner_html will cause href escaping on UTF-8
         doc.css("div#gollum-root").children.to_xml(@@to_xml)
       end
+
+      def table(data)
+        return data.to_s if data.empty?
+        result = "<table>\n"
+        keys = data.respond_to?(:keys) && data.respond_to?(:values) ? data.keys : nil
+          if keys
+            data = data.values
+            result << "<tr>\n"
+            keys.each do |heading|
+              result << "<th>#{CGI.escapeHTML(heading)}</th>\n"
+            end
+            result << "</tr>\n"
+          end
+        result << "<tr>\n"
+          data.each do |value|
+            result << "<td>" << (value.respond_to?(:each) ? table(value) : CGI.escapeHTML(value.to_s)) << "</td>\n"
+          end
+        result << "</tr>\n</table>\n"
+      end
+
     end
   end
 end
