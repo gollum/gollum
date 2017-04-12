@@ -51,6 +51,16 @@ context "Precious::Views::Page" do
 EOS
   end
 
+  test 'page has sha id' do
+    title = 'test'
+    @wiki.write_page(title, :markdown, 'Test' + "\n # 3", commit_details)
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    assert_equal "345e6aef713208c8d50cdea23b85e6ad831f0449", @view.sha
+  end
+
   test "h1 title can be disabled" do
     title = 'H1'
     @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert("js")</script>' + "\n # 3", commit_details)
@@ -63,6 +73,6 @@ EOS
 
     # Title is based on file name when h1_title is false.
     actual = @view.title
-    assert_equal 'H1', title
+    assert_equal title, actual
   end
 end
