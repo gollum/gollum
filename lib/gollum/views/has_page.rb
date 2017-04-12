@@ -11,5 +11,9 @@ module Precious
     def format
       @page.format.to_s
     end
+
+    def id
+      @page.sha
+    end
   end
 end
