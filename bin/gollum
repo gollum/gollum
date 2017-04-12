@@ -111,6 +111,12 @@ MSG
   opts.on("--no-live-preview", "Disable the live preview feature in page editor.") do
     wiki_options[:live_preview] = false
   end
+  opts.on("--follow-renames", "Follow pages across renames in the History view. Default except on jruby.") do
+    wiki_options[:follow_renames] = true
+  end
+  opts.on("--no-follow-renames", "Do not follow pages across renames in the History view.") do
+    wiki_options[:follow_renames] = false
+  end
   opts.on("--allow-uploads [MODE]", [:dir, :page], "Enable file uploads.",
     "If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.",
     "If set to 'page', Gollum will store each upload at the currently edited page.") do |mode|

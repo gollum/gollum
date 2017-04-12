@@ -404,7 +404,7 @@ module Precious
       @page     = wiki_page(params[:splat].first).page
       @page_num = [params[:page].to_i, 1].max
       unless @page.nil?
-        @versions = @page.versions :page => @page_num
+        @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, git_adapter == 'rjgit' ? false : true))
         mustache :history
       else
         redirect to("/")
