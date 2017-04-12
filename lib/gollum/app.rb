@@ -160,18 +160,10 @@ module Precious
       wiki = wikip.wiki
       @allow_uploads = wiki.allow_uploads
       if page = wikip.page
-        if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
-          live_preview_url = '/livepreview/?page=' + encodeURIComponent(@name)
-          if @path
-            live_preview_url << '&path=' + encodeURIComponent(@path)
-          end
-          redirect to(live_preview_url)
-        else
           @page         = page
           @page.version = wiki.repo.log(wiki.ref, @page.path).first
           @content      = page.text_data
           mustache :edit
-        end
       else
         redirect to("/create/#{encodeURIComponent(@name)}")
       end
@@ -392,12 +384,6 @@ module Precious
       @bar_side      = wiki.bar_side
       @allow_uploads = wiki.allow_uploads
       mustache :page
-    end
-
-    get '/livepreview/' do
-      wiki = wiki_new
-      @mathjax = wiki.mathjax
-      mustache :livepreview, { :layout => false }
     end
 
     get '/history/*' do

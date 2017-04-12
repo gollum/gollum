@@ -105,12 +105,6 @@ MSG
   opts.on("--no-edit", "Disable the feature of editing pages.")  do
     wiki_options[:allow_editing] = false
   end
-  opts.on("--live-preview", "Enable the live preview feature in page editor.") do
-    wiki_options[:live_preview] = true
-  end
-  opts.on("--no-live-preview", "Disable the live preview feature in page editor.") do
-    wiki_options[:live_preview] = false
-  end
   opts.on("--allow-uploads [MODE]", [:dir, :page], "Enable file uploads.",
     "If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.",
     "If set to 'page', Gollum will store each upload at the currently edited page.") do |mode|
