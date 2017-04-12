@@ -58,7 +58,7 @@ EOS
 
     @view = Precious::Views::Page.new
     @view.instance_variable_set :@page, page
-    assert_equal "345e6aef713208c8d50cdea23b85e6ad831f0449", @view.sha
+    assert_equal "594e928cc5dcb6d833dfb86bb36076fd4a84eea7", @view.id
   end
 
   test "h1 title can be disabled" do
