@@ -105,7 +105,6 @@ MSG
   opts.on("--no-edit", "Disable the feature of editing pages.")  do
     wiki_options[:allow_editing] = false
   end
-  end
   opts.on("--follow-renames", "Follow pages across renames in the History view. Default except on jruby.") do
     wiki_options[:follow_renames] = true
   end
