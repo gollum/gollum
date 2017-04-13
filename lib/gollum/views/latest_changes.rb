@@ -23,20 +23,12 @@ module Precious
             :date_full => v.authored_date,
             :files     => v.stats.files.map { |f,*rest|
               page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
               { :file => f,
                 :link => "#{page_path}/#{v.id}"
               }
             }
           }
         end
-      end
-
-      def remove_page_extentions(page_path)
-        Gollum::Markup.formats.values.each do |format|
-          page_path = page_path.gsub(/\.#{format[:regexp]}$/, '')
-        end
-        return page_path
       end
 
       def extract_renamed_path_destination(file)

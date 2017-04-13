@@ -123,7 +123,7 @@ context "Frontend" do
     post "/edit/A", :header => 'header',
          :footer            => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
     follow_redirect!
-    assert_equal "/A", last_request.fullpath
+    assert_equal "/A.md", last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -150,7 +150,7 @@ context "Frontend" do
     post "/rename/B", :rename => "/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/C', last_request.fullpath
+    assert_equal '/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -189,7 +189,7 @@ context "Frontend" do
     post "/rename/G/H", :rename => "/I/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/I/C', last_request.fullpath
+    assert_equal '/I/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -206,7 +206,7 @@ context "Frontend" do
     post "/rename/G/H", :rename => "K/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/G/K/C', last_request.fullpath
+    assert_equal '/G/K/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -272,7 +272,7 @@ context "Frontend" do
   end
 
   test "create redirects to page if already exists" do
-    name = "A"
+    name = "A.md"
     get "/create/#{name}"
     follow_redirect!
     assert_equal "/#{name}", last_request.fullpath
@@ -548,19 +548,6 @@ context "Frontend" do
     assert_match /meta name="robots" content="noindex, nofollow"/, last_response.body
   end
 
-  test "show revision of specific file" do
-    shas = {}
-      ["First revision of testfile", "Second revision of testfile"].each do |content|
-        new_commit = commit_test_file(@wiki, "revisions", "testfile", "log", content)
-        shas[new_commit] = content
-      end
-      shas.each do |sha, content|
-        get "revisions/testfile.log/#{sha}"
-        assert last_response.ok?
-        assert_match /#{content}/, last_response.body
-      end
-  end
-
   def app
     Precious::App
   end
@@ -689,10 +676,23 @@ context "Frontend with lotr" do
 
     post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',
          :page                        => 'Orc', :path => 'Mordor', :message => 'minor edit'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body
+  end
+
+  test "show revision of specific file" do
+    old_sha = "df26e61e707116f81ebc6b935ec6d1676b7e96c4"
+    update_sha = "f803c64d11407b23797325e3843f3f378b78f611"
+    
+    get "Data.csv/#{old_sha}"
+    assert last_response.ok?
+    assert_no_match /Samwise,Gamgee/, last_response.body
+
+    get "Data.csv/#{update_sha}"
+    assert last_response.ok?
+    assert_match /Samwise,Gamgee/, last_response.body
   end
 
   test "existing emoji" do
