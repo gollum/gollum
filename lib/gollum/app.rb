@@ -464,6 +464,7 @@ module Precious
         @name    = name
         @content = page.formatted_data
         @version = version
+        @bar_side = wikip.wiki.bar_side
         mustache :page
       elsif file = wikip.wiki.file("#{file_path}", version, true)
         show_file(file)
