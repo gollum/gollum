@@ -1,3 +1,5 @@
+require "pathname"
+
 module Precious
   module Views
     class Page < Layout
@@ -11,6 +13,29 @@ module Precious
       def title
         h1 = @h1_title ? page_header_from_content(@content) : false
         h1 || @page.url_path_title
+      end
+
+      def breadcrumb
+        # Not sure exactly why @path is not available here
+        path       = Pathname.new(@page.path)
+
+        # Always expose a link to the root of the wiki
+        breadcrumb = [%{<a href="#{@base_url}/">root</a>}]
+
+        # Then for each directory, add a crumb
+        path.descend do |crumb|
+          title = crumb.basename
+
+          # We reached the end of the trail
+          if title == path.basename
+            # Split the extension from the filename, it looks better!
+            breadcrumb << path.basename(path.extname)
+          else
+            breadcrumb << %{<a href="#{@base_url}/#{crumb}">#{title}</a>}
+          end
+        end
+
+        breadcrumb.join(" / ")
       end
 
       def page_header

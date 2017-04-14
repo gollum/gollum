@@ -839,11 +839,16 @@ ul.actions {
     background-image: url(../images/fileview/folder-horizontal.png);
 }
 
-#pages .breadcrumb {
+#pages .breadcrumb, #wiki-content .breadcrumb {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   margin: 1em 0;
   padding: 0.25em;
+}
+
+#wiki-content .breadcrumb {
+  border-top: none;
+  margin-top: 0;
 }
 
 .clearfloats {
