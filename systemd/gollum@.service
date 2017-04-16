@@ -1,0 +1,12 @@
+[Unit]
+Description=Gollum wiki server
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+ExecStart=/usr/bin/gollum
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
