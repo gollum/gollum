@@ -95,25 +95,14 @@ context "Frontend" do
     divs.each {|div| assert_match div, last_response.body}
   end
 
-  test "retain edit information" do
+  test "provide last edit information" do
     page1 = 'page1'
     user1 = 'user1'
     @wiki.write_page(page1, :markdown, '',
                      { :name => user1, :email => user1 });
 
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
-
-    page2 = 'page2'
-    user2 = 'user2'
-    @wiki.write_page(page2, :markdown, '',
-                     { :name => user2, :email => user2 });
-
-    get page2
-    assert_match /Last edited by <b>user2/, last_response.body
-
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
+    get "/last-commit-info", :path => page1
+    assert_match /\"author\":\"user1\"/, last_response.body
   end
 
   test "edits page" do
@@ -326,6 +315,28 @@ context "Frontend" do
     assert_no_match(/[^\/]#{dir}/, last_response.body)
   end
 
+  test "create with template succeed if template exists" do
+    Precious::App.set(:wiki_options, { :template_page => true })
+    page='_Template'
+    post '/create', :content => 'fake template', :page => page,
+      :path               => '/', :format => 'markdown', :message => ''
+    follow_redirect!      
+    assert last_response.ok?
+    #puts last_response
+    @wiki.clear_cache    
+    get "/create/TT"
+    assert last_response.ok?
+    get '/delete/_Template'
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+
+  test "create with template succeed if template doesn't exist" do
+    Precious::App.set(:wiki_options, { :template_page => true }) 
+    get "/create/TT"
+    assert last_response.ok?
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+  
   test "create sets the correct path for a relative path subdirectory with the page file directory set" do
     Precious::App.set(:wiki_options, { :page_file_dir => "foo" })
     dir  = "bardir"

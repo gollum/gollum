@@ -161,6 +161,7 @@ Gollum comes with the following command line options:
 | --template-dir    | [PATH]    | Specify custom mustache template directory. |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
+| --template-page   | none      | Tell Gollum to use /_Template as the default content for new pages. _Template must be git committed. |
 
 **Notes:**
 
