@@ -305,8 +305,8 @@ module Precious
       if settings.wiki_options[:template_page] then
         temppage = wiki_page("/_Template")
         @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
-      end          
-      wikip = wiki_page(params[:splat].first.gsub('+', '-'))
+      end
+      wikip = wiki_page(params[:splat].first)
       @name, ext = wikip.name.to_url
       @path = wikip.path
       @allow_uploads = wikip.wiki.allow_uploads
