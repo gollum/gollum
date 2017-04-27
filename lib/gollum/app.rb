@@ -47,7 +47,7 @@ module Precious
     register Mustache::Sinatra
     include Precious::Helpers
 
-    dir     = File.dirname(File.expand_path(__FILE__))
+    dir = File.dirname(File.expand_path(__FILE__))
 
     # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
@@ -484,6 +484,8 @@ module Precious
       show_page_or_file(params[:splat].first)
     end
 
+    private
+    
     def show_page_or_file(fullpath)
       wiki = wiki_new
 
@@ -531,8 +533,6 @@ module Precious
       content ||= page.raw_data
       wiki.update_page(page, name, format, content.to_s, commit)
     end
-
-    private
 
     # Options parameter to Gollum::Committer#initialize
     #     :message   - The String commit message.
