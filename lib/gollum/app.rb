@@ -93,26 +93,6 @@ module Precious
       redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
     end
 
-    # path is set to name if path is nil.
-    #   if path is 'a/b' and a and b are dirs, then
-    #   path must have a trailing slash 'a/b/' or
-    #   extract_path will trim path to 'a'
-    # name, path, version
-    def wiki_page(name, path = nil, version = nil, exact = true)
-      wiki = wiki_new
-      path = name if path.nil?
-      name, ext = extract_name(name) || wiki.index_page
-      path = extract_path(path)
-      path = '/' if exact && path.nil?
-
-      OpenStruct.new(:wiki => wiki, :page => wiki.paged(join_page_name(name, ext), path, exact, version),
-                     :name => name, :path => path, :ext => ext)
-    end
-
-    def wiki_new
-      Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
-    end
-
     get '/last-commit-info' do
       content_type :json
       if page = wiki_page(params[:path]).page
@@ -485,7 +465,7 @@ module Precious
     end
 
     private
-    
+
     def show_page_or_file(fullpath)
       wiki = wiki_new
 
@@ -532,6 +512,25 @@ module Precious
       format  = (format || page.format).to_sym
       content ||= page.raw_data
       wiki.update_page(page, name, format, content.to_s, commit)
+    end
+
+    #  path is set to name if path is nil.
+    #  if path is 'a/b' and a and b are dirs, then
+    #  path must have a trailing slash 'a/b/' or
+    #  extract_path will trim path to 'a'
+    def wiki_page(name, path = nil, version = nil, exact = true)
+      wiki = wiki_new
+      path = name if path.nil?
+      name, ext = extract_name(name) || wiki.index_page
+      path = extract_path(path)
+      path = '/' if exact && path.nil?
+
+      OpenStruct.new(:wiki => wiki, :page => wiki.paged(join_page_name(name, ext), path, exact, version),
+                     :name => name, :path => path, :ext => ext)
+    end
+
+    def wiki_new
+      Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
     end
 
     # Options parameter to Gollum::Committer#initialize
