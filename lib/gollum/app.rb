@@ -49,21 +49,6 @@ module Precious
 
     dir     = File.dirname(File.expand_path(__FILE__))
 
-    # Detect unsupported browsers.
-    Browser = Struct.new(:browser, :version)
-
-    @@min_ua = [
-        Browser.new('Internet Explorer', '10.0'),
-        Browser.new('Chrome', '7.0'),
-        Browser.new('Firefox', '4.0'),
-        Browser.new('Safari', '9.0')
-    ]
-
-    def supported_useragent?(user_agent)
-      ua = UserAgent.parse(user_agent)
-      @@min_ua.detect { |min| ua >= min }
-    end
-
     # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
     set :static, true
