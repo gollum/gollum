@@ -142,7 +142,7 @@ Gollum comes with the following command line options:
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
-| --emoji           | none      | Parse and interpret emoji tags (e.g. :heart:). |
+| --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
 | --no-edit         | none      | Disable the feature of editing pages. |
 | --live-preview    | none      | Enable the live preview feature in page editor. |
 | --no-live-preview | none      | Disable the live preview feature in page editor. |
