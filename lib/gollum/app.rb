@@ -488,6 +488,7 @@ module Precious
         /(.+) # capture any path after the "/pages" excluding the leading slash
       )?      # end the optional non-capturing group
     }x do |path|
+      path[-1] != '/' ? path << '/' : path if path  #fixes breadcrumbs - # 1241 (the last slash of a directory path is stripped off when running within rails)
       @path        = extract_path(path) if path
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
