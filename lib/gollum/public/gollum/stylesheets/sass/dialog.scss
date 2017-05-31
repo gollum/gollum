@@ -1,0 +1,176 @@
+/* @control dialog */
+
+@import "_base", "_features", "_breakpoint", "_component";
+
+#gollum-dialog-dialog {
+  display: block;
+  overflow: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  width: 100%;
+  height: 100%;
+
+  @include mediummobile-breakpoint {
+    position: absolute;
+    position: fixed;
+    width: auto;
+    height: auto;
+  }
+
+  @include desktop-breakpoint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+
+  &.active {
+    display: block;
+  }
+
+  a.minibutton {
+    float: right;
+    margin-right: 0.5em;
+    width: auto;
+    
+    font-size: 1.2em;
+    font-family: $font-default;
+    
+    margin: 0 0 0 0.8em;
+    padding: 0.4em 1em;
+
+    @include button-base;
+  }
+}
+
+#gollum-dialog-dialog-inner {
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+
+  @include four-edge-position(0px);
+
+  @include mediummobile-breakpoint {
+    margin: auto;
+    position: fixed;
+
+    width: auto;
+    height: auto;
+
+    min-width: 280px;
+    min-height: 380px;
+
+    max-width: 450px;
+    max-height: 450px;
+
+    @include four-edge-position(10px);
+
+    border: 7px solid #999;
+    border: 7px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+  }
+
+  @include desktop-breakpoint {
+    margin: 0 0 0 -225px;
+    position: relative;
+
+    width: 450px;
+
+    @include four-edge-position(auto);
+  }
+
+  h4 {
+    border-bottom: $border-standard;
+    color: #000;
+    font-size: 1.8em;
+    line-height: normal;
+    font-weight: bold;
+    margin: 0 0 0.75em 0;
+    padding: 0 0 0.3em 0;
+  }
+}
+
+#gollum-dialog-dialog-bg {
+  background-color: #fff;
+  padding: 1em;
+
+  height: 100%;
+
+  @include alt-box-model;
+
+  @include mediummobile-breakpoint {
+    overflow: hidden;
+
+    @include vertical-gradient(#f7f7f7, #ffffff);
+  }
+
+  @include desktop-breakpoint {
+    height: auto;
+  }
+}
+
+#gollum-dialog-dialog-body {
+  font-size: 1.2em;
+  line-height: 1.6em;
+
+  fieldset {
+    display: block;
+    @include reset-box;
+    @include clearfix;
+
+    .field {
+      margin: 0 0 1.5em 0;
+      padding: 0;
+
+      &:last-child {
+        margin: 0 0 1em 0;
+      }
+
+      label {
+        color: #000;
+        display: block;
+        font-size: 1.2em;
+        font-weight: bold;
+        line-height: 1.6em;
+        margin: 0;
+        padding: 0;
+        min-width: 80px;
+      }
+
+      input {
+        &[type="text"] {
+          border: $border-standard;
+          display: block;
+          font-family: $font-default;
+          font-size: 1.2em;
+          line-height: 1.6em;
+          margin: 0.3em 0 0 0;
+          padding: 0.3em 0.5em;
+          width: 94%;
+        }
+
+        &.code {
+          font-family: $font-console;
+        }
+      }
+
+      span.context {
+        font-size: .9em;
+        color: #666;
+
+        span.path {
+          font-family: $font-console;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+#gollum-dialog-dialog-buttons {
+  border-top: $border-standard;
+  overflow: hidden;
+  margin: 1.5em 0 0 0;
+  padding: 1em 0 0 0;
+}

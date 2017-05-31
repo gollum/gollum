@@ -3,9 +3,9 @@ require 'cgi'
 require 'sinatra'
 require 'gollum-lib'
 require 'mustache/sinatra'
-require 'useragent'
 require 'stringex'
 require 'json'
+require 'sass/plugin/rack'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -43,13 +43,17 @@ end
 #
 # See the wiki.rb file for more details on wiki options
 module Precious
+
+  COMPILED_CSS_PATH = File.join(File.dirname(__FILE__), 'public', 'gollum', 'stylesheets') unless defined?(Precious::COMPILED_CSS_PATH)
+  SASS_PATH = File.join(COMPILED_CSS_PATH, 'sass') unless defined?(Precious::SASS_PATH)
+
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
 
     dir = File.dirname(File.expand_path(__FILE__))
 
-    # We want to serve public assets for now
+    # # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
     set :static, true
     set :default_markup, :markdown
@@ -64,6 +68,11 @@ module Precious
         # Tell mustache where the views are
         :views     => "#{dir}/views"
     }
+
+    Sass::Plugin.options[:style] = :compressed
+    Sass::Plugin.options[:template_path] = Precious::SASS_PATH
+    Sass::Plugin.options[:css_location] = Precious::COMPILED_CSS_PATH
+    use Sass::Plugin::Rack
 
     # Sinatra error handling
     configure :development, :staging do

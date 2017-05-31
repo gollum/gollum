@@ -1,0 +1,91 @@
+// Describes feature mixins
+
+// Sets the basic desktop page layout.
+// We made this reusable so the IE7/8 template can use it too.
+@mixin desktop-page-layout {
+  max-width: $layout-body-width;
+  padding-left: $layout-body-padding;
+  padding-right: $layout-body-padding;
+}
+
+// Sets the alternative box model so borders are counted as part of the width.
+@mixin alt-box-model {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+// Reset box margin and padding.
+@mixin reset-box-leave-border {
+  margin: 0;
+  padding: 0;
+}
+
+// Reset box margin, padding and border.
+@mixin reset-box {
+  border: 0;
+  @include reset-box-leave-border;
+}
+
+// Uses a simple text concealment method.
+@mixin text-conceal-simple {
+  overflow: hidden;
+  text-indent: -5000px;
+}
+
+// Defines position as equi-distant from the edge of the parent element.
+@mixin four-edge-position($padding: 0px) {
+  top: $padding;
+  right: $padding;
+  bottom: $padding;
+  left: $padding;
+}
+
+// Sets box to clear internal floats without using overflow.
+@mixin clearfix {
+  &:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+// Top and bottom children of this element have their margins truncated.
+@mixin children-truncate-margin {
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Defines a vertical gradient.
+@mixin vertical-gradient($start-color, $end-color) {
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#{$start-color}', endColorstr='#{$end-color}');
+  background: -webkit-gradient(linear, left top, left bottom, from($start-color), to($end-color));
+  background: -moz-linear-gradient(top, $start-color, $end-color);
+}
+
+// Defines a common animation.
+@mixin generic-animation($animation) {
+  -webkit-animation: $animation;
+  -moz-animation: $animation;
+  -o-animation: $animation;
+  animation: $animation;
+}
+
+// Defines font smoothing method.
+// http://maximilianhoffmann.com/posts/better-font-rendering-on-osx
+@mixin font-smoothing($value: on) {
+  @if $value == on {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  @else {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+  }
+}
