@@ -76,7 +76,11 @@ opts = OptionParser.new do |opts|
     # make a backup of the option and sanitize it
     base_path_original = base_path.dup
     base_path = CGI.escape(base_path)
-    
+
+    # / characters are perfectly acceptible in paths, and should not be replaced.
+    # This line backs out that change.
+    base_path.gsub!("%2F", "/")
+
     # then let the user know if we changed the URL
     unless base_path_original == base_path
       puts <<MSG
