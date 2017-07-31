@@ -201,7 +201,7 @@ module Precious
             data = data.values
             result << "<tr>\n"
             keys.each do |heading|
-              result << "<th>#{CGI.escapeHTML(heading)}</th>\n"
+              result << "<th>#{CGI.escapeHTML(heading.to_s)}</th>\n"
             end
             result << "</tr>\n"
           end
