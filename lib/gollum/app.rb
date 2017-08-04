@@ -5,7 +5,9 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'stringex'
 require 'json'
-require 'sass/plugin/rack'
+require 'sprockets'
+require 'uglifier'
+require 'sass'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -44,18 +46,25 @@ end
 # See the wiki.rb file for more details on wiki options
 module Precious
 
-  COMPILED_CSS_PATH = File.join(File.dirname(__FILE__), 'public', 'gollum', 'stylesheets') unless defined?(Precious::COMPILED_CSS_PATH)
-  SASS_PATH = File.join(COMPILED_CSS_PATH, 'sass') unless defined?(Precious::SASS_PATH)
-
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
 
     dir = File.dirname(File.expand_path(__FILE__))
 
-    # # We want to serve public assets for now
-    set :public_folder, "#{dir}/public/gollum"
-    set :static, true
+    set :sprockets, Sprockets::Environment.new
+
+    # append assets paths
+    sprockets.append_path ::File.join(dir, 'public/gollum/stylesheets/')
+    sprockets.append_path ::File.join(dir, 'public/gollum/javascript')
+    sprockets.append_path ::File.join(dir, 'public/gollum/images')
+    sprockets.append_path ::File.join(dir, 'public/gollum/fonts')
+
+
+    # compress assets
+    sprockets.js_compressor  = :uglify
+    sprockets.css_compressor = :scss
+
     set :default_markup, :markdown
 
     set :mustache, {
@@ -68,11 +77,6 @@ module Precious
         # Tell mustache where the views are
         :views     => "#{dir}/views"
     }
-
-    Sass::Plugin.options[:style] = :compressed
-    Sass::Plugin.options[:template_path] = Precious::SASS_PATH
-    Sass::Plugin.options[:css_location] = Precious::COMPILED_CSS_PATH
-    use Sass::Plugin::Rack
 
     # Sinatra error handling
     configure :development, :staging do
@@ -100,6 +104,11 @@ module Precious
 
     get '/' do
       redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
+    end
+
+    get '/assets/*' do
+      env['PATH_INFO'].sub!('/assets', '')
+      settings.sprockets.call(env)
     end
 
     get '/last-commit-info' do
