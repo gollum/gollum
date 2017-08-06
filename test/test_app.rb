@@ -14,7 +14,7 @@ context "Frontend" do
   teardown do
     FileUtils.rm_rf(@path)
   end
-
+  
   test "utf-8 kcode" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
   end

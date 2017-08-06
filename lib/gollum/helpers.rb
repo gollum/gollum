@@ -13,7 +13,7 @@ module Precious
     def join_page_name(name, ext)
       "#{name}#{ext}"
     end
-
+    
     # Extract the path string that Gollum::Wiki expects
     def extract_path(file_path)
       return nil if file_path.nil?
