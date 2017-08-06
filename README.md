@@ -146,7 +146,7 @@ Gollum comes with the following command line options:
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
-| --emoji           | none      | Parse and interpret emoji tags (e.g. :heart:). |
+| --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
 | --no-edit         | none      | Disable the feature of editing pages. |
 | --live-preview    | none      | Enable the live preview feature in page editor. |
 | --no-live-preview | none      | Disable the live preview feature in page editor. |
@@ -154,6 +154,7 @@ Gollum comes with the following command line options:
 | --mathjax         | none      | Enables MathJax (renders mathematical equations). By default, uses the `TeX-AMS-MML_HTMLorMML` config with the `autoload-all` extension.<sup>5</sup> |
 | --irb             | none      | Launch Gollum in "console mode", with a [predefined API](https://github.com/gollum/gollum-lib/). |
 | --h1-title        | none      | Tell Gollum to use the first `<h1>` as page title. |
+| --no-display-metadata | none  | Do not render metadata tables in pages. |
 | --show-all        | none      | Tell Gollum to also show files in the file view. By default, only valid pages are shown. |
 | --collapse-tree   | none      | Tell Gollum to collapse the file tree, when the file view is opened. By default, the tree is expanded. |
 | --user-icons      | [MODE]    | Tell Gollum to use specific user icons for history view. Can be set to `gravatar`, `identicon` or `none`. Default: `none`. |
@@ -161,6 +162,7 @@ Gollum comes with the following command line options:
 | --template-dir    | [PATH]    | Specify custom mustache template directory. |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
+| --template-page   | none      | Tell Gollum to use /_Template as the default content for new pages. _Template must be git committed. |
 
 **Notes:**
 

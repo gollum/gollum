@@ -46,7 +46,7 @@ module Precious
       end
 
       def page_name
-        @name.gsub('-', ' ')
+        @name
       end
 
       def formats
@@ -56,6 +56,11 @@ module Precious
       def default_markup
         Precious::App.settings.default_markup
       end
+
+      #QND - sets default template page if specified
+      def content
+        @template_page
+      end      
     end
   end
 end

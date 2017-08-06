@@ -385,7 +385,9 @@ a:active, a:hover {
 }
 
 .markdown-body table tr th,
-.markdown-body table tr td {
+.markdown-body table tr td,
+.markdown-body table tr td table,
+.markdown-body table tr th table {
   border: 1px solid #ccc;
   text-align: none;
   margin: 0;

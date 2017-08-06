@@ -29,6 +29,38 @@ context "Precious::Views::Page" do
     assert_equal '1 & 2', actual
   end
 
+  test "metadata is rendered into a table" do
+    title = 'metadata test'
+    @wiki.write_page(title, :markdown, "---\nsome: metadata\nhere: for you\n---\n# Some markdown\nIn this doc")
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+
+    assert_equal @view.rendered_metadata, <<-EOS
+<table>
+<tr>
+<th>some</th>
+<th>here</th>
+</tr>
+<tr>
+<td>metadata</td>
+<td>for you</td>
+</tr>
+</table>
+EOS
+  end
+
+  test 'page has sha id' do
+    title = 'test'
+    @wiki.write_page(title, :markdown, 'Test' + "\n # 3", commit_details)
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    assert_equal "594e928cc5dcb6d833dfb86bb36076fd4a84eea7", @view.id
+  end
+
   test "h1 title can be disabled" do
     title = 'H1'
     @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert("js")</script>' + "\n # 3", commit_details)
@@ -41,6 +73,6 @@ context "Precious::Views::Page" do
 
     # Title is based on file name when h1_title is false.
     actual = @view.title
-    assert_equal 'H1', title
+    assert_equal title, actual
   end
 end

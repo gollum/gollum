@@ -5,6 +5,7 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'json'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -17,20 +18,16 @@ require File.expand_path '../helpers', __FILE__
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
 
-# Fix to_url
+# Use stringex #to_url only to leverage its #to_ascii method when using grit
 class String
-  alias :upstream_to_url :to_url
-
   if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
     def to_ascii
       self # Do not transliterate utf-8 url's unless using Grit
     end
   end
 
-  # _Header => header which causes errors
   def to_url
-    return nil if self.nil?
-    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar'], :force_downcase => false
+    to_ascii
   end
 end
 
@@ -50,22 +47,7 @@ module Precious
     register Mustache::Sinatra
     include Precious::Helpers
 
-    dir     = File.dirname(File.expand_path(__FILE__))
-
-    # Detect unsupported browsers.
-    Browser = Struct.new(:browser, :version)
-
-    @@min_ua = [
-        Browser.new('Internet Explorer', '10.0'),
-        Browser.new('Chrome', '7.0'),
-        Browser.new('Firefox', '4.0'),
-        Browser.new('Safari', '9.0')
-    ]
-
-    def supported_useragent?(user_agent)
-      ua = UserAgent.parse(user_agent)
-      @@min_ua.detect { |min| ua >= min }
-    end
+    dir = File.dirname(File.expand_path(__FILE__))
 
     # We want to serve public assets for now
     set :public_folder, "#{dir}/public/gollum"
@@ -96,6 +78,7 @@ module Precious
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
+      forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/')
       @page_dir = settings.wiki_options[:page_file_dir].to_s
@@ -110,24 +93,12 @@ module Precious
       redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
     end
 
-    # path is set to name if path is nil.
-    #   if path is 'a/b' and a and b are dirs, then
-    #   path must have a trailing slash 'a/b/' or
-    #   extract_path will trim path to 'a'
-    # name, path, version
-    def wiki_page(name, path = nil, version = nil, exact = true)
-      wiki = wiki_new
-      path = name if path.nil?
-      name = extract_name(name) || wiki.index_page
-      path = extract_path(path)
-      path = '/' if exact && path.nil?
-
-      OpenStruct.new(:wiki => wiki, :page => wiki.paged(name, path, exact, version),
-                     :name => name, :path => path)
-    end
-
-    def wiki_new
-      Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+    get '/last-commit-info' do
+      content_type :json
+      if page = wiki_page(params[:path]).page
+        version = page.last_version
+        {:author => version.author.name, :date => version.authored_date}.to_json
+      end
     end
 
     get '/emoji/:name' do
@@ -147,33 +118,23 @@ module Precious
     get '/edit/*' do
       forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
-      @name = wikip.name
+      @name = join_page_name(wikip.name, wikip.ext)
       @path = wikip.path
       @upload_dest   = find_upload_dest(@path)
 
       wiki = wikip.wiki
       @allow_uploads = wiki.allow_uploads
       if page = wikip.page
-        if wiki.live_preview && page.format.to_s.include?('markdown') && supported_useragent?(request.user_agent)
-          live_preview_url = '/livepreview/?page=' + encodeURIComponent(@name)
-          if @path
-            live_preview_url << '&path=' + encodeURIComponent(@path)
-          end
-          redirect to(live_preview_url)
-        else
           @page         = page
           @page.version = wiki.repo.log(wiki.ref, @page.path).first
           @content      = page.text_data
           mustache :edit
-        end
       else
         redirect to("/create/#{encodeURIComponent(@name)}")
       end
     end
 
     post '/uploadFile' do
-      forbid unless @allow_editing
-
       wiki = wiki_new
 
       unless wiki.allow_uploads
@@ -236,12 +197,10 @@ module Precious
     end
 
     post '/rename/*' do
-      forbid unless @allow_editing
-
       wikip = wiki_page(params[:splat].first)
       halt 500 if wikip.nil?
       wiki   = wikip.wiki
-      page   = wiki.paged(wikip.name, wikip.path, exact = true)
+      page   = wiki.paged(join_page_name(wikip.name, wikip.ext), wikip.path, exact = true)
       rename = params[:rename]
       halt 500 if page.nil?
       halt 500 if rename.nil? or rename.empty?
@@ -268,14 +227,12 @@ module Precious
       committer.commit
 
       wikip = wiki_page(rename)
-      page  = wiki.paged(wikip.name, wikip.path, exact = true)
+      page  = wiki.paged(join_page_name(wikip.name, wikip.ext), wikip.path, exact = true)
       return if page.nil?
       redirect to("/#{page.escaped_url_path}")
     end
 
     post '/edit/*' do
-      forbid unless @allow_editing
-
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
@@ -296,7 +253,7 @@ module Precious
     get '/delete/*' do
       forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
-      name  = wikip.name
+      name  = join_page_name(wikip.name, wikip.ext)
       wiki  = wikip.wiki
       page  = wikip.page
       unless page.nil?
@@ -310,8 +267,12 @@ module Precious
 
     get '/create/*' do
       forbid unless @allow_editing
-      wikip = wiki_page(params[:splat].first.gsub('+', '-'))
-      @name = wikip.name.to_url
+      if settings.wiki_options[:template_page] then
+        temppage = wiki_page("/_Template")
+        @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
+      end
+      wikip = wiki_page(params[:splat].first)
+      @name, ext = wikip.name.to_url
       @path = wikip.path
       @allow_uploads = wikip.wiki.allow_uploads
       @upload_dest   = find_upload_dest(@path)
@@ -335,8 +296,6 @@ module Precious
     end
 
     post '/create' do
-      forbid unless @allow_editing
-
       name   = params[:page].to_url
       path   = sanitize_empty_params(params[:path]) || ''
       format = params[:format].intern
@@ -348,7 +307,7 @@ module Precious
         wiki.write_page(name, format, params[:content], commit_message, path)
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
-        redirect to("/#{clean_url(::File.join(encodeURIComponent(page_dir), encodeURIComponent(path), encodeURIComponent(name)))}")
+        redirect to("/#{clean_url(::File.join(encodeURIComponent(page_dir), encodeURIComponent(path), encodeURIComponent(wiki.page_file_name(name, format))))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
@@ -356,11 +315,9 @@ module Precious
     end
 
     post '/revert/*/:sha1/:sha2' do
-      forbid unless @allow_editing
-
       wikip = wiki_page(params[:splat].first)
       @path = wikip.path
-      @name = wikip.name
+      @name = join_page_name(wikip.name, wikip.ext)
       wiki  = wikip.wiki
       @page = wiki.paged(@name, @path)
       sha1  = params[:sha1]
@@ -381,8 +338,6 @@ module Precious
     end
 
     post '/preview' do
-      forbid unless @allow_editing
-
       wiki           = wiki_new
       @name          = params[:page] || "Preview"
       @page          = wiki.preview_page(@name, params[:content], params[:format])
@@ -396,17 +351,11 @@ module Precious
       mustache :page
     end
 
-    get '/livepreview/' do
-      wiki = wiki_new
-      @mathjax = wiki.mathjax
-      mustache :livepreview, { :layout => false }
-    end
-
     get '/history/*' do
       @page     = wiki_page(params[:splat].first).page
       @page_num = [params[:page].to_i, 1].max
       unless @page.nil?
-        @versions = @page.versions :page => @page_num
+        @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, git_adapter == 'rjgit' ? false : true))
         mustache :history
       else
         redirect to("/")
@@ -444,7 +393,7 @@ module Precious
     }x do |path, start_version, end_version|
       wikip     = wiki_page(path)
       @path     = wikip.path
-      @name     = wikip.name
+      @name     = join_page_name(wikip.name, wikip.ext)
       @versions = [start_version, end_version]
       wiki      = wikip.wiki
       @page     = wikip.page
@@ -457,7 +406,7 @@ module Precious
       file_path = params[:captures][0]
       version   = params[:captures][1]
       wikip     = wiki_page(file_path, file_path, version)
-      name      = wikip.name
+      name      = join_page_name(wikip.name, wikip.ext)
       path      = wikip.path
       if page = wikip.page
         @page    = page
@@ -516,13 +465,14 @@ module Precious
       show_page_or_file(params[:splat].first)
     end
 
+    private
+
     def show_page_or_file(fullpath)
       wiki = wiki_new
 
-      name = extract_name(fullpath) || wiki.index_page
+      name, ext = extract_name(fullpath) || wiki.index_page
       path = extract_path(fullpath) || '/'
-
-      if page = wiki.paged(name, path, exact = true)
+      if page = wiki.paged(join_page_name(name, ext), path, exact = true)
         @page          = page
         @name          = name
         @content       = page.formatted_data
@@ -530,7 +480,6 @@ module Precious
 
         # Extensions and layout data
         @editable      = true
-        @page_exists   = !page.last_version.nil?
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
         @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
@@ -542,7 +491,7 @@ module Precious
         show_file(file)
       else
         not_found unless @allow_editing
-        page_path = [path, name].compact.join('/')
+        page_path = [path, join_page_name(name, ext)].compact.join('/')
         redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
       end
     end
@@ -566,7 +515,24 @@ module Precious
       wiki.update_page(page, name, format, content.to_s, commit)
     end
 
-    private
+    #  path is set to name if path is nil.
+    #  if path is 'a/b' and a and b are dirs, then
+    #  path must have a trailing slash 'a/b/' or
+    #  extract_path will trim path to 'a'
+    def wiki_page(name, path = nil, version = nil, exact = true)
+      wiki = wiki_new
+      path = name if path.nil?
+      name, ext = extract_name(name) || wiki.index_page
+      path = extract_path(path)
+      path = '/' if exact && path.nil?
+
+      OpenStruct.new(:wiki => wiki, :page => wiki.paged(join_page_name(name, ext), path, exact, version),
+                     :name => name, :path => path, :ext => ext)
+    end
+
+    def wiki_new
+      Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)
+    end
 
     # Options parameter to Gollum::Committer#initialize
     #     :message   - The String commit message.

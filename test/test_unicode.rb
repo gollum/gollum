@@ -89,13 +89,12 @@ context "Frontend Unicode support" do
     assert_equal 'ghi', page.version.message
   end
 
-  test 'transliteration' do
+  test 'unicode filenames' do
     # we transliterate only when adapter is grit
     return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
-
-    # TODO: Remove to_url once write_page changes are merged.
-    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', commit_details)
-    page = @wiki.page('eeeee')
+    
+    @wiki.write_page("ééééé".to_url, :markdown, '한글 text', { :name => '', :email => '' })
+    page = @wiki.page("eeeee".to_url)
     assert_equal '한글 text', utf8(page.raw_data)
   end
 

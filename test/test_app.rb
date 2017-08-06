@@ -14,35 +14,7 @@ context "Frontend" do
   teardown do
     FileUtils.rm_rf(@path)
   end
-
-  test "urls transform unicode" do
-    header  = '_Header'
-    footer  = '_Footer'
-    sidebar = '_Sidebar'
-
-    # header, footer, and sidebar must be preserved
-    # or gollum will not recognize them
-    assert_equal header, header.to_url
-    assert_equal footer, footer.to_url
-    assert_equal sidebar, sidebar.to_url
-
-    # spaces are converted to dashes in URLs
-    # and in file names saved to disk
-    # urls are not case sensitive
-    assert_equal 'Title-Space', 'Title Space'.to_url
-  end
-
-  test "translation" do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
-
-    # ascii only file names prevent UTF8 issues
-    # when using git repos across operating systems
-    # as this test demonstrates, translation is not
-    # great
-    assert_equal 'm-plus-F', 'μ†ℱ'.to_url
-  end
-
+  
   test "utf-8 kcode" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
   end
@@ -95,25 +67,14 @@ context "Frontend" do
     divs.each {|div| assert_match div, last_response.body}
   end
 
-  test "retain edit information" do
+  test "provide last edit information" do
     page1 = 'page1'
     user1 = 'user1'
     @wiki.write_page(page1, :markdown, '',
                      { :name => user1, :email => user1 });
 
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
-
-    page2 = 'page2'
-    user2 = 'user2'
-    @wiki.write_page(page2, :markdown, '',
-                     { :name => user2, :email => user2 });
-
-    get page2
-    assert_match /Last edited by <b>user2/, last_response.body
-
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
+    get "/last-commit-info", :path => page1
+    assert_match /\"author\":\"user1\"/, last_response.body
   end
 
   test "edits page" do
@@ -162,7 +123,7 @@ context "Frontend" do
     post "/edit/A", :header => 'header',
          :footer            => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
     follow_redirect!
-    assert_equal "/A", last_request.fullpath
+    assert_equal "/A.md", last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -189,7 +150,7 @@ context "Frontend" do
     post "/rename/B", :rename => "/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/C', last_request.fullpath
+    assert_equal '/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -228,7 +189,7 @@ context "Frontend" do
     post "/rename/G/H", :rename => "/I/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/I/C', last_request.fullpath
+    assert_equal '/I/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -245,7 +206,7 @@ context "Frontend" do
     post "/rename/G/H", :rename => "K/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/G/K/C', last_request.fullpath
+    assert_equal '/G/K/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -271,8 +232,8 @@ context "Frontend" do
   test "creates pages with escaped characters in title" do
     post "/create", :content => 'abc', :page => 'Title with spaces',
          :format             => 'markdown', :message => 'foo'
-    assert_equal 'http://example.org/Title-with-spaces', last_response.headers['Location']
-    get "/Title-with-spaces"
+    assert_equal 'http://example.org/Title%20with%20spaces.md', last_response.headers['Location']
+    get "/Title%20with%20spaces"
     assert_match /abc/, last_response.body
   end
 
@@ -296,7 +257,7 @@ context "Frontend" do
     post "/create", :content => 'abc', :page => 'Home', :path => '/foo/',
          :format             => 'markdown', :message => 'foo'
 
-    assert_equal "http://example.org/foo/Home", last_response.headers['Location']
+    assert_equal "http://example.org/foo/Home.md", last_response.headers['Location']
 
     follow_redirect!
     assert last_response.ok?
@@ -311,7 +272,7 @@ context "Frontend" do
   end
 
   test "create redirects to page if already exists" do
-    name = "A"
+    name = "A.md"
     get "/create/#{name}"
     follow_redirect!
     assert_equal "/#{name}", last_request.fullpath
@@ -326,6 +287,28 @@ context "Frontend" do
     assert_no_match(/[^\/]#{dir}/, last_response.body)
   end
 
+  test "create with template succeed if template exists" do
+    Precious::App.set(:wiki_options, { :template_page => true })
+    page='_Template'
+    post '/create', :content => 'fake template', :page => page,
+      :path               => '/', :format => 'markdown', :message => ''
+    follow_redirect!      
+    assert last_response.ok?
+    #puts last_response
+    @wiki.clear_cache    
+    get "/create/TT"
+    assert last_response.ok?
+    get '/delete/_Template'
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+
+  test "create with template succeed if template doesn't exist" do
+    Precious::App.set(:wiki_options, { :template_page => true }) 
+    get "/create/TT"
+    assert last_response.ok?
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+  
   test "create sets the correct path for a relative path subdirectory with the page file directory set" do
     Precious::App.set(:wiki_options, { :page_file_dir => "foo" })
     dir  = "bardir"
@@ -565,19 +548,6 @@ context "Frontend" do
     assert_match /meta name="robots" content="noindex, nofollow"/, last_response.body
   end
 
-  test "show revision of specific file" do
-    shas = {}
-      ["First revision of testfile", "Second revision of testfile"].each do |content|
-        new_commit = commit_test_file(@wiki, "revisions", "testfile", "log", content)
-        shas[new_commit] = content
-      end
-      shas.each do |sha, content|
-        get "revisions/testfile.log/#{sha}"
-        assert last_response.ok?
-        assert_match /#{content}/, last_response.body
-      end
-  end
-
   def app
     Precious::App
   end
@@ -630,11 +600,11 @@ context "Frontend with lotr" do
 
     body = last_response.body
 
-    assert body.include?("Bilbo Baggins"), "/pages should include the page 'Bilbo Baggins'"
+    assert body.include?("Bilbo-Baggins"), "/pages should include the page 'Bilbo Baggins'"
     assert body.include?("Gondor"), "/pages should include the folder 'Gondor'"
     assert !body.include?("Boromir"), "/pages should NOT include the page 'Boromir'"
     assert body.include?("Mordor"), "/pages should include the folder 'Mordor'"
-    assert !body.include?("Eye Of Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
+    assert !body.include?("Eye-Of-Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
     assert !body.match(/(Zamin).+(roast\-mutton)/m), "/pages should be sorted alphabetically"
   end
 
@@ -644,8 +614,8 @@ context "Frontend with lotr" do
 
     body = last_response.body
 
-    assert !body.include?("Bilbo Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
-    assert body.include?("Eye Of Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
+    assert !body.include?("Bilbo-Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
+    assert body.include?("Eye-Of-Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
   end
 
   test "symbolic link pages" do
@@ -666,7 +636,7 @@ context "Frontend with lotr" do
     post "/create", :content => '123', :page => page,
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
     # should be wiki/Mordor/path
-    assert_equal 'http://example.org/Mordor/' + page, last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/' + page + '.md', last_response.headers['Location']
     get '/Mordor/' + page
     assert_match /123/, last_response.body
 
@@ -677,7 +647,7 @@ context "Frontend with lotr" do
   test "create pages within sub-directories using page file dir" do
     post "/create", :content => 'one two', :page => 'base',
          :path               => 'wiki/Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/wiki/Mordor/base', last_response.headers['Location']
+    assert_equal 'http://example.org/wiki/Mordor/base.md', last_response.headers['Location']
     get "/wiki/Mordor/base"
 
     assert_match /one two/, last_response.body
@@ -687,14 +657,14 @@ context "Frontend with lotr" do
   test "create pages within sub-directories" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
     get "/Mordor/Orc"
     assert_match /big smelly creatures/, last_response.body
 
     post "/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, very scary'
-    assert_equal 'http://example.org/Mordor/Uruk-Hai', last_response.headers['Location']
-    get "/Mordor/Uruk-Hai"
+    assert_equal 'http://example.org/Mordor/Uruk%20Hai.md', last_response.headers['Location']
+    get "/Mordor/Uruk%20Hai"
     assert_match /really big smelly creatures/, last_response.body
   end
 
@@ -702,14 +672,27 @@ context "Frontend with lotr" do
     post "/create", :content => 'big smelly creatures', :page => 'Orc',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
 
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
     post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',
          :page                        => 'Orc', :path => 'Mordor', :message => 'minor edit'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body
+  end
+
+  test "show revision of specific file" do
+    old_sha = "df26e61e707116f81ebc6b935ec6d1676b7e96c4"
+    update_sha = "f803c64d11407b23797325e3843f3f378b78f611"
+    
+    get "Data.csv/#{old_sha}"
+    assert last_response.ok?
+    assert_no_match /Samwise,Gamgee/, last_response.body
+
+    get "Data.csv/#{update_sha}"
+    assert last_response.ok?
+    assert_match /Samwise,Gamgee/, last_response.body
   end
 
   test "existing emoji" do
