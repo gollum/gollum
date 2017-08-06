@@ -683,11 +683,11 @@ ul.actions {
         }
 
         &.file {
-          background-image: url(fileview/document.png);
+          background-image: $img_fileview_doc;
         }
 
         &.folder {
-          background-image: url(fileview/folder-horizontal.png);
+          background-image: $img_fileview_folder;
         }
       }
     }

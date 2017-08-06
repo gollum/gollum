@@ -6,6 +6,7 @@ require 'optparse'
 require 'rubygems'
 require 'gollum'
 require 'cgi'
+require 'sprockets'
 
 exec         = {}
 options      = {
@@ -92,6 +93,18 @@ MSG
   opts.on("--page-file-dir [PATH]", "Specify the subdirectory for all pages. Default: repository root.",
     "Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.") do |path|
     wiki_options[:page_file_dir] = path
+  end
+  opts.on("--static", "Use static assets. Defaults to false in development/test, defaults to true in production/staging.") do
+    wiki_options[:static] = true
+  end
+  opts.on("--no-static", "Do not use static assets (even when in production/staging).") do
+    wiki_options[:static] = false
+  end
+  opts.on("--assets [PATH]", "Set the path to look for static assets. Only used if --static is set to true, or environment is production/staging. Default: ./public/assets") do |path|
+    wiki_options[:static_assets_path] = path
+  end
+  opts.on("--precompile-assets [PATH]", "Precompile static assets to PATH.") do |path|
+    options[:precompile] = path || './public/assets'
   end
   opts.on("--css", "Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).") do
     wiki_options[:css] = true
@@ -235,6 +248,19 @@ if options[:irb]
     puts "Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}"
     exit 0
   end
+elsif options[:precompile]
+  require 'gollum/app'
+  env = Precious::Assets.sprockets
+  manifest = Sprockets::Manifest.new(env, options[:precompile])
+    Sprockets::Helpers.configure do |config|
+      config.environment = env
+      config.prefix      = "#{wiki_options[:base_path]}/#{Precious::Assets::ASSET_URL}"
+      config.digest      = true
+      config.public_path = options[:precompile]
+      config.manifest    = manifest
+    end
+  puts "Precompiling assets to #{::File.expand_path(options[:precompile])}..."
+  manifest.compile(Precious::Assets::MANIFEST)
 else
   require 'gollum/app'
   Precious::App.set(:gollum_path, gollum_path)

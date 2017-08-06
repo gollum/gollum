@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta http-equiv="Content-type" content="text/html;charset=utf-8">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/assets/app.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/assets/fileview.css" media="all">
+  {{#stylesheet_tag_mustache}}app media: :all{{/stylesheet_tag_mustache}}
+  {{#stylesheet_tag_mustache}}fileview media: :all{{/stylesheet_tag_mustache}}
   {{#css}}<link rel="stylesheet" type="text/css" href="{{base_url}}/custom.css" media="all">{{/css}}
   {{#js}}<script type="text/javascript" src="{{base_url}}/custom.js"></script>{{/js}}
   <title>{{title}}</title>

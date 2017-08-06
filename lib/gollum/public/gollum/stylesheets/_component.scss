@@ -78,7 +78,7 @@
 
 // Defines images for buttons.
 @mixin button-sprites {
-  background-image: url(icon-sprite.png);
+  background-image: $img_icon_sprite;
   background-repeat: no-repeat;
 }
 

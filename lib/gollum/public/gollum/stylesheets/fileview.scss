@@ -1,13 +1,4 @@
-//colors
-$white: #fff;
-$black: #000000;
-
-//urls
-$url_0: url(fileview/document.png);
-$url_1: url(fileview/trashcan.png);
-$url_2: url(fileview/toggle-small-expand.png);
-$url_3: url(fileview/folder-horizontal.png);
-$url_4: url(fileview/toggle-small.png);
+@import "_base";
 
 li {
   position: relative;
@@ -24,7 +15,7 @@ li {
       span.icon {
         width: 14px;
         height: 18px;
-        background: $url_0 0 0 no-repeat;
+        background: $img_fileview_doc 0 0 no-repeat;
         display: inline-block;
         margin-right: 7px;
         vertical-align: text-top;
@@ -39,12 +30,12 @@ li {
         padding-left: 36px;
         padding-right: 10px;
         border: 0 solid $black;
-        background: $url_1 no-repeat 16px center;
+        background: $img_icon_sprite no-repeat 16px center;
         cursor: pointer;
       }
     }
     a span.icon {
-      background: $url_0 0 0 no-repeat;
+      background: $img_fileview_doc 0 0 no-repeat;
     }
   }
   input {
@@ -58,7 +49,7 @@ li {
     width: 1em;
     top: 0;
     + ol {
-      background: $url_2 40px 0 no-repeat;
+      background: $img_fileview_toggle_small_expand 40px 0 no-repeat;
       margin: -1.188em 0 0 -44px;
       height: 1.5em;
       > li {
@@ -68,7 +59,7 @@ li {
       }
     }
     &:checked + ol {
-      background: $url_4 40px 5px no-repeat;
+      background: $img_fileview_toggle_small 40px 5px no-repeat;
       margin: -1.5em 0 0 -44px;
       padding: 1.563em 0 0 80px;
       height: auto;
@@ -82,7 +73,7 @@ li {
     }
   }
   label {
-    background: $url_3 15px 1px no-repeat;
+    background: $img_fileview_folder 15px 1px no-repeat;
     cursor: pointer;
     display: block;
     padding-left: 37px;

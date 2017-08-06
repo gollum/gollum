@@ -8,8 +8,8 @@
  */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('fontawesome-webfont.eot?v=4.0.3');
-  src: url('fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('fontawesome-webfont.woff?v=4.0.3') format('woff'), url('fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
+  src: asset-url('fontawesome-webfont.eot?v=4.0.3');
+  src: asset-url('fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), asset-url('fontawesome-webfont.woff?v=4.0.3') format('woff'), asset-url('fontawesome-webfont.ttf?v=4.0.3') format('truetype'), asset-url('fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -283,7 +283,7 @@ a {
   }
 
   hr {
-    background: transparent url(dirty-shade.png) repeat-x 0 0;
+    background: transparent $img_dirty_shade repeat-x 0 0;
     border: 0 none;
     color: #ccc;
     height: 4px;

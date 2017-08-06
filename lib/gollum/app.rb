@@ -6,10 +6,13 @@ require 'mustache/sinatra'
 require 'stringex'
 require 'json'
 require 'sprockets'
+require 'sprockets-helpers'
 require 'uglifier'
 require 'sass'
 
 require 'gollum'
+require 'gollum/assets'
+require 'gollum/views/helpers'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
@@ -45,25 +48,13 @@ end
 #
 # See the wiki.rb file for more details on wiki options
 module Precious
-
   class App < Sinatra::Base
     register Mustache::Sinatra
     include Precious::Helpers
 
     dir = File.dirname(File.expand_path(__FILE__))
 
-    set :sprockets, Sprockets::Environment.new
-
-    # append assets paths
-    sprockets.append_path ::File.join(dir, 'public/gollum/stylesheets/')
-    sprockets.append_path ::File.join(dir, 'public/gollum/javascript')
-    sprockets.append_path ::File.join(dir, 'public/gollum/images')
-    sprockets.append_path ::File.join(dir, 'public/gollum/fonts')
-
-
-    # compress assets
-    sprockets.js_compressor  = :uglify
-    sprockets.css_compressor = :scss
+    set :sprockets, ::Precious::Assets.sprockets(dir)
 
     set :default_markup, :markdown
 
@@ -100,6 +91,19 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
+
+      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
+      @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
+
+      Sprockets::Helpers.configure do |config|
+        config.environment = settings.sprockets
+        config.prefix      = "#{@base_url}/#{Precious::Assets::ASSET_URL}"
+        config.digest      = @use_static_assets
+        if @use_static_assets
+          config.public_path = @static_assets_path
+          config.manifest = Sprockets::Manifest.new(settings.sprockets, @static_assets_path)
+        end
+      end
     end
 
     get '/' do
@@ -107,8 +111,15 @@ module Precious
     end
 
     get '/assets/*' do
-      env['PATH_INFO'].sub!('/assets', '')
-      settings.sprockets.call(env)
+      env['PATH_INFO'].sub!("/#{Precious::Assets::ASSET_URL}", '')
+      if @use_static_assets
+        env['PATH_INFO'].sub!(Sprockets::Helpers.prefix, '') if @base_url
+        not_found_msg = "Not found." 
+        not_found = Proc.new {[404, {'Content-Type' => 'text/html', 'Content-Length' => not_found_msg.length.to_s}, [not_found_msg]]}
+        Rack::Static.new(not_found, {:root => @static_assets_path, :urls => ['']}).call(env)
+      else
+        settings.sprockets.call(env)
+      end
     end
 
     get '/last-commit-info' do

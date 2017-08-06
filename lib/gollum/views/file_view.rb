@@ -1,6 +1,8 @@
 module Precious
   module Views
     class FileView < Layout
+      include Sprockets::Helpers
+      include Precious::Views::SprocketsHelpers
       attr_reader :results, :ref
 
       def title

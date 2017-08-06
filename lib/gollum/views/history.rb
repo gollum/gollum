@@ -2,6 +2,8 @@ module Precious
   module Views
     class History < Layout
       include HasPage
+      include Sprockets::Helpers
+      include Precious::Views::SprocketsHelpers
 
       attr_reader :page, :page_num, :allow_editing
 
