@@ -486,7 +486,7 @@ module Precious
       # --show-all and --collapse-tree can be set.
       @results = Gollum::FileView.new(content, options).render_files
       @ref     = wiki.ref
-      mustache :file_view, { :layout => false }
+      mustache :file_view
     end
 
     get '/*' do

@@ -3,7 +3,7 @@ module Precious
     class FileView < Layout
       include Sprockets::Helpers
       include Precious::Views::SprocketsHelpers
-      attr_reader :results, :ref
+      attr_reader :results, :ref, :allow_editing
 
       def title
         "File view of #{@ref}"

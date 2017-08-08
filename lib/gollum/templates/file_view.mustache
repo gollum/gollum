@@ -1,33 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta http-equiv="Content-type" content="text/html;charset=utf-8">
-  {{#stylesheet_tag_mustache}}app media: :all{{/stylesheet_tag_mustache}}
-  {{#stylesheet_tag_mustache}}fileview media: :all{{/stylesheet_tag_mustache}}
-  {{#css}}<link rel="stylesheet" type="text/css" href="{{base_url}}/custom.css" media="all">{{/css}}
-  {{#js}}<script type="text/javascript" src="{{base_url}}/custom.js"></script>{{/js}}
-  <title>{{title}}</title>
-</head>
-<body>
+{{#stylesheet_tag_mustache}}fileview media: :all{{/stylesheet_tag_mustache}}
 
-<div id="home_button">
-  <ul class="actions">
-    <li class="minibutton">
-      <a href="{{base_url}}/" class="action-home-page">Home</a>
-    </li>
-  </ul>
-</div>
-
-{{#has_results}}
-  <div id="results">
-  {{{results}}}
+<div id="wiki-wrapper" class="results">
+  <div id="head" style="border:none;">
+    <h1>{{title}}</h1>
+    <ul class="actions">
+      <li class="minibutton">
+        {{>searchbar}}
+      </li>
+      <li class="minibutton"><a href="{{base_url}}/"
+         class="action-home-page">Home</a></li>
+      {{#allow_editing}}
+        <li class="minibutton jaws">
+        <a href="#" id="minibutton-new-page">New</a></li>
+      {{/allow_editing}}
+    </ul>
   </div>
-{{/has_results}}
 
-{{#no_results}}
-  <p id="no-results">
-    There are no pages in <strong>{{ref}}</strong>.
-  </p>
-{{/no_results}}
-</body>
-</html>
+  <div id="pages">
+    {{#has_results}}
+      <div id="results">
+      {{{results}}}<i class="fa fa-trash" aria-hidden="true"></i>
+      </div>
+    {{/has_results}}
+
+    {{#no_results}}
+      <p id="no-results">
+        There are no pages in <strong>{{ref}}</strong>.
+      </p>
+    {{/no_results}}
+  </div>
+
+    <div id="footer">
+      <ul class="actions">
+        <li class="minibutton"><a href="#">Back to Top</a></li>
+      </ul>
+    </div>
+</div>
