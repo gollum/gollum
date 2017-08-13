@@ -2,6 +2,41 @@ require 'yaml'
 
 module Precious
   module Views
+
+    module RouteHelpers
+      ROUTES = {
+        'gollum' => {
+          :last_commit_info => 'last_commit_info',
+          :latest_changes => 'latest_changes',
+          :create => 'create',
+          :edit => 'edit',
+          :fileview => 'fileview',
+          :pages => 'pages',
+          :history => 'history',
+          :rename => 'rename',
+          :preview => 'preview',
+          :compare => 'compare',
+          :search => 'search'
+        }
+      }
+
+      def self.parse_routes(routes, prefix = '')
+        routes.each do |name, path|
+          if path.respond_to?(:keys) then
+            self.parse_routes(path, "#{prefix}/#{name}")
+          else
+            define_method :"#{name.to_s}_path" do
+              "#{base_url}/#{prefix}/#{path}".gsub(/\/{2,}/, '/')
+            end
+          end
+        end
+      end
+
+      def self.included(base)
+        self.parse_routes(ROUTES)
+      end
+    end
+
     module SprocketsHelpers
       def self.included(base)
 

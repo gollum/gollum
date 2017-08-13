@@ -1,7 +1,7 @@
 module Precious
   module Assets
     MANIFEST = %w(app.js app.css fileview.css ie7.css print.css *.png *.jpg *.svg *.eot *.ttf *.woff *.woff2)
-    ASSET_URL = 'assets'
+    ASSET_URL = 'gollum/assets'
     
     def self.sprockets(dir = File.dirname(File.expand_path(__FILE__)))
       env = Sprockets::Environment.new

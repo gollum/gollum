@@ -8,7 +8,7 @@
     <li class="minibutton"><a href="{{base_url}}/{{escaped_url_path}}"
        class="action-view-page">View Page</a></li>
     {{#allow_editing}}
-      <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
+      <li class="minibutton"><a href="{{edit_path}}/{{escaped_url_path}}"
          class="action-edit-page">Edit Page</a></li>
     {{/allow_editing}}
   </ul>
@@ -21,7 +21,7 @@
   </ul>
 
   <form name="compare-versions" id="version-form" method="post"
-   action="{{base_url}}/compare/{{escaped_url_path}}">
+   action="{{compare_path}}/{{escaped_url_path}}">
   <fieldset>
   <table>
     <tbody>
