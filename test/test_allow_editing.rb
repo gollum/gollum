@@ -17,7 +17,7 @@ context "Precious::Views::Editing" do
 
   test "creating page is blocked" do
     Precious::App.set(:wiki_options, { allow_editing: false})
-    post "/create", :content => 'abc', :page => "D",
+    post "/gollum/create", :content => 'abc', :page => "D",
          :format             => 'markdown', :message => 'def'
     assert !last_response.ok?
 
