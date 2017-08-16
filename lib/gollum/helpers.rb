@@ -20,8 +20,6 @@ module Precious
       last_slash = file_path.rindex("/")
       if last_slash
         file_path[0, last_slash]
-      else
-        file_path
       end
     end
 
