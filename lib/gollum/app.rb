@@ -48,12 +48,12 @@ end
 # }
 #
 # See the wiki.rb file for more details on wiki options
+
 module Precious
   class App < Sinatra::Base
     register Mustache::Sinatra
     register Sinatra::Namespace
     include Precious::Helpers
-
     dir = File.dirname(File.expand_path(__FILE__))
 
     set :sprockets, ::Precious::Assets.sprockets(dir)
@@ -96,9 +96,9 @@ module Precious
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
-
       Sprockets::Helpers.configure do |config|
         config.environment = settings.sprockets
+        config.environment.context_class.class_variable_set(:@@base_url, @base_url)
         config.prefix      = "#{@base_url}/#{Precious::Assets::ASSET_URL}"
         config.digest      = @use_static_assets
         if @use_static_assets

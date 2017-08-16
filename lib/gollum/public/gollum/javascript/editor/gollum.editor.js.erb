@@ -209,7 +209,7 @@
           formData.append('file', file);
 
           $.ajax({
-            url: baseUrl + '/uploadFile',
+            url: '<%= upload_file_path %>',
             data: formData,
             cache: false,
             contentType: false,

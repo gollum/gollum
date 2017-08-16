@@ -12,7 +12,15 @@ module Precious
 
       env.js_compressor  = :uglify
       env.css_compressor = :scss
+
+      env.context_class.class_eval do
+        def base_url
+          self.class.class_variable_get(:@@base_url)
+        end
+        include ::Precious::Views::RouteHelpers
+      end
       env
     end
   end
 end
+

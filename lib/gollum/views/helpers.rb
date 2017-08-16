@@ -6,9 +6,11 @@ module Precious
     module RouteHelpers
       ROUTES = {
         'gollum' => {
-          :last_commit_info => 'last_commit_info',
+          :last_commit_info => 'last-commit-info',
           :latest_changes => 'latest_changes',
+          :upload_file => 'uploadFile',
           :create => 'create',
+          :delete => 'delete',
           :edit => 'edit',
           :fileview => 'fileview',
           :pages => 'pages',
