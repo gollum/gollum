@@ -16,7 +16,12 @@
     {{#results}}
     <li>
       <a href="{{base_url}}/{{name}}">{{name}}</a>
-      <span class="count">({{count}} matches)</span>
+      {{#val}}
+        <span class="count">({{count}} matches)</span></br>
+	{{#text}}
+	  <span class="context">{{context}}</span></br>
+	{{/text}}
+      {{/val}}
     </li>
     {{/results}}
   </ul>
