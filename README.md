@@ -47,31 +47,31 @@ For more information on Gollum's capabilities and pitfalls:
 Varies depending on operating system, package manager and Ruby installation. Generally, you should first install Ruby and then Gollum.
 
 1. Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of choice.
-2. Gollum is best installed via RubyGems:  
+2. Gollum is best installed via RubyGems:
 	```
 	[sudo] gem install gollum
 	```
 
 Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
-**Notes:**  
+**Notes:**
 * Whichever Ruby implementation you're using, Gollum ships with the appropriate default git adapter. So the above installation procedure is common for both MRI and JRuby.
 * If you're installing from source:
-	* Optionally uninstall any previous versions of Gollum:  
+	* Optionally uninstall any previous versions of Gollum:
 		```
 		[sudo] gem uninstall -aIx gollum
 		```
 	* Install [Bundler](http://bundler.io/).
 	* Navigate to the cloned source of Gollum.
-	* Install dependencies:  
+	* Install dependencies:
 		```
 		[sudo] bundle install
 		```
-	* Build:  
+	* Build:
 		```
 		rake build
 		```
-	* And install:  
+	* And install:
 		```
 		[sudo] gem install --no-document pkg/gollum*.gem
 		```
@@ -158,7 +158,8 @@ Gollum comes with the following command line options:
 | --collapse-tree   | none      | Tell Gollum to collapse the file tree, when the file view is opened. By default, the tree is expanded. |
 | --user-icons      | [MODE]    | Tell Gollum to use specific user icons for history view. Can be set to `gravatar`, `identicon` or `none`. Default: `none`. |
 | --mathjax-config  | [FILE]    | Specify path to a custom MathJax configuration. If not specified, uses the `mathjax.config.js` file from repository root. |
-| --template-dir    | [PATH]    | Specify custom mustache template directory. |
+| --template-dir    | [PATH]    | Specify custom mustache template directory. This will be
+prepended to the Mustache search path (before the standard Gollum templates) |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
 
