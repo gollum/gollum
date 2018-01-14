@@ -5,16 +5,13 @@
   <meta name="MobileOptimized" content="width">
   <meta name="HandheldFriendly" content="true">
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/gollum.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/editor.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/dialog.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/template.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/print.css" media="print">
+  {{#stylesheet_tag_mustache}}app media: :all{{/stylesheet_tag_mustache}}
+  {{#stylesheet_tag_mustache}}print media: :print{{/stylesheet_tag_mustache}}
   {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_path}}/custom.css" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
 
-  <!--[if IE 7]>
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/ie7.css" media="all">
+  <!--[if lte IE 8]>
+  {{#stylesheet_tag_mustache}}ie7 media: :all{{/stylesheet_tag_mustache}}
   <![endif]-->
 
   <script>
@@ -24,16 +21,9 @@
       var pageFullPath = '{{url_path}}';
       {{/page}}
   </script>
-  <script type="text/javascript" src="{{base_url}}/javascript/jquery-1.7.2.min.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/mousetrap.min.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/ace-1.2.5/ace.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/gollum.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/gollum.dialog.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/gollum.placeholder.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/jquery.resize.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.editor.js"></script>
+  {{#javascript_tag_mustache}}app{{/javascript_tag_mustache}}
   {{#use_identicon}}
-  <script type="text/javascript" src="{{base_url}}/javascript/identicon_canvas.js"></script>
+  {{#javascript_tag_mustache}}identicon_canvas{{/javascript_tag_mustache}}
   {{/use_identicon}}
   {{#mathjax}}
   {{^mathjax_config}}

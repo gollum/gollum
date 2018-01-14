@@ -4,6 +4,8 @@ module Precious
   module Views
     class Layout < Mustache
       include Rack::Utils
+      include Sprockets::Helpers
+      include Precious::Views::SprocketsHelpers
       alias_method :h, :escape_html
 
       attr_reader :name, :path

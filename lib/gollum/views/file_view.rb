@@ -1,7 +1,9 @@
 module Precious
   module Views
     class FileView < Layout
-      attr_reader :results, :ref
+      include Sprockets::Helpers
+      include Precious::Views::SprocketsHelpers
+      attr_reader :results, :ref, :allow_editing
 
       def title
         "File view of #{@ref}"

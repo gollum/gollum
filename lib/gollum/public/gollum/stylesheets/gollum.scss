@@ -1,0 +1,712 @@
+// Basic stylesheet for Gollum
+
+@import "_base", "_breakpoint", "_features", "_layout", "_component";
+
+/* @section core */
+body, html {
+  font-family: $font-default;
+  font-size: 10px;
+  @include reset-box;
+}
+
+a {
+  &:link {
+    color: $blue;
+    text-decoration: none;
+  }
+  &:hover, &:visited {
+    color: $blue;
+    text-decoration: underline;
+  }
+}
+
+#wiki-wrapper {
+  #template blockquote {
+    margin: 1em 0;
+    border-left: 4px solid $grey;
+    padding-left: .8em;
+    color: #555;
+  }
+}
+
+/* @section head */
+#head {
+  margin: 1em 0 0;
+  padding: 0;
+  overflow: hidden;
+
+  @include desktop-breakpoint {
+    border-bottom: $border-standard;
+    padding-bottom: 0.3em;
+    margin: 4em 0 1.5em;
+  }
+
+  h1 {
+    font-size: 1.5em;
+    float: left;
+    line-height: normal;
+    margin: 0;
+    padding: 0 0 0 0.667em;
+
+    @include desktop-breakpoint {
+      font-size: 2.5em;
+      padding: 2px 0 0 0;
+    }
+  }
+
+  ul.actions {
+    clear: both;
+    margin: 0 1em;
+
+    @include desktop-breakpoint {
+      clear: none;
+      float: right;
+      margin: 0;
+    }
+  }
+}
+
+/* @section body */
+#wiki-body {
+  margin-bottom: 40px;
+
+  table {
+    display: block;
+    overflow: auto;
+    border: 0;
+  }
+
+  /* @section comments */
+  #inline-comment {
+    display: none; /* todo */
+  }
+}
+
+/* @section toc */
+#wiki-toc-main {
+  @include component-base;
+
+  font-size: 13px;
+  padding: 0px 5px;
+  float: left;
+  margin-bottom: 20px;
+  min-width: 33%;
+
+  > div {
+    border: none;
+  }
+}
+
+/* @section sidebar */
+
+#wiki-sidebar {
+  @include component-base;
+
+  font-size: 13px;
+  padding: 7px;
+  color: #555;
+
+  p {
+    margin: 13px 0 0;
+
+    &.parent {
+      border-bottom: 1px solid #bbb;
+      font-weight: bold;
+      margin: 0 0 0.5em 0;
+      padding: 0 0 0.5em 0;
+      text-shadow: 0 1px 0 #fff;
+
+      &:before {
+        color: #666;
+        content: "← ";
+      }
+    }
+  }
+
+  > p:first-child {
+    margin-top: 10px;
+  }
+}
+
+/* @section footer */
+
+#wiki-footer {
+  margin: 2em 0 5em;
+
+  #header-content, #footer-content {
+    @include component-base;
+
+    padding: 1em;
+  }
+  #header-content {
+    margin-bottom: 1.5em;
+  }
+  #footer-content {
+    margin-top: 1.5em;
+
+    h3 {
+      font-size: 1.2em;
+      color: #333;
+      margin: 0;
+      padding: 0 0 0.2em;
+      text-shadow: 0 1px 0 #fff;
+    }
+
+    p {
+      margin: 0.5em 0 0;
+      padding: 0;
+    }
+
+    ul.links {
+      margin: 0.5em 0 0;
+      overflow: hidden;
+      padding: 0;
+
+      li {
+        color: #999;
+        float: left;
+        list-style-position: inside;
+        list-style-type: square;
+        padding: 0;
+        margin-left: 0.75em;
+
+        &:first-child {
+          list-style-type: none;
+          margin: 0;
+
+          .ff & {
+            margin: 0 -0.75em 0 0;
+          }
+        }
+
+        a {
+          font-weight: bold;
+          text-shadow: 0 1px 0 #fff;
+        }
+      }
+    }
+  }
+}
+
+/* @section page-footer */
+.page #footer {
+  clear: both;
+  border-top: $border-standard;
+  margin: 1em 0 7em;
+}
+
+#footer {
+  p#last-edit {
+    font-size: .9em;
+    line-height: 1.6em;
+    color: #999;
+    margin: 0.9em 0;
+
+    span.username {
+      font-weight: bold;
+    }
+  }
+
+  .actions {
+    margin-left: 1em;
+
+    @include desktop-breakpoint {
+      margin: 0;
+    }
+  }
+}
+
+/* @section history */
+.history {
+  @include section-header;
+}
+
+#wiki-history {
+  margin: 2em 1em 0 1em;
+
+  fieldset {
+    border: 0;
+    margin: 1em 0;
+    padding: 0;
+  }
+
+  table, tbody {
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+
+    tr {
+      padding: 0;
+      margin: 0;
+      background-color: #ebf2f6;
+
+      &:nth-child(2n), &.alt-row {
+        background-color: #f3f7fa;
+      }
+
+      &.selected {
+        background-color: #ffffea !important;
+        z-index: 100;
+      }
+
+      td {
+        border-top: 1px solid #c0dce9;
+        border-bottom: 1px solid #c0dce9;
+        font-size: 1em;
+        line-height: 1.6em;
+        margin: 0;
+        padding: 0.3em 0.7em;
+
+        &.checkbox {
+          width: auto;
+          padding: 0 0.2em 0 0;
+
+          input {
+            cursor: pointer;
+            display: block;
+            padding-right: 0;
+            padding-top: 0.4em;
+            margin: 0 auto;
+            width: 1.2em;
+            height: 1.2em;
+          }
+        }
+
+        &.commit-name {
+          border-left: 0;
+
+          span.time-elapsed {
+            color: #999;
+          }
+
+          a {
+            font-size: 0.9em;
+            font-family: $font-console;
+            padding: 0 0.2em;
+          }
+        }
+
+        &.author {
+          width: 20%;
+
+          a {
+            color: #000;
+            font-weight: bold;
+
+            span.username {
+              display: block;
+              padding-top: 3px;
+            }
+          }
+        }
+
+        img {
+          background-color: #fff;
+          border: 1px solid #999;
+          display: block;
+          float: left;
+          height: 18px;
+          overflow: hidden;
+          margin: 0 0.5em 0 0;
+          width: 18px;
+          padding: 2px;
+        }
+      }
+    }
+  }
+}
+
+.history #footer {
+  margin-bottom: 7em;
+}
+
+.history #wiki-history ul.actions li,
+.history #footer ul.actions li {
+  margin: 0 0.6em 0 0;
+}
+
+@include desktop-breakpoint {
+  #wiki-history {
+    margin: 2em 0 0 0;
+
+    table tr td {
+      border: 1px solid #c0dce9;
+      font-size: 1em;
+      line-height: 1.6em;
+      margin: 0;
+      padding: 0.3em 0.7em;
+
+      &.checkbox {
+        width: 4em;
+        padding: 0.3em;
+      }
+    }
+  }
+}
+
+/* @section edit */
+.edit {
+  @include section-header;
+}
+
+/* @section search */
+
+.results {
+  @include section-header;
+
+  #results {
+    border-bottom: 1px solid #ccc;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 2em;
+    padding-bottom: 2em;
+
+    @include desktop-breakpoint {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    ul {
+      margin: 2em 0 0 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        padding: 0.2em 0;
+
+        @include largemobile-breakpoint {
+          font-size: 1.2em;
+        }
+
+        @include desktop-breakpoint {
+          list-style: disc;
+          list-style-position: outside;
+          line-height: 1.6em;
+        }
+
+        a {
+          word-wrap: break-word;
+        }
+
+        span.count {
+          color: #999;
+        }
+      }
+    }
+  }
+
+  p#no-results {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin-top: 2em;
+  }
+
+  #footer ul.actions li {
+    margin: 0 1em 0 0;
+  }
+}
+
+/* @section compare */
+.compare {
+  @include section-header;
+
+  #compare-content {
+    margin-top: 3em;
+  }
+
+  .data {
+    border: $border-standard;
+    margin: 1em 0 2em;
+    overflow: auto;
+
+    table {
+      width: 100%;
+
+      tr td {
+        font-family: $font-console;
+        font-size: 1.2em;
+        line-height: 1.2em;
+        margin: 0;
+        padding: 0;
+
+        & + td + td {
+          width: 100%;
+        }
+
+        &.line_numbers {
+          background: $light-grey;
+          border-right: 1px solid #999;
+          color: #999;
+          padding: 0 0 0 0.5em;
+        }
+      }
+    }
+
+    pre {
+      margin: 0;
+      padding: 0;
+
+      div {
+        padding: 0 0 0 1em;
+      }
+    }
+  }
+
+  #footer {
+    margin-bottom: 7em;
+  }
+}
+
+.compare #compare-content ul.actions li,
+.compare #footer ul.actions li {
+  margin-left: 0;
+  margin-right: 0.6em;
+}
+
+/* @control syntax */
+.highlight {
+  background: #ffffff;
+  .c, .cm, .c1 { color: #999988; font-style: italic }
+  .err { color: #a61717; background-color: #e3d2d2 }
+  .k, .o { font-weight: bold }
+  .cp { color: #999999; font-weight: bold }
+  .cs { color: #999999; font-weight: bold; font-style: italic }
+  .gd {
+    color: #000000;
+    background-color: #ffdddd;
+    .x {
+      color: #000000;
+      background-color: #ffaaaa;
+    }
+  }
+  .ge { font-style: italic }
+  .gr { color: #aa0000 }
+  .gh { color: #999999 }
+  .gi {
+    color: #000000;
+    background-color: #ddffdd;
+    .x {
+      color: #000000;
+      background-color: #aaffaa;
+    }
+  }
+  .gc { color: #999; background-color: #EAF2F5 }
+  .go { color: #888888 }
+  .gp { color: #555 }
+  .gs { font-weight: bold }
+  .gu { color: #aaaaaa }
+  .gt { color: #aa0000 }
+}
+
+/* @control minibutton */
+ul.actions {
+   display: block;
+   list-style-type: none;
+   overflow: hidden;
+   padding: 0;
+
+  li {
+    float: left;
+    font-size: 0.9em;
+    margin-left: 1px;
+    margin-bottom: 1px;
+
+    @include desktop-breakpoint {
+      margin-left: 0.6em;
+      margin-bottom: 0.6em;
+    }
+  }
+}
+
+.minibutton a {
+  @include button-base;
+
+  margin: 0;
+  padding: 0.6em 1em;
+  height: 1.4em;
+
+  @include desktop-breakpoint {
+    padding: 0.4em 1em;
+  }
+}
+
+#search-submit {
+  @include button-base;
+  
+  margin: 0;
+  padding: 0.4em 1em;
+}
+
+/* @special error */
+#wiki-wrapper.error {
+  height: 1px;
+  position: absolute;
+  overflow: visible;
+  top: 50%;
+  width: 100%;
+}
+
+#error {
+  background-color: $color-editor-component;
+  border: $border-editor-component;
+  left: 50%;
+  overflow: hidden;
+  padding: 2%;
+  margin: -10% 0 0 -35%;
+  position: absolute;
+  width: 70%;
+
+  border-radius: 0.5em;
+
+  h1 {
+    font-size: 3em;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+  }
+
+  p {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin: 1em 0 0.5em;
+    padding: 0;
+  }
+}
+
+/* @control searchbar */
+#searchbar {
+  float: right;
+  overflow: hidden;
+
+  @include desktop-breakpoint {
+    padding: 0;
+  }
+
+  #searchbar-fauxtext {
+    background: #fff;
+    border: none;
+    overflow: hidden;
+    height: $editor-button-size;
+
+    @include desktop-breakpoint {
+      height: $editor-button-img-height;
+    }
+
+    input#search-query {
+      border: 1px solid $color-button-border;
+      border-radius: 3px 0 0 3px;
+
+      color: #000;
+      float: left;
+      font-family: $font-default;
+      font-size: 1em;
+      height: inherit;
+      padding: 0 .5em;
+
+      -webkit-focus-ring: none;
+
+      @include alt-box-model;
+
+      .ie8 & {
+        padding: 0.5em 0 0 0.5em;
+      }
+
+      &.ph {
+        color: #999;
+      }
+    }
+
+    #search-submit {
+      @include button-base;
+
+      border-left: none;
+      border-radius: 0 3px 3px 0;
+
+      margin: 0 !important;
+      padding: 0;
+      float: right;
+      height: inherit;
+
+      @include alt-box-model;
+
+      @include editor-button(16);
+
+      span {
+        @include button-sprites;
+        
+        display: block;
+        height: inherit;
+
+        width: 32px;
+        text-align: center;
+
+        @include text-conceal-simple;
+
+        .ff &, .ie & {
+          height: 2.2em;
+        }
+
+        @include desktop-breakpoint {
+          width: 28px;
+        }
+      }
+
+      &:hover span {
+        padding: 0;
+      }
+    }
+  }
+}
+
+/* @section pages */
+
+#pages {
+  font-size: 1.2em;
+  margin: 0 1em 20px 1em;
+
+  @include desktop-breakpoint {
+    margin: 0 0 20px 0;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      a {
+        &.file, &.folder {
+          background-position: 0 1px;
+          background-repeat: no-repeat;
+          padding-left: 20px;
+        }
+
+        &.file {
+          background-image: $img_fileview_doc;
+        }
+
+        &.folder {
+          background-image: $img_fileview_folder;
+        }
+      }
+    }
+  }
+
+  .breadcrumb {
+    border-top: $border-standard;
+    border-bottom: $border-standard;
+    margin: 1em 0;
+    padding: 0.25em;
+  }
+}
+
+.clearfloats {
+  clear: both;
+}
+
+.emoji {
+  width: 20px;
+  height: 20px;
+  vertical-align: -18%;
+}

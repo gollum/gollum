@@ -1,0 +1,124 @@
+// Describes common component styles for Gollum pages
+
+// Sets a reusable component container.
+@mixin component-base {
+  background-color: $light-grey;
+  border: $border-standard;
+  border-radius: 0.5em;
+}
+
+// Sets a reusable section header component.
+@mixin section-header {
+  h1 {
+    color: #999;
+    font-weight: normal;
+
+    strong {
+      color: #000;
+      font-weight: bold;
+    }
+  }
+}
+
+// Sets textarea styles.
+@mixin component-textarea {
+  @include alt-box-model;
+
+  display: block;
+  clear: both;
+
+  background: #fff;
+  border: $border-standard;
+
+  font-size: 1em;
+  font-family: $font-console;
+  line-height: 1.4em;
+
+  margin: 0 0 0.4em;
+  padding: 0.5em;
+
+  width: 100%;
+
+  @include desktop-breakpoint {
+    margin: 1em 0 0.4em;
+  }
+}
+
+// Defines a common button style.
+@mixin button-base {
+  display: block;
+
+  font-weight: bold;
+
+  color: $button-text;
+  background-color: $light-grey;
+  border: 1px solid $color-button-border;
+  text-shadow: 0 1px 0 #fff;
+
+  cursor: pointer;
+
+  @include vertical-gradient(#f4f4f4, #ececec);
+  border-radius: 3px;
+
+  &:hover {
+    color: #fff;
+    background: $color-button-background-hover;
+    border-color: $color-button-border-hover $color-button-border-hover $color-button-border-hover-hi;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+
+    text-decoration: none;
+
+    @include vertical-gradient($color-button-background-hover-hi, $color-button-background-hover);
+  }
+
+  &:visited {
+    text-decoration: none;
+  }
+}
+
+// Defines images for buttons.
+@mixin button-sprites {
+  background-image: $img_icon_sprite;
+  background-repeat: no-repeat;
+}
+
+// Defines mobile and desktop editor button sizes.
+@mixin editor-button-size {
+  width: $editor-button-size;
+  height: $editor-button-size;
+
+  @include desktop-breakpoint {
+    width: $editor-button-desktop-size;
+    height: $editor-button-desktop-size;
+  }
+}
+
+// Defines a common editor button style using image sprites.
+@mixin editor-button($row-pos: 0) {
+  $left: $editor-button-img-width * -1 * $row-pos;
+  $left-mobile: $left + $editor-button-mobile-margin;
+
+  $top: 0;
+  $top-hover: -1 * $editor-button-img-height;
+  $top-mobile: $editor-button-mobile-margin;
+  $top-mobile-hover: -1 * $editor-button-img-height + $editor-button-mobile-margin;
+
+  span {
+    background-position: $left-mobile $top-mobile;
+  }
+  &:hover {
+    span {
+      background-position: $left-mobile $top-mobile-hover;
+    }
+  }
+  @include desktop-breakpoint {
+    span {
+      background-position: $left $top;
+    }
+    &:hover {
+      span {
+        background-position: $left $top-hover;
+      }
+    }
+  }
+}

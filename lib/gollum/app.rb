@@ -3,11 +3,16 @@ require 'cgi'
 require 'sinatra'
 require 'gollum-lib'
 require 'mustache/sinatra'
-require 'useragent'
 require 'stringex'
 require 'json'
+require 'sprockets'
+require 'sprockets-helpers'
+require 'uglifier'
+require 'sass'
 
 require 'gollum'
+require 'gollum/assets'
+require 'gollum/views/helpers'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
@@ -49,9 +54,8 @@ module Precious
 
     dir = File.dirname(File.expand_path(__FILE__))
 
-    # We want to serve public assets for now
-    set :public_folder, "#{dir}/public/gollum"
-    set :static, true
+    set :sprockets, ::Precious::Assets.sprockets(dir)
+
     set :default_markup, :markdown
 
     set :mustache, {
@@ -87,10 +91,35 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
+
+      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
+      @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
+
+      Sprockets::Helpers.configure do |config|
+        config.environment = settings.sprockets
+        config.prefix      = "#{@base_url}/#{Precious::Assets::ASSET_URL}"
+        config.digest      = @use_static_assets
+        if @use_static_assets
+          config.public_path = @static_assets_path
+          config.manifest = Sprockets::Manifest.new(settings.sprockets, @static_assets_path)
+        end
+      end
     end
 
     get '/' do
       redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
+    end
+
+    get '/assets/*' do
+      env['PATH_INFO'].sub!("/#{Precious::Assets::ASSET_URL}", '')
+      if @use_static_assets
+        env['PATH_INFO'].sub!(Sprockets::Helpers.prefix, '') if @base_url
+        not_found_msg = "Not found." 
+        not_found = Proc.new {[404, {'Content-Type' => 'text/html', 'Content-Length' => not_found_msg.length.to_s}, [not_found_msg]]}
+        Rack::Static.new(not_found, {:root => @static_assets_path, :urls => ['']}).call(env)
+      else
+        settings.sprockets.call(env)
+      end
     end
 
     get '/last-commit-info' do
@@ -458,7 +487,7 @@ module Precious
       # --show-all and --collapse-tree can be set.
       @results = Gollum::FileView.new(content, options).render_files
       @ref     = wiki.ref
-      mustache :file_view, { :layout => false }
+      mustache :file_view
     end
 
     get '/*' do

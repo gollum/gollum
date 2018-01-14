@@ -1,0 +1,84 @@
+@import "_base";
+
+#pages {
+  li {
+    position: relative;
+    margin-left: -15px;
+    list-style: none;
+    &.file {
+      white-space: nowrap;
+      margin-left: -1px !important;
+      height: 1.5em;
+      a {
+        text-decoration: none;
+        display: inline-block;
+        span.icon {
+          width: 14px;
+          height: 18px;
+          background: $img_fileview_doc 0 0 no-repeat;
+          display: inline-block;
+          margin-right: 7px;
+          vertical-align: text-top;
+        }
+      }
+      form {
+        vertical-align: middle;
+        display: inline;
+        button {
+          vertical-align: middle;
+          height: 20px;
+          border: 0 solid $black;
+          background: $img_fileview_trash no-repeat 16px center;
+          cursor: pointer;
+        }
+      }
+      a span.icon {
+        background: $img_fileview_doc 0 0 no-repeat;
+      }
+    }
+    input {
+      position: absolute;
+      left: 0;
+      margin-left: 0;
+      opacity: 0;
+      z-index: 2;
+      cursor: pointer;
+      height: 1em;
+      width: 1em;
+      top: 0;
+      + ol {
+        background: $img_fileview_toggle_small_expand 40px 0 no-repeat;
+        margin: -1.188em 0 0 -44px;
+        height: 1.5em;
+        > li {
+          display: none;
+          margin-left: -14px !important;
+          padding-left: 1px;
+        }
+      }
+      &:checked + ol {
+        background: $img_fileview_toggle_small 40px 5px no-repeat;
+        margin: -1.5em 0 0 -44px;
+        padding: 1.563em 0 0 80px;
+        height: auto;
+        > li {
+          display: block;
+          margin: 0 0 0.125em;
+          &:last-child {
+            margin: 0 0 0.063em;
+          }
+        }
+      }
+    }
+    label {
+      background: $img_fileview_folder 15px 1px no-repeat;
+      cursor: pointer;
+      display: block;
+      padding-left: 37px;
+    }
+  }
+  ol.tree {
+    padding: 0 0 0 30px;
+    width: 300px;
+  }
+}
