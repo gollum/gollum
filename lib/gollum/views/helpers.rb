@@ -43,13 +43,11 @@ module Precious
       def self.included(base)
 
         def sprockets_stylesheet_tag
-          puts "STYLESHEET TAG"
           lambda do |args|
             args = args.split(' ')
             name = args[0]
             options = {:media => :all}
             options[:media] = :print if args[1] == 'print'
-            puts "FOUND: " + name.inspect
             send(:stylesheet_tag, name, options)
           end
         end
