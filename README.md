@@ -47,6 +47,10 @@ For more information on Gollum's capabilities and pitfalls:
 Varies depending on operating system, package manager and Ruby installation. Generally, you should first install Ruby and then Gollum.
 
 1. Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of choice.
+Add the rmv path is .bashrc. Usually ```source /usr/local/rvm/scripts/rvm``` to source ruby directory for future shell sessions. 
+
+Also, install 2 system packages: ```libicu-dev and libbz2-dev```
+
 2. Gollum is best installed via RubyGems:  
 	```
 	[sudo] gem install gollum
