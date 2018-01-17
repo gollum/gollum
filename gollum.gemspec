@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '4.1.1'
-  s.date              = '2017-04-17'
+  s.version           = '5.0.1b'
+  s.date              = '2017-01-17'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
