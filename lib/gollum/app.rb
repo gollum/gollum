@@ -301,7 +301,8 @@ module Precious
         @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
       end
       wikip = wiki_page(params[:splat].first)
-      @name, ext = wikip.name.to_url
+      @name = wikip.name.to_url
+      @ext = wikip.ext
       @path = wikip.path
       @allow_uploads = wikip.wiki.allow_uploads
       @upload_dest   = find_upload_dest(@path)
@@ -320,6 +321,10 @@ module Precious
         page_dir = settings.wiki_options[:page_file_dir].to_s
         redirect to("/#{clean_url(::File.join(page_dir, page.escaped_url_path))}")
       else
+        unless Gollum::Page.format_for("#{@name}#{@ext}")
+          @name = "#{@name}#{@ext}"
+          @ext = nil
+        end
         mustache :create
       end
     end
