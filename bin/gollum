@@ -116,7 +116,7 @@ MSG
     "If set to 'page', Gollum will store each upload at the currently edited page.",
     "If set to 'dirpage', Gollum will store uploads in '<git-repo>/uploads/' directory with subfolder structure mirroring that with 'page'") do |mode|
     wiki_options[:allow_uploads]    = true
-    wiki_options[:per_page_uploads] = true if mode == :page || :dirpage
+    wiki_options[:per_page_uploads] = true if mode == :page || mode == :dirpage
     wiki_options[:per_page_uploads_cons] = true if mode == :dirpage
   end
   opts.on("--mathjax", "Enable MathJax (renders mathematical equations).",
