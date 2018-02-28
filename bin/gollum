@@ -124,11 +124,13 @@ MSG
   opts.on("--no-follow-renames", "Do not follow pages across renames in the History view.") do
     wiki_options[:follow_renames] = false
   end
-  opts.on("--allow-uploads [MODE]", [:dir, :page], "Enable file uploads.",
+  opts.on("--allow-uploads [MODE]", [:dir, :page, :dirpage], "Enable file uploads.",
     "If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.",
-    "If set to 'page', Gollum will store each upload at the currently edited page.") do |mode|
+    "If set to 'page', Gollum will store each upload at the currently edited page.",
+    "If set to 'dirpage', Gollum will store uploads in '<git-repo>/uploads/' directory with subfolder structure mirroring that with 'page'") do |mode|
     wiki_options[:allow_uploads]    = true
-    wiki_options[:per_page_uploads] = true if mode == :page
+    wiki_options[:per_page_uploads] = true if mode == :page || mode == :dirpage
+    wiki_options[:per_page_uploads_cons] = true if mode == :dirpage
   end
   opts.on("--mathjax", "Enable MathJax (renders mathematical equations).",
     "By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.") do
