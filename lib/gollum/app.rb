@@ -583,10 +583,16 @@ module Precious
     end
 
     def find_upload_dest(path)
-      settings.wiki_options[:allow_uploads] ?
-          (settings.wiki_options[:per_page_uploads] ?
-              "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
-          ) : ''
+      if not settings.wiki_options[:allow_uploads]
+        return ''
+      end
+
+      dest = settings.wiki_options[:per_page_uploads] ?
+               "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
+      dest = settings.wiki_options[:per_page_uploads_cons] ?
+               ::File.join([settings.wiki_options['page_file_dir'], 'uploads/', dest].compact) : dest
+
+      return dest
     end
   end
 end
