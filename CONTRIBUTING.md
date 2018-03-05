@@ -21,6 +21,10 @@ Before submitting an issue, **please carefully look through the following places
 
 Lastly, please **consider helping out** by opening a Pull Request!
 
+## Triaging Issues [![Open Source Helpers](https://www.codetriage.com/gollum/gollum/badges/users.svg)](https://www.codetriage.com/gollum/gollum)
+
+You can triage issues which may include reproducing bug reports or asking for vital information, such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to gollum on CodeTriage](https://www.codetriage.com/gollum/gollum).
+
 ## Opening a Pull Request
 
 Pull Requests fixing bugs, implementing new features, or updating documentation and dependencies are all very welcome! If you would like to help out with the project, you can pick an open issue from the issue tracker. We're more than happy to help you get started! Here's how you can proceed:
