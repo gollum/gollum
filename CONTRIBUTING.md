@@ -21,6 +21,10 @@ Before submitting an issue, **please carefully look through the following places
 
 Lastly, please **consider helping out** by opening a Pull Request!
 
+Serious bugs can be reported directly to the maintainers using these GPG keys:
+
+* [@dometto](https://pgp.mit.edu/pks/lookup?op=vindex&search=0xD637E455CD3E27BF)
+
 ## Opening a Pull Request
 
 Pull Requests fixing bugs, implementing new features, or updating documentation and dependencies are all very welcome! If you would like to help out with the project, you can pick an open issue from the issue tracker. We're more than happy to help you get started! Here's how you can proceed:
