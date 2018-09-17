@@ -29,10 +29,10 @@ class String
     def to_ascii
       self # Do not transliterate utf-8 url's unless using Grit
     end
+  end
 
-    def to_url
-      to_ascii
-    end
+  def to_url
+    to_ascii
   end
 end
 
@@ -389,7 +389,7 @@ module Precious
       @page     = wiki_page(params[:splat].first).page
       @page_num = [params[:page].to_i, 1].max
       unless @page.nil?
-        @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, git_adapter == 'rjgit' ? false : true))
+        @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true))
         mustache :history
       else
         redirect to("/")

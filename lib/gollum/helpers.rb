@@ -6,10 +6,6 @@ module Precious
 
     EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
 
-    def git_adapter
-      defined?(Gollum::GIT_ADAPTER) ? Gollum::GIT_ADAPTER : DEFAULT_ADAPTER.match(/(.*)_adapter/)[1]
-    end
-
     def join_page_name(name, ext)
       "#{name}#{ext}"
     end
