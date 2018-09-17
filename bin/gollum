@@ -176,8 +176,27 @@ MSG
   end
   opts.on("--version", "Display the current version of Gollum.") do
     puts "Gollum " + Gollum::VERSION
+  end
+  opts.on("--versions", "Display the current version of Gollum and auxiliary gems.") do
+    puts "Gollum " + Gollum::VERSION
+    puts "Running on: #{RUBY_PLATFORM} with Ruby version #{RUBY_VERSION}"
+    puts "Using:"
+    loaded_gemspecs =  Gem.loaded_specs
+    gollum_gems = ['gollum-lib', 'gollum-rjgit_adapter', 'rjgit', 'gollum-grit_adapter', 'grit', 'gollum-rugged_adapter', 'rugged']
+    puts Gem.loaded_specs.select{|name, spec| gollum_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
+    puts "With the following renderers:"
+    renderer_gems = ['kramdown', 'RedCloth', 'org-ruby', 'creole', 'asciidoctor', 'wikicloth']
+    renderer_gems.each do |renderer|
+      begin
+        require renderer
+      rescue LoadError
+      end
+    end
+    puts Gem.loaded_specs.select{|name, spec| renderer_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
+    
     exit 0
   end
+  
 
   opts.separator ""
 end
