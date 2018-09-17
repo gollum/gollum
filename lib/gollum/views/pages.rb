@@ -23,7 +23,7 @@ module Precious
             end
           end
 
-          breadcrumb.join(" / ")
+          @wiki.sanitizer.clean(breadcrumb.join(" / "))
         else
           "Home"
         end
@@ -60,7 +60,7 @@ module Precious
           result = Hash[folders.sort_by{| key, value | key.downcase} ].values.join("\n") + "\n"
           result += Hash[page_files.sort_by{ | key, value | key.downcase } ].values.join("\n")
 
-          result
+          @wiki.sanitizer.clean(result)
         else
           ""
         end
