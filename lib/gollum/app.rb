@@ -25,14 +25,14 @@ Gollum::set_git_max_filesize(190 * 10**6)
 
 # Use stringex #to_url only to leverage its #to_ascii method when using grit
 class String
-  if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+  if Gollum::GIT_ADAPTER != 'grit'
     def to_ascii
       self # Do not transliterate utf-8 url's unless using Grit
     end
-  end
 
-  def to_url
-    to_ascii
+    def to_url
+      to_ascii
+    end
   end
 end
 
