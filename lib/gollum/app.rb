@@ -524,12 +524,17 @@ module Precious
       elsif file = wiki.file(fullpath, wiki.ref, true)
         show_file(file)
       else
-        not_found unless @allow_editing
-        page_path = [path, join_page_name(name, ext)].compact.join('/')
-        redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
+        if @allow_editing
+          page_path = [path, join_page_name(name, ext)].compact.join('/')
+          redirect to("/create/#{clean_url(encodeURIComponent(page_path))}")
+        else
+          @message = "The requested page does not exist."
+          status 404
+          return mustache :error
+        end
       end
     end
-
+    
     def show_file(file)
       return unless file
       if file.on_disk?
