@@ -490,11 +490,11 @@ module Precious
     }x do |path|
       @path        = extract_path(path) if path
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
-      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
-      @results     = wiki.pages
-      @results     += wiki.files if settings.wiki_options[:show_all]
+      @wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @results     = @wiki.pages
+      @results     += @wiki.files if settings.wiki_options[:show_all]
       @results     = @results.sort_by { |p| p.name.downcase } # Sort Results alphabetically, fixes 922
-      @ref         = wiki.ref
+      @ref         = @wiki.ref
       mustache :pages
     end
 

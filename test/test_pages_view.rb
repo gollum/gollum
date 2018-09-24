@@ -2,6 +2,18 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'helper'))
 require File.expand_path '../../lib/gollum/views/pages', __FILE__
 
+class FakeSane
+  def clean(data)
+    data
+  end
+end
+
+class FakeWiki
+  def sanitizer
+    FakeSane.new
+  end
+end
+
 FakePageResult = Struct.new(:path) do
   def name
     File.basename(path, File.extname(path)).gsub("-", " ")
@@ -27,6 +39,7 @@ end
 context "Precious::Views::Pages" do
   setup do
     @page = Precious::Views::Pages.new
+    @page.instance_variable_set("@wiki", FakeWiki.new)
   end
 
   test "breadcrumb" do
