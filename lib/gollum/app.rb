@@ -475,25 +475,12 @@ module Precious
       wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
       wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
       @results     = wiki.pages
-      @results     += wiki.files if settings.wiki_options[:show_all]
+      @results     += wiki.files 
       @results     = @results.sort_by { |p| p.name.downcase } # Sort Results alphabetically, fixes 922
       @ref         = wiki.ref
       mustache :pages
     end
 
-    get '/fileview' do
-      wiki     = wiki_new
-      options  = settings.wiki_options
-      content  = wiki.pages
-      # if showing all files include wiki.files
-      content  += wiki.files if options[:show_all]
-
-      # must pass wiki_options to FileView
-      # --show-all and --collapse-tree can be set.
-      @results = Gollum::FileView.new(content, options).render_files
-      @ref     = wiki.ref
-      mustache :file_view
-    end
 
     get '/*' do
       show_page_or_file(params[:splat].first)

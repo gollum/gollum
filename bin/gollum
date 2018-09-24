@@ -147,12 +147,6 @@ MSG
   opts.on("--no-display-metadata", "Do not render metadata tables in pages.") do
     wiki_options[:display_metadata] = false
   end
-  opts.on("--show-all", "Also show files in the file view. By default, only valid pages are shown.") do
-    wiki_options[:show_all] = true
-  end
-  opts.on("--collapse-tree", "Collapse the tree, when file view is opened. By default, the tree is expanded.") do
-    wiki_options[:collapse_tree] = true
-  end
   opts.on("--user-icons [MODE]", [:gravatar, :identicon, :none], "Use specific user-icons for history view.",
     "Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.") do |mode|
     wiki_options[:user_icons] = mode
