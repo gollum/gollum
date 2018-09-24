@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'gollum-lib', '>= 4.2.9'
   s.add_dependency 'kramdown', '~> 1.9.0'
   s.add_dependency 'sinatra', '~> 1.4', '>= 1.4.4'
-  s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
+  s.add_dependency 'mustache', '> 1.0.5'
+  s.add_dependency 'mustache-sinatra', '>= 1.0.1'
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 3.2'
 

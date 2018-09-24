@@ -96,7 +96,6 @@ module Precious
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
-      Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/')
       @page_dir = settings.wiki_options[:page_file_dir].to_s
       # above will detect base_path when it's used with map in a config.ru
