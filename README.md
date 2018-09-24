@@ -33,9 +33,9 @@ For more information on Gollum's capabilities and pitfalls:
 
 | Operating System | Ruby           | Adapters           | Supported |
 | ---------------- | -------------- | ------------------ | --------- |
-| Unix/Linux-like  | Ruby 1.9.3+    | all except [RJGit](https://github.com/repotag/rjgit) | yes |
+| Unix/Linux-like  | Ruby (MRI) 2.1.0+   | all except [RJGit](https://github.com/repotag/rjgit) | yes |
 | Unix/Linux-like  | [JRuby](https://github.com/jruby/jruby) (1.9.3+ compatible) | [RJGit](https://github.com/repotag/rjgit) | yes |
-| Windows          | Ruby 1.9.3+    | all except [RJGit](https://github.com/repotag/rjgit) | no  |
+| Windows          | Ruby (MRI) 2.1.0+  | all except [RJGit](https://github.com/repotag/rjgit) | no  |
 | Windows          | [JRuby](https://github.com/jruby/jruby) (1.9.3+ compatible) | [RJGit](https://github.com/repotag/rjgit) | almost<sup>1</sup> |
 
 **Notes:**
