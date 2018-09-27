@@ -5,6 +5,8 @@ gollum -- A git-based Wiki
 [![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
 [![Dependency Status](https://gemnasium.com/gollum/gollum.svg)](https://gemnasium.com/gollum/gollum)
 
+Note: this is the development branch for the next major release of Gollum, version 5.0. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features.
+
 ## DESCRIPTION
 
 Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository (either bare or regular) of a specific nature:
