@@ -1,3 +1,5 @@
+## It's [Hacktober](https://hacktoberfest.digitalocean.com/)! Please consider helping out. Here are just some of the [issues](https://github.com/gollum/gollum/labels/Hacktoberfest) that could use your help. Also consider [subscribing](https://www.codetriage.com/gollum/gollum) on CodeTriage.
+
 gollum -- A git-based Wiki
 ====================================
 
