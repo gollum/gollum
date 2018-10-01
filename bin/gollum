@@ -6,6 +6,7 @@ require 'optparse'
 require 'rubygems'
 require 'gollum'
 require 'cgi'
+require 'addressable/uri'
 
 exec         = {}
 options      = {
@@ -75,8 +76,11 @@ opts = OptionParser.new do |opts|
 
     # make a backup of the option and sanitize it
     base_path_original = base_path.dup
-    base_path = CGI.escape(base_path)
-    
+
+    # Addressable seems to be the best replacement for the obsolete URI::escape for
+    # encoding a URI properly.
+    base_path = Addressable::URI.escape(base_path)
+
     # then let the user know if we changed the URL
     unless base_path_original == base_path
       puts <<MSG
