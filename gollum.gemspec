@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '4.1.3'
-  s.date              = '2018-09-17'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
   s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency 'gollum-lib', '>= 4.2.9'
+  s.add_dependency 'gollum-lib', '~> 4.2', '>= 4.2.10'
   s.add_dependency 'kramdown', '~> 1.9.0'
   s.add_dependency 'sinatra', '~> 1.4', '>= 1.4.4'
   s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
@@ -44,6 +44,7 @@ Gem::Specification.new do |s|
     CONTRIBUTING.md
     Gemfile
     HISTORY.md
+    ISSUE_TEMPLATE.md
     LICENSE
     README.md
     Rakefile

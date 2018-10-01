@@ -1,3 +1,11 @@
+# 4.1.4 /2018-01-10
+
+* Depend on new version of gollum-lib that relies on a patched version of sanitize, which solves a vulnerability (CVE-2018-3740). See https://github.com/gollum/gollum-lib/pull/296.
+
+# 4.1.3 /2018-17-09
+
+* Solves a vulnerability in the File view and All Pages view that would allow XSS.
+
 # 4.1.2 /2017-08-07
 
 * Lock to a newer version of gollum-lib to avoid installing an outdated and vulnerable dependency (nokogiri) on ruby 2.0. See https://github.com/gollum/gollum-lib/pull/279. Note: this breaks semantic versioning so those using outdated rubies will discover the problem on update.
