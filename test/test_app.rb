@@ -469,7 +469,7 @@ context "Frontend" do
     gollum_author = { :name => 'ghi', :email => 'jkl' }
     session       = { 'gollum.author' => gollum_author }
 
-    post "/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
+    post "/gollum/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
     follow_redirect!
     assert last_response.ok?
 
