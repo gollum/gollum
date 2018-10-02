@@ -144,6 +144,10 @@ module Precious
       end
     end
 
+    get %r{\/edit\/custom.(js|css)} do
+      forbid
+    end
+
     get '/edit/*' do
       forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
@@ -210,6 +214,10 @@ module Precious
         @message = "Duplicate page: #{e.message}"
         mustache :error
       end
+    end
+
+    post %r{\/(deleteFile|rename|edit|revert)\/custom.(js|css)} do
+      forbid
     end
 
     post '/deleteFile/*' do

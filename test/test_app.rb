@@ -505,6 +505,28 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :js => nil })
   end
 
+  test "don't allow editing custom js or css" do
+    Precious::App.set(:wiki_options, { :js => true, :css => true })
+    page = 'yaycustom'
+    text = 'customized!'
+
+    @wiki.write_page(page, :markdown, text,
+                     { :name => 'user1', :email => 'user1' });
+
+    ['.css', '.js'].each do |ext|
+      get "/edit/custom#{ext}"
+      assert_equal last_response.status 403
+    end
+
+    ['deleteFile', 'rename', 'edit', 'revert'].each do |route|
+      ['.css', '.js'].each do |ext|
+        post "/#{route}/custom#{ext}"
+        assert_equal last_response.status 403
+      end
+    end
+    Precious::App.set(:wiki_options, { :js => nil })
+  end
+
   test "change custom.css path if page-file-dir is set" do
     Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
     page = 'docs/yaycustom'
