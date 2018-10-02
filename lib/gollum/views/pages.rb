@@ -57,7 +57,7 @@ module Precious
               else
                 url = "#{@base_url}/#{page.escaped_url_path}#{page.name}"
               end
-              page_link = %{<li><a href=#{url} class="file">#{page.name}</a>#{delete_file(url) if @allow_editing}</li>}
+              page_link = %{<li><a href="#{url}" class="file">#{page.name}</a>#{delete_file(url) if @allow_editing}</li>}
               page_files[page.name] = page_link
             end
           end
