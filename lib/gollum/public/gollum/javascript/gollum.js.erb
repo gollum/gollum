@@ -1,8 +1,14 @@
 // Helpers
 function pageName(){
-  // "my/dir/file" => "file"
-  return typeof(pageFullPath) == 'undefined' ? undefined : pageFullPath.split('/').pop();
+  // "my/dir/file.md" => "file"
+  if (typeof(pageFullPath) == 'undefined') {
+      return undefined;
+  } else {
+      name = pageFullPath.split('/').pop();
+      return name.substring(0, name.lastIndexOf('.'));
+  } 
 }
+
 function pagePath(){
   // "my/dir/file" => "my/dir"
   return typeof(pageFullPath) == 'undefined' ? undefined : pageFullPath.split('/').slice(0,-1).join('/');

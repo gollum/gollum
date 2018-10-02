@@ -21,36 +21,36 @@
   <input type="hidden" name="path" id="gollum-editor-page-path" value="{{path}}">
   <div id="gollum-editor-function-bar">
     <div id="gollum-editor-function-buttons">
-    <a href="#" id="function-bold" class="function-button">
+    <a href="#" id="function-bold" class="function-button" title="Bold">
       <span>Bold</span></a>
-    <a href="#" id="function-italic" class="function-button">
+    <a href="#" id="function-italic" class="function-button" title="Italic">
       <span>Italic</span></a>
-    <a href="#" id="function-code" class="function-button">
+    <a href="#" id="function-code" class="function-button" title="Code">
       <span>Code</span></a>
     <span class="function-divider">&nbsp;</span>
-    <a href="#" id="function-ul" class="function-button">
+    <a href="#" id="function-ul" class="function-button" title="Unordered list">
       <span>Unordered List</span></a>
-    <a href="#" id="function-ol" class="function-button">
+    <a href="#" id="function-ol" class="function-button" title="Ordered list">
       <span>Ordered List</span></a>
-    <a href="#" id="function-blockquote" class="function-button">
+    <a href="#" id="function-blockquote" class="function-button" title="Blockquote">
       <span>Blockquote</span></a>
 
-    <a href="#" id="function-hr" class="function-button">
+    <a href="#" id="function-hr" class="function-button" title="Horizontal rule">
       <span>Horizontal Rule</span></a>
     <span class="function-divider">&nbsp;</span>
-    <a href="#" id="function-h1" class="function-button">
+    <a href="#" id="function-h1" class="function-button"  title="Heading 1">
       <span>h1</span></a>
-    <a href="#" id="function-h2" class="function-button">
+    <a href="#" id="function-h2" class="function-button" title="Heading 2">
       <span>h2</span></a>
-    <a href="#" id="function-h3" class="function-button">
+    <a href="#" id="function-h3" class="function-button" title="Heading 3">
       <span>h3</span></a>
     <span class="function-divider">&nbsp;</span>
-    <a href="#" id="function-link" class="function-button">
+    <a href="#" id="function-link" class="function-button" title="Link">
       <span>Link</span></a>
-    <a href="#" id="function-image" class="function-button">
+    <a href="#" id="function-image" class="function-button" title="Image">
       <span>Image</span></a>
     <span class="function-divider">&nbsp;</span>
-    <a href="#" id="function-help" class="function-button">
+    <a href="#" id="function-help" class="function-button" title="Help">
       <span>Help</span></a>
     </div>
 
@@ -146,6 +146,7 @@
 
     <span class="jaws"><br></span>
     <input type="submit" id="gollum-editor-submit" value="Save" title="Save current changes">
+    <a href="" id="gollum-editor-cancel" class="minibutton" title="Cancel editing" onClick="window.history.back()">Cancel</a>
     <a href="{{preview_path}}" id="gollum-editor-preview" class="minibutton" title="Preview this Page">Preview</a>
   </fieldset>
 </form>

@@ -26,23 +26,7 @@ module Precious
       end
 
       def format
-        @format = (@page.format || false) if @format.nil? && @page
-        @format.to_s.downcase
-      end
-
-      def has_footer
-        @footer = (@page.footer || false) if @footer.nil? && @page
-        !!@footer
-      end
-
-      def has_header
-        @header = (@page.header || false) if @header.nil? && @page
-        !!@header
-      end
-
-      def has_sidebar
-        @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
-        !!@sidebar
+        @format ||= find_format.to_s.downcase
       end
 
       def page_name
@@ -50,7 +34,7 @@ module Precious
       end
 
       def formats
-        super(:markdown)
+        super(find_format)
       end
 
       def default_markup
@@ -60,7 +44,13 @@ module Precious
       #QND - sets default template page if specified
       def content
         @template_page
-      end      
+      end
+      
+      private
+      
+      def find_format
+        @found_format ||= (Gollum::Page.format_for("#{@name}#{@ext}") || default_markup)
+      end
     end
   end
 end

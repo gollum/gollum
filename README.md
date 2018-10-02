@@ -5,6 +5,8 @@ gollum -- A git-based Wiki
 [![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
 [![Dependency Status](https://gemnasium.com/gollum/gollum.svg)](https://gemnasium.com/gollum/gollum)
 
+Note: this is the development branch for the next major release of Gollum, version 5.0. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features.
+
 ## DESCRIPTION
 
 Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository (either bare or regular) of a specific nature:
@@ -23,7 +25,11 @@ For more information on Gollum's capabilities and pitfalls:
 3. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
 4. [Security overview](https://github.com/gollum/gollum/wiki/Security).
 
-For a quick impression of gollum, see [this video](https://www.youtube.com/watch?v=gj1qqK3Oku8). To see more advanced features in action, see [this video](https://www.youtube.com/watch?v=EauxgxsLDC4) here (installation with docker).
+### Videos
+
+* [Quick impression of gollum](https://www.youtube.com/watch?v=gj1qqK3Oku8)
+* [Gollum overview and simple markdown tutorial (german with english subtitles)](https://www.youtube.com/watch?v=wfWgDRmcbU4)
+* [Advanced features in action](https://www.youtube.com/watch?v=EauxgxsLDC4)
 
 ## SYSTEM REQUIREMENTS
 
@@ -69,7 +75,7 @@ Installation examples for individual systems can be seen [here](https://github.c
 		```
 	* And install:  
 		```
-		[sudo] gem install --no-ri --no-rdoc pkg/gollum*.gem
+		[sudo] gem install --no-document pkg/gollum*.gem
 		```
 
 ### Markups

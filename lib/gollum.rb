@@ -12,7 +12,7 @@ require 'sanitize'
 require File.expand_path('../gollum/uri_encode_component', __FILE__)
 
 module Gollum
-  VERSION = '4.0.1'
+  VERSION = '5.0.1b'
 
   def self.assets_path
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))

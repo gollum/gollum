@@ -2,7 +2,6 @@ require 'yaml'
 
 module Precious
   module Views
-
     module RouteHelpers
       ROUTES = {
         'gollum' => {
@@ -12,7 +11,6 @@ module Precious
           :create => 'create',
           :delete => 'delete',
           :edit => 'edit',
-          :fileview => 'fileview',
           :pages => 'pages',
           :history => 'history',
           :rename => 'rename',

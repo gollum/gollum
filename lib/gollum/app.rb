@@ -26,7 +26,7 @@ Gollum::set_git_max_filesize(190 * 10**6)
 
 # Use stringex #to_url only to leverage its #to_ascii method when using grit
 class String
-  if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+  if Gollum::GIT_ADAPTER != 'grit'
     def to_ascii
       self # Do not transliterate utf-8 url's unless using Grit
     end
@@ -96,6 +96,7 @@ module Precious
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
+
       Sprockets::Helpers.configure do |config|
         config.environment = settings.sprockets
         config.environment.context_class.class_variable_set(:@@base_url, @base_url)
@@ -226,7 +227,7 @@ module Precious
           wiki.delete_file(filepath, commit)
         end
 
-        redirect_to('/fileview')
+        redirect_to('/pages')
       end
 
       post '/rename/*' do
@@ -305,7 +306,8 @@ module Precious
           @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
         end
         wikip = wiki_page(params[:splat].first)
-        @name, ext = wikip.name.to_url
+        @name = wikip.name.to_url
+        @ext  = wikip.ext
         @path = wikip.path
         @allow_uploads = wikip.wiki.allow_uploads
         @upload_dest   = find_upload_dest(@path)
@@ -324,6 +326,10 @@ module Precious
           page_dir = settings.wiki_options[:page_file_dir].to_s
           redirect to("/#{clean_url(::File.join(page_dir, page.escaped_url_path))}")
         else
+          unless Gollum::Page.format_for("#{@name}#{@ext}")
+            @name = "#{@name}#{@ext}"
+            @ext = nil
+          end
           mustache :create
         end
       end
@@ -388,7 +394,7 @@ module Precious
         @page     = wiki_page(params[:splat].first).page
         @page_num = [params[:page].to_i, 1].max
         unless @page.nil?
-          @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, git_adapter == 'rjgit' ? false : true))
+          @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true))
           mustache :history
         else
           redirect to("/")
@@ -454,26 +460,11 @@ module Precious
         wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
         wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
         @results     = wiki.pages
-        @results     += wiki.files if settings.wiki_options[:show_all]
+        @results     += wiki.files
         @results     = @results.sort_by { |p| p.name.downcase } # Sort Results alphabetically, fixes 922
         @ref         = wiki.ref
         mustache :pages
       end
-
-      get '/fileview' do
-        wiki     = wiki_new
-        options  = settings.wiki_options
-        content  = wiki.pages
-        # if showing all files include wiki.files
-        content  += wiki.files if options[:show_all]
-
-        # must pass wiki_options to FileView
-        # --show-all and --collapse-tree can be set.
-        @results = Gollum::FileView.new(content, options).render_files
-        @ref     = wiki.ref
-        mustache :file_view
-      end
-
     end
 
     get %r{/(.+?)/([0-9a-f]{40})} do
@@ -487,6 +478,7 @@ module Precious
         @name    = name
         @content = page.formatted_data
         @version = version
+        @bar_side = wikip.wiki.bar_side
         mustache :page
       elsif file = wikip.wiki.file("#{file_path}", version, true)
         show_file(file)
@@ -524,12 +516,17 @@ module Precious
       elsif file = wiki.file(fullpath, wiki.ref, true)
         show_file(file)
       else
-        not_found unless @allow_editing
-        page_path = [path, join_page_name(name, ext)].compact.join('/')
-        redirect to("/gollum/create/#{clean_url(encodeURIComponent(page_path))}")
+        if @allow_editing
+          page_path = [path, join_page_name(name, ext)].compact.join('/')
+          redirect to("/gollum/create/#{clean_url(encodeURIComponent(page_path))}")
+        else
+          @message = "The requested page does not exist."
+          status 404
+          return mustache :error
+        end
       end
     end
-
+    
     def show_file(file)
       return unless file
       if file.on_disk?

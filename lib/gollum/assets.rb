@@ -23,4 +23,3 @@ module Precious
     end
   end
 end
-

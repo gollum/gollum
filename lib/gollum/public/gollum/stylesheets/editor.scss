@@ -318,13 +318,14 @@ a {
 
   /* @control preview */
 
-  #gollum-editor-preview {
+  #gollum-editor-preview, #gollum-editor-cancel {
     float: left;
     font-weight: normal;
     padding: left;
 
     @include alt-box-model;
   }
+
 }
 
 /* @control title */
