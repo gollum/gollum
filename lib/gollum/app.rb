@@ -222,7 +222,7 @@ module Precious
         wiki.delete_file(filepath, commit)
       end
 
-      redirect to('/fileview')
+      redirect to('/pages')
     end
 
     post '/rename/*' do

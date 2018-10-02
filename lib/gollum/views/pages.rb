@@ -29,6 +29,11 @@ module Precious
         end
       end
 
+
+      def delete_file(url)
+        %Q(<form method="POST" action="/deleteFile/#{url}" onsubmit="return confirm('Do you really want to delete the file #{URI.decode(url)}?');"><button type="submit" name="delete" value="true">Delete</button></form>)
+      end
+      
       def files_folders
         if has_results
           folders = {}
@@ -38,6 +43,7 @@ module Precious
           @results.each do |page|
             page_path = page.path
             page_path = page_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?
+            
 
             if page_path.include?('/')
               folder      = page_path.split('/').first
@@ -47,12 +53,12 @@ module Precious
               folders[folder] = folder_link unless folders.key?(folder)
             elsif page_path != ".gitkeep"
               if defined? page.format
-                page_link = %{<li><a href="#{@base_url}/#{page.escaped_url_path}" class="file">#{page.name}</a></li>}
-                page_files[page.name] = page_link
+                url = "#{@base_url}/#{page.escaped_url_path}"
               else
-                page_link = %{<li><a href="#{@base_url}/#{page.escaped_url_path}#{page.name}" class="file">#{page.name}</a></li>}
-                page_files[page.name] = page_link
+                url = "#{@base_url}/#{page.escaped_url_path}#{page.name}"
               end
+              page_link = %{<li><a href="#{url}" class="file">#{page.name}</a>#{delete_file(url) if @allow_editing}</li>}
+              page_files[page.name] = page_link
             end
           end
 
