@@ -144,7 +144,11 @@ module Precious
       end
     end
 
-    get %r{\/edit\/custom.(js|css)} do
+    get %r{\/(edit|create)\/custom.(js|css)} do
+      forbid
+    end
+
+    post %r{\/(deleteFile|rename|edit|revert|create)\/custom.(js|css)(\/.*)?} do
       forbid
     end
 
@@ -214,10 +218,6 @@ module Precious
         @message = "Duplicate page: #{e.message}"
         mustache :error
       end
-    end
-
-    post %r{\/(deleteFile|rename|edit|revert)\/custom.(js|css)} do
-      forbid
     end
 
     post '/deleteFile/*' do
