@@ -44,7 +44,7 @@ context "Precious::Views::Editing" do
 
     assert_match /Edit/, last_response.body, "'Edit' link is blocked in history template"
 
-    get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
+    get '/gollum/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
 
     assert_match /Edit Page/,             last_response.body, "'Edit Page' link is blocked in compare template"
     assert_match /Revert Changes/,        last_response.body, "'Revert Changes' link is blocked in compare template"

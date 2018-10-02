@@ -249,7 +249,7 @@ context "Frontend" do
     get "/foo/"
 
     follow_redirect!
-    assert_equal "/create/foo/Home", last_request.fullpath
+    assert_equal "/gollum/create/foo/Home", last_request.fullpath
     assert last_response.ok?
   end
 
@@ -267,7 +267,7 @@ context "Frontend" do
     name = "E"
     get "/gollum/edit/#{name}"
     follow_redirect!
-    assert_equal "/create/#{name}", last_request.fullpath
+    assert_equal "/gollum/create/#{name}", last_request.fullpath
     assert last_response.ok?
   end
 
