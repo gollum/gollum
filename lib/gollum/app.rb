@@ -145,15 +145,15 @@ module Precious
     end
 
     get %r{/(edit|create)/custom\.(js|css)} do
-      forbid
+      forbid('Changing this resource is not allowed.')
     end
 
     post %r{/(deleteFile|rename|edit|create)/custom\.(js|css)} do
-      forbid
+      forbid('Changing this resource is not allowed.')
     end
 
     post %r{/revert/custom\.(js|css)/.*/.*} do
-      forbid
+      forbid('Changing this resource is not allowed.')
     end
 
     get '/edit/*' do
