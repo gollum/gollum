@@ -144,11 +144,15 @@ module Precious
       end
     end
 
-    get %r{\/(edit|create)\/custom.(js|css)} do
+    get %r{/(edit|create)/custom\.(js|css)} do
       forbid
     end
 
-    post %r{\/(deleteFile|rename|edit|revert|create)\/custom.(js|css)(\/.*)?} do
+    post %r{/(deleteFile|rename|edit|create)/custom\.(js|css)} do
+      forbid
+    end
+
+    post %r{/revert/custom\.(js|css)/.*/.*} do
       forbid
     end
 
