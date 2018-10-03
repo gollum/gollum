@@ -144,6 +144,18 @@ module Precious
       end
     end
 
+    get %r{/(edit|create)/custom\.(js|css)} do
+      forbid('Changing this resource is not allowed.')
+    end
+
+    post %r{/(deleteFile|rename|edit|create)/custom\.(js|css)} do
+      forbid('Changing this resource is not allowed.')
+    end
+
+    post %r{/revert/custom\.(js|css)/.*/.*} do
+      forbid('Changing this resource is not allowed.')
+    end
+
     get '/edit/*' do
       forbid unless @allow_editing
       wikip = wiki_page(params[:splat].first)
