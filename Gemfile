@@ -1,3 +1,5 @@
+source 'https://rubygems.org'
+
 if RUBY_PLATFORM == 'java'
   gem 'gollum-rjgit_adapter', :git => 'https://github.com/repotag/gollum-lib_rjgit_adapter' # For development purposes
   gem 'warbler'
@@ -7,6 +9,5 @@ end
 
 gem 'gollum-lib', :git => 'https://github.com/gollum/gollum-lib.git', :branch => 'gollum-lib-5.x' # For development purposes
 
-source 'https://rubygems.org'
 gemspec
 gem 'rake', '~> 11.2'
