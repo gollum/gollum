@@ -676,13 +676,17 @@ ul.actions {
 
     li {
       a {
-        &.file, &.folder {
+        &.file, &.page, &.folder {
           background-position: 0 1px;
           background-repeat: no-repeat;
           padding-left: 20px;
         }
 
         &.file {
+          background-image: $img_fileview_doc;
+        }
+        
+        &.page {
           background-image: $img_fileview_doc;
         }
 
