@@ -37,34 +37,34 @@ module Precious
       def files_folders
         if has_results
           folders = {}
-          page_files = {}
+          files = {}
 
           # 1012: Folders and Pages need to be separated
-          @results.each do |page|
-            page_path = page.path
-            page_path = page_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?
+          @results.each do |result|
+            result_path = result.path
+            result_path = result_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?
             
 
-            if page_path.include?('/')
-              folder      = page_path.split('/').first
+            if result_path.include?('/')
+              # result contains a folder
+              folder      = result_path.split('/').first
               folder_path = @path ? "#{@path}/#{folder}" : folder
               folder_link = %{<li><a href="#{@base_url}/pages/#{folder_path}/" class="folder">#{folder}</a></li>}
 
               folders[folder] = folder_link unless folders.key?(folder)
-            elsif page_path != ".gitkeep"
-              if defined? page.format
-                url = "#{@base_url}/#{page.escaped_url_path}"
-              else
-                url = "#{@base_url}/#{page.escaped_url_path}#{page.name}"
-              end
-              page_link = %{<li><a href="#{url}" class="file">#{page.name}</a>#{delete_file(url) if @allow_editing}</li>}
-              page_files[page.name] = page_link
+            elsif result_path != ".gitkeep"
+              # result is either a valid gollum page or another type of file
+              klass = (defined? result.format) ? "page" : "file"
+              url = "#{@base_url}/#{result.escaped_url_path}"
+              
+              file_link = %{<li><a href="#{url}" class="#{klass}">#{result.filename}</a>#{delete_file(url) if @allow_editing}</li>}
+              files[result.name] = file_link
             end
           end
 
           # 1012: All Pages should be rendered as Folders first, then Pages, each sorted alphabetically
           result = Hash[folders.sort_by{| key, value | key.downcase} ].values.join("\n") + "\n"
-          result += Hash[page_files.sort_by{ | key, value | key.downcase } ].values.join("\n")
+          result += Hash[files.sort_by{ | key, value | key.downcase } ].values.join("\n")
 
           result
         else
