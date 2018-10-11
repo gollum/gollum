@@ -196,7 +196,7 @@ module Precious
       format   = ext.split('.').last || 'txt'
       filename = ::File.basename(fullname, ext)
       contents = ::File.read(tempfile)
-      reponame = filename + '.' + format
+      reponame = "#{filename}.#{format}"
 
       head = wiki.repo.head
 
@@ -274,7 +274,7 @@ module Precious
     end
 
     post '/edit/*' do
-      path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
+      path      = "/#{clean_url(sanitize_empty_params(params[:path]))}"
       page_name = CGI.unescape(params[:page])
       wiki      = wiki_new
       page      = wiki.paged(page_name, path, exact = true)
