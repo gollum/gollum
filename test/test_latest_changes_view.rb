@@ -17,7 +17,7 @@ context "Precious::Views::LatestChanges" do
   end
 
   test "displays_latest_changes" do
-    get('/latest_changes')
+    get('/gollum/latest_changes')
     body = last_response.body
 
     assert body.include?('<span class="username">Charles Pence</span>'), "/latest_changes should include the Author Charles Pence"

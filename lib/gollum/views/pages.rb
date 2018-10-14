@@ -49,7 +49,7 @@ module Precious
               # result contains a folder
               folder      = result_path.split('/').first
               folder_path = @path ? "#{@path}/#{folder}" : folder
-              folder_link = %{<li><a href="#{@base_url}/pages/#{folder_path}/" class="folder">#{folder}</a></li>}
+              folder_link = %{<li><a href="#{pages_path}/#{folder_path}/" class="folder">#{folder}</a></li>}
 
               folders[folder] = folder_link unless folders.key?(folder)
             elsif result_path != ".gitkeep"

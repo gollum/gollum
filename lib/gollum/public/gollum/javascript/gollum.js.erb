@@ -47,7 +47,7 @@ $(document).ready(function() {
   $('#delete-link').click( function(e) {
     var ok = confirm($(this).data('confirm'));
     if ( ok ) {
-      var loc = baseUrl + '/delete/' + pageFullPath;
+      var loc = '<%= delete_path %>/' + pageFullPath;
       window.location = loc;
     }
     // Don't navigate on cancel.
@@ -162,7 +162,7 @@ $(document).ready(function() {
           {
             type:   'file',
             context: 'Your uploaded file will be accessible at<br>/'+uploadDest+'/[filename]',
-            action: baseUrl + '/uploadFile'
+            action: '<%= upload_file_path %>'
           }
         ],
         OK: function( res ) {
@@ -226,10 +226,14 @@ $(document).ready(function() {
         // In the pages view, pageFullPath isn't defined.
         // The new button will still expect a value however.
         // So we try to figure one out from window.location
-        path = baseUrl == '' ? window.location.pathname.substr(1)
-                             : window.location.pathname.substr(baseUrl.length + 1);
+        path = window.location.pathname.substr(1)
         // Remove the page viewer part of the url.
-        path = path.replace(/^pages\/?/,'')
+        <%
+          pages_path_uri = pages_path
+          pages_path_uri = pages_path_uri[1..-1] if pages_path_uri[0] == '/'
+          pages_path_uri = pages_path_uri.gsub('/','\/')
+        %>
+        path = path.replace(/^<%= pages_path_uri %>\/?/,'')
         // For consistency remove the trailing /
         path = path.replace(/\/$/,'')
       }
@@ -260,7 +264,7 @@ $(document).ready(function() {
           for( var i=0; i < name_parts.length; i++ ){
             name_encoded.push(encodeURIComponent(name_parts[i]));
           }
-          window.location = baseUrl + name_encoded.join('/');
+          window.location =  '<%= create_path %>' + name_encoded.join('/');
         }
       });
     });
@@ -315,7 +319,7 @@ $(document).ready(function() {
   if( $("#last-edit").length ) {
     $("#page-info-toggle").click ( function () {
       $.ajax({
-        url: '/last-commit-info',
+        url: '<%= last_commit_info_path %>',
         data: {path: $("#page-info-toggle").data('pagepath')},
         success: function ( data ) {
           $("#last-edit").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
