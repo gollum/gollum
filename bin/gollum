@@ -5,7 +5,7 @@ $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 require 'optparse'
 require 'rubygems'
 require 'gollum'
-require 'cgi'
+require 'erb'
 require 'sprockets'
 
 exec         = {}
@@ -76,7 +76,8 @@ opts = OptionParser.new do |opts|
 
     # make a backup of the option and sanitize it
     base_path_original = base_path.dup
-    base_path = CGI.escape(base_path)
+    base_path = ERB::Util.url_encode(base_path)
+    base_path.gsub!('%2F', '/')
 
     # then let the user know if we changed the URL
     unless base_path_original == base_path
@@ -88,7 +89,7 @@ MSG
     end
 
     # and finally, let others enjoy our hard work:
-    wiki_options[:base_path] = base_path
+    wiki_options[:base_path] = base_path unless base_path.empty?
   end
   opts.on("--page-file-dir [PATH]", "Specify the subdirectory for all pages. Default: repository root.",
     "Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.") do |path|
