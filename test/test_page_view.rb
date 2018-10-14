@@ -51,6 +51,39 @@ context "Precious::Views::Page" do
 EOS
   end
 
+  test "allow numbered headings based on metadata" do
+    title = 'countheads test'
+    @wiki.write_page(title, :markdown, "---\ncountheads: true\n---\n# Some markdown\nIn this doc")
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+
+    assert_equal @view.countheads, true
+    assert_equal @view.countheads_style, 'decimal'
+
+    title = 'countheads test2'
+    @wiki.write_page(title, :markdown, "---\ncountheads: 'lower-roman'\n---\n# Some markdown\nIn this doc")
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+
+    assert_equal @view.countheads, true
+    assert_equal @view.countheads_style, 'lower-roman'
+
+    # With invalid style
+    title = 'countheads test3'
+    @wiki.write_page(title, :markdown, "---\ncountheads: 'roman'\n---\n# Some markdown\nIn this doc")
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+
+    assert_equal @view.countheads, true
+    assert_equal @view.countheads_style, 'decimal'
+  end
+
   test 'page has sha id' do
     title = 'test'
     @wiki.write_page(title, :markdown, 'Test' + "\n # 3", commit_details)
