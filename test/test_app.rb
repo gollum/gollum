@@ -510,21 +510,21 @@ context "Frontend" do
   
     ['create', 'edit'].each do |route|
       ['.css', '.js'].each do |ext|
-        get "/#{route}/custom#{ext}"
-        assert_equal 403, last_response.status, "get /#{route}/custom#{ext} -- #{last_response.inspect}"
+        get "/gollum/#{route}/custom#{ext}"
+        assert_equal 403, last_response.status, "get /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
     end
 
     ['deleteFile', 'rename', 'edit', 'create'].each do |route|
       ['.css', '.js'].each do |ext|
-        post "/#{route}/custom#{ext}"
-        assert_equal 403, last_response.status, "post /#{route}/custom#{ext} -- #{last_response.inspect}"
+        post "/gollum/#{route}/custom#{ext}"
+        assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
     end
 
     ['.css', '.js'].each do |ext|
-      post "/revert/custom#{ext}/02796b1450691f90db5d6dc6a816a4980ce80d07/2f6485c2702c7c8b9b6613672337ffa7d933ddcf"
-      assert_equal 403, last_response.status, "post /revert/custom#{ext} -- #{last_response.inspect}"
+      post "/gollum/revert/custom#{ext}/02796b1450691f90db5d6dc6a816a4980ce80d07/2f6485c2702c7c8b9b6613672337ffa7d933ddcf"
+      assert_equal 403, last_response.status, "post /gollum/revert/custom#{ext} -- #{last_response.inspect}"
     end
 
     Precious::App.set(:wiki_options, { :js => nil })
