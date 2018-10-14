@@ -5,28 +5,28 @@ module Precious
     module RouteHelpers
       ROUTES = {
         'gollum' => {
-          :last_commit_info => 'last-commit-info',
-          :latest_changes => 'latest_changes',
-          :upload_file => 'uploadFile',
-          :create => 'create',
-          :delete => 'delete',
-          :edit => 'edit',
-          :pages => 'pages',
-          :history => 'history',
-          :rename => 'rename',
-          :preview => 'preview',
-          :compare => 'compare',
-          :search => 'search'
+          last_commit_info: 'last-commit-info',
+          latest_changes: 'latest_changes',
+          upload_file: 'uploadFile',
+          create: 'create',
+          delete: 'delete',
+          edit: 'edit',
+          pages: 'pages',
+          history: 'history',
+          rename: 'rename',
+          preview: 'preview',
+          compare: 'compare',
+          search: 'search'
         }
       }
 
       def self.parse_routes(routes, prefix = '')
         routes.each do |name, path|
-          if path.respond_to?(:keys) then
+          if path.respond_to?(:keys)
             self.parse_routes(path, "#{prefix}/#{name}")
           else
             define_method :"#{name.to_s}_path" do
-              "#{base_url}/#{prefix}/#{path}".gsub(/\/{2,}/, '/')
+              "#{base_url}/#{prefix}/#{path}".gsub(/\/{2,}/, '/') # remove double slashes
             end
           end
         end
