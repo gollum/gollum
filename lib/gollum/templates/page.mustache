@@ -14,7 +14,7 @@ Mousetrap.bind(['e'], function( e ) {
     </li>
     <li class="minibutton"><a href="{{base_url}}/"
        class="action-home-page">Home</a></li>
-    <li class="minibutton"><a href="{{base_url}}/pages"
+    <li class="minibutton"><a href="{{pages_path}}"
       class="action-all-pages">Overview</a></li>
     {{#allow_editing}}
       <li class="minibutton jaws">
@@ -34,13 +34,13 @@ Mousetrap.bind(['e'], function( e ) {
     {{/allow_editing}}
     {{#allow_editing}}
       {{#editable}}
-        <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
+        <li class="minibutton"><a href="{{edit_path}}/{{escaped_url_path}}"
            class="action-edit-page">Edit</a></li>
       {{/editable}}
     {{/allow_editing}}
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
+    <li class="minibutton"><a href="{{history_path}}/{{escaped_url_path}}"
        class="action-page-history">History</a></li>
-    <li class="minibutton"><a href="{{base_url}}/latest_changes"
+    <li class="minibutton"><a href="{{latest_changes_path}}"
        class="action-page-history">Latest Changes</a></li>
   </ul>
 </div>
@@ -91,7 +91,7 @@ Mousetrap.bind(['e'], function( e ) {
 </div>
 </div>
 
-<form name="rename" method="POST" action="{{base_url}}/rename/{{escaped_url_path}}">
+<form name="rename" method="POST" action="{{rename_path}}/{{escaped_url_path}}">
   <input type="hidden" name="rename"/>
   <input type="hidden" name="message"/>
 </form>

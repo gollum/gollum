@@ -5,13 +5,13 @@
   <meta name="MobileOptimized" content="width">
   <meta name="HandheldFriendly" content="true">
   <meta name="viewport" content="width=device-width">
-  {{#stylesheet_tag_mustache}}app media: :all{{/stylesheet_tag_mustache}}
-  {{#stylesheet_tag_mustache}}print media: :print{{/stylesheet_tag_mustache}}
+  {{#sprockets_stylesheet_tag}}app{{/sprockets_stylesheet_tag}}
+  {{#sprockets_stylesheet_tag}}print print{{/sprockets_stylesheet_tag}}
   {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_path}}/custom.css" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
 
   <!--[if lte IE 8]>
-  {{#stylesheet_tag_mustache}}ie7 media: :all{{/stylesheet_tag_mustache}}
+  {{#sprockets_stylesheet_tag}}ie7{{/sprockets_stylesheet_tag}}
   <![endif]-->
 
   <script>
@@ -21,9 +21,9 @@
       var pageFullPath = '{{url_path}}';
       {{/page}}
   </script>
-  {{#javascript_tag_mustache}}app{{/javascript_tag_mustache}}
+  {{#sprockets_javascript_tag}}app{{/sprockets_javascript_tag}}
   {{#use_identicon}}
-  {{#javascript_tag_mustache}}identicon_canvas{{/javascript_tag_mustache}}
+  {{#sprockets_javascript_tag}}identicon_canvas{{/sprockets_javascript_tag}}
   {{/use_identicon}}
   {{#mathjax}}
   {{^mathjax_config}}

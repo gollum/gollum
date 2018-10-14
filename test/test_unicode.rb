@@ -37,7 +37,7 @@ context "Frontend Unicode support" do
   end
 
   test "creates korean page which contains korean content" do
-    post "/create", :content => '한글 text', :page => "k",
+    post "/gollum/create", :content => '한글 text', :page => "k",
          :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -48,7 +48,7 @@ context "Frontend Unicode support" do
   end
 
   test "heavy use 1" do
-    post "/create", :content => '한글 text', :page => "PG",
+    post "/gollum/create", :content => '한글 text', :page => "PG",
          :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -57,7 +57,7 @@ context "Frontend Unicode support" do
     page = @wiki.page('PG')
     assert_equal '다른 text', utf8(page.raw_data)
 
-    post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
+    post '/gollum/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
     follow_redirect!
     assert last_response.ok?
 
@@ -68,7 +68,7 @@ context "Frontend Unicode support" do
   end
 
   test "heavy use 2" do
-    post "/create", :content => '한글 text', :page => "k",
+    post "/gollum/create", :content => '한글 text', :page => "k",
          :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -78,7 +78,7 @@ context "Frontend Unicode support" do
     page  = @wiki.page('k')
     assert_equal '다른 text', utf8(page.raw_data)
 
-    post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
+    post '/gollum/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
          :format                            => 'markdown', :message => 'ghi'
     follow_redirect!
     assert last_response.ok?

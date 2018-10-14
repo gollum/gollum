@@ -73,13 +73,13 @@ context "Frontend" do
     @wiki.write_page(page1, :markdown, '',
                      { :name => user1, :email => user1 });
 
-    get "/last-commit-info", :path => page1
+    get "/gollum/last-commit-info", :path => page1
     assert_match /\"author\":\"user1\"/, last_response.body
   end
 
   test "edits page" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc', :page => 'A',
+    post "/gollum/edit/A", :content => 'abc', :page => 'A',
          :format             => page_1.format, :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -93,7 +93,7 @@ context "Frontend" do
 
   test "edit page with empty message" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc', :page => 'A',
+    post "/gollum/edit/A", :content => 'abc', :page => 'A',
          :format             => page_1.format
     follow_redirect!
     assert last_response.ok?
@@ -107,7 +107,7 @@ context "Frontend" do
 
   test "edit page with slash" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc', :page => 'A', :path => '/////',
+    post "/gollum/edit/A", :content => 'abc', :page => 'A', :path => '/////',
          :format             => page_1.format, :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -120,7 +120,7 @@ context "Frontend" do
     foot_1   = page_1.footer
     side_1   = page_1.sidebar
 
-    post "/edit/A", :header => 'header',
+    post "/gollum/edit/A", :header => 'header',
          :footer            => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
     follow_redirect!
     assert_equal "/A.md", last_request.fullpath
@@ -147,7 +147,7 @@ context "Frontend" do
 
   test "renames page" do
     page_1 = @wiki.page("B")
-    post "/rename/B", :rename => "/C", :message => 'def'
+    post "/gollum/rename/B", :rename => "/C", :message => 'def'
 
     follow_redirect!
     assert_equal '/C.md', last_request.fullpath
@@ -163,21 +163,21 @@ context "Frontend" do
 
   test "renames page catches invalid page" do
     # No such page
-    post "/rename/no-such-file-here", :rename => "/C", :message => 'def'
+    post "/gollum/rename/no-such-file-here", :rename => "/C", :message => 'def'
     assert !last_response.ok?
     assert_equal last_response.status, 500
   end
 
   test "rename page catches empty target" do
     # Empty rename target
-    post "/rename/B", :rename => "", :message => 'def'
+    post "/gollum/rename/B", :rename => "", :message => 'def'
     assert !last_response.ok?
     assert_equal last_response.status, 500
   end
 
   test "rename page catches non-existent target" do
     # Non-existent rename target
-    post "/rename/B", :message => 'def'
+    post "/gollum/rename/B", :message => 'def'
     assert !last_response.ok?
     assert_equal last_response.status, 500
   end
@@ -186,7 +186,7 @@ context "Frontend" do
   test "renames page in subdirectory" do
     page_1 = @wiki.paged("H", "G")
     assert_not_equal page_1, nil
-    post "/rename/G/H", :rename => "/I/C", :message => 'def'
+    post "/gollum/rename/G/H", :rename => "/I/C", :message => 'def'
 
     follow_redirect!
     assert_equal '/I/C.md', last_request.fullpath
@@ -203,7 +203,7 @@ context "Frontend" do
   test "renames page relative in subdirectory" do
     page_1 = @wiki.paged("H", "G")
     assert_not_equal page_1, nil
-    post "/rename/G/H", :rename => "K/C", :message => 'def'
+    post "/gollum/rename/G/H", :rename => "K/C", :message => 'def'
 
     follow_redirect!
     assert_equal '/G/K/C.md', last_request.fullpath
@@ -219,7 +219,7 @@ context "Frontend" do
 
 
   test "creates page" do
-    post "/create", :content => 'abc', :page => "D",
+    post "/gollum/create", :content => 'abc', :page => "D",
          :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -230,7 +230,7 @@ context "Frontend" do
   end
 
   test "creates pages with escaped characters in title" do
-    post "/create", :content => 'abc', :page => 'Title with spaces',
+    post "/gollum/create", :content => 'abc', :page => 'Title with spaces',
          :format             => 'markdown', :message => 'foo'
     assert_equal 'http://example.org/Title%20with%20spaces.md', last_response.headers['Location']
     get "/Title%20with%20spaces"
@@ -241,7 +241,7 @@ context "Frontend" do
     name = "E"
     get "/#{name}"
     follow_redirect!
-    assert_equal "/create/#{name}", last_request.fullpath
+    assert_equal "/gollum/create/#{name}", last_request.fullpath
     assert last_response.ok?
   end
 
@@ -249,12 +249,12 @@ context "Frontend" do
     get "/foo/"
 
     follow_redirect!
-    assert_equal "/create/foo/Home", last_request.fullpath
+    assert_equal "/gollum/create/foo/Home", last_request.fullpath
     assert last_response.ok?
   end
 
   test "accessing redirectory redirects to index page" do
-    post "/create", :content => 'abc', :page => 'Home', :path => '/foo/',
+    post "/gollum/create", :content => 'abc', :page => 'Home', :path => '/foo/',
          :format             => 'markdown', :message => 'foo'
 
     assert_equal "http://example.org/foo/Home.md", last_response.headers['Location']
@@ -265,15 +265,15 @@ context "Frontend" do
 
   test "edit redirects to create on non-existant page" do
     name = "E"
-    get "/edit/#{name}"
+    get "/gollum/edit/#{name}"
     follow_redirect!
-    assert_equal "/create/#{name}", last_request.fullpath
+    assert_equal "/gollum/create/#{name}", last_request.fullpath
     assert last_response.ok?
   end
 
   test "create redirects to page if already exists" do
     name = "A.md"
-    get "/create/#{name}"
+    get "/gollum/create/#{name}"
     follow_redirect!
     assert_equal "/#{name}", last_request.fullpath
     assert last_response.ok?
@@ -282,7 +282,7 @@ context "Frontend" do
   test "create sets the correct path for a relative path subdirectory" do
     dir  = "foodir"
     name = "#{dir}/bar"
-    get "/create/#{name}"
+    get "/gollum/create/#{name}"
     assert_match(/\/#{dir}/, last_response.body)
     assert_no_match(/[^\/]#{dir}/, last_response.body)
   end
@@ -290,21 +290,21 @@ context "Frontend" do
   test "create with template succeed if template exists" do
     Precious::App.set(:wiki_options, { :template_page => true })
     page='_Template'
-    post '/create', :content => 'fake template', :page => page,
+    post '/gollum/create', :content => 'fake template', :page => page,
       :path               => '/', :format => 'markdown', :message => ''
     follow_redirect!      
     assert last_response.ok?
     #puts last_response
     @wiki.clear_cache    
-    get "/create/TT"
+    get "/gollum/create/TT"
     assert last_response.ok?
-    get '/delete/_Template'
+    get '/gollum/delete/_Template'
     Precious::App.set(:wiki_options, { :template_page => false })
   end
 
   test "create with template succeed if template doesn't exist" do
     Precious::App.set(:wiki_options, { :template_page => true }) 
-    get "/create/TT"
+    get "/gollum/create/TT"
     assert last_response.ok?
     Precious::App.set(:wiki_options, { :template_page => false })
   end
@@ -313,7 +313,7 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :page_file_dir => "foo" })
     dir  = "bardir"
     name = "#{dir}/baz"
-    get "/create/foo/#{name}"
+    get "/gollum/create/foo/#{name}"
     assert_match(/\/#{dir}/, last_response.body)
     assert_no_match(/[^\/]#{dir}/, last_response.body)
     # reset page_file_dir
@@ -324,7 +324,7 @@ context "Frontend" do
     # post '/edit' fails. post '/edit/' works.
     page = 'not-real-page'
     path = '/'
-    post '/edit/', :content => 'edit_msg',
+    post '/gollum/edit/', :content => 'edit_msg',
          :page              => page, :path => path, :message => ''
     page_e = @wiki.paged(page, path)
     assert_equal nil, page_e
@@ -334,7 +334,7 @@ context "Frontend" do
     page = 'c-d-e'
     path = 'a/b/' # path must end with /
 
-    post '/create', :content => 'create_msg', :page => page,
+    post '/gollum/create', :content => 'create_msg', :page => page,
          :path               => path, :format => 'markdown', :message => ''
     page_c = @wiki.paged(page, path)
     assert_equal 'create_msg', page_c.raw_data
@@ -343,7 +343,7 @@ context "Frontend" do
     @wiki.clear_cache
 
     # post '/edit' fails. post '/edit/' works.
-    post '/edit/', :content => 'edit_msg',
+    post '/gollum/edit/', :content => 'edit_msg',
          :page              => page, :path => path, :message => ''
     page_e = @wiki.paged(page, path)
     assert_equal 'edit_msg', page_e.raw_data
@@ -362,7 +362,7 @@ context "Frontend" do
 
   test "guards against creation of existing page" do
     name = "A"
-    post "/create", :content => 'abc', :page => name,
+    post "/gollum/create", :content => 'abc', :page => name,
          :format             => 'markdown', :message => 'def'
 
     assert last_response.ok?
@@ -374,12 +374,12 @@ context "Frontend" do
 
   test "delete a page" do
     name = "deleteme"
-    post "/create", :content => 'abc', :page => name,
+    post "/gollum/create", :content => 'abc', :page => name,
          :format             => 'markdown', :message => 'foo'
     page = @wiki.page(name)
     assert_equal 'abc', page.raw_data
 
-    get '/delete/' + name
+    get '/gollum/delete/' + name
 
     @wiki.clear_cache
     page = @wiki.page(name)
@@ -387,7 +387,7 @@ context "Frontend" do
   end
 
   test "previews content" do
-    post "/preview", :content => 'abc', :format => 'markdown'
+    post "/gollum/preview", :content => 'abc', :format => 'markdown'
     assert last_response.ok?
   end
 
@@ -396,7 +396,7 @@ context "Frontend" do
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
-    post "/preview", :content => 'abc', :format => 'markdown'
+    post "/gollum/preview", :content => 'abc', :format => 'markdown'
     assert last_response.ok?
   end
 
@@ -469,7 +469,7 @@ context "Frontend" do
     gollum_author = { :name => 'ghi', :email => 'jkl' }
     session       = { 'gollum.author' => gollum_author }
 
-    post "/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
+    post "/gollum/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
     follow_redirect!
     assert last_response.ok?
 
@@ -544,15 +544,15 @@ context "Frontend" do
   end
 
   test "show edit page with header and footer and sidebar of multibyte" do
-    post "/create",
+    post "/gollum/create",
          :content => 'りんご',
          :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
 
-    post "/edit/Multibyte",
+    post "/gollum/edit/Multibyte",
          :content => 'りんご', :header => 'みかん', :footer => 'バナナ', :sidebar => 'スイカ',
          :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
 
-    get "edit/Multibyte"
+    get "/gollum/edit/Multibyte"
 
     assert last_response.ok?
     assert_match /りんご/, last_response.body
@@ -620,7 +620,7 @@ context "Frontend with lotr" do
   #
 
   test "/pages" do
-    get "/pages"
+    get "/gollum/pages"
     assert last_response.ok?
 
     body = last_response.body
@@ -633,8 +633,8 @@ context "Frontend with lotr" do
     assert !body.match(/(Zamin).+(roast\-mutton)/m), "/pages should be sorted alphabetically"
   end
 
-  test "/pages/Mordor/" do
-    get "/pages/Mordor/"
+  test "/gollum/pages/Mordor/" do
+    get "/gollum/pages/Mordor/"
     assert last_response.ok?, "/pages/Mordor/ did not respond ok"
 
     body = last_response.body
@@ -658,7 +658,7 @@ context "Frontend with lotr" do
   test "create pages within sub-directories using base path" do
     Precious::App.set(:wiki_options, { :base_path => 'wiki' })
     page = 'path'
-    post "/create", :content => '123', :page => page,
+    post "/gollum/create", :content => '123', :page => page,
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
     # should be wiki/Mordor/path
     assert_equal 'http://example.org/Mordor/' + page + '.md', last_response.headers['Location']
@@ -670,7 +670,7 @@ context "Frontend with lotr" do
   end
 
   test "create pages within sub-directories using page file dir" do
-    post "/create", :content => 'one two', :page => 'base',
+    post "/gollum/create", :content => 'one two', :page => 'base',
          :path               => 'wiki/Mordor', :format => 'markdown', :message => 'oooh, scary'
     assert_equal 'http://example.org/wiki/Mordor/base.md', last_response.headers['Location']
     get "/wiki/Mordor/base"
@@ -680,13 +680,13 @@ context "Frontend with lotr" do
 
 
   test "create pages within sub-directories" do
-    post "/create", :content => 'big smelly creatures', :page => 'Orc',
+    post "/gollum/create", :content => 'big smelly creatures', :page => 'Orc',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
     assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
     get "/Mordor/Orc"
     assert_match /big smelly creatures/, last_response.body
 
-    post "/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
+    post "/gollum/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, very scary'
     assert_equal 'http://example.org/Mordor/Uruk%20Hai.md', last_response.headers['Location']
     get "/Mordor/Uruk%20Hai"
@@ -694,12 +694,12 @@ context "Frontend with lotr" do
   end
 
   test "edit pages within sub-directories" do
-    post "/create", :content => 'big smelly creatures', :page => 'Orc',
+    post "/gollum/create", :content => 'big smelly creatures', :page => 'Orc',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
 
     assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
-    post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',
+    post "/gollum/edit/Mordor/Orc", :content => 'not so big smelly creatures',
          :page                        => 'Orc', :path => 'Mordor', :message => 'minor edit'
     assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
@@ -721,14 +721,14 @@ context "Frontend with lotr" do
   end
 
   test "existing emoji" do
-    get "/emoji/heart"
+    get "/gollum/emoji/heart"
     assert_equal 200, last_response.status
     assert_equal 'image/png', last_response.headers['Content-Type']
     assert_equal [137, 80, 78, 71, 13, 10, 26, 10], last_response.body.each_byte.to_a[0..7]
   end
 
   test "missing emoji" do
-    get "/emoji/oggy_was_here"
+    get "/gollum/emoji/oggy_was_here"
     assert_equal 404, last_response.status
   end
 

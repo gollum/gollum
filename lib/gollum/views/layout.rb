@@ -6,6 +6,8 @@ module Precious
       include Rack::Utils
       include Sprockets::Helpers
       include Precious::Views::SprocketsHelpers
+      include Precious::Views::RouteHelpers
+      
       alias_method :h, :escape_html
 
       attr_reader :name, :path
