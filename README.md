@@ -159,6 +159,6 @@ When `--config` option is used, certain inner parts of Gollum can be customized.
 
 **All of the mentioned alterations work both for Gollum's config file (`config.rb`) and Rack's config file (`config.ru`).**
 
-# Contributing
+## CONTRIBUTING
 
 Please consider helping out! See [here](CONTRIBUTING.md) for pointers on how to get started with development.
