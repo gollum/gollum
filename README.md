@@ -58,25 +58,6 @@ Installation examples for individual systems can be seen [here](https://github.c
 
 **Notes:**  
 * Whichever Ruby implementation you're using, Gollum ships with the appropriate default git adapter. So the above installation procedure is common for both MRI and JRuby.
-* If you're installing from source:
-	* Optionally uninstall any previous versions of Gollum:  
-		```
-		[sudo] gem uninstall -aIx gollum
-		```
-	* Install [Bundler](http://bundler.io/).
-	* Navigate to the cloned source of Gollum.
-	* Install dependencies:  
-		```
-		[sudo] bundle install
-		```
-	* Build:  
-		```
-		rake build
-		```
-	* And install:  
-		```
-		[sudo] gem install --no-document pkg/gollum*.gem
-		```
 
 ### Markups
 
@@ -177,3 +158,7 @@ Gollum comes with the following command line options:
 When `--config` option is used, certain inner parts of Gollum can be customized. This is used throughout our wiki for certain user-level alterations, among which [customizing supported markups](https://github.com/gollum/gollum/wiki/Formats-and-extensions) will probably stand out.
 
 **All of the mentioned alterations work both for Gollum's config file (`config.rb`) and Rack's config file (`config.ru`).**
+
+# Contributing
+
+Please consider helping out! See [here](CONTRIBUTING.md) for pointers on how to get started with development.
