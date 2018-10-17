@@ -298,7 +298,7 @@ context "Frontend" do
     @wiki.clear_cache    
     get "/gollum/create/TT"
     assert last_response.ok?
-    get '/gollum/delete/_Template'
+    post '/gollum/delete/_Template'
     Precious::App.set(:wiki_options, { :template_page => false })
   end
 
@@ -379,7 +379,7 @@ context "Frontend" do
     page = @wiki.page(name)
     assert_equal 'abc', page.raw_data
 
-    get '/gollum/delete/' + name
+    post "/gollum/delete/#{page.filename}"
 
     @wiki.clear_cache
     page = @wiki.page(name)
@@ -515,7 +515,7 @@ context "Frontend" do
       end
     end
 
-    ['deleteFile', 'rename', 'edit', 'create'].each do |route|
+    ['delete', 'rename', 'edit', 'create'].each do |route|
       ['.css', '.js'].each do |ext|
         post "/gollum/#{route}/custom#{ext}"
         assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"

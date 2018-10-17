@@ -153,7 +153,7 @@ module Precious
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/(deleteFile|rename|edit|create)/custom\.(js|css)} do
+      post %r{/(delete|rename|edit|create)/custom\.(js|css)} do
         forbid('Changing this resource is not allowed.')
       end
 
@@ -229,18 +229,6 @@ module Precious
         end
       end
 
-      post '/deleteFile/*' do
-        forbid unless @allow_editing
-        wiki = wiki_new
-        filepath = params[:splat].first
-        unless filepath.nil?
-          commit           = commit_message
-          commit[:message] = "Deleted #{filepath}"
-          wiki.delete_file(filepath, commit)
-        end
-
-        redirect_to('/pages')
-      end
 
       post '/rename/*' do
         wikip = wiki_page(params[:splat].first)
@@ -296,20 +284,23 @@ module Precious
         redirect to("/#{page.escaped_url_path}") unless page.nil?
       end
 
-      get '/delete/*' do
-        forbid unless @allow_editing
-        wikip = wiki_page(params[:splat].first)
-        name  = join_page_name(wikip.name, wikip.ext)
-        wiki  = wikip.wiki
-        page  = wikip.page
-        unless page.nil?
-          commit           = commit_message
-          commit[:message] = "Destroyed #{name} (#{page.format})"
-          wiki.delete_page(page, commit)
-        end
 
-        redirect to('/')
+      post '/delete/*' do
+        $stderr.puts "[DELETE] DELETE WAS CALLED"
+        forbid unless @allow_editing
+        wiki = wiki_new
+        filepath = params[:splat].first
+        $stderr.puts "[DELETE] for file #{filepath}"
+        unless filepath.nil?
+          commit           = commit_message
+          commit[:message] = "Deleted #{filepath}"
+          $stderr.puts "[DELETE] About to call wiki.delete_file"
+          wiki.delete_file(filepath, commit)
+        end
+        $stderr.puts "[DELETE] dunzo"
+        redirect_to('/pages')
       end
+      
 
       get '/create/*' do
         forbid unless @allow_editing

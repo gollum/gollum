@@ -47,8 +47,12 @@ $(document).ready(function() {
   $('#delete-link').click( function(e) {
     var ok = confirm($(this).data('confirm'));
     if ( ok ) {
-      var loc = '<%= delete_path %>/' + pageFullPath;
-      window.location = loc;
+      $.post('<%=delete_path %>/' + pageFullPath,
+        {},
+        function (result) {
+          // page successfully deleted, return to landing page
+          window.location = '/';
+        });
     }
     // Don't navigate on cancel.
     e.preventDefault();
