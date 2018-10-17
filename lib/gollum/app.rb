@@ -286,18 +286,14 @@ module Precious
 
 
       post '/delete/*' do
-        $stderr.puts "[DELETE] DELETE WAS CALLED"
         forbid unless @allow_editing
         wiki = wiki_new
         filepath = params[:splat].first
-        $stderr.puts "[DELETE] for file #{filepath}"
         unless filepath.nil?
           commit           = commit_message
           commit[:message] = "Deleted #{filepath}"
-          $stderr.puts "[DELETE] About to call wiki.delete_file"
           wiki.delete_file(filepath, commit)
         end
-        $stderr.puts "[DELETE] dunzo"
         redirect_to('/pages')
       end
       
