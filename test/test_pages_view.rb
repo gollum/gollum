@@ -35,7 +35,7 @@ context "Precious::Views::Pages" do
   test "breadcrumb" do
     @page.instance_variable_set("@path", "Mordor/Eye-Of-Sauron/Saruman")
     @page.instance_variable_set("@base_url", "")
-    assert_equal '<a href="/pages/">Home</a> / <a href="/pages/Mordor/">Mordor</a> / <a href="/pages/Mordor/Eye-Of-Sauron/">Eye-Of-Sauron</a> / Saruman', @page.breadcrumb
+    assert_equal '<a href="/gollum/pages">Home</a> / <a href="/gollum/pages/Mordor/">Mordor</a> / <a href="/gollum/pages/Mordor/Eye-Of-Sauron/">Eye-Of-Sauron</a> / Saruman', @page.breadcrumb
   end
 
   test "breadcrumb with no path" do

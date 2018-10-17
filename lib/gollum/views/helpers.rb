@@ -10,6 +10,7 @@ module Precious
           upload_file: 'uploadFile',
           create: 'create',
           delete: 'delete',
+          delete_file: 'deleteFile',
           edit: 'edit',
           pages: 'pages',
           history: 'history',

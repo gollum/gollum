@@ -12,14 +12,14 @@ module Precious
       def breadcrumb
         if @path
           path       = Pathname.new(@path)
-          breadcrumb = [%{<a href="#{@base_url}/pages/">Home</a>}]
+          breadcrumb = [%{<a href="#{pages_path}">Home</a>}]
           path.descend do |crumb|
             title = crumb.basename
 
             if title == path.basename
               breadcrumb << title
             else
-              breadcrumb << %{<a href="#{@base_url}/pages/#{crumb}/">#{title}</a>}
+              breadcrumb << %{<a href="#{pages_path}/#{crumb}/">#{title}</a>}
             end
           end
 
@@ -31,7 +31,7 @@ module Precious
 
 
       def delete_file(url)
-        %Q(<form method="POST" action="/deleteFile/#{url}" onsubmit="return confirm('Do you really want to delete the file #{URI.decode(url)}?');"><button type="submit" name="delete" value="true">Delete</button></form>)
+        %Q(<form method="POST" action="#{delete_file_path}#{url}" onsubmit="return confirm('Do you really want to delete the file #{URI.decode(url)}?');"><button type="submit" name="delete" value="true">Delete</button></form>)
       end
       
       def files_folders
