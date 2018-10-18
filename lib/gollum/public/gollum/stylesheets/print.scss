@@ -1,5 +1,6 @@
-// Removes the action buttons at the top and the delete link at the bottom for
-// better printing.
+//  Removes the action buttons at the top,
+//  the delete link at the bottom,
+//  and the footer for better printing.
 
 ul.actions {
 	display: none;
@@ -7,4 +8,8 @@ ul.actions {
 
 #delete-link {
 	display: none;
+}
+
+div#footer {
+    display: none;
 }
