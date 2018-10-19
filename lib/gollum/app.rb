@@ -127,7 +127,7 @@ module Precious
         end
       end
 
-      get '/last-commit-info' do
+      get '/last_commit_info' do
         content_type :json
         if page = wiki_page(params[:path]).page
           version = page.last_version
@@ -180,7 +180,7 @@ module Precious
           end
         end
 
-      post '/uploadFile' do
+      post '/upload_file' do
         wiki = wiki_new
 
         unless wiki.allow_uploads

@@ -73,7 +73,7 @@ context "Frontend" do
     @wiki.write_page(page1, :markdown, '',
                      { :name => user1, :email => user1 });
 
-    get "/gollum/last-commit-info", :path => page1
+    get "/gollum/last_commit_info", :path => page1
     assert_match /\"author\":\"user1\"/, last_response.body
   end
 
