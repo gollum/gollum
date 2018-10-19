@@ -44,15 +44,36 @@ function abspath(path, name){
 
 // ua
 $(document).ready(function() {
+  // for deleting the current page
   $('#delete-link').click( function(e) {
     var ok = confirm($(this).data('confirm'));
     if ( ok ) {
-      var loc = '<%= delete_path %>/' + pageFullPath;
-      window.location = loc;
+      $.post('<%=delete_path %>/' + pageFullPath,
+        {},
+        function (result) {
+          // page successfully deleted, return to landing page
+          window.location = '/';
+        });
     }
     // Don't navigate on cancel.
     e.preventDefault();
   } );
+  // for deleting files and pages from the overview
+  $('.delete-file').click( function(e) {
+    var ok = confirm($(this).data('confirm'));
+    if ( ok ) {
+      var element = $(this);
+      $.post('<%=delete_path %>' + $(this).data('file-path'),
+        {},
+        function (result) {
+          // file successfully deleted, stay on overview but remove element from DOM
+          element.closest("li").remove();
+        });
+    }
+    // Don't navigate on cancel.
+    e.preventDefault();
+  } );
+
 
   var nodeSelector = {
     node1: null,
