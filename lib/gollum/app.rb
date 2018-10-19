@@ -294,7 +294,6 @@ module Precious
           commit[:message] = "Deleted #{filepath}"
           wiki.delete_file(filepath, commit)
         end
-        redirect_to('/pages')
       end
       
 

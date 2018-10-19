@@ -31,7 +31,7 @@ module Precious
 
 
       def delete_file(url)
-        %Q(<form method="POST" action="#{delete_path}#{url}" onsubmit="return confirm('Do you really want to delete the file #{URI.decode(url)}?');"><button type="submit" name="delete" value="true">Delete</button></form>)
+        %Q(<div class="delete-file" data-file-path="#{url}" data-confirm="Are you sure you want to delete #{URI.decode(url)}?"><span><button type="submit" name="delete">Delete</button></span></div>)
       end
       
       def files_folders
