@@ -4,8 +4,8 @@ module Precious
   module Views
     module RouteHelpers
       ROUTES = {
-        assets: 'assets',
         'gollum' => {
+          assets: 'assets',
           last_commit_info: 'last_commit_info',
           latest_changes: 'latest_changes',
           upload_file: 'upload_file',

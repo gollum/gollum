@@ -151,7 +151,7 @@
           // get form fields
           var oldAction = $('#gollum-editor form').attr('action');
           var $form = $($('#gollum-editor form').get(0));
-          $form.attr('action', this.href || '<%= preview_path >');
+          $form.attr('action', this.href || '<%= preview_path %>');
           $form.attr('target', '_blank');
           var paths = window.location.pathname.split('/');
           $form.attr('page', paths[ paths.length - 1 ] || '')
