@@ -155,13 +155,13 @@ module Precious
         @rendered_metadata ||= table(metadata)
       end
 
-      def countheads
-        !!metadata['countheads']
+      def header_enum?
+        !!metadata['header_enum']
       end
 
-      def countheads_style
-        if countheads
-          VALID_COUNTER_STYLES.include?(metadata['countheads']) ? metadata['countheads'] : 'decimal'
+      def header_enum_style
+        if header_enum?
+          VALID_COUNTER_STYLES.include?(metadata['header_enum']) ? metadata['header_enum'] : 'decimal'
         end
       end
 
