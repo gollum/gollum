@@ -4,6 +4,14 @@ module Precious
       include HasPage
 
       attr_reader :content, :page, :header, :footer
+      
+      VALID_COUNTER_STYLES = ['decimal', 'decimal-leading-zero', 'arabic-indic', 'armenian', 'upper-armenian',
+        'lower-armenian', 'bengali', 'cambodian', 'khmer', 'cjk-decimal', 'devanagari', 'georgian', 'gujarati', 'gurmukhi',
+        'hebrew', 'kannada', 'lao', 'malayalam', 'mongolian', 'myanmar', 'oriya', 'persian', 'lower-roman', 'upper-roman',
+        'tamil', 'telugu', 'thai', 'tibetan', 'lower-alpha', 'lower-latin', 'upper-alpha', 'upper-latin', 'cjk-earthly-branch',
+        'cjk-heavenly-stem', 'lower-greek', 'hiragana', 'hiragana-iroha', 'katakana', 'katakana-iroha', 'disc', 'circle', 'square',
+        'disclosure-open', 'disclosure-closed'] # https://www.w3.org/TR/css-counter-styles-3/
+
       DATE_FORMAT    = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
       @@to_xml       = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
@@ -145,6 +153,16 @@ module Precious
       def rendered_metadata
         return '' unless page.display_metadata? && !metadata.empty?
         @rendered_metadata ||= table(metadata)
+      end
+
+      def header_enum?
+        !!metadata['header_enum']
+      end
+
+      def header_enum_style
+        if header_enum?
+          VALID_COUNTER_STYLES.include?(metadata['header_enum']) ? metadata['header_enum'] : 'decimal'
+        end
       end
 
       private

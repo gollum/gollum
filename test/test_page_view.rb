@@ -51,6 +51,39 @@ context "Precious::Views::Page" do
 EOS
   end
 
+  test "allow numbered headings based on metadata" do
+    title = 'header enumeration test'
+    @wiki.write_page(title, :markdown, "---\nheader_enum: true\n---\n# Some markdown\nIn this doc")
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+
+    assert_equal @view.header_enum?, true
+    assert_equal @view.header_enum_style, 'decimal'
+
+    title = 'header_enum test2'
+    @wiki.write_page(title, :markdown, "---\nheader_enum: 'lower-roman'\n---\n# Some markdown\nIn this doc")
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+
+    assert_equal @view.header_enum?, true
+    assert_equal @view.header_enum_style, 'lower-roman'
+
+    # With invalid style
+    title = 'header_enum test3'
+    @wiki.write_page(title, :markdown, "---\nheader_enum: 'roman'\n---\n# Some markdown\nIn this doc")
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+
+    assert_equal @view.header_enum?, true
+    assert_equal @view.header_enum_style, 'decimal'
+  end
+
   test 'page has sha id' do
     title = 'test'
     @wiki.write_page(title, :markdown, 'Test' + "\n # 3", commit_details)
