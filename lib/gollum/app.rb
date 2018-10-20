@@ -110,7 +110,7 @@ module Precious
     end
 
     get '/' do
-      redirect clean_url(::File.join(@base_url, @page_dir, wiki_new.index_page))
+      redirect clean_url(::File.join(@base_url, wiki_new.index_page))
     end
 
     namespace '/gollum' do
@@ -196,7 +196,7 @@ module Precious
         halt 500 unless tempfile.is_a? Tempfile
 
         # Remove page file dir prefix from upload path if necessary -- committer handles this itself
-        dir      = wiki.per_page_uploads ? params[:upload_dest] : ::File.join([wiki.page_file_dir, 'uploads'].compact)
+        dir      = wiki.per_page_uploads ? params[:upload_dest] : 'uploads'
         ext      = ::File.extname(fullname)
         format   = ext.split('.').last || 'txt'
         filename = ::File.basename(fullname, ext)
@@ -309,8 +309,6 @@ module Precious
         @path = wikip.path
         @allow_uploads = wikip.wiki.allow_uploads
         @upload_dest   = find_upload_dest(@path)
-
-        page_dir = settings.wiki_options[:page_file_dir].to_s
         unless page_dir.empty?
           # --page-file-dir docs
           # /docs/Home should be created in /Home
@@ -322,7 +320,7 @@ module Precious
         page = wikip.page
         if page
           page_dir = settings.wiki_options[:page_file_dir].to_s
-          redirect to("/#{clean_url(::File.join(page_dir, page.escaped_url_path))}")
+          redirect to("/#{clean_url(page.escaped_url_path)}")
         else
           unless Gollum::Page.format_for("#{@name}#{@ext}")
             @name = "#{@name}#{@ext}"
@@ -343,8 +341,7 @@ module Precious
         begin
           wiki.write_page(name, format, params[:content], commit_message, path)
 
-          page_dir = settings.wiki_options[:page_file_dir].to_s
-          redirect to("/#{clean_url(::File.join(encodeURIComponent(page_dir), encodeURIComponent(path), encodeURIComponent(wiki.page_file_name(name, format))))}")
+          redirect to("/#{clean_url(::File.join(encodeURIComponent(path), encodeURIComponent(wiki.page_file_name(name, format))))}")
         rescue Gollum::DuplicatePageError => e
           @message = "Duplicate page: #{e.message}"
           mustache :error

@@ -313,7 +313,7 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :page_file_dir => "foo" })
     dir  = "bardir"
     name = "#{dir}/baz"
-    get "/gollum/create/foo/#{name}"
+    get "/gollum/create/#{name}"
     assert_match(/\/#{dir}/, last_response.body)
     assert_no_match(/[^\/]#{dir}/, last_response.body)
     # reset page_file_dir
@@ -531,6 +531,7 @@ context "Frontend" do
   end
 
   test "change custom.css path if page-file-dir is set" do
+    ## This test needs to be rewritten to check whether the custom file is actually being read from the page_file_dir
     Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
     page = 'docs/yaycustom'
     text = 'customized!'
@@ -539,7 +540,7 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    assert_match /"\/docs\/custom.css"/, last_response.body
+    assert_match /"\/custom.css"/, last_response.body
     Precious::App.set(:wiki_options, { :css => nil, :page_file_dir => nil })
   end
 
