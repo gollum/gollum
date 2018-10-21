@@ -60,13 +60,13 @@ module RJGit
     end
     
     def /(file)
-      begin
+      if file =~ /^\/+$/
+        self
+      else
         treewalk = TreeWalk.forPath(@jrepo, file, @jtree)
-      rescue Java::JavaLang::IllegalArgumentException
-        return self
+        treewalk.nil? ? nil : 
+          wrap_tree_or_blob(treewalk.get_file_mode(0), treewalk.get_path_string, treewalk.get_object_id(0))
       end
-      treewalk.nil? ? nil : 
-        wrap_tree_or_blob(treewalk.get_file_mode(0), treewalk.get_path_string, treewalk.get_object_id(0))
     end
     
     def self.new_from_hashmap(repository, hashmap, base_tree = nil)
