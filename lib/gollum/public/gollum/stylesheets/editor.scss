@@ -397,6 +397,20 @@ a#function-search { @include editor-button(16); }
   }
 }
 
+#gollum-editor-body-ace {
+  &.dragging {
+    box-shadow: 0 0 10px #AAE000;
+  }
+
+  &.uploading {
+    opacity: 0.5;
+
+    & + div {
+      display: block;
+    }
+  }
+}
+
 /* @section help */
 #gollum-editor-help {
   clear: both;
