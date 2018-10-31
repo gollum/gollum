@@ -372,6 +372,17 @@ context "Frontend" do
     assert_not_equal 'abc', page.raw_data
   end
 
+  test "sets upload destination" do
+    Precious::App.set(:wiki_options, { :allow_uploads => true, :per_page_uploads => true })
+    @wiki.write_page('page1', :markdown, 'Lala',
+                     { :name => 'user1', :email => 'user1' });
+
+    get '/gollum/edit/page1.md'
+    assert_match /var uploadDest\s+=\s+'page1'/, last_response.body
+    # reset page_file_dir
+    Precious::App.set(:wiki_options, { :allow_uploads => false, :per_page_uploads => false })
+  end
+
   test "delete a page" do
     name = "deleteme"
     post "/gollum/create", :content => 'abc', :page => name,
