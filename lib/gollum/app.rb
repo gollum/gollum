@@ -577,10 +577,10 @@ module Precious
       commit_message
     end
 
-    def find_upload_des(path, name)
+    def find_upload_dest(path, name)
       settings.wiki_options[:allow_uploads] ?
           (settings.wiki_options[:per_page_uploads] ?
-              "#{path}/#{::File.basename(name)}".sub(/^\/\//, '') : 'uploads'
+              "#{path}/#{::File.basename(name, ::File.extname(name))}".sub(/^\/\//, '') : 'uploads'
           ) : ''
     end
   end
