@@ -158,6 +158,7 @@ $(document).ready(function() {
     }
   };
 
+
   // ua detection
   if ($.browser.mozilla) {
     $('body').addClass('ff');
@@ -187,7 +188,26 @@ $(document).ready(function() {
           }
         ],
         OK: function( res ) {
-          $('#upload').submit();
+          var formData = new FormData($('#upload').get(0));
+          var endpoint = $('#upload').attr("action");
+
+          $.ajax({
+            url: endpoint,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+              // File successfully uploaded
+            },
+            error: function(data, textStatus, errorThrown) {
+              if (data.status == 409) {
+                alert('This file already exists.');  
+              } else {
+                alert('Error uploading file: ' + textStatus + ' ' + errorThrown);
+              }  
+            }
+          });
         }
       });
     });

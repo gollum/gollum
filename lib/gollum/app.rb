@@ -180,14 +180,11 @@ module Precious
           end
         end
 
+      # AJAX calls only
       post '/upload_file' do
         wiki = wiki_new
 
-        unless wiki.allow_uploads
-          @message = "File uploads are disabled"
-          mustache :error
-          return
-        end
+        halt 405 unless wiki.allow_uploads
 
         if params[:file]
           fullname = params[:file][:filename]
@@ -224,8 +221,7 @@ module Precious
           committer.commit
           redirect to(request.referer)
         rescue Gollum::DuplicatePageError => e
-          @message = "Duplicate page: #{e.message}"
-          mustache :error
+          halt 409 # Signal conflict
         end
       end
 

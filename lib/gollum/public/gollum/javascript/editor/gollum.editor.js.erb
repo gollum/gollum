@@ -228,8 +228,8 @@
               }
               window.ace_editor.insert(text);
             },
-            error: function(r, textStatus) {
-              alert('Error uploading file: ' + textStatus);
+            error: function(r, textStatus, errorThrown) {
+              alert('Error uploading file: ' + textStatus + ' ' + errorThrown);
               $editorBody.removeClass('uploading');
             }
           });
