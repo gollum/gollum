@@ -205,9 +205,8 @@
 
           var file = e.dataTransfer.files[0],
               formData = new FormData();
-          formData.append('upload_dest', uploadDest);
           formData.append('file', file);
-
+          
           $.ajax({
             url: '<%= upload_file_path %>',
             data: formData,

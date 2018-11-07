@@ -15,11 +15,15 @@
   <![endif]-->
 
   <script>
-      var baseUrl = '{{base_url}}';
-      var uploadDest   = '{{upload_dest}}';
-      {{#page}}
-      var pageFullPath = '{{url_path}}';
-      {{/page}}
+	var baseUrl = '{{base_url}}';
+	var uploadDest = 'uploads';
+	var perPageUploads = '{{per_page_uploads}}';
+	if (perPageUploads == 'true') {
+	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/\w+\//, "/").replace(/\.[^/.]+$/, "")
+	}
+	{{#page}}
+	  var pageFullPath = '{{url_path}}';
+	{{/page}}
   </script>
   {{#sprockets_javascript_tag}}app{{/sprockets_javascript_tag}}
   {{#use_identicon}}

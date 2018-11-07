@@ -21,10 +21,6 @@ module Precious
         @allow_uploads
       end
 
-      def upload_dest
-        @upload_dest
-      end
-
       def format
         @format ||= find_format.to_s.downcase
       end

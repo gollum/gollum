@@ -177,7 +177,7 @@ $(document).ready(function() {
     $('#minibutton-upload-page').parent().removeClass('jaws');
     $('#minibutton-upload-page').click(function(e) {
       e.preventDefault();
-
+      
       $.GollumDialog.init({
         title: 'Upload File',
         fields: [
@@ -188,6 +188,7 @@ $(document).ready(function() {
           }
         ],
         OK: function( res ) {
+          $('#wiki-content').addClass('uploading');
           var formData = new FormData($('#upload').get(0));
           var endpoint = $('#upload').attr("action");
 
@@ -199,8 +200,10 @@ $(document).ready(function() {
             contentType: false,
             success: function(data) {
               // File successfully uploaded
+              $('#wiki-content').removeClass('uploading');
             },
             error: function(data, textStatus, errorThrown) {
+              $('#wiki-content').removeClass('uploading');
               if (data.status == 409) {
                 alert('This file already exists.');  
               } else {
@@ -209,6 +212,15 @@ $(document).ready(function() {
             }
           });
         }
+      });
+      $('#gollum-dialog-action-ok').attr('disabled', true);
+      $('input:file').on('change', function() {
+        if ($(this).val()) {
+          news = 'Your uploaded file will be accessible at<br>/' + uploadDest + '/' + $('input[type=file]').val().split('\\').pop();
+          $(".context").html(news);
+          $('#gollum-dialog-action-ok').attr('disabled', false);
+
+        };
       });
     });
   }
