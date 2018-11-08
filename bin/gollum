@@ -135,6 +135,9 @@ MSG
     "By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.") do
     wiki_options[:mathjax] = true
   end
+  opts.on("--critic-markup", "Enable CriticMarkup support.") do
+    wiki_options[:critic_markup] = true
+  end
   opts.on("--irb", "Launch Gollum in 'console mode', with a predefined API.") do
     options[:irb] = true
   end

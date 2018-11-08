@@ -43,6 +43,10 @@ module Precious
       def js # custom js
         @js
       end
+      
+      def critic_markup
+        @critic_markup
+      end
 
     end
   end
