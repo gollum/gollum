@@ -454,7 +454,9 @@ module Precious
           /(.+) # capture any path after the "/pages" excluding the leading slash
         )?      # end the optional non-capturing group
       }x do |path|
-        @path        = extract_path(path) if path
+        if path
+          @path = path[-1] == '/' ? extract_path(path) : extract_path("#{path}/")
+        end
         wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
         wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
         @results     = wiki.pages
