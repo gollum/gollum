@@ -667,7 +667,35 @@
         // get the selected text from the textarea
         var editor = window.ace_editor;
         var txt = editor.getValue();
+        var rtPrefix = '';
+        var rtSuffix = '';
+        var breakBefore = false;
+        var breakAfter = false;
+        var selRange = editor.getSelectionRange();
         var selText = editor.getSelectedText();
+        if (selText === '' ) {
+          if (definitionObject.whole_line && definitionObject.whole_line == true) {
+            var line = selRange.start.row;
+            selText = editor.session.getLine(line);
+            var Range = ace.require('ace/range').Range;
+            selRange = new Range(line, 0, line, selText.length);
+          } else if (definitionObject.break_line && definitionObject.break_line == true) {
+            breakBefore = true;
+          }
+        } else if (definitionObject.break_line && definitionObject.break_line == true) {
+          breakBefore = true;
+          breakAfter  = true;
+        }
+
+        // Only prefix a newline to the replacement text if we're not already at the start of the line
+        if (breakBefore == true && selRange.start.column > 0) {
+          rtPrefix = '\n';
+        }
+
+        if (breakAfter == true) {
+          rtSuffix = '\n';
+        }
+
         var repText = selText;
         var reselect = true;
         var cursor = null;
@@ -697,7 +725,8 @@
         if ( definitionObject.replace &&
              typeof definitionObject.replace == 'string' ) {
           debug('Running replacement - using ' + definitionObject.replace);
-          var rt = definitionObject.replace;
+          var rt = definitionObject.replace
+          rt = rtPrefix + rt + rtSuffix;
 
           repText = escape( repText );
           repText = repText.replace( searchExp, rt );
@@ -732,8 +761,13 @@
         }
 
         if ( repText ) {
-          editor.session.replace(editor.selection.getRange(), repText);
+          editor.session.replace(selRange, repText);
           editor.focus();
+          if (breakAfter == true) {
+            var row = editor.getCursorPosition().row-1;
+            var column = editor.session.getLine(row).length;
+            editor.selection.moveTo(row, column)
+          }
         }
 
       },
