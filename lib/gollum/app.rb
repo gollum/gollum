@@ -86,7 +86,7 @@ module Precious
       @allow_editing = settings.wiki_options[:allow_editing]
       forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
-      @base_url = url('/', false).chomp('/')
+      @base_url = url('/', false).chomp('/').force_encoding('utf-8')
       @page_dir = settings.wiki_options[:page_file_dir].to_s
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
