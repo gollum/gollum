@@ -60,9 +60,6 @@ module Precious
         true
       end
 
-      def critic_markup
-        @critic_markup
-      end
       
       def allow_uploads
         @allow_uploads
