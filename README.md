@@ -42,7 +42,7 @@ For more information on Gollum's capabilities and pitfalls:
 
 **Notes:**
 
-1. There are still some bugs and this setup is not ready for production yet. You can track the progress at [Support Windows via JRuby - Meta Issue](https://github.com/gollum/gollum/issues/1044).
+1. You can track the progress at [Support Windows via JRuby - Meta Issue](https://github.com/gollum/gollum/issues/1044).
 
 ## INSTALLATION
 
@@ -55,28 +55,6 @@ Varies depending on operating system, package manager and Ruby installation. Gen
 	```
 
 Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
-
-**Notes:**  
-* Whichever Ruby implementation you're using, Gollum ships with the appropriate default git adapter. So the above installation procedure is common for both MRI and JRuby.
-* If you're installing from source:
-	* Optionally uninstall any previous versions of Gollum:  
-		```
-		[sudo] gem uninstall -aIx gollum
-		```
-	* Install [Bundler](http://bundler.io/).
-	* Navigate to the cloned source of Gollum.
-	* Install dependencies:  
-		```
-		[sudo] bundle install
-		```
-	* Build:  
-		```
-		rake build
-		```
-	* And install:  
-		```
-		[sudo] gem install --no-document pkg/gollum*.gem
-		```
 
 ### Markups
 
