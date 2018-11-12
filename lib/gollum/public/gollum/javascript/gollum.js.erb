@@ -390,6 +390,14 @@ $(document).ready(function() {
     $.GollumEditor({ NewFile: true, MarkupType: default_markup });
   }
 
+  // CriticMarkup
+  if(criticMarkup == 'true') {
+    $('#wiki-content').addClass('criticmarkup');
+    $('ins.break').unwrap();
+    $('span.critic.comment').wrap('<span class="popover" />');
+    $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
+  }
+
   if( $('#wiki-history').length ){
     var lookup = {};
     $('img.identicon').each(function(index, element){

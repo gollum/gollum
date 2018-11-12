@@ -1,6 +1,6 @@
 module Precious
   module Assets
-    MANIFEST = %w(app.js app.css fileview.css ie7.css print.css *.png *.jpg *.svg *.eot *.ttf *.woff *.woff2)
+    MANIFEST = %w(app.js app.css criticmarkup.css fileview.css ie7.css print.css *.png *.jpg *.svg *.eot *.ttf *.woff *.woff2)
     ASSET_URL = 'gollum/assets'
     
     def self.sprockets(dir = File.dirname(File.expand_path(__FILE__)))

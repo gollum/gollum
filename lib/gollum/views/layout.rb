@@ -44,6 +44,10 @@ module Precious
         @js
       end
       
+      def critic_markup
+        @critic_markup
+      end
+      
       def per_page_uploads
         @per_page_uploads
       end

@@ -60,6 +60,7 @@ module Precious
         true
       end
 
+      
       def allow_uploads
         @allow_uploads
       end
