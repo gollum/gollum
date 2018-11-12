@@ -127,7 +127,7 @@ MSG
   end
   opts.on("--allow-uploads [MODE]", [:dir, :page], "Enable file uploads.",
     "If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.",
-    "If set to 'page', Gollum will store each upload at the currently edited page.") do |mode|
+    "If set to 'page', Gollum will store uploads per page in '<git-repo>/uploads/[pagename]'.") do |mode|
     wiki_options[:allow_uploads]    = true
     wiki_options[:per_page_uploads] = true if mode == :page
   end

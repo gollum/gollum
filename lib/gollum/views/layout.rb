@@ -43,6 +43,10 @@ module Precious
       def js # custom js
         @js
       end
+      
+      def per_page_uploads
+        @per_page_uploads
+      end
 
     end
   end

@@ -84,6 +84,7 @@ module Precious
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
+      @per_page_uploads = settings.wiki_options[:per_page_uploads]
       forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/').force_encoding('utf-8')
@@ -166,7 +167,6 @@ module Precious
         wikip = wiki_page(params[:splat].first)
         @name = join_page_name(wikip.name, wikip.ext)
         @path = wikip.path
-        @upload_dest   = find_upload_dest(@path)
 
         wiki = wikip.wiki
         @allow_uploads = wiki.allow_uploads
@@ -180,14 +180,11 @@ module Precious
           end
         end
 
+      # AJAX calls only
       post '/upload_file' do
+        
         wiki = wiki_new
-
-        unless wiki.allow_uploads
-          @message = "File uploads are disabled"
-          mustache :error
-          return
-        end
+        halt 405 unless wiki.allow_uploads
 
         if params[:file]
           fullname = params[:file][:filename]
@@ -195,8 +192,21 @@ module Precious
         end
         halt 500 unless tempfile.is_a? Tempfile
 
-        # Remove page file dir prefix from upload path if necessary -- committer handles this itself
-        dir      = wiki.per_page_uploads ? params[:upload_dest] : ::File.join([wiki.page_file_dir, 'uploads'].compact)
+        if wiki.per_page_uploads
+          # remove base_url and gollum/* subpath if necessary
+          dir = request.referer.
+                  sub(request.base_url, '').
+                  sub(/.*gollum\/[-\w]+\//, '')
+          # remove file extension 
+          dir = dir.sub(::File.extname(dir), '')
+          dir = ::File.join("uploads", dir)
+        else
+          # Remove page file dir prefix from upload path if necessary -- committer handles this itself
+          dir = ::File.join([wiki.page_file_dir, 'uploads'].compact)
+        end
+        halt 500 if dir.include?('..')
+        halt 500 unless Pathname(dir).relative?
+
         ext      = ::File.extname(fullname)
         format   = ext.split('.').last || 'txt'
         filename = ::File.basename(fullname, ext)
@@ -224,8 +234,7 @@ module Precious
           committer.commit
           redirect to(request.referer)
         rescue Gollum::DuplicatePageError => e
-          @message = "Duplicate page: #{e.message}"
-          mustache :error
+          halt 409 # Signal conflict
         end
       end
 
@@ -308,7 +317,6 @@ module Precious
         @ext  = wikip.ext
         @path = wikip.path
         @allow_uploads = wikip.wiki.allow_uploads
-        @upload_dest   = find_upload_dest(@path)
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
         unless page_dir.empty?
@@ -500,7 +508,6 @@ module Precious
         @page          = page
         @name          = name
         @content       = page.formatted_data
-        @upload_dest   = find_upload_dest(path)
 
         # Extensions and layout data
         @editable      = true
@@ -577,11 +584,5 @@ module Precious
       commit_message
     end
 
-    def find_upload_dest(path)
-      settings.wiki_options[:allow_uploads] ?
-          (settings.wiki_options[:per_page_uploads] ?
-              "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
-          ) : ''
-    end
   end
 end

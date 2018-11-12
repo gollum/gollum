@@ -32,7 +32,7 @@ context "Precious::Views::Editing" do
 
     assert_match /Delete this Page/, last_response.body, "'Delete this Page' link is blocked in page template"
     assert_match /New/,              last_response.body, "'New' button is blocked in page template"
-    assert_match /Upload/,           last_response.body, "'Upload' link is blocked in page template"
+    assert_match /Upload\b/,         last_response.body, "'Upload' link is blocked in page template"
     assert_match /Rename/,           last_response.body, "'Rename' link is blocked in page template"
     assert_match /Edit/,             last_response.body, "'Edit' link is blocked in page template"
 
@@ -56,7 +56,7 @@ context "Precious::Views::Editing" do
 
     assert_no_match /Delete this Page/, last_response.body, "'Delete this Page' link not blocked in page template"
     assert_no_match /New/,              last_response.body, "'New' button not blocked in page template"
-    assert_no_match /Upload/,           last_response.body, "'Upload' link not blocked in page template"
+    assert_no_match /Upload\b/,         last_response.body, "'Upload' link not blocked in page template"
     assert_no_match /Rename/,           last_response.body, "'Rename' link not blocked in page template"
     assert_no_match /Edit/,             last_response.body, "'Edit' link not blocked in page template"
 
