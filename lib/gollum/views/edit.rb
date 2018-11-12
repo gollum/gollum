@@ -65,10 +65,6 @@ module Precious
         @allow_uploads
       end
 
-      def upload_dest
-        @upload_dest
-      end
-
       def format
         @format = (@page.format || false) if @format.nil?
         @format.to_s.downcase

@@ -205,9 +205,8 @@
 
           var file = e.dataTransfer.files[0],
               formData = new FormData();
-          formData.append('upload_dest', uploadDest);
           formData.append('file', file);
-
+          
           $.ajax({
             url: '<%= upload_file_path %>',
             data: formData,
@@ -228,8 +227,8 @@
               }
               window.ace_editor.insert(text);
             },
-            error: function(r, textStatus) {
-              alert('Error uploading file: ' + textStatus);
+            error: function(r, textStatus, errorThrown) {
+              alert('Error uploading file: ' + textStatus + ' ' + errorThrown);
               $editorBody.removeClass('uploading');
             }
           });

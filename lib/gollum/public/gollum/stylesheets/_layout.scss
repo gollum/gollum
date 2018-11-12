@@ -20,6 +20,12 @@
     height: 1%;
     overflow: auto;
   }
+  
+  &.uploading {
+    opacity: 0.5;
+  }
+
+  
 }
 
 /* @section body */
