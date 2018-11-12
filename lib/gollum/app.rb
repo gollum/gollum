@@ -196,7 +196,7 @@ module Precious
           # remove base_url and gollum/* subpath if necessary
           dir = request.referer.
                   sub(request.base_url, '').
-                  sub(/.*gollum\/\w+\//, '')
+                  sub(/.*gollum\/[-\w]+\//, '')
           # remove file extension 
           dir = dir.sub(::File.extname(dir), '')
           dir = ::File.join("uploads", dir)
