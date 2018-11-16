@@ -176,6 +176,7 @@ module Precious
               @page         = page
               @page.version = wiki.repo.log(wiki.ref, @page.path).first
               @content      = page.text_data
+              @etag       = Digest::SHA1.hexdigest(@content)
               mustache :edit
           else
             redirect_to("/create/#{encodeURIComponent(@name)}")
@@ -278,11 +279,17 @@ module Precious
       end
 
       post '/edit/*' do
+        etag = params[:etag]        
         path      = "/#{clean_url(sanitize_empty_params(params[:path]))}"
         page_name = CGI.unescape(params[:page])
         wiki      = wiki_new
         page      = wiki.paged(page_name, path, exact = true)
+        
         return if page.nil?
+        if etag != Digest::SHA1.hexdigest(page.text_data) 
+          halt 412, 'For future use: some helpful data for resolving the conflict here.'
+        end
+        
         committer = Gollum::Committer.new(wiki, commit_message)
         commit    = { :committer => committer }
 
@@ -292,7 +299,6 @@ module Precious
         update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
         committer.commit
 
-        redirect to("/#{page.escaped_url_path}") unless page.nil?
       end
 
 
