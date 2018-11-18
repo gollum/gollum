@@ -51,7 +51,7 @@
       textarea.css('display', 'none');
 
       // NOTE: This requires the page to have only one 'gollum-editor-body'.
-      var editor = ace.edit(editDiv[0]);
+      var editor = ace.edit(editDiv[0], {rtlText: true});
       window.ace_editor = editor;
 
       editor.setTheme("ace/theme/tomorrow");

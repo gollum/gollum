@@ -398,6 +398,8 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
+  $('.markdown-body p, .markdown-body span').attr('dir','auto');
+
   if( $('#wiki-history').length ){
     var lookup = {};
     $('img.identicon').each(function(index, element){
