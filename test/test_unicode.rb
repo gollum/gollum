@@ -57,8 +57,7 @@ context "Frontend Unicode support" do
     page = @wiki.page('PG')
     assert_equal '다른 text', utf8(page.raw_data)
 
-    post '/gollum/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
-    follow_redirect!
+    post '/gollum/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi', :etag => page.sha
     assert last_response.ok?
 
     @wiki = Gollum::Wiki.new(@path)
@@ -79,8 +78,7 @@ context "Frontend Unicode support" do
     assert_equal '다른 text', utf8(page.raw_data)
 
     post '/gollum/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
-         :format                            => 'markdown', :message => 'ghi'
-    follow_redirect!
+         :format => 'markdown', :message => 'ghi', :etag => page.sha
     assert last_response.ok?
 
     @wiki = Gollum::Wiki.new(@path)
