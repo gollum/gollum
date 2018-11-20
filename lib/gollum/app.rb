@@ -287,7 +287,8 @@ module Precious
         
         return if page.nil?
         if etag != page.sha
-          halt 412, 'For future use: some helpful data for resolving the conflict here.'
+          # Signal edit collision and return the page's most recent version
+          halt 412, {etag: page.sha, text_data: page.text_data}.to_json
         end
         
         committer = Gollum::Committer.new(wiki, commit_message)
