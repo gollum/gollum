@@ -367,6 +367,34 @@ $(document).ready(function() {
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
     $.GollumEditor();
+    $("#gollum-editor-submit").click( function(e) {
+      e.preventDefault();
+      // Prevent button from being clicked again
+      $(this).attr('disabled', true);
+
+      var formData = new FormData($('#gollum-editor-form').get(0));
+      var endpoint = $('#gollum-editor-form').attr("action");
+
+      $.ajax({
+        url: endpoint,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          window.location = window.location.href.replace(/gollum\/edit\//, '')
+        },
+        error: function(data, textStatus, errorThrown) {
+          if (data.status == 412) {
+            $('#gollum-editor-submit').attr('disabled', false)
+            alert('Someone else has modified this page while you were editing it. Please store your version on disk outside of the browser, reload this page and reapply your modifications.');
+          } else {
+            alert('Error updating page: ' + textStatus + ' ' + errorThrown);
+          }  
+        }
+      });
+      
+    });
   }
 
   if( $("#last-edit").length ) {
