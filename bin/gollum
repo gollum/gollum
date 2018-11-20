@@ -271,6 +271,7 @@ elsif options[:precompile]
   manifest = Sprockets::Manifest.new(env, options[:precompile])
     Sprockets::Helpers.configure do |config|
       config.environment = env
+      config.environment.context_class.class_variable_set(:@@base_url, wiki_options[:base_path])
       config.prefix      = "#{wiki_options[:base_path]}/#{Precious::Assets::ASSET_URL}"
       config.digest      = true
       config.public_path = options[:precompile]
