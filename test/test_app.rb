@@ -724,6 +724,17 @@ context "Frontend with lotr" do
     assert_equal 404, last_response.status
   end
 
+  test "search with exact match" do
+    @query = "test_01"
+    @results = [{name: "test_01", count:5 }, {name: "test_02", count:10 }]
+    Gollum::Wiki.any_instance.expects(:search).with(@query).returns(@results)
+    get "/search", q: "test_01"
+    follow_redirect!
+
+    assert_equal "http://example.org/test_01", last_request.url
+    assert_equal 302,  last_response.status
+  end
+
   def app
     Precious::App
   end

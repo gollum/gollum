@@ -478,8 +478,13 @@ module Precious
       wiki     = wiki_new
       # Sort wiki search results by count (desc) and then by name (asc)
       @results = wiki.search(@query).sort { |a, b| (a[:count] <=> b[:count]).nonzero? || b[:name] <=> a[:name] }.reverse
-      @name    = @query
-      mustache :search
+
+      if @exact_match = @results.find {|result| result[:name] == @query}
+        redirect to("/#{@exact_match[:name]}")
+      else
+        @name    = @query
+        mustache :search
+      end
     end
 
     get %r{
