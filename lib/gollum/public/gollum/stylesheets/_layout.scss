@@ -24,7 +24,13 @@
   &.uploading {
     opacity: 0.5;
   }
-
+  
+  p, li {
+    code {
+      white-space:pre-wrap;
+      word-wrap:break-word;
+    }
+  }
   
 }
 
