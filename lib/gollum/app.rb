@@ -227,9 +227,11 @@ module Precious
           options.merge! author
         end
 
+        normalize = Gollum::Page.valid_extension?(fullname)
+
         begin
           committer = Gollum::Committer.new(wiki, options)
-          committer.add_to_index(dir, filename, format, contents)
+          committer.add_to_index(dir, filename, format, contents, {normalize: normalize})
           committer.after_commit do |committer, sha|
             wiki.clear_cache
             committer.update_working_dir(dir, filename, format)
