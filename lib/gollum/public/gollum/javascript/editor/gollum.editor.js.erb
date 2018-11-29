@@ -181,6 +181,19 @@
             $('#wiki_format') );
         }
 
+        if ( EditorHas.dir() ) {
+          $('#function-dir').onclick = function () {
+            var editor = window.ace_editor;
+            var rtl = editor.session.$bidiHandler.isRtlDir;
+            editor.session.$bidiHandler.setRtlDirection(editor, rtl);
+            if (rtl == true) {
+
+            } else {
+              
+            }
+          }
+        }
+
         if ( EditorHas.help() ) {
           $('#gollum-editor-help').hide();
           $('#gollum-editor-help').removeClass('jaws');
@@ -562,6 +575,16 @@
                $('#gollum-editor #function-help').length );
     },
 
+    /**
+     *  EditorHas.dir
+     *  True if the editor contains the inline help sector, false otherwise.
+     *
+     *  @return boolean
+     */
+    dir: function() {
+      return ($('#gollum-editor #function-dir').length );
+    },
+
 
     /**
      *  EditorHas.previewButton
@@ -623,7 +646,7 @@
             $(this).click( FunctionBar.evtFunctionButtonClick );
             $(this).removeClass('disabled');
           }
-          else if ( $(this).attr('id') != 'function-help' ) {
+          else if ( !['function-help', 'function-dir'].includes( $(this).attr('id') ) ) {
             $(this).addClass('disabled');
           }
         });

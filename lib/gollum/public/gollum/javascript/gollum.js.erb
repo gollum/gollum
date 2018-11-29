@@ -398,7 +398,7 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
-  $('.markdown-body p, .markdown-body span').attr('dir','auto');
+  $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 
   if( $('#wiki-history').length ){
     var lookup = {};
