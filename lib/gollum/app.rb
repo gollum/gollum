@@ -227,7 +227,7 @@ module Precious
           options.merge! author
         end
 
-        normalize = !(Gollum::File.image?(fullname) || Gollum::File.binary?(fullname))
+        normalize = Gollum::Page.valid_extension?(fullname)
 
         begin
           committer = Gollum::Committer.new(wiki, options)
