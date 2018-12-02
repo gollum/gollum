@@ -1,5 +1,3 @@
-## It's [Hacktober](https://hacktoberfest.digitalocean.com/)! Please consider [helping out](CONTRIBUTING.md). Here are just some of the [issues](https://github.com/gollum/gollum/labels/Hacktoberfest) that could use your help. Also consider [subscribing](https://www.codetriage.com/gollum/gollum) on CodeTriage.
-
 gollum -- A git-based Wiki
 ====================================
 
@@ -9,21 +7,18 @@ gollum -- A git-based Wiki
 
 ## DESCRIPTION
 
-Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository (either bare or regular) of a specific nature:
-* A Gollum repository's contents are human-editable, unless the repository is bare. Pages are unique text files which may be organized into directories any way you choose. Other content can also be included, for example images, PDFs and headers/footers for your pages.
+Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository of a specific nature:
+* A Gollum repository's contents are human-editable. Pages are unique text files which may be organized into directories any way you choose, as long as they have a recognized file extension. Other content can also be included, for example images, PDFs and headers/footers.
 * Gollum pages:
-	* May be written in a variety of [markups](#markups).
-	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
-	* Can be displayed in all versions (commits).
+	* May be written in a variety of [markup languages](#markups).
+	* Can be edited with your favourite system editor or IDE or with the built-in web interface.
+	* Can be displayed in all versions, and can easily be rolled back.
+* Gollum supports advanced functionality like UML diagrams, macros, metadata, and [more](https://github.com/gollum/gollum/wiki).
 
-Gollum can be launched either as a webserver (with the web interface) or in "console mode", where you can use a predefined API to query and manipulate the repository. For more information, see the [Running](#running) and [Configuration](#configuration) sections.
-
-For more information on Gollum's capabilities and pitfalls:
-
-1. [Syntax/capability overview for pages](https://github.com/gollum/gollum/wiki).
-2. [Known limitations](https://github.com/gollum/gollum/wiki/Known-limitations).
-3. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
-4. [Security overview](https://github.com/gollum/gollum/wiki/Security).
+Some helpful documentation:
+1. [Known limitations](https://github.com/gollum/gollum/wiki/Known-limitations).
+2. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
+3. [Security overview](https://github.com/gollum/gollum/wiki/Security).
 
 ### Videos
 
