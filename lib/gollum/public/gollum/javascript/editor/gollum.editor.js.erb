@@ -151,7 +151,7 @@
           // get form fields
           var oldAction = $('#gollum-editor form').attr('action');
           var $form = $($('#gollum-editor form').get(0));
-          $form.attr('action', this.href || '<%= preview_path %>');
+          $form.attr('action', this.href || routePath('preview'));
           $form.attr('target', '_blank');
           var paths = window.location.pathname.split('/');
           $form.attr('page', paths[ paths.length - 1 ] || '')
@@ -209,7 +209,7 @@
           formData.append('file', file);
 
           $.ajax({
-            url: '<%= upload_file_path %>',
+            url: routePath('upload_file'),
             data: formData,
             cache: false,
             contentType: false,
@@ -317,49 +317,42 @@
       }
       if ( !LanguageDefinition.isLoadedFor(name) ) {
         LanguageDefinition._ACTIVE_LANG = null;
-        LanguageDefinition.loadFor( name, function(x, t) {
-          if ( t != 'success' ) {
-            debug('Failed to load language definition for ' + name);
-            // well, fake it and turn everything off for this one
-            LanguageDefinition.define( name, {} );
+
+        // update features that rely on the language definition
+        if ( EditorHas.functionBar() ) {
+          FunctionBar.refresh();
+        }
+
+        if ( LanguageDefinition.isValid() && EditorHas.formatSelector() ) {
+          FormatSelector.updateSelected();
+        }
+
+        if(LanguageDefinition.getHookFunctionFor("activate")) {
+          LanguageDefinition.getHookFunctionFor("activate")();
+        }
+
+        function hotkey( e, cmd ) {
+          e.preventDefault();
+
+          var def = LanguageDefinition.getDefinitionFor( cmd );
+          if ( typeof def == 'object' ) {
+            FunctionBar.executeAction( def );
           }
+          // Prevent bubbling of hotkey.
+          return false;
+        }
 
-          // update features that rely on the language definition
-          if ( EditorHas.functionBar() ) {
-            FunctionBar.refresh();
-          }
+        Mousetrap.bind('mod+1', function( e ){ hotkey( e, 'function-h1' ); });
+        Mousetrap.bind('mod+2', function( e ){ hotkey( e, 'function-h2' ); });
+        Mousetrap.bind('mod+3', function( e ){ hotkey( e, 'function-h3' ); });
+        Mousetrap.bind('mod+b', function( e ){ hotkey( e, 'function-bold' ); });
+        Mousetrap.bind('mod+i', function( e ){ hotkey( e, 'function-italic' ); });
+        Mousetrap.bind('mod+s', function( e ){
+          e.preventDefault();
+          $("#gollum-editor-submit").trigger("click");
+          return false;
+        });
 
-          if ( LanguageDefinition.isValid() && EditorHas.formatSelector() ) {
-            FormatSelector.updateSelected();
-          }
-
-          if(LanguageDefinition.getHookFunctionFor("activate")) {
-            LanguageDefinition.getHookFunctionFor("activate")();
-          }
-
-          function hotkey( e, cmd ) {
-            e.preventDefault();
-
-            var def = LanguageDefinition.getDefinitionFor( cmd );
-            if ( typeof def == 'object' ) {
-              FunctionBar.executeAction( def );
-            }
-            // Prevent bubbling of hotkey.
-            return false;
-          }
-
-          Mousetrap.bind('mod+1', function( e ){ hotkey( e, 'function-h1' ); });
-          Mousetrap.bind('mod+2', function( e ){ hotkey( e, 'function-h2' ); });
-          Mousetrap.bind('mod+3', function( e ){ hotkey( e, 'function-h3' ); });
-          Mousetrap.bind('mod+b', function( e ){ hotkey( e, 'function-bold' ); });
-          Mousetrap.bind('mod+i', function( e ){ hotkey( e, 'function-italic' ); });
-          Mousetrap.bind('mod+s', function( e ){
-            e.preventDefault();
-            $("#gollum-editor-submit").trigger("click");
-            return false;
-          });
-
-        } );
       } else {
         LanguageDefinition._ACTIVE_LANG = name;
         FunctionBar.refresh();
@@ -404,43 +397,6 @@
 
       return null;
     },
-
-
-    /**
-     *  loadFor
-     *  Asynchronously loads a definition file for the current markup.
-     *  Definition files are necessary to use the code editor.
-     *
-     *  @param  string  markup_name  The markup name you want to load
-     *  @return void
-     */
-    loadFor: function( markup_name, on_complete ) {
-      // Keep us from hitting 404s on our site, check the definition blacklist
-      if ( ActiveOptions.NoDefinitionsFor.length ) {
-        for ( var i=0; i < ActiveOptions.NoDefinitionsFor.length; i++ ) {
-          if ( markup_name == ActiveOptions.NoDefinitionsFor[i] ) {
-            // we don't have this. get out.
-            if ( typeof on_complete == 'function' ) {
-              on_complete( null, 'error' );
-              return;
-            }
-          }
-        }
-      }
-
-      // attempt to load the definition for this language
-      var script_uri = '<%= assets_path %>/editor/langs/' + markup_name + '.js';
-      $.ajax({
-                url: script_uri,
-                dataType: 'script',
-                complete: function( xhr, textStatus ) {
-                  if ( typeof on_complete == 'function' ) {
-                    on_complete( xhr, textStatus );
-                  }
-                }
-            });
-    },
-
 
     /**
      *  isLoadedFor

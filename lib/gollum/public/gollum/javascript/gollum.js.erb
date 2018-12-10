@@ -1,4 +1,27 @@
 // Helpers
+
+// Get path for named route, prefixing baseUrl if necessary
+// Uses the route definitions in /lib/gollum/views/helpers.rb.
+// For example, routePath('delete') is equivalent to 'delete_path' in the mustache templates.
+function routePath(name){
+  var routes = $.parseJSON('<%= routes_to_json %>')
+  path = routes[name]
+  if (baseUrl == undefined ) {
+    console.log('Gollum error: baseUrl undefined')
+  } else if (path == undefined ) {
+    console.log('Could not find route with name: ' + name)
+  } else {
+      if ( baseUrl == "") {
+        return path;
+      } else if (baseUrl.charAt(baseUrl.length -1) == '/') {
+        result = baseUrl + path;
+      } else {
+        result = baseUrl + '/' + path;
+      }
+    return result.replace(/\/{2}/g, '/')
+  }
+}
+
 function pageName(){
   // "my/dir/file.md" => "file"
   if (typeof(pageFullPath) == 'undefined') {
@@ -48,7 +71,7 @@ $(document).ready(function() {
   $('#delete-link').click( function(e) {
     var ok = confirm($(this).data('confirm'));
     if ( ok ) {
-      $.post('<%=delete_path %>/' + pageFullPath,
+      $.post(routePath('delete') + '/' + pageFullPath,
         {},
         function (result) {
           // page successfully deleted, return to landing page
@@ -63,7 +86,7 @@ $(document).ready(function() {
     var ok = confirm($(this).data('confirm'));
     if ( ok ) {
       var element = $(this);
-      $.post('<%=delete_path %>' + $(this).data('file-path'),
+      $.post(routePath('delete') + '/' + $(this).data('file-path'),
         {},
         function (result) {
           // file successfully deleted, stay on overview but remove element from DOM
@@ -183,7 +206,7 @@ $(document).ready(function() {
           {
             type:   'file',
             context: 'Your uploaded file will be accessible at<br>/'+uploadDest+'/[filename]',
-            action: '<%= upload_file_path %>'
+            action: routePath('upload_file')
           }
         ],
         OK: function( res ) {
@@ -247,14 +270,7 @@ $(document).ready(function() {
         // In the pages view, pageFullPath isn't defined.
         // The new button will still expect a value however.
         // So we try to figure one out from window.location
-        path = window.location.pathname.substr(1)
-        // Remove the page viewer part of the url.
-        <%
-          pages_path_uri = pages_path
-          pages_path_uri = pages_path_uri[1..-1] if pages_path_uri[0] == '/'
-          pages_path_uri = pages_path_uri.gsub('/','\/')
-        %>
-        path = path.replace(/^<%= pages_path_uri %>\/?/,'')
+        path = window.location.pathname.replace(routePath('pages'), '')
         // For consistency remove the trailing /
         path = path.replace(/\/$/,'')
       }
@@ -285,7 +301,7 @@ $(document).ready(function() {
           for( var i=0; i < name_parts.length; i++ ){
             name_encoded.push(encodeURIComponent(name_parts[i]));
           }
-          window.location =  '<%= create_path %>' + name_encoded.join('/');
+          window.location =  routePath('create') + name_encoded.join('/');
         }
       });
     });
@@ -340,7 +356,7 @@ $(document).ready(function() {
   if( $("#last-edit").length ) {
     $("#page-info-toggle").click ( function () {
       $.ajax({
-        url: '<%= last_commit_info_path %>',
+        url: routePath('last_commit_info'),
         data: {path: $("#page-info-toggle").data('pagepath')},
         success: function ( data ) {
           $("#last-edit").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
