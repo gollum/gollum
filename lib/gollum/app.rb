@@ -8,7 +8,6 @@ require 'stringex'
 require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
-require 'uglifier'
 require 'sass'
 
 require 'gollum'
