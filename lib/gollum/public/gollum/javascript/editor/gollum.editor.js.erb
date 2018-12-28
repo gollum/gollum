@@ -83,8 +83,8 @@
       editor.commands.addCommand({
         name: "saveContents",
         bindKey: {win: "Ctrl-s", mac: "Command-s"},
-        exec: function(editor) {
-          $('#gollum-editor form[name="gollum-editor"]').submit();
+        exec: function() {
+          $("#gollum-editor-submit").trigger("click");
         }
       });
     });
