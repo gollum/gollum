@@ -57,7 +57,7 @@ module Precious
               klass = (defined? result.format) ? "page" : "file"
               url = "#{@base_url}/#{result.escaped_url_path}"
               
-              file_link = %{<li><a href="#{url}" class="#{klass}">#{result.filename}</a>#{delete_file(url) if @allow_editing}</li>}
+              file_link = %{<li><a href="#{url}" class="#{klass}">#{result.filename}</a>#{delete_file(result.escaped_url_path) if @allow_editing}</li>}
               files[result.name] = file_link
             end
           end
