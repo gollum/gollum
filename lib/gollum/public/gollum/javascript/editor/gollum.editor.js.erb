@@ -360,11 +360,6 @@
         exec: hotkey('function-h1')
       });
       window.ace_editor.commands.addCommand({
-        name: "header-1",
-        bindKey: {win: "Ctrl-1", mac: "Command-1"},
-        exec: hotkey('function-h1')
-      });
-      window.ace_editor.commands.addCommand({
         name: "header-2",
         bindKey: {win: "Ctrl-2", mac: "Command-2"},
         exec: hotkey('function-h2')
@@ -689,7 +684,7 @@
         var selText = editor.getSelectedText();
         var selTextLength = selText.length;
         var wholeLine = false;
-        if (selText === '' ) {
+        if (selText == '' ) {
           if (definitionObject.whole_line && definitionObject.whole_line == true) {
             wholeLine = true;
             var line = selRange.start.row;
@@ -732,7 +727,7 @@
         if ( definitionObject.replace &&
              typeof definitionObject.replace == 'string' ) {
           debug('Running replacement - using ' + definitionObject.replace);
-          var rt = definitionObject.replace
+          var rt = definitionObject.replace;
 
           repText = escape( repText );
           repText = repText.replace( searchExp, rt );
@@ -1205,7 +1200,9 @@
 
     editor.session.replace(selRange, repText);
     if (cursorOffset != undefined) {
-      editor.navigateTo(selRange.start.row+newlinesPrefixed+cursorOffset[0], selRange.start.column + cursorOffset[1]);
+      totalVerticalOffset = cursorOffset[0] + newlinesPrefixed + selRange.start.row;
+      totalHorizontalOffset = cursorOffset[1] + selRange.start.column;
+      editor.navigateTo(totalVerticalOffset, totalHorizontalOffset);
     }
     editor.focus();
   };
