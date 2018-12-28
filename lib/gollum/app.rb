@@ -152,11 +152,11 @@ module Precious
         end
       end
 
-      get %r{/(edit|create)/(custom|mathjax\.config\.)\.(js|css)} do
+      get %r{/(edit|create)/(custom|mathjax\.config)\.(js|css)} do
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/(delete|rename|edit|create)/(custom|mathjax\.config\.)\.(js|css)} do
+      post %r{/(delete|rename|edit|create)/(custom|mathjax\.config)\.(js|css)} do
         forbid('Changing this resource is not allowed.')
       end
 
