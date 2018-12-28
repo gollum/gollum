@@ -80,8 +80,7 @@ context "Frontend" do
   test "edits page" do
     page_1 = @wiki.page('A')
     post "/gollum/edit/A", :content => 'abc', :page => 'A',
-         :format             => page_1.format, :message => 'def'
-    follow_redirect!
+         :format => page_1.format, :message => 'def', :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -90,12 +89,28 @@ context "Frontend" do
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
+  
+  test "edit page fails when page is outdated (edit collision)" do
+    page = @wiki.page('A')
+    old_sha = page.sha
+    post "/gollum/edit/A", :content => 'abc', :page => 'A',
+         :format => page.format, :message => 'def', :etag => old_sha
+    assert last_response.ok?
+    
+    @wiki.clear_cache
+    page = @wiki.page('A')
+    new_sha = page.sha
+    assert_not_equal old_sha, new_sha
+    
+    post "/gollum/edit/A", :content => 'def', :page => 'A',
+         :format => page.format, :message => 'def', :etag => old_sha
+    assert_equal last_response.status, 412    
+  end
 
   test "edit page with empty message" do
     page_1 = @wiki.page('A')
     post "/gollum/edit/A", :content => 'abc', :page => 'A',
-         :format             => page_1.format
-    follow_redirect!
+         :format => page_1.format, :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -108,8 +123,7 @@ context "Frontend" do
   test "edit page with slash" do
     page_1 = @wiki.page('A')
     post "/gollum/edit/A", :content => 'abc', :page => 'A', :path => '/////',
-         :format             => page_1.format, :message => 'def'
-    follow_redirect!
+         :format => page_1.format, :message => 'def', :etag => page_1.sha
     assert last_response.ok?
   end
 
@@ -121,9 +135,7 @@ context "Frontend" do
     side_1   = page_1.sidebar
 
     post "/gollum/edit/A", :header => 'header',
-         :footer            => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
-    follow_redirect!
-    assert_equal "/A.md", last_request.fullpath
+         :footer => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def', :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -325,7 +337,7 @@ context "Frontend" do
     page = 'not-real-page'
     path = '/'
     post '/gollum/edit/', :content => 'edit_msg',
-         :page              => page, :path => path, :message => ''
+         :page => page, :path => path, :message => ''
     page_e = @wiki.paged(page, path)
     assert_equal nil, page_e
   end
@@ -335,7 +347,7 @@ context "Frontend" do
     path = 'a/b/' # path must end with /
 
     post '/gollum/create', :content => 'create_msg', :page => page,
-         :path               => path, :format => 'markdown', :message => ''
+         :path => path, :format => 'markdown', :message => ''
     page_c = @wiki.paged(page, path)
     assert_equal 'create_msg', page_c.raw_data
 
@@ -344,7 +356,7 @@ context "Frontend" do
 
     # post '/edit' fails. post '/edit/' works.
     post '/gollum/edit/', :content => 'edit_msg',
-         :page              => page, :path => path, :message => ''
+         :page => page, :path => path, :message => '', :etag => page_c.sha
     page_e = @wiki.paged(page, path)
     assert_equal 'edit_msg', page_e.raw_data
 
@@ -469,8 +481,7 @@ context "Frontend" do
     gollum_author = { :name => 'ghi', :email => 'jkl' }
     session       = { 'gollum.author' => gollum_author }
 
-    post "/gollum/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
-    follow_redirect!
+    post "/gollum/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def', :etag => page1.sha }, { 'rack.session' => session }
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -548,9 +559,11 @@ context "Frontend" do
          :content => 'りんご',
          :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
 
+    page = @wiki.paged('Multibyte')
+    
     post "/gollum/edit/Multibyte",
          :content => 'りんご', :header => 'みかん', :footer => 'バナナ', :sidebar => 'スイカ',
-         :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
+         :page    => 'Multibyte', :format => :markdown, :message => 'mesg', :etag => page.sha
 
     get "/gollum/edit/Multibyte"
 
@@ -695,13 +708,14 @@ context "Frontend with lotr" do
 
   test "edit pages within sub-directories" do
     post "/gollum/create", :content => 'big smelly creatures', :page => 'Orc',
-         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+         :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
 
     assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
+    page = @wiki.paged('Orc', 'Mordor')
     post "/gollum/edit/Mordor/Orc", :content => 'not so big smelly creatures',
-         :page                        => 'Orc', :path => 'Mordor', :message => 'minor edit'
-    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
+         :page => 'Orc', :path => 'Mordor', :message => 'minor edit', :etag => page.sha
+    assert last_response.ok?
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body

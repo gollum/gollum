@@ -57,10 +57,6 @@ module Precious
         @allow_uploads
       end
 
-      def upload_dest
-        @upload_dest
-      end
-
       def has_header
         if @header
           @header.formatted_data.strip.empty? ? false : true

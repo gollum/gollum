@@ -29,7 +29,7 @@
     display: block;
   }
 
-  a.minibutton {
+  button.minibutton {
     float: right;
     margin-right: 0.5em;
     width: auto;
@@ -42,6 +42,12 @@
 
     @include button-base;
   }
+  
+  button.minibutton:disabled {
+    opacity: 0.65; 
+    cursor: not-allowed;
+  }
+  
 }
 
 #gollum-dialog-dialog-inner {

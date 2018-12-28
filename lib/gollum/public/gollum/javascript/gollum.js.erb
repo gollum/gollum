@@ -158,6 +158,7 @@ $(document).ready(function() {
     }
   };
 
+
   // ua detection
   if ($.browser.mozilla) {
     $('body').addClass('ff');
@@ -176,7 +177,7 @@ $(document).ready(function() {
     $('#minibutton-upload-page').parent().removeClass('jaws');
     $('#minibutton-upload-page').click(function(e) {
       e.preventDefault();
-
+      
       $.GollumDialog.init({
         title: 'Upload File',
         fields: [
@@ -187,8 +188,39 @@ $(document).ready(function() {
           }
         ],
         OK: function( res ) {
-          $('#upload').submit();
+          $('#wiki-content').addClass('uploading');
+          var formData = new FormData($('#upload').get(0));
+          var endpoint = $('#upload').attr("action");
+
+          $.ajax({
+            url: endpoint,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+              // File successfully uploaded
+              $('#wiki-content').removeClass('uploading');
+            },
+            error: function(data, textStatus, errorThrown) {
+              $('#wiki-content').removeClass('uploading');
+              if (data.status == 409) {
+                alert('This file already exists.');  
+              } else {
+                alert('Error uploading file: ' + textStatus + ' ' + errorThrown);
+              }  
+            }
+          });
         }
+      });
+      $('#gollum-dialog-action-ok').attr('disabled', true);
+      $('input:file').on('change', function() {
+        if ($(this).val()) {
+          news = 'Your uploaded file will be accessible at<br>/' + uploadDest + '/' + $('input[type=file]').val().split('\\').pop();
+          $(".context").html(news);
+          $('#gollum-dialog-action-ok').attr('disabled', false);
+
+        };
       });
     });
   }
@@ -335,6 +367,34 @@ $(document).ready(function() {
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
     $.GollumEditor();
+    $("#gollum-editor-submit").click( function(e) {
+      e.preventDefault();
+      // Prevent button from being clicked again
+      $(this).attr('disabled', true);
+
+      var formData = new FormData($('#gollum-editor-form').get(0));
+      var endpoint = $('#gollum-editor-form').attr("action");
+
+      $.ajax({
+        url: endpoint,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          window.location = window.location.href.replace(/gollum\/edit\//, '')
+        },
+        error: function(data, textStatus, errorThrown) {
+          if (data.status == 412) {
+            $('#gollum-editor-submit').attr('disabled', false)
+            alert('Someone else has modified this page while you were editing it. Please store your version on disk outside of the browser, reload this page and reapply your modifications.');
+          } else {
+            alert('Error updating page: ' + textStatus + ' ' + errorThrown);
+          }  
+        }
+      });
+      
+    });
   }
 
   if( $("#last-edit").length ) {
@@ -356,6 +416,14 @@ $(document).ready(function() {
       window.onbeforeunload = function(){ return "Leaving will not create a new page!" };
     });
     $.GollumEditor({ NewFile: true, MarkupType: default_markup });
+  }
+
+  // CriticMarkup
+  if(criticMarkup == 'true') {
+    $('#wiki-content').addClass('criticmarkup');
+    $('ins.break').unwrap();
+    $('span.critic.comment').wrap('<span class="popover" />');
+    $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
   if( $('#wiki-history').length ){

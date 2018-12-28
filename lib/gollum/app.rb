@@ -84,6 +84,9 @@ module Precious
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
+      @critic_markup = settings.wiki_options[:critic_markup]
+      @per_page_uploads = settings.wiki_options[:per_page_uploads]
+
       forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/').force_encoding('utf-8')
@@ -166,7 +169,6 @@ module Precious
         wikip = wiki_page(params[:splat].first)
         @name = join_page_name(wikip.name, wikip.ext)
         @path = wikip.path
-        @upload_dest   = find_upload_dest(@path)
 
         wiki = wikip.wiki
         @allow_uploads = wiki.allow_uploads
@@ -174,20 +176,18 @@ module Precious
               @page         = page
               @page.version = wiki.repo.log(wiki.ref, @page.path).first
               @content      = page.text_data
+              @etag         = page.sha
               mustache :edit
           else
             redirect_to("/create/#{encodeURIComponent(@name)}")
           end
         end
 
+      # AJAX calls only
       post '/upload_file' do
+        
         wiki = wiki_new
-
-        unless wiki.allow_uploads
-          @message = "File uploads are disabled"
-          mustache :error
-          return
-        end
+        halt 405 unless wiki.allow_uploads
 
         if params[:file]
           fullname = params[:file][:filename]
@@ -195,8 +195,21 @@ module Precious
         end
         halt 500 unless tempfile.is_a? Tempfile
 
-        # Remove page file dir prefix from upload path if necessary -- committer handles this itself
-        dir      = wiki.per_page_uploads ? params[:upload_dest] : ::File.join([wiki.page_file_dir, 'uploads'].compact)
+        if wiki.per_page_uploads
+          # remove base_url and gollum/* subpath if necessary
+          dir = request.referer.
+                  sub(request.base_url, '').
+                  sub(/.*gollum\/[-\w]+\//, '')
+          # remove file extension 
+          dir = dir.sub(::File.extname(dir), '')
+          dir = ::File.join("uploads", dir)
+        else
+          # Remove page file dir prefix from upload path if necessary -- committer handles this itself
+          dir = ::File.join([wiki.page_file_dir, 'uploads'].compact)
+        end
+        halt 500 if dir.include?('..')
+        halt 500 unless Pathname(dir).relative?
+
         ext      = ::File.extname(fullname)
         format   = ext.split('.').last || 'txt'
         filename = ::File.basename(fullname, ext)
@@ -214,9 +227,11 @@ module Precious
           options.merge! author
         end
 
+        normalize = Gollum::Page.valid_extension?(fullname)
+
         begin
           committer = Gollum::Committer.new(wiki, options)
-          committer.add_to_index(dir, filename, format, contents)
+          committer.add_to_index(dir, filename, format, contents, {normalize: normalize})
           committer.after_commit do |committer, sha|
             wiki.clear_cache
             committer.update_working_dir(dir, filename, format)
@@ -224,8 +239,7 @@ module Precious
           committer.commit
           redirect to(request.referer)
         rescue Gollum::DuplicatePageError => e
-          @message = "Duplicate page: #{e.message}"
-          mustache :error
+          halt 409 # Signal conflict
         end
       end
 
@@ -267,11 +281,18 @@ module Precious
       end
 
       post '/edit/*' do
+        etag      = params[:etag]        
         path      = "/#{clean_url(sanitize_empty_params(params[:path]))}"
         page_name = CGI.unescape(params[:page])
         wiki      = wiki_new
         page      = wiki.paged(page_name, path, exact = true)
+        
         return if page.nil?
+        if etag != page.sha
+          # Signal edit collision and return the page's most recent version
+          halt 412, {etag: page.sha, text_data: page.text_data}.to_json
+        end
+        
         committer = Gollum::Committer.new(wiki, commit_message)
         commit    = { :committer => committer }
 
@@ -281,7 +302,6 @@ module Precious
         update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
         committer.commit
 
-        redirect to("/#{page.escaped_url_path}") unless page.nil?
       end
 
 
@@ -308,7 +328,6 @@ module Precious
         @ext  = wikip.ext
         @path = wikip.path
         @allow_uploads = wikip.wiki.allow_uploads
-        @upload_dest   = find_upload_dest(@path)
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
         unless page_dir.empty?
@@ -500,7 +519,6 @@ module Precious
         @page          = page
         @name          = name
         @content       = page.formatted_data
-        @upload_dest   = find_upload_dest(path)
 
         # Extensions and layout data
         @editable      = true
@@ -577,11 +595,5 @@ module Precious
       commit_message
     end
 
-    def find_upload_dest(path)
-      settings.wiki_options[:allow_uploads] ?
-          (settings.wiki_options[:per_page_uploads] ?
-              "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
-          ) : ''
-    end
   end
 end
