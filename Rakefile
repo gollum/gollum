@@ -191,7 +191,7 @@ task :precompile do
       config.environment = env
       config.prefix      = Precious::Assets::ASSET_URL
       config.digest      = true
-      config.public_path = './public/assets'
+      config.public_path = ENV.fetch('assets_path', './public/assets')
       config.manifest    = manifest
     end
   puts "Precompiling assets to #{::File.expand_path('./public/assets')}..."
