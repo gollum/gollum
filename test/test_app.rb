@@ -54,7 +54,7 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    expected = "<h2><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
@@ -524,6 +524,8 @@ context "Frontend" do
         get "/gollum/#{route}/custom#{ext}"
         assert_equal 403, last_response.status, "get /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
+      get "/gollum/#{route}/mathjax.config.js"
+      assert_equal 403, last_response.status, "get /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
     end
 
     ['delete', 'rename', 'edit', 'create'].each do |route|
@@ -531,6 +533,8 @@ context "Frontend" do
         post "/gollum/#{route}/custom#{ext}"
         assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
+      post "/gollum/#{route}/mathjax.config.js"
+      assert_equal 403, last_response.status, "post /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
     end
 
     ['.css', '.js'].each do |ext|

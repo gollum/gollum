@@ -134,6 +134,7 @@ MSG
   opts.on("--mathjax", "Enable MathJax (renders mathematical equations).",
     "By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.") do
     wiki_options[:mathjax] = true
+    wiki_options[:mathjax_config] = 'mathjax.config.js'
   end
   opts.on("--critic-markup", "Enable support for annotations using CriticMarkup.") do
     wiki_options[:critic_markup] = true
@@ -154,10 +155,6 @@ MSG
   opts.on("--user-icons [MODE]", [:gravatar, :identicon, :none], "Use specific user-icons for history view.",
     "Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.") do |mode|
     wiki_options[:user_icons] = mode
-  end
-  opts.on("--mathjax-config [FILE]", "Specify path to a custom MathJax configuration.",
-    "If not specified, uses the '<git-repo>/mathjax.config.js' file.") do |file|
-    wiki_options[:mathjax_config] = file || 'mathjax.config.js'
   end
   opts.on("--template-dir [PATH]", "Specify custom mustache template directory.") do |path|
     wiki_options[:template_dir] = path
