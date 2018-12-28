@@ -348,7 +348,6 @@
       function hotkey( cmd ) {
         return function () {
           var def = LanguageDefinition.getDefinitionFor( cmd );
-          console.log(def)
           if ( typeof def == 'object' ) {
             FunctionBar.executeAction( def );
           }
