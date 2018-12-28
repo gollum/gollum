@@ -1,7 +1,7 @@
 <script>
 Mousetrap.bind(['e'], function( e ) {
   e.preventDefault();
-  window.location = "/edit" + window.location.pathname;
+  window.location = "{{edit_path}}" + '/' + pageFullPath;
   return false;
 });
 </script>
