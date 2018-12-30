@@ -46,6 +46,7 @@ a {
     float: left;
     line-height: normal;
     margin: 0;
+    margin-top: 2em;
     padding: 0 0 0 0.667em;
 
     @include desktop-breakpoint {
@@ -57,6 +58,7 @@ a {
   ul.actions {
     clear: both;
     margin: 0 1em;
+    position: absolute;
 
     @include desktop-breakpoint {
       clear: none;
@@ -505,18 +507,21 @@ ul.actions {
    list-style-type: none;
    overflow: hidden;
    padding: 0;
+   width: $layout-body-width;
 
   li {
-    float: left;
     font-size: 0.9em;
     margin-left: 1px;
     margin-bottom: 1px;
+    float: left;
 
     @include desktop-breakpoint {
       margin-left: 0.6em;
       margin-bottom: 0.6em;
     }
+  
   }
+  
 }
 
 .minibutton a {
@@ -576,7 +581,7 @@ ul.actions {
 
 /* @control searchbar */
 #searchbar {
-  float: right;
+  float: none;
   overflow: hidden;
 
   @include desktop-breakpoint {
