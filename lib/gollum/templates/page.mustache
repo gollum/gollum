@@ -9,11 +9,11 @@ Mousetrap.bind(['e'], function( e ) {
 <div id="head">
   <h1>{{page_header}}</h1>
   <ul class="actions">
+		<li class="minibutton"><a href="{{base_url}}/"
+       class="action-home-page">Home</a></li>
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}/"
-       class="action-home-page">Home</a></li>
     <li class="minibutton"><a href="{{pages_path}}"
       class="action-all-pages">Overview</a></li>
     {{#allow_editing}}
