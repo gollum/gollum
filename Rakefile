@@ -133,7 +133,7 @@ end
 
 desc "Build and install"
 task :install => :build do
-  sh "gem install --local --no-document rdoc,ri pkg/#{name}-#{version}.gem"
+  sh "gem install --local --no-document pkg/#{name}-#{version}.gem"
 end
 
 desc 'Update gemspec'
