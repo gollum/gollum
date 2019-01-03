@@ -18,11 +18,22 @@ module Precious
 
       def title
         h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.url_path_title
+        h1 || @page.title
       end
 
       def page_header
         title
+      end
+      
+      def breadcrumb
+        path = Pathname.new(@page.url_path_title)
+        breadcrumb = []
+        path.descend do |crumb|
+          element = "#{crumb.basename}"
+          next if element == @page.title
+          breadcrumb << %{<a href="#{pages_path}/#{crumb}/">#{element}</a>}
+        end
+        breadcrumb.empty? ? "" : breadcrumb.join(" / ") << " /"
       end
 
       def content

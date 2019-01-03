@@ -34,6 +34,7 @@ a {
   margin: 1em 0 0;
   padding: 0;
   overflow: hidden;
+  width: 100%;
 
   @include desktop-breakpoint {
     border-bottom: $border-standard;
@@ -46,13 +47,23 @@ a {
     float: left;
     line-height: normal;
     margin: 0;
-    margin-top: 2em;
+    margin-top: 3em;
     padding: 0 0 0 0.667em;
 
     @include desktop-breakpoint {
       font-size: 2.5em;
       padding: 2px 0 0 0;
     }
+  }
+  
+  div.breadcrumb {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    margin-top: 3.5em;
+    float: none;
+    overflow: auto;
+    font-size: 1.5em;
   }
 
   ul.actions {
