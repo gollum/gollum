@@ -435,7 +435,7 @@ module Precious
     end
 
     get %r{
-      /compare/ # match any URL beginning with /compare/
+      ^/compare/ # match any URL beginning with /compare/
       (.+)      # extract the full path (including any directories)
       /         # match the final slash
       ([^.]+)   # match the first SHA1
@@ -483,7 +483,7 @@ module Precious
     end
 
     get %r{
-      /pages  # match any URL beginning with /pages
+      ^/pages # match any URL beginning with /pages
       (?:     # begin an optional non-capturing group
         /(.+) # capture any path after the "/pages" excluding the leading slash
       )?      # end the optional non-capturing group
