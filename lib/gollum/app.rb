@@ -10,6 +10,7 @@ require 'sprockets'
 require 'sprockets-helpers'
 require 'uglifier'
 require 'sass'
+require 'pathname'
 
 require 'gollum'
 require 'gollum/assets'
@@ -87,7 +88,6 @@ module Precious
       forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
       @base_url = url('/', false).chomp('/')
-      @page_dir = settings.wiki_options[:page_file_dir].to_s
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
@@ -164,9 +164,9 @@ module Precious
       get '/edit/*' do
         forbid unless @allow_editing
         wikip = wiki_page(params[:splat].first)
-        @name = join_page_name(wikip.name, wikip.ext)
+        @name = wikip.fullname
         @path = wikip.path
-        @upload_dest   = find_upload_dest(@path)
+        @upload_dest   = find_upload_dest(wikip.fullpath)
 
         wiki = wikip.wiki
         @allow_uploads = wiki.allow_uploads
@@ -234,7 +234,7 @@ module Precious
         wikip = wiki_page(params[:splat].first)
         halt 500 if wikip.nil?
         wiki   = wikip.wiki
-        page   = wiki.paged(join_page_name(wikip.name, wikip.ext), wikip.path, exact = true)
+        page   = wikip.page
         rename = params[:rename]
         halt 500 if page.nil?
         halt 500 if rename.nil? or rename.empty?
@@ -261,7 +261,7 @@ module Precious
         committer.commit
 
         wikip = wiki_page(rename)
-        page  = wiki.paged(join_page_name(wikip.name, wikip.ext), wikip.path, exact = true)
+        page  = wikip.page
         return if page.nil?
         redirect to("/#{page.escaped_url_path}")
       end
@@ -270,7 +270,7 @@ module Precious
         path      = "/#{clean_url(sanitize_empty_params(params[:path]))}"
         page_name = CGI.unescape(params[:page])
         wiki      = wiki_new
-        page      = wiki.paged(page_name, path, exact = true)
+        page      = wiki.page(::File.join(path, page_name))
         return if page.nil?
         committer = Gollum::Committer.new(wiki, commit_message)
         commit    = { :committer => committer }
@@ -308,18 +308,10 @@ module Precious
         @ext  = wikip.ext
         @path = wikip.path
         @allow_uploads = wikip.wiki.allow_uploads
-        @upload_dest   = find_upload_dest(@path)
-        unless page_dir.empty?
-          # --page-file-dir docs
-          # /docs/Home should be created in /Home
-          # not /docs/Home because write_page will append /docs
-          @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
-        end
-        @path = clean_path(@path)
+        @upload_dest   = find_upload_dest(wikip.fullpath)
 
         page = wikip.page
         if page
-          page_dir = settings.wiki_options[:page_file_dir].to_s
           redirect to("/#{clean_url(page.escaped_url_path)}")
         else
           unless Gollum::Page.format_for("#{@name}#{@ext}")
@@ -351,9 +343,9 @@ module Precious
       post '/revert/*/:sha1/:sha2' do
         wikip = wiki_page(params[:splat].first)
         @path = wikip.path
-        @name = join_page_name(wikip.name, wikip.ext)
+        @name = wiki.fullname
         wiki  = wikip.wiki
-        @page = wiki.paged(@name, @path)
+        @page = wikip.page
         sha1  = params[:sha1]
         sha2  = params[:sha2]
 
@@ -427,7 +419,7 @@ module Precious
       }x do |path, start_version, end_version|
         wikip     = wiki_page(path)
         @path     = wikip.path
-        @name     = join_page_name(wikip.name, wikip.ext)
+        @name     = wikip.fullname
         @versions = [start_version, end_version]
         wiki      = wikip.wiki
         @page     = wikip.page
@@ -465,8 +457,8 @@ module Precious
     get %r{/(.+?)/([0-9a-f]{40})} do
       file_path = params[:captures][0]
       version   = params[:captures][1]
-      wikip     = wiki_page(file_path, file_path, version)
-      name      = join_page_name(wikip.name, wikip.ext)
+      wikip     = wiki_page(file_path, version)
+      name      = wikip.fullname
       path      = wikip.path
       if page = wikip.page
         @page    = page
@@ -475,7 +467,7 @@ module Precious
         @version = version
         @bar_side = wikip.wiki.bar_side
         mustache :page
-      elsif file = wikip.wiki.file("#{file_path}", version, true)
+      elsif file = wikip.wiki.file(file_path, version, true)
         show_file(file)
       else
         halt 404
@@ -490,14 +482,11 @@ module Precious
 
     def show_page_or_file(fullpath)
       wiki = wiki_new
-
-      name, ext = extract_name(fullpath) || wiki.index_page
-      path = extract_path(fullpath) || '/'
-      if page = wiki.paged(join_page_name(name, ext), path, exact = true)
+      if page = wiki.page(fullpath)
         @page          = page
-        @name          = name
+        @name          = page.filename_stripped
         @content       = page.formatted_data
-        @upload_dest   = find_upload_dest(path)
+        @upload_dest   = find_upload_dest(Pathname.new(fullpath).cleanpath.to_s)
 
         # Extensions and layout data
         @editable      = true
@@ -512,8 +501,8 @@ module Precious
         show_file(file)
       else
         if @allow_editing
-          page_path = [path, join_page_name(name, ext)].compact.join('/')
-          redirect to("/gollum/create/#{clean_url(encodeURIComponent(page_path))}")
+          path = fullpath[-1] == '/' ? "#{fullpath}#{wiki.index_page}" : fullpath # Append default index page if no page name is supplied
+          redirect to("/gollum/create/#{clean_url(encodeURIComponent(path))}")
         else
           @message = "The requested page does not exist."
           status 404
@@ -541,19 +530,12 @@ module Precious
       wiki.update_page(page, name, format, content.to_s, commit)
     end
 
-    #  path is set to name if path is nil.
-    #  if path is 'a/b' and a and b are dirs, then
-    #  path must have a trailing slash 'a/b/' or
-    #  extract_path will trim path to 'a'
-    def wiki_page(name, path = nil, version = nil, exact = true)
+    def wiki_page(path, version = nil)
       wiki = wiki_new
-      path = name if path.nil?
-      name, ext = extract_name(name) || wiki.index_page
-      path = extract_path(path)
-      path = '/' if exact && path.nil?
+      fullpath, dirname, basename, ext = extract_path_elements(path)
 
-      OpenStruct.new(:wiki => wiki, :page => wiki.paged(join_page_name(name, ext), path, exact, version),
-                     :name => name, :path => path, :ext => ext)
+      OpenStruct.new(:wiki => wiki, :page => wiki.page(path, version),
+                     :name => basename, :path => dirname, :ext => ext, :fullname => "#{basename}#{ext}", :fullpath => fullpath)
     end
 
     def wiki_new
@@ -577,7 +559,7 @@ module Precious
     def find_upload_dest(path)
       settings.wiki_options[:allow_uploads] ?
           (settings.wiki_options[:per_page_uploads] ?
-              "#{path}/#{@name}".sub(/^\/\//, '') : 'uploads'
+              path : 'uploads'
           ) : ''
     end
   end

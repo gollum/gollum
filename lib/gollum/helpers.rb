@@ -6,40 +6,23 @@ module Precious
 
     EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
 
-    def join_page_name(name, ext)
-      "#{name}#{ext}"
-    end
-    
     # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex("/")
-      if last_slash
-        file_path[0, last_slash]
-      end
+    def extract_path(path)
+      dirname = Pathname.new(path).cleanpath.dirname.to_s
+      dirname == '.' ? nil : dirname
     end
 
-    # Extract the 'page' name from the file_path
-    def extract_name(file_path)
-      if file_path[-1, 1] == "/"
-        return nil
-      end
-
-      # File.basename is too eager to please and will return the last
-      # component of the path even if it ends with a directory separator.
-      ext = ::File.extname(file_path)
-      return ::File.basename(file_path, ext), ext
+    def extract_path_elements(path)
+      pathname = Pathname.new(path).cleanpath
+      dirname = ::File.join('/', pathname.dirname.to_s)
+      dirname = '/' if dirname == '.'
+      fullpath = pathname.to_s
+      fullpath = '/' if fullpath = '.'
+      return fullpath, dirname, pathname.basename.to_s, pathname.extname.to_s
     end
 
     def sanitize_empty_params(param)
       [nil, ''].include?(param) ? nil : CGI.unescape(param)
-    end
-
-    # Ensure path begins with a single leading slash
-    def clean_path(path)
-      if path
-        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
-      end
     end
 
     # Remove all slashes from the start of string.
