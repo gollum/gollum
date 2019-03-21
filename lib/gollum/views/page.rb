@@ -186,8 +186,6 @@ module Precious
         case @page.format
           when :asciidoc
             doc.css("div#gollum-root > h1:first-child")
-          when :org
-            doc.css("div#gollum-root > p.title:first-child")
           when :pod
             doc.css("div#gollum-root > a.dummyTopAnchor:first-child + h1")
           when :rest
