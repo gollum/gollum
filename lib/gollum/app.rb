@@ -195,15 +195,12 @@ module Precious
         end
         halt 500 unless tempfile.is_a? Tempfile
 
-        # Remove page file dir prefix from upload path if necessary -- committer handles this itself
         dir      = wiki.per_page_uploads ? params[:upload_dest] : 'uploads'
         ext      = ::File.extname(fullname)
         format   = ext.split('.').last || 'txt'
         filename = ::File.basename(fullname, ext)
         contents = ::File.read(tempfile)
-        reponame = "#{filename}.#{format}"
-
-        head = wiki.repo.head
+        reponame = "#{dir}/#{filename}.#{format}"
 
         options = {
             :message => "Uploaded file to #{dir}/#{reponame}",
@@ -215,16 +212,10 @@ module Precious
         end
 
         begin
-          committer = Gollum::Committer.new(wiki, options)
-          committer.add_to_index(dir, filename, format, contents)
-          committer.after_commit do |committer, sha|
-            wiki.clear_cache
-            committer.update_working_dir(dir, filename, format)
-          end
-          committer.commit
+          wiki.write_file(reponame, contents, options)
           redirect to(request.referer)
-        rescue Gollum::DuplicatePageError => e
-          @message = "Duplicate page: #{e.message}"
+        rescue Gollum::DuplicatePageError, Gollum::IllegalDirectoryPath => e
+          @message = e.message
           mustache :error
         end
       end
@@ -331,7 +322,7 @@ module Precious
         path.gsub!(/^\//, '')
 
         begin
-          wiki.write_page(name, format, params[:content], commit_message, path)
+          wiki.write_page(::File.join(path, name), format, params[:content], commit_message)
 
           redirect to("/#{clean_url(::File.join(encodeURIComponent(path), encodeURIComponent(wiki.page_file_name(name, format))))}")
         rescue Gollum::DuplicatePageError => e
