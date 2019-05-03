@@ -94,7 +94,7 @@ module Precious
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
 
-      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
+      @use_static_assets = settings.wiki_options.fetch(:static,settings.environment == :production || settings.environment == :staging)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
 
       Sprockets::Helpers.configure do |config|
@@ -275,7 +275,6 @@ module Precious
         redirect to("/#{page.escaped_url_path}") unless page.nil?
       end
 
-
       post '/delete/*' do
         forbid unless @allow_editing
         wiki = wiki_new
@@ -285,8 +284,7 @@ module Precious
           commit[:message] = "Deleted #{filepath}"
           wiki.delete_file(filepath, commit)
         end
-      end
-      
+      end      
 
       get '/create/*' do
         forbid unless @allow_editing
@@ -325,8 +323,8 @@ module Precious
           wiki.write_page(::File.join(path, name), format, params[:content], commit_message)
 
           redirect to("/#{clean_url(::File.join(encodeURIComponent(path), encodeURIComponent(wiki.page_file_name(name, format))))}")
-        rescue Gollum::DuplicatePageError => e
-          @message = "Duplicate page: #{e.message}"
+        rescue Gollum::DuplicatePageError, Gollum::IllegalDirectoryPath => e
+          @message = e.message
           mustache :error
         end
       end
@@ -434,12 +432,17 @@ module Precious
           /(.+) # capture any path after the "/pages" excluding the leading slash
         )?      # end the optional non-capturing group
       }x do |path|
-        @path        = extract_path(path) if path
-        wiki_options = settings.wiki_options.merge({ :page_file_dir => @path })
-        wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
-        @results     = wiki.pages
-        @results     += wiki.files
-        @results     = @results.sort_by { |p| p.name.downcase } # Sort Results alphabetically, fixes 922
+        wiki         = wiki_new
+        @results     = wiki.tree_list
+
+        if path
+          @path = Pathname.new(path).cleanpath.to_s if path
+          check_path   = wiki.page_file_dir ? ::File.join(wiki.page_file_dir, @path, '/') : "#{@path}/"
+          @results.select!  {|p| p.path.start_with?(check_path) }
+        end
+
+        @results.sort_by! {|p| p.name.downcase}
+
         @ref         = wiki.ref
         mustache :pages
       end
@@ -522,11 +525,10 @@ module Precious
     end
 
     def wiki_page(path, version = nil)
+      pathname = (Pathname.new('/') + path).cleanpath
       wiki = wiki_new
-      fullpath, dirname, basename, ext = extract_path_elements(path)
-
-      OpenStruct.new(:wiki => wiki, :page => wiki.page(path, version),
-                     :name => basename, :path => dirname, :ext => ext, :fullname => "#{basename}#{ext}", :fullpath => fullpath)
+      OpenStruct.new(:wiki => wiki, :page => wiki.page(pathname.to_s, version = version),
+                     :name => pathname.basename.sub_ext('').to_s, :path => pathname.dirname.to_s, :ext => pathname.extname, :fullname => pathname.basename.to_s, :fullpath => pathname.to_s)
     end
 
     def wiki_new

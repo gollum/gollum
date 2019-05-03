@@ -6,7 +6,11 @@ module Precious
       attr_reader :results, :ref, :allow_editing
 
       def title
-        "All pages in #{@ref}"
+        "Overview of #{@ref}"
+      end
+
+      def current_path
+        @path ? @path : '/'
       end
 
       def breadcrumb
@@ -23,15 +27,15 @@ module Precious
             end
           end
 
-          breadcrumb.join(" / ")
+          breadcrumb.join(' / ')
         else
-          "Home"
+          'Home'
         end
       end
 
 
-      def delete_file(url)
-        %Q(<div class="delete-file" data-file-path="#{url}" data-confirm="Are you sure you want to delete #{URI.decode(url)}?"><span><button type="submit" name="delete">Delete</button></span></div>)
+      def delete_file(path)
+        %Q(<div class="delete-file" data-file-path="#{path}" data-confirm="Are you sure you want to delete #{path}?"><span><button type="submit" name="delete">Delete</button></span></div>)
       end
       
       def files_folders
@@ -41,9 +45,8 @@ module Precious
 
           # 1012: Folders and Pages need to be separated
           @results.each do |result|
-            result_path = result.path
-            result_path = result_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?
-            
+            result_path = result.url_path
+            result_path = result_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?            
 
             if result_path.include?('/')
               # result contains a folder
@@ -52,12 +55,12 @@ module Precious
               folder_link = %{<li><a href="#{pages_path}/#{folder_path}/" class="folder">#{folder}</a></li>}
 
               folders[folder] = folder_link unless folders.key?(folder)
-            elsif result_path != ".gitkeep"
+            elsif result_path != '.gitkeep'
               # result is either a valid gollum page or another type of file
-              klass = (defined? result.format) ? "page" : "file"
+              klass = (defined? result.format) ? 'page' : 'file'
               url = "#{@base_url}/#{result.escaped_url_path}"
               
-              file_link = %{<li><a href="#{url}" class="#{klass}">#{result.filename}</a>#{delete_file(url) if @allow_editing}</li>}
+              file_link = %{<li><a href="#{url}" class="#{klass}">#{result.filename}</a>#{delete_file(result.url_path) if @allow_editing}</li>}
               files[result.name] = file_link
             end
           end
@@ -68,7 +71,7 @@ module Precious
 
           result
         else
-          ""
+          ''
         end
       end
 

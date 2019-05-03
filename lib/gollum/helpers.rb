@@ -6,21 +6,6 @@ module Precious
 
     EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
 
-    # Extract the path string that Gollum::Wiki expects
-    def extract_path(path)
-      dirname = Pathname.new(path).cleanpath.dirname.to_s
-      dirname == '.' ? nil : dirname
-    end
-
-    def extract_path_elements(path)
-      pathname = Pathname.new(path).cleanpath
-      dirname = ::File.join('/', pathname.dirname.to_s)
-      dirname = '/' if dirname == '.'
-      fullpath = pathname.to_s
-      fullpath = '/' if fullpath = '.'
-      return fullpath, dirname, pathname.basename.to_s, pathname.extname.to_s
-    end
-
     def sanitize_empty_params(param)
       [nil, ''].include?(param) ? nil : CGI.unescape(param)
     end

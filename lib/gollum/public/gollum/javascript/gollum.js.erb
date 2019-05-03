@@ -63,7 +63,7 @@ $(document).ready(function() {
     var ok = confirm($(this).data('confirm'));
     if ( ok ) {
       var element = $(this);
-      $.post('<%=delete_path %>' + $(this).data('file-path'),
+      $.post('<%=delete_path %>/' + $(this).data('file-path'),
         {},
         function (result) {
           // file successfully deleted, stay on overview but remove element from DOM

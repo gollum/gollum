@@ -10,6 +10,9 @@ FakePageResult = Struct.new(:path) do
   def escaped_url_path
     CGI.escape(path).gsub(/\..+$/, "").gsub("%2F", "/")
   end
+  def url_path
+    path
+  end
   def format
     true
   end
@@ -20,6 +23,9 @@ FakeFileResult = Struct.new(:path) do
     File.basename(path).gsub("-", " ")
   end
   alias filename name
+  def url_path
+    path
+  end
   def escaped_url_path
     result = path.sub(/\/[^\/]+$/, '/')
     result = result << name if result.include?('/')

@@ -294,7 +294,6 @@ context "Frontend" do
       :path               => '/', :format => 'markdown', :message => ''
     follow_redirect!      
     assert last_response.ok?
-    #puts last_response
     @wiki.clear_cache    
     get "/gollum/create/TT"
     assert last_response.ok?
@@ -745,8 +744,6 @@ context "Frontend with page-file-dir" do
       { :name => 'user1', :email => 'user1' })
 
     get 'yaycustom'
-    puts last_response.body.inspect
-    puts last_response.inspect
     assert_match /"\/custom.css"/, last_response.body
   end
 
@@ -759,15 +756,13 @@ context "Frontend with page-file-dir" do
     }
 
     committer = Gollum::Committer.new(@wiki, options)
-    committer.add_to_index('docs', 'custom', 'css', custom_content, {normalize: false})
+    committer.add_to_index('docs/custom.css', custom_content, {normalize: false})
     committer.after_commit do |committer, sha|
       @wiki.clear_cache
-      committer.update_working_dir('docs', 'custom', 'css')
+      committer.update_working_dir('docs/custom.css')
     end
     committer.commit
-    puts "FILES: " + @wiki.files.inspect
     get 'custom.css'
-    puts last_response.inspect
 
     assert_equal custom_content, last_response.body
   end
