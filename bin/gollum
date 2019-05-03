@@ -104,9 +104,6 @@ MSG
   opts.on("--assets [PATH]", "Set the path to look for static assets. Only used if --static is set to true, or environment is production/staging. Default: ./public/assets") do |path|
     wiki_options[:static_assets_path] = path
   end
-  opts.on("--precompile-assets [PATH]", "Precompile static assets to PATH.") do |path|
-    options[:precompile] = path || './public/assets'
-  end
   opts.on("--css", "Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).") do
     wiki_options[:css] = true
   end
@@ -127,13 +124,17 @@ MSG
   end
   opts.on("--allow-uploads [MODE]", [:dir, :page], "Enable file uploads.",
     "If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.",
-    "If set to 'page', Gollum will store each upload at the currently edited page.") do |mode|
+    "If set to 'page', Gollum will store uploads per page in '<git-repo>/uploads/[pagename]'.") do |mode|
     wiki_options[:allow_uploads]    = true
     wiki_options[:per_page_uploads] = true if mode == :page
   end
   opts.on("--mathjax", "Enable MathJax (renders mathematical equations).",
     "By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.") do
     wiki_options[:mathjax] = true
+    wiki_options[:mathjax_config] = 'mathjax.config.js'
+  end
+  opts.on("--critic-markup", "Enable support for annotations using CriticMarkup.") do
+    wiki_options[:critic_markup] = true
   end
   opts.on("--irb", "Launch Gollum in 'console mode', with a predefined API.") do
     options[:irb] = true
@@ -151,10 +152,6 @@ MSG
   opts.on("--user-icons [MODE]", [:gravatar, :identicon, :none], "Use specific user-icons for history view.",
     "Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.") do |mode|
     wiki_options[:user_icons] = mode
-  end
-  opts.on("--mathjax-config [FILE]", "Specify path to a custom MathJax configuration.",
-    "If not specified, uses the '<git-repo>/mathjax.config.js' file.") do |file|
-    wiki_options[:mathjax_config] = file || 'mathjax.config.js'
   end
   opts.on("--template-dir [PATH]", "Specify custom mustache template directory.") do |path|
     wiki_options[:template_dir] = path
@@ -262,19 +259,6 @@ if options[:irb]
     puts "Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}"
     exit 0
   end
-elsif options[:precompile]
-  require 'gollum/app'
-  env = Precious::Assets.sprockets
-  manifest = Sprockets::Manifest.new(env, options[:precompile])
-    Sprockets::Helpers.configure do |config|
-      config.environment = env
-      config.prefix      = "#{wiki_options[:base_path]}/#{Precious::Assets::ASSET_URL}"
-      config.digest      = true
-      config.public_path = options[:precompile]
-      config.manifest    = manifest
-    end
-  puts "Precompiling assets to #{::File.expand_path(options[:precompile])}..."
-  manifest.compile(Precious::Assets::MANIFEST)
 else
   require 'gollum/app'
   Precious::App.set(:gollum_path, gollum_path)

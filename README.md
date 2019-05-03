@@ -42,7 +42,7 @@ For more information on Gollum's capabilities and pitfalls:
 
 **Notes:**
 
-1. There are still some bugs and this setup is not ready for production yet. You can track the progress at [Support Windows via JRuby - Meta Issue](https://github.com/gollum/gollum/issues/1044).
+1. You can track the progress at [Support Windows via JRuby - Meta Issue](https://github.com/gollum/gollum/issues/1044).
 
 ## INSTALLATION
 
@@ -56,35 +56,13 @@ Varies depending on operating system, package manager and Ruby installation. Gen
 
 Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
-**Notes:**  
-* Whichever Ruby implementation you're using, Gollum ships with the appropriate default git adapter. So the above installation procedure is common for both MRI and JRuby.
-* If you're installing from source:
-	* Optionally uninstall any previous versions of Gollum:  
-		```
-		[sudo] gem uninstall -aIx gollum
-		```
-	* Install [Bundler](http://bundler.io/).
-	* Navigate to the cloned source of Gollum.
-	* Install dependencies:  
-		```
-		[sudo] bundle install
-		```
-	* Build:  
-		```
-		rake build
-		```
-	* And install:  
-		```
-		[sudo] gem install --no-document pkg/gollum*.gem
-		```
-
 ### Markups
 
 Gollum presently ships with support for the following markups:
-* [Markdown](http://daringfireball.net/projects/markdown/syntax)
+* [Markdown](http://daringfireball.net/projects/markdown/syntax) (see [below](#Markdown-flavors) for more information on Markdown flavors)
 * [RDoc](http://rdoc.sourceforge.net/)
 
-Since all markups are rendered by the [github-markup](https://github.com/github/markup) gem, you can easily add support for other markups by additional installation:
+You can easily activate support for other markups by installing additional renderers (any that are supported by [github-markup](https://github.com/github/markup)):
 * [AsciiDoc](http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/) -- `[sudo] gem install asciidoctor`
 * [Creole](http://www.wikicreole.org/wiki/CheatSheet) -- `[sudo] gem install creole`
 * [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `[sudo] gem install wikicloth`
@@ -92,10 +70,14 @@ Since all markups are rendered by the [github-markup](https://github.com/github/
 * [Pod](http://perldoc.perl.org/perlpod.html) -- requires Perl >= 5.10 (the `perl` command must be available on your command line)
 	* Lower versions should install `Pod::Simple` from CPAN.
 * [ReStructuredText](http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html) -- requires python >= 2 (the `python2` command must be available on your command line)
-	* Note that Gollum will also need you to install `docutils` for your Python 2. Installation procedure can, again, vary depending on operating system and package manager.
+	* Note that Gollum will also need you to install `docutils` for your Python 2.
 * [Textile](http://redcloth.org/hobix.com/textile/quick.html) -- `[sudo] gem install RedCloth`
 
-By default, Gollum ships with the `kramdown` gem to render Markdown. However, you can use any [Markdown renderer supported by github-markup](https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb). The thing to remember is that the first installed renderer from the list will be used. So, for example, `redcarpet` will NOT be used if `github/markdown` is installed.
+### Markdown flavors
+
+By default, Gollum ships with the `kramdown` gem to render Markdown. However, you can use any [Markdown renderer supported by github-markup](https://github.com/github/markup/blob/master/lib/github/markup/markdown.rb). This includes [CommonMark](https://commonmark.org/) support via the `commonmarker` gem. The first installed renderer from the list will be used (e.g., `redcarpet` will NOT be used if `github/markdown` is installed). Just `gem install` the renderer of your choice.
+
+See [here](https://github.com/gollum/gollum/wiki/Custom-rendering-gems) for instructions on how to use custom rendering gems and set custom options.
 
 ## RUNNING
 

@@ -8,7 +8,6 @@ require 'stringex'
 require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
-require 'uglifier'
 require 'sass'
 require 'pathname'
 
@@ -85,9 +84,15 @@ module Precious
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
+      @critic_markup = settings.wiki_options[:critic_markup]
+      @per_page_uploads = settings.wiki_options[:per_page_uploads]
+
       forbid unless @allow_editing || request.request_method == "GET"
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
-      @base_url = url('/', false).chomp('/')
+
+      @base_url = url('/', false).chomp('/').force_encoding('utf-8')
+      @page_dir = settings.wiki_options[:page_file_dir].to_s
+
       # above will detect base_path when it's used with map in a config.ru
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
@@ -149,15 +154,15 @@ module Precious
         end
       end
 
-      get %r{/(edit|create)/custom\.(js|css)} do
+      get %r{/(edit|create)/(custom|mathjax\.config)\.(js|css)} do
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/(delete|rename|edit|create)/custom\.(js|css)} do
+      post %r{/(delete|rename|edit|create)/(custom|mathjax\.config)\.(js|css)} do
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/revert/custom\.(js|css)/.*/.*} do
+      post %r{/revert/(custom|mathjax\.config\.)\.(js|css)/.*/.*} do
         forbid('Changing this resource is not allowed.')
       end
 
@@ -174,20 +179,18 @@ module Precious
               @page         = page
               @page.version = wiki.repo.log(wiki.ref, @page.path).first
               @content      = page.text_data
+              @etag         = page.sha
               mustache :edit
           else
             redirect_to("/create/#{encodeURIComponent(@name)}")
           end
         end
 
+      # AJAX calls only
       post '/upload_file' do
+        
         wiki = wiki_new
-
-        unless wiki.allow_uploads
-          @message = "File uploads are disabled"
-          mustache :error
-          return
-        end
+        halt 405 unless wiki.allow_uploads
 
         if params[:file]
           fullname = params[:file][:filename]
@@ -210,6 +213,8 @@ module Precious
         unless author.nil?
           options.merge! author
         end
+
+        normalize = Gollum::Page.valid_extension?(fullname)
 
         begin
           wiki.write_file(reponame, contents, options)
@@ -258,11 +263,18 @@ module Precious
       end
 
       post '/edit/*' do
+        etag      = params[:etag]        
         path      = "/#{clean_url(sanitize_empty_params(params[:path]))}"
         page_name = CGI.unescape(params[:page])
         wiki      = wiki_new
         page      = wiki.page(::File.join(path, page_name))
+
         return if page.nil?
+        if etag != page.sha
+          # Signal edit collision and return the page's most recent version
+          halt 412, {etag: page.sha, text_data: page.text_data}.to_json
+        end
+        
         committer = Gollum::Committer.new(wiki, commit_message)
         commit    = { :committer => committer }
 
@@ -272,7 +284,6 @@ module Precious
         update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
         committer.commit
 
-        redirect to("/#{page.escaped_url_path}") unless page.nil?
       end
 
       post '/delete/*' do
@@ -555,5 +566,6 @@ module Precious
               path : 'uploads'
           ) : ''
     end
+
   end
 end

@@ -15,11 +15,17 @@
   <![endif]-->
 
   <script>
-      var baseUrl = '{{base_url}}';
-      var uploadDest   = '{{upload_dest}}';
-      {{#page}}
-      var pageFullPath = '{{url_path}}';
-      {{/page}}
+  var criticMarkup = '{{critic_markup}}';
+	var baseUrl = '{{base_url}}';
+	var uploadDest = 'uploads';
+	var perPageUploads = '{{per_page_uploads}}';
+	if (perPageUploads == 'true') {
+	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "")
+	}
+	{{#page}}
+	  var pageFullPath = '{{url_path}}';
+	{{/page}}
+
   </script>
   {{#sprockets_javascript_tag}}app{{/sprockets_javascript_tag}}
   {{#use_identicon}}
@@ -43,7 +49,7 @@
   {{/mathjax_config}}
   <script>(function(d,j){
   j = d.createElement('script');
-  j.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+  j.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
   (d.head || d.getElementsByTagName('head')[0]).appendChild(j);
   }(document));
   </script>{{/mathjax}}

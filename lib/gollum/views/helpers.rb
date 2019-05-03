@@ -1,10 +1,11 @@
-require 'yaml'
+require 'json'
 
 module Precious
   module Views
     module RouteHelpers
       ROUTES = {
         'gollum' => {
+          assets: 'assets',
           last_commit_info: 'last_commit_info',
           latest_changes: 'latest_changes',
           upload_file: 'upload_file',
@@ -25,15 +26,21 @@ module Precious
           if path.respond_to?(:keys)
             self.parse_routes(path, "#{prefix}/#{name}")
           else
+            route_path = "#{prefix}/#{path}"
+            @@route_methods[name.to_s] = route_path
             define_method :"#{name.to_s}_path" do
-              "#{base_url}/#{prefix}/#{path}".gsub(/\/{2,}/, '/') # remove double slashes
+              "#{base_url}/#{route_path}".gsub(/\/{2,}/, '/') # remove double slashes
             end
           end
         end
       end
 
       def self.included(base)
+        @@route_methods = {}
         self.parse_routes(ROUTES)
+        define_method :routes_to_json do
+          @@route_methods.to_json
+        end
       end
     end
 

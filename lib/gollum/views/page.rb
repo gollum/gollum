@@ -18,11 +18,22 @@ module Precious
 
       def title
         h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.url_path_title
+        h1 || @page.title
       end
 
       def page_header
         title
+      end
+      
+      def breadcrumb
+        path = Pathname.new(@page.url_path_title)
+        breadcrumb = []
+        path.descend do |crumb|
+          element = "#{crumb.basename}"
+          next if element == @page.title
+          breadcrumb << %{<a href="#{pages_path}/#{crumb}/">#{element}</a>}
+        end
+        breadcrumb.empty? ? "" : breadcrumb.join(" / ") << " /"
       end
 
       def content
@@ -55,10 +66,6 @@ module Precious
 
       def allow_uploads
         @allow_uploads
-      end
-
-      def upload_dest
-        @upload_dest
       end
 
       def has_header
@@ -179,8 +186,6 @@ module Precious
         case @page.format
           when :asciidoc
             doc.css("div#gollum-root > h1:first-child")
-          when :org
-            doc.css("div#gollum-root > p.title:first-child")
           when :pod
             doc.css("div#gollum-root > a.dummyTopAnchor:first-child + h1")
           when :rest
