@@ -99,7 +99,7 @@ module Precious
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
 
-      @use_static_assets = settings.wiki_options.fetch(:static,settings.environment == :production || settings.environment == :staging)
+      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
 
       Sprockets::Helpers.configure do |config|
@@ -447,12 +447,12 @@ module Precious
         @results     = wiki.tree_list
 
         if path
-          @path = Pathname.new(path).cleanpath.to_s if path
+          @path = Pathname.new(path).cleanpath.to_s
           check_path   = wiki.page_file_dir ? ::File.join(wiki.page_file_dir, @path, '/') : "#{@path}/"
-          @results.select!  {|p| p.path.start_with?(check_path) }
+          @results.select!  {|result| result.path.start_with?(check_path) }
         end
 
-        @results.sort_by! {|p| p.name.downcase}
+        @results.sort_by! {|result| result.name.downcase}
 
         @ref         = wiki.ref
         mustache :pages
