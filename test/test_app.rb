@@ -336,7 +336,7 @@ context "Frontend" do
 
     post '/gollum/create', :content => 'create_msg', :page => page,
          :path               => path, :format => 'markdown', :message => ''
-    page_c = @wiki.page(::File.join(path,page))
+    page_c = @wiki.page(File.join(path, page))
     assert_equal 'create_msg', page_c.raw_data
 
     # must clear or create_msg will be returned
@@ -344,8 +344,8 @@ context "Frontend" do
 
     # post '/edit' fails. post '/edit/' works.
     post '/gollum/edit/', :content => 'edit_msg',
-         :page              => page, :path => path, :message => ''
-    page_e = @wiki.page(::File.join(path,page))
+         :page              => page, :path => path, :message => '', :etag => page_c.sha
+    page_e = @wiki.page(File.join(path, page))
     assert_equal 'edit_msg', page_e.raw_data
 
     @wiki.clear_cache
@@ -538,7 +538,7 @@ context "Frontend" do
          :content => 'りんご',
          :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
 
-    page = @wiki.paged('Multibyte')
+    page = @wiki.page('Multibyte')
     
     post "/gollum/edit/Multibyte",
          :content => 'りんご', :header => 'みかん', :footer => 'バナナ', :sidebar => 'スイカ',
@@ -691,7 +691,7 @@ context "Frontend with lotr" do
 
     assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
-    page = @wiki.paged('Orc', 'Mordor')
+    page = @wiki.page('Mordor/Orc')
     post "/gollum/edit/Mordor/Orc", :content => 'not so big smelly creatures',
          :page => 'Orc', :path => 'Mordor', :message => 'minor edit', :etag => page.sha
     assert last_response.ok?
