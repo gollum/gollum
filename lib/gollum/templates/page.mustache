@@ -1,19 +1,19 @@
 <script>
 Mousetrap.bind(['e'], function( e ) {
   e.preventDefault();
-  window.location = "/edit" + window.location.pathname;
+  window.location = "{{edit_path}}" + '/' + pageFullPath;
   return false;
 });
 </script>
 <div id="wiki-wrapper" class="page">
-<div id="head">
+<div id="head"> 
   <h1>{{page_header}}</h1>
   <ul class="actions">
+		<li class="minibutton"><a href="{{base_url}}/"
+       class="action-home-page">Home</a></li>
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}/"
-       class="action-home-page">Home</a></li>
     <li class="minibutton"><a href="{{pages_path}}"
       class="action-all-pages">Overview</a></li>
     {{#allow_editing}}
@@ -43,6 +43,7 @@ Mousetrap.bind(['e'], function( e ) {
     <li class="minibutton"><a href="{{latest_changes_path}}"
        class="action-page-history">Latest Changes</a></li>
   </ul>
+  <div class="breadcrumb">{{{breadcrumb}}}</div>
 </div>
 <div id="wiki-content">
 <div class="{{#has_header}}has-header{{/has_header}}{{#has_footer}} has-footer{{/has_footer}}{{#has_sidebar}} has-sidebar has-{{bar_side}}bar{{/has_sidebar}}{{#has_toc}} has-toc{{/has_toc}}">

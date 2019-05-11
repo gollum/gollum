@@ -46,10 +46,10 @@ $editor-button-img-width: 27px;
 $editor-button-img-height: 28px;
 
 //urls
-$img_fileview_doc: image-url('fileview/document.png');
-$img_fileview_trash: image-url('fileview/trashcan.png');
-$img_fileview_toggle_small: image-url('fileview/toggle-small.png');
-$img_fileview_toggle_small_expand: image-url('fileview/toggle-small-expand.png');
-$img_fileview_folder: image-url('fileview/folder-horizontal.png');
-$img_icon_sprite: image-url('icon-sprite.png');
-$img_dirty_shade: image-url('dirty-shade.png');
+$img_fileview_doc: url('../images/fileview/document.png');
+$img_fileview_trash: url('../images/fileview/trashcan.png');
+$img_fileview_toggle_small: url('../images/fileview/toggle-small.png');
+$img_fileview_toggle_small_expand: url('../images/fileview/toggle-small-expand.png');
+$img_fileview_folder: url('../images/fileview/folder-horizontal.png');
+$img_icon_sprite: url('../images/icon-sprite.png');
+$img_dirty_shade: url('../images/dirty-shade.png');

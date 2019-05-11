@@ -2,11 +2,11 @@
 <div id="head" style="border:none;">
   <h1>{{title}}</h1>
   <ul class="actions">
+	  <li class="minibutton"><a href="{{base_url}}/"
+       class="action-home-page">Home</a></li>
     <li class="minibutton">
       {{>searchbar}}
     </li>
-    <li class="minibutton"><a href="{{base_url}}/"
-       class="action-home-page">Home</a></li>
     {{#allow_editing}}
       <li class="minibutton jaws">
       <a href="#" id="minibutton-new-page">New</a></li>
@@ -28,7 +28,7 @@
 
 {{#no_results}}
   <p id="no-results">
-    There are no pages in <strong>{{ref}}</strong>.
+    There are no pages in <strong>{{current_path}}</strong> on <strong>{{ref}}</strong>.
   </p>
 {{/no_results}}
 

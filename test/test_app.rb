@@ -54,7 +54,7 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    expected = "<h2><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
@@ -80,8 +80,7 @@ context "Frontend" do
   test "edits page" do
     page_1 = @wiki.page('A')
     post "/gollum/edit/A", :content => 'abc', :page => 'A',
-         :format             => page_1.format, :message => 'def'
-    follow_redirect!
+         :format => page_1.format, :message => 'def', :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -90,12 +89,28 @@ context "Frontend" do
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
+  
+  test "edit page fails when page is outdated (edit collision)" do
+    page = @wiki.page('A')
+    old_sha = page.sha
+    post "/gollum/edit/A", :content => 'abc', :page => 'A',
+         :format => page.format, :message => 'def', :etag => old_sha
+    assert last_response.ok?
+    
+    @wiki.clear_cache
+    page = @wiki.page('A')
+    new_sha = page.sha
+    assert_not_equal old_sha, new_sha
+    
+    post "/gollum/edit/A", :content => 'def', :page => 'A',
+         :format => page.format, :message => 'def', :etag => old_sha
+    assert_equal last_response.status, 412    
+  end
 
   test "edit page with empty message" do
     page_1 = @wiki.page('A')
     post "/gollum/edit/A", :content => 'abc', :page => 'A',
-         :format             => page_1.format
-    follow_redirect!
+         :format => page_1.format, :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -108,8 +123,7 @@ context "Frontend" do
   test "edit page with slash" do
     page_1 = @wiki.page('A')
     post "/gollum/edit/A", :content => 'abc', :page => 'A', :path => '/////',
-         :format             => page_1.format, :message => 'def'
-    follow_redirect!
+         :format => page_1.format, :message => 'def', :etag => page_1.sha
     assert last_response.ok?
   end
 
@@ -121,9 +135,7 @@ context "Frontend" do
     side_1   = page_1.sidebar
 
     post "/gollum/edit/A", :header => 'header',
-         :footer            => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
-    follow_redirect!
-    assert_equal "/A.md", last_request.fullpath
+         :footer => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def', :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -184,7 +196,7 @@ context "Frontend" do
 
 
   test "renames page in subdirectory" do
-    page_1 = @wiki.paged("H", "G")
+    page_1 = @wiki.page("G/H")
     assert_not_equal page_1, nil
     post "/gollum/rename/G/H", :rename => "/I/C", :message => 'def'
 
@@ -193,15 +205,15 @@ context "Frontend" do
     assert last_response.ok?
 
     @wiki.clear_cache
-    assert_nil @wiki.paged("H", "G")
-    page_2 = @wiki.paged('C', 'I')
+    assert_nil @wiki.page("G/H")
+    page_2 = @wiki.page('I/C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
   test "renames page relative in subdirectory" do
-    page_1 = @wiki.paged("H", "G")
+    page_1 = @wiki.page("G/H")
     assert_not_equal page_1, nil
     post "/gollum/rename/G/H", :rename => "K/C", :message => 'def'
 
@@ -210,8 +222,8 @@ context "Frontend" do
     assert last_response.ok?
 
     @wiki.clear_cache
-    assert_nil @wiki.paged("H", "G")
-    page_2 = @wiki.paged('C', 'G/K')
+    assert_nil @wiki.page("G/H")
+    page_2 = @wiki.page('G/K/C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
@@ -294,7 +306,6 @@ context "Frontend" do
       :path               => '/', :format => 'markdown', :message => ''
     follow_redirect!      
     assert last_response.ok?
-    #puts last_response
     @wiki.clear_cache    
     get "/gollum/create/TT"
     assert last_response.ok?
@@ -308,17 +319,6 @@ context "Frontend" do
     assert last_response.ok?
     Precious::App.set(:wiki_options, { :template_page => false })
   end
-  
-  test "create sets the correct path for a relative path subdirectory with the page file directory set" do
-    Precious::App.set(:wiki_options, { :page_file_dir => "foo" })
-    dir  = "bardir"
-    name = "#{dir}/baz"
-    get "/gollum/create/foo/#{name}"
-    assert_match(/\/#{dir}/, last_response.body)
-    assert_no_match(/[^\/]#{dir}/, last_response.body)
-    # reset page_file_dir
-    Precious::App.set(:wiki_options, { :page_file_dir => nil })
-  end
 
   test "edit returns nil for non-existant page" do
     # post '/edit' fails. post '/edit/' works.
@@ -326,7 +326,7 @@ context "Frontend" do
     path = '/'
     post '/gollum/edit/', :content => 'edit_msg',
          :page              => page, :path => path, :message => ''
-    page_e = @wiki.paged(page, path)
+    page_e = @wiki.page(::File.join(path,page))
     assert_equal nil, page_e
   end
 
@@ -336,7 +336,7 @@ context "Frontend" do
 
     post '/gollum/create', :content => 'create_msg', :page => page,
          :path               => path, :format => 'markdown', :message => ''
-    page_c = @wiki.paged(page, path)
+    page_c = @wiki.page(File.join(path, page))
     assert_equal 'create_msg', page_c.raw_data
 
     # must clear or create_msg will be returned
@@ -344,8 +344,8 @@ context "Frontend" do
 
     # post '/edit' fails. post '/edit/' works.
     post '/gollum/edit/', :content => 'edit_msg',
-         :page              => page, :path => path, :message => ''
-    page_e = @wiki.paged(page, path)
+         :page              => page, :path => path, :message => '', :etag => page_c.sha
+    page_e = @wiki.page(File.join(path, page))
     assert_equal 'edit_msg', page_e.raw_data
 
     @wiki.clear_cache
@@ -469,8 +469,7 @@ context "Frontend" do
     gollum_author = { :name => 'ghi', :email => 'jkl' }
     session       = { 'gollum.author' => gollum_author }
 
-    post "/gollum/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
-    follow_redirect!
+    post "/gollum/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def', :etag => page1.sha }, { 'rack.session' => session }
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -513,6 +512,8 @@ context "Frontend" do
         get "/gollum/#{route}/custom#{ext}"
         assert_equal 403, last_response.status, "get /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
+      get "/gollum/#{route}/mathjax.config.js"
+      assert_equal 403, last_response.status, "get /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
     end
 
     ['delete', 'rename', 'edit', 'create'].each do |route|
@@ -520,6 +521,8 @@ context "Frontend" do
         post "/gollum/#{route}/custom#{ext}"
         assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
+      post "/gollum/#{route}/mathjax.config.js"
+      assert_equal 403, last_response.status, "post /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
     end
 
     ['.css', '.js'].each do |ext|
@@ -530,27 +533,16 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :js => nil })
   end
 
-  test "change custom.css path if page-file-dir is set" do
-    Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
-    page = 'docs/yaycustom'
-    text = 'customized!'
-
-    @wiki.write_page(page, :markdown, text,
-                     { :name => 'user1', :email => 'user1' });
-
-    get page
-    assert_match /"\/docs\/custom.css"/, last_response.body
-    Precious::App.set(:wiki_options, { :css => nil, :page_file_dir => nil })
-  end
-
   test "show edit page with header and footer and sidebar of multibyte" do
     post "/gollum/create",
          :content => 'りんご',
          :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
 
+    page = @wiki.page('Multibyte')
+    
     post "/gollum/edit/Multibyte",
          :content => 'りんご', :header => 'みかん', :footer => 'バナナ', :sidebar => 'スイカ',
-         :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
+         :page    => 'Multibyte', :format => :markdown, :message => 'mesg', :etag => page.sha
 
     get "/gollum/edit/Multibyte"
 
@@ -695,13 +687,14 @@ context "Frontend with lotr" do
 
   test "edit pages within sub-directories" do
     post "/gollum/create", :content => 'big smelly creatures', :page => 'Orc',
-         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+         :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
 
     assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
+    page = @wiki.page('Mordor/Orc')
     post "/gollum/edit/Mordor/Orc", :content => 'not so big smelly creatures',
-         :page                        => 'Orc', :path => 'Mordor', :message => 'minor edit'
-    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
+         :page => 'Orc', :path => 'Mordor', :message => 'minor edit', :etag => page.sha
+    assert last_response.ok?
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body
@@ -730,6 +723,66 @@ context "Frontend with lotr" do
   test "missing emoji" do
     get "/gollum/emoji/oggy_was_here"
     assert_equal 404, last_response.status
+  end
+
+  def app
+    Precious::App
+  end
+end
+
+context "Frontend with page-file-dir" do
+  include Rack::Test::Methods
+
+  setup do
+    @path = cloned_testpath("examples/revert.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {allow_editing: true})
+    Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
+  end
+
+  teardown do
+    Precious::App.set(:wiki_options, { :css => nil, :page_file_dir => nil})
+    FileUtils.rm_rf(@path)
+  end
+
+  test "create sets the correct path for a relative path subdirectory with the page file directory set" do
+    dir  = "bardir"
+    name = "#{dir}/baz"
+    get "/gollum/create/#{name}"
+    assert_match(/\/#{dir}/, last_response.body)
+    assert_no_match(/[^\/]#{dir}/, last_response.body)
+  end
+
+  test "use custom.css from page-file-dir path if page-file-dir is set" do
+    page = 'docs/yaycustom'
+    text = 'customized!'
+
+    @wiki.write_page(page, :markdown, text,
+      { :name => 'user1', :email => 'user1' })
+
+    get 'yaycustom'
+    assert_match /"\/custom.css"/, last_response.body
+  end
+
+  test "custom.css with page-file-dir" do
+    custom_content = 'customized for page-file-dir'
+    options = {
+        :message => "Uploaded file",
+        :parent  => @wiki.repo.head.commit,
+        :author  => "Bilbo Baggins"
+    }
+
+    committer = Gollum::Committer.new(@wiki, options)
+    committer.add_to_index('docs/custom.css', custom_content, {normalize: false})
+    committer.after_commit do |committer, sha|
+      @wiki.clear_cache
+      committer.update_working_dir('docs/custom.css')
+    end
+    committer.commit
+    get 'custom.css'
+
+    assert_equal custom_content, last_response.body
   end
 
   def app
