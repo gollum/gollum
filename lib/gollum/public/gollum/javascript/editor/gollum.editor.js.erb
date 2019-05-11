@@ -182,16 +182,10 @@
         }
 
         if ( EditorHas.dir() ) {
-          $('#function-dir').onclick = function () {
+          $('#function-dir').click(function( e ) {
             var editor = window.ace_editor;
-            var rtl = editor.session.$bidiHandler.isRtlDir;
-            editor.session.$bidiHandler.setRtlDirection(editor, rtl);
-            if (rtl == true) {
-
-            } else {
-              
-            }
-          }
+            editor.session.$bidiHandler.setRtlDirection(editor, !editor.session.$bidiHandler.isRtlDir);
+          });
         }
 
         if ( EditorHas.help() ) {
@@ -546,7 +540,7 @@
 
     /**
      *  EditorHas.dir
-     *  True if the editor contains the inline help sector, false otherwise.
+     *  True if the editor contains the inline text direction button.
      *
      *  @return boolean
      */
