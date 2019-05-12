@@ -1,3 +1,5 @@
+Current ACE version: 1.4.4
+
 # How to update the ACE editor component
 
 1. Download a new ACE release from (ajax.org/ace-builds)[https://github.com/ajaxorg/ace-builds/releases].
