@@ -183,8 +183,8 @@
 
         if ( EditorHas.dir() ) {
           $('#function-dir').click(function( e ) {
-            var editor = window.ace_editor;
-            editor.session.$bidiHandler.setRtlDirection(editor, !editor.session.$bidiHandler.isRtlDir);
+             window.ace_editor.session.$bidiHandler.$isRtl = !window.ace_editor.session.$bidiHandler.$isRtl;
+             window.ace_editor.renderer.updateFull();
           });
         }
 
