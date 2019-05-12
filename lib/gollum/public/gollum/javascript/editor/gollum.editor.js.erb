@@ -31,6 +31,20 @@
     textile: 'textile'
   }
 
+  function isRTL(s){           
+    var ltrChars    = 'A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02B8\u0300-\u0590\u0800-\u1FFF'+'\u2C00-\uFB1C\uFDFE-\uFE6F\uFEFD-\uFFFF',
+        rtlChars    = '\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC',
+        rtlDirCheck = new RegExp('^[^'+ltrChars+']*['+rtlChars+']');
+
+    return rtlDirCheck.test(s);
+  };
+
+  function switchRtl(b){
+    window.ace_editor.session.$bidiHandler.$isRtl = b;
+    window.ace_editor.session.$bidiHandler.updateBidiMap();
+    window.ace_editor.renderer.updateFull();
+  }
+
   /**
    *  $.GollumEditor
    *
@@ -64,6 +78,10 @@
       editor.getSession().on('change', function(){
         textarea.val(editor.getSession().getValue());
       });
+
+      if (isRTL(editor.getSession().getLine(0))) {
+        switchRtl(true);
+      }
 
       editor.commands.addCommand({
         name: "showKeyboardShortcuts",
@@ -183,8 +201,7 @@
 
         if ( EditorHas.dir() ) {
           $('#function-dir').click(function( e ) {
-             window.ace_editor.session.$bidiHandler.$isRtl = !window.ace_editor.session.$bidiHandler.$isRtl;
-             window.ace_editor.renderer.updateFull();
+            switchRtl(!window.ace_editor.session.$bidiHandler.$isRtl);
           });
         }
 
