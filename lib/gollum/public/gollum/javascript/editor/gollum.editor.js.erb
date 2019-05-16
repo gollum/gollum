@@ -23,12 +23,27 @@
     creole: 'text',
     markdown: 'markdown',
     mediawiki: 'text',
+    bib: 'latex',
     org: 'text',
     rest: 'rst',
     txt: 'text',
     pod: 'text',
     rdoc: 'rdoc',
     textile: 'textile'
+  }
+
+  function isRTL(s){           
+    var ltrChars    = 'A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02B8\u0300-\u0590\u0800-\u1FFF'+'\u2C00-\uFB1C\uFDFE-\uFE6F\uFEFD-\uFFFF',
+        rtlChars    = '\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC',
+        rtlDirCheck = new RegExp('^[^'+ltrChars+']*['+rtlChars+']');
+
+    return rtlDirCheck.test(s);
+  };
+
+  function switchRtl(b){
+    window.ace_editor.session.$bidiHandler.$isRtl = b;
+    window.ace_editor.session.$bidiHandler.updateBidiMap();
+    window.ace_editor.renderer.updateFull();
   }
 
   /**
@@ -51,7 +66,7 @@
       textarea.css('display', 'none');
 
       // NOTE: This requires the page to have only one 'gollum-editor-body'.
-      var editor = ace.edit(editDiv[0]);
+      var editor = ace.edit(editDiv[0], {rtlText: true});
       window.ace_editor = editor;
 
       editor.setTheme("ace/theme/tomorrow");
@@ -64,6 +79,10 @@
       editor.getSession().on('change', function(){
         textarea.val(editor.getSession().getValue());
       });
+
+      if (isRTL(editor.getSession().getLine(0))) {
+        switchRtl(true);
+      }
 
       editor.commands.addCommand({
         name: "showKeyboardShortcuts",
@@ -179,6 +198,12 @@
         if ( EditorHas.formatSelector() ) {
           FormatSelector.init(
             $('#wiki_format') );
+        }
+
+        if ( EditorHas.dir() ) {
+          $('#function-dir').click(function( e ) {
+            switchRtl(!window.ace_editor.session.$bidiHandler.$isRtl);
+          });
         }
 
         if ( EditorHas.help() ) {
@@ -531,6 +556,16 @@
                $('#gollum-editor #function-help').length );
     },
 
+    /**
+     *  EditorHas.dir
+     *  True if the editor contains the inline text direction button.
+     *
+     *  @return boolean
+     */
+    dir: function() {
+      return ($('#gollum-editor #function-dir').length );
+    },
+
 
     /**
      *  EditorHas.previewButton
@@ -592,7 +627,7 @@
             $(this).click( FunctionBar.evtFunctionButtonClick );
             $(this).removeClass('disabled');
           }
-          else if ( $(this).attr('id') != 'function-help' ) {
+          else if ( !['function-help', 'function-dir'].includes( $(this).attr('id') ) ) {
             $(this).addClass('disabled');
           }
         });

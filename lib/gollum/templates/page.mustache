@@ -54,7 +54,7 @@ Mousetrap.bind(['e'], function( e ) {
   {{/has_toc}}
   {{#has_sidebar}}
   <div id="wiki-sidebar" class="gollum-{{sidebar_format}}-content">
-    <div id="sidebar-content" class="markdown-body">
+    <div id="sidebar-content" class="markdown-body" dir="auto">
       {{{sidebar_content}}}
     </div>
   </div>
@@ -62,19 +62,19 @@ Mousetrap.bind(['e'], function( e ) {
   <div id="wiki-body" class="gollum-{{format}}-content">
     {{#has_header}}
     <div id="wiki-header" class="gollum-{{header_format}}-content">
-      <div id="header-content" class="markdown-body">
+      <div id="header-content" class="markdown-body" dir="auto">
         {{{header_content}}}
       </div>
     </div>
     {{/has_header}}
-    <div class="markdown-body {{#header_enum?}}header-enum{{/header_enum?}}" {{#header_enum?}}style="--header-enum-style:{{header_enum_style}};"{{/header_enum?}}>
+    <div class="markdown-body{{#header_enum?}} header-enum{{/header_enum?}}" {{#header_enum?}}style="--header-enum-style:{{header_enum_style}};"{{/header_enum?}} dir="auto">
       {{{rendered_metadata}}}
       {{{content}}}
     </div>
   </div>
   {{#has_footer}}
   <div id="wiki-footer" class="gollum-{{footer_format}}-content">
-    <div id="footer-content" class="markdown-body">
+    <div id="footer-content" class="markdown-body" dir="auto">
       {{{footer_content}}}
     </div>
   </div>
