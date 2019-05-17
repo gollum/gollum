@@ -15,6 +15,7 @@ module Precious
           pages: 'pages',
           history: 'history',
           rename: 'rename',
+          revert: 'revert',
           preview: 'preview',
           compare: 'compare',
           search: 'search'
