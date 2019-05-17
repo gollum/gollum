@@ -2,6 +2,7 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'helper'))
 require File.expand_path '../../lib/gollum/views/page', __FILE__
 
+
 context "Precious::Views::Page" do
   setup do
     examples = testpath "examples"
@@ -107,5 +108,24 @@ EOS
     # Title is based on file name when h1_title is false.
     actual = @view.title
     assert_equal title, actual
+  end
+
+  test "breadcrumbs" do
+    @wiki.write_page('subdir/BC Test 1', :markdown, 'Test', commit_details)
+    page = @wiki.page('subdir/BC Test 1')
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    assert_equal @view.breadcrumb, '<a href="/gollum/pages/subdir/">subdir</a> /'
+
+    # No breadcrumb on unnested page
+    @wiki.write_page('BC Test 2', :markdown, 'Test', commit_details)
+    page = @wiki.page('BC Test 2')
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    assert_equal @view.breadcrumb, ''
   end
 end
