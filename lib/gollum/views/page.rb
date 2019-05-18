@@ -26,14 +26,14 @@ module Precious
       end
       
       def breadcrumb
-        path = Pathname.new(@page.url_path_title)
+        path = Pathname.new(@page.url_path).parent
+        return '' if path.to_s == '.'
         breadcrumb = []
         path.descend do |crumb|
           element = "#{crumb.basename}"
-          next if element == @page.title
           breadcrumb << %{<a href="#{pages_path}/#{crumb}/">#{element}</a>}
         end
-        breadcrumb.empty? ? "" : breadcrumb.join(" / ") << " /"
+        breadcrumb.join(' / ') << ' /'
       end
 
       def content
