@@ -374,11 +374,14 @@ module Precious
         @editable      = false
         @bar_side      = wiki.bar_side
         @allow_uploads = wiki.allow_uploads
+        @navbar        = false
         mustache :page
       end
 
       get '/history/*' do
-        @page     = wiki_page(params[:splat].first).page
+        wikip     = wiki_page(params[:splat].first)
+        @name     = wikip.fullname
+        @page     = wikip.page
         @page_num = [params[:page].to_i, 1].max
         unless @page.nil?
           @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true))
@@ -438,9 +441,9 @@ module Precious
       end
 
       get %r{
-        /pages  # match any URL beginning with /pages
+        /overview  # match any URL beginning with /overview
         (?:     # begin an optional non-capturing group
-          /(.+) # capture any path after the "/pages" excluding the leading slash
+          /(.+) # capture any path after the "/overview" excluding the leading slash
         )?      # end the optional non-capturing group
       }x do |path|
         wiki         = wiki_new
@@ -455,7 +458,8 @@ module Precious
         @results.sort_by! {|result| result.name.downcase}
 
         @ref         = wiki.ref
-        mustache :pages
+        @newable     = true
+        mustache :overview
       end
     end
 
@@ -471,6 +475,7 @@ module Precious
         @content = page.formatted_data
         @version = version
         @bar_side = wikip.wiki.bar_side
+        @navbar   = true
         mustache :page
       elsif file = wikip.wiki.file(file_path, version, true)
         show_file(file)
@@ -500,7 +505,7 @@ module Precious
         @h1_title      = wiki.h1_title
         @bar_side      = wiki.bar_side
         @allow_uploads = wiki.allow_uploads
-
+        @navbar        = true
         mustache :page
       elsif file = wiki.file(fullpath, wiki.ref, true)
         show_file(file)

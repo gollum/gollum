@@ -8,9 +8,9 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 999999;
   width: 100%;
   height: 100%;
+  z-index: 999999;
 
   @include mediummobile-breakpoint {
     position: absolute;
@@ -29,24 +29,6 @@
     display: block;
   }
 
-  button.minibutton {
-    float: right;
-    margin-right: 0.5em;
-    width: auto;
-    
-    font-size: 1.2em;
-    font-family: $font-default;
-    
-    margin: 0 0 0 0.8em;
-    padding: 0.4em 1em;
-
-    @include button-base;
-  }
-  
-  button.minibutton:disabled {
-    opacity: 0.65; 
-    cursor: not-allowed;
-  }
   
 }
 
@@ -54,6 +36,12 @@
   margin: 0px;
   width: 100%;
   height: 100%;
+  padding: 1em;
+  overflow: hidden;
+  background-color: white;
+  webkit-box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
+  moz-box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
+  box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
 
   @include four-edge-position(0px);
 
@@ -72,9 +60,6 @@
 
     @include four-edge-position(10px);
 
-    border: 7px solid #999;
-    border: 7px solid rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
   }
 
   @include desktop-breakpoint {
@@ -98,7 +83,6 @@
 }
 
 #gollum-dialog-dialog-bg {
-  background-color: #fff;
   padding: 1em;
 
   height: 100%;
@@ -145,16 +129,6 @@
       }
 
       input {
-        &[type="text"] {
-          border: $border-standard;
-          display: block;
-          font-family: $font-default;
-          font-size: 1.2em;
-          line-height: 1.6em;
-          margin: 0.3em 0 0 0;
-          padding: 0.3em 0.5em;
-          width: 94%;
-        }
 
         &.code {
           font-family: $font-console;
@@ -175,8 +149,5 @@
 }
 
 #gollum-dialog-dialog-buttons {
-  border-top: $border-standard;
   overflow: hidden;
-  margin: 1.5em 0 0 0;
-  padding: 1em 0 0 0;
 }

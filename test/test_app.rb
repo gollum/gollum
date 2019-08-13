@@ -605,34 +605,35 @@ context "Frontend with lotr" do
   # │   ├── eye.jpg
   # │   └── todo.txt
   # ├── My-Precious.md
+  # ├── roast-mutton.md
   # ├── Samwise\ Gamgee.mediawiki
   # ├── _Footer.md
   # ├── _Header.md
   # └── _Sidebar.md
-  #
+  # ├── Zamin.md
 
-  test "/pages" do
-    get "/gollum/pages"
+  test "/overview" do
+    get "/gollum/overview"
     assert last_response.ok?
 
     body = last_response.body
 
-    assert body.include?("Bilbo-Baggins"), "/pages should include the page 'Bilbo Baggins'"
-    assert body.include?("Gondor"), "/pages should include the folder 'Gondor'"
-    assert !body.include?("Boromir"), "/pages should NOT include the page 'Boromir'"
-    assert body.include?("Mordor"), "/pages should include the folder 'Mordor'"
-    assert !body.include?("Eye-Of-Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
-    assert !body.match(/(Zamin).+(roast\-mutton)/m), "/pages should be sorted alphabetically"
+    assert body.include?("Bilbo-Baggins"), "/overview should include the page 'Bilbo Baggins'"
+    assert body.include?("Gondor"), "/overview should include the folder 'Gondor'"
+    assert !body.include?("Boromir"), "/overview should NOT include the page 'Boromir'"
+    assert body.include?("Mordor"), "/overview should include the folder 'Mordor'"
+    assert !body.include?("Eye-Of-Sauron"), "/overview should NOT include the page 'Eye Of Sauron'"
+    assert !body.match(/(Zamin).+(Bilbo\-Baggins)/m), "/overview should be sorted alphabetically"
   end
 
-  test "/gollum/pages/Mordor/" do
-    get "/gollum/pages/Mordor/"
-    assert last_response.ok?, "/pages/Mordor/ did not respond ok"
+  test "/gollum/overview/Mordor/" do
+    get "/gollum/overview/Mordor/"
+    assert last_response.ok?, "/overview/Mordor/ did not respond ok"
 
     body = last_response.body
 
-    assert !body.include?("Bilbo-Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
-    assert body.include?("Eye-Of-Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
+    assert !body.include?("Bilbo-Baggins"), "/overview/Mordor/ should NOT include the page 'Bilbo Baggins'"
+    assert body.include?("Eye-Of-Sauron"), "/overview/Mordor/ should include the page 'Eye Of Sauron'"
   end
 
   test "symbolic link pages" do

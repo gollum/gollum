@@ -1,0 +1,40 @@
+@import "_base", "_breakpoint";
+
+/* @section history */
+
+
+.history #footer {
+  margin-bottom: 7em;
+}
+
+
+
+/* @section compare */
+.compare {
+
+
+  .data {
+
+    table {
+
+      tr td {
+        font-family: $font-console;
+        line-height: 1.5em;
+
+        & + td + td {
+          width: 100%;
+        }
+
+        &.line_numbers {
+          border-right: 1px solid #999;
+          color: #999;
+          padding: 0 0 0 0.5em;
+        }
+      }
+    }
+
+  }
+
+
+}
+

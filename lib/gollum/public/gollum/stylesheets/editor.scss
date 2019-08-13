@@ -22,54 +22,25 @@ a {
 }
 
 #gollum-editor-body-ace {
-  overflow: scroll;
-  resize: vertical;
-  border: 1px solid #ddd;
+  overflow: hidden;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-size: 1em;
-  height: 25em;
 }
 
 #gollum-editor {
-  margin: 0 0 5em;
-  padding: 0em 1em 0.4em;
-
-  @include clearfix;
-
-  .ff &, .ie & {
-    padding-bottom: 1em;
-  }
-
-  @include desktop-breakpoint {
-    border: $border-editor-component;
-    background: $color-editor-component;
-    margin: 1em 0 5em;
-
-    border-radius: 1em;
-  }
-
-  form {
-    fieldset {
-      width: 100%;
-      @include reset-box;
-    }
-  }
 
   .singleline {
     display: block;
     margin: 0 0 0.7em 0;
-    @include clearfix;
-
+/*    @include clearfix;
+*/
     input {
-      background: #fff;
-      border: $border-standard;
-      color: #000;
       font-size: 1.1em;
       font-family: $font-default;
       line-height: 1.5em;
       margin: 1em 0 0.4em;
       padding: 0.5em;
-      width: 98%;
+      width: 100%;
 
       &.ph {
         color: #999;
@@ -85,6 +56,7 @@ a {
   .path_note {
     text-align: right;
     font-size: small;
+    padding-top: 5px;
     padding-right: 5px;
   }
 
@@ -169,34 +141,6 @@ a {
         clear: none;
         text-align: right;
       }
-
-      select {
-        background-color: $color-editor-component;
-        border: $border-standard;
-        color: #333;
-
-        font-size: 1em;
-        font-family: $font-default;
-        font-weight: bold;
-        line-height: 1.6em;
-        padding: 0.3em 0.4em;
-        display: inline-block;
-
-        border-radius: 0.5em;
-      }
-
-      label {
-        color: #999;
-        font-size: 1em;
-        font-weight: bold;
-        line-height: 1.6em;
-        padding: .3em 0.5em 0 0;
-        display: inline-block;
-
-        &:after {
-          content: ':';
-        }
-      }
     }
   }
 
@@ -205,28 +149,8 @@ a {
   /* @section form-fields */
 
   textarea {
-    @include component-textarea;
-    height: 25em;
-  }
-
-  input#gollum-editor-submit {
-    float: left;
-    font-size: 1em;
-    font-family: $font-default;
-    
-    margin: 0;
-    padding: 0.4em 1em;
-
-    @include button-base;
-    @include alt-box-model;
-
-    .webkit & {
-      padding: 0.5em 1em 0.45em;
-    }
-
-    .ie & {
-      padding: 0.4em 1em 0.5em;
-    }
+    height: 30em;
+    overflow: hidden;
   }
 
   .collapsed, .expanded {
@@ -235,30 +159,15 @@ a {
     overflow: hidden;
     padding: 0.5em 0 0;
 
-    a {
-      &.button {
-        float: left;
-        
-        overflow: hidden;
-        margin: 0.2em 0.5em 0.75em 0;
-
-        @include editor-button-size;
-        @include button-base;
-      }
-
-      span {
-        display: block;
-
-        @include button-sprites;
-        @include editor-button-size;
-        @include text-conceal-simple;
-      }
+    button {
+      margin-bottom: 6px;
     }
+    
 
     h4 {
       font-size: 1.6em;
-      float: left;
       margin: 0;
+      display: inline-block;
 
       padding: 0.25em 0 0 0.3em;
 
@@ -302,28 +211,6 @@ a {
       margin-top: 0.7em;
     }
 
-  }
-
-  /* @control minibutton */
-
-  a.minibutton {
-    font-size: 1em;
-    font-family: $font-default;
-    line-height: 1.2em;
-    margin: 0 0 0 0.8em;
-    padding: 0.5em 1em;
-
-    @include button-base;
-  }
-
-  /* @control preview */
-
-  #gollum-editor-preview, #gollum-editor-cancel {
-    float: left;
-    font-weight: normal;
-    padding: left;
-
-    @include alt-box-model;
   }
 
 }

@@ -302,7 +302,7 @@ $(document).ready(function() {
         // In the pages view, pageFullPath isn't defined.
         // The new button will still expect a value however.
         // So we try to figure one out from window.location
-        path = window.location.pathname.replace(routePath('pages'), '')
+        path = window.location.pathname.replace(routePath('overview'), '')
         // For consistency remove the trailing /
         path = path.replace(/\/$/,'')
       }
@@ -349,8 +349,8 @@ $(document).ready(function() {
       }
     });
 
-    if ($('.history a.action-compare-revision').length) {
-      $('.history a.action-compare-revision').click(function() {
+    if ($('.history button.action-compare-revision').length) {
+      $('.history button.action-compare-revision').click(function() {
         $("#version-form").submit();
       });
     }
@@ -376,6 +376,38 @@ $(document).ready(function() {
       $('#gollum-revert-form').submit();
     });
   }
+
+  if( $('.tabnav-tabs').length ){
+    $(".tabnav-tab").click( function() {
+      if( ! $(this).hasClass('selected')) {
+        tab_id = $(this).attr('id');
+        if (tab_id == 'preview') {
+          var formData = new FormData($('#gollum-editor-form').get(0));
+          var paths = window.location.pathname.split('/');
+          formData.append('page', paths[ paths.length - 1 ] || '')
+          $.ajax({
+            url: routePath('preview'),
+            data: formData,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            success: function(data) {
+              var mainDiv = $('#wiki-wrapper', data);
+              $('.tabnav-div#preview-content').html(mainDiv);
+            },
+            error: function(data, textStatus, errorThrown) {
+              console.log('something went wrong: ' + textStatus + errorThrown);
+            }
+          });
+        }
+        $('.tabnav-tab.selected').removeClass('selected');
+        $(this).addClass('selected');
+        active_div = '#' + tab_id + "-content";
+        $('.tabnav-div').hide();
+        $(active_div).show();
+      };
+    });
+  };
 
   if( $('#wiki-wrapper.edit').length ){
     $("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );

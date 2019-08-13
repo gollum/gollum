@@ -134,17 +134,17 @@ a {
   h6:before {counter-increment: h6; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) "." counter(h5, var(--header-enum-style)) "." counter(h6, var(--header-enum-style)) ". ";}
 }
 
+#footer {
+  margin-bottom: 7em;
+}
+
 .markdown-body {
-  padding: 1em;
+  padding: 1em 1em 1em 0;
   font-size: 15px;
   line-height: 1.7;
   overflow: hidden;
   word-wrap: break-word;
-
-  @include desktop-breakpoint {
-    padding: 30px;
-  }
-
+  
   a {
     &.absent {
       color: $red;
@@ -490,7 +490,7 @@ a {
 /* Table of contents */
 
 .toc {
-  background-color: #F7F7F7;
+  background-color: white;
   border: $border-standard;
   padding: 5px 10px;
   margin: 0;
@@ -515,7 +515,7 @@ a {
 
   > ul {
     margin-left: 10px;
-    font-size: 17px;
+    font-size: 15px;
   }
 }
 

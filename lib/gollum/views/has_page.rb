@@ -1,7 +1,7 @@
 module Precious
   module HasPage
     def path
-      @page.path
+      @page.url_path
     end
 
     def escaped_url_path
