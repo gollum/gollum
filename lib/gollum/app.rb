@@ -177,7 +177,6 @@ module Precious
         @allow_uploads = wiki.allow_uploads
           if page = wikip.page
               @page         = page
-              @page.version = wiki.repo.log(wiki.ref, @page.path).first
               @content      = page.text_data
               @etag         = page.sha
               mustache :edit
