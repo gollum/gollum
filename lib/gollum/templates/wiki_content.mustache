@@ -40,6 +40,7 @@
 
 	</div>
 
+	{{^preview}}
 	<div id="footer" class="pt-4">
 	  <p id="last-edit"><a id="page-info-toggle" data-pagepath="{{escaped_url_path}}">When was this page last modified?</a></p>
 	  {{#allow_editing}}
@@ -48,5 +49,6 @@
 	    </p>
 	  {{/allow_editing}}
 	</div>
+	{{/preview}}
 	
 </div>

@@ -374,6 +374,7 @@ module Precious
         @bar_side      = wiki.bar_side
         @allow_uploads = wiki.allow_uploads
         @navbar        = false
+        @preview       = true
         mustache :page
       end
 

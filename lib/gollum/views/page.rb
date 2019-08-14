@@ -3,7 +3,7 @@ module Precious
     class Page < Layout
       include HasPage
 
-      attr_reader :content, :page, :header, :footer
+      attr_reader :content, :page, :header, :footer, :preview
       
       VALID_COUNTER_STYLES = ['decimal', 'decimal-leading-zero', 'arabic-indic', 'armenian', 'upper-armenian',
         'lower-armenian', 'bengali', 'cambodian', 'khmer', 'cjk-decimal', 'devanagari', 'georgian', 'gujarati', 'gurmukhi',
