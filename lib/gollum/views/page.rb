@@ -3,7 +3,7 @@ module Precious
     class Page < Layout
       include HasPage
 
-      attr_reader :content, :page, :header, :footer
+      attr_reader :content, :page, :header, :footer, :preview
       
       VALID_COUNTER_STYLES = ['decimal', 'decimal-leading-zero', 'arabic-indic', 'armenian', 'upper-armenian',
         'lower-armenian', 'bengali', 'cambodian', 'khmer', 'cjk-decimal', 'devanagari', 'georgian', 'gujarati', 'gurmukhi',
@@ -24,14 +24,15 @@ module Precious
       def page_header
         title
       end
-      
+            
       def breadcrumb
         path = Pathname.new(@page.url_path).parent
         return '' if path.to_s == '.'
         breadcrumb = []
         path.descend do |crumb|
           element = "#{crumb.basename}"
-          breadcrumb << %{<a href="#{pages_path}/#{crumb}/">#{element}</a>}
+          next if element == @page.title
+          breadcrumb << %{<a href="#{overview_path}/#{crumb}/">#{element}</a>}
         end
         breadcrumb.join(' / ') << ' /'
       end
@@ -59,7 +60,23 @@ module Precious
       def editable
         @editable
       end
+      
+      def search
+        true
+      end
+      
+      def history
+        true
+      end
 
+      def latest_changes
+        true
+      end
+      
+      def overview
+        true 
+      end
+        
       def allow_editing
         @allow_editing
       end
@@ -141,6 +158,10 @@ module Precious
 
       def use_identicon
         @page.wiki.user_icons == 'identicon'
+      end
+
+      def navbar?
+        @navbar
       end
 
       # Access to embedded metadata.

@@ -155,11 +155,18 @@
       }
 
       if ( EditorHas.collapsibleInputs() ) {
-        $('#gollum-editor .collapsed a.button, ' +
-          '#gollum-editor .expanded a.button').click(function( e ) {
+        $('#gollum-editor .collapsed button.collapsable, ' +
+          '#gollum-editor .expanded button.collapsable').click(function( e ) {
           e.preventDefault();
           $(this).parent().toggleClass('expanded');
           $(this).parent().toggleClass('collapsed');
+
+          buttons = $(this).parent().children("button");
+          console.log(buttons);
+          hidden_button = buttons.filter(':hidden')[0];
+          shown_button  = buttons.not(':hidden')[0];
+          hidden_button.hidden = false;
+          shown_button.hidden = true;
         });
       }
 
@@ -622,7 +629,7 @@
         debug('Activating function bar');
 
         // check these out
-        $('#gollum-editor-function-bar a.function-button').each(function() {
+        $('#gollum-editor-function-bar button.function-button').each(function() {
           if ( LanguageDefinition.getDefinitionFor( $(this).attr('id') ) ) {
             $(this).click( FunctionBar.evtFunctionButtonClick );
             $(this).removeClass('disabled');

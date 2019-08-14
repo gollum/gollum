@@ -7,12 +7,10 @@
   <meta name="viewport" content="width=device-width">
   {{#sprockets_stylesheet_tag}}app{{/sprockets_stylesheet_tag}}
   {{#sprockets_stylesheet_tag}}print print{{/sprockets_stylesheet_tag}}
+
   {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_path}}/custom.css" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
 
-  <!--[if lte IE 8]>
-  {{#sprockets_stylesheet_tag}}ie7{{/sprockets_stylesheet_tag}}
-  <![endif]-->
 
   <script>
   var criticMarkup = '{{critic_markup}}';
@@ -23,7 +21,7 @@
 	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "")
 	}
 	{{#page}}
-	  var pageFullPath = '{{url_path}}';
+	  var pageFullPath = '{{url_path.source_location}}';
 	{{/page}}
 
   </script>
@@ -59,8 +57,8 @@
   <title>{{title}}</title>
 </head>
 <body>
-
+<div class="container-lg clearfix">
 {{{yield}}}
-
+</div>
 </body>
 </html>

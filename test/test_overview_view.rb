@@ -1,6 +1,6 @@
 # ~*~ encoding: utf-8 ~*~
 require File.expand_path(File.join(File.dirname(__FILE__), 'helper'))
-require File.expand_path '../../lib/gollum/views/pages', __FILE__
+require File.expand_path '../../lib/gollum/views/overview', __FILE__
 
 FakePageResult = Struct.new(:path) do
   def name
@@ -33,15 +33,15 @@ FakeFileResult = Struct.new(:path) do
   end  
 end
 
-context "Precious::Views::Pages" do
+context "Precious::Views::Overview" do
   setup do
-    @page = Precious::Views::Pages.new
+    @page = Precious::Views::Overview.new
   end
 
   test "breadcrumb" do
     @page.instance_variable_set("@path", "Mordor/Eye-Of-Sauron/Saruman")
     @page.instance_variable_set("@base_url", "")
-    assert_equal '<a href="/gollum/pages">Home</a> / <a href="/gollum/pages/Mordor/">Mordor</a> / <a href="/gollum/pages/Mordor/Eye-Of-Sauron/">Eye-Of-Sauron</a> / Saruman', @page.breadcrumb
+    assert_equal '<a href="/gollum/overview">Home</a> / <a href="/gollum/overview/Mordor/">Mordor</a> / <a href="/gollum/overview/Mordor/Eye-Of-Sauron/">Eye-Of-Sauron</a> / Saruman', @page.breadcrumb
   end
 
   test "breadcrumb with no path" do
@@ -52,7 +52,11 @@ context "Precious::Views::Pages" do
     @page.instance_variable_set("@base_url", "")
 	results = [FakePageResult.new("Gondor/Bromir.md"), FakePageResult.new("Hobbit.md"), FakePageResult.new("Home.md"), FakePageResult.new("Mordor/Eye-Of-Sauron.md"), FakePageResult.new("Mordor/todo.md"), FakePageResult.new("Rivendell/Elrond.md"), FakePageResult.new("My-Precious.md"), FakePageResult.new("Zamin.md"), FakePageResult.new("Samwise-Gamgee.md"), FakePageResult.new("roast-mutton.md"), FakePageResult.new("Bilbo-Baggins.md")]
     @page.instance_variable_set("@results", results)
-    assert_equal %{<li><a href="/gollum/pages/Gondor/" class="folder">Gondor</a></li>\n<li><a href="/gollum/pages/Mordor/" class="folder">Mordor</a></li>\n<li><a href="/gollum/pages/Rivendell/" class="folder">Rivendell</a></li>\n<li><a href="/Bilbo-Baggins" class="page">Bilbo Baggins</a></li>\n<li><a href="/Hobbit" class="page">Hobbit</a></li>\n<li><a href="/Home" class="page">Home</a></li>\n<li><a href="/My-Precious" class="page">My Precious</a></li>\n<li><a href="/roast-mutton" class="page">roast mutton</a></li>\n<li><a href="/Samwise-Gamgee" class="page">Samwise Gamgee</a></li>\n<li><a href="/Zamin" class="page">Zamin</a></li>}, @page.files_folders
+    files = 0
+    folders = 0
+    results = @page.files_folders
+    results[0..2].each { |r| assert r[:type] == 'dir' }
+    results[3..-1].each { |r| assert r[:type] == 'file' }
   end
 
   test "files_folders from subdir" do
@@ -60,7 +64,12 @@ context "Precious::Views::Pages" do
     @page.instance_variable_set("@base_url", "")
     results = [FakePageResult.new("Mordor/Eye-Of-Sauron.md"), FakeFileResult.new("Mordor/Aragorn.pdf"), FakePageResult.new("Mordor/Orc/Saruman.md"), FakeFileResult.new("Mordor/.gitkeep")]
     @page.instance_variable_set("@results", results)
-    assert_equal %{<li><a href="/gollum/pages/Mordor/Orc/" class="folder">Orc</a></li>\n<li><a href="/Mordor/Aragorn.pdf" class="file">Aragorn.pdf</a></li>\n<li><a href="/Mordor/Eye-Of-Sauron" class="page">Eye Of Sauron</a></li>}, @page.files_folders
+    result = @page.files_folders.first
+    assert_equal result[:icon].start_with?('<svg class="octicon octicon-file-directory'), true
+    assert_equal result[:type], 'dir'
+    assert_equal result[:url], '/gollum/overview/Mordor/Orc/'
+    assert_equal result[:is_file], false
+    assert_equal result[:name], 'Orc'
   end
 
   test "base url" do
@@ -69,6 +78,6 @@ context "Precious::Views::Pages" do
     @page.instance_variable_set("@base_url", "/wiki")
     results = [FakePageResult.new("Mordor/Eye-Of-Sauron.md"), FakeFileResult.new("Mordor/Aragorn.pdf"), FakePageResult.new("Mordor/Orc/Saruman.md"), FakePageResult.new("Mordor/.gitkeep")]
     @page.instance_variable_set("@results", results)
-    assert_equal %{<li><a href="/wiki/gollum/pages/Mordor/Orc/" class="folder">Orc</a></li>\n<li><a href="/wiki/Mordor/Aragorn.pdf" class="file">Aragorn.pdf</a></li>\n<li><a href="/wiki/Mordor/Eye-Of-Sauron" class="page">Eye Of Sauron</a></li>}, @page.files_folders
+    assert_equal @page.files_folders.first[:url], '/wiki/gollum/overview/Mordor/Orc/'
   end
 end

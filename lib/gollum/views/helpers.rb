@@ -12,7 +12,7 @@ module Precious
           create: 'create',
           delete: 'delete',
           edit: 'edit',
-          pages: 'pages',
+          overview: 'overview',
           history: 'history',
           rename: 'rename',
           revert: 'revert',
@@ -44,6 +44,26 @@ module Precious
         end
       end
     end
+
+    module OcticonHelpers
+      def self.included(base)
+        
+        def rocticon(symbol, parameters = {})
+          Octicons::Octicon.new(symbol, parameters).to_svg
+        end
+        
+        def octicon
+          lambda do |args|
+            symbol, height, width = args.split(' ')
+            parameters = {}
+            parameters[:height] = height if height
+            parameters[:width]  = width if width
+            Octicons::Octicon.new(symbol, parameters).to_svg
+          end
+        end
+      end
+    end
+
 
     module SprocketsHelpers
       def self.included(base)

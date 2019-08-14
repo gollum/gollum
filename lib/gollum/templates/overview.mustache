@@ -1,0 +1,42 @@
+<div id="wiki-wrapper" class="results">
+<div id="head" class="overview">
+	{{>navbar}}
+  <h1 class="py-4">{{title}}</h1>
+</div>
+<div id="overview">
+
+{{#has_results}}
+  <div id="file-browser">
+    <div class="breadcrumb pb-4">
+      {{{breadcrumb}}}
+    </div>
+
+		<div class="Box">
+	    <ul>
+				{{#files_folders}}
+					<li class="Box-row">
+						<span class="pr-2">{{{icon}}}</span>
+						<span><a href={{url}}>{{name}}</a></span>
+						{{#allow_editing}}
+							{{#is_file}}<button class="btn btn-sm float-right delete-file" data-file-path={{name}} data-confirm="Are you sure you want to delete {{name}}?">{{#octicon}}trashcan{{/octicon}}</button>{{/is_file}}
+						{{/allow_editing}}
+		      </li>
+				{{/files_folders}}
+	    </ul>
+		</div>
+	
+	
+{{/has_results}}
+
+{{#no_results}}
+  <p id="no-results">
+    There are no pages in <strong>{{current_path}}</strong> on <strong>{{ref}}</strong>.
+  </p>
+{{/no_results}}
+
+</div>
+<div class="pt-4" id="footer">
+	<a href="#">Back to Top</a>
+</div>
+</div>
+

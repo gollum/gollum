@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 3.2'
+  s.add_dependency 'octicons', '~> 8.5'
   s.add_dependency 'sprockets', '~> 3.7'
   s.add_dependency 'sass', '~> 3.5'
   s.add_dependency 'uglifier', '~> 3.2'

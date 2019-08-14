@@ -65,6 +65,10 @@ module Precious
           super
         end
       end
+      
+      def editable
+        @editable
+      end
 
       def previous_link
         label = "&laquo; Previous"

@@ -1,4 +1,5 @@
 require 'cgi'
+require 'octicons'
 
 module Precious
   module Views
@@ -7,6 +8,7 @@ module Precious
       include Sprockets::Helpers
       include Precious::Views::SprocketsHelpers
       include Precious::Views::RouteHelpers
+      include Precious::Views::OcticonHelpers
       
       alias_method :h, :escape_html
 
@@ -48,6 +50,23 @@ module Precious
         @per_page_uploads
       end
 
+      # Navigation bar
+      def search
+        false
+      end
+      
+      def history
+        false
+      end
+      
+      def overview
+        false
+      end
+      
+      def latest_changes
+        false
+      end
+      
     end
   end
 end
