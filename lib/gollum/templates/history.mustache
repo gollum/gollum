@@ -7,6 +7,8 @@
 
   <div class="pb-4"><button class="btn btn-sm action-compare-revision" type="submit">Compare Revisions</button></div>
 
+  {{>pagination}}
+
 	<div class="Box Box--condensed flex-auto">
 		<form name="compare-versions" id="version-form" method="post"
 	   action="{{compare_path}}/{{escaped_url_path}}">

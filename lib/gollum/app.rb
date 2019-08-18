@@ -17,6 +17,8 @@ require 'gollum/views/helpers'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
+require 'gollum/views/pagination'
+
 
 require File.expand_path '../helpers', __FILE__
 
@@ -382,9 +384,10 @@ module Precious
         wikip     = wiki_page(params[:splat].first)
         @name     = wikip.fullname
         @page     = wikip.page
-        @page_num = [params[:page].to_i, 1].max
+        @page_num = [params[:page_num].to_i, 1].max
+        @max_count = settings.wiki_options.fetch(:latest_changes_count, 10)
         unless @page.nil?
-          @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true))
+          @versions = @page.versions(:max_count => @max_count, :skip => (@page_num-1) * @max_count, :follow => settings.wiki_options.fetch(:follow_renames, ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true))
           mustache :history
         else
           redirect to("/")
@@ -393,8 +396,9 @@ module Precious
 
       get '/latest_changes' do
         @wiki = wiki_new
-        max_count = settings.wiki_options.fetch(:latest_changes_count, 10)
-        @versions = @wiki.latest_changes({:max_count => max_count})
+        @page_num = [params[:page_num].to_i, 1].max
+        @max_count = settings.wiki_options.fetch(:latest_changes_count, 10)
+        @versions = @wiki.latest_changes({:max_count => @max_count, :skip => (@page_num-1) * @max_count})
         mustache :latest_changes
       end
 
@@ -474,6 +478,7 @@ module Precious
         @name    = name
         @content = page.formatted_data
         @version = version
+        @historical = true
         @bar_side = wikip.wiki.bar_side
         @navbar   = true
         mustache :page

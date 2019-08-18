@@ -2,10 +2,11 @@ module Precious
   module Views
     class History < Layout
       include HasPage
+      include Pagination
       include Sprockets::Helpers
       include Precious::Views::SprocketsHelpers
 
-      attr_reader :page, :page_num, :allow_editing
+      attr_reader :page, :allow_editing
 
       def title
         @page.title
@@ -68,26 +69,6 @@ module Precious
       
       def editable
         @editable
-      end
-
-      def previous_link
-        label = "&laquo; Previous"
-        if @page_num == 1
-          %(<span class="disabled">#{label}</span>)
-        else
-          link = url("/history/#{@page.name}?page=#{@page_num-1}")
-          %(<a href="#{link}" hotkey="h">#{label}</a>)
-        end
-      end
-
-      def next_link
-        label = "Next &raquo;"
-        if @versions.size == Gollum::Page.per_page
-          link = "/history/#{@page.name}?page=#{@page_num+1}"
-          %(<a href="#{link}" hotkey="l">#{label}</a>)
-        else
-          %(<span class="disabled">#{label}</span>)
-        end
       end
     end
   end
