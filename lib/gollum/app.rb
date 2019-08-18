@@ -366,6 +366,9 @@ module Precious
         wiki           = wiki_new
         @name          = params[:page] || "Preview"
         @page          = wiki.preview_page(@name, params[:content], params[:format])
+        ['sidebar', 'header', 'footer'].each do |subpage|
+          @page.send("set_#{subpage}".to_sym, params[subpage]) if params[subpage]
+        end
         @content       = @page.formatted_data
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
         @mathjax       = wiki.mathjax
