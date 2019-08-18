@@ -10,6 +10,7 @@ module Precious
 
       def versions
         i = @versions.size + 1
+        url_start_pos = @page_dir.to_s.empty? ? 0 : Pathname.new(@page_dir).cleanpath.to_s.length+1
         @versions.map do |v|
           i -= 1
           { :id        => v.id,
@@ -22,38 +23,13 @@ module Precious
             :identicon => self._identicon_code(v.author.email),
             :date_full => v.authored_date,
             :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              { :file => f,
-                :link => "#{page_path}/#{v.id}"
+              page_path = f[url_start_pos..-1]
+              { :file => page_path,
+                :link => ::File.join([@base_url, page_path, v.id].compact)
               }
             }
           }
         end
-      end
-
-      def extract_renamed_path_destination(file)
-        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
-      end
-
-      # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-
-      def string_to_code(string)
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-
-        return left_shift(b[0], 24) |
-            left_shift(b[1], 16) |
-            left_shift(b[2], 8) |
-            b[3] & 0xFF
       end
 
       def _identicon_code(blob)
@@ -77,6 +53,28 @@ module Precious
 
       def next_link
       end
+
+      # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift(int, shift)
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+
+      def string_to_code(string)
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #  ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+
+        return left_shift(b[0], 24) |
+               left_shift(b[1], 16) |
+               left_shift(b[2], 8) |
+               b[3] & 0xFF
+      end
+
     end
   end
 end
