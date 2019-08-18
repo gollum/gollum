@@ -342,7 +342,7 @@ module Precious
       post '/revert/*/:sha1/:sha2' do
         wikip = wiki_page(params[:splat].first)
         @path = wikip.path
-        @name = wiki.fullname
+        @name = wikip.fullname
         wiki  = wikip.wiki
         @page = wikip.page
         sha1  = params[:sha1]
