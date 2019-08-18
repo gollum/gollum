@@ -714,7 +714,8 @@ context "Frontend with lotr" do
     assert last_response.ok?
     assert_equal last_response.body.include?('delete-link'), false
     assert_equal last_response.body.include?('page-info-toggle'), false
-    assert last_response.body.include?('This version of the page was edited by <b>Tom Preston-Werner</b> at 2010-04-07 21:49:43.')
+    assert last_response.body.include?('This version of the page was edited by <b>Tom Preston-Werner</b> at 2010-04-07')
+    assert last_response.body.include?("<a href=\"/Bilbo-Baggins.md\">View the most recent version.</a></p>")
   end
 
   test "show revision of specific file" do
