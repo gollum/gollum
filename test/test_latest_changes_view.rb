@@ -13,7 +13,7 @@ context "Precious::Views::LatestChanges" do
     @path = cloned_testpath("examples/lotr.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+    Precious::App.set(:wiki_options, {:pagination_count => 10})
   end
 
   test "displays_latest_changes" do
@@ -21,8 +21,8 @@ context "Precious::Views::LatestChanges" do
     body = last_response.body
         
     assert body.include?("<span class=\"float-left col-2\"><a href=\"javascript:void(0)\">\n    Charles Pence\n</a>\n</span>"), "/latest_changes should include Author Charles Pence"
-    assert body.include?('1db89eb'), "/latest_changes should include the :latest_changes_count commit"
-    assert !body.include?('a8ad3c0'), "/latest_changes should not include more than latest_changes_count commits"
+    assert body.include?('1db89eb'), "/latest_changes should include the :pagination_count commit"
+    assert !body.include?('a8ad3c0'), "/latest_changes should not include more than :pagination_count commits"
     assert body.include?('<a href="Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e">Data-Two.csv</a>'), "/latest_changes include links to modified files in #{body}"
     assert body.include?('<a href="Hobbit.md/874f597a5659b4c3b153674ea04e406ff393975e">Hobbit.md</a>'), "/latest_changes should include links to modified pages in #{body}"
   end
