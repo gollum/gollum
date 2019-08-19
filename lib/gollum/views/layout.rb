@@ -6,6 +6,7 @@ module Precious
     class Layout < Mustache
       include Rack::Utils
       include Sprockets::Helpers
+      include Precious::Views::AppHelpers
       include Precious::Views::SprocketsHelpers
       include Precious::Views::RouteHelpers
       include Precious::Views::OcticonHelpers

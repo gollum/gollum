@@ -2,6 +2,15 @@ require 'json'
 
 module Precious
   module Views
+    
+    module AppHelpers
+      def extract_page_dir(path)
+        return path if @page_dir.to_s.empty?
+        @extract_path ||= "#{Pathname.new(@page_dir).cleanpath.to_s}/"
+        path.start_with?(@extract_path) ? path[@extract_path.length..-1] : path
+      end
+    end
+
     module RouteHelpers
       ROUTES = {
         'gollum' => {
@@ -42,6 +51,10 @@ module Precious
         define_method :routes_to_json do
           @@route_methods.to_json
         end
+      end
+
+      def page_route(page)
+        "#{base_url}/#{page}".gsub(/\/{2,}/, '/')
       end
     end
 

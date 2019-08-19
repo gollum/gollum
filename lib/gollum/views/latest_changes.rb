@@ -10,7 +10,6 @@ module Precious
 
       def versions
         i = @versions.size + 1
-        url_start_pos = @page_dir.to_s.empty? ? 0 : Pathname.new(@page_dir).cleanpath.to_s.length+1
         @versions.map do |v|
           i -= 1
           { :id        => v.id,
@@ -23,9 +22,9 @@ module Precious
             :identicon => self._identicon_code(v.author.email),
             :date_full => v.authored_date,
             :files     => v.stats.files.map { |f,*rest|
-              page_path = f[url_start_pos..-1]
+              page_path = extract_page_dir(f)
               { :file => page_path,
-                :link => ::File.join([@base_url, page_path, v.id].compact)
+                :link => "#{page_route(page_path)}/#{v.id}"
               }
             }
           }
