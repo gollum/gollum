@@ -266,7 +266,7 @@ $(document).ready(function() {
 
     if ($('.history button.action-compare-revision').length) {
       $('.history button.action-compare-revision').click(function() {
-        $("#version-form").submit();
+        $("#selection-form").submit();
       });
     }
   }
@@ -361,7 +361,80 @@ $(document).ready(function() {
   }
 
   if( $("#page-history").length) {
+    if( $("#page-history #pagination").length) {
 
+      var maxSelected = 2;
+
+      var toggleInputs = function () {
+        var numSelected = $("#selection-form input").length;
+        if (numSelected == maxSelected) {
+          $('#version-form input:not(:checked)').prop('disabled', true);
+          $('.history button.action-compare-revision').prop('disabled', false);
+        } else if (numSelected < maxSelected) {
+          $('#version-form input').prop('disabled', false);
+          $('.history button.action-compare-revision').prop('disabled', true);
+        }
+      };
+
+      var onCheckboxSelect = function ( box ) {
+        $('<input>').attr({
+          type: 'hidden',
+          id: $(box).val(),
+          name: 'versions[]',
+          value: $(box).val()
+        }).appendTo($("#selection-form"));
+        toggleInputs();
+      };
+
+      var onCheckboxUnselect = function( box ) {
+        $('#selection-form #' + $(box).val()).remove();
+        toggleInputs();
+      };
+
+      var setCheckboxEvents = function () {
+        $("#version-form input").on('change', function () {
+          if (this.checked) {
+            onCheckboxSelect(this);
+          } else {
+            onCheckboxUnselect(this);
+          }
+        });
+      };
+      setCheckboxEvents();
+      toggleInputs();
+
+      var clickPageNav = function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'GET',
+            success: function(data) {
+              var rowDiv = $('#page-history-list', data);
+              var new_pagination = $('#pagination', data);
+
+              $('#pagination #next')[0].hidden = new_pagination.find('#next')[0].hidden;
+              $('#pagination #prev')[0].hidden = new_pagination.find('#prev')[0].hidden;
+
+              $('#page-history-list').replaceWith(rowDiv);
+
+              $("#selection-form input").each(function (index, element) {
+                var value = $(element).val();
+                $('#version-form input[value="' + value + '"]').prop('checked', true);
+              });
+
+              setCheckboxEvents();
+              toggleInputs();
+            },
+            error: function(data, textStatus, errorThrown) {
+              console.log('something went wrong: ' + textStatus + errorThrown)
+            }
+        });
+      };
+
+      $("#pagination #next a, #pagination #prev a").each(function(index, element) {
+       $(element).on("click", clickPageNav);
+      });
+    }
   }
 
   if( $("#last-edit").length ) {
