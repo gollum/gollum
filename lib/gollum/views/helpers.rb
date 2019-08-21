@@ -2,12 +2,12 @@ require 'json'
 
 module Precious
   module Views
-    
+
     module AppHelpers
       def extract_page_dir(path)
-        return path if @page_dir.to_s.empty?
-        @extract_path ||= "#{Pathname.new(@page_dir).cleanpath.to_s}/"
-        path.start_with?(@extract_path) ? path[@extract_path.length..-1] : path
+        return path unless @page_dir
+        @path_to_extract ||= "#{Pathname.new(@page_dir).cleanpath}/"
+        path.start_with?(@path_to_extract) ? path.slice(@path_to_extract.length, path.length) : path
       end
     end
 
@@ -54,7 +54,7 @@ module Precious
       end
 
       def page_route(page)
-        "#{base_url}/#{page}".gsub(/\/{2,}/, '/')
+        "#{base_url}/#{page}".gsub(/\/{2,}/, '/') # remove double slashes
       end
     end
 
