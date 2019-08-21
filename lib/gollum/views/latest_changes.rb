@@ -47,12 +47,6 @@ module Precious
         end
       end
 
-      def previous_link
-      end
-
-      def next_link
-      end
-
       # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
       def left_shift(int, shift)
         r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
