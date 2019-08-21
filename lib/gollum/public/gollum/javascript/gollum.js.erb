@@ -364,9 +364,21 @@ $(document).ready(function() {
     if( $("#page-history #pagination").length) {
 
       var maxSelected = 2;
+      var selectionColors = ["bg-green-light", "bg-red-light"];
 
       var toggleInputs = function () {
-        var numSelected = $("#selection-form input").length;
+        var numSelected = 0;
+        $("#selection-form input").each(function (index, element) {
+          var value = $(element).val();
+          var input = $('#version-form input[value="' + value + '"]');
+          input.prop('checked', true);
+          if (index == 0) {
+            input.closest("li").removeClass(selectionColors[1]).addClass(selectionColors[index]);
+          } else if (index == 1) {
+            input.closest("li").addClass(selectionColors[index]); 
+          }
+          numSelected = numSelected + 1;
+        });
         if (numSelected == maxSelected) {
           $('#version-form input:not(:checked)').prop('disabled', true);
           $('.history button.action-compare-revision').prop('disabled', false);
@@ -388,6 +400,7 @@ $(document).ready(function() {
 
       var onCheckboxUnselect = function( box ) {
         $('#selection-form #' + $(box).val()).remove();
+        $(box).closest("li").removeClass(selectionColors.join(" "));
         toggleInputs();
       };
 
@@ -412,15 +425,18 @@ $(document).ready(function() {
               var rowDiv = $('#page-history-list', data);
               var new_pagination = $('#pagination', data);
 
-              $('#pagination #next')[0].hidden = new_pagination.find('#next')[0].hidden;
-              $('#pagination #prev')[0].hidden = new_pagination.find('#prev')[0].hidden;
+              next = $('#pagination #next');
+              prev = $('#pagination #prev');
+              new_next = new_pagination.find('#next');
+              new_prev = new_pagination.find('#prev');
+
+              next[0].hidden = new_next[0].hidden;
+              prev[0].hidden = new_prev[0].hidden;
+
+              next.children('a').attr('href', new_next.children('a').attr('href'));
+              prev.children('a').attr('href', new_prev.children('a').attr('href'));
 
               $('#page-history-list').replaceWith(rowDiv);
-
-              $("#selection-form input").each(function (index, element) {
-                var value = $(element).val();
-                $('#version-form input[value="' + value + '"]').prop('checked', true);
-              });
 
               setCheckboxEvents();
               toggleInputs();
