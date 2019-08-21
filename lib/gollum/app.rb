@@ -388,7 +388,7 @@ module Precious
         unless @page.nil?
           @versions = @page.versions(
             per_page: @max_count,
-            page: @page_num,
+            page_num: @page_num,
             follow: settings.wiki_options.fetch(:follow_renames,
               ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true)
           )
@@ -402,7 +402,7 @@ module Precious
         @wiki = wiki_new
         @page_num = [params[:page_num].to_i, 1].max
         @max_count = settings.wiki_options.fetch(:pagination_count, 10)
-        @versions = @wiki.latest_changes(::Gollum::Page.log_pagination_options(per_page: @max_count, page: @page_num))
+        @versions = @wiki.latest_changes(::Gollum::Page.log_pagination_options(per_page: @max_count, page_num: @page_num))
         mustache :latest_changes
       end
 
