@@ -3,7 +3,7 @@ module Precious
     class Page < Layout
       include HasPage
 
-      attr_reader :content, :page, :header, :footer, :preview
+      attr_reader :content, :page, :header, :footer, :preview, :historical
       
       VALID_COUNTER_STYLES = ['decimal', 'decimal-leading-zero', 'arabic-indic', 'armenian', 'upper-armenian',
         'lower-armenian', 'bengali', 'cambodian', 'khmer', 'cjk-decimal', 'devanagari', 'georgian', 'gujarati', 'gurmukhi',
@@ -42,13 +42,13 @@ module Precious
       end
 
       def author
-        first = page.last_version
+        first = @version ? page.version : page.last_version
         return DEFAULT_AUTHOR unless first
         first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
       end
 
       def date
-        first = page.last_version
+        first = @version ? page.version : page.last_version
         return Time.now.strftime(DATE_FORMAT) unless first
         first.authored_date.strftime(DATE_FORMAT)
       end

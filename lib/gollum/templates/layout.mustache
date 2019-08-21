@@ -21,7 +21,7 @@
 	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "")
 	}
 	{{#page}}
-	  var pageFullPath = '{{url_path.source_location}}';
+	  var pageFullPath = '{{escaped_url_path}}';
 	{{/page}}
 
   </script>

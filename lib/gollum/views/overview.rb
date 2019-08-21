@@ -1,4 +1,4 @@
-require "pathname"
+require 'pathname'
 
 module Precious
   module Views
