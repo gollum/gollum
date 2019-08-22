@@ -1,6 +1,7 @@
 module Precious
   module Views
     class LatestChanges < Layout
+      include Pagination
 
       attr_reader :wiki
 

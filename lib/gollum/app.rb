@@ -17,6 +17,8 @@ require 'gollum/views/helpers'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
+require 'gollum/views/pagination'
+
 
 require File.expand_path '../helpers', __FILE__
 
@@ -342,7 +344,7 @@ module Precious
       post '/revert/*/:sha1/:sha2' do
         wikip = wiki_page(params[:splat].first)
         @path = wikip.path
-        @name = wiki.fullname
+        @name = wikip.fullname
         wiki  = wikip.wiki
         @page = wikip.page
         sha1  = params[:sha1]
@@ -355,8 +357,7 @@ module Precious
         else
           sha2, sha1 = sha1, "#{sha1}^" if !sha2
           @versions  = [sha1, sha2]
-          diffs      = wiki.repo.diff(@versions.first, @versions.last, @page.path)
-          @diff      = diffs.first
+          @diff      = wiki.full_reverse_diff_for(@page, @versions.first, @versions.last)
           @message   = "The patch does not apply."
           mustache :compare
         end
@@ -366,6 +367,9 @@ module Precious
         wiki           = wiki_new
         @name          = params[:page] || "Preview"
         @page          = wiki.preview_page(@name, params[:content], params[:format])
+        ['sidebar', 'header', 'footer'].each do |subpage|
+          @page.send("set_#{subpage}".to_sym, params[subpage]) if params[subpage]
+        end
         @content       = @page.formatted_data
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
         @mathjax       = wiki.mathjax
@@ -382,9 +386,15 @@ module Precious
         wikip     = wiki_page(params[:splat].first)
         @name     = wikip.fullname
         @page     = wikip.page
-        @page_num = [params[:page].to_i, 1].max
+        @page_num = [params[:page_num].to_i, 1].max
+        @max_count = settings.wiki_options.fetch(:pagination_count, 10)
         unless @page.nil?
-          @versions = @page.versions(:page => @page_num, :follow => settings.wiki_options.fetch(:follow_renames, ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true))
+          @versions = @page.versions(
+            per_page: @max_count,
+            page_num: @page_num,
+            follow: settings.wiki_options.fetch(:follow_renames,
+              ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true)
+          )
           mustache :history
         else
           redirect to("/")
@@ -393,8 +403,9 @@ module Precious
 
       get '/latest_changes' do
         @wiki = wiki_new
-        max_count = settings.wiki_options.fetch(:latest_changes_count, 10)
-        @versions = @wiki.latest_changes({:max_count => max_count})
+        @page_num = [params[:page_num].to_i, 1].max
+        @max_count = settings.wiki_options.fetch(:pagination_count, 10)
+        @versions = @wiki.latest_changes(::Gollum::Page.log_pagination_options(per_page: @max_count, page_num: @page_num))
         mustache :latest_changes
       end
 
@@ -426,8 +437,7 @@ module Precious
         @versions = [start_version, end_version]
         wiki      = wikip.wiki
         @page     = wikip.page
-        diffs     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
-        @diff     = diffs.first
+        @diff     = wiki.full_reverse_diff_for(@page, @versions.first, @versions.last)
         mustache :compare
       end
 
@@ -474,6 +484,7 @@ module Precious
         @name    = name
         @content = page.formatted_data
         @version = version
+        @historical = true
         @bar_side = wikip.wiki.bar_side
         @navbar   = true
         mustache :page

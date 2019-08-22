@@ -19,7 +19,7 @@ module Precious
 
       def lines
         lines = []
-        @diff.diff.split("\n")[2..-1].each_with_index do |line, line_index|
+        @diff.split("\n")[2..-1].each_with_index do |line, line_index|
           lines << { :line  => line,
                      :class => line_class(line),
                      :ldln  => left_diff_line_number(0, line),

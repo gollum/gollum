@@ -208,7 +208,8 @@
         }
 
         if ( EditorHas.dir() ) {
-          $('#function-dir').click(function( e ) {
+          $('#function-text-direction').click(function( e ) {
+            e.preventDefault();
             switchRtl(!window.ace_editor.session.$bidiHandler.$isRtl);
           });
         }
@@ -570,7 +571,7 @@
      *  @return boolean
      */
     dir: function() {
-      return ($('#gollum-editor #function-dir').length );
+      return ($('#gollum-editor #function-text-direction').length );
     },
 
 
@@ -634,7 +635,7 @@
             $(this).click( FunctionBar.evtFunctionButtonClick );
             $(this).removeClass('disabled');
           }
-          else if ( !['function-help', 'function-dir'].includes( $(this).attr('id') ) ) {
+          else if ( !['function-help', 'function-text-direction'].includes( $(this).attr('id') ) ) {
             $(this).addClass('disabled');
           }
         });

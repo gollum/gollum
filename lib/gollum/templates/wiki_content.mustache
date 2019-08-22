@@ -42,14 +42,19 @@
 
 
 	<div id="footer" class="pt-4">
+	  {{^historical}}
 		{{^preview}}
 		  <p id="last-edit"><a id="page-info-toggle" data-pagepath="{{escaped_url_path}}">When was this page last modified?</a></p>
 		  {{#allow_editing}}
 		    <p>
 		      <a id="delete-link" href="{{escaped_url_path}}" data-confirm="Are you sure you want to delete this page?"><span>Delete this Page</span></a>
 		    </p>
-	  {{/allow_editing}}
+	      {{/allow_editing}}
 		{{/preview}}
+	  {{/historical}}
+	  {{#historical}}
+	    <p>This version of the page was edited by <b>{{author}}</b> at {{date}}. <a href="{{full_url_path}}">View the most recent version.</a></p>
+	  {{/historical}}
 	</div>
 
 	

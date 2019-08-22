@@ -701,6 +701,23 @@ context "Frontend with lotr" do
     assert_match /not so big smelly creatures/, last_response.body
   end
 
+  test 'editable pages have footer' do
+    get 'Bilbo-Baggings'
+    assert_equal last_response.body.include?('delete-link'), false
+    assert_equal last_response.body.include?('page-info-toggle'), false
+  end
+
+  test 'show specific revision of page' do
+    old_sha = '5bc1aaec6149e854078f1d0f8b71933bbc6c2e43'
+    page = 'Bilbo-Baggins'
+    get "#{page}/#{old_sha}"
+    assert last_response.ok?
+    assert_equal last_response.body.include?('delete-link'), false
+    assert_equal last_response.body.include?('page-info-toggle'), false
+    assert last_response.body.include?('This version of the page was edited by <b>Tom Preston-Werner</b> at 2010-04-07')
+    assert last_response.body.include?("<a href=\"/Bilbo-Baggins.md\">View the most recent version.</a></p>")
+  end
+
   test "show revision of specific file" do
     old_sha = "df26e61e707116f81ebc6b935ec6d1676b7e96c4"
     update_sha = "f803c64d11407b23797325e3843f3f378b78f611"
