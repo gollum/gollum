@@ -22,10 +22,11 @@ module Precious
             :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
             :identicon => self._identicon_code(v.author.email),
             :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_page_dir(f)
-              { :file => page_path,
-                :link => "#{page_route(page_path)}/#{v.id}"
+            :files     => v.stats.files.map { |f|
+              new_path = extract_page_dir(f[:new_file])
+              { :file => new_path,
+                :link => "#{page_route(new_path)}/#{v.id}",
+                :renamed => f[:old_file] ? extract_page_dir(f[:old_file]) : nil
               }
             }
           }
