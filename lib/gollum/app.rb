@@ -206,10 +206,9 @@ module Precious
         contents = ::File.read(tempfile)
         reponame = "#{dir}/#{filename}.#{format}"
 
-        options = {
-            :message => "Uploaded file to #{dir}/#{reponame}",
-            :parent  => wiki.repo.head.commit,
-        }
+        options = { :message => "Uploaded file to #{dir}/#{reponame}" }
+        options[:parent] = wiki.repo.head.commit if wiki.repo.head
+
         author  = session['gollum.author']
         unless author.nil?
           options.merge! author
