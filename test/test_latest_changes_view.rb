@@ -16,6 +16,20 @@ context 'Precious::Views::LatestChanges' do
     Precious::App.set(:wiki_options, {:pagination_count => 10})
   end
 
+  test 'rename detection' do
+    versions = [OpenStruct.new(
+        :id     => 'fake',
+        :author => OpenStruct.new(:email => 'fake', :name => 'fake'),
+        :message => 'fake',
+        :authored_date => Time.now,
+        :stats => OpenStruct.new(:files => [{:new_file => 'new_path', :old_file => 'old_path', :new_additions => 1, :new_deletions => 1, :changes => 1}])
+      )]
+    view = Precious::Views::LatestChanges.new
+    view.instance_variable_set(:@versions, versions)
+    view.instance_variable_set(:@request, OpenStruct.new(:host => 'fake')) # dummy to generate gravatar icon
+    assert_equal view.versions[0][:files][0][:renamed], 'old_path'
+  end
+
   test 'displays_latest_changes' do
     get('/gollum/latest_changes')
     body = last_response.body
@@ -23,7 +37,7 @@ context 'Precious::Views::LatestChanges' do
     assert body.include?("Charles Pence</span>"), "/latest_changes should include Author Charles Pence"
     assert body.include?('1db89eb'), "/latest_changes should include the :pagination_count commit"
     assert !body.include?('a8ad3c0'), "/latest_changes should not include more than :pagination_count commits"
-    assert body.include?('<a href="Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e">Data-Two.csv</a>'), "/latest_changes include links to modified files in #{body}"
+    assert body.include?('<a href="/Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e">Data-Two.csv</a>'), "/latest_changes include links to modified files in #{body}"
     assert body.include?('<a href="/Hobbit.md/874f597a5659b4c3b153674ea04e406ff393975e">Hobbit.md</a>'), "/latest_changes should include links to modified pages in #{body}"
   end
 
