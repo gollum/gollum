@@ -2,72 +2,6 @@
 
 @import "_base", "_breakpoint", "_features";
 
-/*!
- *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome
- *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
- */
-@font-face {
-  font-family: 'FontAwesome';
-  src: asset-url('fontawesome-webfont.eot?v=4.0.3');
-  src: asset-url('fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), asset-url('fontawesome-webfont.woff?v=4.0.3') format('woff'), asset-url('fontawesome-webfont.ttf?v=4.0.3') format('truetype'), asset-url('fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-.fa {
-  display: inline-block;
-  font: normal normal 16px FontAwesome;
-  line-height: 1;
-  text-decoration: none;
-  @include font-smoothing(on);
-}
-
-.fa-link:before {
-  content: "\f0c1";
-}
-
-.fa-spinner:before {
-  content: "\f110";
-}
-
-.fa-spin {
-  @include generic-animation(spin 2s infinite linear);
-}
-@-moz-keyframes spin {
-  0% {
-    -moz-transform: rotate(0deg);
-  }
-  100% {
-    -moz-transform: rotate(359deg);
-  }
-}
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-  }
-}
-@-o-keyframes spin {
-  0% {
-    -o-transform: rotate(0deg);
-  }
-  100% {
-    -o-transform: rotate(359deg);
-  }
-}
-@keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
-}
-
 /* margin & padding reset*/
 * {
   @include reset-box-leave-border;
@@ -160,10 +94,6 @@ a {
       top: 0;
       left: 0;
       bottom: 0;
-
-      &:focus {
-        outline: none;
-      }
     }
 
     &[id].wiki-toc-anchor {
@@ -197,14 +127,12 @@ a {
     text-rendering: optimizeLegibility;
     @include font-smoothing(on);
 
-    .fa-link {
-      display: none;
-      text-decoration: none;
-      color: #000;
+    a.anchor {
+    
     }
 
     &:hover {
-      a.anchor .fa-link {
+      a.anchor {
         text-decoration: none;
         line-height: 1;
         padding-left: 8px;
