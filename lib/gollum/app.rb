@@ -173,8 +173,7 @@ module Precious
         wikip = wiki_page(params[:splat].first)
         @name = wikip.fullname
         @path = wikip.path
-        @upload_dest   = find_upload_dest(wikip.fullpath)
-
+        @upload_dest = find_upload_dest(wikip.fullpath)
         wiki = wikip.wiki
         @allow_uploads = wiki.allow_uploads
           if page = wikip.page
@@ -198,8 +197,22 @@ module Precious
           tempfile = params[:file][:tempfile]
         end
         halt 500 unless tempfile.is_a? Tempfile
+        
+        if wiki.per_page_uploads
+          # remove base_url and gollum/* subpath if necessary
+          dir = request.referer.
+                  sub(request.base_url, '').
+                  sub(/.*gollum\/[-\w]+\//, '')
+          # remove file extension 
+          dir = dir.sub(::File.extname(dir), '')
+          dir = ::File.join("uploads", dir)
+        else
+          # store all uploads together
+          dir = 'uploads'
+        end
+        halt 500 if dir.include?('..')
+        halt 500 unless Pathname(dir).relative?
 
-        dir      = wiki.per_page_uploads ? params[:upload_dest] : 'uploads'
         ext      = ::File.extname(fullname)
         format   = ext.split('.').last || 'txt'
         filename = ::File.basename(fullname, ext)
@@ -219,9 +232,11 @@ module Precious
         begin
           wiki.write_file(reponame, contents, options)
           redirect to(request.referer)
-        rescue Gollum::DuplicatePageError, Gollum::IllegalDirectoryPath => e
+        rescue Gollum::IllegalDirectoryPath => e
           @message = e.message
           mustache :error
+        rescue Gollum::DuplicatePageError
+          halt 409 # Signal conflict
         end
       end
 
