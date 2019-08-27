@@ -261,7 +261,11 @@
               window.ace_editor.insert(text);
             },
             error: function(r, textStatus, errorThrown) {
-              alert('Error uploading file: ' + textStatus + ' ' + errorThrown);
+              if (data.status == 409) {
+                alert('This file already exists.');
+              } else {
+                alert('Error uploading file: ' + textStatus + ' ' + errorThrown);    
+              }
               $editorBody.removeClass('uploading');
             }
           });
