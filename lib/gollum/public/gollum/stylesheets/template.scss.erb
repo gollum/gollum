@@ -79,26 +79,34 @@ a {
   overflow: hidden;
   word-wrap: break-word;
 
-  .anchorjs-link {
+  .anchor {
     display: inline-block;
+    position: absolute;
+    opacity: 0;
     background: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>') no-repeat;
-    margin-left: -0.8em !important;
-    margin-top: 0.4em;
+    background-size: 0.6em 1.35em;
+    padding-right: 0.5em;
+    padding-top: 0.4em;
+    margin-left: -0.8em;
     width: 1em;
-    height: 0.6em;
+    height: 1em;
     text-decoration: none;
     transition-property: opacity;
-        transition: 0.1s;
+    transition: 0.1s;
     transition-delay: 0.5s;
   }
 
-  .anchorjs-link.edit {
+  *:hover > .anchor, .anchor:focus{
+    opacity: 1;
+  }
+
+  .anchor.edit {
     margin-left: 2em !important;
     margin-top: 0.5em;
     height: 0.5em;
     background: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>') no-repeat;
   }
-  
+
   a {
     &.absent {
       color: $red;
