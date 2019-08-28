@@ -482,7 +482,34 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
-  $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+  if($('#wiki-content').length ){
+    // Set text direction auto
+    $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+
+    // Setup anchors with AnchorJS
+
+    // Normal link anchors first
+    anchors.options = {
+      icon: '',
+      placement: 'left',
+      visible: 'hover'
+    };
+    var anchorSelectors = [];
+    //h1-h6
+    for (var i = 1; i < 7; i++){
+      anchorSelectors.push('.markdown-body h' + i.toString());
+    }
+    anchors.add(anchorSelectors.join(', '));
+
+    // Copy anchors for each editable header and give it the new anchor the 'edit' class, to display a link to edit the section
+    $('a.anchorjs-link').each(function (index, anchor) {
+      header = $(anchor).closest(':header');
+      if (header.hasClass('editable')){
+        var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
+        $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
+      }
+    });
+  }
 
   if( $('#wiki-history').length ){
     var lookup = {};

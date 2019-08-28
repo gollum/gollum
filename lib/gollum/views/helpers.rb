@@ -51,6 +51,13 @@ module Precious
         def rocticon(symbol, parameters = {})
           Octicons::Octicon.new(symbol, parameters).to_svg
         end
+
+        def rocticon_css(symbol, parameters = {})
+          html = rocticon(symbol, parameters.merge({xmlns: 'http://www.w3.org/2000/svg'}))
+          html.gsub!(/\s*(width|height)=["']\d+["']\s*/, ' ') # remove height and width attributes so it can be set via CSS
+          html.gsub!(/\s+/, ' ')
+          html.force_encoding('UTF-8')
+        end
         
         def octicon
           lambda do |args|

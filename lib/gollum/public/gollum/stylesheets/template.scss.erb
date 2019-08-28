@@ -78,22 +78,30 @@ a {
   line-height: 1.7;
   overflow: hidden;
   word-wrap: break-word;
+
+  .anchorjs-link {
+    display: inline-block;
+    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>') no-repeat;
+    margin-left: -0.8em !important;
+    margin-top: 0.4em;
+    width: 1em;
+    height: 0.6em;
+    text-decoration: none;
+    transition-property: opacity;
+        transition: 0.1s;
+    transition-delay: 0.5s;
+  }
+
+  .anchorjs-link.edit {
+    margin-left: 2em !important;
+    margin-top: 0.5em;
+    height: 0.5em;
+    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>') no-repeat;
+  }
   
   a {
     &.absent {
       color: $red;
-    }
-
-    &.anchor {
-      display: block;
-      padding-right: 6px;
-      padding-left: 30px;
-      margin-left: -30px;
-      cursor: pointer;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
     }
 
     &[id].wiki-toc-anchor {
@@ -118,30 +126,6 @@ a {
   }
 
   h1, h2, h3, h4, h5, h6 {
-    margin: 1em 0 15px;
-    padding: 0;
-    font-weight: bold;
-    line-height: 1.7;
-    cursor: text;
-    position: relative;
-    text-rendering: optimizeLegibility;
-    @include font-smoothing(on);
-
-    a.anchor {
-    
-    }
-
-    &:hover {
-      a.anchor {
-        text-decoration: none;
-        line-height: 1;
-        padding-left: 8px;
-        margin-left: -30px;
-        top: 15%;
-        display: inline-block;
-      }
-    }
-
     tt, code {
       font-size: inherit;
     }
@@ -152,9 +136,7 @@ a {
   }
 
   h1 {
-    font-size: 2.5em;
     border-bottom: $border-standard;
-    color: #000;
     margin-top: 20px;
     margin-bottom: 10px;
 
@@ -164,9 +146,7 @@ a {
   }
 
   h2 {
-    font-size: 2em;
     border-bottom: 1px solid #eee;
-    color: #000;
   }
 
   h3 {
