@@ -54,7 +54,7 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
