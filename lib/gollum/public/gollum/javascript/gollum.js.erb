@@ -486,7 +486,7 @@ $(document).ready(function() {
     // Set text direction auto
     $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 
-    // Copy anchors for each editable header and give it the new anchor the 'edit' class, to display a link to edit the section
+    // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
     $('a.anchor').each(function (index, anchor) {
       header = $(anchor).closest(':header');
       if (header.hasClass('editable')){

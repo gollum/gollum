@@ -52,11 +52,11 @@ module Precious
           Octicons::Octicon.new(symbol, parameters).to_svg
         end
 
+        # Well-formed SVG with XMLNS and height/width removed, for use in CSS
         def rocticon_css(symbol, parameters = {})
-          html = rocticon(symbol, parameters.merge({xmlns: 'http://www.w3.org/2000/svg'}))
-          html.gsub!(/\s*(width|height)=["']\d+["']\s*/, ' ') # remove height and width attributes so it can be set via CSS
-          html.gsub!(/\s+/, ' ')
-          html.force_encoding('UTF-8')
+          octicon = Octicons::Octicon.new(symbol, parameters.merge({xmlns: 'http://www.w3.org/2000/svg'}))
+          [:width, :height].each {|option| octicon.options.delete(option)}
+          octicon.to_svg
         end
         
         def octicon
