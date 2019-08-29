@@ -20,8 +20,7 @@ module Precious
             :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
             :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
             :date      => v.authored_date.strftime("%B %d, %Y"),
-            :gravatar  => self._gravatar_code(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
+            :user_icon => self.user_icon_code(v.author.email),
             :date_full => v.authored_date,
             :files     => v.stats.files.map { |f,*rest|
               page_path = extract_renamed_path_destination(f)

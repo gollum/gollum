@@ -18,6 +18,7 @@ module Precious
           self.class.class_variable_get(:@@base_url)
         end
         include ::Precious::Views::RouteHelpers
+        include ::Precious::Views::OcticonHelpers
       end
       env
     end
