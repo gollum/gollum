@@ -371,6 +371,39 @@ context "Frontend" do
     page = @wiki.page(name)
     assert_not_equal 'abc', page.raw_data
   end
+  
+  test "uploading is not allowed unless explicitly enabled" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+    assert_equal 405, last_response.status
+  end
+  
+  test "upload a file" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true})
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+     
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    file = @wiki.file("uploads/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false})
+  end
+  
+  test "guard against uploading an existing file" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true})
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+    assert_equal 302, last_response.status
+    # Post the same file a second time; should result in conflict
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+    assert_equal 409, last_response.status
+    Precious::App.set(:wiki_options, {allow_uploads: false})
+  end
+  
 
   test "delete a page" do
     name = "deleteme"
