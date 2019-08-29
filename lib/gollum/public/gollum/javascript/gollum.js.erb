@@ -484,7 +484,8 @@ $(document).ready(function() {
 
   $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 
-  if( $('#wiki-history').length ){
+  if( $('#wiki-history').length || $('#page-history').length){
+    console.log('IDENTICON');
     var lookup = {};
     $('img.identicon').each(function(index, element){
       var $item   = $(element);

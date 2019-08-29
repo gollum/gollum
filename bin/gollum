@@ -151,7 +151,7 @@ MSG
   end
   opts.on("--user-icons [MODE]", [:gravatar, :identicon, :none], "Use specific user-icons for history view.",
     "Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.") do |mode|
-    wiki_options[:user_icons] = mode
+    wiki_options[:user_icons] = mode.to_s
   end
   opts.on("--template-dir [PATH]", "Specify custom mustache template directory.") do |path|
     wiki_options[:template_dir] = path
