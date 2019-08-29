@@ -50,3 +50,10 @@ https://github.com/donpark/identicon/blob/master/README
 
   lib/gollum/public/gollum/javascript/identicon_canvas.js
 
+---
+
+CSS Spinner by Franz Heidl is used under the MIT license
+
+https://github.com/franzheidl/spinners
+
+  lib/gollum/public/gollum/stylesheets/_spinners.scss
