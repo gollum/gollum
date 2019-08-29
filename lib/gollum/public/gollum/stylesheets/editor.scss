@@ -264,11 +264,6 @@ a#function-search { @include editor-button(16); }
 #gollum-editor-body-ace {
   & + div {
     display: none;
-    font-size: 1.5em;
-
-    > i {
-      font-size: 1em;
-    }
   }
 
   &.dragging {
@@ -276,7 +271,7 @@ a#function-search { @include editor-button(16); }
   }
 
   &.uploading {
-    opacity: 0.5;
+    opacity: 1;
     
     & + div {
       display: block;

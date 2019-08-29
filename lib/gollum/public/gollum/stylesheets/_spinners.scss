@@ -1,0 +1,245 @@
+/*
+================================================================================
+SPINNERS
+================================================================================
+A Sass mixin to generate a pure CSS3 loading/busy indicator.
+https://github.com/franzheidl/spinners
+Franz Heidl 2014
+MIT License
+--------------------------------------------------------------------------------
+USAGE
+
+Default:
+
+.my-spinner {
+ @include spinner();
+}
+
+
+Custom:
+
+.my-spinner {
+ @include spinner(1.25em, 3px solid #555, .7s, background rgba(0, 0, 0, .2);
+}
+
+All arguments are optional.
+
+Acceppts any valid CSS dimensional declaration, e.g px, em, rem as an argument for size.
+
+Use either shorthand border declarations or individual 'border-[property] [value]' (no colon!) pairs for the style.
+
+Pass any number of seconds referring to the duration of one full rotation for animation speed.
+
+--------------------------------------------------------------------------------
+*/
+
+
+@mixin spinner-keyframes {
+  @-webkit-keyframes spinner-animation {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+  @-moz-keyframes spinner-animation {
+    0% {
+      -moz-transform: rotate(0deg);
+    }
+    100% {
+      -moz-transform: rotate(360deg);
+    }
+  }
+  @-ms-keyframes spinner-animation {
+    0% {
+      -ms-transform: rotate(0deg);
+    }
+    100% {
+      -ms-transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes spinner-animation {
+    0% {
+      -o-transform: rotate(0deg);
+    }
+    100% {
+      -o-transform: rotate(100deg);
+    }
+  }
+  @keyframes spinner-animation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+
+
+@include spinner-keyframes();
+
+
+
+@mixin spinner($args...) {
+  $prefixes: -webkit- -moz- -o- -ms- "";
+  $dimensional-units: ('px', 'em', 'rem', '%', 'ex');
+  $border-props: 'border-width' 'border-style' 'border-color';
+  $border-styles: solid dotted dashed double;
+  $size: 1em;
+  $border-width: 3px;
+  $border-style: solid;
+  $border-color: #1277c2;
+  $border: $border-width $border-style $border-color;
+  $duration: .65s;
+  $background: transparent; //
+  
+  // Parse arguments:
+  @if $args {
+    @each $arg in $args {
+      @if length($arg) == 1 {
+        @if type-of($arg) == number {
+          @if unit($arg) != "" {
+            @if unit($arg) == 's' {
+              $duration: $arg;
+            }
+            @else if isIn($dimensional-units, unit($arg)) {
+              $size: $arg;
+            }
+            @else {
+              @warn "Spinner: \"#{$arg}\" is not a valid size or duration declaration!";
+            }
+          }
+          @else {
+            @warn "Spinner: \"#{$arg}\" is not a valid size or duration declaration!";
+          }
+        }
+      }
+      @else if length($arg) == 2 {
+        $prop: nth($arg, 1);
+        $val: nth($arg, 2);
+        @if isIn($border-props, $prop) {
+          @if $prop == 'border-width' {
+            @if unit($val) == 'px' {
+              $border-width: $val;
+            }
+            @else {
+              @warn "Spinner: \"#{unit($val)}\" is not a valid border-width! Using default border-width.";
+            }
+          }
+          @else if $prop == 'border-style' {
+            @if isIn($border-styles, $val) {
+              $border-style: $val;
+            }
+            @else {
+              @warn "Spinner: \"#{$val}\" is not a valid border-style! Using default border-style.";
+            }
+          }
+          @else if $prop == 'border-color' {
+            @if type-of($val) == color {
+              $border-color: $val;
+            }
+            @else {
+              @warn "Spinner: \"#{$val}\" is not a valid border-color! Using default border-color.";
+            }
+          }
+        }
+        @else if $prop == 'background' {
+          @if type-of($val) == color {
+            $background: $val;
+          }
+          @else {
+            @warn "Spinner: \"#{nth($val)}\" is not a valid color for background! Using default \"transparent\".";
+          }
+        }
+        @else {
+          @warn "Spinner: \"#{nth($arg, 1)}\" is not a valid border property! Using default border.";
+        }
+        $border: $border-width $border-style $border-color;
+      }
+      @else if length($arg) == 3 {
+        @if isValidBorder($arg) {
+          $border: $arg;
+        }
+        @else {
+          @warn "Spinner: \"#{$arg}\" is not a valid shorthand border declaration! Using default border.";
+        }
+      }
+    }
+  }
+  
+  
+  
+  background-color: transparent;
+  border: $border;
+  border-radius: 50%;
+  border-top-color: $background;
+  border-right-color: $background;
+  width: $size;
+  height: $size;
+  display: inline-block;
+  vertical-align: middle;
+  @each $prefix in $prefixes {
+    #{$prefix}box-sizing: border-box;
+  }
+  @each $prefix in $prefixes {
+    #{$prefix}animation: spinner-animation $duration infinite linear;
+  }
+}
+
+
+
+@function isValidBorder($border) {
+  $validBorderTypes: color string number;
+  $borderStyles: solid dotted dashed double;
+  $validBorder: false;
+  $types: ();
+  
+  @if length($border) == length($validBorderTypes) {
+    @each $val in $border {
+      @if type-of($val) == number {
+        @if unit($val) == "" {
+          @return false;
+        }
+      }
+      @else if type-of($val) == string {
+        @if not isIn($borderStyles, $val) {
+          @return false;
+        }
+      }
+      $types: append($types, type-of($val));
+    }
+    $validBorder: hasIdenticalValues($validBorderTypes, $types);
+  }
+  
+  @return $validBorder;
+}
+
+
+
+@function hasIdenticalValues($arr1, $arr2) {
+  $id: false;
+  @each $val in $arr1 {
+    @if isIn($arr2, $val) {
+      $id: true;
+    }
+    @else {
+      @return false;
+    }
+  }
+  @return $id;
+}
+
+
+
+@function isIn($arr1, $val) {
+  $hasVal: false;
+  @each $item in $arr1 {
+    @if $item == $val {
+      $hasVal: true;
+    }
+  }
+  @return $hasVal;
+}

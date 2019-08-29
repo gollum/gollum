@@ -2,72 +2,6 @@
 
 @import "_base", "_breakpoint", "_features";
 
-/*!
- *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome
- *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
- */
-@font-face {
-  font-family: 'FontAwesome';
-  src: asset-url('fontawesome-webfont.eot?v=4.0.3');
-  src: asset-url('fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), asset-url('fontawesome-webfont.woff?v=4.0.3') format('woff'), asset-url('fontawesome-webfont.ttf?v=4.0.3') format('truetype'), asset-url('fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-.fa {
-  display: inline-block;
-  font: normal normal 16px FontAwesome;
-  line-height: 1;
-  text-decoration: none;
-  @include font-smoothing(on);
-}
-
-.fa-link:before {
-  content: "\f0c1";
-}
-
-.fa-spinner:before {
-  content: "\f110";
-}
-
-.fa-spin {
-  @include generic-animation(spin 2s infinite linear);
-}
-@-moz-keyframes spin {
-  0% {
-    -moz-transform: rotate(0deg);
-  }
-  100% {
-    -moz-transform: rotate(359deg);
-  }
-}
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-  }
-}
-@-o-keyframes spin {
-  0% {
-    -o-transform: rotate(0deg);
-  }
-  100% {
-    -o-transform: rotate(359deg);
-  }
-}
-@keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
-}
-
 /* margin & padding reset*/
 * {
   @include reset-box-leave-border;
@@ -144,26 +78,38 @@ a {
   line-height: 1.7;
   overflow: hidden;
   word-wrap: break-word;
-  
+
+  .anchor {
+    display: inline-block;
+    position: absolute;
+    opacity: 0;
+    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>') no-repeat;
+    background-size: 0.6em 1.35em;
+    padding-right: 0.5em;
+    padding-top: 0.4em;
+    margin-left: -0.8em;
+    width: 1em;
+    height: 1em;
+    text-decoration: none;
+    transition-property: opacity;
+    transition: 0.1s;
+    transition-delay: 0.5s;
+  }
+
+  *:hover > .anchor, .anchor:focus{
+    opacity: 1;
+  }
+
+  .anchor.edit {
+    margin-left: 2em !important;
+    margin-top: 0.5em;
+    height: 0.5em;
+    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>') no-repeat;
+  }
+
   a {
     &.absent {
       color: $red;
-    }
-
-    &.anchor {
-      display: block;
-      padding-right: 6px;
-      padding-left: 30px;
-      margin-left: -30px;
-      cursor: pointer;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-
-      &:focus {
-        outline: none;
-      }
     }
 
     &[id].wiki-toc-anchor {
@@ -188,32 +134,6 @@ a {
   }
 
   h1, h2, h3, h4, h5, h6 {
-    margin: 1em 0 15px;
-    padding: 0;
-    font-weight: bold;
-    line-height: 1.7;
-    cursor: text;
-    position: relative;
-    text-rendering: optimizeLegibility;
-    @include font-smoothing(on);
-
-    .fa-link {
-      display: none;
-      text-decoration: none;
-      color: #000;
-    }
-
-    &:hover {
-      a.anchor .fa-link {
-        text-decoration: none;
-        line-height: 1;
-        padding-left: 8px;
-        margin-left: -30px;
-        top: 15%;
-        display: inline-block;
-      }
-    }
-
     tt, code {
       font-size: inherit;
     }
@@ -224,9 +144,7 @@ a {
   }
 
   h1 {
-    font-size: 2.5em;
     border-bottom: $border-standard;
-    color: #000;
     margin-top: 20px;
     margin-bottom: 10px;
 
@@ -236,9 +154,7 @@ a {
   }
 
   h2 {
-    font-size: 2em;
     border-bottom: 1px solid #eee;
-    color: #000;
   }
 
   h3 {

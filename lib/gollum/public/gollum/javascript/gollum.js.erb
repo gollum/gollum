@@ -459,10 +459,13 @@ $(document).ready(function() {
         url: routePath('last_commit_info'),
         data: {path: $("#page-info-toggle").data('pagepath')},
         success: function ( data ) {
+          $("#last-edit").next(".dotted-spinner").toggleClass('hidden');
+          $("#last-edit-in-progress").remove();
           $("#last-edit").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
         }
       });
-      $("#last-edit").html('<i class="fa fa-spinner fa-spin"></i> Getting commit info...');
+      $("#last-edit").next(".dotted-spinner").toggleClass('hidden').after('<span id="last-edit-in-progress"> Getting commit info...</span>');
+      $("#page-info-toggle").toggle();
     })
   }
 
@@ -482,7 +485,19 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
-  $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+  if($('#wiki-content').length ){
+    // Set text direction auto
+    $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+
+    // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
+    $('a.anchor').each(function (index, anchor) {
+      header = $(anchor).closest(':header');
+      if (header.hasClass('editable')){
+        var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
+        $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
+      }
+    });
+  }
 
   if( $('#wiki-history').length ){
     var lookup = {};
