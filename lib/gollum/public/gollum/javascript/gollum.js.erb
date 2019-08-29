@@ -4,8 +4,8 @@
 function brokenAvatarImage(image){
   image.onerror = '';
   image.src = 'data:image/svg+xml;utf8,<%= rocticon_css(:person) %>';
-  image.height = "20"
-  image.width = "20"
+  image.height = '20';
+  image.width = '20';
   return true;
 }
 
