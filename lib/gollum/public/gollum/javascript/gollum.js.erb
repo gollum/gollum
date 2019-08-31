@@ -460,12 +460,11 @@ $(document).ready(function() {
         data: {path: $("#page-info-toggle").data('pagepath')},
         success: function ( data ) {
           $("#last-edit").next(".dotted-spinner").toggleClass('hidden');
-          $("#last-edit-in-progress").remove();
-          $("#last-edit").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
+          $("#last-edit-in-progress").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
         }
       });
-      $("#last-edit").next(".dotted-spinner").toggleClass('hidden').after('<span id="last-edit-in-progress"> Getting commit info...</span>');
-      $("#page-info-toggle").toggle();
+      $("#last-edit").next(".dotted-spinner").toggleClass('hidden')
+      $("#page-info-toggle").before('<span id="last-edit-in-progress">&nbsp;Getting commit info...</span>').remove();
     })
   }
 
