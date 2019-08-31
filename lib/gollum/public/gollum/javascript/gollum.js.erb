@@ -4,8 +4,6 @@
 function brokenAvatarImage(image){
   image.onerror = '';
   image.src = 'data:image/svg+xml;utf8,<%= rocticon_css(:person) %>';
-  image.height = '20';
-  image.width = '20';
   return true;
 }
 
@@ -496,7 +494,6 @@ $(document).ready(function() {
   if( $('#wiki-history').length || $('#page-history').length){
     var options = {
       format: 'svg',
-      size: 20,
       background: [255, 255, 255, 255] // rgba white
     };
     $('img.identicon').each(function(index, element){
