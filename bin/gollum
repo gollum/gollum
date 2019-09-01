@@ -149,8 +149,8 @@ MSG
   opts.on("--no-display-metadata", "Do not render metadata tables in pages.") do
     wiki_options[:display_metadata] = false
   end
-  opts.on("--user-icons [MODE]", [:gravatar, :identicon, :none], "Use specific user-icons for history view.",
-    "Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.") do |mode|
+  opts.on("--user-icons [MODE]", [:gravatar, :identicon], "Use specific user-icons for history view.",
+    "Can be set to 'gravatar' or 'identicon'. Default: standard avatar.") do |mode|
     wiki_options[:user_icons] = mode.to_s
   end
   opts.on("--template-dir [PATH]", "Specify custom mustache template directory.") do |path|
