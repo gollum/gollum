@@ -17,6 +17,7 @@ require 'gollum/views/helpers'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
+require 'gollum/views/has_user_icons'
 require 'gollum/views/pagination'
 
 
@@ -397,11 +398,12 @@ module Precious
       end
 
       get '/history/*' do
-        wikip     = wiki_page(params[:splat].first)
-        @name     = wikip.fullname
-        @page     = wikip.page
-        @page_num = [params[:page_num].to_i, 1].max
+        wikip      = wiki_page(params[:splat].first)
+        @name      = wikip.fullname
+        @page      = wikip.page
+        @page_num  = [params[:page_num].to_i, 1].max
         @max_count = settings.wiki_options.fetch(:pagination_count, 10)
+        @wiki      = @page.wiki
         unless @page.nil?
           @versions = @page.versions(
             per_page: @max_count,
