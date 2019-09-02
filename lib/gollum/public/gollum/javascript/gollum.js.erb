@@ -119,6 +119,7 @@ $(document).ready(function() {
   }
 
   if ($('#minibutton-upload-page').length) {
+    new ClipboardJS('#ClipboardJSlink');
     $('#minibutton-upload-page').parent().removeClass('jaws');
     $('#minibutton-upload-page').click(function(e) {
       e.preventDefault();
@@ -161,7 +162,10 @@ $(document).ready(function() {
       $('#gollum-dialog-action-ok').attr('disabled', true);
       $('input:file').on('change', function() {
         if ($(this).val()) {
-          news = 'Your uploaded file will be accessible at<br>/' + uploadDest + '/' + $('input[type=file]').val().split('\\').pop();
+          filename = $('input[type=file]').val().split('\\').pop();
+          upload_path = '/' + uploadDest + '/' + filename;
+          clipboard_button = '<button class="btn btn-sm mb-2" id="ClipboardJSlink" data-clipboard-text="' + upload_path + '"><%=rocticon('clippy')%></button>'
+          news = 'Your uploaded file will be accessible at<br>' + clipboard_button + '&nbsp;' + upload_path;
           $(".context").html(news);
           $('#gollum-dialog-action-ok').attr('disabled', false);
 

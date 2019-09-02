@@ -16,8 +16,16 @@ https://github.com/stewartlord/identicon.js/blob/master/README.md
 
 ---
 
-CSS Spinner by Franz Heidl is used under the MIT license
+CSS Spinner by Franz Heidl is used under the MIT license.
 
 https://github.com/franzheidl/spinners
 
   lib/gollum/public/gollum/stylesheets/_spinners.scss
+
+---
+
+ClipboardJS is used under the MIT license.
+
+https://github.com/zenorocha/clipboard.js
+
+  lib/gollum/public/gollum/javascript/clipboard.min.js
