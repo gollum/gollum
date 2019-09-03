@@ -198,12 +198,14 @@ module Precious
           tempfile = params[:file][:tempfile]
         end
         halt 500 unless tempfile.is_a? Tempfile
-        
+
         if wiki.per_page_uploads
           # remove base_url and gollum/* subpath if necessary
           dir = request.referer.
                   sub(request.base_url, '').
                   sub(/.*gollum\/[-\w]+\//, '')
+          # remove base path if it is set
+          dir = dir.sub(wiki.base_path, '') if wiki.base_path
           # remove file extension 
           dir = dir.sub(::File.extname(dir), '')
           dir = ::File.join("uploads", dir)
