@@ -375,7 +375,7 @@ context "Frontend" do
   test "uploading is not allowed unless explicitly enabled" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close
-    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
     assert_equal 405, last_response.status
   end
   
@@ -384,7 +384,7 @@ context "Frontend" do
     temp_upload_file.close
     Precious::App.set(:wiki_options, {allow_uploads: true})
   
-    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
   
     assert_equal 302, last_response.status # redirect is expected
     @wiki.clear_cache
@@ -397,7 +397,7 @@ context "Frontend" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close
     Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
-    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(temp_upload_file)}, {'HTTP_REFERER' => 'http://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
     
     assert_equal 302, last_response.status # redirect is expected
     @wiki.clear_cache
@@ -411,7 +411,7 @@ context "Frontend" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close
     Precious::App.set(:wiki_options, {base_path: 'base', allow_uploads: true, per_page_uploads: true})
-    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(temp_upload_file)}, {'HTTP_REFERER' => 'http://localhost:4567/base/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/base/Home.md', 'HTTP_HOST' => 'localhost:4567'}
     
     assert_equal 302, last_response.status # redirect is expected
     @wiki.clear_cache
@@ -426,15 +426,14 @@ context "Frontend" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close
     Precious::App.set(:wiki_options, {allow_uploads: true})
-    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
     assert_equal 302, last_response.status
     # Post the same file a second time; should result in conflict
-    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
     assert_equal 409, last_response.status
     Precious::App.set(:wiki_options, {allow_uploads: false})
   end
   
-
   test "delete a page" do
     name = "deleteme"
     post "/gollum/create", :content => 'abc', :page => name,
