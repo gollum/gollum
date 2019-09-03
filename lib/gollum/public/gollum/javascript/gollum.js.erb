@@ -340,7 +340,9 @@ $(document).ready(function() {
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
-    $.GollumEditor();
+    $.GollumEditor({
+      section: window.location.hash.substr(1)
+    });
     $("#gollum-editor-submit").click( function(e) {
       e.preventDefault();
       // Prevent button from being clicked again
@@ -499,14 +501,16 @@ $(document).ready(function() {
     // Set text direction auto
     $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 
-    // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
-    $('a.anchor').each(function (index, anchor) {
-      header = $(anchor).closest(':header');
-      if (header.hasClass('editable')){
-        var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
-        $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
-      }
-    });
+    if ($.markupSupportsEditableSections(pageFormat)){
+      // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
+      $('a.anchor').each(function (index, anchor) {
+        header = $(anchor).closest(':header');
+        if (header.hasClass('editable')){
+          var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
+          $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
+        }
+      });
+    }
   }
 
   if( $('#wiki-history').length || $('#page-history').length){
