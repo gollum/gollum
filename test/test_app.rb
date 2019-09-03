@@ -379,17 +379,47 @@ context "Frontend" do
     assert_equal 405, last_response.status
   end
   
-  test "upload a file" do
+  test "upload a file with mode dir" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close
     Precious::App.set(:wiki_options, {allow_uploads: true})
+  
     post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(temp_upload_file)
-     
+  
     assert_equal 302, last_response.status # redirect is expected
     @wiki.clear_cache
     file = @wiki.file("uploads/#{::File.basename(temp_upload_file.path)}")
     assert_equal 'abc', file.raw_data
     Precious::App.set(:wiki_options, {allow_uploads: false})
+  end
+
+  test "upload a file with mode page" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(temp_upload_file)}, {'HTTP_REFERER' => 'http://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: Home), based on referer
+    file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
+  end
+  
+  test "upload a file with mode page and base-path (base) enabled" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {base_path: 'base', allow_uploads: true, per_page_uploads: true})
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(temp_upload_file)}, {'HTTP_REFERER' => 'http://localhost:4567/base/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: Home), based on referer, ignoring base-path (base)
+    file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
+    assert_not_nil file
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
   
   test "guard against uploading an existing file" do
