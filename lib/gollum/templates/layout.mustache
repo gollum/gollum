@@ -18,7 +18,7 @@
 	var uploadDest = 'uploads';
 	var perPageUploads = '{{per_page_uploads}}';
 	if (perPageUploads == 'true') {
-	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "")
+	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "").replace(baseUrl, "")
 	}
 	{{#page}}
 	  var pageFullPath = '{{escaped_url_path}}';
