@@ -304,12 +304,14 @@ $(document).ready(function() {
   }
 
   if( $('.tabnav-tabs').length ){
-    $(".tabnav-tab").click( function() {
+    $(".tabnav-tab").click( function(e) {
+      e.preventDefault();
       if( ! $(this).hasClass('selected')) {
         tab_id = $(this).attr('id');
         if (tab_id == 'preview') {
           var formData = new FormData($('#gollum-editor-form').get(0));
           var paths = window.location.pathname.split('/');
+          var sectionAnchor = window.location.hash.substr(1);
           formData.append('page', paths[ paths.length - 1 ] || '')
           $.ajax({
             url: routePath('preview'),
@@ -320,6 +322,9 @@ $(document).ready(function() {
             success: function(data) {
               var mainDiv = $('#wiki-wrapper', data);
               $('.tabnav-div#preview-content').html(mainDiv);
+              if (sectionAnchor = $('.tabnav-div#preview-content ' + '#' + sectionAnchor)[0]) { 
+                sectionAnchor.scrollIntoView();
+              }
             },
             error: function(data, textStatus, errorThrown) {
               console.log('something went wrong: ' + textStatus + errorThrown);
@@ -497,7 +502,7 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
-  if($('#wiki-content').length ){
+  if($('.markdown-body').length ){
     // Set text direction auto
     $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 
