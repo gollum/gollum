@@ -322,8 +322,10 @@ $(document).ready(function() {
             success: function(data) {
               var mainDiv = $('#wiki-wrapper', data);
               $('.tabnav-div#preview-content').html(mainDiv);
-              if (sectionAnchor = $('.tabnav-div#preview-content ' + '#' + sectionAnchor)[0]) { 
-                sectionAnchor.scrollIntoView();
+              if (sectionAnchor ) { 
+                if ( sectionHeading = $('.tabnav-div#preview-content ' + '#' + sectionAnchor)[0] ) {
+                  sectionHeading.scrollIntoView();
+                }
               }
             },
             error: function(data, textStatus, errorThrown) {
