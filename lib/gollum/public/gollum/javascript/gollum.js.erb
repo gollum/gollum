@@ -323,7 +323,7 @@ $(document).ready(function() {
               var mainDiv = $('#wiki-wrapper', data);
               $('.tabnav-div#preview-content').html(mainDiv);
               if (sectionAnchor ) { 
-                if ( sectionHeading = $('.tabnav-div#preview-content ' + '#' + sectionAnchor)[0] ) {
+                if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
                   sectionHeading.scrollIntoView();
                 }
               }
