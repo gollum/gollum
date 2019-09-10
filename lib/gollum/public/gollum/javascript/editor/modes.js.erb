@@ -63,6 +63,26 @@ var UMLStart = {
   next:  "<%= uml_rule_id %>"
 };
 
+// Markdown should also recognise ~~~ style fenced codeblocks.
+<%
+md_codeblock_rule_name = 'MarkdownCodeBlock'
+md_codeblock_rule_id = 'md_codeblock';
+%>
+var <%= md_codeblock_rule_name %> = [{
+  token: "support.function",
+  regex: /^( {0,3})(~~[~]+)\s*$/,
+  next:  "start"
+  },
+  {
+    defaultToken: "support.function"
+  }];
+
+var MarkdownCodeStart = {
+  token: "support.function",
+  regex: "^( {0,3})(~~[~]+)$",
+  next:  "<%= md_codeblock_rule_id %>"
+};
+
 <%
 default_rules = {
   :path => '',
@@ -90,8 +110,11 @@ textile_rules[:rule_name] = 'TextileHighlightRules'
   'GollumMarkdownHighlightRules' => {
     :path => 'ace/mode/markdown_highlight_rules',
     :rule_name => 'MarkdownHighlightRules',
-    :start_rules => ['UMLStart'], # Markdown only needs to be extended with UML rules
-    :block_rules => {uml_rule_id => uml_rule_name}    
+    :start_rules => ['GitHubStart', 'UMLStart', 'MarkdownCodeStart'],
+    :block_rules => {
+      codeblock_rule_id => codeblock_rule_name,
+      md_codeblock_rule_id => md_codeblock_rule_name,
+      uml_rule_id => uml_rule_name}    
   }
 }.each do |name, highlighter|
 %>
@@ -105,6 +128,9 @@ ace.define("<%= name %>", [], function(require, exports, module) {
   var GollumHighlightRules = function() {
     var mergeRules = new BaseHighlightRules();
     this.$rules = mergeRules.getRules();
+    this.$rules.start = this.$rules.start.filter(function (item) {
+      return !(item.next == 'githubblock');
+    });
     <% highlighter[:start_rules].each do |rule| %>
     this.$rules.start.unshift(<%= rule %>);
     <% end %>
