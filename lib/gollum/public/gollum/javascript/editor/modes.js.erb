@@ -27,7 +27,7 @@ codeblock_rule_id = 'githubblock'
 // The rule defining the github-codeblock state for the ACE Tokenizer
 var <%= codeblock_rule_name %> = [{
   token: "support.function",
-  regex: /^( {0,3})(```)\s*$/,
+  regex: /^( {0,3})(``[`]+)\s*$/,
   next:  "start"
   },
   {
@@ -37,7 +37,7 @@ var <%= codeblock_rule_name %> = [{
 // The rule defining how the ACE Tokenizer gets into the github-codeblock state
 var GitHubStart = {
   token: "support.function",
-  regex: "^( {0,3})(```)[^`]*$",
+  regex: "^( {0,3})(``[`]+)$",
   next:  "<%= codeblock_rule_id %>"
 };
 
@@ -65,19 +65,23 @@ var UMLStart = {
 
 // Markdown should also recognise ~~~ style fenced codeblocks.
 <%
-md_codeblock_rule_id = 'githubblock'
 md_codeblock_rule_name = 'MarkdownCodeBlock'
+md_codeblock_rule_id = 'md_codeblock';
 %>
+var <%= md_codeblock_rule_name %> = [{
+  token: "support.function",
+  regex: /^( {0,3})(~~[~]+)\s*$/,
+  next:  "start"
+  },
+  {
+    defaultToken: "support.function"
+  }];
 
-var MDRules = ace.require('ace/mode/markdown_highlight_rules').MarkdownHighlightRules;
-MDRules = new MDRules();
-MDRules = MDRules.getRules();
-var MarkdownCodeStart = MDRules.start.find(function (item){
-  return item.next == '<%= md_codeblock_rule_id %>' && item.onMatch != undefined;
-});
-MarkdownCodeStart.regex = "^\\s*(```[^`]*|~~~+[^~]*)$"; //Override default regex, backtick based fences must be 3 characters long.
-console.log(MarkdownCodeStart);
-var <%= md_codeblock_rule_name %> = MDRules.githubblock;
+var MarkdownCodeStart = {
+  token: "support.function",
+  regex: "^( {0,3})(~~[~]+)$",
+  next:  "<%= md_codeblock_rule_id %>"
+};
 
 <%
 default_rules = {
@@ -108,6 +112,7 @@ textile_rules[:rule_name] = 'TextileHighlightRules'
     :rule_name => 'MarkdownHighlightRules',
     :start_rules => ['GitHubStart', 'UMLStart', 'MarkdownCodeStart'],
     :block_rules => {
+      codeblock_rule_id => codeblock_rule_name,
       md_codeblock_rule_id => md_codeblock_rule_name,
       uml_rule_id => uml_rule_name}    
   }
