@@ -27,7 +27,7 @@ codeblock_rule_id = 'githubblock'
 // The rule defining the github-codeblock state for the ACE Tokenizer
 var <%= codeblock_rule_name %> = [{
   token: "support.function",
-  regex: /^( {0,3})(``[`]+)\s*$/,
+  regex: /^( {0,3})(```)\s*$/,
   next:  "start"
   },
   {
@@ -37,7 +37,7 @@ var <%= codeblock_rule_name %> = [{
 // The rule defining how the ACE Tokenizer gets into the github-codeblock state
 var GitHubStart = {
   token: "support.function",
-  regex: "^( {0,3})(``[`]+)$",
+  regex: "^( {0,3})(```)[^`]*$",
   next:  "<%= codeblock_rule_id %>"
 };
 
@@ -70,8 +70,18 @@ md_codeblock_rule_id = 'md_codeblock';
 %>
 var <%= md_codeblock_rule_name %> = [{
   token: "support.function",
-  regex: /^( {0,3})(~~[~]+)\s*$/,
-  next:  "start"
+  regex: ".*",
+  onMatch:  function(value, state, stack, line) {
+              var length     = stack[2][0];
+              var match = /^( {0,3})(~~[~]+)\s*$/.exec(value);
+              if (match && match[2].length >= length) {
+                stack.splice(0, 3);
+                this.next = stack.shift();
+                return this.token;
+              }
+              this.next = "";
+              return this.token;
+            }
   },
   {
     defaultToken: "support.function"
@@ -80,6 +90,11 @@ var <%= md_codeblock_rule_name %> = [{
 var MarkdownCodeStart = {
   token: "support.function",
   regex: "^( {0,3})(~~[~]+)$",
+  onMatch: function(value, state, stack, line) {
+    var match = new RegExp(this.regex).exec(value);
+    stack.unshift("<%= md_codeblock_rule_name %>", [], [match[2].length], state);
+    return this.token;
+  },
   next:  "<%= md_codeblock_rule_id %>"
 };
 
