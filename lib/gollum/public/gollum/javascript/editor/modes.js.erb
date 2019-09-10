@@ -90,7 +90,7 @@ var GollumCodeStart = {
 // Markdown pages should also support fenced code blocks
 var MarkdownCodeStart = {
   token: "support.function",
-  regex: "^( {0,3})(~~[~]+)$",
+  regex: "^( {0,3})(~~[~]+)[^`~]*$",
   onMatch: startCodeBlockMatch,
   next:  "<%= codeblock_rule_id %>"
 };
