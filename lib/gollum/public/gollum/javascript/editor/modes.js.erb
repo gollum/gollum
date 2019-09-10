@@ -27,7 +27,7 @@ codeblock_rule_id = 'githubblock'
 // The rule defining the github-codeblock state for the ACE Tokenizer
 var <%= codeblock_rule_name %> = [{
   token: "support.function",
-  regex: /^(\s{0,3})(``[`]+)\s*$/,
+  regex: /^( {0,3})(``[`]+)\s*$/,
   next:  "start"
   },
   {
@@ -37,7 +37,7 @@ var <%= codeblock_rule_name %> = [{
 // The rule defining how the ACE Tokenizer gets into the github-codeblock state
 var GitHubStart = {
   token: "support.function",
-  regex: "^(?:[ \\t]{0,3})(``[`]+)$",
+  regex: "^( {0,3})(``[`]+)$",
   next:  "<%= codeblock_rule_id %>"
 };
 
