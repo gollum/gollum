@@ -19,24 +19,15 @@
       * Dynamically generating modes: https://stackoverflow.com/questions/22166784/dynamically-update-syntax-highlighting-mode-rules-for-the-ace-editor
 */
 
-<%
-codeblock_rule_name = 'GitHubBlock'
-codeblock_rule_id = 'githubblock'
-%>
+// First steal the rules for github code blocks from the markdown highlighter
 
-// The rule defining the github-codeblock state for the ACE Tokenizer
-var <%= codeblock_rule_name %> = [{
-  token: "support.function",
-  regex: /^```$/,
-  next:  "start"
-}];
-
-// The rule defining how the ACE Tokenizer gets into the github-codeblock state
-var GitHubStart = {
-  token: "support.function",
-  regex: /^```/,
-  next:  "<%= codeblock_rule_id %>"
-};
+var MDHighlightRules = ace.require('ace/mode/markdown_highlight_rules').MarkdownHighlightRules;
+var MDHighlightRules = new MDHighlightRules;
+var MDHighlightRules = MDHighlightRules.getRules();
+var GitHubBlock = MDHighlightRules['githubblock'];
+var GitHubStart = MDHighlightRules['start'].find(function(start_rule) {
+  return start_rule.next === 'githubblock'
+});
 
 <%
 uml_rule_name = 'UMLBlock'
@@ -46,14 +37,17 @@ uml_rule_id = 'umlblock'
 // The rule defining the UML state for the ACE Tokenizer
 var <%= uml_rule_name %>  = [{
   token: "support.function",
-  regex: /^\@enduml/,
+  regex: "^\\@enduml$",
   next:  "start"
-}];
+  },
+  {
+    defaultToken: "support.function"
+  }];
 
 // The rule defining how the ACE Tokenizer gets into the UML state
 var UMLStart = {
   token: "support.function",
-  regex: /^\@startuml/,
+  regex: "^(?:[ \\t]*)\\@startuml$",
   next:  "<%= uml_rule_id %>"
 };
 
@@ -62,7 +56,7 @@ default_rules = {
   :path => '',
   :rule_name => '',
   :start_rules => ['GitHubStart', 'UMLStart'],
-  :block_rules => {codeblock_rule_id => codeblock_rule_name, uml_rule_id => uml_rule_name}
+  :block_rules => {'githubblock' => 'GitHubBlock', uml_rule_id => uml_rule_name}
 }
 
 rst_rules = default_rules.dup
