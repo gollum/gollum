@@ -434,8 +434,9 @@ context "Frontend" do
   end
 
   test "previews content" do
-    post "/gollum/preview", :content => 'abc', :format => 'markdown'
+    post "/gollum/preview", :content => 'abc', :format => 'markdown', :page => 'Samewise%20Gamgee.mediawiki'
     assert last_response.ok?
+    assert last_response.body.include?('Samewise Gamgee</h1>')
   end
 
   test "previews content on the first page of an empty wiki" do

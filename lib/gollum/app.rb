@@ -382,7 +382,7 @@ module Precious
 
       post '/preview' do
         wiki           = wiki_new
-        @name          = params[:page] || "Preview"
+        @name          = params[:page] ? strip_page_name(CGI.unescape(params[:page])) : 'Preview'
         @page          = wiki.preview_page(@name, params[:content], params[:format])
         ['sidebar', 'header', 'footer'].each do |subpage|
           @page.send("set_#{subpage}".to_sym, params[subpage]) if params[subpage]
@@ -393,7 +393,7 @@ module Precious
         @h1_title      = wiki.h1_title
         @editable      = false
         @bar_side      = wiki.bar_side
-        @allow_uploads = wiki.allow_uploads
+        @allow_uploads = false
         @navbar        = false
         @preview       = true
         mustache :page
