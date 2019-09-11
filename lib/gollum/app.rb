@@ -382,7 +382,13 @@ module Precious
 
       post '/preview' do
         wiki           = wiki_new
-        @name          = params[:page] || "Preview"
+        if params[:page]
+        @name = CGI.unescape(params[:page])
+        # Check if the page name determined from the url already has a format extension, and if so, strip it.
+        @name = Gollum::Page.valid_extension?(@name) ? Gollum::Page.strip_filename(@name) : @name
+        else
+          @name = "Preview"
+        end
         @page          = wiki.preview_page(@name, params[:content], params[:format])
         ['sidebar', 'header', 'footer'].each do |subpage|
           @page.send("set_#{subpage}".to_sym, params[subpage]) if params[subpage]
