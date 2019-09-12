@@ -24,9 +24,15 @@
 	  var pageFullPath = '{{escaped_url_path}}';
     var pageFormat   = '{{format}}';
 	{{/page}}
+  {{#is_create_page}}
+    var default_markup = '{{default_markup}}';
+  {{/is_create_page}}
 
   </script>
   {{#sprockets_javascript_tag}}app{{/sprockets_javascript_tag}}
+  {{#has_editor}}
+  {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
+  {{/has_editor}}
   {{#mathjax}}
   {{^mathjax_config}}
   <script type="text/javascript">

@@ -8,6 +8,7 @@ require 'stringex'
 require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
+require 'octicons'
 require 'sass'
 require 'pathname'
 
