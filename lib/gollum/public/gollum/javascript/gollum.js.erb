@@ -10,9 +10,13 @@ function brokenAvatarImage(image){
 // Get path for named route, prefixing baseUrl if necessary
 // Uses the route definitions in /lib/gollum/views/helpers.rb.
 // For example, routePath('delete') is equivalent to 'delete_path' in the mustache templates.
+var gollumRoutes = $.parseJSON('<%= routes_to_json %>')
 function routePath(name){
-  var routes = $.parseJSON('<%= routes_to_json %>')
-  path = routes[name]
+  path = gollumRoutes[name]
+  return prefixBaseUrl(path);
+}
+
+function prefixBaseUrl(path) {
   if (baseUrl == undefined ) {
     console.log('Gollum error: baseUrl undefined')
   } else if (path == undefined ) {
@@ -70,6 +74,12 @@ function abspath(path, name){
   var newName = name_parts.pop();
   // return array of [path, name]
   return [newPath, newName];
+}
+
+var gollumFormats = $.parseJSON('<%= format_extensions %>');
+function formatToExt(format) {
+  // 'markdown' -> .md, 'asciidoc' -> .asciidoc
+  return gollumFormats[format];
 }
 
 // ua
@@ -356,6 +366,7 @@ $(document).ready(function() {
       $(this).attr('disabled', true);
 
       var formData = new FormData($('#gollum-editor-form').get(0));
+      var newPath  = prefixBaseUrl(pagePath() + '/' + pageName() + formatToExt($('#wiki_format')[0].value));
       var endpoint = $('#gollum-editor-form').attr("action");
 
       $.ajax({
@@ -365,7 +376,7 @@ $(document).ready(function() {
         processData: false,
         contentType: false,
         success: function(data) {
-          window.location = window.location.href.replace(/gollum\/edit\//, '')
+          window.location = newPath;
         },
         error: function(data, textStatus, errorThrown) {
           if (data.status == 412) {
