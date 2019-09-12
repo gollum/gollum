@@ -304,12 +304,14 @@ $(document).ready(function() {
   }
 
   if( $('.tabnav-tabs').length ){
-    $(".tabnav-tab").click( function() {
+    $(".tabnav-tab").click( function(e) {
+      e.preventDefault();
       if( ! $(this).hasClass('selected')) {
         tab_id = $(this).attr('id');
         if (tab_id == 'preview') {
           var formData = new FormData($('#gollum-editor-form').get(0));
           var paths = window.location.pathname.split('/');
+          var sectionAnchor = window.location.hash.substr(1);
           formData.append('page', paths[ paths.length - 1 ] || '')
           $.ajax({
             url: routePath('preview'),
@@ -320,6 +322,11 @@ $(document).ready(function() {
             success: function(data) {
               var mainDiv = $('#wiki-wrapper', data);
               $('.tabnav-div#preview-content').html(mainDiv);
+              if (sectionAnchor ) { 
+                if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
+                  sectionHeading.scrollIntoView();
+                }
+              }
             },
             error: function(data, textStatus, errorThrown) {
               console.log('something went wrong: ' + textStatus + errorThrown);
@@ -340,7 +347,9 @@ $(document).ready(function() {
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
-    $.GollumEditor();
+    $.GollumEditor({
+      section: window.location.hash.substr(1)
+    });
     $("#gollum-editor-submit").click( function(e) {
       e.preventDefault();
       // Prevent button from being clicked again
@@ -495,18 +504,20 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
-  if($('#wiki-content').length ){
+  if($('.markdown-body').length ){
     // Set text direction auto
     $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 
-    // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
-    $('a.anchor').each(function (index, anchor) {
-      header = $(anchor).closest(':header');
-      if (header.hasClass('editable')){
-        var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
-        $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
-      }
-    });
+    if ($.markupSupportsEditableSections(pageFormat)){
+      // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
+      $('a.anchor').each(function (index, anchor) {
+        header = $(anchor).closest(':header');
+        if (header.hasClass('editable')){
+          var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
+          $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
+        }
+      });
+    }
   }
 
   if( $('#wiki-history').length || $('#page-history').length){
