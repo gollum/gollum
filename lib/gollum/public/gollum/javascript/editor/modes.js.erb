@@ -3,9 +3,6 @@
     Add highlighting rules for gollum-specific block level syntax to ACE.
     We first have to extends the Highlighters for each supported syntax,
     so that later, we can extend the relevant ACE Mode to use the custom Highlighter.
-    We do this for all and only those languages which ACE supports, i.e.,
-    for which it has a specific Highlighter and Mode. So we do not extend e.g. Creole,
-    for which there is no ACE Mode (we use the 'text mode' instead).
     At the moment there are two gollum-wide block level syntaxes which need to be added:
 
     * GitHub style code blocks: ``` ... ```
@@ -115,6 +112,15 @@ textile_rules = default_rules.dup
 textile_rules[:path] = 'ace/mode/textile_highlight_rules'
 textile_rules[:rule_name] = 'TextileHighlightRules'
 
+rdoc_rules = default_rules.dup
+rdoc_rules[:path] = 'ace/mode/rdoc_highlight_rules'
+rdoc_rules[:rule_name] = 'RDocHighlightRules'
+
+# Create set of extended rules for markups that don't have their own Ace mode, based on the default 'text' highligter.
+text_rules = default_rules.dup
+text_rules[:path] = 'ace/mode/text_highlight_rules'
+text_rules[:rule_name] = 'TextHighlightRules'
+
 markdown_rules = default_rules.dup
 markdown_rules[:path] = 'ace/mode/markdown_highlight_rules'
 markdown_rules[:rule_name] = 'MarkdownHighlightRules'
@@ -125,6 +131,8 @@ markdown_rules[:start_rules] = ['GollumCodeStart', 'UMLStart', 'MarkdownCodeStar
   'GollumRstHighlightRules'      => rst_rules,
   'GollumAsciidocHighlightRules' => asciidoc_rules,
   'GollumTextileHighlightRules'  => textile_rules,
+  'GollumTextHighlightRules'     => text_rules,
+  'GollumRdocHighlightRules'     => rdoc_rules,
   'GollumMarkdownHighlightRules' => markdown_rules 
 }.each do |name, highlighter|
 %>
@@ -161,26 +169,59 @@ ace.define("<%= name %>", [], function(require, exports, module) {
 
 (function($) {
   var AceMode = {
-    asciidoc: 'GollumAsciidocHighlightRules',
-    creole: 'text',
-    markdown: 'GollumMarkdownHighlightRules',
-    mediawiki: 'text',
-    bib: 'latex',
-    org: 'text',
-    rst: 'GollumRstHighlightRules',
-    txt: 'text',
-    pod: 'text',
-    rdoc: 'rdoc',
-    textile: 'GollumTextileHighlightRules'
+    asciidoc: {
+      mode: 'asciidoc',
+      highlighter: 'GollumAsciidocHighlightRules'
+    },
+    creole: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    markdown: {
+      mode: 'markdown',
+      highlighter: 'GollumMarkdownHighlightRules'
+    },
+    mediawiki: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    bib: {
+      mode: 'latex'
+    },
+    org: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    rst: {
+      mode: 'rst',
+      highlighter: 'GollumRstHighlightRules'
+    },
+    txt: {
+      mode: 'text'
+    },
+    pod: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    rdoc: {
+      mode: 'rdoc',
+      highlighter: 'GollumRdocHighlightRules'
+    },
+    textile: {
+      mode: 'textile',
+      highlighter: 'GollumTextileHighlightRules'
+    }
   };
 
   $.getEditorMode = function ( mode ) {
-    var ace_mode = '';
-    if (ace_mode = AceMode[mode]) {
-      if (ace_mode.startsWith('Gollum')){ // We have extended highlighters
-        var baseMode = ace.require("ace/mode/" + mode).Mode;
+    var lang = null;
+    if (lang = AceMode[mode]) {
+      var ace_mode = lang['mode'];
+      var gollum_rules = lang['highlighter'];
+      if (gollum_rules){ // We have extended highlighters
+        var baseMode = ace.require("ace/mode/" + ace_mode).Mode;
         var dynamicMode = new baseMode();
-        dynamicMode.HighlightRules = ace.require(ace_mode).GollumHighlightRules;
+        dynamicMode.HighlightRules = ace.require(gollum_rules).GollumHighlightRules;
         return dynamicMode;      
       } else {
         return "ace/mode/" + ace_mode;
