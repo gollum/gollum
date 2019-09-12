@@ -21,6 +21,10 @@ a {
   color: lightgray;
 }
 
+a.tabnav-tab:focus {
+  outline: none;
+}
+
 #gollum-editor-body-ace {
   overflow: hidden;
   font-family: Consolas, "Liberation Mono", Courier, monospace;

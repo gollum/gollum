@@ -307,42 +307,58 @@ $(document).ready(function() {
     });
   }
 
+  // Called when clicking the 'Preview' tab in the editor view
+  function getPreview () {
+    var formData = new FormData($('#gollum-editor-form').get(0));
+    var paths = window.location.pathname.split('/');
+    var sectionAnchor = window.location.hash.substr(1);
+    formData.append('page', paths[ paths.length - 1 ] || '')
+    $.ajax({
+      url: routePath('preview'),
+      data: formData,
+      type: 'POST',
+      processData: false,
+      contentType: false,
+      success: function(data) {
+        var mainDiv = $('#wiki-wrapper', data);
+        $('.tabnav-div#preview-content').html(mainDiv);
+        setTextDirection();
+        if (sectionAnchor ) { 
+          if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
+            sectionHeading.scrollIntoView();
+          }
+        }
+      },
+      error: function(data, textStatus, errorThrown) {
+        console.log('something went wrong: ' + textStatus + errorThrown);
+      }
+    });
+  }
+
+  function togglePreviewTab ( preview ) {
+    if (preview) {
+      active_div = '#preview-content'
+      active_tab = '#preview.tabnav-tab';
+    } else {
+      active_div = '#edit-content'
+      active_tab = '#edit.tabnav-tab';
+    }
+
+    $('.tabnav-tab.selected').removeClass('selected');
+    $(active_tab).addClass('selected');
+    $('.tabnav-div').hide();
+    $(active_div).show();
+  }
+
   if( $('.tabnav-tabs').length ){
     $(".tabnav-tab").click( function(e) {
       e.preventDefault();
-      if( ! $(this).hasClass('selected')) {
-        tab_id = $(this).attr('id');
-        if (tab_id == 'preview') {
-          var formData = new FormData($('#gollum-editor-form').get(0));
-          var paths = window.location.pathname.split('/');
-          var sectionAnchor = window.location.hash.substr(1);
-          formData.append('page', paths[ paths.length - 1 ] || '')
-          $.ajax({
-            url: routePath('preview'),
-            data: formData,
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            success: function(data) {
-              var mainDiv = $('#wiki-wrapper', data);
-              $('.tabnav-div#preview-content').html(mainDiv);
-              setTextDirection();
-              if (sectionAnchor ) { 
-                if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
-                  sectionHeading.scrollIntoView();
-                }
-              }
-            },
-            error: function(data, textStatus, errorThrown) {
-              console.log('something went wrong: ' + textStatus + errorThrown);
-            }
-          });
+      if( !$(this).hasClass('selected') ) {
+        preview = $(this).attr('id') == 'preview';
+        if (preview) {
+          getPreview();
         }
-        $('.tabnav-tab.selected').removeClass('selected');
-        $(this).addClass('selected');
-        active_div = '#' + tab_id + "-content";
-        $('.tabnav-div').hide();
-        $(active_div).show();
+        togglePreviewTab(preview);
       };
     });
   };
@@ -352,9 +368,32 @@ $(document).ready(function() {
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
+
+    var previewHotkey = function () {
+      $('.tabnav-tab').not('.selected').click();
+      return false;
+    };
+
+    // Hotkey for moving between Edit and Preview tab
+    Mousetrap.bind(['ctrl+shift+p'], previewHotkey);
+
     $.GollumEditor({
-      section: window.location.hash.substr(1)
-    });
+      section: window.location.hash.substr(1),
+      commands: // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
+      [{
+        name: "togglePreview",
+        bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
+        exec: previewHotkey
+      },
+      {
+        name: "saveContents",
+        bindKey: {win: "Ctrl-s", mac: "Command-s"},
+        exec: function() {
+          $("#gollum-editor-submit").trigger("click");
+        }
+      }]
+    }); 
+
     $("#gollum-editor-submit").click( function(e) {
       e.preventDefault();
       // Prevent button from being clicked again
@@ -510,8 +549,15 @@ $(document).ready(function() {
   }
 
   if($('.markdown-body').length ){
-    // Set text direction auto
+    // Set text direction (LTR or RTL)
     setTextDirection();
+
+    // Set the 'e' hotkey for editing pages.
+    Mousetrap.bind(['e'], function( e ) {
+      e.preventDefault();
+      window.location = routePath('edit') + '/' + pageFullPath;
+      return false;
+    });
 
     if ($.markupSupportsEditableSections(pageFormat)){
       // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
