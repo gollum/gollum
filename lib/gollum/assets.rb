@@ -1,6 +1,8 @@
+require 'octicons'
+
 module Precious
   module Assets
-    MANIFEST = %w(app.js app.css criticmarkup.css fileview.css ie7.css print.css *.png *.jpg *.svg *.eot *.ttf *.woff *.woff2)
+    MANIFEST = %w(app.js editor.js app.css criticmarkup.css fileview.css ie7.css print.css *.png *.jpg *.svg *.eot *.ttf *.woff *.woff2)
     ASSET_URL = 'gollum/assets'
     
     def self.sprockets(dir = File.dirname(File.expand_path(__FILE__)))
@@ -17,6 +19,7 @@ module Precious
         def base_url
           self.class.class_variable_get(:@@base_url)
         end
+        include ::Octicons
         include ::Precious::Views::RouteHelpers
         include ::Precious::Views::OcticonHelpers
       end

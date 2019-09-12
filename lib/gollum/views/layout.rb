@@ -1,5 +1,4 @@
 require 'cgi'
-require 'octicons'
 
 module Precious
   module Views
