@@ -72,6 +72,10 @@ function abspath(path, name){
   return [newPath, newName];
 }
 
+function setTextDirection () {
+  $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+}
+
 // ua
 $(document).ready(function() {
   // for deleting the current page
@@ -322,6 +326,7 @@ $(document).ready(function() {
             success: function(data) {
               var mainDiv = $('#wiki-wrapper', data);
               $('.tabnav-div#preview-content').html(mainDiv);
+              setTextDirection();
               if (sectionAnchor ) { 
                 if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
                   sectionHeading.scrollIntoView();
@@ -506,7 +511,7 @@ $(document).ready(function() {
 
   if($('.markdown-body').length ){
     // Set text direction auto
-    $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+    setTextDirection();
 
     if ($.markupSupportsEditableSections(pageFormat)){
       // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
