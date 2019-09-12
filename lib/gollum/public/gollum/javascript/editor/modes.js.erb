@@ -1,12 +1,16 @@
 /*  modes.js
 
-    Add highlighting rules for gollum-specific block level syntax to ACE.
+    Add highlighting rules for gollum-specific syntax to ACE.
     We first have to extends the Highlighters for each supported syntax,
     so that later, we can extend the relevant ACE Mode to use the custom Highlighter.
     At the moment there are two gollum-wide block level syntaxes which need to be added:
 
     * GitHub style code blocks: ``` ... ```
     * UML blocks: @startuml ... @enduml
+
+    In addition, there are universal gollum tags:
+
+    [[link]]]
 
     The regexes defined for these below should be equivalent to the regexes used by
     gollum-lib to extract these blocks.
@@ -16,6 +20,12 @@
       * Dynamically generating modes: https://stackoverflow.com/questions/22166784/dynamically-update-syntax-highlighting-mode-rules-for-the-ace-editor
 */
 
+// For Gollum link tags
+var GollumTagStart = {
+  token: "support.function",
+  regex: "\\[\\[.*\\]\\]",
+  next: 'start'
+};
 
 <%
 uml_rule_name = 'UMLBlock'
@@ -96,8 +106,10 @@ var MarkdownCodeStart = {
 default_rules = {
   :path => '',
   :rule_name => '',
-  :start_rules => ['GollumCodeStart', 'UMLStart'],
-  :block_rules => {codeblock_rule_id => codeblock_rule_name, uml_rule_id => uml_rule_name}
+  :start_rules => ['GollumTagStart', 'UMLStart', 'GollumCodeStart'],
+  :block_rules => { codeblock_rule_id => codeblock_rule_name, 
+                    uml_rule_id => uml_rule_name,
+                  }
 }
 
 rst_rules = default_rules.dup
@@ -105,6 +117,7 @@ rst_rules[:path] = 'ace/mode/rst_highlight_rules'
 rst_rules[:rule_name] = 'RSTHighlightRules'
 
 asciidoc_rules = default_rules.dup
+asciidoc_rules[:start_rules] = ['UMLStart', 'GollumCodeStart'] # Gollum tags are disabled for asciidoc
 asciidoc_rules[:path] = 'ace/mode/asciidoc_highlight_rules'
 asciidoc_rules[:rule_name] = 'AsciidocHighlightRules'
 
@@ -124,7 +137,7 @@ text_rules[:rule_name] = 'TextHighlightRules'
 markdown_rules = default_rules.dup
 markdown_rules[:path] = 'ace/mode/markdown_highlight_rules'
 markdown_rules[:rule_name] = 'MarkdownHighlightRules'
-markdown_rules[:start_rules] = ['GollumCodeStart', 'UMLStart', 'MarkdownCodeStart'] # Markdown pages should also support fenced code blocks
+markdown_rules[:start_rules] = ['GollumTagStart', 'UMLStart', 'GollumCodeStart', 'MarkdownCodeStart'] # Markdown pages should also support fenced code blocks
 
 
 {
