@@ -36,15 +36,15 @@ def testpath(path)
   File.join(TEST_DIR, path)
 end
 
-def cloned_testpath(path)
+def cloned_testpath(path, bare = false)
   repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
-  end
-  cloned
+  tmp    = Tempfile.new(self.class.name)
+  path   = tmp.path
+  bare   = bare ? "--bare" : ""
+  tmp.close(true)
+  redirect = Gem.win_platform? ? '' : '2>/dev/null'
+  %x{git clone #{bare} #{repo} #{path} #{redirect}}
+  path
 end
 
 def commit_details

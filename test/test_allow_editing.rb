@@ -4,15 +4,13 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'helper'))
 context "Precious::Views::Editing" do
   include Rack::Test::Methods
   setup do
-    examples = testpath "examples"
-    @path    = File.join(examples, "test.git")
+    @path    = cloned_testpath('examples/revert.git')
     Precious::App.set(:gollum_path, @path)
-    FileUtils.cp_r File.join(examples, "revert.git"), @path, :remove_destination => true
     @wiki = Gollum::Wiki.new(@path)
   end
 
   teardown do
-    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+    FileUtils.rm_rf(@path)
   end
 
   test "creating page is blocked" do

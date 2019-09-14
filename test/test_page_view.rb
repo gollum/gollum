@@ -5,14 +5,12 @@ require File.expand_path '../../lib/gollum/views/page', __FILE__
 
 context "Precious::Views::Page" do
   setup do
-    examples = testpath "examples"
-    @path    = File.join(examples, "test.git")
-    FileUtils.cp_r File.join(examples, "empty.git"), @path, :remove_destination => true
+    @path    = cloned_testpath('examples/empty.git')
     @wiki = Gollum::Wiki.new(@path)
   end
 
   teardown do
-    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+    FileUtils.rm_rf(@path)
   end
 
   test "h1 title sanitizes correctly" do
