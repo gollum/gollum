@@ -377,7 +377,7 @@ $(document).ready(function() {
       }
     },
     {
-      name: "togglePreview",
+      name: "togglePreview", // Ace's hotkeys override Mousetrap, so add the preview hotkey to the editor, too.
       bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
       exec: previewHotkey
     }
