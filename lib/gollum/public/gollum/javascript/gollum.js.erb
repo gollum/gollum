@@ -363,35 +363,40 @@ $(document).ready(function() {
     });
   };
 
+  var previewHotkey = function () {
+    $('.tabnav-tab').not('.selected').click();
+    return false;
+  };
+
+  var editorHotkeys = [
+    {
+      name: "saveContents",
+      bindKey: {win: "Ctrl-s", mac: "Command-s"},
+      exec: function() {
+        $("#gollum-editor-submit").trigger("click");
+      }
+    },
+    {
+      name: "togglePreview",
+      bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
+      exec: previewHotkey
+    }
+  ];
+
+  if ( $('#wiki-wrapper.edit').length || $('#wiki-wrapper.create').length ) {
+    // Hotkey for moving between Edit and Preview tab
+    Mousetrap.bind(['ctrl+shift+p'], previewHotkey);
+  }
+
   if( $('#wiki-wrapper.edit').length ){
     $("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
 
-    var previewHotkey = function () {
-      $('.tabnav-tab').not('.selected').click();
-      return false;
-    };
-
-    // Hotkey for moving between Edit and Preview tab
-    Mousetrap.bind(['ctrl+shift+p'], previewHotkey);
-
     $.GollumEditor({
       section: window.location.hash.substr(1),
-      commands: // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
-      [{
-        name: "togglePreview",
-        bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
-        exec: previewHotkey
-      },
-      {
-        name: "saveContents",
-        bindKey: {win: "Ctrl-s", mac: "Command-s"},
-        exec: function() {
-          $("#gollum-editor-submit").trigger("click");
-        }
-      }]
+      commands: editorHotkeys // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
     }); 
 
     $("#gollum-editor-submit").click( function(e) {
@@ -537,7 +542,7 @@ $(document).ready(function() {
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will not create a new page!" };
     });
-    $.GollumEditor({ NewFile: true, MarkupType: default_markup });
+    $.GollumEditor({ NewFile: true, MarkupType: default_markup, commands: editorHotkeys });
   }
 
   // CriticMarkup
