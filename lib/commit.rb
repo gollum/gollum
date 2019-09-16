@@ -40,6 +40,7 @@ module RJGit
       df = DiffFormatter.new(DisabledOutputStream::INSTANCE)
       df.set_repository(@jrepo)
       df.set_context(0)
+      df.set_detect_renames(true)
       parent_commit = @jcommit.parent_count > 0 ? @jcommit.get_parents[0] : nil
       entries = df.scan(parent_commit, @jcommit)
 
