@@ -86,8 +86,20 @@ describe Commit do
         :new_additions => 0,
         :new_deletions => 2,
         :changes => 2,
-        :new_path => 'deconstructions.txt',
-        :old_path => 'deconstructions.txt'
+        :new_file => 'deconstructions.txt',
+        :old_file => 'deconstructions.txt'
+      }
+      expect(stats[:files].first).to eq(expected_file_stat)
+    end
+
+    it "has stats that follow renames" do
+      stats = Repo.new(TEST_REPO_PATH).commits[0].stats
+      expected_file_stat =  {
+        :new_additions => 0,
+        :new_deletions => 0,
+        :changes => 0,
+        :new_file => 'follow-rename.txt',
+        :old_file => 'rename-example.txt'
       }
       expect(stats[:files].first).to eq(expected_file_stat)
     end
@@ -100,10 +112,10 @@ describe Commit do
         :new_additions => 75,
         :new_deletions => 0,
         :changes => 75,
-        :new_path => 'postpatriarchialist.txt',
-        :old_path => '/dev/null'
+        :new_file => 'postpatriarchialist.txt',
+        :old_file => '/dev/null'
       }
-      result = stats[:files].find {|f| f[:new_path] == 'postpatriarchialist.txt'}
+      result = stats[:files].find {|f| f[:new_file] == 'postpatriarchialist.txt'}
       expect(result).to eq(expected_file_stat)
     end
     

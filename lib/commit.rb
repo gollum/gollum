@@ -59,8 +59,8 @@ module RJGit
         total_del += del
         total_ins += ins
         results << {
-          :new_path => file.getNewPath,
-          :old_path => file.getOldPath,
+          :new_file => file.getNewPath,
+          :old_file => file.getOldPath,
           :new_additions => ins,
           :new_deletions => del,
           :changes => ins + del
