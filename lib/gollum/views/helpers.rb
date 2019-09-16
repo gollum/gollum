@@ -64,6 +64,13 @@ module Precious
         def rocticon(symbol, parameters = {})
           Octicons::Octicon.new(symbol, parameters).to_svg
         end
+
+        # Well-formed SVG with XMLNS and height/width removed, for use in CSS
+        def rocticon_css(symbol, parameters = {})
+          octicon = ::Octicons::Octicon.new(symbol, parameters.merge({xmlns: 'http://www.w3.org/2000/svg'}))
+          [:width, :height].each {|option| octicon.options.delete(option)}
+          octicon.to_svg
+        end
         
         def octicon
           lambda do |args|

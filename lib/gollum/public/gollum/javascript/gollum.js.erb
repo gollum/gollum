@@ -1,5 +1,12 @@
 // Helpers
 
+// Replace broken user icons with 'person' octicon
+function brokenAvatarImage(image){
+  image.onerror = '';
+  image.src = 'data:image/svg+xml;utf8,<%= rocticon_css(:person) %>';
+  return true;
+}
+
 // Get path for named route, prefixing baseUrl if necessary
 // Uses the route definitions in /lib/gollum/views/helpers.rb.
 // For example, routePath('delete') is equivalent to 'delete_path' in the mustache templates.
@@ -65,6 +72,10 @@ function abspath(path, name){
   return [newPath, newName];
 }
 
+function setTextDirection () {
+  $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+}
+
 // ua
 $(document).ready(function() {
   // for deleting the current page
@@ -112,6 +123,7 @@ $(document).ready(function() {
   }
 
   if ($('#minibutton-upload-page').length) {
+    new ClipboardJS('#ClipboardJSlink');
     $('#minibutton-upload-page').parent().removeClass('jaws');
     $('#minibutton-upload-page').click(function(e) {
       e.preventDefault();
@@ -154,7 +166,10 @@ $(document).ready(function() {
       $('#gollum-dialog-action-ok').attr('disabled', true);
       $('input:file').on('change', function() {
         if ($(this).val()) {
-          news = 'Your uploaded file will be accessible at<br>/' + uploadDest + '/' + $('input[type=file]').val().split('\\').pop();
+          filename = $('input[type=file]').val().split('\\').pop();
+          upload_path = '/' + uploadDest + '/' + filename;
+          clipboard_button = '<button class="btn btn-sm mb-2" id="ClipboardJSlink" data-clipboard-text="' + upload_path + '"><%=rocticon('clippy')%></button>'
+          news = 'Your uploaded file will be accessible at<br>' + clipboard_button + '&nbsp;' + upload_path;
           $(".context").html(news);
           $('#gollum-dialog-action-ok').attr('disabled', false);
 
@@ -292,44 +307,98 @@ $(document).ready(function() {
     });
   }
 
-  if( $('.tabnav-tabs').length ){
-    $(".tabnav-tab").click( function() {
-      if( ! $(this).hasClass('selected')) {
-        tab_id = $(this).attr('id');
-        if (tab_id == 'preview') {
-          var formData = new FormData($('#gollum-editor-form').get(0));
-          var paths = window.location.pathname.split('/');
-          formData.append('page', paths[ paths.length - 1 ] || '')
-          $.ajax({
-            url: routePath('preview'),
-            data: formData,
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            success: function(data) {
-              var mainDiv = $('#wiki-wrapper', data);
-              $('.tabnav-div#preview-content').html(mainDiv);
-            },
-            error: function(data, textStatus, errorThrown) {
-              console.log('something went wrong: ' + textStatus + errorThrown);
-            }
-          });
+  // Called when clicking the 'Preview' tab in the editor view
+  function getPreview () {
+    var formData = new FormData($('#gollum-editor-form').get(0));
+    var paths = window.location.pathname.split('/');
+    var sectionAnchor = window.location.hash.substr(1);
+    formData.append('page', paths[ paths.length - 1 ] || '')
+    $.ajax({
+      url: routePath('preview'),
+      data: formData,
+      type: 'POST',
+      processData: false,
+      contentType: false,
+      success: function(data) {
+        var mainDiv = $('#wiki-wrapper', data);
+        $('.tabnav-div#preview-content').html(mainDiv);
+        setTextDirection();
+        if (sectionAnchor ) { 
+          if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
+            sectionHeading.scrollIntoView();
+          }
         }
-        $('.tabnav-tab.selected').removeClass('selected');
-        $(this).addClass('selected');
-        active_div = '#' + tab_id + "-content";
-        $('.tabnav-div').hide();
-        $(active_div).show();
+      },
+      error: function(data, textStatus, errorThrown) {
+        console.log('something went wrong: ' + textStatus + errorThrown);
+      }
+    });
+  }
+
+  function togglePreviewTab ( preview ) {
+    if (preview) {
+      active_div = '#preview-content'
+      active_tab = '#preview.tabnav-tab';
+    } else {
+      active_div = '#edit-content'
+      active_tab = '#edit.tabnav-tab';
+    }
+
+    $('.tabnav-tab.selected').removeClass('selected');
+    $(active_tab).addClass('selected');
+    $('.tabnav-div').hide();
+    $(active_div).show();
+  }
+
+  if( $('.tabnav-tabs').length ){
+    $(".tabnav-tab").click( function(e) {
+      e.preventDefault();
+      if( !$(this).hasClass('selected') ) {
+        preview = $(this).attr('id') == 'preview';
+        if (preview) {
+          getPreview();
+        }
+        togglePreviewTab(preview);
       };
     });
   };
+
+  var previewHotkey = function () {
+    $('.tabnav-tab').not('.selected').click();
+    return false;
+  };
+
+  var editorHotkeys = [
+    {
+      name: "saveContents",
+      bindKey: {win: "Ctrl-s", mac: "Command-s"},
+      exec: function() {
+        $("#gollum-editor-submit").trigger("click");
+      }
+    },
+    {
+      name: "togglePreview", // Ace's hotkeys override Mousetrap, so add the preview hotkey to the editor, too.
+      bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
+      exec: previewHotkey
+    }
+  ];
+
+  if ( $('#wiki-wrapper.edit').length || $('#wiki-wrapper.create').length ) {
+    // Hotkey for moving between Edit and Preview tab
+    Mousetrap.bind(['ctrl+shift+p'], previewHotkey);
+  }
 
   if( $('#wiki-wrapper.edit').length ){
     $("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
-    $.GollumEditor();
+
+    $.GollumEditor({
+      section: window.location.hash.substr(1),
+      commands: editorHotkeys // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
+    }); 
+
     $("#gollum-editor-submit").click( function(e) {
       e.preventDefault();
       // Prevent button from being clicked again
@@ -459,10 +528,12 @@ $(document).ready(function() {
         url: routePath('last_commit_info'),
         data: {path: $("#page-info-toggle").data('pagepath')},
         success: function ( data ) {
-          $("#last-edit").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
+          $("#last-edit").next(".dotted-spinner").toggleClass('hidden');
+          $("#last-edit-in-progress").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
         }
       });
-      $("#last-edit").html('<i class="fa fa-spinner fa-spin"></i> Getting commit info...');
+      $("#last-edit").next(".dotted-spinner").toggleClass('hidden')
+      $("#page-info-toggle").before('<span id="last-edit-in-progress">&nbsp;Getting commit info...</span>').remove();
     })
   }
 
@@ -471,7 +542,7 @@ $(document).ready(function() {
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will not create a new page!" };
     });
-    $.GollumEditor({ NewFile: true, MarkupType: default_markup });
+    $.GollumEditor({ NewFile: true, MarkupType: default_markup, commands: editorHotkeys });
   }
 
   // CriticMarkup
@@ -482,22 +553,40 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
-  $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+  if($('.markdown-body').length ){
+    // Set text direction (LTR or RTL)
+    setTextDirection();
 
-  if( $('#wiki-history').length ){
-    var lookup = {};
+    // Set the 'e' hotkey for editing pages.
+    Mousetrap.bind(['e'], function( e ) {
+      e.preventDefault();
+      window.location = routePath('edit') + '/' + pageFullPath;
+      return false;
+    });
+
+    if ($.markupSupportsEditableSections(pageFormat)){
+      // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
+      $('a.anchor').each(function (index, anchor) {
+        header = $(anchor).closest(':header');
+        if (header.hasClass('editable')){
+          var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
+          $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
+        }
+      });
+    }
+  }
+
+  if( $('#wiki-history').length || $('#page-history').length){
+    var options = {
+      format: 'svg',
+      background: [255, 255, 255, 255] // rgba white
+    };
     $('img.identicon').each(function(index, element){
-      var $item   = $(element);
-      var code    = parseInt($item.data('identicon'), 10);
-      var img_bin = lookup[code];
-      if( img_bin === undefined ){
-        var size = 16;
-        var canvas = $('<canvas width=16 height=16/>').get(0);
-        render_identicon(canvas, code, 16);
-        img_bin = canvas.toDataURL("image/png");
-        lookup[code] = img_bin;
-      }
-      $item.attr('src', img_bin);
+      var item    = $(element);
+      var code    = item.data('identicon');
+      var img_bin = new Identicon(code, options).toString();
+      img_bin = 'data:image/svg+xml;base64,' + img_bin;
+      item.attr('src', img_bin);
     });
   }
 });

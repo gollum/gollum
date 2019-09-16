@@ -18,17 +18,21 @@
 	var uploadDest = 'uploads';
 	var perPageUploads = '{{per_page_uploads}}';
 	if (perPageUploads == 'true') {
-	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "")
+	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "").replace(baseUrl, "")
 	}
 	{{#page}}
 	  var pageFullPath = '{{escaped_url_path}}';
+    var pageFormat   = '{{format}}';
 	{{/page}}
+  {{#is_create_page}}
+    var default_markup = '{{default_markup}}';
+  {{/is_create_page}}
 
   </script>
   {{#sprockets_javascript_tag}}app{{/sprockets_javascript_tag}}
-  {{#use_identicon}}
-  {{#sprockets_javascript_tag}}identicon_canvas{{/sprockets_javascript_tag}}
-  {{/use_identicon}}
+  {{#has_editor}}
+  {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
+  {{/has_editor}}
   {{#mathjax}}
   {{^mathjax_config}}
   <script type="text/javascript">

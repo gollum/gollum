@@ -10,6 +10,11 @@ module Precious
       [nil, ''].include?(param) ? nil : CGI.unescape(param)
     end
 
+    def strip_page_name(name)
+      # Check if name already has a format extension, and if so, strip it.
+      Gollum::Page.valid_extension?(name) ? Gollum::Page.strip_filename(name) : name
+    end
+
     # Remove all slashes from the start of string.
     # Remove all double slashes
     def clean_url url

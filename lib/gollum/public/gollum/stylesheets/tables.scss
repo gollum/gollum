@@ -2,6 +2,15 @@
 
 /* @section history */
 
+#user-icons {
+  a, img, span, svg {
+    vertical-align: middle;
+  }
+  img, svg {
+    width: 20px;
+    height: 20px;
+  }
+}
 
 .history #footer {
   margin-bottom: 7em;

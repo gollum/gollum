@@ -8,6 +8,7 @@ require 'stringex'
 require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
+require 'octicons'
 require 'sass'
 require 'pathname'
 
@@ -17,6 +18,7 @@ require 'gollum/views/helpers'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
+require 'gollum/views/has_user_icons'
 require 'gollum/views/pagination'
 
 
@@ -173,8 +175,7 @@ module Precious
         wikip = wiki_page(params[:splat].first)
         @name = wikip.fullname
         @path = wikip.path
-        @upload_dest   = find_upload_dest(wikip.fullpath)
-
+        @upload_dest = find_upload_dest(wikip.fullpath)
         wiki = wikip.wiki
         @allow_uploads = wiki.allow_uploads
           if page = wikip.page
@@ -199,17 +200,32 @@ module Precious
         end
         halt 500 unless tempfile.is_a? Tempfile
 
-        dir      = wiki.per_page_uploads ? params[:upload_dest] : 'uploads'
+        if wiki.per_page_uploads
+          # remove base_url and gollum/* subpath if necessary
+          dir = request.referer.
+                  sub(request.base_url, '').
+                  sub(/.*gollum\/[-\w]+\//, '')
+          # remove base path if it is set
+          dir = dir.sub(wiki.base_path, '') if wiki.base_path
+          # remove file extension 
+          dir = dir.sub(::File.extname(dir), '')
+          dir = ::File.join("uploads", dir)
+        else
+          # store all uploads together
+          dir = 'uploads'
+        end
+        halt 500 if dir.include?('..')
+        halt 500 unless Pathname(dir).relative?
+
         ext      = ::File.extname(fullname)
         format   = ext.split('.').last || 'txt'
         filename = ::File.basename(fullname, ext)
         contents = ::File.read(tempfile)
         reponame = "#{dir}/#{filename}.#{format}"
 
-        options = {
-            :message => "Uploaded file to #{dir}/#{reponame}",
-            :parent  => wiki.repo.head.commit,
-        }
+        options = { :message => "Uploaded file to #{dir}/#{reponame}" }
+        options[:parent] = wiki.repo.head.commit if wiki.repo.head
+
         author  = session['gollum.author']
         unless author.nil?
           options.merge! author
@@ -220,9 +236,11 @@ module Precious
         begin
           wiki.write_file(reponame, contents, options)
           redirect to(request.referer)
-        rescue Gollum::DuplicatePageError, Gollum::IllegalDirectoryPath => e
+        rescue Gollum::IllegalDirectoryPath => e
           @message = e.message
           mustache :error
+        rescue Gollum::DuplicatePageError
+          halt 409 # Signal conflict
         end
       end
 
@@ -365,7 +383,7 @@ module Precious
 
       post '/preview' do
         wiki           = wiki_new
-        @name          = params[:page] || "Preview"
+        @name          = params[:page] ? strip_page_name(CGI.unescape(params[:page])) : 'Preview'
         @page          = wiki.preview_page(@name, params[:content], params[:format])
         ['sidebar', 'header', 'footer'].each do |subpage|
           @page.send("set_#{subpage}".to_sym, params[subpage]) if params[subpage]
@@ -376,18 +394,19 @@ module Precious
         @h1_title      = wiki.h1_title
         @editable      = false
         @bar_side      = wiki.bar_side
-        @allow_uploads = wiki.allow_uploads
+        @allow_uploads = false
         @navbar        = false
         @preview       = true
         mustache :page
       end
 
       get '/history/*' do
-        wikip     = wiki_page(params[:splat].first)
-        @name     = wikip.fullname
-        @page     = wikip.page
-        @page_num = [params[:page_num].to_i, 1].max
+        wikip      = wiki_page(params[:splat].first)
+        @name      = wikip.fullname
+        @page      = wikip.page
+        @page_num  = [params[:page_num].to_i, 1].max
         @max_count = settings.wiki_options.fetch(:pagination_count, 10)
+        @wiki      = @page.wiki
         unless @page.nil?
           @versions = @page.versions(
             per_page: @max_count,

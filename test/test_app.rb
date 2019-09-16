@@ -54,7 +54,7 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
@@ -371,7 +371,54 @@ context "Frontend" do
     page = @wiki.page(name)
     assert_not_equal 'abc', page.raw_data
   end
+  
+  test "uploading is not allowed unless explicitly enabled" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+    assert_equal 405, last_response.status
+  end
+  
+  test "upload a file with mode dir" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true})
+  
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+  
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    file = @wiki.file("uploads/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false})
+  end
 
+  test "upload a file with mode page" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: Home), based on referer
+    file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
+  end
+  
+  test "guard against uploading an existing file" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true})
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+    assert_equal 302, last_response.status
+    # Post the same file a second time; should result in conflict
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+    assert_equal 409, last_response.status
+    Precious::App.set(:wiki_options, {allow_uploads: false})
+  end
+  
   test "delete a page" do
     name = "deleteme"
     post "/gollum/create", :content => 'abc', :page => name,
@@ -387,8 +434,9 @@ context "Frontend" do
   end
 
   test "previews content" do
-    post "/gollum/preview", :content => 'abc', :format => 'markdown'
+    post "/gollum/preview", :content => 'abc', :format => 'markdown', :page => 'Samewise%20Gamgee.mediawiki'
     assert last_response.ok?
+    assert last_response.body.include?('Samewise Gamgee</h1>')
   end
 
   test "previews content on the first page of an empty wiki" do

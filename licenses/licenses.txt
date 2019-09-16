@@ -7,46 +7,25 @@ gollum is not permitted.
 
 ---
 
-The following PNGs are based on Ubuntu 11.10 SVG files located in /usr/share/icons/unity-icon-theme/places/svg/
-- group-folders.svg
-- group-files.svg
-- group-downloads.svg
+The identicon.js code is used under the BSD license.
 
-  lib/gollum/public/css/document.png
-  lib/gollum/public/css/folder-horizontal.png
-  lib/gollum/public/css/toggle-small-expand.png
-  lib/gollum/public/css/toggle-small.png
-
-Creative Commons - Attribution Share Alike
-https://launchpad.net/unity-asset-pool
-http://packages.ubuntu.com/oneiric/all/unity-asset-pool/filelist
-https://bazaar.launchpad.net/~unity-team/unity-asset-pool/trunk/view/head:/COPYRIGHT
+https://github.com/stewartlord/identicon.js/blob/master/identicon.js
+https://github.com/stewartlord/identicon.js/blob/master/README.md
+  
+  lib/gollum/public/gollum/javascript/identicon.js
 
 ---
 
-The css-tree-menu code is used under the MIT license.
+CSS Spinner by Franz Heidl is used under the MIT license.
 
-http://www.thecssninja.com/css/css-tree-menu
-http://www.thecssninja.com/demo/license.txt
+https://github.com/franzheidl/spinners
 
-  lib/gollum/public/css/_styles.css
-
----
-
-Default profile image (man_24.png) is used under the CC BY-SA 3.0 Unported license.
-
-CC BY-SA 3.0 Unported
-http://blog.twg.ca/2010/11/retina-display-icon-set/
-http://creativecommons.org/licenses/by-sa/3.0/legalcode.txt
-
-    lib/gollum/public/images/man_24.png
+  lib/gollum/public/gollum/stylesheets/_spinners.scss
 
 ---
 
-The canvas_identicon code is used under the MIT license.
+ClipboardJS is used under the MIT license.
 
-https://github.com/donpark/identicon/blob/master/identicon-canvas/identicon_canvas.js
-https://github.com/donpark/identicon/blob/master/README
+https://github.com/zenorocha/clipboard.js
 
-  lib/gollum/public/gollum/javascript/identicon_canvas.js
-
+  lib/gollum/public/gollum/javascript/clipboard.min.js
