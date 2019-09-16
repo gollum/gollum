@@ -8,10 +8,6 @@ matrix:
       jdk: openjdk11
       before-install: gem install bundler --no-ri --no-rdoc
 
-# For OpenJDK 8 support
-# https://github.com/travis-ci/travis-ci/issues/2968
-dist: xenial
-
 addons:
   # Fix OpenJDK builds
   # https://github.com/travis-ci/travis-ci/issues/5227
