@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'tempfile'
 SimpleCov.start
 
 if ENV['TRAVIS']
@@ -43,9 +44,10 @@ def remove_temp_repo(path)
 end
 
 def get_new_temp_repo_path(bare = false)
-  dirname = bare ? 'git_bare_test' : 'git_non_bare_test'
-  filename = dirname + Time.now.to_i.to_s + rand(300).to_s.rjust(3, '0')
-  File.join('/','tmp', filename)
+  tmp = Tempfile.new(bare ? 'git_bare_test' : 'git_non_bare_test')
+  path = tmp.path
+  tmp.close(true)
+  path
 end
 
 # Require any custom RSpec matchers
