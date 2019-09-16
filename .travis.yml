@@ -10,7 +10,7 @@ matrix:
 
 # For OpenJDK 8 support
 # https://github.com/travis-ci/travis-ci/issues/2968
-dist: trusty
+dist: xenial
 
 addons:
   # Fix OpenJDK builds
