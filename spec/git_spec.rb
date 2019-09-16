@@ -493,20 +493,24 @@ describe RubyGit do
       it "fetches from a local clone" do
         expect(@local.branches).to have(1).branches
         expect(@local.tags).to have(0).tags
-        @local.git.fetch(@remote.path, refspecs: "+refs/*:refs/*")
+        @local.git.fetch(@remote.path, refspecs: "+refs/heads/*:refs/heads/*")
         # 2 branches are expected here because the remote has 2 branches, master and alternative,
         # though only one showed up locally until the fetch was done with the refspecs above.
         expect(@local.branches).to have(2).branches
+        # Also fetch new tag
+        @local.git.fetch(@remote.path, refspecs: "+refs/tags/*:refs/tags/*")
         expect(@local.tags).to have(1).tags
       end
 
       it "fetches from a local clone with credentials" do
         expect(@local.branches).to have(1).branches
         expect(@local.tags).to have(0).tags
-        @local.git.fetch(@remote.path, refspecs: "+refs/*:refs/*", username: 'rspec', password: 'Hahmeid7')
+        @local.git.fetch(@remote.path, refspecs: "+refs/heads/*:refs/heads/*", username: 'rspec', password: 'Hahmeid7')
         # 2 branches are expected here because the remote has 2 branches, master and alternative,
         # though only one showed up locally until the fetch was done with the refspecs above.
         expect(@local.branches).to have(2).branches
+        # Also fetch new tag
+        @local.git.fetch(@remote.path, refspecs: "+refs/tags/*:refs/tags/*")
         expect(@local.tags).to have(1).tags
       end
     end
