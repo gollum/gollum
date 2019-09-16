@@ -1,5 +1,9 @@
 module Precious
   module Editable
+    def has_editor
+      true
+    end
+
     def formats(selected = @page.format)
       Gollum::Markup.formats.map do |key, val|
         { :name     => val[:name],
