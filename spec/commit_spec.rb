@@ -80,16 +80,43 @@ describe Commit do
 
     it "has stats" do
       stats = Repo.new(TEST_REPO_PATH).commits[-2].stats
-      expect(stats[0]).to eq 8
-      expect(stats[1]).to eq 2
-      expect(stats[2]["postpatriarchialist.txt"]).to eq([2, 0, 2])
+      expect(stats[:total_additions]).to eq 8
+      expect(stats[:total_deletions]).to eq 2
+      expected_file_stat =  {
+        :new_additions => 0,
+        :new_deletions => 2,
+        :changes => 2,
+        :new_file => 'deconstructions.txt',
+        :old_file => 'deconstructions.txt'
+      }
+      expect(stats[:files].first).to eq(expected_file_stat)
+    end
+
+    it "has stats that follow renames" do
+      stats = Repo.new(TEST_REPO_PATH).commits[0].stats
+      expected_file_stat =  {
+        :new_additions => 0,
+        :new_deletions => 0,
+        :changes => 0,
+        :new_file => 'follow-rename.txt',
+        :old_file => 'rename-example.txt'
+      }
+      expect(stats[:files].first).to eq(expected_file_stat)
     end
 
     it "has stats on first commit" do
       stats = Repo.new(TEST_REPO_PATH).commits[-1].stats
-      expect(stats[0]).to eq 228
-      expect(stats[1]).to eq 0
-      expect(stats[2]["postpatriarchialist.txt"]).to eq([75, 0, 75])
+      expect(stats[:total_additions]).to eq 228
+      expect(stats[:total_deletions]).to eq 0
+      expected_file_stat =  {
+        :new_additions => 75,
+        :new_deletions => 0,
+        :changes => 75,
+        :new_file => 'postpatriarchialist.txt',
+        :old_file => '/dev/null'
+      }
+      result = stats[:files].find {|f| f[:new_file] == 'postpatriarchialist.txt'}
+      expect(result).to eq(expected_file_stat)
     end
     
     it "has diffs compared with parent commit" do
