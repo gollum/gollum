@@ -2,10 +2,10 @@ language: ruby
 matrix:
   include:
     - rvm: jruby-9k
-      jdk: oraclejdk8
+      jdk: oraclejdk11
       before-install: gem install bundler --no-ri --no-rdoc
     - rvm: jruby-9k
-      jdk: openjdk8
+      jdk: openjdk11
       before-install: gem install bundler --no-ri --no-rdoc
 
 # For OpenJDK 8 support
