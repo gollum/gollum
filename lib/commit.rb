@@ -41,10 +41,7 @@ module RJGit
       df.set_repository(@jrepo)
       df.set_context(0)
       parent_commit = @jcommit.parent_count > 0 ? @jcommit.get_parents[0] : nil
-
-      rename_detector = RenameDetector.new(@jrepo)
-      rename_detector.addAll(df.scan(parent_commit, @jcommit))
-      entries = rename_detector.compute
+      entries = df.scan(parent_commit, @jcommit)
 
       results = []
       total_del = 0
