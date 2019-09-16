@@ -89,13 +89,7 @@ context 'Latest changes with page-file-dir' do
     assert_equal body.include?('<a href="/Rivendell/Elrond.md/'), false
     assert_equal body.include?('<a href="/Elrond.md/'), true
   end
-
-  test "extract destination file name in case of path renaming" do
-    view = Precious::Views::LatestChanges.new
-    assert_equal "newname.md", view.extract_renamed_path_destination("oldname.md => newname.md")
-    assert_equal "newDirectoryName/fileName.md", view.extract_renamed_path_destination("{oldDirectoryName => newDirectoryName}/fileName.md")
-  end
-
+  
   teardown do
     FileUtils.rm_rf(@path)
     Precious::App.set(:wiki_options, { :page_file_dir => nil})
