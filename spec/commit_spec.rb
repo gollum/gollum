@@ -80,16 +80,31 @@ describe Commit do
 
     it "has stats" do
       stats = Repo.new(TEST_REPO_PATH).commits[-2].stats
-      expect(stats[0]).to eq 8
-      expect(stats[1]).to eq 2
-      expect(stats[2]["postpatriarchialist.txt"]).to eq([2, 0, 2])
+      expect(stats[:total_additions]).to eq 8
+      expect(stats[:total_deletions]).to eq 2
+      expected_file_stat =  {
+        :new_additions => 0,
+        :new_deletions => 2,
+        :changes => 2,
+        :new_path => 'deconstructions.txt',
+        :old_path => 'deconstructions.txt'
+      }
+      expect(stats[:files].first).to eq(expected_file_stat)
     end
 
     it "has stats on first commit" do
       stats = Repo.new(TEST_REPO_PATH).commits[-1].stats
-      expect(stats[0]).to eq 228
-      expect(stats[1]).to eq 0
-      expect(stats[2]["postpatriarchialist.txt"]).to eq([75, 0, 75])
+      expect(stats[:total_additions]).to eq 228
+      expect(stats[:total_deletions]).to eq 0
+      expected_file_stat =  {
+        :new_additions => 75,
+        :new_deletions => 0,
+        :changes => 75,
+        :new_path => 'postpatriarchialist.txt',
+        :old_path => '/dev/null'
+      }
+      result = stats[:files].find {|f| f[:new_path] == 'postpatriarchialist.txt'}
+      expect(result).to eq(expected_file_stat)
     end
     
     it "has diffs compared with parent commit" do

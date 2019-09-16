@@ -41,8 +41,12 @@ module RJGit
       df.set_repository(@jrepo)
       df.set_context(0)
       parent_commit = @jcommit.parent_count > 0 ? @jcommit.get_parents[0] : nil
-      entries = df.scan(parent_commit, @jcommit)
-      results = {}
+
+      rename_detector = RenameDetector.new(@jrepo)
+      rename_detector.addAll(df.scan(parent_commit, @jcommit))
+      entries = rename_detector.compute
+
+      results = []
       total_del = 0
       total_ins = 0
       entries.each do |entry|
@@ -57,9 +61,19 @@ module RJGit
         end
         total_del += del
         total_ins += ins
-        results[file.getNewPath] = [ins, del, ins + del]
+        results << {
+          :new_path => file.getNewPath,
+          :old_path => file.getOldPath,
+          :new_additions => ins,
+          :new_deletions => del,
+          :changes => ins + del
+        }
       end
-      return total_ins, total_del, results
+      return {
+        :total_additions => total_ins,
+        :total_deletions => total_del,
+        :files => results
+      }
     end
 
     def diff(options = {})
