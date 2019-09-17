@@ -107,7 +107,7 @@ module RJGit
         walk = RevWalk.new(repository)
         objhead = repository.resolve(Constants::HEAD)
         return Commit.new(repository, walk.parseCommit(objhead))
-      rescue NativeException => e
+      rescue java.lang.NullPointerException => e
         return nil
       end
     end
@@ -122,7 +122,7 @@ module RJGit
         walk.mark_start(root)
         commits = walk.map { |commit| Commit.new(repository, commit) }
         return commits.first(options[:limit])
-      rescue NativeException => e
+      rescue java.lang.NullPointerException => e
         return Array.new
       end
     end
