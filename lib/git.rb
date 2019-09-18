@@ -268,7 +268,11 @@ module RJGit
     def checkout(branch_name = "master", options = {})
       checkout_command = @jgit.checkout.set_name(branch_name)
       # call :setStartPoint directly to avoid ambiguity warning
-      checkout_command.java_send :setStartPoint, [RevCommit], options[:commit]
+      if options[:commit].is_a?(org.eclipse.jgit.revwalk.RevCommit)
+        checkout_command.java_send :setStartPoint, [org.eclipse.jgit.revwalk.RevCommit], options[:commit]
+      else
+        checkout_command.java_send :setStartPoint, [java.lang.String], options[:commit]
+      end
       options[:paths].each {|path| checkout_command.add_path(path)} if options[:paths]
       checkout_command.set_create_branch(true) if options[:create]
       checkout_command.set_force(true) if options[:force]
