@@ -22,25 +22,17 @@ module Precious
             :date      => v.authored_date.strftime("%B %d, %Y"),
             :user_icon => self.user_icon_code(v.author.email),
             :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              { :file => f,
-                :link => "#{page_path}/#{v.id}"
+            :files     => v.stats.files.map { |f|
+              new_path = extract_page_dir(f[:new_file])
+              { :file => new_path,
+                :link => "#{page_route(new_path)}/#{v.id}",
+                :renamed => f[:old_file] ? extract_page_dir(f[:old_file]) : nil
               }
             }
           }
         end
       end
 
-      def extract_renamed_path_destination(file)
-        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
-      end
-
-      def previous_link
-      end
-
-      def next_link
-      end
     end
   end
 end

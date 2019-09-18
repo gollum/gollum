@@ -41,6 +41,5 @@ module Precious
         fail ArgumentError, "emoji `#{name}' not found"
       end
     end
-
   end
 end
