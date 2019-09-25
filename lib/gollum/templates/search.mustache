@@ -7,20 +7,16 @@
 <div id="results">
 
 {{#has_results}}
-  <table>
-  <thead><tr>
-  <th>Filename</th>
-  <th>Matches</th>
-  </tr></thead>
-  <tbody>
+  <ul>
     {{#results}}
-      <tr>
-      <td><a href="{{base_url}}/{{name}}">{{name}}</a></td>
-      <td>{{#context}}{{.}}<br/>{{/context}}</td>
-      </tr>
+      <li>
+        <a href="{{base_url}}/{{name}}">{{name}}</a>
+        {{#context}}
+        <br/>{{.}}
+        {{/context}}
+      </li>
     {{/results}}
-  </tbody>
-  </table>
+  </ul>
 {{/has_results}}
 
 {{#no_results}}
