@@ -24,6 +24,9 @@
 	  var pageFullPath = '{{escaped_url_path}}';
     var pageFormat   = '{{format}}';
 	{{/page}}
+  {{#search_terms}}
+    var searchTerms  = '{{search_terms}}';
+  {{/search_terms}}
   {{#is_create_page}}
     var default_markup = '{{default_markup}}';
   {{/is_create_page}}
