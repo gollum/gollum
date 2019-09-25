@@ -173,6 +173,15 @@ context "Frontend" do
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
+  test "rename preserves format" do
+    page_1 = @wiki.page("B")
+    post "/gollum/rename/B", :rename => "/C.rst", :message => 'def'
+
+    follow_redirect!
+    assert_equal '/C.rst.md', last_request.fullpath
+    assert last_response.ok?
+  end
+
   test "renames page catches invalid page" do
     # No such page
     post "/gollum/rename/no-such-file-here", :rename => "/C", :message => 'def'
@@ -193,7 +202,6 @@ context "Frontend" do
     assert !last_response.ok?
     assert_equal last_response.status, 500
   end
-
 
   test "renames page in subdirectory" do
     page_1 = @wiki.page("G/H")
@@ -228,7 +236,6 @@ context "Frontend" do
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
-
 
   test "creates page" do
     post "/gollum/create", :content => 'abc', :page => "D",
@@ -328,6 +335,20 @@ context "Frontend" do
          :page              => page, :path => path, :message => ''
     page_e = @wiki.page(::File.join(path,page))
     assert_equal nil, page_e
+  end
+
+  test "edit allows changing format" do
+    post '/gollum/create', :content => 'create_msg', :page => 'gandalf',
+          :path => '/', :format => 'markdown', :message => ''
+    page = @wiki.page('gandalf.md')
+    assert page
+
+    @wiki.clear_cache
+
+    post '/gollum/edit/', :content => 'new content', :format => 'txt', :page => 'gandalf', :path => '/', :message => '', :etag => page.sha
+    assert last_response.ok?
+    assert_nil @wiki.page('gandalf.md')
+    assert @wiki.page('gandalf.txt')
   end
 
   test "page create and edit with dash & page rev" do

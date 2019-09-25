@@ -275,8 +275,8 @@ module Precious
         end
         committer.commit
 
-        wikip = wiki_page(rename)
-        page  = wikip.page
+        # Renaming preserves format, so add the page's format to the renamed path to retrieve the renamed page
+        page = wiki_page("#{rename}.#{Gollum::Page.format_to_ext(page.format)}").page
         return if page.nil?
         redirect to("/#{page.escaped_url_path}")
       end
