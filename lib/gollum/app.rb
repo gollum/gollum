@@ -473,7 +473,7 @@ module Precious
             b_filename_count = b[:filename_count]
             b_count          = b[:count]
           end
-          [a[:filename_count], b_filename_count] <=> [a[:count], b_count]
+          [a[:filename_count], a[:count]] <=> [b_filename_count, b_count]
         end
         @results.reverse!
         @name    = @query
