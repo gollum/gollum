@@ -1,7 +1,7 @@
 module Precious
   module Views
     class Search < Layout
-      attr_reader :content, :page, :footer, :results, :query, :search_terms
+      attr_reader :results, :query, :search_terms
 
       def title
         "Search results for " + @query
@@ -9,6 +9,10 @@ module Precious
 
       def search
         true # View has searchbar
+      end
+
+      def has_search_terms
+        !@search_terms.empty?
       end
 
       def has_results

@@ -465,7 +465,16 @@ module Precious
         wiki     = wiki_new
         # Sort wiki search results by count (desc) and then by name (asc)
         @results, @search_terms = wiki.search(@query)
-        @results.sort! { |a, b| (a[:filename_count] <=> b[:filename_count] ).nonzero? || (a[:count] <=> b[:count]).nonzero? }
+        @results.sort! do |a, b|
+          if b.nil?
+            b_filename_count = 0
+            b_count          = 0
+          else
+            b_filename_count = b[:filename_count]
+            b_count          = b[:count]
+          end
+          [a[:filename_count], b_filename_count] <=> [a[:count], b_count]
+        end
         @results.reverse!
         @name    = @query
         mustache :search

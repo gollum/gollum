@@ -564,6 +564,27 @@ $(document).ready(function() {
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
 
+  if($('#search-results').length ){
+    $('.toggle-context').each(function () {
+      var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
+      if ( !hiddenContext.length ) {
+        $(this).toggle();
+      } else {
+        $(this).click(function () {
+          hiddenContext.toggle();
+          $(this).toggle();
+        });
+      }
+    });
+    var searchQuery = new RegExp(searchTerms.join('|'), 'gi'); //searchTerms provided by the layout template.
+    $('div.search-context li').each(function () {
+      var newText = $(this).html().replace(searchQuery, function (match) {
+        return '<span class="bg-green-light">' + match + '</span>';
+      });
+      $(this).html(newText);
+    });
+  }
+
   if($('.markdown-body').length ){
     // Set text direction (LTR or RTL)
     setTextDirection();
