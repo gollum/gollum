@@ -1,7 +1,9 @@
 module Precious
-  module Pagination 
+  module Pagination
+
 	  def next_page
-	    @versions.length < @max_count ? nil : (@page_num + 1).to_s
+      result_set = @versions || @results
+	    result_set.length < @max_count ? nil : (@page_num + 1).to_s
 	  end
 
 	  def previous_page

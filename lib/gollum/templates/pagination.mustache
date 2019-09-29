@@ -1,11 +1,6 @@
-<div id="pagination" class="pb-2 px-3">
-	  <span id="prev" {{^previous_page}}hidden{{/previous_page}}>
-	    <a href="?page_num={{previous_page}}">&laquo; Previous</a>
-	  </span>
-
-	<span>&nbsp;</span>
-
-	  <span id="next" class="float-right" {{^next_page}}hidden{{/next_page}}>
-	    <a href="?page_num={{next_page}}">Next &raquo;</a>
-	  </span>
-</div>
+<nav class="paginate-container" aria-label="Pagination">
+  <div class="pagination" id="pagination">
+    <a id="prev" href="?page_num={{previous_page}}" class="previous_page {{^previous_page}}disabled{{/previous_page}}">Previous</span>
+    <a id="next" href="?page_num={{next_page}}" class="next_page {{^next_page}}disabled{{/next_page}}" rel="next" aria-label="Next Page">Next</a>
+  </div>
+</nav>
