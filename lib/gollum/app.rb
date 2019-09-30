@@ -461,22 +461,17 @@ module Precious
       end
 
       get '/search' do
-        @query   = params[:q] || ''
-        wiki     = wiki_new
-        # Sort wiki search results by count (desc) and then by name (asc)
-        @results, @search_terms = wiki.search(@query)
-        @results.sort! do |a, b|
-          if b.nil?
-            b_filename_count = 0
-            b_count          = 0
-          else
-            b_filename_count = b[:filename_count]
-            b_count          = b[:count]
-          end
-          [a[:filename_count], a[:count]] <=> [b_filename_count, b_count]
+        @query     = params[:q]
+        @name      = @query
+        if @query.empty?
+          @results = []
+          @search_terms = []
+        else
+          @page_num  = [params[:page_num].to_i, 1].max
+          @max_count = 10
+          wiki       = wiki_new
+          @results, @search_terms = wiki.search(@query)
         end
-        @results.reverse!
-        @name    = @query
         mustache :search
       end
 
