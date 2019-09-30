@@ -86,6 +86,16 @@ function setTextDirection () {
   $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 }
 
+function preparePage () {
+  setTextDirection();
+  if(criticMarkup == 'true') {
+    $('#wiki-content').addClass('criticmarkup');
+    $('ins.break').unwrap();
+    $('span.critic.comment').wrap('<span class="popover" />');
+    $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
+  }
+}
+
 // ua
 $(document).ready(function() {
   // for deleting the current page
@@ -332,7 +342,7 @@ $(document).ready(function() {
       success: function(data) {
         var mainDiv = $('#wiki-wrapper', data);
         $('.tabnav-div#preview-content').html(mainDiv);
-        setTextDirection();
+        preparePage();
         if (sectionAnchor ) { 
           if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
             sectionHeading.scrollIntoView();
@@ -559,14 +569,6 @@ $(document).ready(function() {
     $.GollumEditor({ NewFile: true, MarkupType: default_markup, commands: editorHotkeys });
   }
 
-  // CriticMarkup
-  if(criticMarkup == 'true') {
-    $('#wiki-content').addClass('criticmarkup');
-    $('ins.break').unwrap();
-    $('span.critic.comment').wrap('<span class="popover" />');
-    $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
-  }
-
   if($('#search-results').length ){
     $('.toggle-context').each(function () {
       var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
@@ -592,10 +594,10 @@ $(document).ready(function() {
       $(this).html(newText);
     });
   }
-
+  
   if($('.markdown-body').length ){
     // Set text direction (LTR or RTL)
-    setTextDirection();
+    preparePage();
 
     // Set the 'e' hotkey for editing pages.
     Mousetrap.bind(['e'], function( e ) {
