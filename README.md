@@ -7,19 +7,10 @@ RJGit
 [![Coverage Status](https://coveralls.io/repos/repotag/rjgit/badge.png?branch=master)](https://coveralls.io/r/repotag/rjgit)
 [![Gem Version](https://badge.fury.io/rb/rjgit.png)](http://badge.fury.io/rb/rjgit)
 
-Authors
+Summary
 -------
 
-RJGit is being developed by Team Repotag:
-
-- [Maarten Engelen](https://github.com/maarten)
-- [Bart Kamphorst](https://github.com/bartkamphorst)
-- [Dawa Ometto](https://github.com/dometto)
-- [Arlette van Wissen](https://github.com/arlettevanwissen)
-- [Steven Woudenberg](https://github.com/stevenwoudenberg)
-
-With special thanks to:
-- [Patrick Pepels](https://github.com/bluedread)
+RJGit provides a fully featured library for accessing and manipulating git repositories by wrapping the Java [JGit library](https://github.com/eclipse/jgit). It thus provides similiar functionality as e.g. [rugged](https://github.com/libgit2/rugged) on JRuby.
 
 Installation
 ------------
@@ -173,6 +164,21 @@ jruby --ng-server &
 ```
 jruby --ng -S rake
 ```
+
+Authors
+-------
+
+RJGit is being developed by Team Repotag:
+
+- [Maarten Engelen](https://github.com/maarten)
+- [Bart Kamphorst](https://github.com/bartkamphorst)
+- [Dawa Ometto](https://github.com/dometto)
+- [Arlette van Wissen](https://github.com/arlettevanwissen)
+- [Steven Woudenberg](https://github.com/stevenwoudenberg)
+
+With special thanks to:
+- [Patrick Pepels](https://github.com/bluedread)
+
 
 License
 -------
