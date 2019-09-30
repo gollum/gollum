@@ -581,9 +581,7 @@ $(document).ready(function() {
         });
       }
     });
-    searchTerms = searchTerms.map( function (s) {
-      return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); //Regex escape: https://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript/3561711#3561711
-    });
+
     var searchQuery = new RegExp(searchTerms.join('|'), 'gi'); //searchTerms provided by the layout template.
     $('div.search-context li span').each(function () {
       var curText = $(this).html().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
