@@ -8,26 +8,33 @@
 
   {{>pagination}}
 
-<div class="Box Box--condensed search-results" id="search-results">
-  <ul>
-  <div class="Box-header border-bottom p-0"></div>
-  {{#results}}
-    <li class="Box-row Box-row--gray">
-            <span class="Counter Counter--gray tooltipped tooltipped-w" aria-label="{{filename_count}} hits in filename - {{count}} hits in content">{{filename_count}} - {{count}}</span>&nbsp;
+  <div id="search-results">
+  {{#sorted_results}}
+    <div class="Box Box--condensed search-results" data-index="{{index}}">
+      <ul>
+      <div class="Box-header border-bottom p-0"></div>
+      {{#results}}
+        <li class="Box-row Box-row--gray">
+          <span class="Counter Counter--gray tooltipped tooltipped-w" aria-label="{{filename_count}} hits in filename - {{count}} hits in content">{{filename_count}} - {{count}}</span>&nbsp;
+          <span class="text-bold"><a href="{{base_url}}/{{name}}">{{name}}</a></span>
+          <button class="btn-link tooltipped tooltipped-w float-right toggle-context" aria-label="Show all {{count}} hits in this page">{{#octicon}}search{{/octicon}}</button>
+        </li>
 
-      <span class="text-bold"><a href="{{base_url}}/{{name}}">{{name}}</a></span>
-      <button class="btn-link tooltipped tooltipped-w float-right toggle-context" aria-label="Show all {{count}} hits in this page">{{#octicon}}search{{/octicon}}</button>
-    </li>
-
-    <div class="search-context">
-      {{#context}}
-      <li class="Box-row border-0"><span class="text-italic">{{.}}</span></li>
-      {{/context}}
+        <div class="search-context">
+          {{#context}}
+            <li class="Box-row border-0"><span class="text-italic">{{.}}</span></li>
+          {{/context}}
+        </div>
+      {{/results}}
+      </ul>
     </div>
+  {{/sorted_results}}
+  </div>
 
-  {{/results}}
-  </ul>
-</div>
+  <div id="footer" class="mt-4">
+    <a class="btn" href="#">Back to Top</a>
+  </div>
+
 {{/has_results}}
 
 {{#no_results}}
@@ -35,10 +42,6 @@
     There are no results for your search <strong>{{query}}</strong>.
   </p>
 {{/no_results}}
-
-<div id="footer" class="mt-4">
-    <a class="btn" href="#">Back to Top</a>
-</div>
 
 </div>
 </div>
