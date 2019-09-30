@@ -33,6 +33,12 @@ function prefixBaseUrl(path) {
   }
 }
 
+// Ensure one slash at the beginning, no trailing slash.
+function cleanPath (path){
+  var result = '/' + path.replace(/\/$/,'');
+  return result.replace(/\/{2}/g, '/');
+}
+
 function pageName(){
   // "my/dir/file.md" => "file"
   if (typeof(pageFullPath) == 'undefined') {
@@ -207,7 +213,7 @@ $(document).ready(function() {
       var oldName = pageName();
       var context_blurb =
         "Renamed page will be under " +
-        "<span class='path'>" + htmlEscape('/' + path) + "</span>" +
+        "<span class='path'>" + htmlEscape(cleanPath(path)) + "</span>" +
         " unless an absolute path is given."
 
       $.GollumDialog.init({
@@ -246,19 +252,17 @@ $(document).ready(function() {
     $('#minibutton-new-page').parent().removeClass('jaws');
     $('#minibutton-new-page').click(function(e) {
       e.preventDefault();
-
       var path = pagePath();
       if( path === undefined && $('#file-browser').length != 0 ){
         // In the pages view, pageFullPath isn't defined.
         // The new button will still expect a value however.
         // So we try to figure one out from window.location
         path = window.location.pathname.replace(routePath('overview'), '')
-        // For consistency remove the trailing /
-        path = path.replace(/\/$/,'')
       }
+
       var context_blurb =
         "Page will be created under " +
-        "<span class='path'>" + htmlEscape('/' + path) + "</span>" +
+        "<span class='path'>" + htmlEscape(cleanPath(path)) + "</span>" +
         " unless an absolute path is given."
 
       $.GollumDialog.init({
@@ -425,7 +429,7 @@ $(document).ready(function() {
       $(this).attr('disabled', true);
 
       var formData = new FormData($('#gollum-editor-form').get(0));
-      var newPath  = prefixBaseUrl(pagePath() + '/' + pageName() + formatToExt($('#wiki_format')[0].value));
+      var newPath  = cleanPath(prefixBaseUrl(pagePath() + '/' + pageName() + formatToExt($('#wiki_format')[0].value)));
       var endpoint = $('#gollum-editor-form').attr("action");
 
       $.ajax({
