@@ -568,87 +568,26 @@ $(document).ready(function() {
   }
 
   if($('#search-results').length ){
-    var toggleContext = function () {
-      $('.toggle-context').each(function () {
-        var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
-        if ( !hiddenContext.length ) {
+    $('.toggle-context').each(function () {
+      var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
+      if ( !hiddenContext.length ) {
+        $(this).toggle();
+      } else {
+        $(this).click(function () {
+          hiddenContext.toggle();
           $(this).toggle();
-        } else {
-          $(this).click(function () {
-            hiddenContext.toggle();
-            $(this).toggle();
-          });
-        }
-      });
-    };
-    toggleContext();
-
+        });
+      }
+    });
     var searchQuery = new RegExp(searchTerms.join('|'), 'gi'); //searchTerms provided by the layout template.
     $('div.search-context li span').each(function () {
       var newText = $(this).html().replace(searchQuery, function (match) {
         return '<span class="bg-green-light">' + match + '</span>';
       });
+              console.log(newText);
+
       $(this).html(newText);
     });
-
-    var currentPage = function () {
-      return parseInt($('div.search-results').not(':hidden').attr('data-index'));
-    };
-
-    var navPage = function ( tryGetPage ) {
-      var tryPage = tryGetPage();
-      var tryDiv = $('div.search-results[data-index=' + tryPage + ']')
-      if (tryDiv.length) {
-        return $(tryDiv);
-      } else {
-        return null;
-      }
-    };
-
-    var nextPage = function () {
-      return navPage(function () {
-        return currentPage() + 1;
-      });
-    };
-
-    var prevPage = function () {
-      return navPage(function (cur) {
-        return currentPage() - 1;
-      });
-    };
-
-    var toggleNav = function () {
-      if (nextPage()) {
-        $('#pagination #next').removeClass('disabled');
-      } else {
-        $('#pagination #next').addClass('disabled');
-      }
-      if (prevPage()) {
-        $('#pagination #prev').removeClass('disabled');
-      } else {
-        $('#pagination #prev').addClass('disabled');
-      }
-    };
-
-    toggleNav();
-
-    var navClick = function (e) {
-      e.preventDefault();
-      if ( $(this).attr('id') == 'next' ) {
-        var targetPageDiv = nextPage();
-      } else {
-        var targetPageDiv = prevPage();
-      }
-      if (targetPageDiv) {
-        $('div.search-results').hide();
-        targetPageDiv.toggle();
-        toggleContext();
-        toggleNav();
-      }
-      this.blur();
-    };
-    $('#pagination a').on('click', navClick)
-
   }
 
   if($('.markdown-body').length ){
