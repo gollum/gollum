@@ -508,36 +508,39 @@ $(document).ready(function() {
 
       var clickPageNav = function (e) {
         e.preventDefault();
-        $.ajax({
-            url: $(this).attr('href'),
-            type: 'GET',
-            success: function(data) {
-              var rowDiv = $('#page-history-list', data);
-              var new_pagination = $('#pagination', data);
+        if ( !$(this).hasClass('disabled') ) {
+          $.ajax({
+              url: $(this).attr('href'),
+              type: 'GET',
+              success: function(data) {
+                var rowDiv = $('#page-history-list', data);
+                var new_pagination = $('#pagination', data);
 
-              next = $('#pagination #next');
-              prev = $('#pagination #prev');
-              new_next = new_pagination.find('#next');
-              new_prev = new_pagination.find('#prev');
+                ['#next', '#prev'].forEach( function (nav_item) {
+                  old_btn = $('#pagination ' + nav_item);
+                  new_btn = new_pagination.find(nav_item);
+                  old_btn.attr('href', new_btn.attr('href'));
+                  if (new_btn.hasClass('disabled')) {
+                    old_btn.addClass('disabled');
+                  } else {
+                    old_btn.removeClass('disabled');
+                  }
+                });
 
-              next[0].hidden = new_next[0].hidden;
-              prev[0].hidden = new_prev[0].hidden;
+                $('#page-history-list').replaceWith(rowDiv);
 
-              next.children('a').attr('href', new_next.children('a').attr('href'));
-              prev.children('a').attr('href', new_prev.children('a').attr('href'));
-
-              $('#page-history-list').replaceWith(rowDiv);
-
-              setCheckboxEvents();
-              toggleInputs();
-            },
-            error: function(data, textStatus, errorThrown) {
-              console.log('something went wrong: ' + textStatus + errorThrown)
-            }
-        });
+                setCheckboxEvents();
+                toggleInputs();
+              },
+              error: function(data, textStatus, errorThrown) {
+                console.log('something went wrong: ' + textStatus + errorThrown)
+              }
+          });
+        }
+        this.blur();
       };
 
-      $("#pagination #next a, #pagination #prev a").each(function(index, element) {
+      $("#pagination #next, #pagination #prev").each(function(index, element) {
        $(element).on("click", clickPageNav);
       });
     }
@@ -566,6 +569,30 @@ $(document).ready(function() {
     $.GollumEditor({ NewFile: true, MarkupType: default_markup, commands: editorHotkeys });
   }
 
+  if($('#search-results').length ){
+    $('.toggle-context').each(function () {
+      var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
+      if ( !hiddenContext.length ) {
+        $(this).toggle();
+      } else {
+        $(this).click(function () {
+          hiddenContext.toggle();
+          $(this).toggle();
+        });
+      }
+    });
+
+    var searchQuery = new RegExp(searchTerms.join('|'), 'gi'); //searchTerms provided by the layout template.
+    $('div.search-context li span').each(function () {
+      var curText = $(this).html().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      var newText = curText.replace(searchQuery, function (match) {
+        return '<span class="bg-green-light">' + match + '</span>';
+      });
+
+      $(this).html(newText);
+    });
+  }
+  
   if($('.markdown-body').length ){
     // Set text direction (LTR or RTL)
     preparePage();

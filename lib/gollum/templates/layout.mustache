@@ -24,6 +24,10 @@
 	  var pageFullPath = '{{escaped_url_path}}';
     var pageFormat   = '{{format}}';
 	{{/page}}
+  {{#has_search_terms}}
+    var searchTerms  = [{{#search_terms}}'{{.}}', {{/search_terms}}
+    ];
+  {{/has_search_terms}}
   {{#is_create_page}}
     var default_markup = '{{default_markup}}';
   {{/is_create_page}}
