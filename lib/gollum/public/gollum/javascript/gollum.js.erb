@@ -102,6 +102,12 @@ function preparePage () {
   }
 }
 
+function flashNotice(type, notice) {
+  // accepted types: info, success, warn, error
+  html = '<p><div class="flash flash-' + type +'"><button class="flash-close js-flash-close" type="button" onclick="parentNode.remove()"><%=rocticon('x')%></button>' + notice + '</div></p>';
+  $('#wiki-content h1').before(html);
+}
+
 // ua
 $(document).ready(function() {
   // for deleting the current page
@@ -146,6 +152,11 @@ $(document).ready(function() {
     } else if ($.browser.version == "8.0") {
       $('body').addClass('ie8');
     }
+  }
+
+  if (match = new RegExp(/\?redirected\_from=([^?]*)/).exec(window.location.href)) {
+    notice = "The page you requested was renamed or moved. You've been successfully redirected to its new location.";
+    flashNotice('success', notice);
   }
 
   if ($('#minibutton-upload-page').length) {
