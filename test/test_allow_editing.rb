@@ -25,6 +25,17 @@ context "Precious::Views::Editing" do
     assert page.nil?
   end
 
+  test ".redirects.gollum file should not be accessible" do
+    Precious::App.set(:wiki_options, { allow_editing: true, allow_uploads: true })
+    get '/.redirects.gollum'
+    assert_match /Accessing this resource is not allowed/, last_response.body
+  end
+  
+  test ".redirects.gollum file should not be editable" do
+    Precious::App.set(:wiki_options, { allow_editing: true, allow_uploads: true })
+    get '/gollum/edit/.redirects.gollum'
+    assert_match /Changing this resource is not allowed/, last_response.body
+  end
 
   test "frontend links for editing are not blocked" do
     Precious::App.set(:wiki_options, { allow_editing: true, allow_uploads: true })
