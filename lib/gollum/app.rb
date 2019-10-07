@@ -89,6 +89,7 @@ module Precious
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
       @critic_markup = settings.wiki_options[:critic_markup]
+      @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
 
       forbid unless @allow_editing || request.request_method == "GET"
@@ -278,7 +279,7 @@ module Precious
         # Renaming preserves format, so add the page's format to the renamed path to retrieve the renamed page
         new_path = "#{rename}.#{Gollum::Page.format_to_ext(page.format)}"
         # Add a redirect from the old page to the new
-        wiki.add_redirect(page.url_path, new_path.gsub(/(^\/)/, ''))
+        wiki.add_redirect(page.url_path, new_path.gsub(/(^\/)/, '')) if @redirects_enabled
 
         page = wiki_page(new_path).page
         return if page.nil?
@@ -553,7 +554,7 @@ module Precious
         mustache :page
       elsif file = wiki.file(fullpath, wiki.ref, true)
         show_file(file)
-      elsif redirect_path = wiki.redirects[fullpath]
+      elsif @redirects_enabled && redirect_path = wiki.redirects[fullpath]
         redirect to("#{encodeURIComponent(redirect_path)}?redirected_from=#{encodeURIComponent(fullpath)}")
       else
         if @allow_editing
