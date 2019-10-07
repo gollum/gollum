@@ -154,10 +154,6 @@ $(document).ready(function() {
     }
   }
 
-  if (match = new RegExp(/\?redirected\_from=([^?]*)/).exec(window.location.href)) {
-    notice = "The page you requested was renamed or moved. You've been successfully redirected to its new location.";
-    flashNotice('success', notice);
-  }
 
   if ($('#minibutton-upload-page').length) {
     new ClipboardJS('#ClipboardJSlink');
@@ -611,7 +607,11 @@ $(document).ready(function() {
   if($('.markdown-body').length ){
     // Set text direction (LTR or RTL)
     preparePage();
-
+    // Check if there was a redirect here
+    if (match = new RegExp(/[?&]redirected\_from=([^?]*)/).exec(window.location.href)) {
+      notice = "The page you requested was renamed or moved. You've been successfully redirected to its new location.";
+      flashNotice('success', notice);
+    }
     // Set the 'e' hotkey for editing pages.
     Mousetrap.bind(['e'], function( e ) {
       e.preventDefault();
