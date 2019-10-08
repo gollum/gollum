@@ -181,20 +181,22 @@ end
 
 desc 'Precompile assets'
 task :precompile do
- require './lib/gollum/views/helpers.rb'
- require './lib/gollum/assets.rb'
- require 'sprockets'
- require 'sprockets-helpers'
- require 'sass'
+  require 'gollum'
+  require 'gollum-lib'
+  require './lib/gollum/views/helpers.rb'
+  require './lib/gollum/assets.rb'
+  require 'sprockets'
+  require 'sprockets-helpers'
+  require 'sass'
   env = Precious::Assets.sprockets
   manifest = Sprockets::Manifest.new(env, './public/assets')
-    Sprockets::Helpers.configure do |config|
-      config.environment = env
-      config.prefix      = Precious::Assets::ASSET_URL
-      config.digest      = true
-      config.public_path = ENV.fetch('GOLLUM_ASSETS_PATH', './public/assets')
-      config.manifest    = manifest
-    end
+  Sprockets::Helpers.configure do |config|
+    config.environment = env
+    config.prefix      = Precious::Assets::ASSET_URL
+    config.digest      = true
+    config.public_path = ENV.fetch('GOLLUM_ASSETS_PATH', './public/assets')
+    config.manifest    = manifest
+  end
   puts "Precompiling assets to #{::File.expand_path('./public/assets')}..."
   manifest.compile(Precious::Assets::MANIFEST)
 end
