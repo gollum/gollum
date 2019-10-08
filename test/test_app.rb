@@ -169,7 +169,7 @@ context "Frontend" do
     assert_nil @wiki.page("B")
     page_2 = @wiki.page('C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def', page_2.last_version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
@@ -216,7 +216,7 @@ context "Frontend" do
     assert_nil @wiki.page("G/H")
     page_2 = @wiki.page('I/C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def', page_2.last_version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
@@ -233,7 +233,7 @@ context "Frontend" do
     assert_nil @wiki.page("G/H")
     page_2 = @wiki.page('G/K/C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def', page_2.last_version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 

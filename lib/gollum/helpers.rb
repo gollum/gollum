@@ -17,7 +17,7 @@ module Precious
 
     # Remove all slashes from the start of string.
     # Remove all double slashes
-    def clean_url url
+    def clean_url(url)
       return url if url.nil?
       url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
     end
