@@ -102,10 +102,17 @@ function preparePage () {
   }
 }
 
-function flashNotice(type, notice) {
+function flashNotice(type, notice, button_label, button_function, button_type) {
   // accepted types: info, success, warn, error
-  html = '<p><div class="flash flash-' + type +'"><button class="flash-close js-flash-close" type="button" onclick="parentNode.remove()"><%=rocticon('x')%></button>' + notice + '</div></p>';
+  nested_button_html = '';
+  if (typeof(button_label) !== 'undefined'  && typeof(button_function) !== 'undefined') {
+    button_type = (typeof(button_type) !== 'undefined' && button_type == 'danger') ? ' btn-danger' : '';
+    nested_button_html = '<span class="px-2"><button type="button" class="btn btn-sm' + button_type + '" onclick="' + button_function + '">' + button_label + '</button></span>'
+  }
+  html = '<p><div id="gollum-flash" class="flash flash-' + type +'"><button class="flash-close js-flash-close" type="button" onclick="parentNode.remove()"><%=rocticon('x')%></button>' + notice + nested_button_html + '</div></p>';
+  $('#gollum-flash').remove();
   $('#wiki-content h1').before(html);
+  if (type == 'success') { setTimeout(function() {$('#gollum-flash').fadeOut();}, 5000); }
 }
 
 // ua
@@ -184,13 +191,14 @@ $(document).ready(function() {
             success: function(data) {
               // File successfully uploaded
               $('#wiki-content').removeClass('uploading');
+              flashNotice("success", "Your file was successfully uploaded.", "foobar", "alert('flash!')");
             },
             error: function(data, textStatus, errorThrown) {
               $('#wiki-content').removeClass('uploading');
               if (data.status == 409) {
-                alert('This file already exists.');  
+                flashNotice('error', 'The file you tried to upload already exists. Please rename the file and try again.');  
               } else {
-                alert('Error uploading file: ' + textStatus + ' ' + errorThrown);
+                flashNotice('error', 'Error uploading file: ' + textStatus + ' ' + errorThrown);
               }  
             }
           });
