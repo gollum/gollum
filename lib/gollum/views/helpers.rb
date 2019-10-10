@@ -51,9 +51,6 @@ module Precious
         define_method :routes_to_json do
           @@route_methods.to_json
         end
-        define_method :format_extensions do
-          Hash[Gollum::Markup.formats.to_a.map{|fmt| [fmt[0], ".#{Gollum::Page.format_to_ext(fmt[0])}"]}].to_json
-        end
       end
 
       def page_route(page)
