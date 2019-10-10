@@ -82,12 +82,6 @@ function abspath(path, name){
   return [newPath, newName];
 }
 
-var gollumFormats = $.parseJSON('<%= format_extensions %>');
-function formatToExt(format) {
-  // 'markdown' -> .md, 'asciidoc' -> .asciidoc
-  return gollumFormats[format];
-}
-
 function setTextDirection () {
   $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 }
@@ -444,7 +438,8 @@ $(document).ready(function() {
       $(this).attr('disabled', true);
 
       var formData = new FormData($('#gollum-editor-form').get(0));
-      var newPath  = cleanPath(prefixBaseUrl(pagePath() + '/' + pageName() + formatToExt($('#wiki_format')[0].value)));
+      var newExt   = '.' + $('#wiki_format option:selected').attr('data-ext');
+      var newPath  = cleanPath(prefixBaseUrl(pagePath() + '/' + pageName() + newExt));
       var endpoint = $('#gollum-editor-form').attr("action");
 
       $.ajax({
