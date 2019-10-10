@@ -627,7 +627,7 @@ $(document).ready(function() {
       $('a.anchor').each(function (index, anchor) {
         header = $(anchor).closest(':header');
         if (header.hasClass('editable')){
-          var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
+          var newUrl = routePath('edit') + '/' + pageFullPath + $(anchor).attr('href');
           $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
         }
       });
