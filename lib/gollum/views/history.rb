@@ -25,6 +25,7 @@ module Precious
             :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
             :date      => v.authored_date.strftime("%B %d, %Y"),
             :user_icon => self.user_icon_code(v.author.email),
+            :filename  => path_for_version(v.id),
             :date_full => v.authored_date,
           }
         end
@@ -33,6 +34,13 @@ module Precious
       def editable
         @editable
       end
+
+      private
+
+      def path_for_version(sha)
+        Gollum::PreviewPage.new(@wiki, @pathnames[sha], '', sha).escaped_url_path
+      end
+
     end
   end
 end
