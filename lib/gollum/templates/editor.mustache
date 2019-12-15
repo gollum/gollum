@@ -59,14 +59,14 @@
       <select id="wiki_format" name="format" class="form-select">
       {{#formats}}
       {{#enabled}}
-      <option {{#selected}}selected="selected" {{/selected}}value="{{id}}">
+      <option {{#selected}}selected="selected" {{/selected}}value="{{id}}" data-ext="{{ext}}">
         {{name}}
         </option>
       {{/enabled}}
       {{/formats}}
       {{#formats}}
       {{^enabled}}
-      <option class="disabled" {{#selected}}selected="selected" {{/selected}}value="{{id}}">
+      <option class="disabled" {{#selected}}selected="selected" {{/selected}}value="{{id}}" data-ext="{{ext}}">
         {{name}}
         </option>
       {{/enabled}}

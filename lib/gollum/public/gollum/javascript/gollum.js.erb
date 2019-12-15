@@ -10,9 +10,13 @@ function brokenAvatarImage(image){
 // Get path for named route, prefixing baseUrl if necessary
 // Uses the route definitions in /lib/gollum/views/helpers.rb.
 // For example, routePath('delete') is equivalent to 'delete_path' in the mustache templates.
+var gollumRoutes = $.parseJSON('<%= routes_to_json %>')
 function routePath(name){
-  var routes = $.parseJSON('<%= routes_to_json %>')
-  path = routes[name]
+  path = gollumRoutes[name]
+  return prefixBaseUrl(path);
+}
+
+function prefixBaseUrl(path) {
   if (baseUrl == undefined ) {
     console.log('Gollum error: baseUrl undefined')
   } else if (path == undefined ) {
@@ -27,6 +31,12 @@ function routePath(name){
       }
     return result.replace(/\/{2}/g, '/')
   }
+}
+
+// Ensure one slash at the beginning, no trailing slash.
+function cleanPath (path){
+  var result = '/' + path.replace(/\/$/,'');
+  return result.replace(/\/{2}/g, '/');
 }
 
 function pageName(){
@@ -76,6 +86,29 @@ function setTextDirection () {
   $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 }
 
+function preparePage () {
+  setTextDirection();
+  if(criticMarkup == 'true') {
+    $('#wiki-content').addClass('criticmarkup');
+    $('ins.break').unwrap();
+    $('span.critic.comment').wrap('<span class="popover" />');
+    $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
+  }
+}
+
+function flashNotice(type, notice, button_label, button_function, button_type) {
+  // accepted types: info, success, warn, error
+  nested_button_html = '';
+  if (typeof(button_label) !== 'undefined'  && typeof(button_function) !== 'undefined') {
+    button_type = (typeof(button_type) !== 'undefined' && button_type == 'danger') ? ' btn-danger' : '';
+    nested_button_html = '<span class="px-2"><button type="button" class="btn btn-sm' + button_type + '" onclick="' + button_function + '">' + button_label + '</button></span>'
+  }
+  html = '<p><div id="gollum-flash" class="flash flash-' + type +'"><button class="flash-close js-flash-close" type="button" onclick="parentNode.remove()"><%=rocticon('x')%></button>' + notice + nested_button_html + '</div></p>';
+  $('#gollum-flash').remove();
+  $('#wiki-content h1').before(html);
+  if (type == 'success') { setTimeout(function() {$('#gollum-flash').fadeOut();}, 5000); }
+}
+
 // ua
 $(document).ready(function() {
   // for deleting the current page
@@ -122,6 +155,7 @@ $(document).ready(function() {
     }
   }
 
+
   if ($('#minibutton-upload-page').length) {
     new ClipboardJS('#ClipboardJSlink');
     $('#minibutton-upload-page').parent().removeClass('jaws');
@@ -151,13 +185,14 @@ $(document).ready(function() {
             success: function(data) {
               // File successfully uploaded
               $('#wiki-content').removeClass('uploading');
+              flashNotice("success", "Your file was successfully uploaded.", "foobar", "alert('flash!')");
             },
             error: function(data, textStatus, errorThrown) {
               $('#wiki-content').removeClass('uploading');
               if (data.status == 409) {
-                alert('This file already exists.');  
+                flashNotice('error', 'The file you tried to upload already exists. Please rename the file and try again.');  
               } else {
-                alert('Error uploading file: ' + textStatus + ' ' + errorThrown);
+                flashNotice('error', 'Error uploading file: ' + textStatus + ' ' + errorThrown);
               }  
             }
           });
@@ -187,7 +222,7 @@ $(document).ready(function() {
       var oldName = pageName();
       var context_blurb =
         "Renamed page will be under " +
-        "<span class='path'>" + htmlEscape('/' + path) + "</span>" +
+        "<span class='path'>" + htmlEscape(cleanPath(path)) + "</span>" +
         " unless an absolute path is given."
 
       $.GollumDialog.init({
@@ -226,19 +261,17 @@ $(document).ready(function() {
     $('#minibutton-new-page').parent().removeClass('jaws');
     $('#minibutton-new-page').click(function(e) {
       e.preventDefault();
-
       var path = pagePath();
       if( path === undefined && $('#file-browser').length != 0 ){
         // In the pages view, pageFullPath isn't defined.
         // The new button will still expect a value however.
         // So we try to figure one out from window.location
         path = window.location.pathname.replace(routePath('overview'), '')
-        // For consistency remove the trailing /
-        path = path.replace(/\/$/,'')
       }
+
       var context_blurb =
         "Page will be created under " +
-        "<span class='path'>" + htmlEscape('/' + path) + "</span>" +
+        "<span class='path'>" + htmlEscape(cleanPath(path)) + "</span>" +
         " unless an absolute path is given."
 
       $.GollumDialog.init({
@@ -322,7 +355,7 @@ $(document).ready(function() {
       success: function(data) {
         var mainDiv = $('#wiki-wrapper', data);
         $('.tabnav-div#preview-content').html(mainDiv);
-        setTextDirection();
+        preparePage();
         if (sectionAnchor ) { 
           if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
             sectionHeading.scrollIntoView();
@@ -363,35 +396,40 @@ $(document).ready(function() {
     });
   };
 
+  var previewHotkey = function () {
+    $('.tabnav-tab').not('.selected').click();
+    return false;
+  };
+
+  var editorHotkeys = [
+    {
+      name: "saveContents",
+      bindKey: {win: "Ctrl-s", mac: "Command-s"},
+      exec: function() {
+        $("#gollum-editor-submit").trigger("click");
+      }
+    },
+    {
+      name: "togglePreview", // Ace's hotkeys override Mousetrap, so add the preview hotkey to the editor, too.
+      bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
+      exec: previewHotkey
+    }
+  ];
+
+  if ( $('#wiki-wrapper.edit').length || $('#wiki-wrapper.create').length ) {
+    // Hotkey for moving between Edit and Preview tab
+    Mousetrap.bind(['ctrl+shift+p'], previewHotkey);
+  }
+
   if( $('#wiki-wrapper.edit').length ){
     $("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
     });
 
-    var previewHotkey = function () {
-      $('.tabnav-tab').not('.selected').click();
-      return false;
-    };
-
-    // Hotkey for moving between Edit and Preview tab
-    Mousetrap.bind(['ctrl+shift+p'], previewHotkey);
-
     $.GollumEditor({
       section: window.location.hash.substr(1),
-      commands: // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
-      [{
-        name: "togglePreview",
-        bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
-        exec: previewHotkey
-      },
-      {
-        name: "saveContents",
-        bindKey: {win: "Ctrl-s", mac: "Command-s"},
-        exec: function() {
-          $("#gollum-editor-submit").trigger("click");
-        }
-      }]
+      commands: editorHotkeys // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
     }); 
 
     $("#gollum-editor-submit").click( function(e) {
@@ -400,6 +438,8 @@ $(document).ready(function() {
       $(this).attr('disabled', true);
 
       var formData = new FormData($('#gollum-editor-form').get(0));
+      var newExt   = '.' + $('#wiki_format option:selected').attr('data-ext');
+      var newPath  = cleanPath(prefixBaseUrl(pagePath() + '/' + pageName() + newExt));
       var endpoint = $('#gollum-editor-form').attr("action");
 
       $.ajax({
@@ -409,7 +449,7 @@ $(document).ready(function() {
         processData: false,
         contentType: false,
         success: function(data) {
-          window.location = window.location.href.replace(/gollum\/edit\//, '')
+          window.location = newPath;
         },
         error: function(data, textStatus, errorThrown) {
           if (data.status == 412) {
@@ -482,36 +522,39 @@ $(document).ready(function() {
 
       var clickPageNav = function (e) {
         e.preventDefault();
-        $.ajax({
-            url: $(this).attr('href'),
-            type: 'GET',
-            success: function(data) {
-              var rowDiv = $('#page-history-list', data);
-              var new_pagination = $('#pagination', data);
+        if ( !$(this).hasClass('disabled') ) {
+          $.ajax({
+              url: $(this).attr('href'),
+              type: 'GET',
+              success: function(data) {
+                var rowDiv = $('#page-history-list', data);
+                var new_pagination = $('#pagination', data);
 
-              next = $('#pagination #next');
-              prev = $('#pagination #prev');
-              new_next = new_pagination.find('#next');
-              new_prev = new_pagination.find('#prev');
+                ['#next', '#prev'].forEach( function (nav_item) {
+                  old_btn = $('#pagination ' + nav_item);
+                  new_btn = new_pagination.find(nav_item);
+                  old_btn.attr('href', new_btn.attr('href'));
+                  if (new_btn.hasClass('disabled')) {
+                    old_btn.addClass('disabled');
+                  } else {
+                    old_btn.removeClass('disabled');
+                  }
+                });
 
-              next[0].hidden = new_next[0].hidden;
-              prev[0].hidden = new_prev[0].hidden;
+                $('#page-history-list').replaceWith(rowDiv);
 
-              next.children('a').attr('href', new_next.children('a').attr('href'));
-              prev.children('a').attr('href', new_prev.children('a').attr('href'));
-
-              $('#page-history-list').replaceWith(rowDiv);
-
-              setCheckboxEvents();
-              toggleInputs();
-            },
-            error: function(data, textStatus, errorThrown) {
-              console.log('something went wrong: ' + textStatus + errorThrown)
-            }
-        });
+                setCheckboxEvents();
+                toggleInputs();
+              },
+              error: function(data, textStatus, errorThrown) {
+                console.log('something went wrong: ' + textStatus + errorThrown)
+              }
+          });
+        }
+        this.blur();
       };
 
-      $("#pagination #next a, #pagination #prev a").each(function(index, element) {
+      $("#pagination #next, #pagination #prev").each(function(index, element) {
        $(element).on("click", clickPageNav);
       });
     }
@@ -537,21 +580,41 @@ $(document).ready(function() {
     $("#gollum-editor-body").one('change', function(){
       window.onbeforeunload = function(){ return "Leaving will not create a new page!" };
     });
-    $.GollumEditor({ NewFile: true, MarkupType: default_markup });
+    $.GollumEditor({ NewFile: true, MarkupType: default_markup, commands: editorHotkeys });
   }
 
-  // CriticMarkup
-  if(criticMarkup == 'true') {
-    $('#wiki-content').addClass('criticmarkup');
-    $('ins.break').unwrap();
-    $('span.critic.comment').wrap('<span class="popover" />');
-    $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
-  }
+  if($('#search-results').length ){
+    $('.toggle-context').each(function () {
+      var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
+      if ( !hiddenContext.length ) {
+        $(this).toggle();
+      } else {
+        $(this).click(function () {
+          hiddenContext.toggle();
+          $(this).toggle();
+        });
+      }
+    });
 
+    var searchQuery = new RegExp(searchTerms.join('|'), 'gi'); //searchTerms provided by the layout template.
+    $('div.search-context li span').each(function () {
+      var curText = $(this).html().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      var newText = curText.replace(searchQuery, function (match) {
+        return '<span class="bg-green-light">' + match + '</span>';
+      });
+
+      $(this).html(newText);
+    });
+  }
+  
   if($('.markdown-body').length ){
     // Set text direction (LTR or RTL)
-    setTextDirection();
-
+    preparePage();
+    // Check if there was a redirect here
+    if (match = new RegExp(/[?&]redirected\_from=([^?]*)/).exec(window.location.href)) {
+      notice = "The page you requested was renamed or moved. You've been successfully redirected to its new location.";
+      flashNotice('success', notice);
+    }
     // Set the 'e' hotkey for editing pages.
     Mousetrap.bind(['e'], function( e ) {
       e.preventDefault();
@@ -564,7 +627,7 @@ $(document).ready(function() {
       $('a.anchor').each(function (index, anchor) {
         header = $(anchor).closest(':header');
         if (header.hasClass('editable')){
-          var newUrl = routePath('edit') + '/' + pageName() + $(anchor).attr('href');
+          var newUrl = routePath('edit') + '/' + pageFullPath + $(anchor).attr('href');
           $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
         }
       });

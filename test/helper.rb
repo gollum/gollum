@@ -19,7 +19,11 @@ $LOAD_PATH.unshift(dir)
 
 module Gollum
 end
-Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER'] if ENV['GIT_ADAPTER']
+if ENV['GIT_ADAPTER']
+  Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER']
+else
+  Gollum::GIT_ADAPTER = RUBY_PLATFORM == 'java' ? 'rjgit' : 'rugged'
+end
 
 ENV['RACK_ENV'] = 'test'
 require 'gollum'

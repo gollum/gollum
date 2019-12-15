@@ -89,6 +89,7 @@ module Precious
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
       @allow_editing = settings.wiki_options[:allow_editing]
       @critic_markup = settings.wiki_options[:critic_markup]
+      @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
 
       forbid unless @allow_editing || request.request_method == "GET"
@@ -158,15 +159,15 @@ module Precious
         end
       end
 
-      get %r{/(edit|create)/(custom|mathjax\.config)\.(js|css)} do
+      get %r{/(edit|create)/(\.redirects.gollum|(custom|mathjax\.config)\.(js|css))} do
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/(delete|rename|edit|create)/(custom|mathjax\.config)\.(js|css)} do
+      post %r{/(delete|rename|edit|create)/(\.redirects.gollum|(custom|mathjax\.config)\.(js|css))} do
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/revert/(custom|mathjax\.config\.)\.(js|css)/.*/.*} do
+      post %r{/revert/(\.redirects.gollum|(custom|mathjax\.config\.)\.(js|css)/.*/.*)} do
         forbid('Changing this resource is not allowed.')
       end
 
@@ -274,9 +275,13 @@ module Precious
           return
         end
         committer.commit
+        
+        # Renaming preserves format, so add the page's format to the renamed path to retrieve the renamed page
+        new_path = "#{rename}.#{Gollum::Page.format_to_ext(page.format)}"
+        # Add a redirect from the old page to the new
+        wiki.add_redirect(page.url_path, clean_url(new_path)) if @redirects_enabled
 
-        wikip = wiki_page(rename)
-        page  = wikip.page
+        page = wiki_page(new_path).page
         return if page.nil?
         redirect to("/#{page.escaped_url_path}")
       end
@@ -461,11 +466,17 @@ module Precious
       end
 
       get '/search' do
-        @query   = params[:q] || ''
-        wiki     = wiki_new
-        # Sort wiki search results by count (desc) and then by name (asc)
-        @results = wiki.search(@query).sort { |a, b| (a[:count] <=> b[:count]).nonzero? || b[:name] <=> a[:name] }.reverse
-        @name    = @query
+        @query     = params[:q]
+        @name      = @query
+        if @query.empty?
+          @results = []
+          @search_terms = []
+        else
+          @page_num  = [params[:page_num].to_i, 1].max
+          @max_count = 10
+          wiki       = wiki_new
+          @results, @search_terms = wiki.search(@query)
+        end
         mustache :search
       end
 
@@ -490,7 +501,7 @@ module Precious
         @newable     = true
         mustache :overview
       end
-    end
+    end # gollum namespace
 
     get %r{/(.+?)/([0-9a-f]{40})} do
       file_path = params[:captures][0]
@@ -512,6 +523,10 @@ module Precious
       else
         halt 404
       end
+    end
+
+    get '/\.redirects\.gollum' do
+      forbid('Accessing this resource is not allowed.')
     end
 
     get '/*' do
@@ -539,6 +554,8 @@ module Precious
         mustache :page
       elsif file = wiki.file(fullpath, wiki.ref, true)
         show_file(file)
+      elsif @redirects_enabled && redirect_path = wiki.redirects[fullpath]
+        redirect to("#{encodeURIComponent(redirect_path)}?redirected_from=#{encodeURIComponent(fullpath)}")
       else
         if @allow_editing
           path = fullpath[-1] == '/' ? "#{fullpath}#{wiki.index_page}" : fullpath # Append default index page if no page name is supplied
