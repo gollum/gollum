@@ -29,14 +29,15 @@ Gem::Specification.new do |s|
   s.add_dependency 'kramdown-parser-gfm', '~> 1.0.0'
   s.add_dependency 'sinatra', '~> 2.0'
   s.add_dependency 'sinatra-contrib', '~> 2.0'
-  s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
+  s.add_dependency 'mustache', ['>= 0.99.8', '< 1.0.0']
+  s.add_dependency 'mustache-sinatra', '~> 1.0.1'
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 3.2'
   s.add_dependency 'octicons', '~> 8.5'
-  s.add_dependency 'sprockets', '~> 3.7'
-  s.add_dependency 'sass', '~> 3.5'
+  s.add_dependency 'sprockets', '~> 4.0'
   s.add_dependency 'uglifier', '~> 3.2'
   s.add_dependency 'sprockets-helpers', '~> 1.2'
+  s.add_dependency 'sassc', '~> 2.2'
 
   s.add_development_dependency 'rack-test', '~> 0.6.3'
   s.add_development_dependency 'shoulda', '~> 3.6.0'

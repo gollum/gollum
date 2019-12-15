@@ -13,7 +13,7 @@ module Precious
       env.append_path ::File.join(dir, 'public/gollum/fonts')
 
       env.js_compressor  = :uglify
-      env.css_compressor = :scss
+      env.css_compressor = :sassc
 
       env.context_class.class_eval do
         def base_url

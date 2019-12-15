@@ -185,7 +185,7 @@ task :precompile do
   require './lib/gollum/assets.rb'
   require 'sprockets'
   require 'sprockets-helpers'
-  require 'sass'
+  require 'sassc'
   env = Precious::Assets.sprockets
   manifest = Sprockets::Manifest.new(env, './public/assets')
   Sprockets::Helpers.configure do |config|
