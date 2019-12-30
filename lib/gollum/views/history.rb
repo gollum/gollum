@@ -38,7 +38,9 @@ module Precious
       private
 
       def path_for_version(sha)
-        Gollum::PreviewPage.new(@wiki, @pathnames[sha], '', sha).escaped_url_path
+        @preview_page ||= Gollum::PreviewPage.new(@wiki, @pathnames[sha], '', sha)
+        @preview_page.path = @patnames[sha]
+        @preview_page.escaped_url_path
       end
 
     end
