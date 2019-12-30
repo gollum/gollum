@@ -218,8 +218,8 @@ $(document).ready(function() {
     $('#minibutton-rename-page').click(function(e) {
       e.preventDefault();
 
-      var path = pagePath();
-      var oldName = pageName();
+      var path = decodeURI(pagePath());
+      var oldName = decodeURI(pageName());
       var context_blurb =
         "Renamed page will be under " +
         "<span class='path'>" + htmlEscape(cleanPath(path)) + "</span>" +
