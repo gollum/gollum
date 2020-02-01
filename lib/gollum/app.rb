@@ -413,7 +413,7 @@ module Precious
         @max_count = settings.wiki_options.fetch(:pagination_count, 10)
         @wiki      = @page.wiki
         unless @page.nil?
-          @versions, @pathnames = @page.versions(
+          @versions = @page.versions(
             per_page: @max_count,
             page_num: @page_num,
             follow: settings.wiki_options.fetch(:follow_renames,

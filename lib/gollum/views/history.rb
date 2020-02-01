@@ -25,7 +25,7 @@ module Precious
             :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
             :date      => v.authored_date.strftime("%B %d, %Y"),
             :user_icon => self.user_icon_code(v.author.email),
-            :filename  => path_for_version(v.id),
+            :filename  => path_for_version(v.tracked_pathname),
             :date_full => v.authored_date,
           }
         end
@@ -37,9 +37,9 @@ module Precious
 
       private
 
-      def path_for_version(sha)
-        @preview_page ||= Gollum::PreviewPage.new(@wiki, @pathnames[sha], '', sha)
-        @preview_page.path = @patnames[sha]
+      def path_for_version(pathname)
+        @preview_page ||= Gollum::PreviewPage.new(@wiki, '', '', nil)
+        @preview_page.path = pathname ? pathname : @name
         @preview_page.escaped_url_path
       end
 
