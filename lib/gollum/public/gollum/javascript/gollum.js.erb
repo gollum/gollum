@@ -185,7 +185,7 @@ $(document).ready(function() {
             success: function(data) {
               // File successfully uploaded
               $('#wiki-content').removeClass('uploading');
-              flashNotice("success", "Your file was successfully uploaded.", "foobar", "alert('flash!')");
+              flashNotice("success", "Your file was successfully uploaded.");
             },
             error: function(data, textStatus, errorThrown) {
               $('#wiki-content').removeClass('uploading');
