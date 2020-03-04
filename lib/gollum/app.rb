@@ -224,7 +224,7 @@ module Precious
         contents = ::File.read(tempfile)
         reponame = "#{dir}/#{filename}.#{format}"
 
-        options = { :message => "Uploaded file to #{dir}/#{reponame}" }
+        options = { :message => "Uploaded file to #{reponame}" }
         options[:parent] = wiki.repo.head.commit if wiki.repo.head
 
         author  = session['gollum.author']
