@@ -170,25 +170,27 @@ MSG
     puts "Gollum " + Gollum::VERSION
   end
   opts.on("--versions", "Display the current version of Gollum and auxiliary gems.") do
+    require 'gollum-lib'
     puts "Gollum " + Gollum::VERSION
     puts "Running on: #{RUBY_PLATFORM} with Ruby version #{RUBY_VERSION}"
     puts "Using:"
     loaded_gemspecs =  Gem.loaded_specs
     gollum_gems = ['gollum-lib', 'gollum-rjgit_adapter', 'rjgit', 'gollum-grit_adapter', 'grit', 'gollum-rugged_adapter', 'rugged']
     puts Gem.loaded_specs.select{|name, spec| gollum_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
-    puts "With the following renderers:"
-    renderer_gems = ['kramdown', 'RedCloth', 'org-ruby', 'creole', 'asciidoctor', 'wikicloth']
+    puts "Markdown rendering gem: #{GitHub::Markup::Markdown.implementation_name}"
+    puts "Other renderering gems:"
+    renderer_gems = ['RedCloth', 'org-ruby', 'creole', 'asciidoctor', 'wikicloth']
     renderer_gems.each do |renderer|
       begin
         require renderer
       rescue LoadError
       end
     end
-    puts Gem.loaded_specs.select{|name, spec| renderer_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
-    
+    results = Gem.loaded_specs.select{|name, spec| renderer_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
+    puts results.empty? ? 'none' : results
     exit 0
   end
-  
+
 
   opts.separator ""
 end
