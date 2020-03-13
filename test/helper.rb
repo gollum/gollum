@@ -6,6 +6,7 @@ require 'mocha/setup'
 require 'fileutils'
 require 'minitest/reporters'
 require 'twitter_cldr'
+require 'tmpdir'
 
 # Silence locale validation warning
 require 'i18n'
@@ -42,13 +43,11 @@ end
 
 def cloned_testpath(path, bare = false)
   repo   = File.expand_path(testpath(path))
-  tmp    = Tempfile.new(self.class.name)
-  path   = tmp.path
+  tmpdir = Dir.mktmpdir(self.class.name)
   bare   = bare ? "--bare" : ""
-  tmp.close(true)
   redirect = Gem.win_platform? ? '' : '2>/dev/null'
-  %x{git clone #{bare} #{repo} #{path} #{redirect}}
-  path
+  %x{git clone #{bare} '#{repo}' #{tmpdir} #{redirect}}
+  tmpdir
 end
 
 def commit_details
