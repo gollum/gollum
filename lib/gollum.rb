@@ -6,7 +6,6 @@ require 'ostruct'
 
 # external
 require 'github/markup'
-require 'sanitize'
 
 # internal
 require File.expand_path('../gollum/uri_encode_component', __FILE__)
@@ -34,4 +33,3 @@ module Gollum
     end
   end
 end
-
