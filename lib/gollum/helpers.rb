@@ -36,7 +36,7 @@ module Precious
 
     def emoji(name)
       if emoji = Gemojione.index.find_by_name(name)
-        IO.read(EMOJI_PATHNAME.join("#{emoji['unicode']}.png"))
+        IO.read(EMOJI_PATHNAME.join("#{emoji['unicode'].downcase}.png"))
       else
         fail ArgumentError, "emoji `#{name}' not found"
       end
