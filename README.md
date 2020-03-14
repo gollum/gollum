@@ -75,6 +75,13 @@ repo.find('959329025f67539fb82e76b02782322fad032821')
 repo.find('959329025f67539fb82e76b02782322fad032821', :commit) # Find a specific :commit, :blob, :tree, or :tag
 ```
 
+### Logs
+
+```ruby
+repo.git.log # Returns an Array of Commits constituting the log for the default branch
+repo.git.log("follow-rename.txt", "HEAD", follow: true, list_renames: true) # Log for a specific path, tracking the pathname over renames. Returns an Array of TrackingCommits, which store the tracked filename: [#<RJGit::TrackingCommit:0x773014d3 @tracked_pathname="follow-rename.txt" ...>]
+```
+
 ### Getting diffs
 ```ruby
 sha1 = repo.head.id

@@ -50,11 +50,14 @@ describe RubyGit do
       expect(logs.map(&:id)).to_not include 'ad982fe7d4787928daba69bf0ba44a59c572ccd7'
     end
 
-    it "follows renames" do
+    it "follows renames for specific path" do
       repo = Repo.new(TEST_REPO_PATH)
-      messages = repo.git.log("follow-rename.txt", "HEAD", follow: true)
-      expect(messages.count).to eq 2
-      expect(messages[1].message).to match /for following renames/
+      commits = repo.git.log("follow-rename.txt", "HEAD", follow: true, list_renames: true)
+      expect(commits[0]).to be_a TrackingCommit
+      expect(commits[0].tracked_pathname).to eq 'follow-rename.txt'
+      expect(commits[1].tracked_pathname).to eq 'rename-example.txt'
+      expect(commits.count).to eq 2
+      expect(commits[1].message).to match /for following renames/
     end
 
   end

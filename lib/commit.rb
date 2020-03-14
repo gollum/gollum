@@ -4,7 +4,7 @@ module RJGit
   import 'org.eclipse.jgit.revwalk.RevCommit'
   import 'org.eclipse.jgit.diff.DiffFormatter'
   import 'org.eclipse.jgit.util.io.DisabledOutputStream'
-
+  
   class Commit
 
     attr_reader :id, :parents, :actor, :committer, :authored_date, :committed_date
@@ -127,5 +127,14 @@ module RJGit
       end
     end
   
+  end
+  
+  class TrackingCommit < Commit
+    attr_reader :tracked_pathname # This commit is part of a log for a single pathname. The tracked_pathname attribute tracks the pathname over renames.
+    
+    def initialize(repository, commit, tracked_pathname = nil)
+      super(repository, commit)
+      @tracked_pathname = tracked_pathname
+    end
   end
 end
