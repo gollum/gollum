@@ -100,12 +100,12 @@ module RJGit
       Commit.new(repository, RevWalk.new(repository).parseCommit(new_commit))
     end
     
-    def self.find_head(repository)
+    def self.find_head(repository, ref = Constants::HEAD)
       repository = RJGit.repository_type(repository)
       return nil if repository.nil?
       begin
         walk = RevWalk.new(repository)
-        objhead = repository.resolve(Constants::HEAD)
+        objhead = repository.resolve(ref)
         return Commit.new(repository, walk.parseCommit(objhead))
       rescue java.lang.NullPointerException => e
         return nil
