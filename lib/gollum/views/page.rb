@@ -122,6 +122,10 @@ module Precious
       def bar_side
         @bar_side.to_s
       end
+      
+      def left_bar
+        @bar_side == :left
+      end
 
       def has_sidebar
         if @sidebar
