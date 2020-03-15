@@ -380,7 +380,7 @@ module Precious
         else
           sha2, sha1 = sha1, "#{sha1}^" if !sha2
           @versions  = [sha1, sha2]
-          @diff      = wiki.repo.diff(@versions.last, @versions.first, @page)
+          @diff      = wiki.repo.diff(@versions.last, @versions.first, @page.path)
           @message   = 'The patch does not apply.'
           mustache :compare
         end
@@ -461,7 +461,7 @@ module Precious
         @versions = [start_version, end_version]
         wiki      = wikip.wiki
         @page     = wikip.page
-        @diff     = wiki.repo.diff(@page, @versions.last, @versions.first)
+        @diff     = wiki.repo.diff(@versions.last, @versions.first, @page.path)
         mustache :compare
       end
 
