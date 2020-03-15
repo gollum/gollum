@@ -416,8 +416,7 @@ module Precious
           @versions = @page.versions(
             per_page: @max_count,
             page_num: @page_num,
-            follow: settings.wiki_options.fetch(:follow_renames,
-              ::Gollum::GIT_ADAPTER == 'rjgit' ? false : true)
+            follow: settings.wiki_options.fetch(:follow_renames, true)
           )
           mustache :history
         else
