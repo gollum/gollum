@@ -462,7 +462,12 @@ module Precious
         wiki      = wikip.wiki
         @page     = wikip.page
         @diff     = wiki.repo.diff(@versions.last, @versions.first, @page.path)
-        mustache :compare
+        if @diff.empty?
+          @message = 'Could not compare these two revisions, no differences were found.'
+          mustache :error
+        else
+          mustache :compare
+        end
       end
 
       get '/search' do
