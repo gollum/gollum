@@ -92,7 +92,7 @@ module Precious
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
 
-      forbid unless @allow_editing || request.request_method == "GET"
+      forbid unless @allow_editing || request.request_method == 'GET'
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
 
       @base_url = url('/', false).chomp('/').force_encoding('utf-8')
@@ -129,7 +129,7 @@ module Precious
         env['PATH_INFO'].sub!("/#{Precious::Assets::ASSET_URL}", '')
         if @use_static_assets
           env['PATH_INFO'].sub!(Sprockets::Helpers.prefix, '') if @base_url
-          not_found_msg = "Not found." 
+          not_found_msg = 'Not found.'
           not_found = Proc.new {[404, {'Content-Type' => 'text/html', 'Content-Length' => not_found_msg.length.to_s}, [not_found_msg]]}
           Rack::Static.new(not_found, {:root => @static_assets_path, :urls => ['']}).call(env)
         else
@@ -210,7 +210,7 @@ module Precious
           dir = dir.sub(wiki.base_path, '') if wiki.base_path
           # remove file extension 
           dir = dir.sub(::File.extname(dir), '')
-          dir = ::File.join("uploads", dir)
+          dir = ::File.join('uploads', dir)
         else
           # store all uploads together
           dir = 'uploads'
@@ -324,8 +324,8 @@ module Precious
       get '/create/*' do
         forbid unless @allow_editing
         if settings.wiki_options[:template_page] then
-          temppage = wiki_page("/_Template")
-          @template_page = (temppage.page != nil) ? temppage.page.raw_data : "Template page option is set, but no /_Template page is present or committed."
+          temppage = wiki_page('/_Template')
+          @template_page = (temppage.page != nil) ? temppage.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
         end
         wikip = wiki_page(params[:splat].first)
         @name = wikip.name.to_url
@@ -380,8 +380,8 @@ module Precious
         else
           sha2, sha1 = sha1, "#{sha1}^" if !sha2
           @versions  = [sha1, sha2]
-          @diff      = wiki.full_reverse_diff_for(@page, @versions.first, @versions.last)
-          @message   = "The patch does not apply."
+          @diff      = wiki.repo.diff(@versions.last, @versions.first, @page)
+          @message   = 'The patch does not apply.'
           mustache :compare
         end
       end
@@ -461,7 +461,7 @@ module Precious
         @versions = [start_version, end_version]
         wiki      = wikip.wiki
         @page     = wikip.page
-        @diff     = wiki.full_reverse_diff_for(@page, @versions.first, @versions.last)
+        @diff     = wiki.repo.diff(@page, @versions.last, @versions.first)
         mustache :compare
       end
 
