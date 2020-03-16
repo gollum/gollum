@@ -19,7 +19,6 @@ context "Frontend" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
   end
 
-
   test "broken four space" do
     page = 'utfh1'
     text = %(
@@ -467,6 +466,12 @@ context "Frontend" do
     Precious::App.set(:wiki_options, {})
     post "/gollum/preview", :content => 'abc', :format => 'markdown'
     assert last_response.ok?
+  end
+  
+  test 'throws an error when comparing two identical revisions for a page' do
+    get '/gollum/compare/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac...fc66539528eb96f21b2bbdbf557788fe8a1196ac'
+    assert last_response.ok?
+    assert last_response.body.include?('Could not compare these two revisions, no differences were found.')
   end
 
 =begin
