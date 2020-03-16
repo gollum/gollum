@@ -1,13 +1,16 @@
 source 'https://rubygems.org'
 
 if RUBY_PLATFORM == 'java'
-  gem 'gollum-rjgit_adapter', :git => 'https://github.com/gollum/rjgit_adapter' # For development purposes
   gem 'warbler'
-else
-  gem 'gollum-rugged_adapter', :git => 'https://github.com/gollum/rugged_adapter.git' # For development purposes
 end
 
 gem 'gollum-lib', :git => 'https://github.com/gollum/gollum-lib.git', :branch => 'gollum-lib-5.x' # For development purposes
 gem 'therubyrhino', :platforms => :jruby
 gemspec
-gem 'rake', '~> 11.2'
+
+gem "rake", '~> 12.3', '>= 12.3.3'
+gem "pandoc-ruby"
+gem "bibtex-ruby"
+gem "citeproc-ruby"
+gem "csl-styles"
+
