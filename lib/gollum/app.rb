@@ -360,7 +360,7 @@ module Precious
         sha2  = params[:sha2]
 
         commit           = commit_message
-        commit[:message] = "Revert commit #{sha1.chars.take(7).join}"
+        commit[:message] = "Revert commit #{sha2.chars.take(7).join}"
         if wiki.revert_page(@page, sha1, sha2, commit)
           redirect to("/#{@page.escaped_url_path}")
         else
