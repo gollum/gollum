@@ -5,7 +5,7 @@ gollum -- A git-based Wiki
 [![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
 [![Dependency Status](https://gemnasium.com/gollum/gollum.svg)](https://gemnasium.com/gollum/gollum)
 
-Note: this is the development branch for the next major release of Gollum, version 5.0. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features.
+Gollum version 5.0 is out! See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to the 4.x branch.
 
 ## DESCRIPTION
 
@@ -15,17 +15,17 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 	* May be written in a variety of [markups](#markups).
 	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
 	* Can be displayed in all versions (commits).
+	* Can link to each other (and to files/images) via gollum's own [tags](https://github.com/gollum/gollum/wiki#tags), or via link syntax provided by your markup language of choice.
+* Gollum supports advanced functionality like:
+  * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
+	* [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
+	* Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
+	* Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
+	* [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
+	* [YAML frontmatter/metadata per page](https://github.com/gollum/gollum/wiki#metadata)
+	* ...and [more](https://github.com/gollum/gollum/wiki).
 
-Gollum can be launched either as a webserver (with the web interface) or in "console mode", where you can use a predefined API to query and manipulate the repository. For more information, see the [Running](#running) and [Configuration](#configuration) sections.
-
-For more information on Gollum's capabilities and pitfalls:
-
-1. [Syntax/capability overview for pages](https://github.com/gollum/gollum/wiki).
-2. [Known limitations](https://github.com/gollum/gollum/wiki/Known-limitations).
-3. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
-4. [Security overview](https://github.com/gollum/gollum/wiki/Security).
-
-## SYSTEM REQUIREMENTS
+### SYSTEM REQUIREMENTS
 
 Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/rugged_adapter) for [https://github.com/libgit2/rugged](rugged) by default. You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
 
@@ -41,9 +41,11 @@ Varies depending on operating system, package manager and Ruby installation. Gen
 
 Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
+See [RUNNING](#running) for further instructions.
+
 ### Markups
 
-Gollum presently ships with support for the following markups:
+Gollum allows using different markup languages per page. It presently ships with support for the following markups:
 * [Markdown](http://daringfireball.net/projects/markdown/syntax) (see [below](#Markdown-flavors) for more information on Markdown flavors)
 * [RDoc](http://rdoc.sourceforge.net/)
 
@@ -70,9 +72,9 @@ Simply:
 
 1. Navigate to your git repository (wiki) via the command line.
 2. Run: `gollum`.
-3. Open `http://localhost:4567` in your browser.
+3. Open `http://127.0.0.1:4567` in your browser.
 
-This will start up a web server (WEBrick) running Gollum with a web interface, where you can view and edit your wiki.
+This will start up a web server (WEBrick) running Gollum with a web interface, where you can view and edit your wiki. Of course, you can also run `gollum /path/to/your/wiki`.
 
 ### Running from source
 
@@ -81,7 +83,7 @@ This will start up a web server (WEBrick) running Gollum with a web interface, w
 3. `[sudo] bundle install` (may not always be necessary).
 4. `bundle exec bin/gollum`
 	* Like that, gollum assumes the target wiki (git repository) is the project repository itself. If it's not, execute `bundle exec bin/gollum <path-to-wiki>` instead.
-5. Open `http://localhost:4567` in your browser.
+5. Open `http://127.0.0.1:4567` in your browser.
 
 ### Rack
 
@@ -105,32 +107,33 @@ Gollum comes with the following command line options:
 
 | Option            | Arguments | Description |
 | ----------------- | --------- | ----------- |
-| --host            | [HOST]    | Specify the hostname or IP address to listen on. Default: `0.0.0.0`.<sup>1</sup> |
+| --host            | [HOST]    | Specify the hostname or IP address to listen on. Default: '0.0.0.0'.<sup>1</sup> |
 | --port            | [PORT]    | Specify the port to bind Gollum with. Default: `4567`. |
-| --config          | [FILE]  | Specify path to Gollum's configuration file. |
+| --config          | [FILE]    | Specify path to Gollum's configuration file. |
 | --ref             | [REF]     | Specify the git branch to serve. Default: `master`. |
 | --adapter         | [ADAPTER] | Launch Gollum using a specific git adapter. Default: `rugged`.<sup>2</sup> |
 | --base-path       | [PATH]    | Specify the leading portion of all Gollum URLs (path info). Setting this to `/wiki` will make the wiki accessible under `http://localhost:4567/wiki/`. Default: `/`. |
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
+| --static, --no-static | none  | Use static assets. Defaults to false in development/test,  true in production/staging. |
+| --assets          |  [PATH]   | Set the path to look for static assets. |
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
 | --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
 | --no-edit         | none      | Disable the feature of editing pages. |
-| --live-preview    | none      | Enable the live preview feature in page editor. |
-| --no-live-preview | none      | Disable the live preview feature in page editor. |
+| --follow-renames, --no-follow-renames  | none      | Follow pages across renames in the History view. Default: true.
 | --allow-uploads   | [MODE]    | Enable file uploads. If set to `dir`, Gollum will store all uploads in the `/uploads/` directory in repository root. If set to `page`, Gollum will store each upload at the currently edited page.<sup>4</sup> |
 | --mathjax         | none      | Enables MathJax (renders mathematical equations). By default, uses the `TeX-AMS-MML_HTMLorMML` config with the `autoload-all` extension.<sup>5</sup> |
+| --critic-markup   | none      | Enable support for annotations using [CriticMarkup](http://criticmarkup.com/). |
 | --irb             | none      | Launch Gollum in "console mode", with a [predefined API](https://github.com/gollum/gollum-lib/). |
 | --h1-title        | none      | Tell Gollum to use the first `<h1>` as page title. |
 | --no-display-metadata | none  | Do not render metadata tables in pages. |
-| --show-all        | none      | Tell Gollum to also show files in the file view. By default, only valid pages are shown. |
-| --collapse-tree   | none      | Tell Gollum to collapse the file tree, when the file view is opened. By default, the tree is expanded. |
 | --user-icons      | [MODE]    | Tell Gollum to use specific user icons for history view. Can be set to `gravatar`, `identicon` or `none`. Default: `none`. |
 | --mathjax-config  | [FILE]    | Specify path to a custom MathJax configuration. If not specified, uses the `mathjax.config.js` file from repository root. |
 | --template-dir    | [PATH]    | Specify custom mustache template directory. |
+| --template-page   | none      | Use _Template in root as a template for new pages. Must be committed. |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
-| --template-page   | none      | Tell Gollum to use /_Template as the default content for new pages. _Template must be git committed. |
+| --versions        | none      | Display the current version of Gollum and auxiliary gems. |
 
 **Notes:**
 
@@ -144,3 +147,7 @@ Gollum comes with the following command line options:
 When `--config` option is used, certain inner parts of Gollum can be customized. This is used throughout our wiki for certain user-level alterations, among which [customizing supported markups](https://github.com/gollum/gollum/wiki/Formats-and-extensions) will probably stand out.
 
 **All of the mentioned alterations work both for Gollum's config file (`config.rb`) and Rack's config file (`config.ru`).**
+
+## CONTRIBUTING
+
+See [CONTRIBUTING](CONTRIBUTING.md) for information on how to submit issues, and how to start hacking on gollum.
