@@ -5,7 +5,7 @@ gollum -- A git-based Wiki
 [![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
 [![Dependency Status](https://gemnasium.com/gollum/gollum.svg)](https://gemnasium.com/gollum/gollum)
 
-Gollum version 5.0 is out! See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to the 4.x branch.
+**Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to the 4.x branch.
 
 ## DESCRIPTION
 
@@ -15,15 +15,13 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 	* May be written in a variety of [markups](#markups).
 	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
 	* Can be displayed in all versions (commits).
-	* Can link to each other (and to files/images) via gollum's own [tags](https://github.com/gollum/gollum/wiki#tags), or via link syntax provided by your markup language of choice.
 * Gollum supports advanced functionality like:
   * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
-	* [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
-	* Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
-	* Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
-	* [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
-	* [YAML frontmatter/metadata per page](https://github.com/gollum/gollum/wiki#metadata)
-	* ...and [more](https://github.com/gollum/gollum/wiki).
+  * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
+  * Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
+  * Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
+  * [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
+  * ...and [more](https://github.com/gollum/gollum/wiki).
 
 ### SYSTEM REQUIREMENTS
 
@@ -39,9 +37,13 @@ Varies depending on operating system, package manager and Ruby installation. Gen
 	[sudo] gem install gollum
 	```
 
-Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
+To run, simply:
 
-See [RUNNING](#running) for further instructions.
+1. Navigate to your git repository (wiki) via the command line.
+2. Run: `gollum`.
+3. Open `http://127.0.0.1:4567` in your browser.
+
+Of course, you can also run `gollum /path/to/wiki`. Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
 ### Markups
 
@@ -66,23 +68,12 @@ By default, Gollum ships with the `kramdown` gem to render Markdown. However, yo
 
 See [here](https://github.com/gollum/gollum/wiki/Custom-rendering-gems) for instructions on how to use custom rendering gems and set custom options.
 
-## RUNNING
-
-Simply:
-
-1. Navigate to your git repository (wiki) via the command line.
-2. Run: `gollum`.
-3. Open `http://127.0.0.1:4567` in your browser.
-
-This will start up a web server (WEBrick) running Gollum with a web interface, where you can view and edit your wiki. Of course, you can also run `gollum /path/to/your/wiki`.
-
-### Running from source
+## RUNNING FROM SOURCE
 
 1. `git clone https://github.com/gollum/gollum`
 2. `cd gollum`
-3. `[sudo] bundle install` (may not always be necessary).
+3. `[sudo] bundle install`
 4. `bundle exec bin/gollum`
-	* Like that, gollum assumes the target wiki (git repository) is the project repository itself. If it's not, execute `bundle exec bin/gollum <path-to-wiki>` instead.
 5. Open `http://127.0.0.1:4567` in your browser.
 
 ### Rack
