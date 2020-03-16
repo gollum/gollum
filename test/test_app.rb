@@ -474,12 +474,10 @@ context "Frontend" do
     assert last_response.body.include?('Could not compare these two revisions, no differences were found.')
   end
 
-=begin
-  # Grit is broken.
   test "reverts single commit" do
     page1 = @wiki.page('B')
 
-    post "/revert/B/7c45b5f16ff3bae2a0063191ef832701214d4df5"
+    post "/gollum/revert/B.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac/7c45b5f16ff3bae2a0063191ef832701214d4df5"
     follow_redirect!
     assert last_response.ok?
 
@@ -487,13 +485,13 @@ context "Frontend" do
     page2 = @wiki.page('B')
     assert_not_equal page1.version.sha, page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
-#    assert_equal "Revert commit #7c45b5f", page2.version.message
+    assert_equal "Revert commit 7c45b5f", page2.version.message
   end
 
   test "reverts multiple commits" do
     page1 = @wiki.page('A')
 
-    post "/revert/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac/b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f"
+    post "/gollum/revert/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac/b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f"
     follow_redirect!
     assert last_response.ok?
 
@@ -502,19 +500,18 @@ context "Frontend" do
     assert_not_equal page1.version.sha, page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
   end
-=end
-=begin
+
   test "cannot revert conflicting commit" do
     page1 = @wiki.page('A')
 
-    post "/revert/A/302a5491a9a5ba12c7652ac831a44961afa312d2"
+    post "/gollum/revert/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac/302a5491a9a5ba12c7652ac831a44961afa312d2"
     assert last_response.ok?
 
     @wiki.clear_cache
     page2 = @wiki.page('A')
     assert_equal page1.version.sha, page2.version.sha
   end
-=end
+  
 =begin
   # redirects are now handled by class MapGollum in bin/gollum
   # they should be set in config.ru
