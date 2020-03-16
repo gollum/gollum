@@ -18,7 +18,7 @@ module Precious
 
       def title
         h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.title
+        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
       end
 
       def page_header
