@@ -1,3 +1,9 @@
+# 5.0 / 2020-03-17
+
+This is a major new release that substantially cleans up and improves the codebase. It also introduces many new features, bugfixes, and removing major limitations. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes. Many thanks for all the users who have provided feedback, and everyone who has chipped in in the development process!
+
+Many of these changes have been made possible by removing the default grit adapter in favour of the new [rugged adapter](https://github.com/gollum/rugged_adapter).
+
 # 4.1.0 /2017-03-09
 
 * Added file deletion functionality to file view
