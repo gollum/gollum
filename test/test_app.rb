@@ -474,8 +474,6 @@ context "Frontend" do
     assert last_response.body.include?('Could not compare these two revisions, no differences were found.')
   end
 
-=begin
-  # Grit is broken.
   test "reverts single commit" do
     page1 = @wiki.page('B')
 
@@ -487,7 +485,7 @@ context "Frontend" do
     page2 = @wiki.page('B')
     assert_not_equal page1.version.sha, page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
-#    assert_equal "Revert commit #7c45b5f", page2.version.message
+    assert_equal "Revert commit #7c45b5f", page2.version.message
   end
 
   test "reverts multiple commits" do
@@ -502,8 +500,7 @@ context "Frontend" do
     assert_not_equal page1.version.sha, page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
   end
-=end
-=begin
+
   test "cannot revert conflicting commit" do
     page1 = @wiki.page('A')
 
@@ -514,7 +511,7 @@ context "Frontend" do
     page2 = @wiki.page('A')
     assert_equal page1.version.sha, page2.version.sha
   end
-=end
+  
 =begin
   # redirects are now handled by class MapGollum in bin/gollum
   # they should be set in config.ru

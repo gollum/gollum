@@ -91,8 +91,8 @@ context "Frontend Unicode support" do
     # we transliterate only when adapter is grit
     return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
     
-    @wiki.write_page("ééééé".to_url, :markdown, '한글 text', { :name => '', :email => '' })
-    page = @wiki.page("eeeee".to_url)
+    @wiki.write_page("ééééé", :markdown, '한글 text', { :name => '', :email => '' })
+    page = @wiki.page("eeeee")
     assert_equal '한글 text', utf8(page.raw_data)
   end
 

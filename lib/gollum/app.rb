@@ -4,7 +4,6 @@ require 'sinatra'
 require 'sinatra/namespace'
 require 'gollum-lib'
 require 'mustache/sinatra'
-require 'stringex'
 require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
@@ -27,19 +26,6 @@ require File.expand_path '../helpers', __FILE__
 #required to upload bigger binary files
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
-
-# Use stringex #to_url only to leverage its #to_ascii method when using grit
-class String
-  if Gollum::GIT_ADAPTER != 'grit'
-    def to_ascii
-      self # Do not transliterate utf-8 url's unless using Grit
-    end
-  end
-
-  def to_url
-    to_ascii
-  end
-end
 
 # Run the frontend, based on Sinatra
 #
@@ -328,7 +314,7 @@ module Precious
           @template_page = (temppage.page != nil) ? temppage.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
         end
         wikip = wiki_page(params[:splat].first)
-        @name = wikip.name.to_url
+        @name = wikip.name
         @ext  = wikip.ext
         @path = wikip.path
         @allow_uploads = wikip.wiki.allow_uploads
@@ -347,7 +333,7 @@ module Precious
       end
 
       post '/create' do
-        name   = params[:page].to_url
+        name   = params[:page]
         path   = sanitize_empty_params(params[:path]) || ''
         format = params[:format].intern
         wiki   = wiki_new
