@@ -25,24 +25,9 @@ For more information on Gollum's capabilities and pitfalls:
 3. [Troubleshoot guide](https://github.com/gollum/gollum/wiki/Troubleshoot-guide).
 4. [Security overview](https://github.com/gollum/gollum/wiki/Security).
 
-### Videos
-
-* [Quick impression of gollum](https://www.youtube.com/watch?v=gj1qqK3Oku8)
-* [Gollum overview and simple markdown tutorial (german with english subtitles)](https://www.youtube.com/watch?v=wfWgDRmcbU4)
-* [Advanced features in action](https://www.youtube.com/watch?v=EauxgxsLDC4)
-
 ## SYSTEM REQUIREMENTS
 
-| Operating System | Ruby           | Adapters           | Supported |
-| ---------------- | -------------- | ------------------ | --------- |
-| Unix/Linux-like  | Ruby 1.9.3+    | all except [RJGit](https://github.com/repotag/rjgit) | yes |
-| Unix/Linux-like  | [JRuby](https://github.com/jruby/jruby) (1.9.3+ compatible) | [RJGit](https://github.com/repotag/rjgit) | yes |
-| Windows          | Ruby 1.9.3+    | all except [RJGit](https://github.com/repotag/rjgit) | no  |
-| Windows          | [JRuby](https://github.com/jruby/jruby) (1.9.3+ compatible) | [RJGit](https://github.com/repotag/rjgit) | almost<sup>1</sup> |
-
-**Notes:**
-
-1. You can track the progress at [Support Windows via JRuby - Meta Issue](https://github.com/gollum/gollum/issues/1044).
+Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/rugged_adapter) for [https://github.com/libgit2/rugged](rugged) by default. You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
 
 ## INSTALLATION
 
@@ -124,8 +109,7 @@ Gollum comes with the following command line options:
 | --port            | [PORT]    | Specify the port to bind Gollum with. Default: `4567`. |
 | --config          | [FILE]  | Specify path to Gollum's configuration file. |
 | --ref             | [REF]     | Specify the git branch to serve. Default: `master`. |
-| --adapter         | [ADAPTER] | Launch Gollum using a specific git adapter. Default: `grit`.<sup>2</sup> |
-| --bare            | none      | Tell Gollum that the git repository should be treated as bare. This is only necessary when using the default grit adapter. |
+| --adapter         | [ADAPTER] | Launch Gollum using a specific git adapter. Default: `rugged`.<sup>2</sup> |
 | --base-path       | [PATH]    | Specify the leading portion of all Gollum URLs (path info). Setting this to `/wiki` will make the wiki accessible under `http://localhost:4567/wiki/`. Default: `/`. |
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
@@ -153,8 +137,7 @@ Gollum comes with the following command line options:
 1. The `0.0.0.0` IP address allows remote access. Should you wish for Gollum to turn into a personal Wiki, use `127.0.0.1`.
 2. Before using `--adapter`, you should probably read [this](https://github.com/gollum/gollum/wiki/Git-adapters) first.
 3. When `--css` or `--js` is used, respective files must be committed to your git repository or you will get a 302 redirect to the create a page.
-4. Files can be uploaded simply by dragging and dropping them onto the editor's text area (this is, however exclusive to the default editor, not the live preview editor).
-5. Read the relevant [Security note](https://github.com/gollum/gollum/wiki/Security#custom-cssjs--mathjax-config) before using these.
+4. Files can be uploaded simply by dragging and dropping them onto the editor's text area.
 
 ### Config file
 
