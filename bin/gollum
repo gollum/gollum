@@ -62,11 +62,8 @@ opts = OptionParser.new do |opts|
   opts.on("-r", "--ref [REF]", "Specify the branch to serve. Default: 'master'.") do |ref|
     wiki_options[:ref] = ref
   end
-  opts.on("-a", "--adapter [ADAPTER]", "Launch Gollum using a specific git adapter. Default: 'grit'.") do |adapter|
+  opts.on("-a", "--adapter [ADAPTER]", "Launch Gollum using a specific git adapter. Default: 'rugged'.") do |adapter|
     Gollum::GIT_ADAPTER = adapter
-  end
-  opts.on("--bare", "Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.") do
-    wiki_options[:repo_is_bare] = true
   end
   opts.on("-b", "--base-path [PATH]", "Specify the leading portion of all Gollum URLs (path info). Default: '/'.",
     "Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.") do |base_path|
@@ -116,7 +113,7 @@ MSG
   opts.on("--no-edit", "Disable the feature of editing pages.")  do
     wiki_options[:allow_editing] = false
   end
-  opts.on("--follow-renames", "Follow pages across renames in the History view. Default except on jruby.") do
+  opts.on("--follow-renames", "Follow pages across renames in the History view. Default: true.") do
     wiki_options[:follow_renames] = true
   end
   opts.on("--no-follow-renames", "Do not follow pages across renames in the History view.") do
@@ -175,7 +172,7 @@ MSG
     puts "Running on: #{RUBY_PLATFORM} with Ruby version #{RUBY_VERSION}"
     puts "Using:"
     loaded_gemspecs =  Gem.loaded_specs
-    gollum_gems = ['gollum-lib', 'gollum-rjgit_adapter', 'rjgit', 'gollum-grit_adapter', 'grit', 'gollum-rugged_adapter', 'rugged']
+    gollum_gems = ['gollum-lib', 'gollum-rjgit_adapter', 'rjgit', 'gollum-rugged_adapter', 'rugged']
     puts Gem.loaded_specs.select{|name, spec| gollum_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
     puts "Markdown rendering gem: #{GitHub::Markup::Markdown.implementation_name}"
     puts "Other renderering gems:"

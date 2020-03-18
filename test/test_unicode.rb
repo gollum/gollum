@@ -87,15 +87,6 @@ context "Frontend Unicode support" do
     assert_equal 'ghi', page.version.message
   end
 
-  test 'unicode filenames' do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
-    
-    @wiki.write_page("ééééé", :markdown, '한글 text', { :name => '', :email => '' })
-    page = @wiki.page("eeeee")
-    assert_equal '한글 text', utf8(page.raw_data)
-  end
-
   def app
     Precious::App
   end
