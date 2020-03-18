@@ -5,7 +5,7 @@ gollum -- A git-based Wiki
 [![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
 [![Dependency Status](https://gemnasium.com/gollum/gollum.svg)](https://gemnasium.com/gollum/gollum)
 
-**Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to gollum version 4.x.
+**Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to Gollum version 4.x. See some [Screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
 
 ## DESCRIPTION
 
@@ -36,18 +36,17 @@ Varies depending on operating system, package manager and Ruby installation. Gen
 	```
 	[sudo] gem install gollum
 	```
+	
+Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
 To run, simply:
 
-1. Navigate to your git repository (wiki) via the command line.
-2. Run: `gollum`.
-3. Open `http://127.0.0.1:4567` in your browser.
-
-Of course, you can also run `gollum /path/to/wiki`. Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
+1. Run: `gollum /path/to/wiki`.
+2. Open `http://localhost:4567` in your browser.
 
 ### Markups
 
-Gollum allows using different markup languages per page. It presently ships with support for the following markups:
+Gollum allows using different markup languages on different wiki pages. It presently ships with support for the following markups:
 * [Markdown](http://daringfireball.net/projects/markdown/syntax) (see [below](#Markdown-flavors) for more information on Markdown flavors)
 * [RDoc](http://rdoc.sourceforge.net/)
 
@@ -74,7 +73,7 @@ See [here](https://github.com/gollum/gollum/wiki/Custom-rendering-gems) for inst
 2. `cd gollum`
 3. `[sudo] bundle install`
 4. `bundle exec bin/gollum`
-5. Open `http://127.0.0.1:4567` in your browser.
+5. Open `http://localhost:4567` in your browser.
 
 ### Rack
 
@@ -131,7 +130,7 @@ Gollum comes with the following command line options:
 1. The `0.0.0.0` IP address allows remote access. Should you wish for Gollum to turn into a personal Wiki, use `127.0.0.1`.
 2. Before using `--adapter`, you should probably read [this](https://github.com/gollum/gollum/wiki/Git-adapters) first.
 3. When `--css` or `--js` is used, respective files must be committed to your git repository or you will get a 302 redirect to the create a page.
-4. Files can be uploaded simply by dragging and dropping them onto the editor's text area.
+4. Files can be uploaded simply by dragging and dropping them onto the editor's text area when `--allow-uploads` is used.
 
 ### Config file
 
