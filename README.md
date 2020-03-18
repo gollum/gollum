@@ -9,23 +9,25 @@ gollum -- A git-based Wiki
 
 ## DESCRIPTION
 
-Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository (either bare or regular) of a specific nature:
-* A Gollum repository's contents are human-editable, unless the repository is bare. Pages are unique text files which may be organized into directories any way you choose. Other content can also be included, for example images, PDFs and headers/footers for your pages.
+Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository of a specific nature:
+* A Gollum repository's contents are human-editable text or markup files.
+* Pages may be organized into directories any way you choose.
+* Other content can also be included, for example images, PDFs and headers/footers for your pages.
 * Gollum pages:
 	* May be written in a variety of [markups](#markups).
 	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
-	* Can be displayed in all versions (commits).
+	* Can be displayed in all versions, reverted, etc.
 * Gollum supports advanced functionality like:
   * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
   * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
   * Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
   * Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
   * [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
-  * ...and [more](https://github.com/gollum/gollum/wiki).
+  * ...and [more](https://github.com/gollum/gollum/wiki)
 
 ### SYSTEM REQUIREMENTS
 
-Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/rugged_adapter) for [https://github.com/libgit2/rugged](rugged) by default. You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
+Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/rugged_adapter) for [rugged](https://github.com/libgit2/rugged) by default. You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
 
 ## INSTALLATION
 
@@ -37,7 +39,7 @@ Varies depending on operating system, package manager and Ruby installation. Gen
 	[sudo] gem install gollum
 	```
 	
-Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
+Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation). Alternatively, you can [run Gollum from source](#running-from-source)
 
 To run, simply:
 
