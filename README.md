@@ -110,7 +110,6 @@ Gollum comes with the following command line options:
 | --assets          |  [PATH]   | Set the path to look for static assets. |
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
-| --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
 | --no-edit         | none      | Disable the feature of editing pages. |
 | --follow-renames, --no-follow-renames  | none      | Follow pages across renames in the History view. Default: true.
 | --allow-uploads   | [MODE]    | Enable file uploads. If set to `dir`, Gollum will store all uploads in the `/uploads/` directory in repository root. If set to `page`, Gollum will store each upload at the currently edited page.<sup>4</sup> |
@@ -123,6 +122,8 @@ Gollum comes with the following command line options:
 | --mathjax-config  | [FILE]    | Specify path to a custom MathJax configuration. If not specified, uses the `mathjax.config.js` file from repository root. |
 | --template-dir    | [PATH]    | Specify custom mustache template directory. |
 | --template-page   | none      | Use _Template in root as a template for new pages. Must be committed. |
+| --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
+| --global-tag-lookup | none   |  Match an internal link to 'Foo' with the first page found with that filename, anywhere in the repository. Provides compatibility with Gollum 4.x. |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
 | --versions        | none      | Display the current version of Gollum and auxiliary gems. |

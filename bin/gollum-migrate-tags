@@ -1,0 +1,248 @@
+#!/usr/bin/env ruby
+#coding:utf-8
+require 'optparse'
+require 'pathname'
+require 'rubygems'
+
+REPO = ARGV[0] || Dir.pwd
+
+wiki_options = {}
+options = {}
+
+opts = OptionParser.new do |opts|
+opts.banner = <<EOF
+Use this tool to migrate a wiki repository created under Gollum versions 4.x or earlier to a 5.x compatibile repo.
+It finds and repairs Gollum link tags that no longer work under 5.x for two reasons:
+
+* 5.x wiki internal links are case senitive
+* 5.x wiki internal links are no longer 'global'.
+    * NB: you can use the --global-tag-lookup option in gollum >= 5.x to enable 4.x-style global tags.
+
+See https://github.com/gollum/gollum/wiki/5.0-release-notes#filename-handling for more information.
+Usage of this script comes without any warranty.
+
+Note: you can also use this script with the --dry-run option to find broken tags in your wiki.
+
+Usage: gollum-migrate-tags /path/to/repo
+
+NB: without the --write flag, this will be a 'dry run' that doesn't actually make any changes, but outputs the changes that would be made.
+
+You can use the --page-file-dir and --config options as you would normally with gollum.
+
+Requires a non-bare repository. Recommended usage:
+
+1. Clone your wiki's repository to create a backup.
+2. Run this script on your cloned repo. 
+3. If all looks sane, run the script with the --write option. This will overwrite files in your working directory, but not commit the changes, so you have time to review them.
+4. Do a 'git diff' to inspect the changes.
+5. Commit the changes if all looks sane, and push/pull them back into your original repo.
+
+Options:
+EOF
+  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum\'s configuration file.') do |file|
+    options[:config] = file
+  end
+
+  opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.') do |path|
+    wiki_options[:page_file_dir] = path
+  end
+  
+  opts.on('--prefer-relative-links', 'When specified, will try to replace broken links with relative links (\'[[Foo/Bar]]\' instead of \'[[/Subdir/Foo/Bar]]\') where possible.') do
+    PREFER_RELATIVE = true
+  end
+  
+  opts.on('--run-silent', 'Don\'t output anything.') do
+    PREFER_RELATIVE = true
+  end
+  
+  opts.on('--write', 'No dry run: actually perform the substitutions.') do
+    NO_DRY_RUN = true
+  end
+end
+
+# Read command line options into `options` hash
+begin
+  opts.parse!
+rescue OptionParser::InvalidOption
+  puts "gollum-migrate-tags: #{$!.message}"
+  puts "gollum-migrate-tags: try 'gollum-migrate-tags --help' for more information"
+  exit
+end
+
+require 'gollum-lib'
+
+if cfg = options[:config]
+  # If the path begins with a '/' it will be considered an absolute path,
+  # otherwise it will be relative to the CWD
+  cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
+  require cfg
+end
+  
+class Gollum::Filter::CodeMigrator < Gollum::Filter::Code
+  def extract(data)
+    case @markup.format
+    when :asciidoc
+      data.gsub!(/^(\[source,([^\r\n]*)\]\n)?----\n(.+?)\n----$/m) do
+        cache_codeblock($~.to_s)
+      end
+    when :org
+      org_headers = %r{([ \t]*#\+HEADER[S]?:[^\r\n]*\n)*}
+      org_name = %r{([ \t]*#\+NAME:[^\r\n]*\n)?}
+      org_lang = %r{[ ]*([^\n \r]*)[ ]*[^\r\n]*}
+      org_begin = %r{([ \t]*)#\+BEGIN_SRC#{org_lang}\r?\n}
+      org_end = %r{\r?\n[ \t]*#\+END_SRC[ \t\r]*}
+      data.gsub!(/^#{org_headers}#{org_name}#{org_begin}(.+?)#{org_end}$/mi) do
+        cache_codeblock($~.to_s)
+      end
+    when :markdown
+      data.gsub!(/^([ ]{0,3})(~~~+) ?([^\r\n]+)?\r?\n(.+?)\r?\n[ ]{0,3}(~~~+)[ \t\r]*$/m) do
+        m_indent = Regexp.last_match[1]
+        m_start  = Regexp.last_match[2] # ~~~
+        m_lang   = Regexp.last_match[3]
+        m_code   = Regexp.last_match[4]
+        m_end    = Regexp.last_match[5] # ~~~
+        # The closing code fence must be at least as long as the opening fence
+        next '' if m_end.length < m_start.length
+        lang = m_lang ? m_lang.strip.split.first : nil
+        cache_codeblock($~.to_s)
+      end  
+    end
+
+    data.gsub!(/^([ ]{0,3})``` ?([^\r\n]+)?\r?\n(.+?)\r?\n[ ]{0,3}```[ \t]*\r?$/m) do
+      cache_codeblock($~.to_s)
+    end
+    data
+  end
+  
+  def process(data)
+    return data if data.nil? || data.size.zero? || @map.size.zero?
+    @map.each do |id, block| ## Just put the code blocks back in verbatim
+      data.gsub!(id, block)
+    end
+    data
+  end
+  
+  def cache_codeblock(block)
+    id = "#{open_pattern}#{Digest::SHA1.hexdigest(block)}#{close_pattern}"
+    @map[id] = block
+    id
+  end
+end
+  
+class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
+  def process_tag(tag)
+    link_part, extra = parse_tag_parts(tag)
+    orig_tag = %{[[#{tag}]]}
+    return orig_tag if link_part.nil?
+    
+    img_args = extra ? [extra, link_part] : [link_part]
+    mime = MIME::Types.type_for(::File.extname(img_args.first.to_s)).first
+    
+    # For any kind of tag other than an internal link: just return the tag.
+    if tag =~ /^_TOC_/ || link_part =~ /^_$/ || link_part =~ /^#{INCLUDE_TAG}/ || (mime && mime.content_type =~ /^image/) || process_external_link_tag(link_part, extra) || process_file_link_tag(link_part, extra)
+      return orig_tag
+    end
+
+    # It's an internal Page link tag. Try to find the file/page it links to
+    link = link_part
+    page = find_page_from_path(link)
+    anchor = nil
+    
+    if page.nil? # No match yet, now try finding the page with anchor removed
+      if pos = link.rindex('#')
+        anchor = link[pos..-1]
+        link  = link[0...pos]
+      end
+
+      if link.empty? && anchor # Internal anchor link, don't search for the page but return the original tag
+        return orig_tag
+      end
+
+      page  = find_page_from_path(link)
+    end
+
+    if page
+      # Great, the link is not broken. Return the original tag.
+      return orig_tag
+    else
+      possibles = find_linked(link)
+      if possibles.empty?
+        log(:info, "Found no candidates for broken link: #{orig_tag}")
+        return orig_tag
+      else
+        if possibles.size > 1
+          log(:empty)
+          log(:warn, "Found multiple possibilities for the link '#{orig_tag}':")
+          possibles.map! {|p| Pathname.new(p)}
+          possibles.sort!
+          possibles.each{|p| log(:none, "* #{p}")}
+          log(:warn,"Picking #{possibles.first}")
+          log(:empty)
+        end
+        pick = possibles.first
+        return tag_for_pick(pick, orig_tag, extra, anchor, @markup.page.path)
+      end
+        
+    end
+  end
+  
+  private
+  
+  def tag_for_pick(pick, orig_tag, extra, anchor, linking_page_path)
+    pick = if defined?(PREFER_RELATIVE)
+      overlapping_path = Pathname.new(linking_page_path).dirname.to_s
+      relative_path = pick.to_s.match(/^\/#{overlapping_path}\/(.+)/)
+      relative_path ? relative_path[1] : pick
+    else
+      pick
+    end
+    new_tag = extra.nil? ? %{[[#{pick}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
+    log(:info, "#{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}")
+    return defined?(DRY_RUN) ? orig_tag : new_tag    
+  end
+end
+
+class ::Gollum::Filter::PlainTextMigrator < Gollum::Filter::PlainText
+  def extract(data)
+    data
+  end
+end
+
+filter_chain = [:PlainTextMigrator, :CodeMigrator, :TagMigrator]
+
+wiki = ::Gollum::Wiki.new(REPO, wiki_options.merge({:filter_chain => filter_chain}))
+TREE = wiki.tree_list(wiki.ref, true, false).map {|page| ::File.join('/', page.path)}
+
+def find_linked(link)
+  # If the link has no explicit file extension, test against the link + the '.' character.
+  # This is to avoid that 'Samwi' matches 'Samwise.md'
+  # If it has an explicit file extension ('Samwi.md'), just test against that.
+  test_path = ::File.extname(link).empty? ? /#{link}\..+/ : link
+  # Select pages from the wiki whose path =~ 'Foo/Bar/Samwi.*'
+  # Match case-insenstively to mimic 4.x behavior!
+  TREE.select {|path| path =~ /^\/(.*\/)?#{test_path}/i}
+end
+
+def log(kind, msg = nil)
+  unless defined?(RUN_SILENT)
+    if kind == :none
+      puts msg
+    elsif kind == :empty
+      puts
+    else
+    puts "[#{kind.to_s.upcase}] #{msg}"
+    end
+  end
+end
+
+wiki.pages.each do |page|
+  log(:info,"Page #{page.path}")
+  new_data = page.formatted_data
+  if defined?(NO_DRY_RUN)
+    path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
+    f = File.new(path, 'w')
+    f.write(new_data)
+    f.close
+  end
+  log(:none, "====")
+end
