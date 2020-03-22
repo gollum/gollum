@@ -91,7 +91,7 @@ module Precious
       @mathjax_config = settings.wiki_options[:mathjax_config]
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
-      @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
+      @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
 
       Sprockets::Helpers.configure do |config|
         config.environment = settings.sprockets

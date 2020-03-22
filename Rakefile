@@ -188,13 +188,14 @@ task :precompile do
   require 'sass'
   env = Precious::Assets.sprockets
   manifest = Sprockets::Manifest.new(env, './public/assets')
+  path = ENV.fetch('GOLLUM_ASSETS_PATH', './public/assets')
   Sprockets::Helpers.configure do |config|
     config.environment = env
     config.prefix      = Precious::Assets::ASSET_URL
     config.digest      = true
-    config.public_path = ENV.fetch('GOLLUM_ASSETS_PATH', './public/assets')
+    config.public_path = path
     config.manifest    = manifest
   end
-  puts "Precompiling assets to #{::File.expand_path('./public/assets')}..."
+  puts "Precompiling assets to #{path}..."
   manifest.compile(Precious::Assets::MANIFEST)
 end
