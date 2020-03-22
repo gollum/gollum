@@ -51,7 +51,7 @@ opts = OptionParser.new do |opts|
       # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
       options[:port] = Integer(port)
     rescue ArgumentError
-      puts 'Error: '#{port}' is not a valid port number.'
+      puts "Error: '#{port}' is not a valid port number."
       exit 1
     end
   end
@@ -79,8 +79,8 @@ opts = OptionParser.new do |opts|
     unless base_path_original == base_path
       puts <<MSG
 Warning: your base-path has been sanitized:
-  - original: '#{base_path_original}'
-  - sanitized: '#{base_path}'
+  - original: "#{base_path_original}"
+  - sanitized: "#{base_path}"
 MSG
     end
 
@@ -171,7 +171,7 @@ MSG
   opts.on('--versions', 'Display the current version of Gollum and auxiliary gems.') do
     require 'gollum-lib'
     puts 'Gollum ' + Gollum::VERSION
-    puts 'Running on: #{RUBY_PLATFORM} with Ruby version #{RUBY_VERSION}'
+    puts "Running on: #{RUBY_PLATFORM} with Ruby version #{RUBY_VERSION}"
     puts 'Using:'
     loaded_gemspecs =  Gem.loaded_specs
     gollum_gems = ['gollum-lib', 'gollum-rjgit_adapter', 'rjgit', 'gollum-rugged_adapter', 'rugged']
@@ -197,8 +197,8 @@ end
 # Read command line options into `options` hash
 begin
   opts.parse!
-rescue OptionParser::InvalidOption
-  puts 'gollum: #{$!.message}'
+rescue OptionParser::InvalidOption => e
+  puts "gollum: #{$!.message}"
   puts 'gollum: try \'gollum --help\' for more information'
   exit
 end
