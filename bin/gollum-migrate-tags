@@ -11,28 +11,29 @@ options = {}
 
 opts = OptionParser.new do |opts|
 opts.banner = <<EOF
-Use this tool to migrate a wiki repository created under Gollum versions 4.x to a 5.x compatibile repo.
+Use this tool to migrate a wiki repository created under Gollum versions 4.x or earlier to a 5.x compatibile repo.
 It finds and repairs Gollum link tags that no longer work under 5.x for two reasons:
 
 * 5.x wiki internal links are case senitive
 * 5.x wiki internal links are no longer 'global'.
-    * NB: you can use gollum's --global-tag-lookup option to enable 4.x-style global tags.
+    * NB: you can use the --global-tag-lookup option in gollum >= 5.x to enable 4.x-style global tags.
 
 See https://github.com/gollum/gollum/wiki/5.0-release-notes#filename-handling for more information.
 Usage of this script comes without any warranty.
 
 Note: you can also use this script with the --dry-run option to find broken tags in your wiki.
 
-Usage: gollum-migrator.rb /path/to/repo
+Usage: gollum-migrate-tags /path/to/repo
 
-This will overwrite files in your working directory, but not commit the changes, so you have time to review them.
+NB: without the --write flag, this will be a 'dry run' that doesn't actually make any changes, but outputs the changes that would be made.
+
 You can use the --page-file-dir and --config options as you would normally with gollum.
 
 Requires a non-bare repository. Recommended usage:
 
 1. Clone your wiki's repository to create a backup.
-2. Run this script with the --dry-run on your cloned repo.
-3. If all looks sane, run the script without the --dry-run option.
+2. Run this script on your cloned repo. 
+3. If all looks sane, run the script with the --write option. This will overwrite files in your working directory, but not commit the changes, so you have time to review them.
 4. Do a 'git diff' to inspect the changes.
 5. Commit the changes if all looks sane, and push/pull them back into your original repo.
 
@@ -54,8 +55,8 @@ EOF
     PREFER_RELATIVE = true
   end
   
-  opts.on('--dry-run', 'Don\'t actually perform any substitutions, only output broken links.') do
-    DRY_RUN = true
+  opts.on('--write', 'No dry run: actually perform the substitutions.') do
+    NO_DRY_RUN = true
   end
 end
 
@@ -63,8 +64,8 @@ end
 begin
   opts.parse!
 rescue OptionParser::InvalidOption
-  puts "gollum-migrator: #{$!.message}"
-  puts "gollum-migrator: try 'gollum --migrator' for more information"
+  puts "gollum-migrate-tags: #{$!.message}"
+  puts "gollum-migrate-tags: try 'gollum-migrate-tags --help' for more information"
   exit
 end
 
@@ -213,7 +214,12 @@ wiki = ::Gollum::Wiki.new(REPO, wiki_options.merge({:filter_chain => filter_chai
 TREE = wiki.tree_list(wiki.ref, true, false).map {|page| ::File.join('/', page.path)}
 
 def find_linked(link)
+  # If the link has no explicit file extension, test against the link + the '.' character.
+  # This is to avoid that 'Samwi' matches 'Samwise.md'
+  # If it has an explicit file extension ('Samwi.md'), just test against that.
   test_path = ::File.extname(link).empty? ? /#{link}\..+/ : link
+  # Select pages from the wiki whose path =~ 'Foo/Bar/Samwi.*'
+  # Match case-insenstively to mimic 4.x behavior!
   TREE.select {|path| path =~ /^\/(.*\/)?#{test_path}/i}
 end
 
@@ -232,7 +238,7 @@ end
 wiki.pages.each do |page|
   log(:info,"Page #{page.path}")
   new_data = page.formatted_data
-  unless defined?(DRY_RUN)
+  if defined?(NO_DRY_RUN)
     path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
     f = File.new(path, 'w')
     f.write(new_data)

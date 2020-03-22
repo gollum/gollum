@@ -23,25 +23,30 @@ waa
 [[Subsub/Zaa.md]]
 EOF
 
-context '4.x -> 5.x tag migrator' do
-  include Rack::Test::Methods
+unless ENV['TRAVIS']
 
-  setup do
-    @path = cloned_testpath("examples/lotr_migration.git")
-  end
-  
-  test 'repair broken links' do
-    PREFER_RELATIVE = true
-    RUN_SILENT = true
-    script_path = File.expand_path(File.join(File.dirname(__FILE__), '../', 'bin', 'gollum-migrate-tags'))
-    Dir.chdir(@path) do
-      load script_path
+  context '4.x -> 5.x tag migrator' do
+    include Rack::Test::Methods
+
+    setup do
+      @path = cloned_testpath("examples/lotr_migration.git")
     end
-    f = File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
-    assert_equal result, f.read
+    
+    test 'repair broken links' do
+      PREFER_RELATIVE = true
+      RUN_SILENT = true
+      NO_DRY_RUN = true
+      script_path = File.expand_path(File.join(File.dirname(__FILE__), '../', 'bin', 'gollum-migrate-tags'))
+      Dir.chdir(@path) do
+        load script_path
+      end
+      f = File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
+      assert_equal result, f.read
+    end
+
+    teardown do
+      FileUtils.rm_rf(@path)
+    end
   end
 
-  teardown do
-    FileUtils.rm_rf(@path)
-  end
 end
