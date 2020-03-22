@@ -32,6 +32,7 @@ context '4.x -> 5.x tag migrator' do
   
   test 'repair broken links' do
     PREFER_RELATIVE = true
+    RUN_SILENT = true
     script_path = File.expand_path(File.join(File.dirname(__FILE__), '../', 'bin', 'gollum-migrate-tags'))
     Dir.chdir(@path) do
       load script_path

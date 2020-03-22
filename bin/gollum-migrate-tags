@@ -50,6 +50,10 @@ EOF
     PREFER_RELATIVE = true
   end
   
+  opts.on('--run-silent', 'Don\'t output anything.') do
+    PREFER_RELATIVE = true
+  end
+  
   opts.on('--dry-run', 'Don\'t actually perform any substitutions, only output broken links.') do
     DRY_RUN = true
   end
@@ -162,17 +166,17 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
     else
       possibles = find_linked(link)
       if possibles.empty?
-        puts "[INFO] Found no candidates for broken link: #{orig_tag}"
+        log(:info, "Found no candidates for broken link: #{orig_tag}")
         return orig_tag
       else
         if possibles.size > 1
-          puts
-          puts "[WARN] Found multiple possibilities for the link '#{orig_tag}':"
+          log(:empty)
+          log(:warn, "Found multiple possibilities for the link '#{orig_tag}':")
           possibles.map! {|p| Pathname.new(p)}
           possibles.sort!
-          possibles.each{|p| puts "* #{p}"}
-          puts "[WARN] Picking #{possibles.first}"
-          puts
+          possibles.each{|p| log(:none, "* #{p}")}
+          log(:warn,"Picking #{possibles.first}")
+          log(:empty)
         end
         pick = possibles.first
         return tag_for_pick(pick, orig_tag, extra, anchor, @markup.page.path)
@@ -192,7 +196,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
       pick
     end
     new_tag = extra.nil? ? %{[[#{pick}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
-    puts "[INFO] #{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}"
+    log(:info, "#{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}")
     return defined?(DRY_RUN) ? orig_tag : new_tag    
   end
 end
@@ -213,8 +217,20 @@ def find_linked(link)
   TREE.select {|path| path =~ /^\/(.*\/)?#{test_path}/i}
 end
 
+def log(kind, msg = nil)
+  unless defined?(RUN_SILENT)
+    if kind == :none
+      puts msg
+    elsif kind == :empty
+      puts
+    else
+    puts "[#{kind.to_s.upcase}] #{msg}"
+    end
+  end
+end
+
 wiki.pages.each do |page|
-  puts "[INFO] Page #{page.path}"
+  log(:info,"Page #{page.path}")
   new_data = page.formatted_data
   unless defined?(DRY_RUN)
     path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
@@ -222,5 +238,5 @@ wiki.pages.each do |page|
     f.write(new_data)
     f.close
   end
-  puts "===="
+  log(:none, "====")
 end
