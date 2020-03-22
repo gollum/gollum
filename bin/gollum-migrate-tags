@@ -15,10 +15,13 @@ Use this tool to migrate a wiki repository created under Gollum versions 4.x to 
 It finds and repairs Gollum link tags that no longer work under 5.x for two reasons:
 
 * 5.x wiki internal links are case senitive
-* 5.x wiki internal links are no longer 'global'
+* 5.x wiki internal links are no longer 'global'.
+    * NB: you can use gollum's --global-tag-lookup option to enable 4.x-style global tags.
 
 See https://github.com/gollum/gollum/wiki/5.0-release-notes#filename-handling for more information.
 Usage of this script comes without any warranty.
+
+Note: you can also use this script with the --dry-run option to find broken tags in your wiki.
 
 Usage: gollum-migrator.rb /path/to/repo
 
@@ -35,15 +38,19 @@ Requires a non-bare repository. Recommended usage:
 
 Options:
 EOF
-  opts.on("-c", "--config [FILE]", "Specify path to the Gollum's configuration file.") do |file|
+  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum\'s configuration file.') do |file|
     options[:config] = file
   end
 
-  opts.on("--page-file-dir [PATH]", "Specify the subdirectory for all pages. Default: repository root.") do |path|
+  opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.') do |path|
     wiki_options[:page_file_dir] = path
   end
   
-  opts.on("--dry-run", "Don't actually perform any substitutions, only output broken links.") do
+  opts.on('--prefer-relative-links', 'When specified, will try to replace broken links with relative links (\'[[Foo/Bar]]\' instead of \'[[/Subdir/Foo/Bar]]\') where possible.') do
+    PREFER_RELATIVE = true
+  end
+  
+  opts.on('--dry-run', 'Don\'t actually perform any substitutions, only output broken links.') do
     DRY_RUN = true
   end
 end
@@ -168,7 +175,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
           puts
         end
         pick = possibles.first
-        return tag_for_pick(pick, orig_tag, extra, anchor)
+        return tag_for_pick(pick, orig_tag, extra, anchor, @markup.page.path)
       end
         
     end
@@ -176,7 +183,14 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
   
   private
   
-  def tag_for_pick(pick, orig_tag, extra, anchor)
+  def tag_for_pick(pick, orig_tag, extra, anchor, linking_page_path)
+    pick = if defined?(PREFER_RELATIVE)
+      overlapping_path = Pathname.new(linking_page_path).dirname.to_s
+      relative_path = pick.to_s.match(/^\/#{overlapping_path}\/(.+)/)
+      relative_path ? relative_path[1] : pick
+    else
+      pick
+    end
     new_tag = extra.nil? ? %{[[#{pick}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
     puts "[INFO] #{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}"
     return defined?(DRY_RUN) ? orig_tag : new_tag    
