@@ -187,8 +187,8 @@ task :precompile do
   require 'sprockets-helpers'
   require 'sass'
   env = Precious::Assets.sprockets
-  manifest = Sprockets::Manifest.new(env, './public/assets')
   path = ENV.fetch('GOLLUM_ASSETS_PATH', './public/assets')
+  manifest = Sprockets::Manifest.new(env, path)
   Sprockets::Helpers.configure do |config|
     config.environment = env
     config.prefix      = Precious::Assets::ASSET_URL
