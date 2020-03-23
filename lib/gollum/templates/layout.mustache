@@ -39,14 +39,14 @@
   {{/has_editor}}
   {{#mathjax}}
   <script type="text/javascript">
-  window.MathJax = {
-    tex2jax: {
-      inlineMath:  [ ['$','$'], ['\\(','\\)'] ],
-      displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
-      processEscapes: true
-    },
-    TeX: { extensions: ["autoload-all.js"] }
-  };
+    window.MathJax = {
+      tex2jax: {
+        inlineMath:  [ ['$','$'], ['\\(','\\)'] ],
+        displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+        processEscapes: true
+      },
+      TeX: { extensions: ["autoload-all.js"] }
+    };
   </script>
   {{#mathjax_config}}
   <script type="text/javascript" src="{{base_url}}/{{mathjax_config}}"></script>

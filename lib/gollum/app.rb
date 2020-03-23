@@ -172,6 +172,7 @@ module Precious
           if page = wikip.page
               @page         = page
               @content      = page.text_data
+              @mathjax      = wiki.mathjax
               @etag         = page.sha
               mustache :edit
           else
@@ -385,7 +386,6 @@ module Precious
         end
         @content       = @page.formatted_data
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
-        @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
         @editable      = false
         @bar_side      = wiki.bar_side

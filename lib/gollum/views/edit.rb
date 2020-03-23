@@ -18,6 +18,10 @@ module Precious
       def page_name
         @name
       end
+      
+      def mathjax
+        @mathjax
+      end
 
       def header
         if @header.nil?
