@@ -97,6 +97,12 @@ module Precious
             send(:stylesheet_tag, name, options)
           end
         end
+        
+        def sprockets_asset_path
+          lambda do |name|
+            send(:asset_path, name)
+          end          
+        end
 
         def sprockets_javascript_tag
           lambda do |name|
