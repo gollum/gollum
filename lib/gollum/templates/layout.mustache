@@ -38,7 +38,6 @@
   {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
   {{/has_editor}}
   {{#mathjax}}
-  {{^mathjax_config}}
   <script type="text/javascript">
   window.MathJax = {
     tex2jax: {
@@ -49,7 +48,6 @@
     TeX: { extensions: ["autoload-all.js"] }
   };
   </script>
-  {{/mathjax_config}}
   {{#mathjax_config}}
   <script type="text/javascript" src="{{base_url}}/{{mathjax_config}}"></script>
   {{/mathjax_config}}
@@ -59,7 +57,8 @@
       '{{base_url}}/javascript/MathJax-2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
   (d.head || d.getElementsByTagName('head')[0]).appendChild(j);
   }(document));
-  </script>{{/mathjax}}
+  </script>
+  {{/mathjax}}
   {{#js}}<script type="text/javascript" src="{{custom_path}}/custom.js"></script>{{/js}}
 
   <title>{{title}}</title>
