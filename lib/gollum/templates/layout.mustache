@@ -51,13 +51,7 @@
   {{#mathjax_config}}
   <script type="text/javascript" src="{{base_url}}/{{mathjax_config}}"></script>
   {{/mathjax_config}}
-  <script>(function(d,j){
-  j = d.createElement('script');
-  j.src =
-      '{{base_url}}/javascript/MathJax-2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-  (d.head || d.getElementsByTagName('head')[0]).appendChild(j);
-  }(document));
-  </script>
+  <script defer src="{{base_path}}/gollum/assets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   {{/mathjax}}
   {{#js}}<script type="text/javascript" src="{{custom_path}}/custom.js"></script>{{/js}}
 
