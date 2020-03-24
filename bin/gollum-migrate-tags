@@ -245,9 +245,7 @@ end
 filter_chain = [:PlainTextMigrator, :CodeMigrator, :TagMigrator]
 
 wiki = ::Gollum::Wiki.new(REPO, wiki_options.merge({:filter_chain => filter_chain}))
-pages = wiki.tree_list(wiki.ref, true, false)
-files = wiki.files
-TREE = (pages + files).map {|file| ::File.join('/', file.path)}
+TREE = wiki.tree_list(wiki.ref, true, true).map {|file| ::File.join('/', file.path)}
 
 def find_linked(link)
   link.gsub!(' ', '-') if const_true(:HYPHENATE) # Match paths containing dashes instead of spaces
