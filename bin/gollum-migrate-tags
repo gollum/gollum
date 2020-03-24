@@ -53,8 +53,12 @@ EOF
     PREFER_RELATIVE = true
   end
   
-  opts.on('--hyphenate', 'Repair links that used spaces instead of hyphens for pages that contain hyphens: [[Bilbo Baggings]] -> [[Bilbo-Baggins]]') do
-    HYPHENATE = true
+  HYPHENATE = true unless defined?(HYPHENATE)
+  opts.on('--hyphenate', 'Default. Repair links that use spaces instead of hyphens for pages that contain hyphens: [[Bilbo Baggins]] -> [[Bilbo-Baggins]]') do
+  end
+  
+  opts.on('--no-hyphenate', 'Turn off the --hyphenate option.') do
+    HYPHENATE = false
   end
   
   opts.on('--run-silent', 'Don\'t output anything.') do
@@ -145,7 +149,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
     mime = MIME::Types.type_for(::File.extname(img_args.first.to_s)).first
     
     # For any kind of tag other than an internal link: just return the tag.
-    if tag =~ /^_TOC_/ || link_part =~ /^_$/ || link_part =~ /^#{INCLUDE_TAG}/ || (mime && mime.content_type =~ /^image/) || process_external_link_tag(link_part, extra)# || process_file_link_tag(link_part, extra)
+    if tag =~ /^_TOC_/ || link_part =~ /^_$/ || link_part =~ /^#{INCLUDE_TAG}/ || (mime && mime.content_type =~ /^image/) || process_external_link_tag(link_part, extra) || process_file_link_tag(link_part, extra)
       return orig_tag
     end
 
