@@ -6,6 +6,24 @@ require 'rubygems'
 
 REPO = ARGV[0] || Dir.pwd
 
+def set_const(const, val)
+  already_defined = begin
+    Object.const_get(const)
+    true
+  rescue NameError
+    false
+  end
+  Object.const_set(const, val) unless already_defined
+end
+
+def const_true(const)
+  begin
+    Object.const_get(const)
+  rescue NameError
+    false
+  end
+end
+
 wiki_options = {}
 options = {}
 
@@ -14,7 +32,7 @@ opts.banner = <<EOF
 Use this tool to migrate a wiki repository created under Gollum versions 4.x or earlier to a 5.x compatibile repo.
 It finds and repairs Gollum link tags that no longer work under 5.x for two reasons:
 
-* 5.x wiki internal links may contain spaces, [[Bilbo Baggins]] no longer resolves to [[Bilbo-Baggins]]
+* 5.x wiki internal links may contain spaces. [[Bilbo Baggins]] and [[Bilbo-Baggins]] therefore link to distinct pages.
 * 5.x wiki internal links are case senitive
 * 5.x wiki internal links are no longer 'global'.
     * NB: you can use the --global-tag-lookup option in gollum >= 5.x to enable 4.x-style global tags.
@@ -49,29 +67,30 @@ EOF
   end
     
   opts.on('--prefer-relative-links', 'When specified, will try to replace broken links with relative links (\'[[Foo/Bar]]\' instead of \'[[/Subdir/Foo/Bar]]\') where possible.') do
-    PREFER_RELATIVE = true
-  end
-  
-  HYPHENATE = true unless defined?(HYPHENATE)
-  opts.on('--hyphenate', 'Default. Repair links that use spaces instead of hyphens for pages that contain hyphens: [[Bilbo Baggins]] -> [[Bilbo-Baggins]]') do
+    set_const(:PREFER_RELATIVE, true)
   end
   
   opts.on('--no-hyphenate', 'Turn off the --hyphenate option.') do
-    HYPHENATE = false
+    set_const(:HYPHENATE, false)
+  end
+  
+  opts.on('--hyphenate', 'Default. Repair links that use spaces instead of hyphens: [[Bilbo Baggins]] -> [[Bilbo-Baggins]]') do
+    set_const(:HYPHENATE, true)
   end
   
   opts.on('--run-silent', 'Don\'t output anything.') do
-    PREFER_RELATIVE = true
+    set_const(:PREFER_RELATIVE, true)
   end
   
   opts.on('--write', 'No dry run: actually perform the substitutions.') do
-    NO_DRY_RUN = true
+    set_const(:NO_DRY_RUN, true)
   end
 end
 
 # Read command line options into `options` hash
 begin
   opts.parse!
+  set_const(:HYPHENATE, true)
 rescue OptionParser::InvalidOption
   puts "gollum-migrate-tags: #{$!.message}"
   puts "gollum-migrate-tags: try 'gollum-migrate-tags --help' for more information"
@@ -198,7 +217,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
   private
   
   def tag_for_pick(pick, orig_tag, extra, anchor, linking_page_path)
-    pick = if defined?(PREFER_RELATIVE) && PREFER_RELATIVE
+    pick = if const_true(:PREFER_RELATIVE)
       overlapping_path = Pathname.new(linking_page_path).dirname.to_s
       if overlapping_path == '.'
         overlapping_path = '' 
@@ -212,7 +231,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
     end
     new_tag = extra.nil? ? %{[[#{pick}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
     log(:info, "#{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}")
-    return (defined?(DRY_RUN) && DRY_RUN) ? orig_tag : new_tag    
+    return const_true(:DRY_RUN) ? orig_tag : new_tag    
   end
 end
 
@@ -230,7 +249,7 @@ files = wiki.files
 TREE = (pages + files).map {|file| ::File.join('/', file.path)}
 
 def find_linked(link)
-  link.gsub!(' ', '-') if defined?(HYPHENATE) && HYPHENATE # Match paths containing dashes instead of spaces
+  link.gsub!(' ', '-') if const_true(:HYPHENATE) # Match paths containing dashes instead of spaces
   # If the link has no explicit file extension, test against the link + the '.' character.
   # This is to avoid that 'Samwi' matches 'Samwise.md'
   # If it has an explicit file extension ('Samwi.md'), just test against that.
@@ -241,7 +260,7 @@ def find_linked(link)
 end
 
 def log(kind, msg = nil)
-  unless defined?(RUN_SILENT) && RUN_SILENT
+  unless const_true(:RUN_SILENT)
     if kind == :none
       puts msg
     elsif kind == :empty
@@ -255,7 +274,7 @@ end
 wiki.pages.each do |page|
   log(:info,"Page #{page.path}")
   new_data = page.formatted_data
-  if defined?(NO_DRY_RUN) && NO_DRY_RUN
+  if const_true(:NO_DRY_RUN)
     path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
     f = File.new(path, 'w')
     f.write(new_data)
