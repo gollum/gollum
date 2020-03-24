@@ -155,6 +155,9 @@ MSG
   opts.on('--global-tag-lookup', 'Match an internal link to \'Foo\' with the first page found with that filename, anywhere in the repository. Provides compatibility with Gollum 4.x.') do
     wiki_options[:global_tag_lookup] = true
   end
+  opts.on('--hyphened-tag-lookup', 'Match an internal link to \'Bilbo Baggins\' with \'Bilbo-Baggins\'. Provides compatibility with Gollum 4.x.') do
+    wiki_options[:hyphened_tag_lookup] = true
+  end
   opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:) except when the leading colon is backslashed (e.g. \\:heart:).') do
     wiki_options[:emoji] = true
   end
