@@ -17,6 +17,8 @@ It finds and repairs Gollum link tags that no longer work under 5.x for two reas
 * 5.x wiki internal links are case senitive
 * 5.x wiki internal links are no longer 'global'.
     * NB: you can use the --global-tag-lookup option in gollum >= 5.x to enable 4.x-style global tags.
+  
+NB: you can also use this script to update links to filenames containing hyphens, see the --hyphenate option.
 
 See https://github.com/gollum/gollum/wiki/5.0-release-notes#filename-handling for more information.
 Usage of this script comes without any warranty.
@@ -46,9 +48,13 @@ EOF
   opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.') do |path|
     wiki_options[:page_file_dir] = path
   end
-  
+    
   opts.on('--prefer-relative-links', 'When specified, will try to replace broken links with relative links (\'[[Foo/Bar]]\' instead of \'[[/Subdir/Foo/Bar]]\') where possible.') do
     PREFER_RELATIVE = true
+  end
+  
+  opts.on('--hyphenate', 'Repair links that used spaces instead of hyphens for pages that contain hyphens: [[Bilbo Baggings]] -> [[Bilbo-Baggins]]') do
+    HYPHENATE = true
   end
   
   opts.on('--run-silent', 'Don\'t output anything.') do
@@ -189,16 +195,21 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
   private
   
   def tag_for_pick(pick, orig_tag, extra, anchor, linking_page_path)
-    pick = if defined?(PREFER_RELATIVE)
+    pick = if defined?(PREFER_RELATIVE) && PREFER_RELATIVE
       overlapping_path = Pathname.new(linking_page_path).dirname.to_s
-      relative_path = pick.to_s.match(/^\/#{overlapping_path}\/(.+)/)
+      if overlapping_path == '.'
+        overlapping_path = '' 
+      else
+        overlapping_path = ::File.join('/', overlapping_path)
+      end
+      relative_path = pick.to_s.match(/^#{overlapping_path}\/(.+)/)
       relative_path ? relative_path[1] : pick
     else
       pick
     end
     new_tag = extra.nil? ? %{[[#{pick}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
     log(:info, "#{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}")
-    return defined?(DRY_RUN) ? orig_tag : new_tag    
+    return (defined?(DRY_RUN) && DRY_RUN) ? orig_tag : new_tag    
   end
 end
 
@@ -214,6 +225,7 @@ wiki = ::Gollum::Wiki.new(REPO, wiki_options.merge({:filter_chain => filter_chai
 TREE = wiki.tree_list(wiki.ref, true, false).map {|page| ::File.join('/', page.path)}
 
 def find_linked(link)
+  link.gsub!(' ', '-') if defined?(HYPHENATE) && HYPHENATE # Match paths containing dashes instead of spaces
   # If the link has no explicit file extension, test against the link + the '.' character.
   # This is to avoid that 'Samwi' matches 'Samwise.md'
   # If it has an explicit file extension ('Samwi.md'), just test against that.
@@ -224,7 +236,7 @@ def find_linked(link)
 end
 
 def log(kind, msg = nil)
-  unless defined?(RUN_SILENT)
+  unless defined?(RUN_SILENT) && RUN_SILENT
     if kind == :none
       puts msg
     elsif kind == :empty
@@ -238,7 +250,7 @@ end
 wiki.pages.each do |page|
   log(:info,"Page #{page.path}")
   new_data = page.formatted_data
-  if defined?(NO_DRY_RUN)
+  if defined?(NO_DRY_RUN) && NO_DRY_RUN
     path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
     f = File.new(path, 'w')
     f.write(new_data)
