@@ -198,7 +198,7 @@ end
 begin
   opts.parse!
 rescue OptionParser::InvalidOption => e
-  puts "gollum: #{$!.message}"
+  puts "gollum: #{e.message}"
   puts 'gollum: try \'gollum --help\' for more information'
   exit
 end

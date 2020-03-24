@@ -113,7 +113,7 @@ module Precious
     namespace '/gollum' do
       
       get '/assets/mathjax/*' do
-        env['PATH_INFO'].sub!("/#{Precious::Assets::ASSET_URL}/mathjax", '')
+        env['PATH_INFO'].sub!("/gollum/assets/mathjax", '')
         Rack::Static.new(not_found_proc, {:root => @mathjax_path, :urls => ['']}).call(env)
       end
 
