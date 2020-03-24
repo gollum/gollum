@@ -42,6 +42,11 @@ context "Frontend" do
   def nfd utf8
     TwitterCldr::Normalization.normalize(utf8, using: :nfd)
   end
+  
+  test 'mathjax assets are served' do
+    get '/gollum/assets/mathjax/MathJax.js'
+    assert last_response.ok?
+  end
 
   test "UTF-8 headers href preserved" do
     page = 'utfh1'

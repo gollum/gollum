@@ -1,4 +1,4 @@
-<div id="gollum-editor" data-escaped-name="{{escaped_name}}" class="{{#is_create_page}}create{{/is_create_page}}{{#is_edit_page}}edit{{/is_edit_page}} {{#allow_uploads}}uploads-allowed{{/allow_uploads}}">
+<div id="gollum-editor" data-escaped-name="{{escaped_name}}" class="{{#is_create_page}}create{{/is_create_page}}{{#is_edit_page}}edit{{/is_edit_page}} {{#allow_uploads}}uploads-allowed{{/allow_uploads}} tex2jax_ignore">
 {{#is_create_page}}
 <form id="gollum-editor-form" name="gollum-editor" action="{{create_path}}" method="post">
 {{/is_create_page}}
@@ -142,7 +142,7 @@
     <span class="jaws"><br></span>
 		<div class="form-actions">
     	<input type="submit" id="gollum-editor-submit" class="btn btn-primary" value="Save" title="Save current changes">
-    	<a href="" id="gollum-editor-cancel" class="btn" type="button" title="Cancel editing" onClick="window.history.back()">Cancel</a>
+    	<a id="gollum-editor-cancel" class="btn" type="button" title="Cancel editing" onClick="window.history.back()">Cancel</a>
 		</div>
   </fieldset>
 </form>

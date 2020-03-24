@@ -33,7 +33,12 @@ module Precious
       status 404
       return mustache :error
     end
-
+    
+    def not_found_proc
+      not_found_msg = 'Not found.'
+      Proc.new {[404, {'Content-Type' => 'text/html', 'Content-Length' => not_found_msg.length.to_s}, [not_found_msg]]}
+    end
+    
     def emoji(name)
       if emoji = Gemojione.index.find_by_name(name)
         IO.read(EMOJI_PATHNAME.join("#{emoji['unicode'].downcase}.png"))

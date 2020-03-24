@@ -28,10 +28,14 @@ offline with latex equations without bloating the gollum release tarball.
 6. Slimify mathjax
 
       cd MathJax-x.y.z && grunt && cd ..
+      
+7. Remove old mathjax (careful!)
 
-7. Replace bundled mathjax with newly generated one
+     rm -rf ${GOLLUM_ROOT}/lib/gollum/public/gollum/javascript/MathJax
 
-      cp MathJax-x.y.z ${GOLLUM_ROOT}/lib/gollum/public/gollum/javascript
+8. Replace bundled mathjax with newly generated one
 
-8. Update mathjax version in ${GOLLUM_ROOT}/lib/gollum/templates/layout.mustache
+      cp MathJax-x.y.z ${GOLLUM_ROOT}/lib/gollum/public/gollum/javascript/MathJax
+
+9. Update mathjax version in ${GOLLUM_ROOT}/lib/gollum/templates/layout.mustache
 

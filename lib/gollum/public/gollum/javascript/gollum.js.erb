@@ -361,6 +361,9 @@ $(document).ready(function() {
             sectionHeading.scrollIntoView();
           }
         }
+        if (window.MathJax != null) {
+          window.MathJax.Hub.Queue(['Typeset',window.MathJax.Hub,'preview-content']);
+        }
       },
       error: function(data, textStatus, errorThrown) {
         console.log('something went wrong: ' + textStatus + errorThrown);

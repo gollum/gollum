@@ -91,8 +91,9 @@ module Precious
       @mathjax_config = settings.wiki_options[:mathjax_config]
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
-      @static_assets_path = settings.wiki_options.fetch(:static_assets_path, './public/assets')
-
+      @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
+      @mathjax_path = ::File.join(File.dirname(__FILE__), 'public/gollum/javascript/MathJax')
+      
       Sprockets::Helpers.configure do |config|
         config.environment = settings.sprockets
         config.environment.context_class.class_variable_set(:@@base_url, @base_url)
@@ -110,14 +111,17 @@ module Precious
     end
 
     namespace '/gollum' do
+      
+      get '/assets/mathjax/*' do
+        env['PATH_INFO'].sub!("/gollum/assets/mathjax", '')
+        Rack::Static.new(not_found_proc, {:root => @mathjax_path, :urls => ['']}).call(env)
+      end
 
       get '/assets/*' do
         env['PATH_INFO'].sub!("/#{Precious::Assets::ASSET_URL}", '')
         if @use_static_assets
           env['PATH_INFO'].sub!(Sprockets::Helpers.prefix, '') if @base_url
-          not_found_msg = 'Not found.'
-          not_found = Proc.new {[404, {'Content-Type' => 'text/html', 'Content-Length' => not_found_msg.length.to_s}, [not_found_msg]]}
-          Rack::Static.new(not_found, {:root => @static_assets_path, :urls => ['']}).call(env)
+          Rack::Static.new(not_found_proc, {:root => @static_assets_path, :urls => ['']}).call(env)
         else
           settings.sprockets.call(env)
         end
@@ -168,6 +172,7 @@ module Precious
           if page = wikip.page
               @page         = page
               @content      = page.text_data
+              @mathjax      = wiki.mathjax
               @etag         = page.sha
               mustache :edit
           else
@@ -381,7 +386,6 @@ module Precious
         end
         @content       = @page.formatted_data
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
-        @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
         @editable      = false
         @bar_side      = wiki.bar_side
