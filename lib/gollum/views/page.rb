@@ -28,13 +28,14 @@ module Precious
       def breadcrumb
         path = Pathname.new(@page.url_path).parent
         return '' if path.to_s == '.'
-        breadcrumb = []
+        breadcrumb = [%{<nav aria-label="Breadcrumb"><ol>}]
         path.descend do |crumb|
           element = "#{crumb.basename}"
           next if element == @page.title
-          breadcrumb << %{<a href="#{overview_path}/#{crumb}/">#{element}</a>}
+          breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{element}</a></li>}
         end
-        breadcrumb.join(' / ') << ' /'
+        breadcrumb << %{</ol></nav>}
+        breadcrumb.join("\n")
       end
 
       def content
