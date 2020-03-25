@@ -43,7 +43,7 @@ unless ENV['TRAVIS']
       Dir.chdir(@path) do
         load script_path
       end
-      f = File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
+      f = ::File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
       assert_equal result, f.read
     end
     
@@ -57,7 +57,7 @@ unless ENV['TRAVIS']
         load script_path
       end
     
-      f = File.new(::File.join(@path, 'Home.textile'), 'r')
+      f = ::File.new(::File.join(@path, 'Home.textile'), 'r')
       output = f.read
       assert_equal true, output.include?('[[Bilbo-Baggins.md]]')
       assert_equal true, output.include?('[[evil|Mordor/Eye-Of-Sauron.md]]')

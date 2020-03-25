@@ -6,26 +6,16 @@ require 'rubygems'
 
 REPO = ARGV[0] || Dir.pwd
 
-def set_const(const, val)
-  already_defined = begin
-    Object.const_get(const)
-    true
-  rescue NameError
-    false
-  end
-  Object.const_set(const, val) unless already_defined
-end
-
-def const_true(const)
-  begin
-    Object.const_get(const)
-  rescue NameError
-    false
-  end
-end
-
 wiki_options = {}
 options = {}
+
+migrate_options = {
+  :hyphenate => true
+}
+
+def setting(const)
+  Object.const_defined?(const.upcase) && Object.const_get(const.upcase)
+end
 
 opts = OptionParser.new do |opts|
 opts.banner = <<EOF
@@ -68,30 +58,32 @@ EOF
   end
     
   opts.on('--prefer-relative-links', 'When specified, will try to replace broken links with relative links (\'[[Foo/Bar]]\' instead of \'[[/Subdir/Foo/Bar]]\') where possible.') do
-    set_const(:PREFER_RELATIVE, true)
-  end
-  
-  opts.on('--no-hyphenate', 'Turn off the --hyphenate option.') do
-    set_const(:HYPHENATE, false)
+    migrate_options[:prefer_relative] = true
   end
   
   opts.on('--hyphenate', 'Default. Repair links that use spaces instead of hyphens: [[Bilbo Baggins]] -> [[Bilbo-Baggins]]') do
-    set_const(:HYPHENATE, true)
+    migrate_options[:hyphenate] = true
+  end
+  
+  opts.on('--no-hyphenate', 'Turn off the --hyphenate option.') do
+    migrate_options[:hyphenate] = false
   end
   
   opts.on('--run-silent', 'Don\'t output anything.') do
-    set_const(:PREFER_RELATIVE, true)
+    migrate_options[:run_silent] = true
   end
   
   opts.on('--write', 'No dry run: actually perform the substitutions.') do
-    set_const(:NO_DRY_RUN, true)
+    migrate_options[:no_dry_run] = true
   end
 end
 
 # Read command line options into `options` hash
 begin
   opts.parse!
-  set_const(:HYPHENATE, true)
+  migrate_options.each do |setting, value|
+    Object.const_set(setting.to_s.upcase, value)
+  end
 rescue OptionParser::InvalidOption
   puts "gollum-migrate-tags: #{$!.message}"
   puts "gollum-migrate-tags: try 'gollum-migrate-tags --help' for more information"
@@ -172,9 +164,9 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
       return orig_tag
     end
 
-    # It's an internal Page link tag. Try to find the file/page it links to
+    # Try to resolve it as an internal Page link tag.
     link = link_part
-    page = find_page_from_path(link)
+    page = find_page_or_file_from_path(link)
     anchor = nil
     
     if page.nil? # No match yet, now try finding the page with anchor removed
@@ -187,7 +179,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
         return orig_tag
       end
 
-      page  = find_page_from_path(link)
+      page  = find_page_or_file_from_path(link)
     end
 
     if page
@@ -218,21 +210,17 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
   private
   
   def tag_for_pick(pick, orig_tag, extra, anchor, linking_page_path)
-    pick = if const_true(:PREFER_RELATIVE)
+    pick = if setting(:prefer_relative)
       overlapping_path = Pathname.new(linking_page_path).dirname.to_s
-      if overlapping_path == '.'
-        overlapping_path = '' 
-      else
-        overlapping_path = ::File.join('/', overlapping_path)
-      end
+      overlapping_path = overlapping_path == '.' ? '' : ::File.join('/', overlapping_path)
       relative_path = pick.to_s.match(/^#{overlapping_path}\/(.+)/)
       relative_path ? relative_path[1] : pick
     else
       pick
     end
-    new_tag = extra.nil? ? %{[[#{pick}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
+    new_tag = extra.nil? ? %{[[#{pick}#{anchor}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
     log(:info, "#{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}")
-    return const_true(:DRY_RUN) ? orig_tag : new_tag    
+    new_tag    
   end
 end
 
@@ -248,7 +236,7 @@ wiki = ::Gollum::Wiki.new(REPO, wiki_options.merge({:filter_chain => filter_chai
 TREE = wiki.tree_list(wiki.ref, true, true).map {|file| ::File.join('/', file.path)}
 
 def find_linked(link)
-  link.gsub!(' ', '-') if const_true(:HYPHENATE) # Match paths containing dashes instead of spaces
+  link.gsub!(' ', '-') if setting(:hyphenate) # Match paths containing dashes instead of spaces
   # If the link has no explicit file extension, test against the link + the '.' character.
   # This is to avoid that 'Samwi' matches 'Samwise.md'
   # If it has an explicit file extension ('Samwi.md'), just test against that.
@@ -259,7 +247,7 @@ def find_linked(link)
 end
 
 def log(kind, msg = nil)
-  unless const_true(:RUN_SILENT)
+  unless setting(:run_silent)
     if kind == :none
       puts msg
     elsif kind == :empty
@@ -273,7 +261,7 @@ end
 wiki.pages.each do |page|
   log(:info,"Page #{page.path}")
   new_data = page.formatted_data
-  if const_true(:NO_DRY_RUN)
+  if setting(:no_dry_run)
     path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
     f = File.new(path, 'w')
     f.write(new_data)
