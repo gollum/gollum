@@ -24,7 +24,7 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
   * Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
   * Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
   * [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
-	* [Redirects](https://github.com/gollum/gollum/wiki/5.0-release-notes#support-for-redirects)
+  * [Redirects](https://github.com/gollum/gollum/wiki/5.0-release-notes#support-for-redirects)
   * ...and [more](https://github.com/gollum/gollum/wiki)
 
 ### SYSTEM REQUIREMENTS
@@ -39,7 +39,7 @@ Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/r
 	[sudo] gem install gollum
 	```
 	
-Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation). Alternatively, you can [run Gollum from source](#running-from-source)
+Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
 To run, simply:
 
