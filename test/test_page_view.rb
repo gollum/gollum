@@ -115,7 +115,8 @@ EOS
     @view = Precious::Views::Page.new
     @view.instance_variable_set :@page, page
     @view.instance_variable_set :@content, page.formatted_data
-    assert_equal @view.breadcrumb, '<a href="/gollum/overview/subdir/">subdir</a> /'
+    assert_equal @view.breadcrumb, "<nav aria-label=\"Breadcrumb\"><ol>\n<li class=\"breadcrumb-item\"><a href=\"/gollum/overview/subdir/\">subdir</a></li>\n</ol></nav>"
+
 
     # No breadcrumb on unnested page
     @wiki.write_page('BC Test 2', :markdown, 'Test', commit_details)

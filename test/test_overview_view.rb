@@ -41,7 +41,8 @@ context "Precious::Views::Overview" do
   test "breadcrumb" do
     @page.instance_variable_set("@path", "Mordor/Eye-Of-Sauron/Saruman")
     @page.instance_variable_set("@base_url", "")
-    assert_equal '<a href="/gollum/overview">Home</a> / <a href="/gollum/overview/Mordor/">Mordor</a> / <a href="/gollum/overview/Mordor/Eye-Of-Sauron/">Eye-Of-Sauron</a> / Saruman', @page.breadcrumb
+    $stderr.puts @page.breadcrumb.inspect
+    assert_equal "<nav aria-label=\"Breadcrumb\"><ol><li class=\"breadcrumb-item\"><a href=\"/gollum/overview\">Home</a></li>\n<li class=\"breadcrumb-item\"><a href=\"/gollum/overview/Mordor/\">Mordor</a></li>\n<li class=\"breadcrumb-item\"><a href=\"/gollum/overview/Mordor/Eye-Of-Sauron/\">Eye-Of-Sauron</a></li>\n<li class=\"breadcrumb-item\" aria-current=\"page\">Saruman</li>\n</ol></nav>", @page.breadcrumb
   end
 
   test "breadcrumb with no path" do
