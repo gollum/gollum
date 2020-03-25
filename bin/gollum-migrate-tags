@@ -82,7 +82,8 @@ end
 begin
   opts.parse!
   migrate_options.each do |setting, value|
-    Object.const_set(setting.to_s.upcase, value)
+    const = setting.to_s.upcase
+    Object.const_set(const, value) unless Object.const_defined?(const)
   end
 rescue OptionParser::InvalidOption
   puts "gollum-migrate-tags: #{$!.message}"
