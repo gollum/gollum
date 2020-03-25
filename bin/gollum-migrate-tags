@@ -9,15 +9,25 @@ REPO = ARGV[0] || Dir.pwd
 wiki_options = {}
 options = {}
 
+migrate_options = {
+  :hyphenate => true
+}
+
+def setting(const)
+  Object.const_defined?(const.upcase) && Object.const_get(const.upcase)
+end
+
 opts = OptionParser.new do |opts|
 opts.banner = <<EOF
 Use this tool to migrate a wiki repository created under Gollum versions 4.x or earlier to a 5.x compatibile repo.
 It finds and repairs Gollum link tags that no longer work under 5.x for two reasons:
 
+* 5.x wiki internal links may contain spaces. [[Bilbo Baggins]] and [[Bilbo-Baggins]] therefore link to distinct pages.
+    * NB: you can use the --hyphened_tag_lookup option in gollum >= 5.x to mimic the behavior from 4.x.
 * 5.x wiki internal links are case senitive
 * 5.x wiki internal links are no longer 'global'.
     * NB: you can use the --global-tag-lookup option in gollum >= 5.x to enable 4.x-style global tags.
-
+  
 See https://github.com/gollum/gollum/wiki/5.0-release-notes#filename-handling for more information.
 Usage of this script comes without any warranty.
 
@@ -46,23 +56,35 @@ EOF
   opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.') do |path|
     wiki_options[:page_file_dir] = path
   end
-  
+    
   opts.on('--prefer-relative-links', 'When specified, will try to replace broken links with relative links (\'[[Foo/Bar]]\' instead of \'[[/Subdir/Foo/Bar]]\') where possible.') do
-    PREFER_RELATIVE = true
+    migrate_options[:prefer_relative] = true
+  end
+  
+  opts.on('--hyphenate', 'Default. Repair links that use spaces instead of hyphens: [[Bilbo Baggins]] -> [[Bilbo-Baggins]]') do
+    migrate_options[:hyphenate] = true
+  end
+  
+  opts.on('--no-hyphenate', 'Turn off the --hyphenate option.') do
+    migrate_options[:hyphenate] = false
   end
   
   opts.on('--run-silent', 'Don\'t output anything.') do
-    PREFER_RELATIVE = true
+    migrate_options[:run_silent] = true
   end
   
   opts.on('--write', 'No dry run: actually perform the substitutions.') do
-    NO_DRY_RUN = true
+    migrate_options[:no_dry_run] = true
   end
 end
 
 # Read command line options into `options` hash
 begin
   opts.parse!
+  migrate_options.each do |setting, value|
+    const = setting.to_s.upcase
+    Object.const_set(const, value) unless Object.const_defined?(const)
+  end
 rescue OptionParser::InvalidOption
   puts "gollum-migrate-tags: #{$!.message}"
   puts "gollum-migrate-tags: try 'gollum-migrate-tags --help' for more information"
@@ -143,9 +165,9 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
       return orig_tag
     end
 
-    # It's an internal Page link tag. Try to find the file/page it links to
+    # Try to resolve it as an internal Page link tag.
     link = link_part
-    page = find_page_from_path(link)
+    page = find_page_or_file_from_path(link)
     anchor = nil
     
     if page.nil? # No match yet, now try finding the page with anchor removed
@@ -158,7 +180,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
         return orig_tag
       end
 
-      page  = find_page_from_path(link)
+      page  = find_page_or_file_from_path(link)
     end
 
     if page
@@ -189,16 +211,17 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
   private
   
   def tag_for_pick(pick, orig_tag, extra, anchor, linking_page_path)
-    pick = if defined?(PREFER_RELATIVE)
+    pick = if setting(:prefer_relative)
       overlapping_path = Pathname.new(linking_page_path).dirname.to_s
-      relative_path = pick.to_s.match(/^\/#{overlapping_path}\/(.+)/)
+      overlapping_path = overlapping_path == '.' ? '' : ::File.join('/', overlapping_path)
+      relative_path = pick.to_s.match(/^#{overlapping_path}\/(.+)/)
       relative_path ? relative_path[1] : pick
     else
       pick
     end
-    new_tag = extra.nil? ? %{[[#{pick}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
+    new_tag = extra.nil? ? %{[[#{pick}#{anchor}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
     log(:info, "#{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}")
-    return defined?(DRY_RUN) ? orig_tag : new_tag    
+    new_tag    
   end
 end
 
@@ -211,9 +234,10 @@ end
 filter_chain = [:PlainTextMigrator, :CodeMigrator, :TagMigrator]
 
 wiki = ::Gollum::Wiki.new(REPO, wiki_options.merge({:filter_chain => filter_chain}))
-TREE = wiki.tree_list(wiki.ref, true, false).map {|page| ::File.join('/', page.path)}
+TREE = wiki.tree_list(wiki.ref, true, true).map {|file| ::File.join('/', file.path)}
 
 def find_linked(link)
+  link.gsub!(' ', '-') if setting(:hyphenate) # Match paths containing dashes instead of spaces
   # If the link has no explicit file extension, test against the link + the '.' character.
   # This is to avoid that 'Samwi' matches 'Samwise.md'
   # If it has an explicit file extension ('Samwi.md'), just test against that.
@@ -224,7 +248,7 @@ def find_linked(link)
 end
 
 def log(kind, msg = nil)
-  unless defined?(RUN_SILENT)
+  unless setting(:run_silent)
     if kind == :none
       puts msg
     elsif kind == :empty
@@ -238,7 +262,7 @@ end
 wiki.pages.each do |page|
   log(:info,"Page #{page.path}")
   new_data = page.formatted_data
-  if defined?(NO_DRY_RUN)
+  if setting(:no_dry_run)
     path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
     f = File.new(path, 'w')
     f.write(new_data)

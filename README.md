@@ -17,12 +17,14 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 	* May be written in a variety of [markups](#markups).
 	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
 	* Can be displayed in all versions, reverted, etc.
+* Gollum strives to be compatible with GitHub wikis (see `--hyphened-tag-lookup`)
 * Gollum supports advanced functionality like:
   * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
   * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
   * Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
   * Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
   * [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
+  * [Redirects](https://github.com/gollum/gollum/wiki/5.0-release-notes#support-for-redirects)
   * ...and [more](https://github.com/gollum/gollum/wiki)
 
 ### SYSTEM REQUIREMENTS
@@ -31,20 +33,20 @@ Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/r
 
 ## INSTALLATION
 
-Varies depending on operating system, package manager and Ruby installation. Generally, you should first install Ruby and then Gollum.
-
 1. Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of choice.
 2. Gollum is best installed via RubyGems:  
 	```
 	[sudo] gem install gollum
 	```
 	
-Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation). Alternatively, you can [run Gollum from source](#running-from-source)
+Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
 To run, simply:
 
 1. Run: `gollum /path/to/wiki`.
 2. Open `http://localhost:4567` in your browser.
+
+See [below](#running-from-source) for information on running Gollum from source, as a Rack app, and more.
 
 ### Markups
 
@@ -124,6 +126,7 @@ Gollum comes with the following command line options:
 | --template-page   | none      | Use _Template in root as a template for new pages. Must be committed. |
 | --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
 | --global-tag-lookup | none   |  Match an internal link to 'Foo' with the first page found with that filename, anywhere in the repository. Provides compatibility with Gollum 4.x. |
+| --hyphened-tag-lookup | none  | Match an internal link to 'Bilbo Baggins' with 'Bilbo-Baggins'. Provides compatibility with Gollum 4.x. |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
 | --versions        | none      | Display the current version of Gollum and auxiliary gems. |
