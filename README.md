@@ -17,13 +17,14 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 	* May be written in a variety of [markups](#markups).
 	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
 	* Can be displayed in all versions, reverted, etc.
-* Gollum strives to be compatible with GitHub wikis (see `--hyphened_tag_lookup`)
+* Gollum strives to be compatible with GitHub wikis (see `--hyphened-tag-lookup`)
 * Gollum supports advanced functionality like:
   * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
   * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
   * Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
   * Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
   * [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
+	* [Redirects](https://github.com/gollum/gollum/wiki/5.0-release-notes#support-for-redirects)
   * ...and [more](https://github.com/gollum/gollum/wiki)
 
 ### SYSTEM REQUIREMENTS
@@ -31,8 +32,6 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/rugged_adapter) for [rugged](https://github.com/libgit2/rugged) by default. You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
 
 ## INSTALLATION
-
-Varies depending on operating system, package manager and Ruby installation. Generally, you should first install Ruby and then Gollum.
 
 1. Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of choice.
 2. Gollum is best installed via RubyGems:  
@@ -46,6 +45,8 @@ To run, simply:
 
 1. Run: `gollum /path/to/wiki`.
 2. Open `http://localhost:4567` in your browser.
+
+See [below](#running-from-source) for information on running Gollum from source, as a Rack app, and more.
 
 ### Markups
 
