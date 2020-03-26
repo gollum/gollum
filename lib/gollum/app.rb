@@ -10,6 +10,7 @@ require 'sprockets-helpers'
 require 'octicons'
 require 'sass'
 require 'pathname'
+require 'rss'
 
 require 'gollum'
 require 'gollum/assets'
@@ -44,6 +45,8 @@ module Precious
     register Mustache::Sinatra
     register Sinatra::Namespace
     include Precious::Helpers
+    include Precious::Views::AppHelpers
+    
     dir = File.dirname(File.expand_path(__FILE__))
 
     set :sprockets, ::Precious::Assets.sprockets(dir)
@@ -77,6 +80,8 @@ module Precious
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
+      
+      @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
 
       forbid unless @allow_editing || request.request_method == 'GET'
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
@@ -111,7 +116,37 @@ module Precious
     end
 
     namespace '/gollum' do
-      
+      get '/feed/' do
+        url = env['REQUEST_URI'] || "http#{env['HTTPS'] == 'off' ? nil : 's'}://#{env['SERVER_NAME']}#{env['PATH_INFO']}" # Annoyingly, env['REQUEST_URI'] is not available in the tests. In case it sometimes proves to be unavailable in production, fall back to joining together the various parts of the url.
+        url = url.match(/^(.*)gollum\/feed\/$/)[1]
+        latest_changes = "#{url}gollum/latest_changes"
+        changes = wiki_new.latest_changes(::Gollum::Page.log_pagination_options(per_page: 10, page_num: 0))
+        rss = RSS::Maker.make('2.0') do |maker|
+          maker.channel.author = 'Gollum Wiki'
+          maker.channel.updated = changes.first.authored_date
+          maker.channel.title = "#{@wiki_title} Latest Changes"
+          maker.channel.description = "Latest Changes in #{@wiki_title}"
+          maker.channel.link = latest_changes
+          changes.each do |change|
+            maker.items.new_item do |item|
+              item.link = latest_changes
+              item.title = change.message
+              item.updated = change.authored_date
+              id = change.id
+              files = change.stats.files.map do |files|
+                [files[:old_file], files[:new_file]].compact.map do |file|
+                  f = extract_page_dir(file)
+                  "<li><a href=\"#{url}#{f}/#{id}\">#{f}</a></li>"
+                end
+              end
+              item.description = "Commited by: <a href=\"mailto:#{change.author.email}\">#{change.author.name}</a><br/>Commit ID: #{id[0..6]}<br/><br/>Affected files:<ul>#{files.join}</ul>"
+            end
+          end
+        end
+        content_type :rss
+        rss.to_s
+      end
+
       get '/assets/mathjax/*' do
         env['PATH_INFO'].sub!("/gollum/assets/mathjax", '')
         Rack::Static.new(not_found_proc, {:root => @mathjax_path, :urls => ['']}).call(env)
