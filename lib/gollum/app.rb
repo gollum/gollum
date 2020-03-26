@@ -10,7 +10,6 @@ require 'sprockets-helpers'
 require 'octicons'
 require 'sass'
 require 'pathname'
-require 'rss'
 
 require 'gollum'
 require 'gollum/assets'
@@ -20,7 +19,7 @@ require 'gollum/views/editable'
 require 'gollum/views/has_page'
 require 'gollum/views/has_user_icons'
 require 'gollum/views/pagination'
-
+require 'gollum/views/rss.rb'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -45,7 +44,6 @@ module Precious
     register Mustache::Sinatra
     register Sinatra::Namespace
     include Precious::Helpers
-    include Precious::Views::AppHelpers
     
     dir = File.dirname(File.expand_path(__FILE__))
 
@@ -117,37 +115,13 @@ module Precious
 
     namespace '/gollum' do
       get '/feed/' do
-        url = env['REQUEST_URI'] || "#{env['HTTPS'] == 'off' ? 'http' : 'https'}://#{env['SERVER_NAME']}#{env['PATH_INFO']}" # Annoyingly, env['REQUEST_URI'] is not available in the tests. In case it sometimes proves to be unavailable in production, fall back to joining together the various parts of the url.
-        url = url.match(/^(.*)gollum\/feed\/$/)[1]
-        latest_changes = "#{url}gollum/latest_changes"
+        url = "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}"
         changes = wiki_new.latest_changes(::Gollum::Page.log_pagination_options(
           per_page: settings.wiki_options.fetch(:pagination_count, 10),
           page_num: 0)
         )
-        rss = RSS::Maker.make('2.0') do |maker|
-          maker.channel.author = 'Gollum Wiki'
-          maker.channel.updated = changes.first.authored_date
-          maker.channel.title = "#{@wiki_title} Latest Changes"
-          maker.channel.description = "Latest Changes in #{@wiki_title}"
-          maker.channel.link = latest_changes
-          changes.each do |change|
-            maker.items.new_item do |item|
-              item.link = latest_changes
-              item.title = change.message
-              item.updated = change.authored_date
-              id = change.id
-              files = change.stats.files.map do |files|
-                [files[:old_file], files[:new_file]].compact.map do |file|
-                  f = extract_page_dir(file)
-                  "<li><a href=\"#{url}#{f}/#{id}\">#{f}</a></li>"
-                end
-              end
-              item.description = "Commited by: <a href=\"mailto:#{change.author.email}\">#{change.author.name}</a><br/>Commit ID: #{id[0..6]}<br/><br/>Affected files:<ul>#{files.join}</ul>"
-            end
-          end
-        end
         content_type :rss
-        rss.to_s
+        RSSView.new(@base_url, @wiki_title, url, changes).render
       end
 
       get '/assets/mathjax/*' do
