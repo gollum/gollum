@@ -20,18 +20,18 @@ module Precious
       def breadcrumb
         if @path
           path       = Pathname.new(@path)
-          breadcrumb = [%{<a href="#{overview_path}">Home</a>}]
+          breadcrumb = [%{<nav aria-label="Breadcrumb"><ol><li class="breadcrumb-item"><a href="#{overview_path}">Home</a></li>}]
           path.descend do |crumb|
             title = crumb.basename
 
             if title == path.basename
-              breadcrumb << title
+              breadcrumb << %{<li class="breadcrumb-item" aria-current="page">#{title}</li>}
             else
-              breadcrumb << %{<a href="#{overview_path}/#{crumb}/">#{title}</a>}
+              breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{title}</a></li>}
             end
           end
-
-          breadcrumb.join(' / ')
+          breadcrumb << %{</ol></nav>}
+          breadcrumb.join("\n")
         else
           'Home'
         end
