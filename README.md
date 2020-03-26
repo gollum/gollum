@@ -25,7 +25,7 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
   * Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
   * [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
   * [Redirects](https://github.com/gollum/gollum/wiki#redirects)
-	* [RSS Feed](https://github.com/gollum/gollum/wiki/5.0-release-notes#rss-feed) of latest changes
+  * [RSS Feed](https://github.com/gollum/gollum/wiki/5.0-release-notes#rss-feed) of latest changes
   * ...and [more](https://github.com/gollum/gollum/wiki)
 
 ### SYSTEM REQUIREMENTS

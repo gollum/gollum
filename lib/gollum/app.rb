@@ -117,10 +117,13 @@ module Precious
 
     namespace '/gollum' do
       get '/feed/' do
-        url = env['REQUEST_URI'] || "http#{env['HTTPS'] == 'off' ? nil : 's'}://#{env['SERVER_NAME']}#{env['PATH_INFO']}" # Annoyingly, env['REQUEST_URI'] is not available in the tests. In case it sometimes proves to be unavailable in production, fall back to joining together the various parts of the url.
+        url = env['REQUEST_URI'] || "#{env['HTTPS'] == 'off' ? 'http' : 'https'}://#{env['SERVER_NAME']}#{env['PATH_INFO']}" # Annoyingly, env['REQUEST_URI'] is not available in the tests. In case it sometimes proves to be unavailable in production, fall back to joining together the various parts of the url.
         url = url.match(/^(.*)gollum\/feed\/$/)[1]
         latest_changes = "#{url}gollum/latest_changes"
-        changes = wiki_new.latest_changes(::Gollum::Page.log_pagination_options(per_page: 10, page_num: 0))
+        changes = wiki_new.latest_changes(::Gollum::Page.log_pagination_options(
+          per_page: settings.wiki_options.fetch(:pagination_count, 10),
+          page_num: 0)
+        )
         rss = RSS::Maker.make('2.0') do |maker|
           maker.channel.author = 'Gollum Wiki'
           maker.channel.updated = changes.first.authored_date
