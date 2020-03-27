@@ -169,7 +169,12 @@ ace.define("<%= name %>", [], function(require, exports, module) {
     this.addRules({
       <%= id %> : <%= rule %>
     });
+    if (this.$rules.listblock != null){
+      // Some markup languages, like markdown, have a separate starting block for list contents, which also need to parse Gollum Tags.
+      this.$rules.listblock.unshift(GollumTagStart);
+    }
     <% end %>
+
     this.normalizeRules();
   };
 
