@@ -152,19 +152,10 @@ MSG
   opts.on('--template-page', 'Use _Template in root as a template for new pages.') do
     wiki_options[:template_page] = true
   end
-  opts.on('--no-strict-tag-lookup', 'Conjunction of --global-tag-lookup, --hyphened-tag-lookup, and --case-insensitive-tag-lookup. Provides compatibility with Gollum 4.x.') do
+  opts.on('--lenient-tag-lookup', 'Internal links resolve case-insensitively, will treat spaces as hyphens, and will match the first page found with a certain filename, anywhere in the repository. Provides compatibility with Gollum 4.x.') do
     wiki_options[:case_insensitive_tag_lookup] = true
     wiki_options[:global_tag_lookup] = true
     wiki_options[:hyphened_tag_lookup] = true
-  end
-  opts.on('--global-tag-lookup', 'Match an internal link to \'Foo\' with the first page found with that filename, anywhere in the repository.') do
-    wiki_options[:global_tag_lookup] = true
-  end
-  opts.on('--hyphened-tag-lookup', 'Match an internal link to \'Bilbo Baggins\' with \'Bilbo-Baggins\'.') do
-    wiki_options[:hyphened_tag_lookup] = true
-  end
-  opts.on('--case-insensitive-tag-lookup', 'Match internal links case-insensitively.') do
-    wiki_options[:case_insensitive_tag_lookup] = true
   end
   opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:) except when the leading colon is backslashed (e.g. \\:heart:).') do
     wiki_options[:emoji] = true
