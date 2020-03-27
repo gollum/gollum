@@ -19,7 +19,7 @@ require 'gollum/views/editable'
 require 'gollum/views/has_page'
 require 'gollum/views/has_user_icons'
 require 'gollum/views/pagination'
-
+require 'gollum/views/rss.rb'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -44,6 +44,7 @@ module Precious
     register Mustache::Sinatra
     register Sinatra::Namespace
     include Precious::Helpers
+    
     dir = File.dirname(File.expand_path(__FILE__))
 
     set :sprockets, ::Precious::Assets.sprockets(dir)
@@ -77,6 +78,8 @@ module Precious
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
+      
+      @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
 
       forbid unless @allow_editing || request.request_method == 'GET'
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
@@ -111,7 +114,16 @@ module Precious
     end
 
     namespace '/gollum' do
-      
+      get '/feed/' do
+        url = "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}"
+        changes = wiki_new.latest_changes(::Gollum::Page.log_pagination_options(
+          per_page: settings.wiki_options.fetch(:pagination_count, 10),
+          page_num: 0)
+        )
+        content_type :rss
+        RSSView.new(@base_url, @wiki_title, url, changes).render
+      end
+
       get '/assets/mathjax/*' do
         env['PATH_INFO'].sub!("/gollum/assets/mathjax", '')
         Rack::Static.new(not_found_proc, {:root => @mathjax_path, :urls => ['']}).call(env)

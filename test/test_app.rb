@@ -63,6 +63,21 @@ context "Frontend" do
 
     assert_match /#{expected}/, actual
   end
+  
+  test 'rss feed' do
+    channel_title = <<EOF
+<title>Gollum Wiki Latest Changes</title>
+EOF
+    item = <<EOF
+<description>Commited by: &lt;a href=&quot;mailto:dawa.ometto@phil.uu.nl&quot;&gt;Dawa Ometto&lt;/a&gt;&lt;br/&gt;Commit ID: 02796b1&lt;br/&gt;&lt;br/&gt;Affected files:&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;http://example.org/custom.css/02796b1450691f90db5d6dc6a816a4980ce80d07&quot;&gt;custom.css&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://example.org/custom.js/02796b1450691f90db5d6dc6a816a4980ce80d07&quot;&gt;custom.js&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+EOF
+    get '/gollum/feed/'
+    assert last_response.ok?
+    assert_equal 'application/rss+xml', last_response.headers['Content-Type']
+    assert last_response.body.start_with?('<?xml')
+    assert last_response.body.include?(item)
+    assert last_response.body.include?(channel_title)
+  end
 
   test "show sidebar, header, footer when present" do
     divs = [@wiki.page("_Header").formatted_data, @wiki.page("_Footer").formatted_data, @wiki.page("_Sidebar").formatted_data]
