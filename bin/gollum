@@ -100,10 +100,10 @@ MSG
   opts.on('--assets [PATH]', 'Set the path to look for static assets. Only used if --static is set to true, or environment is production/staging. Default: ./public/assets') do |path|
     wiki_options[:static_assets_path] = path
   end
-  opts.on('--css', 'Inject custom CSS into each page. The \'<git-repo>/custom.css\' file is used (must be committed).') do
+  opts.on('--css', 'Inject custom CSS into each page. The \'<wiki-root>/custom.css\' file is used (must be committed).') do
     wiki_options[:css] = true
   end
-  opts.on('--js', 'Inject custom JavaScript into each page. The \'<git-repo>/custom.js\' file is used (must be committed).') do
+  opts.on('--js', 'Inject custom JavaScript into each page. The \'<wiki-root>/custom.js\' file is used (must be committed).') do
     wiki_options[:js] = true
   end
   opts.on('--no-edit', 'Disable the feature of editing pages.')  do

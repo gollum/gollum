@@ -111,8 +111,8 @@ Gollum comes with the following command line options:
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
 | --static, --no-static | none  | Use static assets. Defaults to false in development/test,  true in production/staging. |
 | --assets          |  [PATH]   | Set the path to look for static assets. |
-| --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from repository root.<sup>3,5</sup> |
-| --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from repository root.<sup>3,5</sup> |
+| --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from wiki root.<sup>3</sup> |
+| --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from wiki root.<sup>3</sup> |
 | --no-edit         | none      | Disable the feature of editing pages. |
 | --follow-renames, --no-follow-renames  | none      | Follow pages across renames in the History view. Default: true.
 | --allow-uploads   | [MODE]    | Enable file uploads. If set to `dir`, Gollum will store all uploads in the `/uploads/` directory in repository root. If set to `page`, Gollum will store each upload at the currently edited page.<sup>4</sup> |
