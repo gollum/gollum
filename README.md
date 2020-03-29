@@ -5,7 +5,7 @@ gollum -- A git-based Wiki
 [![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
 [![Open Source Helpers](https://www.codetriage.com/gollum/gollum/badges/users.svg)](https://www.codetriage.com/gollum/gollum)
 
-**Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to Gollum version 4.x. See some [Screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
+**Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to Gollum version 4.x, and see some [Screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
 
 ## DESCRIPTION
 
