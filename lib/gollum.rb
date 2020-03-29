@@ -6,6 +6,7 @@ require 'ostruct'
 
 # external
 require 'github/markup'
+require 'rhino' if RUBY_PLATFORM == 'java'
 
 # internal
 require File.expand_path('../gollum/uri_encode_component', __FILE__)
