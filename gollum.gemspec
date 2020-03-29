@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency 'gollum-lib', '~> 5.0.a'
+  s.add_dependency 'gollum-lib', '~> 5.0'
   s.add_dependency 'kramdown', '~> 2.1.0'
   s.add_dependency 'kramdown-parser-gfm', '~> 1.0.0'
   s.add_dependency 'sinatra', '~> 2.0'
@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'uglifier', '~> 3.2'
   s.add_dependency 'sprockets-helpers', '~> 1.2'
   s.add_dependency 'rss', '~> 0.2.9'
+  s.add_dependency 'therubyrhino', '~> 2.1.0'
 
   s.add_development_dependency 'rack-test', '~> 0.6.3'
   s.add_development_dependency 'shoulda', '~> 3.6.0'
