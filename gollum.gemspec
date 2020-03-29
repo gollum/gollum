@@ -7,7 +7,6 @@ Gem::Specification.new do |s|
   s.name              = 'gollum'
   s.version           = '5.0.1b'
   s.date              = '2018-09-28'
-  s.rubyforge_project = 'gollum'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
@@ -52,6 +51,7 @@ Gem::Specification.new do |s|
     CONTRIBUTING.md
     Gemfile
     HISTORY.md
+    ISSUE_TEMPLATE.md
     LICENSE
     README.md
     Rakefile

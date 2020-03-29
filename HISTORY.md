@@ -8,6 +8,18 @@ Many thanks to all the users who have provided feedback, and everyone who has ch
 
 Many of these changes have been made possible by removing the default grit adapter in favour of the new [rugged adapter](https://github.com/gollum/rugged_adapter).
 
+# 4.1.4 /2018-01-10
+
+* Depend on new version of gollum-lib that relies on a patched version of sanitize, which solves a vulnerability (CVE-2018-3740). See https://github.com/gollum/gollum-lib/pull/296.
+
+# 4.1.3 /2018-17-09
+
+* Solves a vulnerability in the File view and All Pages view that would allow XSS.
+
+# 4.1.2 /2017-08-07
+
+* Lock to a newer version of gollum-lib to avoid installing an outdated and vulnerable dependency (nokogiri) on ruby 2.0. See https://github.com/gollum/gollum-lib/pull/279. Note: this breaks semantic versioning so those using outdated rubies will discover the problem on update.
+
 # 4.1.0 /2017-03-09
 
 * Added file deletion functionality to file view

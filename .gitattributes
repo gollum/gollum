@@ -30,3 +30,11 @@ gollum text
 # Denote all files that are truly binary and should not be modified.
 *.png binary
 *.jpg binary
+
+# Make github-linguist ignore files that aren't our own
+
+lib/gollum/public/gollum/* linguist-vendored
+lib/gollum/public/gollum/javascript/gollum* linguist-vendored=false
+lib/gollum/public/gollum/javascript/*/gollum* linguist-vendored=false
+lib/gollum/public/gollum/css linguist-vendored=false
+
