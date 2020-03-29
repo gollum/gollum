@@ -1,0 +1,653 @@
+// Helpers
+
+// Replace broken user icons with 'person' octicon
+function brokenAvatarImage(image){
+  image.onerror = '';
+  image.src = 'data:image/svg+xml;utf8,<%= rocticon_css(:person) %>';
+  return true;
+}
+
+// Get path for named route, prefixing baseUrl if necessary
+// Uses the route definitions in /lib/gollum/views/helpers.rb.
+// For example, routePath('delete') is equivalent to 'delete_path' in the mustache templates.
+var gollumRoutes = $.parseJSON('<%= routes_to_json %>')
+function routePath(name){
+  path = gollumRoutes[name]
+  return prefixBaseUrl(path);
+}
+
+function prefixBaseUrl(path) {
+  if (baseUrl == undefined ) {
+    console.log('Gollum error: baseUrl undefined')
+  } else if (path == undefined ) {
+    console.log('Could not find route with name: ' + name)
+  } else {
+      if ( baseUrl == "") {
+        return path;
+      } else if (baseUrl.charAt(baseUrl.length -1) == '/') {
+        result = baseUrl + path;
+      } else {
+        result = baseUrl + '/' + path;
+      }
+    return result.replace(/\/{2}/g, '/')
+  }
+}
+
+// Ensure one slash at the beginning, no trailing slash.
+function cleanPath (path){
+  var result = '/' + path.replace(/\/$/,'');
+  return result.replace(/\/{2}/g, '/');
+}
+
+function pageName(){
+  // "my/dir/file.md" => "file"
+  if (typeof(pageFullPath) == 'undefined') {
+      return undefined;
+  } else {
+      name = pageFullPath.split('/').pop();
+      return name.substring(0, name.lastIndexOf('.'));
+  } 
+}
+
+function pagePath(){
+  // "my/dir/file" => "my/dir"
+  return typeof(pageFullPath) == 'undefined' ? undefined : pageFullPath.split('/').slice(0,-1).join('/');
+}
+
+// Generic HTML escape function
+function htmlEscape( str ) {
+  // The (slower) alternative is: return $('<div/>').text(str).html();
+  // http://stackoverflow.com/questions/1219860/javascript-jquery-html-encoding/7124052#7124052
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Given a page name and a current path, returns a fully qualified path.
+function abspath(path, name){
+  // Make sure the given path starts at the root.
+  if(name[0] != '/'){
+    name = '/' + name;
+    if (path) {
+      name = '/' + path + name;
+    }
+  }
+  var name_parts = name.split('/');
+  var newPath = name_parts.slice(0, -1).join('/');
+  var newName = name_parts.pop();
+  // return array of [path, name]
+  return [newPath, newName];
+}
+
+function setTextDirection () {
+  $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
+}
+
+function preparePage () {
+  setTextDirection();
+  if(criticMarkup == 'true') {
+    $('#wiki-content').addClass('criticmarkup');
+    $('ins.break').unwrap();
+    $('span.critic.comment').wrap('<span class="popover" />');
+    $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
+  }
+}
+
+function flashNotice(type, notice, button_label, button_function, button_type) {
+  // accepted types: info, success, warn, error
+  nested_button_html = '';
+  if (typeof(button_label) !== 'undefined'  && typeof(button_function) !== 'undefined') {
+    button_type = (typeof(button_type) !== 'undefined' && button_type == 'danger') ? ' btn-danger' : '';
+    nested_button_html = '<span class="px-2"><button type="button" class="btn btn-sm' + button_type + '" onclick="' + button_function + '">' + button_label + '</button></span>'
+  }
+  html = '<p><div id="gollum-flash" class="flash flash-' + type +'"><button class="flash-close js-flash-close" type="button" onclick="parentNode.remove()"><%=rocticon('x')%></button>' + notice + nested_button_html + '</div></p>';
+  $('#gollum-flash').remove();
+  $('#wiki-content h1').before(html);
+  if (type == 'success') { setTimeout(function() {$('#gollum-flash').fadeOut();}, 5000); }
+}
+
+// ua
+$(document).ready(function() {
+  // for deleting the current page
+  $('#delete-link').click( function(e) {
+    var ok = confirm($(this).data('confirm'));
+    if ( ok ) {
+      $.post(routePath('delete') + '/' + pageFullPath,
+        {},
+        function (result) {
+          // page successfully deleted, return to landing page
+          window.location = '/';
+        });
+    }
+    // Don't navigate on cancel.
+    e.preventDefault();
+  } );
+  // for deleting files and pages from the overview
+  $('.delete-file').click( function(e) {
+    var ok = confirm($(this).data('confirm'));
+    if ( ok ) {
+      var element = $(this);
+      $.post(routePath('delete') + '/' + $(this).data('file-path'),
+        {},
+        function (result) {
+          // file successfully deleted, stay on overview but remove element from DOM
+          element.closest("li").remove();
+        });
+    }
+    // Don't navigate on cancel.
+    e.preventDefault();
+  } );
+
+  // ua detection
+  if ($.browser.mozilla) {
+    $('body').addClass('ff');
+  } else if ($.browser.webkit) {
+    $('body').addClass('webkit');
+  } else if ($.browser.msie) {
+    $('body').addClass('ie');
+    if ($.browser.version == "7.0") {
+      $('body').addClass('ie7');
+    } else if ($.browser.version == "8.0") {
+      $('body').addClass('ie8');
+    }
+  }
+
+
+  if ($('#minibutton-upload-page').length) {
+    new ClipboardJS('#ClipboardJSlink');
+    $('#minibutton-upload-page').parent().removeClass('jaws');
+    $('#minibutton-upload-page').click(function(e) {
+      e.preventDefault();
+      
+      $.GollumDialog.init({
+        title: 'Upload File',
+        fields: [
+          {
+            type:   'file',
+            context: 'Your uploaded file will be accessible at<br>/'+uploadDest+'/[filename]',
+            action: routePath('upload_file')
+          }
+        ],
+        OK: function( res ) {
+          $('#wiki-content').addClass('uploading');
+          var formData = new FormData($('#upload').get(0));
+          var endpoint = $('#upload').attr("action");
+
+          $.ajax({
+            url: endpoint,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+              // File successfully uploaded
+              $('#wiki-content').removeClass('uploading');
+              flashNotice("success", "Your file was successfully uploaded.");
+            },
+            error: function(data, textStatus, errorThrown) {
+              $('#wiki-content').removeClass('uploading');
+              if (data.status == 409) {
+                flashNotice('error', 'The file you tried to upload already exists. Please rename the file and try again.');  
+              } else {
+                flashNotice('error', 'Error uploading file: ' + textStatus + ' ' + errorThrown);
+              }  
+            }
+          });
+        }
+      });
+      $('#gollum-dialog-action-ok').attr('disabled', true);
+      $('input:file').on('change', function() {
+        if ($(this).val()) {
+          filename = $('input[type=file]').val().split('\\').pop();
+          upload_path = '/' + uploadDest + '/' + filename;
+          clipboard_button = '<button class="btn btn-sm mb-2" id="ClipboardJSlink" data-clipboard-text="' + upload_path + '"><%=rocticon('clippy')%></button>'
+          news = 'Your uploaded file will be accessible at<br>' + clipboard_button + '&nbsp;' + upload_path;
+          $(".context").html(news);
+          $('#gollum-dialog-action-ok').attr('disabled', false);
+
+        };
+      });
+    });
+  }
+
+  if ($('#minibutton-rename-page').length) {
+    $('#minibutton-rename-page').parent().removeClass('jaws');
+    $('#minibutton-rename-page').click(function(e) {
+      e.preventDefault();
+
+      var path = decodeURI(pagePath());
+      var oldName = decodeURI(pageName());
+      var context_blurb =
+        "Renamed page will be under " +
+        "<span class='path'>" + htmlEscape(cleanPath(path)) + "</span>" +
+        " unless an absolute path is given."
+
+      $.GollumDialog.init({
+        title: 'Rename Page',
+        fields: [
+          {
+            id:   'name',
+            name: 'Rename to',
+            type: 'text',
+            defaultValue: oldName || '',
+            context: context_blurb
+          }
+        ],
+        OK: function( res ) {
+          var newName = 'Rename Page';
+          if ( res['name'] ) {
+            newName = res['name'];
+          }
+          var name_parts = abspath(path, newName);
+          var newPath = name_parts[0];
+
+          var msg = '/' + path == newPath ? 'Renamed ' + oldName + ' to ' + newName
+                                          : 'Renamed ' + oldName + ' to ' + name_parts.join('/');
+          // Fill in the rename form
+          // This is preferable to AJAX so that we automatically follow the 302 response.
+          var rename_form = $("form[name=rename]");
+          rename_form.children("input[name=rename]").val(name_parts.join('/'));
+          rename_form.children("input[name=message]").val(msg);
+          rename_form.submit();
+        }
+      });
+    });
+  }
+
+  if ($('#minibutton-new-page').length) {
+    $('#minibutton-new-page').parent().removeClass('jaws');
+    $('#minibutton-new-page').click(function(e) {
+      e.preventDefault();
+      var path = pagePath();
+      if( path === undefined && $('#file-browser').length != 0 ){
+        // In the pages view, pageFullPath isn't defined.
+        // The new button will still expect a value however.
+        // So we try to figure one out from window.location
+        path = window.location.pathname.replace(routePath('overview'), '')
+      }
+
+      var context_blurb =
+        "Page will be created under " +
+        "<span class='path'>" + htmlEscape(cleanPath(path)) + "</span>" +
+        " unless an absolute path is given."
+
+      $.GollumDialog.init({
+        title: 'Create New Page',
+        fields: [
+          {
+            id:   'name',
+            name: 'Page Name',
+            type: 'text',
+            defaultValue: '',
+            context: context_blurb
+          }
+        ],
+        OK: function( res ) {
+          var name = 'New Page';
+          if ( res['name'] ) {
+            name = res['name'];
+          }
+          var name_encoded = [];
+          var name_parts = abspath(path, name).join('/').split('/');
+          // Split and encode each component individually.
+          for( var i=0; i < name_parts.length; i++ ){
+            name_encoded.push(encodeURIComponent(name_parts[i]));
+          }
+          window.location =  routePath('create') + name_encoded.join('/');
+        }
+      });
+    });
+  }
+
+  if ($('#wiki-wrapper').hasClass('history')) {
+    $('#wiki-history td.checkbox input').each(function() {
+      $(this).click(function() {
+        nodeSelector.checkNode($(this));
+      });
+      if ( $(this).is(':checked') ) {
+        nodeSelector.checkNode($(this));
+      }
+    });
+
+    if ($('.history button.action-compare-revision').length) {
+      $('.history button.action-compare-revision').click(function() {
+        $("#selection-form").submit();
+      });
+    }
+  }
+
+  if ($('#searchbar a#search-submit').length) {
+    $.GollumPlaceholder.add($('#searchbar #search-query'));
+    $('#searchbar a#search-submit').click(function(e) {
+      e.preventDefault();
+      $('#searchbar #search-form')[0].submit();
+    });
+    $('#searchbar #search-form').submit(function(e) {
+      $.GollumPlaceholder.clearAll();
+      $(this).unbind('submit');
+      $(this).submit();
+    });
+  }
+
+  if ($('#gollum-revert-form').length &&
+      $('.gollum-revert-button').length ) {
+    $('a.gollum-revert-button').click(function(e) {
+      e.preventDefault();
+      $('#gollum-revert-form').submit();
+    });
+  }
+
+  // Called when clicking the 'Preview' tab in the editor view
+  function getPreview () {
+    var formData = new FormData($('#gollum-editor-form').get(0));
+    var paths = window.location.pathname.split('/');
+    var sectionAnchor = window.location.hash.substr(1);
+    formData.append('page', paths[ paths.length - 1 ] || '')
+    $.ajax({
+      url: routePath('preview'),
+      data: formData,
+      type: 'POST',
+      processData: false,
+      contentType: false,
+      success: function(data) {
+        var mainDiv = $('#wiki-wrapper', data);
+        $('.tabnav-div#preview-content').html(mainDiv);
+        preparePage();
+        if (sectionAnchor ) { 
+          if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
+            sectionHeading.scrollIntoView();
+          }
+        }
+        if (window.MathJax != null) {
+          window.MathJax.Hub.Queue(['Typeset',window.MathJax.Hub,'preview-content']);
+        }
+      },
+      error: function(data, textStatus, errorThrown) {
+        console.log('something went wrong: ' + textStatus + errorThrown);
+      }
+    });
+  }
+
+  function togglePreviewTab ( preview ) {
+    if (preview) {
+      active_div = '#preview-content'
+      active_tab = '#preview.tabnav-tab';
+    } else {
+      active_div = '#edit-content'
+      active_tab = '#edit.tabnav-tab';
+    }
+
+    $('.tabnav-tab.selected').removeClass('selected');
+    $(active_tab).addClass('selected');
+    $('.tabnav-div').hide();
+    $(active_div).show();
+  }
+
+  if( $('.tabnav-tabs').length ){
+    $(".tabnav-tab").click( function(e) {
+      e.preventDefault();
+      if( !$(this).hasClass('selected') ) {
+        preview = $(this).attr('id') == 'preview';
+        if (preview) {
+          getPreview();
+        }
+        togglePreviewTab(preview);
+      };
+    });
+  };
+
+  var previewHotkey = function () {
+    $('.tabnav-tab').not('.selected').click();
+    return false;
+  };
+
+  var editorHotkeys = [
+    {
+      name: "saveContents",
+      bindKey: {win: "Ctrl-s", mac: "Command-s"},
+      exec: function() {
+        $("#gollum-editor-submit").trigger("click");
+      }
+    },
+    {
+      name: "togglePreview", // Ace's hotkeys override Mousetrap, so add the preview hotkey to the editor, too.
+      bindKey: {win: "ctrl-shift-p", mac: "ctrl-shift-p"},
+      exec: previewHotkey
+    }
+  ];
+
+  if ( $('#wiki-wrapper.edit').length || $('#wiki-wrapper.create').length ) {
+    // Hotkey for moving between Edit and Preview tab
+    Mousetrap.bind(['ctrl+shift+p'], previewHotkey);
+  }
+
+  if( $('#wiki-wrapper.edit').length ){
+    $("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );
+    $("#gollum-editor-body").one('change', function(){
+      window.onbeforeunload = function(){ return "Leaving will discard all edits!" };
+    });
+
+    $.GollumEditor({
+      section: window.location.hash.substr(1),
+      commands: editorHotkeys // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
+    }); 
+
+    $("#gollum-editor-submit").click( function(e) {
+      e.preventDefault();
+      // Prevent button from being clicked again
+      $(this).attr('disabled', true);
+
+      var formData = new FormData($('#gollum-editor-form').get(0));
+      var newExt   = '.' + $('#wiki_format option:selected').attr('data-ext');
+      var newPath  = cleanPath(prefixBaseUrl(pagePath() + '/' + pageName() + newExt));
+      var endpoint = $('#gollum-editor-form').attr("action");
+
+      $.ajax({
+        url: endpoint,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          window.location = newPath;
+        },
+        error: function(data, textStatus, errorThrown) {
+          if (data.status == 412) {
+            $('#gollum-editor-submit').attr('disabled', false)
+            alert('Someone else has modified this page while you were editing it. Please store your version on disk outside of the browser, reload this page and reapply your modifications.');
+          } else {
+            alert('Error updating page: ' + textStatus + ' ' + errorThrown);
+          }  
+        }
+      });
+      
+    });
+  }
+
+  if( $("#page-history").length) {
+    if( $("#page-history #pagination").length) {
+
+      var maxSelected = 2;
+      var selectionColors = ["bg-green-light", "bg-red-light"];
+
+      var toggleInputs = function () {
+        var numSelected = 0;
+        $("#selection-form input").each(function (index, element) {
+          var value = $(element).val();
+          var input = $('#version-form input[value="' + value + '"]');
+          input.prop('checked', true);
+          if (index == 0) {
+            input.closest("li").removeClass(selectionColors[1]).addClass(selectionColors[index]);
+          } else if (index == 1) {
+            input.closest("li").addClass(selectionColors[index]); 
+          }
+          numSelected = numSelected + 1;
+        });
+        if (numSelected == maxSelected) {
+          $('#version-form input:not(:checked)').prop('disabled', true);
+          $('.history button.action-compare-revision').prop('disabled', false);
+        } else if (numSelected < maxSelected) {
+          $('#version-form input').prop('disabled', false);
+          $('.history button.action-compare-revision').prop('disabled', true);
+        }
+      };
+
+      var onCheckboxSelect = function ( box ) {
+        $('<input>').attr({
+          type: 'hidden',
+          id: $(box).val(),
+          name: 'versions[]',
+          value: $(box).val()
+        }).appendTo($("#selection-form"));
+        toggleInputs();
+      };
+
+      var onCheckboxUnselect = function( box ) {
+        $('#selection-form #' + $(box).val()).remove();
+        $(box).closest("li").removeClass(selectionColors.join(" "));
+        toggleInputs();
+      };
+
+      var setCheckboxEvents = function () {
+        $("#version-form input").on('change', function () {
+          if (this.checked) {
+            onCheckboxSelect(this);
+          } else {
+            onCheckboxUnselect(this);
+          }
+        });
+      };
+      setCheckboxEvents();
+      toggleInputs();
+
+      var clickPageNav = function (e) {
+        e.preventDefault();
+        if ( !$(this).hasClass('disabled') ) {
+          $.ajax({
+              url: $(this).attr('href'),
+              type: 'GET',
+              success: function(data) {
+                var rowDiv = $('#page-history-list', data);
+                var new_pagination = $('#pagination', data);
+
+                ['#next', '#prev'].forEach( function (nav_item) {
+                  old_btn = $('#pagination ' + nav_item);
+                  new_btn = new_pagination.find(nav_item);
+                  old_btn.attr('href', new_btn.attr('href'));
+                  if (new_btn.hasClass('disabled')) {
+                    old_btn.addClass('disabled');
+                  } else {
+                    old_btn.removeClass('disabled');
+                  }
+                });
+
+                $('#page-history-list').replaceWith(rowDiv);
+
+                setCheckboxEvents();
+                toggleInputs();
+              },
+              error: function(data, textStatus, errorThrown) {
+                console.log('something went wrong: ' + textStatus + errorThrown)
+              }
+          });
+        }
+        this.blur();
+      };
+
+      $("#pagination #next, #pagination #prev").each(function(index, element) {
+       $(element).on("click", clickPageNav);
+      });
+    }
+  }
+
+  if( $("#last-edit").length ) {
+    $("#page-info-toggle").click ( function () {
+      $.ajax({
+        url: routePath('last_commit_info'),
+        data: {path: $("#page-info-toggle").data('pagepath')},
+        success: function ( data ) {
+          $("#last-edit").next(".dotted-spinner").toggleClass('hidden');
+          $("#last-edit-in-progress").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
+        }
+      });
+      $("#last-edit").next(".dotted-spinner").toggleClass('hidden')
+      $("#page-info-toggle").before('<span id="last-edit-in-progress">&nbsp;Getting commit info...</span>').remove();
+    })
+  }
+
+  if( $('#wiki-wrapper.create').length ){
+    $("#gollum-editor-submit").click( function() { window.onbeforeunload = null; } );
+    $("#gollum-editor-body").one('change', function(){
+      window.onbeforeunload = function(){ return "Leaving will not create a new page!" };
+    });
+    $.GollumEditor({ NewFile: true, MarkupType: default_markup, commands: editorHotkeys });
+  }
+
+  if($('#search-results').length ){
+    $('.toggle-context').each(function () {
+      var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
+      if ( !hiddenContext.length ) {
+        $(this).toggle();
+      } else {
+        $(this).click(function () {
+          hiddenContext.toggle();
+          $(this).toggle();
+        });
+      }
+    });
+
+    var searchQuery = new RegExp(searchTerms.join('|'), 'gi'); //searchTerms provided by the layout template.
+    $('div.search-context li span').each(function () {
+      var curText = $(this).html().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      var newText = curText.replace(searchQuery, function (match) {
+        return '<span class="bg-green-light">' + match + '</span>';
+      });
+
+      $(this).html(newText);
+    });
+  }
+  
+  if($('.markdown-body').length ){
+    // Set text direction (LTR or RTL)
+    preparePage();
+    // Check if there was a redirect here
+    if (match = new RegExp(/[?&]redirected\_from=([^?]*)/).exec(window.location.href)) {
+      notice = "The page you requested was renamed or moved. You've been successfully redirected to its new location.";
+      flashNotice('success', notice);
+    }
+    // Set the 'e' hotkey for editing pages.
+    Mousetrap.bind(['e'], function( e ) {
+      e.preventDefault();
+      window.location = routePath('edit') + '/' + pageFullPath;
+      return false;
+    });
+
+    if ($.markupSupportsEditableSections(pageFormat)){
+      // Copy anchors for each editable header and give the new anchor the 'edit' class, to display an "edit section" link
+      $('a.anchor').each(function (index, anchor) {
+        header = $(anchor).closest(':header');
+        if (header.hasClass('editable')){
+          var newUrl = routePath('edit') + '/' + pageFullPath + $(anchor).attr('href');
+          $(anchor).clone().addClass('edit').attr('href', newUrl).appendTo(header);
+        }
+      });
+    }
+  }
+
+  if( $('#wiki-history').length || $('#page-history').length){
+    var options = {
+      format: 'svg',
+      background: [255, 255, 255, 255] // rgba white
+    };
+    $('img.identicon').each(function(index, element){
+      var item    = $(element);
+      var code    = item.data('identicon');
+      var img_bin = new Identicon(code, options).toString();
+      img_bin = 'data:image/svg+xml;base64,' + img_bin;
+      item.attr('src', img_bin);
+    });
+  }
+});

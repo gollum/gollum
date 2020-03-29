@@ -1,60 +1,35 @@
 <div id="wiki-wrapper" class="history">
 <div id="head">
-  <h1>History for <strong>{{title}}</strong></h1>
-  <ul class="actions">
-    <li class="minibutton">
-      {{>searchbar}}
-    </li>
-    <li class="minibutton"><a href="{{base_url}}/{{escaped_url_path}}"
-       class="action-view-page">View Page</a></li>
-    {{#allow_editing}}
-      <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
-         class="action-edit-page">Edit Page</a></li>
-    {{/allow_editing}}
-  </ul>
+	{{>navbar}}
+  <h1 class="py-4"><span class="f1-light text-gray-light">History for</span> {{name}}</h1>
 </div>
-<div id="wiki-history">
+<div id="page-history">
 
-  <ul class="actions">
-    <li class="minibutton"><a href="javascript:void(0);"
-       class="action-compare-revision">Compare Revisions</a></li>
-  </ul>
+  {{>pagination}}
 
-  <form name="compare-versions" id="version-form" method="post"
-   action="{{base_url}}/compare/{{escaped_url_path}}">
-  <fieldset>
-  <table>
-    <tbody>
+    <form name="selection-form" id="selection-form" method="post" action="{{compare_path}}/{{escaped_url_path}}"></form>
 
-      {{#versions}}
-      <tr>
-        <td class="checkbox">
-          <input type="checkbox" name="versions[]" value="{{id}}">
-        </td>
-        <td class="author">
-            {{>author_template}}
-        </td>
-        <td class="commit-name">
-          <span class="time-elapsed" title="{{date_full}}">{{date}}:</span>&nbsp;
-          {{message}}
-          [<a href="{{base_url}}/{{escaped_url_path}}/{{id}}" title="View commit">{{id7}}</a>]
-        </td>
-      </tr>
-      {{/versions}}
+	<div id="page-history-list" class="Box Box--condensed flex-auto">
+		<form id="version-form">
+			<ul> 	
+	    	{{#versions}}
+				<li class="Box-row border-top Box-row--hover-gray d-flex flex-items-center">
+					<span class="pr-2"><input class="checkbox" type="checkbox" name="versions[]" value="{{id}}"></span>
+					<span class="float-left col-2" id="user-icons">{{>author_template}}</span>
+					<span class="flex-auto col-1 text-gray-light">{{date}}</span>
+					<span class="flex-auto col-5">{{message}}</span>
+					<span class="pl-4 float-right">[<a href="{{base_url}}/{{filename}}/{{id}}" title="View commit">{{id7}}</a>]</span>
+				</li>
+				{{/versions}}
+			</ul>
+		</form>
+	</div>
+	
 
-    </tbody>
-  </table>
-  </fieldset>
-  </form>
-</div>
+
 <div id="footer">
-  <ul class="actions">
-    <li class="minibutton"><a href="javascript:void(0);"
-       class="action-compare-revision">Compare Revisions</a></li>
-
-    <!-- only show this button if we have more than 20 revisions -->
-    <li class="minibutton"><a href="#"
-       class="action-back-to-top">Back to Top</a></li>
-  </ul>
+	<div class="pt-4">
+  	<button class="btn btn-sm action-compare-revision" type="submit">Compare Revisions</button>
+	</div>
 </div>
 </div>

@@ -1,0 +1,51 @@
+@import "_base", "_breakpoint";
+
+/* @section history */
+
+#user-icons {
+  a, img, span, svg {
+    vertical-align: middle;
+  }
+  img, svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.history #footer {
+  margin-bottom: 7em;
+}
+
+.overview {
+  border:none;
+}
+
+/* @section compare */
+.compare {
+
+
+  .data {
+
+    table {
+
+      tr td {
+        font-family: $font-console;
+        line-height: 1.5em;
+
+        & + td + td {
+          width: 100%;
+        }
+
+        &.line_numbers {
+          border-right: 1px solid #999;
+          color: #999;
+          padding: 0 0 0 0.5em;
+        }
+      }
+    }
+
+  }
+
+
+}
+

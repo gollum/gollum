@@ -5,63 +5,61 @@
   <meta name="MobileOptimized" content="width">
   <meta name="HandheldFriendly" content="true">
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/gollum.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/editor.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/dialog.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/template.css" media="all">
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/print.css" media="print">
+  {{#sprockets_stylesheet_tag}}app{{/sprockets_stylesheet_tag}}
+  {{#sprockets_stylesheet_tag}}print print{{/sprockets_stylesheet_tag}}
+
   {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_path}}/custom.css" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
 
-  <!--[if IE 7]>
-  <link rel="stylesheet" type="text/css" href="{{base_url}}/css/ie7.css" media="all">
-  <![endif]-->
 
   <script>
-      var baseUrl = '{{base_url}}';
-      var uploadDest   = '{{upload_dest}}';
-      {{#page}}
-      var pageFullPath = '{{url_path_display}}';
-      {{/page}}
+  var criticMarkup = '{{critic_markup}}';
+	var baseUrl = '{{base_url}}';
+	var uploadDest = 'uploads';
+	var perPageUploads = '{{per_page_uploads}}';
+	if (perPageUploads == 'true') {
+	  uploadDest = uploadDest + window.location.pathname.replace(/.*gollum\/[-\w]+\//, "/").replace(/\.[^/.]+$/, "").replace(baseUrl, "")
+	}
+	{{#page}}
+	  var pageFullPath = '{{escaped_url_path}}';
+    var pageFormat   = '{{format}}';
+	{{/page}}
+  {{#has_search_terms}}
+    var searchTerms  = [{{#search_terms}}'{{.}}', {{/search_terms}}
+    ];
+  {{/has_search_terms}}
+  {{#is_create_page}}
+    var default_markup = '{{default_markup}}';
+  {{/is_create_page}}
+
   </script>
-  <script type="text/javascript" src="{{base_url}}/javascript/jquery-1.7.2.min.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/mousetrap.min.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/gollum.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/gollum.dialog.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/gollum.placeholder.js"></script>
-  <script type="text/javascript" src="{{base_url}}/javascript/editor/gollum.editor.js"></script>
-  {{#use_identicon}}
-  <script type="text/javascript" src="{{base_url}}/javascript/identicon_canvas.js"></script>
-  {{/use_identicon}}
+  {{#sprockets_javascript_tag}}app{{/sprockets_javascript_tag}}
+  {{#has_editor}}
+  {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
+  {{/has_editor}}
   {{#mathjax}}
-  {{^mathjax_config}}
   <script type="text/javascript">
-  window.MathJax = {
-    tex2jax: {
-      inlineMath:  [ ['$','$'], ['\\(','\\)'] ],
-      displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
-      processEscapes: true
-    },
-    TeX: { extensions: ["autoload-all.js"] }
-  };
+    window.MathJax = {
+      tex2jax: {
+        inlineMath:  [ ['$','$'], ['\\(','\\)'] ],
+        displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+        processEscapes: true
+      },
+      TeX: { extensions: ["autoload-all.js"] }
+    };
   </script>
-  {{/mathjax_config}}
   {{#mathjax_config}}
   <script type="text/javascript" src="{{base_url}}/{{mathjax_config}}"></script>
   {{/mathjax_config}}
-  <script>(function(d,j){
-  j = d.createElement('script');
-  j.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-  (d.head || d.getElementsByTagName('head')[0]).appendChild(j);
-  }(document));
-  </script>{{/mathjax}}
+  <script defer src="{{base_path}}/gollum/assets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  {{/mathjax}}
   {{#js}}<script type="text/javascript" src="{{custom_path}}/custom.js"></script>{{/js}}
 
   <title>{{title}}</title>
 </head>
 <body>
-
+<div class="container-lg clearfix">
 {{{yield}}}
-
+</div>
 </body>
 </html>

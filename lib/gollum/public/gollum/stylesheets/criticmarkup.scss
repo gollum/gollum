@@ -1,0 +1,42 @@
+.criticmarkup mark {
+    background-color: #fffd38;
+    text-decoration: none;
+}
+
+.criticmarkup del {
+    background-color: #f6a9a9;
+    text-decoration: line-through;
+}
+.criticmarkup ins {
+    background-color: #a9f6a9;
+    text-decoration: none;
+}
+.criticmarkup ins.break {
+	display: block;
+	line-height: 2px;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+.criticmarkup ins.break span {
+	line-height: 1.5em;
+}
+.criticmarkup .popover {
+	background-color: #fffd38;
+	color: #000;
+}
+.criticmarkup .critic.comment {
+    display: none;
+}
+
+.criticmarkup .popover:hover span.critic.comment {
+    display: block;
+    position: absolute;
+    width: 200px;
+    left: 30%;
+    font-size: 0.8em; 
+    color: #ccc;
+    background-color: #333;
+    z-index: 10;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+}

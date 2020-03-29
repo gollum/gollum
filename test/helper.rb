@@ -6,6 +6,7 @@ require 'mocha/setup'
 require 'fileutils'
 require 'minitest/reporters'
 require 'twitter_cldr'
+require 'tmpdir'
 
 # Silence locale validation warning
 require 'i18n'
@@ -19,7 +20,11 @@ $LOAD_PATH.unshift(dir)
 
 module Gollum
 end
-Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER'] if ENV['GIT_ADAPTER']
+if ENV['GIT_ADAPTER']
+  Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER']
+else
+  Gollum::GIT_ADAPTER = RUBY_PLATFORM == 'java' ? 'rjgit' : 'rugged'
+end
 
 ENV['RACK_ENV'] = 'test'
 require 'gollum'
@@ -36,15 +41,13 @@ def testpath(path)
   File.join(TEST_DIR, path)
 end
 
-def cloned_testpath(path)
+def cloned_testpath(path, bare = false)
   repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
-  end
-  cloned
+  tmpdir = Dir.mktmpdir(self.class.name)
+  bare   = bare ? "--bare" : ""
+  redirect = Gem.win_platform? ? '' : '2>/dev/null'
+  %x{git clone #{bare} '#{repo}' #{tmpdir} #{redirect}}
+  tmpdir
 end
 
 def commit_details
@@ -91,14 +94,3 @@ def context(*args, &block)
 end
 
 $contexts = []
-
-# Commit file to wiki, overwriting previous versions of that file
-def commit_test_file(wiki, dir, filename, ext, content)
-  committer = Gollum::Committer.new(wiki, :message => "Added testfile", :parent  => wiki.repo.head.commit)
-  committer.add_to_index(dir, filename, ext, content, true)
-    committer.after_commit do |committer, sha|
-      wiki.clear_cache
-      committer.update_working_dir(dir, filename, ext)
-    end
-  committer.commit
-end

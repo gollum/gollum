@@ -1,25 +1,33 @@
 <div id="wiki-wrapper" class="results">
-<div id="head">
-  <h1>Search Results for <strong>{{query}}</strong></h1>
-  <ul class="actions">
-    <li class="minibutton">
-      {{>searchbar}}
-    </li>
-    <li class="minibutton"><a href="{{base_url}}/"
-       class="action-home-page">Home</a></li>
-  </ul>
-</div>
-<div id="results">
+  <div id="head">
+    {{>navbar}}
+    <h1 class="py-4"><span class="f1-light text-gray-light">Search results for</span> {{name}}</h1>
+  </div>
 
 {{#has_results}}
+
+  {{>pagination}}
+
+<div class="Box Box--condensed search-results" id="search-results">
   <ul>
-    {{#results}}
-    <li>
-      <a href="{{base_url}}/{{name}}">{{name}}</a>
-      <span class="count">({{count}} matches)</span>
+  <div class="Box-header border-bottom p-0"></div>
+  {{#results}}
+    <li class="Box-row Box-row--gray">
+            <span class="Counter Counter--gray tooltipped tooltipped-w" aria-label="{{filename_count}} hits in filename - {{count}} hits in content">{{filename_count}} - {{count}}</span>&nbsp;
+
+      <span class="text-bold"><a href="{{base_url}}/{{name}}">{{name}}</a></span>
+      <button class="btn-link tooltipped tooltipped-w float-right toggle-context" aria-label="Show all {{count}} hits in this page">{{#octicon}}search{{/octicon}}</button>
     </li>
-    {{/results}}
+
+    <div class="search-context">
+      {{#context}}
+      <li class="Box-row border-0"><span class="text-italic">{{.}}</span></li>
+      {{/context}}
+    </div>
+
+  {{/results}}
   </ul>
+</div>
 {{/has_results}}
 
 {{#no_results}}
@@ -28,11 +36,10 @@
   </p>
 {{/no_results}}
 
+<div id="footer" class="mt-4">
+    <a class="btn" href="#">Back to Top</a>
 </div>
-<div id="footer">
-  <ul class="actions">
-    <li class="minibutton"><a href="#">Back to Top</a></li>
-  </ul>
+
 </div>
 </div>
 

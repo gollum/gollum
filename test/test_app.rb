@@ -14,39 +14,10 @@ context "Frontend" do
   teardown do
     FileUtils.rm_rf(@path)
   end
-
-  test "urls transform unicode" do
-    header  = '_Header'
-    footer  = '_Footer'
-    sidebar = '_Sidebar'
-
-    # header, footer, and sidebar must be preserved
-    # or gollum will not recognize them
-    assert_equal header, header.to_url
-    assert_equal footer, footer.to_url
-    assert_equal sidebar, sidebar.to_url
-
-    # spaces are converted to dashes in URLs
-    # and in file names saved to disk
-    # urls are not case sensitive
-    assert_equal 'Title-Space', 'Title Space'.to_url
-  end
-
-  test "translation" do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
-
-    # ascii only file names prevent UTF8 issues
-    # when using git repos across operating systems
-    # as this test demonstrates, translation is not
-    # great
-    assert_equal 'm-plus-F', 'μ†ℱ'.to_url
-  end
-
+  
   test "utf-8 kcode" do
     assert_equal 'μ†ℱ'.scan(/./), ["μ", "†", "ℱ"]
   end
-
 
   test "broken four space" do
     page = 'utfh1'
@@ -71,6 +42,11 @@ context "Frontend" do
   def nfd utf8
     TwitterCldr::Normalization.normalize(utf8, using: :nfd)
   end
+  
+  test 'mathjax assets are served' do
+    get '/gollum/assets/mathjax/MathJax.js'
+    assert last_response.ok?
+  end
 
   test "UTF-8 headers href preserved" do
     page = 'utfh1'
@@ -82,10 +58,25 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-    expected = "<h2><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"><i class=\"fa fa-link\"></i></a>#{text}</h2>"
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"></a>#{text}</h2>"
     actual   = nfd(last_response.body)
 
     assert_match /#{expected}/, actual
+  end
+  
+  test 'rss feed' do
+    channel_title = <<EOF
+<title>Gollum Wiki Latest Changes</title>
+EOF
+    item = <<EOF
+<description>Commited by: &lt;a href=&quot;mailto:dawa.ometto@phil.uu.nl&quot;&gt;Dawa Ometto&lt;/a&gt;&lt;br/&gt;Commit ID: 02796b1&lt;br/&gt;&lt;br/&gt;Affected files:&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;http://example.org/custom.css/02796b1450691f90db5d6dc6a816a4980ce80d07&quot;&gt;custom.css&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://example.org/custom.js/02796b1450691f90db5d6dc6a816a4980ce80d07&quot;&gt;custom.js&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+EOF
+    get '/gollum/feed/'
+    assert last_response.ok?
+    assert_equal 'application/rss+xml', last_response.headers['Content-Type']
+    assert last_response.body.start_with?('<?xml')
+    assert last_response.body.include?(item)
+    assert last_response.body.include?(channel_title)
   end
 
   test "show sidebar, header, footer when present" do
@@ -95,32 +86,20 @@ context "Frontend" do
     divs.each {|div| assert_match div, last_response.body}
   end
 
-  test "retain edit information" do
+  test "provide last edit information" do
     page1 = 'page1'
     user1 = 'user1'
     @wiki.write_page(page1, :markdown, '',
                      { :name => user1, :email => user1 });
 
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
-
-    page2 = 'page2'
-    user2 = 'user2'
-    @wiki.write_page(page2, :markdown, '',
-                     { :name => user2, :email => user2 });
-
-    get page2
-    assert_match /Last edited by <b>user2/, last_response.body
-
-    get page1
-    assert_match /Last edited by <b>user1/, last_response.body
+    get "/gollum/last_commit_info", :path => page1
+    assert_match /\"author\":\"user1\"/, last_response.body
   end
 
   test "edits page" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc', :page => 'A',
-         :format             => page_1.format, :message => 'def'
-    follow_redirect!
+    post "/gollum/edit/A", :content => 'abc', :page => 'A',
+         :format => page_1.format, :message => 'def', :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -129,12 +108,28 @@ context "Frontend" do
     assert_equal 'def', page_2.version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
+  
+  test "edit page fails when page is outdated (edit collision)" do
+    page = @wiki.page('A')
+    old_sha = page.sha
+    post "/gollum/edit/A", :content => 'abc', :page => 'A',
+         :format => page.format, :message => 'def', :etag => old_sha
+    assert last_response.ok?
+    
+    @wiki.clear_cache
+    page = @wiki.page('A')
+    new_sha = page.sha
+    assert_not_equal old_sha, new_sha
+    
+    post "/gollum/edit/A", :content => 'def', :page => 'A',
+         :format => page.format, :message => 'def', :etag => old_sha
+    assert_equal last_response.status, 412    
+  end
 
   test "edit page with empty message" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc', :page => 'A',
-         :format             => page_1.format
-    follow_redirect!
+    post "/gollum/edit/A", :content => 'abc', :page => 'A',
+         :format => page_1.format, :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -146,9 +141,8 @@ context "Frontend" do
 
   test "edit page with slash" do
     page_1 = @wiki.page('A')
-    post "/edit/A", :content => 'abc', :page => 'A', :path => '/////',
-         :format             => page_1.format, :message => 'def'
-    follow_redirect!
+    post "/gollum/edit/A", :content => 'abc', :page => 'A', :path => '/////',
+         :format => page_1.format, :message => 'def', :etag => page_1.sha
     assert last_response.ok?
   end
 
@@ -159,10 +153,8 @@ context "Frontend" do
     foot_1   = page_1.footer
     side_1   = page_1.sidebar
 
-    post "/edit/A", :header => 'header',
-         :footer            => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def'
-    follow_redirect!
-    assert_equal "/A", last_request.fullpath
+    post "/gollum/edit/A", :header => 'header',
+         :footer => 'footer', :page => "A", :sidebar => 'sidebar', :message => 'def', :etag => page_1.sha
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -186,79 +178,86 @@ context "Frontend" do
 
   test "renames page" do
     page_1 = @wiki.page("B")
-    post "/rename/B", :rename => "/C", :message => 'def'
+    post "/gollum/rename/B", :rename => "/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/C', last_request.fullpath
+    assert_equal '/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
     assert_nil @wiki.page("B")
     page_2 = @wiki.page('C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def', page_2.last_version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
+  end
+
+  test "rename preserves format" do
+    page_1 = @wiki.page("B")
+    post "/gollum/rename/B", :rename => "/C.rst", :message => 'def'
+
+    follow_redirect!
+    assert_equal '/C.rst.md', last_request.fullpath
+    assert last_response.ok?
   end
 
   test "renames page catches invalid page" do
     # No such page
-    post "/rename/no-such-file-here", :rename => "/C", :message => 'def'
+    post "/gollum/rename/no-such-file-here", :rename => "/C", :message => 'def'
     assert !last_response.ok?
     assert_equal last_response.status, 500
   end
 
   test "rename page catches empty target" do
     # Empty rename target
-    post "/rename/B", :rename => "", :message => 'def'
+    post "/gollum/rename/B", :rename => "", :message => 'def'
     assert !last_response.ok?
     assert_equal last_response.status, 500
   end
 
   test "rename page catches non-existent target" do
     # Non-existent rename target
-    post "/rename/B", :message => 'def'
+    post "/gollum/rename/B", :message => 'def'
     assert !last_response.ok?
     assert_equal last_response.status, 500
   end
 
-
   test "renames page in subdirectory" do
-    page_1 = @wiki.paged("H", "G")
+    page_1 = @wiki.page("G/H")
     assert_not_equal page_1, nil
-    post "/rename/G/H", :rename => "/I/C", :message => 'def'
+    post "/gollum/rename/G/H", :rename => "/I/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/I/C', last_request.fullpath
+    assert_equal '/I/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
-    assert_nil @wiki.paged("H", "G")
-    page_2 = @wiki.paged('C', 'I')
+    assert_nil @wiki.page("G/H")
+    page_2 = @wiki.page('I/C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def', page_2.last_version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
   test "renames page relative in subdirectory" do
-    page_1 = @wiki.paged("H", "G")
+    page_1 = @wiki.page("G/H")
     assert_not_equal page_1, nil
-    post "/rename/G/H", :rename => "K/C", :message => 'def'
+    post "/gollum/rename/G/H", :rename => "K/C", :message => 'def'
 
     follow_redirect!
-    assert_equal '/G/K/C', last_request.fullpath
+    assert_equal '/G/K/C.md', last_request.fullpath
     assert last_response.ok?
 
     @wiki.clear_cache
-    assert_nil @wiki.paged("H", "G")
-    page_2 = @wiki.paged('C', 'G/K')
+    assert_nil @wiki.page("G/H")
+    page_2 = @wiki.page('G/K/C')
     assert_equal "INITIAL\n\nSPAM2\n", page_2.raw_data
-    assert_equal 'def', page_2.version.message
+    assert_equal 'def', page_2.last_version.message
     assert_not_equal page_1.version.sha, page_2.version.sha
   end
 
-
   test "creates page" do
-    post "/create", :content => 'abc', :page => "D",
+    post "/gollum/create", :content => 'abc', :page => "D",
          :format             => 'markdown', :message => 'def'
     follow_redirect!
     assert last_response.ok?
@@ -269,10 +268,10 @@ context "Frontend" do
   end
 
   test "creates pages with escaped characters in title" do
-    post "/create", :content => 'abc', :page => 'Title with spaces',
+    post "/gollum/create", :content => 'abc', :page => 'Title with spaces',
          :format             => 'markdown', :message => 'foo'
-    assert_equal 'http://example.org/Title-with-spaces', last_response.headers['Location']
-    get "/Title-with-spaces"
+    assert_equal 'http://example.org/Title%20with%20spaces.md', last_response.headers['Location']
+    get "/Title%20with%20spaces"
     assert_match /abc/, last_response.body
   end
 
@@ -280,7 +279,7 @@ context "Frontend" do
     name = "E"
     get "/#{name}"
     follow_redirect!
-    assert_equal "/create/#{name}", last_request.fullpath
+    assert_equal "/gollum/create/#{name}", last_request.fullpath
     assert last_response.ok?
   end
 
@@ -288,15 +287,15 @@ context "Frontend" do
     get "/foo/"
 
     follow_redirect!
-    assert_equal "/create/foo/Home", last_request.fullpath
+    assert_equal "/gollum/create/foo/Home", last_request.fullpath
     assert last_response.ok?
   end
 
   test "accessing redirectory redirects to index page" do
-    post "/create", :content => 'abc', :page => 'Home', :path => '/foo/',
+    post "/gollum/create", :content => 'abc', :page => 'Home', :path => '/foo/',
          :format             => 'markdown', :message => 'foo'
 
-    assert_equal "http://example.org/foo/Home", last_response.headers['Location']
+    assert_equal "http://example.org/foo/Home.md", last_response.headers['Location']
 
     follow_redirect!
     assert last_response.ok?
@@ -304,15 +303,15 @@ context "Frontend" do
 
   test "edit redirects to create on non-existant page" do
     name = "E"
-    get "/edit/#{name}"
+    get "/gollum/edit/#{name}"
     follow_redirect!
-    assert_equal "/create/#{name}", last_request.fullpath
+    assert_equal "/gollum/create/#{name}", last_request.fullpath
     assert last_response.ok?
   end
 
   test "create redirects to page if already exists" do
-    name = "A"
-    get "/create/#{name}"
+    name = "A.md"
+    get "/gollum/create/#{name}"
     follow_redirect!
     assert_equal "/#{name}", last_request.fullpath
     assert last_response.ok?
@@ -321,48 +320,72 @@ context "Frontend" do
   test "create sets the correct path for a relative path subdirectory" do
     dir  = "foodir"
     name = "#{dir}/bar"
-    get "/create/#{name}"
+    get "/gollum/create/#{name}"
     assert_match(/\/#{dir}/, last_response.body)
     assert_no_match(/[^\/]#{dir}/, last_response.body)
   end
 
-  test "create sets the correct path for a relative path subdirectory with the page file directory set" do
-    Precious::App.set(:wiki_options, { :page_file_dir => "foo" })
-    dir  = "bardir"
-    name = "#{dir}/baz"
-    get "/create/foo/#{name}"
-    assert_match(/\/#{dir}/, last_response.body)
-    assert_no_match(/[^\/]#{dir}/, last_response.body)
-    # reset page_file_dir
-    Precious::App.set(:wiki_options, { :page_file_dir => nil })
+  test "create with template succeed if template exists" do
+    Precious::App.set(:wiki_options, { :template_page => true })
+    page='_Template'
+    post '/gollum/create', :content => 'fake template', :page => page,
+      :path               => '/', :format => 'markdown', :message => ''
+    follow_redirect!      
+    assert last_response.ok?
+    @wiki.clear_cache    
+    get "/gollum/create/TT"
+    assert last_response.ok?
+    post '/gollum/delete/_Template'
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+
+  test "create with template succeed if template doesn't exist" do
+    Precious::App.set(:wiki_options, { :template_page => true }) 
+    get "/gollum/create/TT"
+    assert last_response.ok?
+    Precious::App.set(:wiki_options, { :template_page => false })
   end
 
   test "edit returns nil for non-existant page" do
     # post '/edit' fails. post '/edit/' works.
     page = 'not-real-page'
     path = '/'
-    post '/edit/', :content => 'edit_msg',
+    post '/gollum/edit/', :content => 'edit_msg',
          :page              => page, :path => path, :message => ''
-    page_e = @wiki.paged(page, path)
+    page_e = @wiki.page(::File.join(path,page))
     assert_equal nil, page_e
+  end
+
+  test "edit allows changing format" do
+    post '/gollum/create', :content => 'create_msg', :page => 'gandalf',
+          :path => '/', :format => 'markdown', :message => ''
+    page = @wiki.page('gandalf.md')
+    assert page
+
+    @wiki.clear_cache
+
+    post '/gollum/edit/', :content => 'new content', :format => 'txt', :page => 'gandalf', :path => '/', :message => '', :etag => page.sha
+    assert last_response.ok?
+    assert_nil @wiki.page('gandalf.md')
+    assert @wiki.page('gandalf.txt')
   end
 
   test "page create and edit with dash & page rev" do
     page = 'c-d-e'
     path = 'a/b/' # path must end with /
 
-    post '/create', :content => 'create_msg', :page => page,
+    post '/gollum/create', :content => 'create_msg', :page => page,
          :path               => path, :format => 'markdown', :message => ''
-    page_c = @wiki.paged(page, path)
+    page_c = @wiki.page(File.join(path, page))
     assert_equal 'create_msg', page_c.raw_data
 
     # must clear or create_msg will be returned
     @wiki.clear_cache
 
     # post '/edit' fails. post '/edit/' works.
-    post '/edit/', :content => 'edit_msg',
-         :page              => page, :path => path, :message => ''
-    page_e = @wiki.paged(page, path)
+    post '/gollum/edit/', :content => 'edit_msg',
+         :page              => page, :path => path, :message => '', :etag => page_c.sha
+    page_e = @wiki.page(File.join(path, page))
     assert_equal 'edit_msg', page_e.raw_data
 
     @wiki.clear_cache
@@ -379,7 +402,7 @@ context "Frontend" do
 
   test "guards against creation of existing page" do
     name = "A"
-    post "/create", :content => 'abc', :page => name,
+    post "/gollum/create", :content => 'abc', :page => name,
          :format             => 'markdown', :message => 'def'
 
     assert last_response.ok?
@@ -388,15 +411,62 @@ context "Frontend" do
     page = @wiki.page(name)
     assert_not_equal 'abc', page.raw_data
   end
+  
+  test "uploading is not allowed unless explicitly enabled" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+    assert_equal 405, last_response.status
+  end
+  
+  test "upload a file with mode dir" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true})
+  
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+  
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    file = @wiki.file("uploads/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false})
+  end
 
+  test "upload a file with mode page" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: Home), based on referer
+    file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
+  end
+  
+  test "guard against uploading an existing file" do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true})
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+    assert_equal 302, last_response.status
+    # Post the same file a second time; should result in conflict
+    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+    assert_equal 409, last_response.status
+    Precious::App.set(:wiki_options, {allow_uploads: false})
+  end
+  
   test "delete a page" do
     name = "deleteme"
-    post "/create", :content => 'abc', :page => name,
+    post "/gollum/create", :content => 'abc', :page => name,
          :format             => 'markdown', :message => 'foo'
     page = @wiki.page(name)
     assert_equal 'abc', page.raw_data
 
-    get '/delete/' + name
+    post "/gollum/delete/#{page.filename}"
 
     @wiki.clear_cache
     page = @wiki.page(name)
@@ -404,8 +474,9 @@ context "Frontend" do
   end
 
   test "previews content" do
-    post "/preview", :content => 'abc', :format => 'markdown'
+    post "/gollum/preview", :content => 'abc', :format => 'markdown', :page => 'Samewise%20Gamgee.mediawiki'
     assert last_response.ok?
+    assert last_response.body.include?('Samewise Gamgee</h1>')
   end
 
   test "previews content on the first page of an empty wiki" do
@@ -413,16 +484,20 @@ context "Frontend" do
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {})
-    post "/preview", :content => 'abc', :format => 'markdown'
+    post "/gollum/preview", :content => 'abc', :format => 'markdown'
     assert last_response.ok?
   end
+  
+  test 'throws an error when comparing two identical revisions for a page' do
+    get '/gollum/compare/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac...fc66539528eb96f21b2bbdbf557788fe8a1196ac'
+    assert last_response.ok?
+    assert last_response.body.include?('Could not compare these two revisions, no differences were found.')
+  end
 
-=begin
-  # Grit is broken.
   test "reverts single commit" do
     page1 = @wiki.page('B')
 
-    post "/revert/B/7c45b5f16ff3bae2a0063191ef832701214d4df5"
+    post "/gollum/revert/B.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac/7c45b5f16ff3bae2a0063191ef832701214d4df5"
     follow_redirect!
     assert last_response.ok?
 
@@ -430,13 +505,13 @@ context "Frontend" do
     page2 = @wiki.page('B')
     assert_not_equal page1.version.sha, page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
-#    assert_equal "Revert commit #7c45b5f", page2.version.message
+    assert_equal "Revert commit 7c45b5f", page2.version.message
   end
 
   test "reverts multiple commits" do
     page1 = @wiki.page('A')
 
-    post "/revert/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac/b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f"
+    post "/gollum/revert/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac/b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f"
     follow_redirect!
     assert last_response.ok?
 
@@ -445,19 +520,18 @@ context "Frontend" do
     assert_not_equal page1.version.sha, page2.version.sha
     assert_equal "INITIAL", page2.raw_data.strip
   end
-=end
-=begin
+
   test "cannot revert conflicting commit" do
     page1 = @wiki.page('A')
 
-    post "/revert/A/302a5491a9a5ba12c7652ac831a44961afa312d2"
+    post "/gollum/revert/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac/302a5491a9a5ba12c7652ac831a44961afa312d2"
     assert last_response.ok?
 
     @wiki.clear_cache
     page2 = @wiki.page('A')
     assert_equal page1.version.sha, page2.version.sha
   end
-=end
+  
 =begin
   # redirects are now handled by class MapGollum in bin/gollum
   # they should be set in config.ru
@@ -486,8 +560,7 @@ context "Frontend" do
     gollum_author = { :name => 'ghi', :email => 'jkl' }
     session       = { 'gollum.author' => gollum_author }
 
-    post "/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def' }, { 'rack.session' => session }
-    follow_redirect!
+    post "/gollum/edit/A", { :content => 'abc', :page => 'A', :format => page1.format, :message => 'def', :etag => page1.sha }, { 'rack.session' => session }
     assert last_response.ok?
 
     @wiki.clear_cache
@@ -522,29 +595,47 @@ context "Frontend" do
     Precious::App.set(:wiki_options, { :js => nil })
   end
 
-  test "change custom.css path if page-file-dir is set" do
-    Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
-    page = 'docs/yaycustom'
-    text = 'customized!'
+  test "don't allow changing custom js or css" do
+    Precious::App.set(:wiki_options, { :js => true, :css => true })
+  
+    ['create', 'edit'].each do |route|
+      ['.css', '.js'].each do |ext|
+        get "/gollum/#{route}/custom#{ext}"
+        assert_equal 403, last_response.status, "get /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
+      end
+      get "/gollum/#{route}/mathjax.config.js"
+      assert_equal 403, last_response.status, "get /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
+    end
 
-    @wiki.write_page(page, :markdown, text,
-                     { :name => 'user1', :email => 'user1' });
+    ['delete', 'rename', 'edit', 'create'].each do |route|
+      ['.css', '.js'].each do |ext|
+        post "/gollum/#{route}/custom#{ext}"
+        assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
+      end
+      post "/gollum/#{route}/mathjax.config.js"
+      assert_equal 403, last_response.status, "post /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
+    end
 
-    get page
-    assert_match /"\/docs\/custom.css"/, last_response.body
-    Precious::App.set(:wiki_options, { :css => nil, :page_file_dir => nil })
+    ['.css', '.js'].each do |ext|
+      post "/gollum/revert/custom#{ext}/02796b1450691f90db5d6dc6a816a4980ce80d07/2f6485c2702c7c8b9b6613672337ffa7d933ddcf"
+      assert_equal 403, last_response.status, "post /gollum/revert/custom#{ext} -- #{last_response.inspect}"
+    end
+
+    Precious::App.set(:wiki_options, { :js => nil })
   end
 
   test "show edit page with header and footer and sidebar of multibyte" do
-    post "/create",
+    post "/gollum/create",
          :content => 'りんご',
          :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
 
-    post "/edit/Multibyte",
+    page = @wiki.page('Multibyte')
+    
+    post "/gollum/edit/Multibyte",
          :content => 'りんご', :header => 'みかん', :footer => 'バナナ', :sidebar => 'スイカ',
-         :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
+         :page    => 'Multibyte', :format => :markdown, :message => 'mesg', :etag => page.sha
 
-    get "edit/Multibyte"
+    get "/gollum/edit/Multibyte"
 
     assert last_response.ok?
     assert_match /りんご/, last_response.body
@@ -563,19 +654,6 @@ context "Frontend" do
 
     assert last_response.ok?
     assert_match /meta name="robots" content="noindex, nofollow"/, last_response.body
-  end
-
-  test "show revision of specific file" do
-    shas = {}
-      ["First revision of testfile", "Second revision of testfile"].each do |content|
-        new_commit = commit_test_file(@wiki, "revisions", "testfile", "log", content)
-        shas[new_commit] = content
-      end
-      shas.each do |sha, content|
-        get "revisions/testfile.log/#{sha}"
-        assert last_response.ok?
-        assert_match /#{content}/, last_response.body
-      end
   end
 
   def app
@@ -618,34 +696,35 @@ context "Frontend with lotr" do
   # │   ├── eye.jpg
   # │   └── todo.txt
   # ├── My-Precious.md
+  # ├── roast-mutton.md
   # ├── Samwise\ Gamgee.mediawiki
   # ├── _Footer.md
   # ├── _Header.md
   # └── _Sidebar.md
-  #
+  # ├── Zamin.md
 
-  test "/pages" do
-    get "/pages"
+  test "/overview" do
+    get "/gollum/overview"
     assert last_response.ok?
 
     body = last_response.body
 
-    assert body.include?("Bilbo Baggins"), "/pages should include the page 'Bilbo Baggins'"
-    assert body.include?("Gondor"), "/pages should include the folder 'Gondor'"
-    assert !body.include?("Boromir"), "/pages should NOT include the page 'Boromir'"
-    assert body.include?("Mordor"), "/pages should include the folder 'Mordor'"
-    assert !body.include?("Eye Of Sauron"), "/pages should NOT include the page 'Eye Of Sauron'"
-    assert !body.match(/(Zamin).+(roast\-mutton)/m), "/pages should be sorted alphabetically"
+    assert body.include?("Bilbo-Baggins"), "/overview should include the page 'Bilbo Baggins'"
+    assert body.include?("Gondor"), "/overview should include the folder 'Gondor'"
+    assert !body.include?("Boromir"), "/overview should NOT include the page 'Boromir'"
+    assert body.include?("Mordor"), "/overview should include the folder 'Mordor'"
+    assert !body.include?("Eye-Of-Sauron"), "/overview should NOT include the page 'Eye Of Sauron'"
+    assert !body.match(/(Zamin).+(Bilbo\-Baggins)/m), "/overview should be sorted alphabetically"
   end
 
-  test "/pages/Mordor/" do
-    get "/pages/Mordor/"
-    assert last_response.ok?, "/pages/Mordor/ did not respond ok"
+  test "/gollum/overview/Mordor/" do
+    get "/gollum/overview/Mordor/"
+    assert last_response.ok?, "/overview/Mordor/ did not respond ok"
 
     body = last_response.body
 
-    assert !body.include?("Bilbo Baggins"), "/pages/Mordor/ should NOT include the page 'Bilbo Baggins'"
-    assert body.include?("Eye Of Sauron"), "/pages/Mordor/ should include the page 'Eye Of Sauron'"
+    assert !body.include?("Bilbo-Baggins"), "/overview/Mordor/ should NOT include the page 'Bilbo Baggins'"
+    assert body.include?("Eye-Of-Sauron"), "/overview/Mordor/ should include the page 'Eye Of Sauron'"
   end
 
   test "symbolic link pages" do
@@ -663,10 +742,10 @@ context "Frontend with lotr" do
   test "create pages within sub-directories using base path" do
     Precious::App.set(:wiki_options, { :base_path => 'wiki' })
     page = 'path'
-    post "/create", :content => '123', :page => page,
+    post "/gollum/create", :content => '123', :page => page,
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
     # should be wiki/Mordor/path
-    assert_equal 'http://example.org/Mordor/' + page, last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/' + page + '.md', last_response.headers['Location']
     get '/Mordor/' + page
     assert_match /123/, last_response.body
 
@@ -675,9 +754,9 @@ context "Frontend with lotr" do
   end
 
   test "create pages within sub-directories using page file dir" do
-    post "/create", :content => 'one two', :page => 'base',
+    post "/gollum/create", :content => 'one two', :page => 'base',
          :path               => 'wiki/Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/wiki/Mordor/base', last_response.headers['Location']
+    assert_equal 'http://example.org/wiki/Mordor/base.md', last_response.headers['Location']
     get "/wiki/Mordor/base"
 
     assert_match /one two/, last_response.body
@@ -685,43 +764,134 @@ context "Frontend with lotr" do
 
 
   test "create pages within sub-directories" do
-    post "/create", :content => 'big smelly creatures', :page => 'Orc',
+    post "/gollum/create", :content => 'big smelly creatures', :page => 'Orc',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
     get "/Mordor/Orc"
     assert_match /big smelly creatures/, last_response.body
 
-    post "/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
+    post "/gollum/create", :content => 'really big smelly creatures', :page => 'Uruk Hai',
          :path               => 'Mordor', :format => 'markdown', :message => 'oooh, very scary'
-    assert_equal 'http://example.org/Mordor/Uruk-Hai', last_response.headers['Location']
-    get "/Mordor/Uruk-Hai"
+    assert_equal 'http://example.org/Mordor/Uruk%20Hai.md', last_response.headers['Location']
+    get "/Mordor/Uruk%20Hai"
     assert_match /really big smelly creatures/, last_response.body
   end
 
   test "edit pages within sub-directories" do
-    post "/create", :content => 'big smelly creatures', :page => 'Orc',
-         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+    post "/gollum/create", :content => 'big smelly creatures', :page => 'Orc',
+         :path => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
 
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    assert_equal 'http://example.org/Mordor/Orc.md', last_response.headers['Location']
 
-    post "/edit/Mordor/Orc", :content => 'not so big smelly creatures',
-         :page                        => 'Orc', :path => 'Mordor', :message => 'minor edit'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    page = @wiki.page('Mordor/Orc')
+    post "/gollum/edit/Mordor/Orc", :content => 'not so big smelly creatures',
+         :page => 'Orc', :path => 'Mordor', :message => 'minor edit', :etag => page.sha
+    assert last_response.ok?
 
     get "/Mordor/Orc"
     assert_match /not so big smelly creatures/, last_response.body
   end
 
+  test 'editable pages have footer' do
+    get 'Bilbo-Baggings'
+    assert_equal last_response.body.include?('delete-link'), false
+    assert_equal last_response.body.include?('page-info-toggle'), false
+  end
+
+  test 'show specific revision of page' do
+    old_sha = '5bc1aaec6149e854078f1d0f8b71933bbc6c2e43'
+    page = 'Bilbo-Baggins'
+    get "#{page}/#{old_sha}"
+    assert last_response.ok?
+    assert_equal last_response.body.include?('delete-link'), false
+    assert_equal last_response.body.include?('page-info-toggle'), false
+    assert last_response.body.include?('This version of the page was edited by <b>Tom Preston-Werner</b> at 2010-04-07')
+    assert last_response.body.include?("<a href=\"/Bilbo-Baggins.md\">View the most recent version.</a></p>")
+  end
+
+  test "show revision of specific file" do
+    old_sha = "df26e61e707116f81ebc6b935ec6d1676b7e96c4"
+    update_sha = "f803c64d11407b23797325e3843f3f378b78f611"
+    
+    get "Data.csv/#{old_sha}"
+    assert last_response.ok?
+    assert_no_match /Samwise,Gamgee/, last_response.body
+
+    get "Data.csv/#{update_sha}"
+    assert last_response.ok?
+    assert_match /Samwise,Gamgee/, last_response.body
+  end
+
   test "existing emoji" do
-    get "/emoji/heart"
+    get "/gollum/emoji/heart"
     assert_equal 200, last_response.status
     assert_equal 'image/png', last_response.headers['Content-Type']
     assert_equal [137, 80, 78, 71, 13, 10, 26, 10], last_response.body.each_byte.to_a[0..7]
   end
 
   test "missing emoji" do
-    get "/emoji/oggy_was_here"
+    get "/gollum/emoji/oggy_was_here"
     assert_equal 404, last_response.status
+  end
+
+  def app
+    Precious::App
+  end
+end
+
+context "Frontend with page-file-dir" do
+  include Rack::Test::Methods
+
+  setup do
+    @path = cloned_testpath("examples/revert.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {allow_editing: true})
+    Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
+  end
+
+  teardown do
+    Precious::App.set(:wiki_options, { :css => nil, :page_file_dir => nil})
+    FileUtils.rm_rf(@path)
+  end
+
+  test "create sets the correct path for a relative path subdirectory with the page file directory set" do
+    dir  = "bardir"
+    name = "#{dir}/baz"
+    get "/gollum/create/#{name}"
+    assert_match(/\/#{dir}/, last_response.body)
+    assert_no_match(/[^\/]#{dir}/, last_response.body)
+  end
+
+  test "use custom.css from page-file-dir path if page-file-dir is set" do
+    page = 'docs/yaycustom'
+    text = 'customized!'
+
+    @wiki.write_page(page, :markdown, text,
+      { :name => 'user1', :email => 'user1' })
+
+    get 'yaycustom'
+    assert_match /"\/custom.css"/, last_response.body
+  end
+
+  test "custom.css with page-file-dir" do
+    custom_content = 'customized for page-file-dir'
+    options = {
+        :message => "Uploaded file",
+        :parent  => @wiki.repo.head.commit,
+        :author  => "Bilbo Baggins"
+    }
+
+    committer = Gollum::Committer.new(@wiki, options)
+    committer.add_to_index('docs/custom.css', custom_content, {normalize: false})
+    committer.after_commit do |committer, sha|
+      @wiki.clear_cache
+      committer.update_working_dir('docs/custom.css')
+    end
+    committer.commit
+    get 'custom.css'
+
+    assert_equal custom_content, last_response.body
   end
 
   def app

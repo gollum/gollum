@@ -6,17 +6,12 @@ require 'ostruct'
 
 # external
 require 'github/markup'
-require 'sanitize'
 
 # internal
 require File.expand_path('../gollum/uri_encode_component', __FILE__)
 
-# Set ruby to UTF-8 mode
-# This is required for Ruby 1.8.7 which gollum still supports.
-$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
-
 module Gollum
-  VERSION = '4.1.4'
+  VERSION = '5.0.1b'
 
   def self.assets_path
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
@@ -38,4 +33,3 @@ module Gollum
     end
   end
 end
-

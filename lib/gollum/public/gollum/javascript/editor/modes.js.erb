@@ -1,0 +1,252 @@
+/*  modes.js
+
+    Add highlighting rules for gollum-specific syntax to ACE.
+    We first have to extends the Highlighters for each supported syntax,
+    so that later, we can extend the relevant ACE Mode to use the custom Highlighter.
+    At the moment there are two gollum-wide block level syntaxes which need to be added:
+
+    * GitHub style code blocks: ``` ... ```
+    * UML blocks: @startuml ... @enduml
+
+    In addition, there are universal gollum tags:
+
+    [[link]]]
+
+    The regexes defined for these below should be equivalent to the regexes used by
+    gollum-lib to extract these blocks.
+
+    ACE Docs:
+      * Highlight Rules: https://cloud9-sdk.readme.io/docs/highlighting-rules
+      * Dynamically generating modes: https://stackoverflow.com/questions/22166784/dynamically-update-syntax-highlighting-mode-rules-for-the-ace-editor
+*/
+
+// For Gollum link tags
+var GollumTagStart = {
+  token: "support.function",
+  regex: "\\[\\[.*\\]\\]",
+  next: 'start'
+};
+
+<%
+uml_rule_name = 'UMLBlock'
+uml_rule_id = 'umlblock'
+%>
+
+// The rule defining the UML state for the ACE Tokenizer
+var <%= uml_rule_name %>  = [{
+  token: "support.function",
+  regex: "^\\@enduml$",
+  next:  "start"
+  },
+  {
+    defaultToken: "support.function"
+  }];
+
+// The rule defining how the ACE Tokenizer gets into the UML state
+var UMLStart = {
+  token: "support.function",
+  regex: "^(?:[ \\t]*)\\@startuml$",
+  next:  "<%= uml_rule_id %>"
+};
+
+<%
+codeblock_rule_name = 'GithubCodeBlock'
+codeblock_rule_id = 'githubblock';
+%>
+
+// Generic rule for github style fenced code blocks (both for three backticks, or tildes).
+// The generic approach was lifted from ACE's markdown_highlight_rules.js
+// Relies on startCodeBlockMatch to be called in the 'start' state to log the length and kind of the opening tag.
+var <%= codeblock_rule_name %> = [{
+  token: "support.function",
+  regex: ".*",
+  onMatch:  function(value, state, stack, line) {
+              var length     = stack[2][0];
+              var symbol     = stack[2][1];
+              // length and symbol are logged by startCodeBlockMatch
+              var match = /^( {0,3})(~~[~]+|```)\s*$/.exec(value);
+              // if there's a matching close tag, it's at least as long as the logged open tag, and it's the same character (backtick or tilde) as the opening tag.
+              if (match && match[2].length >= length && match[2].charAt(0) == symbol) {
+                stack.splice(0, 3);
+                this.next = stack.shift();
+                return this.token;
+              }
+              this.next = "";
+              return this.token;
+            }
+  },
+  {
+    defaultToken: "support.function"
+  }];
+
+// When we have a match for the start of a code block, log the information how long the opening tag was, and which character (backtick or tilde) it used.
+var startCodeBlockMatch = function(value, state, stack, line) {
+  var match = new RegExp(this.regex).exec(value);
+  stack.unshift("<%= codeblock_rule_id %>", [], [match[2].length, match[2].charAt(0)], state);
+  return this.token;
+}
+
+// Three backticks should work on all pages
+var GollumCodeStart = {
+  token: "support.function",
+  regex: "^( {0,3})(```)[^`]*$",
+  onMatch: startCodeBlockMatch,
+  next:  "<%= codeblock_rule_id %>"
+};
+
+// Markdown pages should also support fenced code blocks
+var MarkdownCodeStart = {
+  token: "support.function",
+  regex: "^( {0,3})(~~[~]+)[^`~]*$",
+  onMatch: startCodeBlockMatch,
+  next:  "<%= codeblock_rule_id %>"
+};
+
+<%
+default_rules = {
+  :path => '',
+  :rule_name => '',
+  :start_rules => ['GollumTagStart', 'UMLStart', 'GollumCodeStart'],
+  :block_rules => { codeblock_rule_id => codeblock_rule_name, 
+                    uml_rule_id => uml_rule_name,
+                  }
+}
+
+rst_rules = default_rules.dup
+rst_rules[:path] = 'ace/mode/rst_highlight_rules'
+rst_rules[:rule_name] = 'RSTHighlightRules'
+
+asciidoc_rules = default_rules.dup
+asciidoc_rules[:start_rules] = ['UMLStart', 'GollumCodeStart'] # Gollum tags are disabled for asciidoc
+asciidoc_rules[:path] = 'ace/mode/asciidoc_highlight_rules'
+asciidoc_rules[:rule_name] = 'AsciidocHighlightRules'
+
+textile_rules = default_rules.dup
+textile_rules[:path] = 'ace/mode/textile_highlight_rules'
+textile_rules[:rule_name] = 'TextileHighlightRules'
+
+rdoc_rules = default_rules.dup
+rdoc_rules[:path] = 'ace/mode/rdoc_highlight_rules'
+rdoc_rules[:rule_name] = 'RDocHighlightRules'
+
+# Create set of extended rules for markups that don't have their own Ace mode, based on the default 'text' highligter.
+text_rules = default_rules.dup
+text_rules[:path] = 'ace/mode/text_highlight_rules'
+text_rules[:rule_name] = 'TextHighlightRules'
+
+markdown_rules = default_rules.dup
+markdown_rules[:path] = 'ace/mode/markdown_highlight_rules'
+markdown_rules[:rule_name] = 'MarkdownHighlightRules'
+markdown_rules[:start_rules] = ['GollumTagStart', 'UMLStart', 'GollumCodeStart', 'MarkdownCodeStart'] # Markdown pages should also support fenced code blocks
+
+
+{
+  'GollumRstHighlightRules'      => rst_rules,
+  'GollumAsciidocHighlightRules' => asciidoc_rules,
+  'GollumTextileHighlightRules'  => textile_rules,
+  'GollumTextHighlightRules'     => text_rules,
+  'GollumRdocHighlightRules'     => rdoc_rules,
+  'GollumMarkdownHighlightRules' => markdown_rules 
+}.each do |name, highlighter|
+%>
+// Register gollum-specific HighlightRules with ACE
+ace.define("<%= name %>", [], function(require, exports, module) {
+  "use strict";
+
+  var oop = require("ace/lib/oop");
+  var BaseHighlightRules = require('<%= highlighter[:path] %>').<%= highlighter[:rule_name] %>;
+
+  var GollumHighlightRules = function() {
+    var mergeRules = new BaseHighlightRules();
+    this.$rules = mergeRules.getRules();
+    this.$rules.start = this.$rules.start.filter(function (item) {
+      return !(item.next == 'githubblock');
+    });
+    <% highlighter[:start_rules].each do |rule| %>
+    this.$rules.start.unshift(<%= rule %>);
+    <% end %>
+    <% highlighter[:block_rules].each do |id, rule| %>
+    this.addRules({
+      <%= id %> : <%= rule %>
+    });
+    if (this.$rules.listblock != null){
+      // Some markup languages, like markdown, have a separate starting block for list contents, which also need to parse Gollum Tags.
+      this.$rules.listblock.unshift(GollumTagStart);
+    }
+    <% end %>
+
+    this.normalizeRules();
+  };
+
+  oop.inherits(GollumHighlightRules, BaseHighlightRules);
+
+  exports.GollumHighlightRules = GollumHighlightRules;
+});
+<% end %>
+// Done defining the extended HighlightRule definitions
+
+(function($) {
+  var AceMode = {
+    asciidoc: {
+      mode: 'asciidoc',
+      highlighter: 'GollumAsciidocHighlightRules'
+    },
+    creole: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    markdown: {
+      mode: 'markdown',
+      highlighter: 'GollumMarkdownHighlightRules'
+    },
+    mediawiki: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    bib: {
+      mode: 'latex'
+    },
+    org: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    rst: {
+      mode: 'rst',
+      highlighter: 'GollumRstHighlightRules'
+    },
+    txt: {
+      mode: 'text'
+    },
+    pod: {
+      mode: 'text',
+      highlighter: 'GollumTextHighlightRules'
+    },
+    rdoc: {
+      mode: 'rdoc',
+      highlighter: 'GollumRdocHighlightRules'
+    },
+    textile: {
+      mode: 'textile',
+      highlighter: 'GollumTextileHighlightRules'
+    }
+  };
+
+  $.getEditorMode = function ( mode ) {
+    var lang = null;
+    if (lang = AceMode[mode]) {
+      var ace_mode = lang['mode'];
+      var gollum_rules = lang['highlighter'];
+      if (gollum_rules){ // We have extended highlighters
+        var baseMode = ace.require("ace/mode/" + ace_mode).Mode;
+        var dynamicMode = new baseMode();
+        dynamicMode.HighlightRules = ace.require(gollum_rules).GollumHighlightRules;
+        return dynamicMode;      
+      } else {
+        return "ace/mode/" + ace_mode;
+      }
+    } else {
+      return null;
+    }
+  }
+
+})(jQuery);

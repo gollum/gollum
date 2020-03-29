@@ -19,11 +19,15 @@ module Precious
 
       def lines
         lines = []
-        @diff.diff.split("\n")[2..-1].each_with_index do |line, line_index|
+        lines_to_parse = @diff.split("\n")[4..-1]
+        # If the diff is of a rename, the diff header will be one line longer than normal because it will contain a line starting with '+++' to indicate the 'new' filename.
+        # Make sure to skip that header line if it is present.
+        lines_to_parse = lines_to_parse[1..-1] if lines_to_parse[0].start_with?('+++')
+        lines_to_parse.each_with_index do |line, line_index|
           lines << { :line  => line,
                      :class => line_class(line),
-                     :ldln  => left_diff_line_number(0, line),
-                     :rdln  => right_diff_line_number(0, line) }
+                     :ldln  => left_diff_line_number(line),
+                     :rdln  => right_diff_line_number(line) }
         end if @diff
         lines
       end
@@ -48,7 +52,7 @@ module Precious
 
       @left_diff_line_number = nil
 
-      def left_diff_line_number(id, line)
+      def left_diff_line_number(line)
         if line =~ /^@@/
           m, li                  = *line.match(/\-(\d+)/)
           @left_diff_line_number = li.to_i
@@ -70,7 +74,7 @@ module Precious
 
       @right_diff_line_number = nil
 
-      def right_diff_line_number(id, line)
+      def right_diff_line_number(line)
         if line =~ /^@@/
           m, ri                   = *line.match(/\+(\d+)/)
           @right_diff_line_number = ri.to_i

@@ -6,40 +6,18 @@ module Precious
 
     EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
 
-    # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex("/")
-      if last_slash
-        file_path[0, last_slash]
-      end
-    end
-
-    # Extract the 'page' name from the file_path
-    def extract_name(file_path)
-      if file_path[-1, 1] == "/"
-        return nil
-      end
-
-      # File.basename is too eager to please and will return the last
-      # component of the path even if it ends with a directory separator.
-      ::File.basename(file_path)
-    end
-
     def sanitize_empty_params(param)
       [nil, ''].include?(param) ? nil : CGI.unescape(param)
     end
 
-    # Ensure path begins with a single leading slash
-    def clean_path(path)
-      if path
-        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
-      end
+    def strip_page_name(name)
+      # Check if name already has a format extension, and if so, strip it.
+      Gollum::Page.valid_extension?(name) ? Gollum::Page.strip_filename(name) : name
     end
 
     # Remove all slashes from the start of string.
     # Remove all double slashes
-    def clean_url url
+    def clean_url(url)
       return url if url.nil?
       url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
     end
@@ -55,14 +33,18 @@ module Precious
       status 404
       return mustache :error
     end
-
+    
+    def not_found_proc
+      not_found_msg = 'Not found.'
+      Proc.new {[404, {'Content-Type' => 'text/html', 'Content-Length' => not_found_msg.length.to_s}, [not_found_msg]]}
+    end
+    
     def emoji(name)
       if emoji = Gemojione.index.find_by_name(name)
-        IO.read(EMOJI_PATHNAME.join("#{emoji['unicode']}.png"))
+        IO.read(EMOJI_PATHNAME.join("#{emoji['unicode'].downcase}.png"))
       else
         fail ArgumentError, "emoji `#{name}' not found"
       end
     end
-
   end
 end

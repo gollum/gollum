@@ -3,18 +3,39 @@ module Precious
     class Page < Layout
       include HasPage
 
-      attr_reader :content, :page, :header, :footer
+      attr_reader :content, :page, :header, :footer, :preview, :historical
+      
+      VALID_COUNTER_STYLES = ['decimal', 'decimal-leading-zero', 'arabic-indic', 'armenian', 'upper-armenian',
+        'lower-armenian', 'bengali', 'cambodian', 'khmer', 'cjk-decimal', 'devanagari', 'georgian', 'gujarati', 'gurmukhi',
+        'hebrew', 'kannada', 'lao', 'malayalam', 'mongolian', 'myanmar', 'oriya', 'persian', 'lower-roman', 'upper-roman',
+        'tamil', 'telugu', 'thai', 'tibetan', 'lower-alpha', 'lower-latin', 'upper-alpha', 'upper-latin', 'cjk-earthly-branch',
+        'cjk-heavenly-stem', 'lower-greek', 'hiragana', 'hiragana-iroha', 'katakana', 'katakana-iroha', 'disc', 'circle', 'square',
+        'disclosure-open', 'disclosure-closed'] # https://www.w3.org/TR/css-counter-styles-3/
+
       DATE_FORMAT    = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
       @@to_xml       = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
 
       def title
         h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.url_path_title
+        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
       end
 
       def page_header
         title
+      end
+            
+      def breadcrumb
+        path = Pathname.new(@page.url_path).parent
+        return '' if path.to_s == '.'
+        breadcrumb = [%{<nav aria-label="Breadcrumb"><ol>}]
+        path.descend do |crumb|
+          element = "#{crumb.basename}"
+          next if element == @page.title
+          breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{element}</a></li>}
+        end
+        breadcrumb << %{</ol></nav>}
+        breadcrumb.join("\n")
       end
 
       def content
@@ -22,13 +43,13 @@ module Precious
       end
 
       def author
-        first = page.last_version
+        first = @version ? page.version : page.last_version
         return DEFAULT_AUTHOR unless first
         first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
       end
 
       def date
-        first = page.last_version
+        first = @version ? page.version : page.last_version
         return Time.now.strftime(DATE_FORMAT) unless first
         first.authored_date.strftime(DATE_FORMAT)
       end
@@ -40,21 +61,29 @@ module Precious
       def editable
         @editable
       end
-
-      def page_exists
-        @page_exists
+      
+      def search
+        true
+      end
+      
+      def history
+        true
       end
 
+      def latest_changes
+        true
+      end
+      
+      def overview
+        true 
+      end
+        
       def allow_editing
         @allow_editing
       end
 
       def allow_uploads
         @allow_uploads
-      end
-
-      def upload_dest
-        @upload_dest
       end
 
       def has_header
@@ -94,6 +123,10 @@ module Precious
       def bar_side
         @bar_side.to_s
       end
+      
+      def left_bar
+        @bar_side == :left
+      end
 
       def has_sidebar
         if @sidebar
@@ -132,15 +165,37 @@ module Precious
         @page.wiki.user_icons == 'identicon'
       end
 
+      def navbar?
+        @navbar
+      end
+
       # Access to embedded metadata.
-      #
-      # Examples
-      #
-      #   {{#metadata}}{{name}}{{/metadata}}
       #
       # Returns Hash.
       def metadata
         @page.metadata
+      end   
+
+      # Access to embedded metadata.
+      #
+      # Examples
+      #
+      #   {{#rendered_metadata}}{{name}}{{/rendered_metadata}}
+      #
+      # Returns HTML table.
+      def rendered_metadata
+        return '' unless page.display_metadata? && !metadata.empty?
+        @rendered_metadata ||= table(metadata)
+      end
+
+      def header_enum?
+        !!metadata['header_enum']
+      end
+
+      def header_enum_style
+        if header_enum?
+          VALID_COUNTER_STYLES.include?(metadata['header_enum']) ? metadata['header_enum'] : 'decimal'
+        end
       end
 
       private
@@ -157,11 +212,9 @@ module Precious
         case @page.format
           when :asciidoc
             doc.css("div#gollum-root > h1:first-child")
-          when :org
-            doc.css("div#gollum-root > p.title:first-child")
           when :pod
             doc.css("div#gollum-root > a.dummyTopAnchor:first-child + h1")
-          when :rest
+          when :rst
             doc.css("div#gollum-root > div > div > h1:first-child")
           else
             doc.css("div#gollum-root > h1:first-child")
@@ -188,6 +241,26 @@ module Precious
         # .inner_html will cause href escaping on UTF-8
         doc.css("div#gollum-root").children.to_xml(@@to_xml)
       end
+
+      def table(data)
+        return data.to_s if data.empty?
+        result = "<table>\n"
+        keys = data.respond_to?(:keys) && data.respond_to?(:values) ? data.keys : nil
+          if keys
+            data = data.values
+            result << "<tr>\n"
+            keys.each do |heading|
+              result << "<th>#{CGI.escapeHTML(heading.to_s)}</th>\n"
+            end
+            result << "</tr>\n"
+          end
+        result << "<tr>\n"
+          data.each do |value|
+            result << "<td>" << (value.respond_to?(:each) ? table(value) : CGI.escapeHTML(value.to_s)) << "</td>\n"
+          end
+        result << "</tr>\n</table>\n"
+      end
+
     end
   end
 end

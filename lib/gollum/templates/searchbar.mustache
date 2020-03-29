@@ -1,10 +1,3 @@
-<div id="searchbar">
-  <form action="{{base_url}}/search" method="get" id="search-form">
-  <div id="searchbar-fauxtext">
-    <input type="text" name="q" id="search-query" value="Search&hellip;" autocomplete="off">
-    <a href="#" id="search-submit" title="Search this wiki">
-      <span>Search</span>
-    </a>
-  </div>
-  </form>
-</div>
+<form class="search-form" action="{{search_path}}" method="get" id="search-form">
+	<input type="text" class="form-control input-block" name="q" id="search-query" placeholder="Search" aria-label="Search site" autocomplete="off">
+</form>

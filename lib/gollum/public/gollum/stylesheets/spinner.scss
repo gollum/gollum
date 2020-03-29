@@ -1,0 +1,9 @@
+@import "_spinners";
+
+.dotted-spinner {
+ @include spinner(1.4em, border-style dotted);
+ vertical-align: top;
+ &.hidden {
+   display: none;
+ }
+}

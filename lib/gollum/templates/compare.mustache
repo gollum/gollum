@@ -1,69 +1,52 @@
 <div id="wiki-wrapper" class="compare">
-<div id="head">
-  <h1>History for <strong>{{path}}</strong></h1>
-
-  <ul class="actions">
-    <li class="minibutton">
-      {{>searchbar}}
-    </li>
-    <li class="minibutton"><a href="{{base_url}}/{{escaped_url_path}}"
-       class="action-view-page">View Page</a></li>
-    {{#allow_editing}}
-      <li class="minibutton"><a href="{{base_url}}/edit/{{escaped_url_path}}"
-         class="action-edit-page">Edit Page</a></li>
-    {{/allow_editing}}
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
-       class="action-page-history">Page History</a></li>
-  </ul>
-</div>
+	<div id="head">
+		{{>navbar}}
+	  <h1 class="py-4"><span class="f1-light text-gray-light">Comparing versions of</span> {{name}}</h1>
+	</div>
 
 {{#message}}
-<p>{{message}}</p>
+	<p>{{message}}</p>
 {{/message}}
 
-<div id="compare-content">
+	<div id="compare-content">
 
-  {{#show_revert}}
-  <ul class="actions">
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
-       class="action-page-history">Back to Page History</a></li>
-    {{#allow_editing}}
-      <li class="minibutton">
-        <form name="gollum-revert" action="{{base_url}}/revert/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form">
-        <a href="#" class="gollum-revert-button">Revert Changes</a>
-        </form>
-      </li>
-    {{/allow_editing}}
-  </ul>
-  {{/show_revert}}
+		<div class="py-4" id="actions">
+		  {{#show_revert}}
+		    {{#allow_editing}}
+				<form name="gollum-revert" action="{{revert_path}}/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form"></form>
+				<span class="pb-4">
+					<button class="btn btn-sm" type="submit" onclick="$('#gollum-revert-form').submit()">Revert Changes</button>
+				</span>
+		    {{/allow_editing}}
+		  {{/show_revert}}
+			<a href="{{history_path}}/{{escaped_url_path}}" class="btn btn-sm action-page-history">Back to Page History</a>
+		</div>
 
-  <div class="data highlight">
-    <table cellpadding="0" cellspacing="0">
-      {{#lines}}
-        <tr>
-          <td class="line_numbers">{{ldln}}</td>
-          <td class="line_numbers">{{rdln}}</td>
-          <td>
-            <pre><div class="{{class}}">{{line}}</div></pre>
-          </td>
-        </tr>
-      {{/lines}}
-    </table>
-  </div>
+	  <div class="Box data highlight">
+			<div class="Box-header Box--condensed Box-header--gray">{{path}} <span class="px-2 float-right">Comparing {{before}} to {{after}}</span></div>
+	    <table >
+	      {{#lines}}
+	        <tr>
+	          <td class="line_numbers">{{ldln}}</td>
+	          <td class="line_numbers">{{rdln}}</td>
+	          <td>
+	            <div class="{{class}} pl-2">{{line}}</div>
+	          </td>
+	        </tr>
+	      {{/lines}}
+	    </table>
+		</div>
+	</div>
+
+	<div class="pt-4" id="footer">
+	   {{#show_revert}}
+	   {{#allow_editing}}
+				<span class="pt-4"><button class="btn btn-sm gollum-revert-button" type="submit" onclick="$('#gollum-revert-form').submit()">Revert Changes</button></span>
+	   {{/allow_editing}}
+	   {{/show_revert}}
+		<div class="pt-4">
+	   <a href="#">Back to Top</a>
+		</div>
+	</div>
 </div>
-<div id="footer">
-  <ul class="actions">
-    <li class="minibutton"><a href="{{base_url}}/history/{{escaped_url_path}}"
-       class="action-page-history">Back to Page History</a></li>
-    {{#show_revert}}
-    {{#allow_editing}}
-      <li class="minibutton">
-        <a href="#" class="gollum-revert-button">Revert Changes</a>
-      </li>
-    {{/allow_editing}}
-    {{/show_revert}}
-    <li class="minibutton"><a href="#">Back to Top</a></li>
-  </ul>
-</div>
-</div>
-</div>
+

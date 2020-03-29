@@ -5,7 +5,8 @@ $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 require 'optparse'
 require 'rubygems'
 require 'gollum'
-require 'cgi'
+require 'erb'
+require 'sprockets'
 
 exec         = {}
 options      = {
@@ -13,166 +14,197 @@ options      = {
   :bind => '0.0.0.0',
 }
 wiki_options = {
-  :live_preview  => false,
   :allow_uploads => false,
   :allow_editing => true,
 }
 
 opts = OptionParser.new do |opts|
   # define program name (although this defaults to the name of the file, just in case...)
-  opts.program_name = "gollum"
-    
-  # set basic info for the "--help" command (options will be appended automatically from the below definitions)
+  opts.program_name = 'gollum'
+
+  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
   opts.banner = '
   Gollum is a multi-format Wiki Engine/API/Frontend.
-    
+
   Usage:
       gollum [options] [git-repo]
-    
+
   Arguments:
       [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
-  
+
   Notes:
       Paths for all options are relative to <git-repo> unless absolute.
       This message is only a basic description. For more information, please visit:
           https://github.com/gollum/gollum
-  
+
   OPTIONS'
-  
-  # define gollum options  
-  opts.separator ""
-  opts.separator "  Major:"
-  
-  opts.on("-h", "--host [HOST]", "Specify the hostname or IP address to listen on. Default: '0.0.0.0'.") do |host|
+
+  # define gollum options
+  opts.separator ''
+  opts.separator '  Major:'
+
+  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: \'0.0.0.0\'.') do |host|
     options[:bind] = host
   end
-  opts.on("-p", "--port [PORT]", "Specify the port to bind Gollum with. Default: '4567'.") do |port|
+  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: \'4567\'.') do |port|
     begin
-      # don't use "port.to_i" here... it doesn't raise errors which might result in a nice confusion later on
+      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
       options[:port] = Integer(port)
     rescue ArgumentError
       puts "Error: '#{port}' is not a valid port number."
       exit 1
     end
   end
-  opts.on("-c", "--config [FILE]", "Specify path to the Gollum's configuration file.") do |file|
+  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum\'s configuration file.') do |file|
     options[:config] = file
   end
-  opts.on("-r", "--ref [REF]", "Specify the branch to serve. Default: 'master'.") do |ref|
+  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: \'master\'.') do |ref|
     wiki_options[:ref] = ref
   end
-  opts.on("-a", "--adapter [ADAPTER]", "Launch Gollum using a specific git adapter. Default: 'grit'.") do |adapter|
-    Gollum::GIT_ADAPTER = adapter
-  end
-  opts.on("--bare", "Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.") do
+  opts.on("--bare", "Declare '<git-repo>' to be bare.") do
     wiki_options[:repo_is_bare] = true
   end
-  opts.on("-b", "--base-path [PATH]", "Specify the leading portion of all Gollum URLs (path info). Default: '/'.",
-    "Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.") do |base_path|
-      
+  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: \'rugged\'.') do |adapter|
+    Gollum::GIT_ADAPTER = adapter
+  end
+  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: \'/\'.',
+    'Example: setting this to \'/wiki\' will make the wiki accessible under \'http://localhost:4567/wiki/\'.') do |base_path|
+
     # first trim a leading slash, if any
     base_path.sub!(/^\/+/, '')
 
     # make a backup of the option and sanitize it
     base_path_original = base_path.dup
-    base_path = CGI.escape(base_path)
-    
+    base_path = ERB::Util.url_encode(base_path)
+    base_path.gsub!('%2F', '/')
+
     # then let the user know if we changed the URL
     unless base_path_original == base_path
       puts <<MSG
 Warning: your base-path has been sanitized:
-  - original: '#{base_path_original}'
-  - sanitized: '#{base_path}'
+  - original: "#{base_path_original}"
+  - sanitized: "#{base_path}"
 MSG
     end
-      
+
     # and finally, let others enjoy our hard work:
-    wiki_options[:base_path] = base_path
+    wiki_options[:base_path] = base_path unless base_path.empty?
   end
-  opts.on("--page-file-dir [PATH]", "Specify the subdirectory for all pages. Default: repository root.", 
-    "Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.") do |path|
+  opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.',
+    'Example: setting this to \'pages\' will make Gollum serve only pages at \'<git-repo>/pages/*\'.') do |path|
     wiki_options[:page_file_dir] = path
   end
-  opts.on("--css", "Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).") do
+  opts.on('--static', 'Use static assets. Defaults to false in development/test, defaults to true in production/staging.') do
+    wiki_options[:static] = true
+  end
+  opts.on('--no-static', 'Do not use static assets (even when in production/staging).') do
+    wiki_options[:static] = false
+  end
+  opts.on('--assets [PATH]', 'Set the path to look for static assets. Only used if --static is set to true, or environment is production/staging. Default: ./public/assets') do |path|
+    wiki_options[:static_assets_path] = path
+  end
+  opts.on('--css', 'Inject custom CSS into each page. The \'<wiki-root>/custom.css\' file is used (must be committed).') do
     wiki_options[:css] = true
   end
-  opts.on("--js", "Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).") do
+  opts.on('--js', 'Inject custom JavaScript into each page. The \'<wiki-root>/custom.js\' file is used (must be committed).') do
     wiki_options[:js] = true
   end
-  opts.on("--emoji", "Parse and interpret emoji tags (e.g. :heart:).") do
-    wiki_options[:emoji] = true
-  end
-  opts.on("--no-edit", "Disable the feature of editing pages.")  do
+  opts.on('--no-edit', 'Disable the feature of editing pages.')  do
     wiki_options[:allow_editing] = false
   end
-  opts.on("--live-preview", "Enable the live preview feature in page editor.") do
-    wiki_options[:live_preview] = true
+  opts.on('--follow-renames', 'Follow pages across renames in the History view. Default: true.') do
+    wiki_options[:follow_renames] = true
   end
-  opts.on("--no-live-preview", "Disable the live preview feature in page editor.") do
-    wiki_options[:live_preview] = false
+  opts.on('--no-follow-renames', 'Do not follow pages across renames in the History view.') do
+    wiki_options[:follow_renames] = false
   end
-  opts.on("--allow-uploads [MODE]", [:dir, :page], "Enable file uploads.",
-    "If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.",
-    "If set to 'page', Gollum will store each upload at the currently edited page.") do |mode|
+  opts.on('--allow-uploads [MODE]', [:dir, :page], 'Enable file uploads.',
+    'If set to \'dir\', Gollum will store all uploads in the \'<git-repo>/uploads/\' directory.',
+    'If set to \'page\', Gollum will store uploads per page in \'<git-repo>/uploads/[pagename]\'.') do |mode|
     wiki_options[:allow_uploads]    = true
     wiki_options[:per_page_uploads] = true if mode == :page
   end
-  opts.on("--mathjax", "Enable MathJax (renders mathematical equations).",
-    "By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.") do
+  opts.on('--mathjax', 'Enable MathJax (renders mathematical equations).',
+    'By default, uses the \'TeX-AMS-MML_HTMLorMML\' config with the \'autoload-all\' extension.') do
     wiki_options[:mathjax] = true
+    wiki_options[:mathjax_config] = 'mathjax.config.js'
   end
-  opts.on("--irb", "Launch Gollum in 'console mode', with a predefined API.") do
+  opts.on('--critic-markup', 'Enable support for annotations using CriticMarkup.') do
+    wiki_options[:critic_markup] = true
+  end
+  opts.on('--irb', 'Launch Gollum in \'console mode\', with a predefined API.') do
     options[:irb] = true
   end
-  
-  opts.separator ""
-  opts.separator "  Minor:"
-  
-  opts.on("--h1-title", "Use the first '<h1>' as page title.") do
+
+  opts.separator ''
+  opts.separator '  Minor:'
+
+  opts.on('--h1-title', 'Use the first \'<h1>\' as page title.') do
     wiki_options[:h1_title] = true
   end
-  opts.on("--show-all", "Also show files in the file view. By default, only valid pages are shown.") do
-    wiki_options[:show_all] = true
+  opts.on('--no-display-metadata', 'Do not render metadata tables in pages.') do
+    wiki_options[:display_metadata] = false
   end
-  opts.on("--collapse-tree", "Collapse the tree, when file view is opened. By default, the tree is expanded.") do
-    wiki_options[:collapse_tree] = true
+  opts.on('--user-icons [MODE]', [:gravatar, :identicon], 'Use specific user-icons for history view.',
+    'Can be set to \'gravatar\' or \'identicon\'. Default: standard avatar.') do |mode|
+    wiki_options[:user_icons] = mode.to_s
   end
-  opts.on("--user-icons [MODE]", [:gravatar, :identicon, :none], "Use specific user-icons for history view.",
-    "Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.") do |mode|
-    wiki_options[:user_icons] = mode
-  end
-  opts.on("--mathjax-config [FILE]", "Specify path to a custom MathJax configuration.",
-    "If not specified, uses the '<git-repo>/mathjax.config.js' file.") do |file|
-    wiki_options[:mathjax_config] = file || 'mathjax.config.js'
-  end
-  opts.on("--plantuml-url [URL]", "Sets the PlantUML server endpoint.") do |url|
-    wiki_options[:plantuml_url] = url
-  end
-  opts.on("--template-dir [PATH]", "Specify custom mustache template directory.") do |path|
+  opts.on('--template-dir [PATH]', 'Specify custom mustache template directory.') do |path|
     wiki_options[:template_dir] = path
   end
-  
-  opts.separator ""
-  opts.separator "  Common:"
-  
-  opts.on("--help", "Display this message.") do
+  opts.on('--template-page', 'Use _Template in root as a template for new pages.') do
+    wiki_options[:template_page] = true
+  end
+  opts.on('--lenient-tag-lookup', 'Internal links resolve case-insensitively, will treat spaces as hyphens, and will match the first page found with a certain filename, anywhere in the repository. Provides compatibility with Gollum 4.x.') do
+    wiki_options[:case_insensitive_tag_lookup] = true
+    wiki_options[:global_tag_lookup] = true
+    wiki_options[:hyphened_tag_lookup] = true
+  end
+  opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:) except when the leading colon is backslashed (e.g. \\:heart:).') do
+    wiki_options[:emoji] = true
+  end
+  opts.separator ''
+  opts.separator '  Common:'
+
+  opts.on('--help', 'Display this message.') do
     puts opts
     exit 0
   end
-  opts.on("--version", "Display the current version of Gollum.") do
-    puts "Gollum " + Gollum::VERSION
+  opts.on('--version', 'Display the current version of Gollum.') do
+    puts 'Gollum ' + Gollum::VERSION
+  end
+  opts.on('--versions', 'Display the current version of Gollum and auxiliary gems.') do
+    require 'gollum-lib'
+    puts 'Gollum ' + Gollum::VERSION
+    puts "Running on: #{RUBY_PLATFORM} with Ruby version #{RUBY_VERSION}"
+    puts 'Using:'
+    loaded_gemspecs =  Gem.loaded_specs
+    gollum_gems = ['gollum-lib', 'gollum-rjgit_adapter', 'rjgit', 'gollum-rugged_adapter', 'rugged']
+    puts Gem.loaded_specs.select{|name, spec| gollum_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
+    puts "Markdown rendering gem: #{GitHub::Markup::Markdown.implementation_name}"
+    puts 'Other renderering gems:'
+    renderer_gems = ['RedCloth', 'org-ruby', 'creole', 'asciidoctor', 'wikicloth']
+    renderer_gems.each do |renderer|
+      begin
+        require renderer
+      rescue LoadError
+      end
+    end
+    results = Gem.loaded_specs.select{|name, spec| renderer_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
+    puts results.empty? ? 'none' : results
     exit 0
   end
-  
-  opts.separator ""
+
+
+  opts.separator ''
 end
 
 # Read command line options into `options` hash
 begin
   opts.parse!
-rescue OptionParser::InvalidOption
-  puts "gollum: #{$!.message}"
-  puts "gollum: try 'gollum --help' for more information"
+rescue OptionParser::InvalidOption => e
+  puts "gollum: #{e.message}"
+  puts 'gollum: try \'gollum --help\' for more information'
   exit
 end
 
@@ -210,28 +242,23 @@ if options[:irb]
     if !wiki.exist? then
       raise Gollum::InvalidGitRepositoryError
     end
-    if wiki_options[:plantuml_url]
-      Gollum::Filter::PlantUML.configure do |config|
-        puts "Using #{wiki_options[:plantuml_url]} as PlantUML endpoint"
-        config.url = wiki_options[:plantuml_url]
-      end
-    end
+
     puts
-    puts "Loaded Gollum wiki at:"
+    puts 'Loaded Gollum wiki at:'
     puts "#{File.expand_path(gollum_path).inspect}"
     puts
-    puts "Example API calls:"
+    puts 'Example API calls:'
     puts %(    page = wiki.page('page-name'))
     puts %(    # => <Gollum::Page>)
     puts
     puts %(    page.raw_data)
-    puts %(    # => "# My wiki page")
+    puts %(    # => '# My wiki page')
     puts
     puts %(    page.formatted_data)
-    puts %(    # => "<h1>My wiki page</h1>")
+    puts %(    # => '<h1>My wiki page</h1>')
     puts
-    puts "Full API documentation at:"
-    puts "https://github.com/gollum/gollum-lib"
+    puts 'Full API documentation at:'
+    puts 'https://github.com/gollum/gollum-lib'
     puts
     IRB.start_session(binding)
   rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
@@ -240,6 +267,7 @@ if options[:irb]
   end
 else
   require 'gollum/app'
+  Precious::App.set(:environment, ENV.fetch('RACK_ENV', :production).to_sym)
   Precious::App.set(:gollum_path, gollum_path)
   Precious::App.set(:wiki_options, wiki_options)
   Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
@@ -249,13 +277,6 @@ else
     # otherwise it will be relative to the CWD
     cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
     require cfg
-  end
-
-  if wiki_options[:plantuml_url]
-    Gollum::Filter::PlantUML.configure do |config|
-      puts "Using #{wiki_options[:plantuml_url]} as PlantUML endpoint"
-      config.url = wiki_options[:plantuml_url]
-    end
   end
 
   base_path = wiki_options[:base_path]
@@ -268,7 +289,7 @@ else
     class MapGollum
       def initialize(base_path)
         @mg = Rack::Builder.new do
-          
+
           map "/#{base_path}" do
             run Precious::App
           end
@@ -278,7 +299,7 @@ else
           map '/*' do
             run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
           end
-          
+
         end
       end
 
@@ -286,7 +307,7 @@ else
         @mg.call(env)
       end
     end
-    
+
     # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
     Rack::Server.new(:app => MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
   end

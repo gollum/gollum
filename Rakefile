@@ -71,6 +71,7 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test' << '.'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = true
+  test.warning = false
 end
 
 desc "Generate RCov test coverage and open in your browser"
@@ -133,7 +134,7 @@ end
 
 desc "Build and install"
 task :install => :build do
-  sh "gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem"
+  sh "gem install --local --no-document pkg/#{name}-#{version}.gem"
 end
 
 desc 'Update gemspec'
@@ -176,4 +177,25 @@ task :validate do
     puts "A `VERSION` file at root level violates Gem best practices."
     exit!
   end
+end
+
+desc 'Precompile assets'
+task :precompile do
+  require './lib/gollum/views/helpers.rb'
+  require './lib/gollum/assets.rb'
+  require 'sprockets'
+  require 'sprockets-helpers'
+  require 'sass'
+  env = Precious::Assets.sprockets
+  path = ENV.fetch('GOLLUM_ASSETS_PATH', ::File.join(File.dirname(__FILE__), 'lib/gollum/public/assets'))
+  manifest = Sprockets::Manifest.new(env, path)
+  Sprockets::Helpers.configure do |config|
+    config.environment = env
+    config.prefix      = Precious::Assets::ASSET_URL
+    config.digest      = true
+    config.public_path = path
+    config.manifest    = manifest
+  end
+  puts "Precompiling assets to #{path}..."
+  manifest.compile(Precious::Assets::MANIFEST)
 end

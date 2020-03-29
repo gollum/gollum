@@ -1,3 +1,13 @@
+# 5.0 / 2020-03-17
+
+This is a major new release that introduces many new features, bugfixes, and removes major limitations. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes.
+
+**Note**: due to changes to the way in which Gollum handles filenames, you may have to change some links in your wiki when migrating from gollum 4.x. See the [release notes](https://github.com/gollum/gollum/wiki/5.0-release-notes#migrating-your-wiki) for more details. You may be find the `bin/gollum-migrate-tags` script helpful to accomplish this. Also see the `--lenient-tag-lookup` option for making tag lookup backwards compatible with 4.x, though note that this will decrease performance on large wikis with many tags.
+
+Many thanks to all the users who have provided feedback, and everyone who has chipped in in the development process!
+
+Many of these changes have been made possible by removing the default grit adapter in favour of the new [rugged adapter](https://github.com/gollum/rugged_adapter).
+
 # 4.1.4 /2018-01-10
 
 * Depend on new version of gollum-lib that relies on a patched version of sanitize, which solves a vulnerability (CVE-2018-3740). See https://github.com/gollum/gollum-lib/pull/296.
