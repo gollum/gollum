@@ -1,8 +1,8 @@
 # 5.0 / 2020-03-17
 
-This is a major new release that substantially cleans up and improves the codebase. It also introduces many new features, bugfixes, and removing major limitations. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes.
+This is a major new release that introduces many new features, bugfixes, and removes major limitations. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes.
 
-**Note**: due to changes to the way in which Gollum handles filenames, you may have to change some links in your wiki when migrating from gollum 4.x. See the [release notes](https://github.com/gollum/gollum/wiki/5.0-release-notes#migrating-your-wiki) for more details. You may be able to use the `bin/gollum-migrate-tags` script to accomplish this. Also see the `--lenient-tag-lookup` option.
+**Note**: due to changes to the way in which Gollum handles filenames, you may have to change some links in your wiki when migrating from gollum 4.x. See the [release notes](https://github.com/gollum/gollum/wiki/5.0-release-notes#migrating-your-wiki) for more details. You may be find the `bin/gollum-migrate-tags` script helpful to accomplish this. Also see the `--lenient-tag-lookup` option for making tag lookup backwards compatible with 4.x, though note that this will decrease performance on large wikis with many tags.
 
 Many thanks to all the users who have provided feedback, and everyone who has chipped in in the development process!
 

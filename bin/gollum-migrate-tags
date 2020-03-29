@@ -20,18 +20,16 @@ end
 opts = OptionParser.new do |opts|
 opts.banner = <<EOF
 Use this tool to migrate a wiki repository created under Gollum versions 4.x or earlier to a 5.x compatibile repo.
-It finds and repairs Gollum link tags that no longer work under 5.x for two reasons:
+It finds and repairs Gollum link tags that no longer work under 5.x for three reasons:
 
 * 5.x wiki internal links may contain spaces. [[Bilbo Baggins]] and [[Bilbo-Baggins]] therefore link to distinct pages.
-    * NB: you can use the --hyphened_tag_lookup option in gollum >= 5.x to mimic the behavior from 4.x.
 * 5.x wiki internal links are case senitive
 * 5.x wiki internal links are no longer 'global'.
-    * NB: you can use the --global-tag-lookup option in gollum >= 5.x to enable 4.x-style global tags.
+
+* NB: you can use the --lenient-tag-lookup option in gollum >= 5.x to enable 4.x-backwards compatible tags.
   
 See https://github.com/gollum/gollum/wiki/5.0-release-notes#filename-handling for more information.
 Usage of this script comes without any warranty.
-
-Note: you can also use this script with the --dry-run option to find broken tags in your wiki.
 
 Usage: gollum-migrate-tags /path/to/repo
 
@@ -268,5 +266,5 @@ wiki.pages.each do |page|
     f.write(new_data)
     f.close
   end
-  log(:none, "====")
+  log(:none, '====')
 end

@@ -1,6 +1,6 @@
-**Note**: we are currently working on version 5.0 of gollum in an attempt to make it, better, faster, and easier to maintain. We will **not** be fixing issues with previous versions of gollum (4.x), except for security issues.
+**Note**: before submitting an issue, please make sure you have updated to the latest version of gollum.
 
-Please submit only issues that are present in the `5.x` branch of this project. When submitting issues with `5.x`, please include the output of `gollum --versions` in your ticket. 
+**Please include the output of `gollum --versions` in your ticket!**
 
 Please read [these guidelines](https://github.com/gollum/gollum/blob/master/CONTRIBUTING.md) before submitting your issue, and for info on reporting vulnerabilities.
 
