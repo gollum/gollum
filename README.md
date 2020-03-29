@@ -106,6 +106,7 @@ Gollum comes with the following command line options:
 | --port            | [PORT]    | Specify the port to bind Gollum with. Default: `4567`. |
 | --config          | [FILE]    | Specify path to Gollum's configuration file. |
 | --ref             | [REF]     | Specify the git branch to serve. Default: `master`. |
+| --bare            | none      | Tell Gollum that the git repository should be treated as bare. |
 | --adapter         | [ADAPTER] | Launch Gollum using a specific git adapter. Default: `rugged`.<sup>2</sup> |
 | --base-path       | [PATH]    | Specify the leading portion of all Gollum URLs (path info). Setting this to `/wiki` will make the wiki accessible under `http://localhost:4567/wiki/`. Default: `/`. |
 | --page-file-dir   | [PATH]    | Specify the subdirectory for all pages. If set, Gollum will only serve pages from this directory and its subdirectories. Default: repository root. |
