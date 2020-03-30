@@ -12,7 +12,7 @@ require 'rhino' if RUBY_PLATFORM == 'java'
 require File.expand_path('../gollum/uri_encode_component', __FILE__)
 
 module Gollum
-  VERSION = '5.0.1b'
+  VERSION = '5.0.0'
 
   def self.assets_path
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
