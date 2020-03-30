@@ -52,7 +52,6 @@ Gem::Specification.new do |s|
     CONTRIBUTING.md
     Gemfile
     HISTORY.md
-    ISSUE_TEMPLATE.md
     LICENSE
     README.md
     Rakefile
@@ -69,17 +68,17 @@ Gem::Specification.new do |s|
     lib/gollum/app.rb
     lib/gollum/assets.rb
     lib/gollum/helpers.rb
-    lib/gollum/public/assets/.sprockets-manifest-4144404f74daae547f8ad02cfc64dd97.json
-    lib/gollum/public/assets/app-1f77d3951828aebecd9c3f65f60028b0e70972cceb3badf85bfa9004a92e552c.css
-    lib/gollum/public/assets/app-1f77d3951828aebecd9c3f65f60028b0e70972cceb3badf85bfa9004a92e552c.css.gz
+    lib/gollum/public/assets/.sprockets-manifest-3edc7e21737459b21fbf150f5dccd15c.json
     lib/gollum/public/assets/app-982c7fca1832732a24e92474ca2729aeb56f2d0c05bb7a8ff913e9f58a6500d5.js
     lib/gollum/public/assets/app-982c7fca1832732a24e92474ca2729aeb56f2d0c05bb7a8ff913e9f58a6500d5.js.gz
+    lib/gollum/public/assets/app-b205e593a30f1cc0054e2e9ed9fc8af3658d8ef4a62b9708c20f204560deefb7.css
+    lib/gollum/public/assets/app-b205e593a30f1cc0054e2e9ed9fc8af3658d8ef4a62b9708c20f204560deefb7.css.gz
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css.gz
     lib/gollum/public/assets/editor-0dbae28c53db5a73d666d30504946671eb09948ffdaf1fdd9d1c8d856d4c0ba1.js
     lib/gollum/public/assets/editor-0dbae28c53db5a73d666d30504946671eb09948ffdaf1fdd9d1c8d856d4c0ba1.js.gz
-    lib/gollum/public/assets/print-c70ea78d9c87a4546733a2f2288fbf1f93fa8510890ac73cac6db8a784e27429.css
-    lib/gollum/public/assets/print-c70ea78d9c87a4546733a2f2288fbf1f93fa8510890ac73cac6db8a784e27429.css.gz
+    lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css
+    lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css.gz
     lib/gollum/public/gollum/javascript/HOWTO_UPDATE_ACE.md
     lib/gollum/public/gollum/javascript/HOWTO_UPDATE_MATHJAX.md
     lib/gollum/public/gollum/javascript/MathJax/LICENSE
