@@ -78,6 +78,15 @@ git commit -am "Add test"
 git push ../lotr.git/ master
 ```
 
+## Updating static assets
+
+This is necessary whenever changes have been made to the assets in `lib/gollum/public/gollum/javascript` (mostly SASS, CSS, and JS files), to ensure the changes are also present in the [released](#releasing-the-gem) version of the gem. Steps:
+
+1. `git rm -r lib/gollum/public/assets`
+1. `bundle exec rake precompile`
+1. `git add lib/gollum/public/assets`
+1. `git commit`
+
 ## Releasing the gem
 
 Gollum uses [Semantic Versioning](http://semver.org/).
