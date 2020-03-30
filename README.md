@@ -17,7 +17,7 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 	* May be written in a variety of [markups](#markups).
 	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
 	* Can be displayed in all versions, reverted, etc.
-* Gollum strives to be compatible with GitHub wikis (see `--hyphened-tag-lookup`)
+* Gollum strives to be compatible with GitHub wikis (see `--lenient-tag-lookup`)
 * Gollum supports advanced functionality like:
   * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
   * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
