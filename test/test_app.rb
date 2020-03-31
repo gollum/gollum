@@ -478,15 +478,6 @@ EOF
     assert last_response.ok?
     assert last_response.body.include?('Samewise Gamgee</h1>')
   end
-
-  test "previews content on the first page of an empty wiki" do
-    @path = cloned_testpath("examples/empty.git")
-    @wiki = Gollum::Wiki.new(@path)
-    Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {})
-    post "/gollum/preview", :content => 'abc', :format => 'markdown'
-    assert last_response.ok?
-  end
   
   test 'throws an error when comparing two identical revisions for a page' do
     get '/gollum/compare/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac...fc66539528eb96f21b2bbdbf557788fe8a1196ac'
@@ -897,4 +888,36 @@ context "Frontend with page-file-dir" do
   def app
     Precious::App
   end
+end
+
+context "Frontend with empty repo" do
+  include Rack::Test::Methods
+  
+  setup do
+    @path = cloned_testpath("examples/empty.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {allow_editing: true})
+  end
+
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+  
+  def app
+    Precious::App
+  end
+  
+  test 'previews content on the first page of an empty wiki' do
+    post '/gollum/preview', :content => 'abc', :format => 'markdown'
+    assert last_response.ok?
+  end
+
+  test 'wiki redirects to create page with newly initialized repo' do
+    get '/Home'
+    follow_redirect!
+    assert_equal '/gollum/create/Home', last_request.fullpath
+    assert last_response.ok?
+  end
+  
 end
