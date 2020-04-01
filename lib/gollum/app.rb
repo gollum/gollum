@@ -188,7 +188,7 @@ module Precious
               @etag         = page.sha
               mustache :edit
           else
-            redirect to("/#{encodeURIComponent(@name)}")
+            redirect to("/#{@name}")
           end
         end
 
@@ -435,7 +435,7 @@ module Precious
       end
 
       post '/compare/*' do
-        @file     = encodeURIComponent(params[:splat].first)
+        @file     = params[:splat].first
         @versions = params[:versions] || []
         if @versions.size < 2
           redirect to("/gollum/history/#{@file}")
