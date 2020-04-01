@@ -486,12 +486,13 @@ $(document).ready(function() {
           }
           numSelected = numSelected + 1;
         });
-        if (numSelected == maxSelected) {
-          $('#version-form input:not(:checked)').prop('disabled', true);
-          $('.history button.action-compare-revision').prop('disabled', false);
-        } else if (numSelected < maxSelected) {
-          $('#version-form input').prop('disabled', false);
+        if (numSelected < 1) {
           $('.history button.action-compare-revision').prop('disabled', true);
+        } else if (numSelected < maxSelected) {
+          $('.history button.action-compare-revision').prop('disabled', false);
+          $('#version-form input').prop('disabled', false);
+        } else {
+          $('#version-form input:not(:checked)').prop('disabled', true);
         }
       };
 
