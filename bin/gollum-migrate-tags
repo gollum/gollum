@@ -4,8 +4,6 @@ require 'optparse'
 require 'pathname'
 require 'rubygems'
 
-REPO = ARGV[0] || Dir.pwd
-
 wiki_options = {}
 options = {}
 
@@ -88,6 +86,8 @@ rescue OptionParser::InvalidOption
   puts "gollum-migrate-tags: try 'gollum-migrate-tags --help' for more information"
   exit
 end
+
+REPO = ARGV[0] || Dir.pwd
 
 require 'gollum-lib'
 
