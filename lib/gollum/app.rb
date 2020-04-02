@@ -188,8 +188,8 @@ module Precious
               @etag         = page.sha
               mustache :edit
           else
-            newfile = ::File.join('gollum/create', @path, @name)
-            redirect to(encodeURIComponent(newfile))
+            newfile = ::File.join(@path, @name).sub(%r{^/}, '')
+            redirect to("gollum/create/#{encodeURIComponent(newfile)}")
           end
         end
 
