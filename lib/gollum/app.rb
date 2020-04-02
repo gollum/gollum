@@ -188,7 +188,7 @@ module Precious
               @etag         = page.sha
               mustache :edit
           else
-            redirect to("/#{@name}")
+            redirect to("/gollum/create/#{@name}")
           end
         end
 
