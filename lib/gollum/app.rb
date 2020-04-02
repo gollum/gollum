@@ -188,8 +188,8 @@ module Precious
               @etag         = page.sha
               mustache :edit
           else
-            newfile = URI.encode(::File.join(@path, @name).sub(%r{^/}, ''))
-            redirect to("/gollum/create/#{newfile}")
+            newfile = ::File.join('gollum/create', @path, @name)
+            redirect to(encodeURIComponent(newfile).gsub('%2F', '/'))
           end
         end
 
@@ -436,12 +436,12 @@ module Precious
       end
 
       post '/compare/*' do
-        @file     = URI.encode(params[:splat].first)
+        @file     = encodeURIComponent(params[:splat].first).gsub('%2F', '/')
         @versions = params[:versions] || []
         if @versions.size < 2
-          redirect to("/gollum/history/#{@file}")
+          redirect to("gollum/history/#{@file}")
         else
-          redirect to("/gollum/compare/%s/%s...%s" % [
+          redirect to("gollum/compare/%s/%s...%s" % [
               @file,
               @versions.last,
               @versions.first]
