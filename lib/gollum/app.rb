@@ -413,8 +413,8 @@ module Precious
         @page      = wikip.page
         @page_num  = [params[:page_num].to_i, 1].max
         @max_count = settings.wiki_options.fetch(:pagination_count, 10)
-        @wiki      = @page.wiki
         unless @page.nil?
+          @wiki      = @page.wiki
           @versions = @page.versions(
             per_page: @max_count,
             page_num: @page_num,
