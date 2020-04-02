@@ -172,6 +172,7 @@ MSG
   end
   opts.on('--version', 'Display the current version of Gollum.') do
     puts 'Gollum ' + Gollum::VERSION
+    exit 0
   end
   opts.on('--versions', 'Display the current version of Gollum and auxiliary gems.') do
     require 'gollum-lib'
