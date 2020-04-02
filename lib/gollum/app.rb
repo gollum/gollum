@@ -189,7 +189,7 @@ module Precious
               mustache :edit
           else
             newfile = ::File.join('gollum/create', @path, @name)
-            redirect to(encodeURIComponent(newfile).gsub('%2F', '/'))
+            redirect to(encodeURIComponent(newfile))
           end
         end
 
@@ -436,7 +436,7 @@ module Precious
       end
 
       post '/compare/*' do
-        @file     = encodeURIComponent(params[:splat].first).gsub('%2F', '/')
+        @file     = encodeURIComponent(params[:splat].first)
         @versions = params[:versions] || []
         if @versions.size < 2
           redirect to("gollum/history/#{@file}")
