@@ -649,6 +649,9 @@ EOF
 
   test 'history/NO-EXIST redirects to Home' do
     get '/gollum/history/NO-EXIST'
+    follow_redirect!
+    assert_equal last_request.fullpath, '/'
+    # redirect again from / to /Home
     assert_equal last_response.status, 302
   end
 
