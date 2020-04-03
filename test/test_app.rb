@@ -929,3 +929,46 @@ context "Frontend with empty repo" do
   end
   
 end
+
+context 'Frontend with base path' do
+  include Rack::Test::Methods
+  
+  setup do
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+    @base_path = 'wiki'
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {base_path: @base_path, mathjax: true})
+  end
+
+  teardown do
+    FileUtils.rm_rf(@path)
+  end
+  
+  test 'page with base path' do
+    get '/wiki/Home'
+    assert last_response.ok?
+  end
+  
+  test 'base path mathjax assets' do
+    get '/wiki/Home'
+    assert last_response.ok?
+    assert last_response.body.include?('<script defer src="/wiki/gollum/assets/mathjax/MathJax.js')
+  end
+  
+  test 'compare view' do
+    post '/wiki/gollum/compare/Bilbo-Baggins.md', :versions => ['f25eccd98e9b667f9e22946f3e2f945378b8a72d', '5bc1aaec6149e854078f1d0f8b71933bbc6c2e43']
+    follow_redirect!
+    assert last_response.ok?
+    assert_equal '/wiki/gollum/compare/Bilbo-Baggins.md/5bc1aaec6149e854078f1d0f8b71933bbc6c2e43...f25eccd98e9b667f9e22946f3e2f945378b8a72d', last_request.fullpath
+    
+    post '/wiki/gollum/compare/Bilbo-Baggins.md', :versions => ['f25eccd98e9b667f9e22946f3e2f945378b8a72d']
+    follow_redirect!
+    assert last_response.ok?
+    assert_equal '/wiki/gollum/history/Bilbo-Baggins.md', last_request.fullpath
+  end
+  
+  def app
+    Precious::MapGollum.new(@base_path)
+  end  
+end

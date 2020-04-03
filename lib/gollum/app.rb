@@ -40,6 +40,30 @@ Gollum::set_git_max_filesize(190 * 10**6)
 # See the wiki.rb file for more details on wiki options
 
 module Precious
+  
+  # For use with the --base-path option.
+  class MapGollum
+    def initialize(base_path)
+      @mg = Rack::Builder.new do
+
+        map "/#{base_path}" do
+          run Precious::App
+        end
+        map '/' do
+          run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
+        end
+        map '/*' do
+          run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
+        end
+
+      end
+    end
+
+    def call(env)
+      @mg.call(env)
+    end
+  end
+  
   class App < Sinatra::Base
     register Mustache::Sinatra
     register Sinatra::Namespace
