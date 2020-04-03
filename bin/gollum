@@ -287,29 +287,7 @@ else
   else
     require 'rack'
 
-    class MapGollum
-      def initialize(base_path)
-        @mg = Rack::Builder.new do
-
-          map "/#{base_path}" do
-            run Precious::App
-          end
-          map '/' do
-            run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
-          end
-          map '/*' do
-            run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
-          end
-
-        end
-      end
-
-      def call(env)
-        @mg.call(env)
-      end
-    end
-
     # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
-    Rack::Server.new(:app => MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
+    Rack::Server.new(:app => Precious::MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
   end
 end
