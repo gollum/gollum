@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '5.0.0'
-  s.date              = '2020-03-30'
+  s.version           = '5.0.1'
+  s.date              = '2020-04-04'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
