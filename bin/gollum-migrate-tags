@@ -81,6 +81,7 @@ begin
     const = setting.to_s.upcase
     Object.const_set(const, value) unless Object.const_defined?(const)
   end
+  wiki_options[:page_file_dir] = setting(:page_file_dir) ? setting(:page_file_dir) : wiki_options[:page_file_dir] # Allow settings :page_file_dir through PAGE_FILE_DIR constant.
 rescue OptionParser::InvalidOption
   puts "gollum-migrate-tags: #{$!.message}"
   puts "gollum-migrate-tags: try 'gollum-migrate-tags --help' for more information"
@@ -261,7 +262,7 @@ wiki.pages.each do |page|
   log(:info,"Page #{page.path}")
   new_data = page.formatted_data
   if setting(:no_dry_run)
-    path = ::File.join([wiki.path, wiki.page_file_dir, page.path].compact)
+    path = ::File.join(wiki.path, page.path)
     f = File.new(path, 'w')
     f.write(new_data)
     f.close
