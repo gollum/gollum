@@ -74,7 +74,6 @@ unless ENV['TRAVIS']
       
       f = ::File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
       output = f.read
-      puts output.inspect
       assert_equal true, output.include?('[[Subsub/Zaa.md]]')
       assert_equal true, output.include?('[[Samwi]]')
     end
