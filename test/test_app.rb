@@ -977,15 +977,3 @@ context 'Frontend with base path' do
     Precious::MapGollum.new(@base_path)
   end  
 end
-
-# Remove me after merging the PR
-# https://github.com/gollum/rugged_adapter/pull/44
-module Gollum
-  module Git
-    class Repo
-      def rev_parse(spec)
-        @repo.rev_parse(spec)
-      end
-    end
-  end
-end
