@@ -464,11 +464,8 @@ module Precious
         @versions = params[:versions] || []
         if @versions.size == 1
           wikip  = wiki_page(params[:splat].first)
-          adapter_commit = wikip.wiki.repo.commit(@versions.first)
-          impl_commit = adapter_commit.commit
-          impl_parent = impl_commit.parents.first
-          adapter_parent = Gollum::Git::Commit.new(impl_parent)
-          @versions.push(adapter_parent.id)
+          commit = wikip.wiki.repo.commit(@versions.first)
+          @versions.push(commit.parent.id)
         end
         if @versions.empty?
           redirect to("gollum/history/#{@file}")
