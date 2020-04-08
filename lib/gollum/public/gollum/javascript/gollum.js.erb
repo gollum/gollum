@@ -105,7 +105,7 @@ function flashNotice(type, notice, button_label, button_function, button_type) {
   }
   html = '<p><div id="gollum-flash" class="flash flash-' + type +'"><button class="flash-close js-flash-close" type="button" onclick="parentNode.remove()"><%=rocticon('x')%></button>' + notice + nested_button_html + '</div></p>';
   $('#gollum-flash').remove();
-  $('#wiki-content h1').before(html);
+  $('#wiki-content').before(html);
   if (type == 'success') { setTimeout(function() {$('#gollum-flash').fadeOut();}, 5000); }
 }
 
