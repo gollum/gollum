@@ -49,6 +49,7 @@ module Precious
               # result contains a folder
               folder_name = result_path.split('/').first
               folder_path = @path ? "#{@path}/#{folder_name}" : folder_name
+              folder_path = ERB::Util.url_encode(folder_path).gsub('%2F', '/').force_encoding('utf-8')
               folder_url  = "#{overview_path}/#{folder_path}/"
               files_and_folders << {name: folder_name, icon: rocticon('file-directory'), type: 'dir', url: folder_url, is_file: false}
             elsif result_path != '.gitkeep'
