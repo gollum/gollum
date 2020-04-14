@@ -181,6 +181,7 @@ end
 
 desc 'Precompile assets'
 task :precompile do
+  require './lib/gollum/app.rb'
   require './lib/gollum/views/helpers.rb'
   require './lib/gollum/assets.rb'
   require 'sprockets'
