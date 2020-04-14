@@ -465,7 +465,12 @@ module Precious
         if @versions.size == 1
           wikip  = wiki_page(params[:splat].first)
           commit = wikip.wiki.repo.commit(@versions.first)
-          @versions.push(commit.parent.id)
+          parent = commit.parent
+          if parent.nil?
+            redirect to("#{@file}/#{@commit.id}")
+          else
+            @versions.push(parent.id)
+          end
         end
         if @versions.empty?
           redirect to("gollum/history/#{@file}")
