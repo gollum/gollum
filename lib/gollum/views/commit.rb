@@ -22,7 +22,6 @@ module Precious
       end
 
       def files
-        puts @diff
         files = @diff.split(%r{^diff --git a/.+ b/.+$}).reject(&:empty?)
         files.map do |diff|
           matched = diff.match(%r{(?<=^--- a/).+$})

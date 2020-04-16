@@ -10,7 +10,7 @@
 
 <ul class="Box flex-auto">
 	{{#versions}}
-		<li class="commit Box-row Box-row--hover-gray border-top d-flex flex-items-center">
+		<li class="Box-row Box-row--hover-gray border-top d-flex flex-items-center">
 			<span class="float-left col-2" id="user-icons">{{>author_template}}</span>
 			<span class="flex-auto col-1 text-gray-light">{{date}}</span>
 			<span class="flex-auto col-7">{{message}}<br/>
@@ -19,7 +19,7 @@
 			{{/files}}
 			</span>
 			<span class="pl-4 float-right">
-				<a href="{{base_url}}/gollum/commit/{{id}}" class="sha btn btn-outline">{{id7}}</a>
+				<a href="{{base_url}}/gollum/commit/{{id}}" class="btn btn-outline text-mono">{{id7}}</a>
 			</span>
 		</li>
 	{{/versions}}
