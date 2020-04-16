@@ -8,9 +8,9 @@
 
 <div id="wiki-history">
 
-<div class="Box flex-auto">
+<ul class="Box flex-auto">
 	{{#versions}}
-		<div class="Box-row Box-row--hover-gray border-top d-flex flex-items-center">
+		<li class="commit Box-row Box-row--hover-gray border-top d-flex flex-items-center">
 			<span class="float-left col-2" id="user-icons">{{>author_template}}</span>
 			<span class="flex-auto col-1 text-gray-light">{{date}}</span>
 			<span class="flex-auto col-7">{{message}}<br/>
@@ -18,10 +18,12 @@
 			  <span class="flex-auto col-2">{{#renamed}}{{renamed}} -> {{/renamed}}<a href="{{link}}">{{file}}</a></span><br/>
 			{{/files}}
 			</span>
-			<span class="pl-4 float-right">[{{id7}}]</span>
-		</div>
+			<span class="pl-4 float-right">
+				<a href="{{base_url}}/gollum/commit/{{id}}" class="sha btn btn-outline">{{id7}}</a>
+			</span>
+		</li>
 	{{/versions}}
-</div>
+</ul>
 
  
 </div>
