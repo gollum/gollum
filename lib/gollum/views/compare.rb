@@ -17,9 +17,9 @@ module Precious
         @versions[1][0..6]
       end
 
-      def lines
+      def lines(diff = @diff)
         lines = []
-        lines_to_parse = @diff.split("\n")[4..-1]
+        lines_to_parse = diff.split("\n")[4..-1]
         # If the diff is of a rename, the diff header will be one line longer than normal because it will contain a line starting with '+++' to indicate the 'new' filename.
         # Make sure to skip that header line if it is present.
         lines_to_parse = lines_to_parse[1..-1] if lines_to_parse[0].start_with?('+++')
@@ -28,7 +28,7 @@ module Precious
                      :class => line_class(line),
                      :ldln  => left_diff_line_number(line),
                      :rdln  => right_diff_line_number(line) }
-        end if @diff
+        end if diff
         lines
       end
 
