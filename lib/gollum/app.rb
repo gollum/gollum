@@ -462,7 +462,17 @@ module Precious
       post '/compare/*' do
         @file     = clean_url(encodeURIComponent(params[:splat].first))
         @versions = params[:versions] || []
-        if @versions.size < 2
+        if @versions.size == 1
+          wikip  = wiki_page(params[:splat].first)
+          commit = wikip.wiki.repo.commit(@versions.first)
+          parent = commit.parent
+          if parent.nil?
+            redirect to("#{@file}/#{@commit.id}")
+          else
+            @versions.push(parent.id)
+          end
+        end
+        if @versions.empty?
           redirect to("gollum/history/#{@file}")
         else
           redirect to("gollum/compare/%s/%s...%s" % [

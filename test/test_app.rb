@@ -965,6 +965,11 @@ context 'Frontend with base path' do
     post '/wiki/gollum/compare/Bilbo-Baggins.md', :versions => ['f25eccd98e9b667f9e22946f3e2f945378b8a72d']
     follow_redirect!
     assert last_response.ok?
+    assert_equal '/wiki/gollum/compare/Bilbo-Baggins.md/b0d108328459e44fff4a76cd19b10ddc34adce4b...f25eccd98e9b667f9e22946f3e2f945378b8a72d', last_request.fullpath
+
+    post '/wiki/gollum/compare/Bilbo-Baggins.md', :versions => []
+    follow_redirect!
+    assert last_response.ok?
     assert_equal '/wiki/gollum/history/Bilbo-Baggins.md', last_request.fullpath
   end
   
