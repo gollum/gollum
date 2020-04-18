@@ -512,11 +512,16 @@ module Precious
       }x do |version|
         @version = version
         wiki = wiki_new
-        @commit = wiki.repo.commit(version)
-        parent = @commit.parent
-        parent_id = parent.nil? ? nil : parent.id
-        @diff = wiki.repo.diff(parent_id, version)
-        mustache :commit
+        begin
+          @commit = wiki.repo.commit(version)
+          parent = @commit.parent
+          parent_id = parent.nil? ? nil : parent.id
+          @diff = wiki.repo.diff(parent_id, version)
+          mustache :commit
+        rescue Gollum::Git::NoSuchShaFound
+          @message = "Invalid commit: #{@version}"
+          mustache :error
+        end
       end
 
       get '/search' do
