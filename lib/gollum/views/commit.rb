@@ -7,7 +7,7 @@ module Precious
       attr_reader :version
 
       def title
-        "Changes in #{@version[1..7]}: #{message}"
+        "Changes in #{@version[0..6]}: #{message}"
       end
 
       def author

@@ -16,6 +16,7 @@ module Precious
           i -= 1
           { :id        => v.id,
             :id7       => v.id[0..6],
+            :href      => page_route("gollum/commit/#{v.id}"),
             :num       => i,
             :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
             :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
