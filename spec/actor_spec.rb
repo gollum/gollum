@@ -17,6 +17,14 @@ describe "A Git Actor" do
     expect(a.name).to eq 'Super Mario'
     expect(a.email).to eq 'mario@super.org'
   end
+  
+  it 'optionally sets the commit time' do
+    t = Time.parse('2020-02-14')
+    a = Actor.new("Tom Werner", "tom@example.com", t)
+    expect(a.time).to be_a Time
+    unix_time = t.to_i.to_s
+    expect(a.output).to match unix_time
+  end
 
   # from_string
 

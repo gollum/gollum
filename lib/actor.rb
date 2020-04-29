@@ -2,6 +2,7 @@ module RJGit
 
   # PersonIdent in JGit
   import 'org.eclipse.jgit.lib.PersonIdent'
+  import 'java.util.TimeZone'
   
   class Actor
 
@@ -17,10 +18,11 @@ module RJGit
       return self.new(name, email)
     end
     
-    def initialize(name, email)
+    def initialize(name, email, time = nil)
       @name = name
       @email = email
-      @person_ident = PersonIdent.new(name, email)
+      @time = time
+      @person_ident = @time ? PersonIdent.new(name, email, time.to_java, TimeZone.getTimeZone(time.zone)) : PersonIdent.new(name, email)
     end
     
     # Create an Actor from a string.
@@ -43,7 +45,8 @@ module RJGit
     # time - The Time the commit was authored or committed.
     #
     # Returns a String.
-    def output(time)
+    def output(time = nil)
+      time = time || self.time
       offset = time.utc_offset / 60
       "%s <%s> %d %+.2d%.2d" % [
         @name,
@@ -51,6 +54,10 @@ module RJGit
         time.to_i,
         offset / 60,
         offset.abs % 60]
+    end
+    
+    def time
+      Time.at(@person_ident.getWhen.getTime/1000)
     end
 
   end 
