@@ -170,6 +170,11 @@ describe RJGit do
         end
       end
 
+    it "mimics git-describe" do
+      id = Porcelain.commit(@repo, "Initial commit").id
+      expect(Porcelain.describe(@repo, id)).to match(/\Av0\.0-2-g[0-9a-f]{7}\z/)
+    end
+
     after(:all) do
       @repo = nil
       remove_temp_repo(@temp_repo_path)

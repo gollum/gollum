@@ -163,6 +163,12 @@ module RJGit
       RJGit.convert_diff_entries(diff_entries)
     end
 
+    def self.describe(repository, ref, options = {})
+      options = {:always => false, :long => false, :tags => false}.merge(options)
+      repo = RJGit.repository_type(repository)
+      git = RubyGit.new(repo).jgit
+      git.describe.set_target(ref).set_always(options[:always]).set_long(options[:long]).set_tags(options[:tags]).call
+    end
   end
 
   module Plumbing
