@@ -164,10 +164,18 @@ module RJGit
     end
 
     def self.describe(repository, ref, options = {})
-      options = {:always => false, :long => false, :tags => false}.merge(options)
+      options = {:always => false, :long => false, :tags => false, :match => []}.merge(options)
       repo = RJGit.repository_type(repository)
       git = RubyGit.new(repo).jgit
-      git.describe.set_target(ref).set_always(options[:always]).set_long(options[:long]).set_tags(options[:tags]).call
+      command = git.describe.
+        set_target(ref).
+        set_always(options[:always]).
+        set_long(options[:long]).
+        set_tags(options[:tags])
+      command = options[:match].each_with_object(command) do |match|
+        command.set_match(match)
+      end
+      command.call
     end
   end
 
