@@ -230,6 +230,20 @@ describe RJGit do
       it 'only greps for Regexps and Strings' do
         expect { Porcelain.grep(@repo, 10..20) }.to raise_error("A Range was passed to RJGit::Porcelain.grep().  Only Regexps and Strings are supported!")
       end
+
+      it 'supports case-insensitivity for a Regexp' do
+        expect(Porcelain.grep(@repo, /\AThis is a/, :path_filter => "test_file.txt")).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, /\Athis Is A/, :path_filter => "test_file.txt")).to eq({})
+        expect(Porcelain.grep(@repo, /\Athis Is A/, :path_filter => "test_file.txt", case_insensitive: true)).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, /\Athis Is Not A/, :path_filter => "test_file.txt", case_insensitive: true)).to eq({})
+      end
+
+      it 'supports case-insensitivity for a String' do
+        expect(Porcelain.grep(@repo, "This is a", :path_filter => "test_file.txt")).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, "this Is A", :path_filter => "test_file.txt")).to eq({})
+        expect(Porcelain.grep(@repo, "this Is A", :path_filter => "test_file.txt", case_insensitive: true)).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, "this Is Not A", :path_filter => "test_file.txt", case_insensitive: true)).to eq({})
+      end
     end
 
     after(:all) do
