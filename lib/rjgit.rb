@@ -190,6 +190,30 @@ module RJGit
       end
       command.call
     end
+
+    # options:
+    #  * ref
+    #  * path_filter
+    def self.grep(repository, query, options={})
+      repo = RJGit.repository_type(repository)
+      walk = RevWalk.new(repo)
+      ls_tree_options = {:recursive => true, :path_filter => options[:path_filter]}
+
+      ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options).each_with_object({}) do |item, result|
+        blob = Blob.new(repo, item[:mode], item[:path], walk.lookup_blob(ObjectId.from_string(item[:id])))
+        next if blob.binary?
+
+        rows = blob.data.split("\n")
+        data = case query
+        when Regexp then rows.grep(query)
+        when String then rows.select { |r| r[query] }
+        else raise "A #{query.class} was passed to #{self}.grep().  Only Regexps and Strings are supported!"
+        end
+        next if data.empty?
+
+        result[blob.path] = data
+      end
+    end
   end
 
   module Plumbing
