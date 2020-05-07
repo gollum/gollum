@@ -27,12 +27,17 @@ module RJGit
   
   module Porcelain
 
+    import 'java.io.IOException'
     import 'org.eclipse.jgit.lib.Constants'
     import 'org.eclipse.jgit.api.AddCommand'
     import 'org.eclipse.jgit.api.CommitCommand'
     import 'org.eclipse.jgit.api.BlameCommand'
+    import 'org.eclipse.jgit.api.errors.RefNotFoundException'
     import 'org.eclipse.jgit.blame.BlameGenerator'
     import 'org.eclipse.jgit.blame.BlameResult'
+    import 'org.eclipse.jgit.errors.IncorrectObjectTypeException'
+    import 'org.eclipse.jgit.errors.InvalidPatternException'
+    import 'org.eclipse.jgit.errors.MissingObjectException'
     import 'org.eclipse.jgit.treewalk.CanonicalTreeParser'
     import 'org.eclipse.jgit.diff.DiffFormatter'
 
@@ -163,6 +168,28 @@ module RJGit
       RJGit.convert_diff_entries(diff_entries)
     end
 
+    def self.describe(repository, ref, options = {})
+      options = {:always => false, :long => false, :tags => false, :match => []}.merge(options)
+      repo = RJGit.repository_type(repository)
+      git = RubyGit.new(repo).jgit
+      command = git.describe.
+        set_always(options[:always]).
+        set_long(options[:long]).
+        set_tags(options[:tags])
+      begin
+        command = command.set_target(ref)
+      rescue IncorrectObjectTypeException, IOException, MissingObjectException, RefNotFoundException
+        return nil
+      end
+      options[:match].each do |match|
+        begin
+          command = command.set_match(match)
+        rescue InvalidPatternException
+          return nil
+        end
+      end
+      command.call
+    end
   end
 
   module Plumbing

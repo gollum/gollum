@@ -170,6 +170,28 @@ describe RJGit do
         end
       end
 
+    describe 'git-describe' do
+      it "mimics git-describe" do
+        id = Porcelain.commit(@repo, "Initial commit").id
+        expect(Porcelain.describe(@repo, id)).to match(/\Av0\.0-2-g[0-9a-f]{7}\z/)
+      end
+
+      it "matches the right tag when match is used" do
+        @repo.git.tag('v0.1', 'Tag v0.1', Porcelain.commit(@repo, "Previous commit").id)
+        id = Porcelain.commit(@repo, "Initial commit").id
+        expect(Porcelain.describe(@repo, id, match: ['v0.0'])).to match(/\Av0\.0-4-g[0-9a-f]{7}\z/)
+        expect(Porcelain.describe(@repo, id, match: ['v0.1'])).to match(/\Av0\.1-1-g[0-9a-f]{7}\z/)
+        expect(Porcelain.describe(@repo, id, match: ['v0.0', 'v0.1'])).to match(/\Av0\.1-1-g[0-9a-f]{7}\z/)
+        expect(Porcelain.describe(@repo, id, match: ['v0.*'])).to match(/\Av0\.1-1-g[0-9a-f]{7}\z/)
+        expect(Porcelain.describe(@repo, id, match: ['v99'])).to be_nil
+        expect(Porcelain.describe(@repo, id, match: ['*[a'])).to be_nil # Swallows NoClosingBracketException, a type of InvalidPatternException
+      end
+
+      it "returns nil when the ref doesn't exist" do
+        expect(Porcelain.describe(@repo, 'abcdef123456')).to be_nil # Swallows RefNotFoundException
+      end
+    end
+
     after(:all) do
       @repo = nil
       remove_temp_repo(@temp_repo_path)
