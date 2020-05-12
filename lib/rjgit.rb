@@ -201,24 +201,20 @@ module RJGit
       walk = RevWalk.new(repo)
       ls_tree_options = {:recursive => true, :path_filter => options[:path_filter]}
 
-      raise "A #{query.class} was passed to #{self}.grep().  Only Regexps and Strings are supported!" unless String === query || Regexp === query
-
-      if case_insensitive
-        query = case query
-        when Regexp then Regexp.new(query.source, query.options | Regexp::IGNORECASE)
-        when String then query.downcase
-        end
+      query = case query
+      when Regexp then query
+      when String then Regexp.new(Regexp.escape(query))
+      else raise "A #{query.class} was passed to #{self}.grep().  Only Regexps and Strings are supported!"
       end
+
+      query = Regexp.new(query.source, query.options | Regexp::IGNORECASE) if case_insensitive
 
       ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options).each_with_object({}) do |item, result|
         blob = Blob.new(repo, item[:mode], item[:path], walk.lookup_blob(ObjectId.from_string(item[:id])))
         next if blob.binary?
 
         rows = blob.data.split("\n")
-        data = case query
-        when Regexp then rows.grep(query)
-        when String then rows.select { |r| (case_insensitive ? r.downcase : r)[query] }
-        end
+        data = rows.grep(query)
         next if data.empty?
 
         result[blob.path] = data
