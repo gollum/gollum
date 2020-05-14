@@ -192,6 +192,60 @@ describe RJGit do
       end
     end
 
+    describe 'git-grep' do
+      before(:all) do
+        File.open(File.join(@temp_repo_path, @testfile), 'a') {|file| file.write("\nAppending to test file") }
+        Porcelain.add(@repo, @testfile)
+        Porcelain.commit(@repo, 'Append to testfile')
+      end
+
+      it "finds files matching a String" do
+        expect(Porcelain.grep(@repo, ' file to add')).to eq(@testfile => ["This is a new file to add."])
+      end
+
+      it "finds files matching a Regexp" do
+        expect(Porcelain.grep(@repo, / file.*add/)).to eq(@testfile => ["This is a new file to add."])
+      end
+
+      it "supports the path option" do
+        expect(Porcelain.grep(@repo, / file.*add/, :path_filter => "chapters")).to eq({})
+        expect(Porcelain.grep(@repo, / file.*add/, :path_filter => "test_file.txt")).to eq(@testfile => ["This is a new file to add."])
+      end
+
+      it 'works on nested files' do
+        results = Porcelain.grep(@repo, /eventually/, :path_filter => "chapters")
+        expect(results.keys).to contain_exactly("chapters/prematerial.txt")
+        expect(results.fetch("chapters/prematerial.txt")).to contain_exactly(a_string_matching(/ eventually the rubicon/))
+      end
+
+      it 'supports the ref option' do
+        expect(Porcelain.grep(@repo, 'Append', ref: @repo.commits[0].id)).to eq(@testfile => ["Appending to test file"])
+        expect(Porcelain.grep(@repo, 'Append', ref: @repo.commits[1].id)).to eq({})
+      end
+
+      it 'ignores binary files' do
+        expect(Porcelain.grep(@repo, /./, :path_filter => "homer-excited.png")).to eq({})
+      end
+
+      it 'only greps for Regexps and Strings' do
+        expect { Porcelain.grep(@repo, 10..20) }.to raise_error("A Range was passed to RJGit::Porcelain.grep().  Only Regexps and Strings are supported!")
+      end
+
+      it 'supports case-insensitivity for a Regexp' do
+        expect(Porcelain.grep(@repo, /\AThis is a/, :path_filter => "test_file.txt")).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, /\Athis Is A/, :path_filter => "test_file.txt")).to eq({})
+        expect(Porcelain.grep(@repo, /\Athis Is A/, :path_filter => "test_file.txt", case_insensitive: true)).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, /\Athis Is Not A/, :path_filter => "test_file.txt", case_insensitive: true)).to eq({})
+      end
+
+      it 'supports case-insensitivity for a String' do
+        expect(Porcelain.grep(@repo, "This is a", :path_filter => "test_file.txt")).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, "this Is A", :path_filter => "test_file.txt")).to eq({})
+        expect(Porcelain.grep(@repo, "this Is A", :path_filter => "test_file.txt", case_insensitive: true)).to eq(@testfile => ["This is a new file to add."])
+        expect(Porcelain.grep(@repo, "this Is Not A", :path_filter => "test_file.txt", case_insensitive: true)).to eq({})
+      end
+    end
+
     after(:all) do
       @repo = nil
       remove_temp_repo(@temp_repo_path)

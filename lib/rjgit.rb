@@ -190,6 +190,36 @@ module RJGit
       end
       command.call
     end
+
+    # options:
+    #  * ref
+    #  * path_filter
+    #  * case_insensitive
+    def self.grep(repository, query, options={})
+      case_insensitive = options[:case_insensitive]
+      repo = RJGit.repository_type(repository)
+      walk = RevWalk.new(repo)
+      ls_tree_options = {:recursive => true, :path_filter => options[:path_filter]}
+
+      query = case query
+      when Regexp then query
+      when String then Regexp.new(Regexp.escape(query))
+      else raise "A #{query.class} was passed to #{self}.grep().  Only Regexps and Strings are supported!"
+      end
+
+      query = Regexp.new(query.source, query.options | Regexp::IGNORECASE) if case_insensitive
+
+      ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options).each_with_object({}) do |item, result|
+        blob = Blob.new(repo, item[:mode], item[:path], walk.lookup_blob(ObjectId.from_string(item[:id])))
+        next if blob.binary?
+
+        rows = blob.data.split("\n")
+        data = rows.grep(query)
+        next if data.empty?
+
+        result[blob.path] = data
+      end
+    end
   end
 
   module Plumbing
