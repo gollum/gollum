@@ -55,11 +55,18 @@ module RJGit
     end
 
     # http://dev.eclipse.org/mhonarc/lists/jgit-dev/msg00558.html
-    def self.cat_file(repository, blob)
+    def self.cat_file(repository, blob, path = nil)
       jrepo = RJGit.repository_type(repository)
       jblob = RJGit.blob_type(blob)
       # Try to resolve symlinks; return nil otherwise
-      mode = RJGit.get_file_mode(jrepo, jblob)
+      mode = if path
+        last_commit_hash = jrepo.resolve(Constants::HEAD)
+        return nil if last_commit_hash.nil?
+        jtree = RevWalk.new(jrepo).parse_commit(last_commit_hash).get_tree
+        RJGit.get_file_mode_with_path(jrepo, path, jtree)
+      else
+        RJGit.get_file_mode(jrepo, jblob)
+      end
       if mode == SYMLINK_TYPE
         symlink_source = jrepo.open(jblob.id).get_bytes.to_a.pack('c*').force_encoding('UTF-8')
         blob = Blob.find_blob(jrepo, symlink_source)
