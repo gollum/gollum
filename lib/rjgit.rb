@@ -216,9 +216,13 @@ module RJGit
 
       query = Regexp.new(query.source, query.options | Regexp::IGNORECASE) if case_insensitive
 
+      # We optimize below by first grepping the entire file, and then, if a match is found, then identifying the individual line.
+      # To avoid missing full-line matches during the optimization, we first convert multiline anchors to single-line anchors.
+      query = Regexp.new(query.source.gsub(/\A\\A/, '^').gsub(/\\z\z/, '$'), query.options)
+
       ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options).each_with_object({}) do |item, result|
         blob = Blob.new(repo, item[:mode], item[:path], walk.lookup_blob(ObjectId.from_string(item[:id])))
-        next if blob.binary?
+        next if blob.binary? || !query.match(blob.data)
 
         rows = blob.data.split("\n")
         data = rows.grep(query)
