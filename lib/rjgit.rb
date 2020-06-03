@@ -220,15 +220,27 @@ module RJGit
       # To avoid missing full-line matches during the optimization, we first convert multiline anchors to single-line anchors.
       query = Regexp.new(query.source.gsub(/\A\\A/, '^').gsub(/\\z\z/, '$'), query.options)
 
-      ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options).each_with_object({}) do |item, result|
-        blob = Blob.new(repo, item[:mode], item[:path], walk.lookup_blob(ObjectId.from_string(item[:id])))
-        next if blob.binary? || !query.match(blob.data)
+      files_to_scan = ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options)
 
-        rows = blob.data.split("\n")
+      files_to_scan.each do |file|
+        id = if file[:mode] == SYMLINK_TYPE
+          symlink_source = repo.open(ObjectId.from_string(file[:id])).get_bytes.to_a.pack('c*').force_encoding('UTF-8')
+          Blob.find_blob(repo, symlink_source).jblob.id
+        else
+          ObjectId.from_string(file[:id])
+        end
+        file[:data] = repo.open(id).get_bytes.to_a.pack('c*').force_encoding('UTF-8').encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+        file[:binary] = RawText.is_binary(file[:data].to_java_bytes)
+      end
+
+      files_to_scan.each_with_object({}) do |file, result|
+        next if file[:binary] || !query.match(file[:data])
+
+        rows = file[:data].split("\n")
         data = rows.grep(query)
         next if data.empty?
 
-        result[blob.path] = data
+        result[file[:path]] = data
       end
     end
   end
