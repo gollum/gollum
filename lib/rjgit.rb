@@ -222,21 +222,22 @@ module RJGit
 
       files_to_scan = ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options)
 
-      files_to_scan.each do |file|
+      files_to_scan.each_with_object({}) do |file, result|
         id = if file[:mode] == SYMLINK_TYPE
           symlink_source = repo.open(ObjectId.from_string(file[:id])).get_bytes.to_a.pack('c*').force_encoding('UTF-8')
           Blob.find_blob(repo, symlink_source).jblob.id
         else
           ObjectId.from_string(file[:id])
         end
-        file[:data] = repo.open(id).get_bytes.to_a.pack('c*').force_encoding('UTF-8').encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
-        file[:binary] = RawText.is_binary(file[:data].to_java_bytes)
-      end
+        bytes = repo.open(id).get_bytes
 
-      files_to_scan.each_with_object({}) do |file, result|
-        next if file[:binary] || !query.match(file[:data])
+        binary = RawText.is_binary(bytes)
+        next if binary
 
-        rows = file[:data].split("\n")
+        file_contents = bytes.to_a.pack('c*').force_encoding('UTF-8').encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+        next unless query.match(file_contents)
+
+        rows = file_contents.split("\n")
         data = rows.grep(query)
         next if data.empty?
 
