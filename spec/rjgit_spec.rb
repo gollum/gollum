@@ -237,9 +237,7 @@ describe RJGit do
         end
 
         it 'find matching content in symlinked files' do
-          expect(Porcelain.grep(@repo, /California/, :path_filter => symlink_file_name)).to eq(
-            symlink_file_name => ["Department of English, University of California"]
-          )
+          expect(Porcelain.grep(@repo, /California/, :path_filter => symlink_file_name)).to eq(symlink_file_name => ["Department of English, University of California"])
         end
       end
 
