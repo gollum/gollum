@@ -234,7 +234,7 @@ module RJGit
         binary = RawText.is_binary(bytes)
         next if binary
 
-        file_contents = bytes.to_a.pack('c*').force_encoding('UTF-8').encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+        file_contents = bytes.to_s
         next unless query.match(file_contents)
 
         rows = file_contents.split("\n")
