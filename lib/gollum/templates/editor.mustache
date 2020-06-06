@@ -97,6 +97,10 @@
       </div>
     </div>
   </div>
+  <div id="gollum-autorecover-msg" class="flash flash-full" hidden>
+      Autosaved text is available. Click the button to restore it.
+      <button id="gollum-autorecover-button" class="btn btn-sm primary flash-action">Restore Text</button>
+  </div>
     <textarea id="gollum-editor-body" class="form-control"
      data-markup-lang="{{format}}" name="content" class="mousetrap">{{content}}</textarea>
     <div id="uploading">
@@ -147,3 +151,4 @@
   </fieldset>
 </form>
 </div>
+<div id="gollum-saved-msg" class="position-fixed bottom-0 left-0"></div>
