@@ -18,7 +18,10 @@
 					<span class="float-left col-2" id="user-icons">{{>author_template}}</span>
 					<span class="flex-auto col-1 text-gray-light">{{date}}</span>
 					<span class="flex-auto col-5">{{message}}</span>
-					<span class="pl-4 float-right">[<a href="{{base_url}}/{{filename}}/{{id}}" title="View commit">{{id7}}</a>]</span>
+					<span class="pl-4 float-right">
+						<a href="{{href}}" class="btn btn-outline text-mono">{{id7}}</a>
+						<a href="{{href_page}}" title="Browse the page at this point in the history" class="btn btn-outline">{{#octicon}}code{{/octicon}}</a>
+					</span>
 				</li>
 				{{/versions}}
 			</ul>

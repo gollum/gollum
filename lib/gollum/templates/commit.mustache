@@ -1,0 +1,26 @@
+<div id="wiki-wrapper" class="compare">
+  <div id="head">
+    <h1 class="py-4">{{message}}</h1>
+    {{author}} commited {{authored_date}}
+    <span class="px-2 float-right">commit <code>{{version}}</code></span>
+  </div>
+
+  <div id="compare-content">
+	  {{#files}}
+    <div class="Box data highlight my-3">
+      <div class="Box-header Box--condensed Box-header--gray">
+				<code>{{path}}</code>
+			</div>
+      <table>
+        {{#lines}}
+        <tr>
+          <td class="line_numbers">{{ldln}}</td>
+          <td class="line_numbers">{{rdln}}</td>
+          <td><div class="{{class}} pl-2">{{line}}</div></td>
+        </tr>
+        {{/lines}}
+      </table>
+    </div>
+    {{/files}}
+  </div>
+</div>
