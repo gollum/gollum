@@ -2,7 +2,7 @@
 	
 	<div class="TableObject">
 		<div class="TableObject-item">
-	    <a class="btn" href="{{base_url}}/">Home</a>
+	    <a class="btn" id="minibutton-home" href="{{base_url}}/">Home</a>
 	  </div>
 
 
@@ -11,13 +11,13 @@
 	  </div>
 		
 	  <div class="TableObject-item">
-	    {{#overview}}<a class="btn" href="{{overview_path}}">Overview</a>{{/overview}}
-			{{#latest_changes}}<a class="btn" href="{{latest_changes_path}}">Latest Changes</a>{{/latest_changes}}
+	    {{#overview}}<a class="btn" id="minibutton-overview" href="{{overview_path}}">Overview</a>{{/overview}}
+			{{#latest_changes}}<a class="btn" id="minibutton-latest-changes" href="{{latest_changes_path}}">Latest Changes</a>{{/latest_changes}}
 	  </div>
 	
 		{{#history}}
 		<div class="TableObject-item pl-1">
-			<a class="btn" href="{{history_path}}/{{escaped_url_path}}">Page History</a>
+			<a class="btn" id="minibutton-history" href="{{history_path}}/{{escaped_url_path}}">Page History</a>
 		</div>
 		{{/history}}
 		
