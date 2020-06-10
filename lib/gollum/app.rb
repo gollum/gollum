@@ -459,7 +459,30 @@ module Precious
         mustache :latest_changes
       end
 
-      post '/compare/*' do
+      get %r{
+        /compare/ # match any URL beginning with /compare/
+        (.+)      # extract the full path (including any directories)
+        /         # match the final slash
+        ([^.]+)   # match the first SHA1
+        \.{2,3}   # match .. or ...
+        (.+)      # match the second SHA1
+      }x do |path, start_version, end_version|
+        wikip     = wiki_page(path)
+        @path     = wikip.path
+        @name     = wikip.fullname
+        @versions = [start_version, end_version]
+        wiki      = wikip.wiki
+        @page     = wikip.page
+        @diff     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+        if @diff.empty?
+          @message = 'Could not compare these two revisions, no differences were found.'
+          mustache :error
+        else
+          mustache :compare
+        end
+      end
+
+      get '/compare/*' do
         @file     = clean_url(encodeURIComponent(params[:splat].first))
         @versions = params[:versions] || []
         if @versions.size == 1
@@ -483,28 +506,6 @@ module Precious
         end
       end
 
-      get %r{
-        /compare/ # match any URL beginning with /compare/
-        (.+)      # extract the full path (including any directories)
-        /         # match the final slash
-        ([^.]+)   # match the first SHA1
-        \.{2,3}   # match .. or ...
-        (.+)      # match the second SHA1
-      }x do |path, start_version, end_version|
-        wikip     = wiki_page(path)
-        @path     = wikip.path
-        @name     = wikip.fullname
-        @versions = [start_version, end_version]
-        wiki      = wikip.wiki
-        @page     = wikip.page
-        @diff     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
-        if @diff.empty?
-          @message = 'Could not compare these two revisions, no differences were found.'
-          mustache :error
-        else
-          mustache :compare
-        end
-      end
 
       get %r{
         /commit/  # match any URL beginning with /show/
