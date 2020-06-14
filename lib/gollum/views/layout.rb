@@ -26,12 +26,24 @@ module Precious
         !@path.nil?
       end
 
-      def base_url
+      def custom_path
         @base_url
       end
 
-      def custom_path
-        "#{@base_url}"
+      def custom_css
+        clean_url(custom_path, "custom.css")
+      end
+
+      def custom_js
+        clean_url(custom_path, "custom.js")
+      end
+
+      def mathjax_config
+        page_route(@mathjax_config)
+      end
+
+      def mathjax_js
+        page_route("gollum/assets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
       end
 
       def css # custom css
