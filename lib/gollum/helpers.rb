@@ -19,7 +19,7 @@ module Precious
     # Remove all double slashes
     def clean_url(url)
       return url if url.nil?
-      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
+      url.gsub('%2F', '/').gsub(%r{/{2,}}, '/').gsub(%r{^/}, '')
     end
 
     def forbid(msg = "Forbidden. This wiki is set to no-edit mode.")
