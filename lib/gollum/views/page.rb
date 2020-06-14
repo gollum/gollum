@@ -169,6 +169,10 @@ module Precious
         @navbar
       end
 
+      def full_url_path
+        page_route(@page.escaped_url_path)
+      end
+
       # Access to embedded metadata.
       #
       # Returns Hash.

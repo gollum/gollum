@@ -15,9 +15,5 @@ module Precious
     def id
       @page.sha
     end
-
-    def full_url_path
-      ::File.join(@base_url, escaped_url_path)
-    end
   end
 end
