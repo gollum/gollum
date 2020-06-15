@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = %w[README.md LICENSE]
 
+  s.add_dependency 'rdoc'
   s.add_dependency 'gollum-lib', '~> 5.0'
   s.add_dependency 'kramdown', '~> 2.1.0'
   s.add_dependency 'kramdown-parser-gfm', '~> 1.0.0'
