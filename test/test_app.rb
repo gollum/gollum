@@ -957,17 +957,17 @@ context 'Frontend with base path' do
   end
   
   test 'compare view' do
-    post '/wiki/gollum/compare/Bilbo-Baggins.md', :versions => ['f25eccd98e9b667f9e22946f3e2f945378b8a72d', '5bc1aaec6149e854078f1d0f8b71933bbc6c2e43']
+    get '/wiki/gollum/compare/Bilbo-Baggins.md?versions[]=f25eccd98e9b667f9e22946f3e2f945378b8a72d&versions[]=5bc1aaec6149e854078f1d0f8b71933bbc6c2e43'
     follow_redirect!
     assert last_response.ok?
     assert_equal '/wiki/gollum/compare/Bilbo-Baggins.md/5bc1aaec6149e854078f1d0f8b71933bbc6c2e43...f25eccd98e9b667f9e22946f3e2f945378b8a72d', last_request.fullpath
     
-    post '/wiki/gollum/compare/Bilbo-Baggins.md', :versions => ['f25eccd98e9b667f9e22946f3e2f945378b8a72d']
+    get '/wiki/gollum/compare/Bilbo-Baggins.md?versions[]=f25eccd98e9b667f9e22946f3e2f945378b8a72d'
     follow_redirect!
     assert last_response.ok?
     assert_equal '/wiki/gollum/compare/Bilbo-Baggins.md/b0d108328459e44fff4a76cd19b10ddc34adce4b...f25eccd98e9b667f9e22946f3e2f945378b8a72d', last_request.fullpath
 
-    post '/wiki/gollum/compare/Bilbo-Baggins.md', :versions => []
+    get '/wiki/gollum/compare/Bilbo-Baggins.md'
     follow_redirect!
     assert last_response.ok?
     assert_equal '/wiki/gollum/history/Bilbo-Baggins.md', last_request.fullpath
