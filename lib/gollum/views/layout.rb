@@ -26,6 +26,10 @@ module Precious
         !@path.nil?
       end
 
+      def base_url
+        @base_url
+      end
+
       def custom_path
         @base_url
       end
