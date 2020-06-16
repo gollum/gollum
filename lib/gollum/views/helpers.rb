@@ -59,7 +59,7 @@ module Precious
 
       def clean_url(*url)
         url.compact!
-        return url if url.nil?
+        return nil if url.empty?
 
         ::File.join(*url).gsub(%r{/{2,}}, '/')
       end
