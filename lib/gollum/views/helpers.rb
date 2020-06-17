@@ -39,7 +39,7 @@ module Precious
             route_path = "#{prefix}/#{path}"
             @@route_methods[name.to_s] = route_path
             define_method :"#{name.to_s}_path" do
-              "#{base_url}/#{route_path}".gsub(/\/{2,}/, '/') # remove double slashes
+              page_route(route_path)
             end
           end
         end
@@ -53,8 +53,15 @@ module Precious
         end
       end
 
-      def page_route(page)
-        "#{base_url}/#{page}".gsub(/\/{2,}/, '/') # remove double slashes
+      def page_route(page = nil)
+        clean_url(@base_url, page)
+      end
+
+      def clean_url(*url)
+        url.compact!
+        return nil if url.empty?
+
+        ::File.join(*url).gsub(%r{/{2,}}, '/')
       end
     end
 

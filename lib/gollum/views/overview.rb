@@ -52,7 +52,7 @@ module Precious
               folder_url  = "#{overview_path}/#{folder_path}/"
               files_and_folders << {name: folder_name, icon: rocticon('file-directory'), type: 'dir', url: folder_url, is_file: false}
             elsif result_path != '.gitkeep'
-              file_url = "#{@base_url}/#{result.escaped_url_path}"
+              file_url = page_route(result.escaped_url_path)
               files_and_folders << {name: result.filename, icon: rocticon('file'), type: 'file', url: file_url, is_file: true}
             end
           end
