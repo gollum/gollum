@@ -526,7 +526,7 @@ module Precious
       end
 
       get '/search' do
-        @query     = params[:q]
+        @query     = params[:q] || ''
         @name      = @query
         if @query.empty?
           @results = []
