@@ -54,7 +54,7 @@ module Precious
       end
 
       def page_route(page = nil)
-        clean_url(@base_url, page)
+        clean_url('/' + @base_url, page)
       end
 
       def clean_url(*url)
