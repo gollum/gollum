@@ -230,14 +230,15 @@ module Precious
         halt 500 unless tempfile.is_a? Tempfile
 
         if wiki.per_page_uploads
-          # remove base_url and gollum/* subpath if necessary
-          dir = request.referer.
-                  sub(request.base_url, '').
-                  sub(/.*gollum\/[-\w]+\//, '')
+          dir = request.referer.sub(request.base_url, '')
           # remove base path if it is set
-          dir = dir.sub(wiki.base_path, '') if wiki.base_path
+          dir.sub!(/^#{wiki.base_path}/, '') if wiki.base_path
+          # remove base_url and gollum/* subpath if necessary
+          dir.sub!(/^\/gollum\/[-\w]+\//, '')
           # remove file extension 
-          dir = dir.sub(::File.extname(dir), '')
+          dir.sub!(/#{::File.extname(dir)}$/, '')
+          # revert escaped whitespaces
+          dir.gsub!(/%20/, ' ')
           dir = ::File.join('uploads', dir)
         else
           # store all uploads together
