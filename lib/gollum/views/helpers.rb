@@ -54,9 +54,7 @@ module Precious
       end
 
       def page_route(page = nil)
-        base_url = @base_url.nil? ? '/' : @base_url
-        base_url.prepend('/') unless base_url.start_with?('/')
-        clean_url(base_url, page)
+        clean_url("/#{@base_url}", page)
       end
 
       def clean_url(*url)
