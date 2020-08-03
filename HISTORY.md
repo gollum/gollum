@@ -1,3 +1,9 @@
+# 5.1
+
+* Bugfixes
+* Add autosave feature (#1576)
+* Add Add quick access to diff of each commit in the history
+
 # 5.0 / 2020-03-17
 
 This is a major new release that introduces many new features, bugfixes, and removes major limitations. See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes.
