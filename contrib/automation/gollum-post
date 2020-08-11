@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+#
+# Distributed under the terms of the MIT License.
+#
+# Author: Sam Baskinger <basking2@yahoo.com>
+#
+# Description: gollum-post is an example script that shows how 
+#              to post a file to Gollum. This may be used
+#              to build scripts around CI/CD pipelines that 
+#              publish their documentation to Gollum.
+#
+
+require 'uri'
+require 'mechanize'
+require 'digest'
+
+GOLLUM=URI('https://mygollum.server')
+
+m = Mechanize.new()
+
+page="TestPage"
+path="/automated/docs"
+format="asciidoc"
+content="""
+= This is #{page}
+
+This page is automatically generated.
+"""
+message='Posting current documentation.'
+
+# Check if the page exists.
+p = m.get("#{GOLLUM}#{path}/#{page}")
+
+# If we were redirected to the creat page...
+if p.uri.to_s =~ /\/gollum\/create/
+
+  # ... then create the page.
+  p = m.post("#{GOLLUM}/gollum/create",
+             'keybinding' => 'default',
+             'page' => page,
+             'path' => path,
+             'format' => 'asciidoc',
+             'message' => 'Publish bot.',
+             'content' => content)
+else
+  # ... else, get the previous content and update it.
+  p = m.get("#{GOLLUM}/gollum/edit#{path}/#{page}")
+
+  # Get the previous content. You _could_ check if this is unchanged at this 
+  # step and post nothing.
+  previous_content = p.xpath('//textarea[@id="gollum-editor-body"]')[0].text
+
+  # The previous ETag is the Git SHA-1. We need this to replace the previous contents.
+  prev_etag = Digest::SHA1.hexdigest("blob #{previous_content.length}\0#{previous_content}")
+
+  # Post the updated document using the ETag of the previous document to avoid collisions.
+  p = m.post("#{GOLLUM}/gollum/edit#{path}/#{page}",
+             'keybinding' => 'default',
+             'page' => page,
+             'path' => path,
+             'format' => 'asciidoc',
+             'message' => message,
+             'etag' => prev_etag,
+             'content' => content)
+end
+
