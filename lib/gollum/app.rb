@@ -355,6 +355,9 @@ module Precious
         if settings.wiki_options[:template_page] then
           temppage = wiki_page('/_Template')
           @template_page = (temppage.page != nil) ? temppage.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
+          if defined?(Gollum::TemplateFilter)
+            @template_page = Gollum::TemplateFilter.filter(@template_page)
+          end
         end
         wikip = wiki_page(params[:splat].first)
         @name = wikip.name
