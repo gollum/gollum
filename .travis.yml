@@ -2,6 +2,7 @@ rvm:
   - 2.4.0
   - 2.6.0
   - jruby-9.2.9.0
+  - truffleruby-head
 jdk:
   - oraclejdk9
 before_install:
