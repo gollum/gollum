@@ -590,7 +590,6 @@ module Precious
     end
 
     get '/*' do
-      puts params.inspect
       show_page_or_file(params[:splat].first)
     end
 
