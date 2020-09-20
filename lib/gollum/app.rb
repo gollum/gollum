@@ -421,7 +421,7 @@ module Precious
       post '/preview' do
         wiki           = wiki_new
         @name          = params[:page] ? strip_page_name(CGI.unescape(params[:page])) : 'Preview'
-        @page          = wiki.preview_page(@name, params[:content], params[:format])
+        @page          = wiki.preview_page(@name, wiki.normalize(params[:content]), params[:format])
         ['sidebar', 'header', 'footer'].each do |subpage|
           @page.send("set_#{subpage}".to_sym, params[subpage]) if params[subpage]
         end

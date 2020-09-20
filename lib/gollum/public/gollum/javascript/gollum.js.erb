@@ -345,7 +345,8 @@ $(document).ready(function() {
     var formData = new FormData($('#gollum-editor-form').get(0));
     var paths = window.location.pathname.split('/');
     var sectionAnchor = window.location.hash.substr(1);
-    formData.append('page', paths[ paths.length - 1 ] || '')
+    formData.append('page', paths[ paths.length - 1 ] || '');
+
     $.ajax({
       url: routePath('preview'),
       data: formData,
