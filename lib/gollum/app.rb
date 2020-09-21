@@ -318,9 +318,8 @@ module Precious
       post '/edit/*' do
         etag      = params[:etag]        
         path      = "/#{clean_url(sanitize_empty_params(params[:path]))}"
-        page_name = CGI.unescape(params[:page])
         wiki      = wiki_new
-        page      = wiki.page(::File.join(path, page_name))
+        page      = wiki.page(::File.join(path, params[:page]))
 
         return if page.nil?
         if etag != page.sha
@@ -417,7 +416,7 @@ module Precious
 
       post '/preview' do
         wiki           = wiki_new
-        @name          = params[:page] ? strip_page_name(CGI.unescape(params[:page])) : 'Preview'
+        @name          = params[:page] ? strip_page_name(params[:page]) : 'Preview'
         @page          = wiki.preview_page(@name, params[:content], params[:format])
         ['sidebar', 'header', 'footer'].each do |subpage|
           @page.send("set_#{subpage}".to_sym, params[subpage]) if params[subpage]

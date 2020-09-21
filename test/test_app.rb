@@ -474,7 +474,7 @@ EOF
   end
 
   test "previews content" do
-    post "/gollum/preview", :content => 'abc', :format => 'markdown', :page => 'Samewise%20Gamgee.mediawiki'
+    post "/gollum/preview", :content => 'abc', :format => 'markdown', :page => 'Samewise Gamgee.mediawiki'
     assert last_response.ok?
     assert last_response.body.include?('Samewise Gamgee</h1>')
   end
