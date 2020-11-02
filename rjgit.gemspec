@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.licenses          = ['Modified BSD', 'EPL']
   s.rdoc_options = ["--charset=UTF-8"]
 
-  s.add_dependency('mime-types', "~> 3.3.1")
+  s.add_dependency('mime-types', "~> 3.3")
 
 end
