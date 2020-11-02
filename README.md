@@ -4,6 +4,7 @@ gollum -- A git-based Wiki
 [![Gem Version](https://badge.fury.io/rb/gollum.svg)](http://badge.fury.io/rb/gollum)
 [![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
 [![Open Source Helpers](https://www.codetriage.com/gollum/gollum/badges/users.svg)](https://www.codetriage.com/gollum/gollum)
+[![Cutting Edge Dependency Status](https://dometto-cuttingedge.herokuapp.com/github/repotag/rjgit/svg 'Cutting Edge Dependency Status')](https://dometto-cuttingedge.herokuapp.com/github/repotag/rjgit/info)
 
 **Please update to gollum 5.1.1 to counter a recent exploit in the kramdown rendering gem, [CVE-2020-14001](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-14001)**
 
