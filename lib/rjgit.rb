@@ -62,7 +62,7 @@ module RJGit
       # Try to resolve symlinks; return nil otherwise
       mode = if path
         last_commit_hash = jrepo.resolve(Constants::HEAD)
-        return nil if last_commit_hash.nil?
+        return nil unless last_commit_hash
         jtree = RevWalk.new(jrepo).parse_commit(last_commit_hash).get_tree
         RJGit.get_file_mode_with_path(jrepo, path, jtree)
       else
