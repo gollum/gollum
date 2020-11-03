@@ -55,7 +55,8 @@ module RJGit
     end
 
     # http://dev.eclipse.org/mhonarc/lists/jgit-dev/msg00558.html
-    def self.cat_file(repository, blob, path = nil)
+    def self.cat_file(repository, blob)
+      path = blob.path if blob.respond_to?(:path)
       jrepo = RJGit.repository_type(repository)
       jblob = RJGit.blob_type(blob)
       # Try to resolve symlinks; return nil otherwise

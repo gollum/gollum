@@ -36,7 +36,7 @@ module RJGit
     # The binary contents of this blob.
     # Returns String
     def data
-      @data ||= RJGit::Porcelain.cat_file(@jrepo, @jblob, path)
+      @data ||= RJGit::Porcelain.cat_file(@jrepo, self)
     end
     
     def is_symlink?
