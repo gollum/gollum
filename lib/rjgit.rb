@@ -226,6 +226,11 @@ module RJGit
       files_to_scan.each_with_object({}) do |file, result|
         id = if file[:mode] == SYMLINK_TYPE
           symlink_source = repo.open(ObjectId.from_string(file[:id])).get_bytes.to_a.pack('c*').force_encoding('UTF-8')
+          unless symlink_source[File::SEPARATOR]
+            dir = file[:path].split(File::SEPARATOR)
+            dir[-1] = symlink_source
+            symlink_source = File.join(dir)
+          end
           Blob.find_blob(repo, symlink_source).jblob.id
         else
           ObjectId.from_string(file[:id])
