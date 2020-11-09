@@ -97,8 +97,23 @@ module Precious
     end
 
     before do
+      @authentication = settings.wiki_options.fetch(:authentication, false)
+      @auth_editing_override = false
+      if @authentication
+        author  = session['gollum.author']
+        if author.nil? || author.empty?
+          if settings.wiki_options[:authentication_mode] == :HTTP_HEADER
+            unless request.env["HTTP_GIT_AUTHOR_NAME"].nil? || request.env["HTTP_GIT_AUTHOR_EMAIL"].nil? || request.env["HTTP_GIT_AUTHOR_NAME"].empty? || request.env["HTTP_GIT_AUTHOR_EMAIL"].empty?
+              session['gollum.author'] = { name: request.env["HTTP_GIT_AUTHOR_NAME"], email: request.env["HTTP_GIT_AUTHOR_EMAIL"] }
+              author  = session['gollum.author']
+              @auth_editing_override = true
+            end
+          end
+        end
+      end
+
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
-      @allow_editing = settings.wiki_options[:allow_editing]
+      @allow_editing = settings.wiki_options[:allow_editing] || @auth_editing_override
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
