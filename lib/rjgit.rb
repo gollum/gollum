@@ -231,8 +231,7 @@ module RJGit
         end
         bytes = repo.open(id).get_bytes
 
-        binary = RawText.is_binary(bytes)
-        next if binary
+        next if RawText.is_binary(bytes)
 
         file_contents = bytes.to_s
         next unless query.match(file_contents)
