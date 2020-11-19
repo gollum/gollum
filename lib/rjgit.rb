@@ -56,10 +56,11 @@ module RJGit
 
     # http://dev.eclipse.org/mhonarc/lists/jgit-dev/msg00558.html
     def self.cat_file(repository, blob)
+      mode = blob.mode if blob.respond_to?(:mode)
       jrepo = RJGit.repository_type(repository)
       jblob = RJGit.blob_type(blob)
       # Try to resolve symlinks; return nil otherwise
-      mode = RJGit.get_file_mode(jrepo, jblob)
+      mode ||= RJGit.get_file_mode(jrepo, jblob)
       if mode == SYMLINK_TYPE
         symlink_source = jrepo.open(jblob.id).get_bytes.to_a.pack('c*').force_encoding('UTF-8')
         blob = Blob.find_blob(jrepo, symlink_source)
@@ -209,15 +210,37 @@ module RJGit
 
       query = Regexp.new(query.source, query.options | Regexp::IGNORECASE) if case_insensitive
 
-      ls_tree(repo, nil, options.fetch(:ref, 'HEAD'), ls_tree_options).each_with_object({}) do |item, result|
-        blob = Blob.new(repo, item[:mode], item[:path], walk.lookup_blob(ObjectId.from_string(item[:id])))
-        next if blob.binary?
+      # We optimize below by first grepping the entire file, and then, if a match is found, then identifying the individual line.
+      # To avoid missing full-line matches during the optimization, we first convert multiline anchors to single-line anchors.
+      query = Regexp.new(query.source.gsub(/\A\\A/, '^').gsub(/\\z\z/, '$'), query.options)
 
-        rows = blob.data.split("\n")
+      ref = options.fetch(:ref, 'HEAD')
+      files_to_scan = ls_tree(repo, nil, ref, ls_tree_options)
+
+      files_to_scan.each_with_object({}) do |file, result|
+        id = if file[:mode] == SYMLINK_TYPE
+          symlink_source = repo.open(ObjectId.from_string(file[:id])).get_bytes.to_a.pack('c*').force_encoding('UTF-8')
+          unless symlink_source[File::SEPARATOR]
+            dir = file[:path].split(File::SEPARATOR)
+            dir[-1] = symlink_source
+            symlink_source = File.join(dir)
+          end
+          Blob.find_blob(repo, symlink_source, ref).jblob.id
+        else
+          ObjectId.from_string(file[:id])
+        end
+        bytes = repo.open(id).get_bytes
+
+        next if RawText.is_binary(bytes)
+
+        file_contents = bytes.to_s
+        next unless query.match(file_contents)
+
+        rows = file_contents.split("\n")
         data = rows.grep(query)
         next if data.empty?
 
-        result[blob.path] = data
+        result[file[:path]] = data
       end
     end
   end

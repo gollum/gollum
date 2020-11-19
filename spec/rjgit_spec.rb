@@ -227,6 +227,20 @@ describe RJGit do
         expect(Porcelain.grep(@repo, /./, :path_filter => "homer-excited.png")).to eq({})
       end
 
+      context 'with a symlink' do
+        let(:symlink_file_name) { 'symlink.txt' }
+        let(:symlink_file_path) { File.join(@temp_repo_path, symlink_file_name) }
+        before do
+          File.symlink('deconstructions.txt', symlink_file_path)
+          Porcelain.add(@repo, symlink_file_name)
+          Porcelain.commit(@repo, 'Added a symlink')
+        end
+
+        it 'find matching content in symlinked files' do
+          expect(Porcelain.grep(@repo, /California/, :path_filter => symlink_file_name)).to eq(symlink_file_name => ["Department of English, University of California"])
+        end
+      end
+
       it 'only greps for Regexps and Strings' do
         expect { Porcelain.grep(@repo, 10..20) }.to raise_error("A Range was passed to RJGit::Porcelain.grep().  Only Regexps and Strings are supported!")
       end
