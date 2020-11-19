@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'gollum-lib', '~> 5.0'
   s.add_dependency 'kramdown', '~> 2.3'
-  s.add_dependency 'kramdown-parser-gfm', '~> 1.0.0'
+  s.add_dependency 'kramdown-parser-gfm', '~> 1.1.0'
   s.add_dependency 'sinatra', '~> 2.0'
   s.add_dependency 'sinatra-contrib', '~> 2.0'
   s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
