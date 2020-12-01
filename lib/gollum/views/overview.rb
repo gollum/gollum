@@ -25,9 +25,9 @@ module Precious
             title = crumb.basename
 
             if title == path.basename
-              breadcrumb << %{<li class="breadcrumb-item" aria-current="page">#{title}</li>}
+              breadcrumb << %{<li class="breadcrumb-item" aria-current="page">#{CGI.escape(title.to_s)}</li>}
             else
-              breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{title}</a></li>}
+              breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{CGI.escape(title.to_s)}</a></li>}
             end
           end
           breadcrumb << %{</ol></nav>}

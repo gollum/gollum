@@ -43,6 +43,13 @@ context "Precious::Views::Overview" do
     @page.instance_variable_set("@base_url", "")
     assert_equal "<nav aria-label=\"Breadcrumb\"><ol><li class=\"breadcrumb-item\"><a href=\"/gollum/overview\">Home</a></li>\n<li class=\"breadcrumb-item\"><a href=\"/gollum/overview/Mordor/\">Mordor</a></li>\n<li class=\"breadcrumb-item\"><a href=\"/gollum/overview/Mordor/Eye-Of-Sauron/\">Eye-Of-Sauron</a></li>\n<li class=\"breadcrumb-item\" aria-current=\"page\">Saruman</li>\n</ol></nav>", @page.breadcrumb
   end
+  
+  test 'guard against malicious filenames' do
+    malicious_title = '<img src=x onerror=alert(1) />'
+    @page.instance_variable_set("@path", malicious_title)
+    @page.instance_variable_set("@base_url", "")
+    assert @page.breadcrumb.include?(">%3Cimg+src%3Dx+onerror%3Dalert%281%29+</a>")
+  end
 
   test "breadcrumb with no path" do
     assert_equal 'Home', @page.breadcrumb

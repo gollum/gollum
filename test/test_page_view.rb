@@ -12,6 +12,17 @@ context "Precious::Views::Page" do
   teardown do
     FileUtils.rm_rf(@path)
   end
+  
+  test 'guard against malicious filenames' do
+    malicious_title = '<img src=x onerror=alert(1) />'
+    @wiki.write_page(malicious_title, :markdown, 'Is Bilbo a hobbit? Why certainly!')
+    page = @wiki.page(malicious_title)
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+    assert @view.breadcrumb.include?(">%3Cimg+src%3Dx+onerror%3Dalert%281%29+</a>")
+  end
 
   test "h1 title sanitizes correctly" do
     title = 'H1'
