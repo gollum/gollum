@@ -61,7 +61,9 @@ module Precious
         url.compact!
         return nil if url.empty?
 
-        ::File.join(*url).gsub(%r{/{2,}}, '/')
+        _url = ::File.join(*url)
+        _url = _url.gsub(%r{/{2,}}, '/')
+        _url = _url.gsub(%r{\?}, '%3F')
       end
     end
 
