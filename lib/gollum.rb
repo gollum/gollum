@@ -33,4 +33,25 @@ module Gollum
       super(message || "Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.")
     end
   end
+  
+  class TemplateFilter
+    @@filters = {}
+
+    def self.filters
+      @@filters
+    end
+
+    def self.add_filter(pattern, &replacement)
+      @@filters[pattern] = replacement
+    end
+
+    def self.apply_filters(data)
+      template = data
+      @@filters.each do |pattern, replacement|
+        template = template.gsub(pattern, replacement.call)
+      end
+      template
+    end
+  end
+
 end

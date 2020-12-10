@@ -352,13 +352,7 @@ module Precious
 
       get '/create/*' do
         forbid unless @allow_editing
-        if settings.wiki_options[:template_page] then
-          temppage = wiki_page('/_Template')
-          @template_page = (temppage.page != nil) ? temppage.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
-          if defined?(Gollum::TemplateFilter)
-            @template_page = Gollum::TemplateFilter.filter(@template_page)
-          end
-        end
+        @template_page = load_template if settings.wiki_options[:template_page]
         wikip = wiki_page(params[:splat].first)
         @name = wikip.name
         @ext  = wikip.ext
@@ -640,6 +634,13 @@ module Precious
         content_type file.mime_type
         file.raw_data
       end
+    end
+
+    def load_template
+      template_page = wiki_page('/_Template')
+      template_page = (templalate_page.page != nil) ? template_page.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
+      template_page = Gollum::TemplateFilter.apply_filters(template_page) unless Gollum::TemplateFilter.filters.empty?
+      template_page
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
