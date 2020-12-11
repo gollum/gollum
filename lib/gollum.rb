@@ -37,10 +37,6 @@ module Gollum
   class TemplateFilter
     @@filters = {}
 
-    def self.filters
-      @@filters
-    end
-
     def self.add_filter(pattern, &replacement)
       @@filters[pattern] = replacement
     end
