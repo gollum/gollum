@@ -638,7 +638,7 @@ module Precious
 
     def load_template
       template_page = wiki_page('/_Template')
-      template_page = (templalate_page.page != nil) ? template_page.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
+      template_page = (template_page.page != nil) ? template_page.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
       template_page = Gollum::TemplateFilter.apply_filters(template_page) unless Gollum::TemplateFilter.filters.empty?
       template_page
     end
