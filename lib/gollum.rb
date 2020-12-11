@@ -46,11 +46,10 @@ module Gollum
     end
 
     def self.apply_filters(data)
-      template = data
       @@filters.each do |pattern, replacement|
-        template = template.gsub(pattern, replacement.call)
+        data.gsub!(pattern, replacement.call)
       end
-      template
+      data
     end
   end
 
