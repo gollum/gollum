@@ -12,7 +12,7 @@ context "Precious::Views::Page" do
   teardown do
     FileUtils.rm_rf(@path)
   end
-  
+
   test 'guard against malicious filenames' do
     malicious_title = '<img src=x onerror=alert(1) />'
     @wiki.write_page(malicious_title, :markdown, 'Is Bilbo a hobbit? Why certainly!')
@@ -137,5 +137,10 @@ EOS
     @view.instance_variable_set :@page, page
     @view.instance_variable_set :@content, page.formatted_data
     assert_equal @view.breadcrumb, ''
+  end
+
+  test "links to pages containing ?" do
+    @view = Precious::Views::Page.new
+    assert_equal @view.page_route("Page?"), '/Page%3F'
   end
 end
