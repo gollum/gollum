@@ -53,19 +53,21 @@ a {
 /* Markdown body */
 
 .header-enum {
-  h2 {counter-reset: h3}
-  h3 {counter-reset: h4}
-  h4 {counter-reset: h5}
-  h5 {counter-reset: h6}
+  h1 {counter-reset: h2; counter-increment: h1}
+  h2 {counter-reset: h3; counter-increment: h2}
+  h3 {counter-reset: h4; counter-increment: h3}
+  h4 {counter-reset: h5; counter-increment: h4}
+  h5 {counter-reset: h6; counter-increment: h5}
+  h6 {counter-increment: h6;}
 
   --header-enum-style: decimal;
   
-  h1:before {counter-increment: h1; content: counter(h1, var(--header-enum-style)) ". ";}
-  h2:before {counter-increment: h2; content: counter(h1, var(--header-enum-style)) "."  counter(h2, var(--header-enum-style)) ". ";}
-  h3:before {counter-increment: h3; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) ". ";}
-  h4:before {counter-increment: h4; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) ". ";}
-  h5:before {counter-increment: h5; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) "." counter(h5, var(--header-enum-style)) ". ";}
-  h6:before {counter-increment: h6; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) "." counter(h5, var(--header-enum-style)) "." counter(h6, var(--header-enum-style)) ". ";}
+  h1:before {content: counter(h1, var(--header-enum-style)) ". ";}
+  h2:before {content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) ". ";}
+  h3:before {content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) ". ";}
+  h4:before {content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) ". ";}
+  h5:before {content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) "." counter(h5, var(--header-enum-style)) ". ";}
+  h6:before {content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) "." counter(h5, var(--header-enum-style)) "." counter(h6, var(--header-enum-style)) ". ";}
 }
 
 #footer {
