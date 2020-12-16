@@ -52,6 +52,32 @@ a {
 
 /* Markdown body */
 
+.anchor {
+  display: inline-block;
+  position: absolute;
+  opacity: 0;
+  background: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>') no-repeat;
+  background-size: 0.6em 1.35em;
+  padding-right: 0.5em;
+  padding-top: 0.4em;
+  width: 1em;
+  height: 1em;
+  text-decoration: none;
+  transition-property: opacity;
+  transition: 0.1s;
+}
+
+*:hover > .anchor, .anchor:focus{
+  opacity: 1;
+}
+
+.anchor.edit {
+  margin-left: 2em !important;
+  margin-top: 0.5em;
+  height: 0.5em;
+  background: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>') no-repeat;
+}
+
 .header-enum {
   h1 {counter-reset: h2; counter-increment: h1}
   h2 {counter-reset: h3; counter-increment: h2}
@@ -62,6 +88,15 @@ a {
 
   --header-enum-style: decimal;
   
+  // Move the anchor to the left accounting for the extra characters addeed by the section counters
+  @for $index from 1 through 6 {
+    h#{$index}{
+      a.anchor{
+        margin-left: -1-#{$index}*1.4ch;
+      }
+    }
+  }
+
   h1:before {content: counter(h1, var(--header-enum-style)) ". ";}
   h2:before {content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) ". ";}
   h3:before {content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) ". ";}
@@ -89,33 +124,6 @@ a {
     .anchor {
       display: none;
     }
-  }
-
-  .anchor {
-    display: inline-block;
-    position: absolute;
-    opacity: 0;
-    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>') no-repeat;
-    background-size: 0.6em 1.35em;
-    padding-right: 0.5em;
-    padding-top: 0.4em;
-    margin-left: -0.8em;
-    width: 1em;
-    height: 1em;
-    text-decoration: none;
-    transition-property: opacity;
-    transition: 0.1s;
-  }
-
-  *:hover > .anchor, .anchor:focus{
-    opacity: 1;
-  }
-
-  .anchor.edit {
-    margin-left: 2em !important;
-    margin-top: 0.5em;
-    height: 0.5em;
-    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>') no-repeat;
   }
 
   a {
