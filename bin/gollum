@@ -152,7 +152,7 @@ MSG
   opts.on('--template-dir [PATH]', 'Specify custom mustache template directory.') do |path|
     wiki_options[:template_dir] = path
   end
-  opts.on('--template-page', 'Use _Template in root as a template for new pages.') do
+  opts.on('--template-page', 'Use _Template.{ext} as a template for new pages.') do
     wiki_options[:template_page] = true
   end
   opts.on('--lenient-tag-lookup', 'Internal links resolve case-insensitively, will treat spaces as hyphens, and will match the first page found with a certain filename, anywhere in the repository. Provides compatibility with Gollum 4.x.') do
