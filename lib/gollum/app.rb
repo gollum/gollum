@@ -638,7 +638,7 @@ module Precious
 
     def load_template(path)
       template_page = wiki_page(::File.join(path, '_Template')).page || wiki_page('/_Template').page
-      template_page.nil? ? nil : Gollum::TemplateFilter.apply_filters(template_page.raw_data)
+      template_page ? Gollum::TemplateFilter.apply_filters(template_page.raw_data) : nil
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
