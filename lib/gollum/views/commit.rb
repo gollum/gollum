@@ -25,10 +25,12 @@ module Precious
       def files
         files = @diff.split(%r{^diff --git a/.+ b/.+$}).reject(&:empty?)
         files.map do |diff|
-          matched = diff.match(%r{(?<=^--- a/).+$})
-          matched = diff.match(%r{(?<=^\+\+\+ b/).+$}) if matched.nil?
+          matched = diff.match(%r{^\-\-\- (\")?a/(.+)(?(1)\")$})
+          matched = diff.match(%r{^\+\+\+ (\")?b/(.+)(?(1)\")$}) if matched.nil?
+          path = matched[2]
+          path.gsub!(/(?<!\\)\\/, '') if matched[1]
           {
-            path: matched[0],
+            path: path,
             lines: lines(diff)
           }
         end
