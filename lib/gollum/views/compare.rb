@@ -47,6 +47,8 @@ module Precious
       def line_class(line)
         if line =~ /^@@/
           'gc'
+        elsif git_line?(line)
+          'gg'
         elsif line =~ /^\+/
           'gi'
         elsif line =~ /^\-/
@@ -59,7 +61,7 @@ module Precious
       @left_diff_line_number = nil
 
       def left_diff_line_number(line)
-        if line =~ /^@@/
+        if git_line?(line)
           m, li                  = *line.match(/\-(\d+)/)
           @left_diff_line_number = li.to_i
           @current_line_number   = @left_diff_line_number
@@ -81,7 +83,7 @@ module Precious
       @right_diff_line_number = nil
 
       def right_diff_line_number(line)
-        if line =~ /^@@/
+        if git_line?(line)
           m, ri                   = *line.match(/\+(\d+)/)
           @right_diff_line_number = ri.to_i
           @current_line_number    = @right_diff_line_number
@@ -98,6 +100,10 @@ module Precious
           @current_line_number    = @right_diff_line_number - 1
         end
         ret
+      end
+
+      def git_line?(line)
+        !!(line =~ /^(\\ No newline|Binary files|@@)/)
       end
     end
   end
