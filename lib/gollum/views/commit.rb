@@ -23,12 +23,24 @@ module Precious
       end
 
       def files
-        files = @diff.split(%r{^diff --git a/.+ b/.+$}).reject(&:empty?)
+        files = @diff.force_encoding(Encoding::UTF_8).scan(%r{
+          ^diff\ --git\         # diff start
+          .+?                   # diff body
+          (?=^diff\ --git|\Z)   # scan until next diff or string
+        }sxmu)
+
         files.map do |diff|
-          matched = diff.match(%r{(?<=^--- a/).+$})
-          matched = diff.match(%r{(?<=^\+\+\+ b/).+$}) if matched.nil?
+          regex = %r{^diff --git (")?[ab]/(.+)(?(1)") (")?[ab]/(.+)(?(3)")}
+
+          match = diff.match(regex)
+          path = match[2]
+          path = match[4] if path.nil?
+
+          # Remove diff --git line
+          diff.gsub!(regex, '')
+
           {
-            path: matched[0],
+            path: path,
             lines: lines(diff)
           }
         end

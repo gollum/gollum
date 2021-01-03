@@ -19,16 +19,22 @@ module Precious
 
       def lines(diff = @diff)
         lines = []
-        lines_to_parse = diff.split("\n")[4..-1]
-        # If the diff is of a rename, the diff header will be one line longer than normal because it will contain a line starting with '+++' to indicate the 'new' filename.
-        # Make sure to skip that header line if it is present.
-        lines_to_parse = lines_to_parse[1..-1] if lines_to_parse[0].start_with?('+++')
+        lines_to_parse = diff.split("\n")[2..-1]
+        lines_to_parse = lines_to_parse[1..-1] if lines_to_parse[0].start_with?('index')
+        lines_to_parse = lines_to_parse[2..-1] if lines_to_parse[0].start_with?('---')
+
+        if lines_to_parse.nil? || lines_to_parse.empty?
+          lines_to_parse = []  # File is created without content
+        else
+          lines_to_parse = lines_to_parse[1..-1] if lines_to_parse[0].start_with?('+++')
+        end
+
         lines_to_parse.each_with_index do |line, line_index|
           lines << { :line  => line,
                      :class => line_class(line),
                      :ldln  => left_diff_line_number(line),
                      :rdln  => right_diff_line_number(line) }
-        end if diff
+        end
         lines
       end
 
