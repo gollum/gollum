@@ -4,6 +4,7 @@ module Precious
   module Views
     class Overview < Layout
       attr_reader :results, :ref, :allow_editing, :newable
+      HIDDEN_PATHS = ['.gitkeep']
 
       def title
         "Overview of #{@ref}"
@@ -51,9 +52,9 @@ module Precious
               folder_path = @path ? "#{@path}/#{folder_name}" : folder_name
               folder_url  = "#{overview_path}/#{folder_path}/"
               files_and_folders << {name: folder_name, icon: rocticon('file-directory'), type: 'dir', url: folder_url, is_file: false}
-            elsif result_path != '.gitkeep'
+            elsif !HIDDEN_PATHS.include?(result_path) 
               file_url = page_route(result.escaped_url_path)
-              files_and_folders << {name: result.filename, icon: rocticon('file'), type: 'file', url: file_url, is_file: true}
+              files_and_folders << {name: result.filename, icon: rocticon('file'), type: 'file', url: file_url, file_path: result.escaped_url_path, is_file: true}
             end
           end
           # 1012: Overview should list folders first, followed by files and pages sorted alphabetically

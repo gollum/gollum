@@ -18,7 +18,7 @@
 						<span class="pr-2">{{{icon}}}</span>
 						<span><a href="{{url}}">{{name}}</a></span>
 						{{#allow_editing}}
-							{{#is_file}}<button class="btn btn-sm float-right delete-file" data-file-path="{{url}}" data-confirm="Are you sure you want to delete {{name}}?">{{#octicon}}trashcan{{/octicon}}</button>{{/is_file}}
+							{{#is_file}}<button class="btn btn-sm float-right delete-file" data-file-path="{{file_path}}" data-confirm="Are you sure you want to delete {{name}}?">{{#octicon}}trashcan{{/octicon}}</button>{{/is_file}}
 						{{/allow_editing}}
 		      </li>
 				{{/files_folders}}

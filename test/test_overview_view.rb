@@ -86,5 +86,7 @@ context "Precious::Views::Overview" do
     results = [FakePageResult.new("Mordor/Eye-Of-Sauron.md"), FakeFileResult.new("Mordor/Aragorn.pdf"), FakePageResult.new("Mordor/Orc/Saruman.md"), FakePageResult.new("Mordor/.gitkeep")]
     @page.instance_variable_set("@results", results)
     assert_equal @page.files_folders.first[:url], '/wiki/gollum/overview/Mordor/Orc/'
+    assert_equal @page.files_folders.last[:url], '/wiki/Mordor/Eye-Of-Sauron'
+    assert_equal @page.files_folders.last[:file_path], 'Mordor/Eye-Of-Sauron'
   end
 end
