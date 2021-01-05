@@ -38,9 +38,10 @@ context "Precious::Views::Compare" do
     diff = get_commit_diff 'afe2034d400ba21e13361f38f74900c51dbc7fde'
     view.instance_variable_set(:@diff, diff)
 
-    assert_equal [{
-      :line=>"Binary files /dev/null and b/Mordor/eye.jpg differ",
-      :class=>"gg", :ldln=>"...", :rdln=>"..."
-    }], view.lines
+    lines = view.lines
+    line = lines[0].delete :line
+
+    assert_match %r{Binary files (/dev/null and b/Mordor/eye.jpg )?differ}, line
+    assert_equal [{:class=>"gg", :ldln=>"...", :rdln=>"..."}], lines
   end
 end
