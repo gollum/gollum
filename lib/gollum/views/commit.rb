@@ -30,14 +30,9 @@ module Precious
         }sxmu)
 
         files.map do |diff|
-          regex = %r{^diff --git (")?[ab]/(.+)(?(1)") (")?[ab]/(.+)(?(3)")}
-
-          match = diff.match(regex)
+          match = diff.match(%r{^diff --git (")?[ab]/(.+)(?(1)") (")?[ab]/(.+)(?(3)")})
           path = match[2]
           path = match[4] if path.nil?
-
-          # Remove diff --git line
-          diff.gsub!(regex, '')
 
           {
             path: path,
