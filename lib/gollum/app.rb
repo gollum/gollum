@@ -303,12 +303,13 @@ module Precious
           redirect to("/#{page.escaped_url_path}")
           return
         end
-        committer.commit
-        
+
         # Renaming preserves format, so add the page's format to the renamed path to retrieve the renamed page
         new_path = "#{rename}.#{Gollum::Page.format_to_ext(page.format)}"
         # Add a redirect from the old page to the new
-        wiki.add_redirect(page.url_path, clean_url(new_path)) if @redirects_enabled
+        wiki.add_redirect(page.url_path, clean_url(new_path), commit) if @redirects_enabled
+
+        committer.commit
 
         page = wiki_page(new_path).page
         return if page.nil?
