@@ -66,6 +66,10 @@ module Precious
         @per_page_uploads
       end
 
+      def show_local_time
+        @show_local_time ? 'true' : 'false'
+      end
+
       # Navigation bar
       def search
         false

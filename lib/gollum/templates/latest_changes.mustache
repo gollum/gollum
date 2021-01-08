@@ -12,7 +12,7 @@
 	{{#versions}}
 		<li class="Box-row Box-row--hover-gray border-top d-flex flex-items-center">
 			<span class="float-left col-2" id="user-icons">{{>author_template}}</span>
-			<span class="flex-auto col-1 text-gray-light">{{date}}</span>
+			<time class="flex-auto col-1 text-gray-light" datetime="{{datetime}}" data-format="{{date_format}}">{{date}}</time>
 			<span class="flex-auto col-7">{{message}}<br/>
 			{{#files}}
 			  <span class="flex-auto col-2">{{#renamed}}{{renamed}} -> {{/renamed}}<a href="{{link}}">{{file}}</a></span><br/>

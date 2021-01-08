@@ -1151,6 +1151,7 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/javascript/ace/worker-xquery.js
     lib/gollum/public/gollum/javascript/app.js
     lib/gollum/public/gollum/javascript/clipboard.min.js
+    lib/gollum/public/gollum/javascript/date.min.js
     lib/gollum/public/gollum/javascript/editor.js
     lib/gollum/public/gollum/javascript/editor/gollum.editor.js
     lib/gollum/public/gollum/javascript/editor/langs/asciidoc.js
