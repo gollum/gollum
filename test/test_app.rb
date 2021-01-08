@@ -804,7 +804,7 @@ context "Frontend with lotr" do
     assert last_response.ok?
     assert_equal last_response.body.include?('delete-link'), false
     assert_equal last_response.body.include?('page-info-toggle'), false
-    assert last_response.body.include?('This version of the page was edited by <b>Tom Preston-Werner</b> at 2010-04-07')
+    assert last_response.body.include?('This version of the page was edited by <b>Tom Preston-Werner</b> at <time datetime="2010-04-07T19:49:43Z" data-format="%Y-%m-%d %H:%M:%S">2010-04-07 12:49:43</time>.')
     assert last_response.body.include?("<a href=\"/Bilbo-Baggins.md\">View the most recent version.</a></p>")
   end
 
