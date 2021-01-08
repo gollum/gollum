@@ -118,6 +118,7 @@ Gollum comes with the following command line options:
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from wiki root.<sup>3</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from wiki root.<sup>3</sup> |
 | --no-edit         | none      | Disable the feature of editing pages. |
+| --local-time | none      | Show browser's local time instead of server's. Default: false.
 | --follow-renames, --no-follow-renames  | none      | Follow pages across renames in the History view. Default: true.
 | --allow-uploads   | [MODE]    | Enable file uploads. If set to `dir`, Gollum will store all uploads in the `/uploads/` directory in repository root. If set to `page`, Gollum will store each upload at the currently edited page.<sup>4</sup> |
 | --mathjax         | none      | Enables MathJax (renders mathematical equations). By default, uses the `TeX-AMS-MML_HTMLorMML` config with the `autoload-all` extension.<sup>5</sup> |
