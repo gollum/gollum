@@ -9,7 +9,7 @@
 	    {{{toc_content}}}
 	  </div>
 	  {{/has_toc}}
-	  <div id="wiki-body" class="gollum-{{format}}-content overflow-hidden {{#left_bar}}pl-4{{/left_bar}}">
+	  <div id="wiki-body" class="gollum-{{format}}-content overflow-hidden">
 	    {{#has_header}}
 	    <div id="wiki-header" class="gollum-{{header_format}}-content">
 	      <div id="header-content" class="markdown-body">
@@ -17,18 +17,20 @@
 	      </div>
 	    </div>
 	    {{/has_header}}
-	    <div class="markdown-body {{#header_enum?}}header-enum{{/header_enum?}}" {{#header_enum?}}style="--header-enum-style:{{header_enum_style}};"{{/header_enum?}}>
-	      {{{rendered_metadata}}}
-	      {{{content}}}
+	    <div class="main-content clearfix container-lg">
+	      <div class="markdown-body {{#header_enum?}}header-enum{{/header_enum?}} {{#has_sidebar}}col-md-9{{/has_sidebar}}" {{#header_enum?}}style="--header-enum-style:{{header_enum_style}};"{{/header_enum?}}>
+	        {{{rendered_metadata}}}
+	        {{{content}}}
+	      </div>
+	      {{#has_sidebar}}
+	      <div id="wiki-sidebar" class="Box Box--condensed col-md-3 px-4">
+	        <div id="sidebar-content" class="gollum-{{sidebar_format}}-content markdown-body">
+	          {{{sidebar_content}}}
+	        </div>
+	      </div>
+	      {{/has_sidebar}}
 	    </div>
 	  </div>
-	  {{#has_sidebar}}
-	  <div id="wiki-sidebar" class="gollum-{{sidebar_format}}-content">
-	    <div id="sidebar-content" class="Box Box--condensed col-3 markdown-body px-4 float-{{bar_side}}">
-	      {{{sidebar_content}}}
-	    </div>
-	  </div>
-	  {{/has_sidebar}}
 	  {{#has_footer}}
 	  <div id="wiki-footer" class="gollum-{{footer_format}}-content">
 	    <div id="footer-content" class="Box Box-condensed markdown-body pl-2">
