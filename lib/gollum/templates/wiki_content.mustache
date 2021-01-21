@@ -18,12 +18,12 @@
 	    </div>
 	    {{/has_header}}
 	    <div class="main-content clearfix container-lg">
-	      <div class="markdown-body {{#header_enum?}}header-enum{{/header_enum?}} {{#has_sidebar}}col-md-9{{/has_sidebar}}" {{#header_enum?}}style="--header-enum-style:{{header_enum_style}};"{{/header_enum?}}>
+	      <div class="markdown-body {{#header_enum?}}header-enum{{/header_enum?}} {{#has_sidebar}}float-md-{{body_side}} col-md-9{{/has_sidebar}}" {{#header_enum?}}style="--header-enum-style:{{header_enum_style}};"{{/header_enum?}}>
 	        {{{rendered_metadata}}}
 	        {{{content}}}
 	      </div>
 	      {{#has_sidebar}}
-	      <div id="wiki-sidebar" class="Box Box--condensed col-md-3 px-4">
+          <div id="wiki-sidebar" class="Box Box--condensed float-md-{{body_side}} col-md-3 px-4">
 	        <div id="sidebar-content" class="gollum-{{sidebar_format}}-content markdown-body">
 	          {{{sidebar_content}}}
 	        </div>

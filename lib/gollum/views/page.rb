@@ -123,7 +123,11 @@ module Precious
       def bar_side
         @bar_side.to_s
       end
-      
+
+      def body_side
+        @bar_side == :right ? "left" : "right"
+      end
+
       def left_bar
         @bar_side == :left
       end
