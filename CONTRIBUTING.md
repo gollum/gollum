@@ -70,7 +70,7 @@ An example of how to add a test file to the bare repository lotr.git.
 ```
 mkdir tmp
 cd tmp
-git clone ../lotr.git/
+git clone ../test/examples/lotr.git/
 git log
 echo "test" > test.md
 git add .
