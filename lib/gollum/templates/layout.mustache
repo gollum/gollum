@@ -5,12 +5,12 @@
   <meta name="MobileOptimized" content="width">
   <meta name="HandheldFriendly" content="true">
   <meta name="viewport" content="width=device-width">
+  {{#sprockets_stylesheet_tag}}primer{{/sprockets_stylesheet_tag}}
   {{#sprockets_stylesheet_tag}}app{{/sprockets_stylesheet_tag}}
   {{#sprockets_stylesheet_tag}}print print{{/sprockets_stylesheet_tag}}
 
   {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_css}}" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
-
 
   <script>
   var criticMarkup = '{{critic_markup}}';
