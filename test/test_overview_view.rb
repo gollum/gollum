@@ -89,6 +89,17 @@ context "Precious::Views::Overview" do
     assert_equal result[:name], 'Orc'
   end
 
+  test "files_folders retain unicode and ASCII characters" do
+    @page.instance_variable_set("@path", "Mordor")
+    @page.instance_variable_set("@base_url", "")
+    @page.instance_variable_set("@results", [
+      FakePageResult.new("Mordor/Eye-Of-Sauron-👁️-数学.md")
+    ])
+    result = @page.files_folders.first
+
+    assert result[:name], "Eye Of Sauron 👁️ 数学"
+  end
+
   test "base url" do
     # based on test "files_folders"
     @page.instance_variable_set("@path", "Mordor")

@@ -38,6 +38,18 @@ context "Precious::Views::Page" do
     assert_include @view.breadcrumb, "数学 📘"
   end
 
+  test "page header retains unicde and ASCII characters" do
+    title = "数学 📘"
+    @wiki.write_page(title, :markdown, "How old is Bilbo?")
+    page = @wiki.page(title)
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+
+    assert @view.page_header, "数学 📘"
+  end
+
   test "h1 title sanitizes correctly" do
     title = 'H1'
     @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert("js")</script>' + "\n # 3", commit_details)
@@ -49,8 +61,7 @@ context "Precious::Views::Page" do
     @view.instance_variable_set :@h1_title, true
 
     # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
+    assert @view.page_header, "1 & 2"
   end
 
   test "metadata is rendered into a table" do
