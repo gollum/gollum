@@ -1,9 +1,14 @@
 <nav class="actions pt-4 overflow-x-scroll">
-	<div class="TableObject">
-		<div class="TableObject-item">
-	    <a class="btn" id="minibutton-home" href="{{page_route}}">Home</a>
-	  </div>
+  <div class="TableObject">
+    <div class="TableObject-item hide-lg hide-xl">
+      {{>mobilenav}}
+    </div>
 
+    <div class="TableObject-item hide-sm hide-md">
+      <a class="btn btn-sm" id="minibutton-home" href="{{page_route}}">
+        Home
+      </a>
+    </div>
 
   	<div class="TableObject-item TableObject-item--primary px-2" {{^search}}style="visibility:hidden"{{/search}}>
 			{{>searchbar}}
