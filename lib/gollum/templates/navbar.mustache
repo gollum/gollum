@@ -1,5 +1,4 @@
-<nav class="actions pt-4">
-	
+<nav class="actions pt-4 overflow-x-scroll">
 	<div class="TableObject">
 		<div class="TableObject-item">
 	    <a class="btn" id="minibutton-home" href="{{page_route}}">Home</a>
@@ -9,18 +8,18 @@
   	<div class="TableObject-item TableObject-item--primary px-2" {{^search}}style="visibility:hidden"{{/search}}>
 			{{>searchbar}}
 	  </div>
-		
+
 	  <div class="TableObject-item">
 	    {{#overview}}<a class="btn" id="minibutton-overview" href="{{overview_path}}">Overview</a>{{/overview}}
 			{{#latest_changes}}<a class="btn" id="minibutton-latest-changes" href="{{latest_changes_path}}">Latest Changes</a>{{/latest_changes}}
 	  </div>
-	
+
 		{{#history}}
 		<div class="TableObject-item pl-1">
 			<a class="btn" id="minibutton-history" href="{{history_path}}/{{escaped_url_path}}">Page History</a>
 		</div>
 		{{/history}}
-		
+
     {{#allow_editing}}
 		  <div class="TableObject-item pl-1">
 				{{#allow_uploads}}
@@ -38,6 +37,6 @@
 				{{/editable}}
 			</div>
 		{{/allow_editing}}
-			
+
 	</div>
 </nav>

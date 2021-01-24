@@ -643,11 +643,20 @@ a {
     .s, .sc {
       color: #A31515;
     }
-  } 
+  }
 }
 
 div.pagination a.disabled {
   pointer-events: none;
+}
+
+nav.actions {
+  scrollbar-width: none;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+
+  ::webkit-scrollbar {
+    display: none;
+  }
 }
 
 .search-results {
