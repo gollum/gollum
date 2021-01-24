@@ -58,8 +58,8 @@
         <div class="BtnGroup" style="display: flex;">
           {{#allow_uploads}}
             <a
-              class="btn BtnGroup-item btn-sm hide-sm hide-md"
-              id="minibutton-upload-page"
+              class="btn BtnGroup-item btn-sm hide-sm hide-md
+                minibutton-upload-page"
             >
               Upload
             </a>
@@ -67,8 +67,8 @@
 
           {{#editable}}
             <a
-              class="btn BtnGroup-item btn-sm hide-sm hide-md"
-              id="minibutton-rename-page"
+              class="btn BtnGroup-item btn-sm hide-sm hide-md
+                minibutton-rename-page"
             >
               Rename
             </a>
@@ -85,7 +85,7 @@
 
       {{#editable}}
         <div class="TableObject-item">
-          <a class="btn btn-primary btn-sm" id="minibutton-new-page" href="#">
+          <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
             New
           </a>
         </div>
@@ -94,7 +94,7 @@
       {{^editable}}
         {{#newable}}
           <div class="TableObject-item">
-            <a class="btn btn-primary btn-sm" id="minibutton-new-page" href="#">
+            <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
               New
             </a>
           </div>
