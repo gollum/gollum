@@ -13,15 +13,29 @@ context "Precious::Views::Page" do
     FileUtils.rm_rf(@path)
   end
 
-  test 'guard against malicious filenames' do
-    malicious_title = '<img src=x onerror=alert(1) />'
-    @wiki.write_page(malicious_title, :markdown, 'Is Bilbo a hobbit? Why certainly!')
-    page = @wiki.page(malicious_title)
+  test "breadcrumbs guard against malicious input" do
+    malicious_path = '<script>alert("malicious-content");/Very Bad'
+    @wiki.write_page(malicious_path, :markdown, 'Is Bilbo a hobbit? Why certainly!')
+    page = @wiki.page(malicious_path)
     @view = Precious::Views::Page.new
     @view.instance_variable_set :@page, page
     @view.instance_variable_set :@content, page.formatted_data
     @view.instance_variable_set :@h1_title, false
-    assert @view.breadcrumb.include?(">%3Cimg+src%3Dx+onerror%3Dalert%281%29+</a>")
+
+    refute_includes @view.breadcrumb, malicious_path
+    assert_includes @view.breadcrumb, ">&lt;script&gt;alert(&quot;malicious-content&quot;);</a>"
+  end
+
+  test "breadcrumbs retain unicode and ASCII characters" do
+    path = "数学 📘/Age of Bilbo"
+    @wiki.write_page(path, :markdown, "How old is Bilbo?")
+    page = @wiki.page(path)
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+
+    assert_include @view.breadcrumb, "数学 📘"
   end
 
   test "h1 title sanitizes correctly" do

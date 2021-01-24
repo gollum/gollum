@@ -32,7 +32,7 @@ module Precious
         path.descend do |crumb|
           element = "#{crumb.basename}"
           next if element == @page.title
-          breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{CGI.escape(element.to_s)}</a></li>}
+          breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{CGI.escapeHTML(element.to_s)}</a></li>}
         end
         breadcrumb << %{</ol></nav>}
         breadcrumb.join("\n")
