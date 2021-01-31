@@ -185,6 +185,7 @@ module RJGit
       if (SSH_TRANSPORTS.include? transport_protocol.to_s) || (options[:transport_protocol] == :ssh) || options[:private_key_file]
         command.set_transport_config_callback(RJGitSSHConfigCallback.new(options))
       elsif (HTTP_TRANSPORTS.include? transport_protocol.to_s) || options[:username]
+        options[:password] = '' unless options[:password]
         command.set_credentials_provider(UsernamePasswordCredentialsProvider.new(options[:username], options[:password]))
       end
     end

@@ -5,7 +5,7 @@ dir = File.join(File.dirname(File.dirname(File.expand_path( __FILE__))), 'lib', 
 jgit_jar = File.basename(Dir.glob(File.join(dir, "org.eclipse.jgit-*.jar")).first)
 jgit_version = jgit_jar.split("org.eclipse.jgit-").last.split(".jar").first
 
-UPLOAD_PACK_ADVERTISEMENT = "00da55ca9d4360c522d38bc73ef9cce81c2f72c413d5 HEAD\u0000 include-tag multi_ack_detailed multi_ack ofs-delta side-band side-band-64k thin-pack no-progress shallow agent=JGit/#{jgit_version} symref=HEAD:refs/heads/master\n0044f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/alternative\n003f55ca9d4360c522d38bc73ef9cce81c2f72c413d5 refs/heads/master\n0000"
+UPLOAD_PACK_ADVERTISEMENT = "00db55ca9d4360c522d38bc73ef9cce81c2f72c413d5 HEAD\u0000 include-tag multi_ack_detailed multi_ack ofs-delta side-band side-band-64k thin-pack no-progress shallow agent=JGit/#{jgit_version} symref=HEAD:refs/heads/master\n0044f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/alternative\n003f55ca9d4360c522d38bc73ef9cce81c2f72c413d5 refs/heads/master\n0000"
 
 CORRECT_UPLOAD_REQUEST = "0067want f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 multi_ack_detailed side-band-64k thin-pack ofs-delta\n00000009done\n" # Correct request for an object
 
@@ -17,7 +17,7 @@ UPLOAD_REQUEST_UNKNOWN_OBJECT = "0067want aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 UPLOAD_REQUEST_INVALID_OBJECT = "0067want aaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa multi_ack_detailed side-band-64k thin-pack ofs-delta\n00000009done\n" # Malformed object id requested
 
-RECEIVE_PACK_ADVERTISEMENT = "00a4f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/alternative\u0000 side-band-64k delete-refs report-status quiet atomic ofs-delta agent=JGit/#{jgit_version}\n003f55ca9d4360c522d38bc73ef9cce81c2f72c413d5 refs/heads/master\n0000"
+RECEIVE_PACK_ADVERTISEMENT = "00a5f5771ead0e6d9a8d937bf5cabfa3678ee8944a92 refs/heads/alternative\u0000 side-band-64k delete-refs report-status quiet atomic ofs-delta agent=JGit/#{jgit_version}\n003f55ca9d4360c522d38bc73ef9cce81c2f72c413d5 refs/heads/master\n0000"
 
 CORRECT_RECEIVE_REQUEST = "00a20000000000000000000000000000000000000000 2f5cc213db87cb9719df0a094cab3a5bb458b361 refs/heads/test\x00 report-status side-band-64k agent=git/2.10.1.(Apple.Git-78)0000PACK\x00\x00\x00\x02\x00\x00\x00\x03\x98\x0Ex\x9C\x9D\xCCA\n\xC20\x10@\xD1}N\x91\xBDP23I\x9A\x80\x88\xA0{7^ \x99Li\xC16\xA5\xA6x}\xA5Gp\xF9\x16\xFF\xB7MD\xA3G+1Xk\xB2/\xE4\f\x93\xC5\f$\xB1\a\x840\x00\xFBLb2\xAB5m\xB24\xED\x1C\xA7X,y\xC3\x0E\xB1P\xC8\xDC\x93\f\x91Y\x020\x0E=\xB2\x05*N\xA5\xBD\x8Du\xD3\xF7\xF4I\xFA1KkU\x9F\xCB\x0F]=p]\xC7\xE9\xD5\xED{\xB7\xBC.\x1A\x1C\x90\xC3\x001\xE8\x93\x01c\x14\xD7y\x9EZ\x93\x7F{\xF5\x94w\xD3\xB7\xE3\xA2\xBE?\xADE\xA7\xFB\x01\x16O\xE5\xB9\xFA\xCD\xDE\x8E\x10iz\x91\xB6c&\x9F\x91\xC98\x06x\x9C\xEBb\xEAb\x9A\xF0M\x84\xF3\x8AVj\xE8\xF6\xF3\xA6\n\xCB\x82\x96\xB8\x14\xED\xFC\x12\xDE\xCA\x7F\x0F\x00\x9C=\f\x17\xF4\x01\x16B\x19\xCA\x17\x87\xBF,~\x869lw\xD1\xCC\x82O\xFC\xFC\x96x\x9C[k\xB7\xD3\x8E'\xC458D!4\xC0\xC51\xC4\x95k\x83\xAE<\x00FV\x06\x18\xB8Y\x92p\x19v\x9EV<A\\u\xFDTS\xEF\x85yb\x91"
 
