@@ -139,6 +139,17 @@ EOS
     assert_equal @view.breadcrumb, ''
   end
 
+  test "body_side is 'right' by default" do
+    @view = Precious::Views::Page.new
+    assert_equal @view.body_side, "right"
+  end
+
+  test "body_side is 'left' if bar_side side is 'right'" do
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@bar_side, :right
+    assert_equal @view.body_side, "left"
+  end
+
   test "links to pages containing ?" do
     @view = Precious::Views::Page.new
     assert_equal @view.page_route("Page?"), '/Page%3F'
