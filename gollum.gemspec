@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '5.1.2'
-  s.date              = '2020-12-01'
+  s.date              = '2021-01-03'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
@@ -68,15 +68,15 @@ Gem::Specification.new do |s|
     lib/gollum/app.rb
     lib/gollum/assets.rb
     lib/gollum/helpers.rb
-    lib/gollum/public/assets/.sprockets-manifest-459226ba5fc211b78ba9a3aa6ebde96c.json
+    lib/gollum/public/assets/.sprockets-manifest-35882cacf71c40928e0c2dc9b8acf8fe.json
+    lib/gollum/public/assets/app-4215e58002a43c4b2e9f0f7caa05a81c7c09d22a918c6fe40cd8e423db3110b5.css
+    lib/gollum/public/assets/app-4215e58002a43c4b2e9f0f7caa05a81c7c09d22a918c6fe40cd8e423db3110b5.css.gz
     lib/gollum/public/assets/app-6e925e38a12a40c4fa9e0400cc874e0f4f97b66fdeb90a144dea527dbb544fbd.js
     lib/gollum/public/assets/app-6e925e38a12a40c4fa9e0400cc874e0f4f97b66fdeb90a144dea527dbb544fbd.js.gz
-    lib/gollum/public/assets/app-b205e593a30f1cc0054e2e9ed9fc8af3658d8ef4a62b9708c20f204560deefb7.css
-    lib/gollum/public/assets/app-b205e593a30f1cc0054e2e9ed9fc8af3658d8ef4a62b9708c20f204560deefb7.css.gz
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css.gz
-    lib/gollum/public/assets/editor-b2c10f22ef6ca1e120956a2d11ff4ca19ac44d7e7240f5cc43ec949184d8b708.js
-    lib/gollum/public/assets/editor-b2c10f22ef6ca1e120956a2d11ff4ca19ac44d7e7240f5cc43ec949184d8b708.js.gz
+    lib/gollum/public/assets/editor-b621bfe2cb8823516fb3a96c32e82001b297f6754117b47bdad6e59db85a9d08.js
+    lib/gollum/public/assets/editor-b621bfe2cb8823516fb3a96c32e82001b297f6754117b47bdad6e59db85a9d08.js.gz
     lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css
     lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css.gz
     lib/gollum/public/gollum/javascript/HOWTO_UPDATE_ACE.md

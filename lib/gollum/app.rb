@@ -303,12 +303,13 @@ module Precious
           redirect to("/#{page.escaped_url_path}")
           return
         end
-        committer.commit
-        
+
         # Renaming preserves format, so add the page's format to the renamed path to retrieve the renamed page
         new_path = "#{rename}.#{Gollum::Page.format_to_ext(page.format)}"
         # Add a redirect from the old page to the new
-        wiki.add_redirect(page.url_path, clean_url(new_path)) if @redirects_enabled
+        wiki.add_redirect(page.url_path, clean_url(new_path), commit) if @redirects_enabled
+
+        committer.commit
 
         page = wiki_page(new_path).page
         return if page.nil?
@@ -351,14 +352,11 @@ module Precious
 
       get '/create/*' do
         forbid unless @allow_editing
-        if settings.wiki_options[:template_page] then
-          temppage = wiki_page('/_Template')
-          @template_page = (temppage.page != nil) ? temppage.page.raw_data : 'Template page option is set, but no /_Template page is present or committed.'
-        end
         wikip = wiki_page(params[:splat].first)
         @name = wikip.name
         @ext  = wikip.ext
         @path = wikip.path
+        @template_page = load_template(@path) if settings.wiki_options[:template_page]
         @allow_uploads = wikip.wiki.allow_uploads
         @upload_dest   = find_upload_dest(wikip.fullpath)
 
@@ -636,6 +634,11 @@ module Precious
         content_type file.mime_type
         file.raw_data
       end
+    end
+
+    def load_template(path)
+      template_page = wiki_page(::File.join(path, '_Template')).page || wiki_page('/_Template').page
+      template_page ? Gollum::TemplateFilter.apply_filters(template_page.raw_data) : nil
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
