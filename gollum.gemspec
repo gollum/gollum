@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency 'gollum-lib', '~> 5.0'
+  s.add_dependency 'gollum-lib', '~> 5.1'
   s.add_dependency 'kramdown', '~> 2.3'
   s.add_dependency 'kramdown-parser-gfm', '~> 1.1.0'
   s.add_dependency 'sinatra', '~> 2.0'
@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mustache-sinatra', '~> 1.0'
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 4.1'
-  s.add_dependency 'octicons', '~> 11.0'
+  s.add_dependency 'octicons', '~> 12.0'
   s.add_dependency 'sprockets', '~> 3.7'
   s.add_dependency 'sass', '~> 3.5'
   s.add_dependency 'uglifier', '~> 4.2'
