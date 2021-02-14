@@ -43,12 +43,22 @@ context "Precious::Views::Overview" do
     @page.instance_variable_set("@base_url", "")
     assert_equal "<nav aria-label=\"Breadcrumb\"><ol><li class=\"breadcrumb-item\"><a href=\"/gollum/overview\">Home</a></li>\n<li class=\"breadcrumb-item\"><a href=\"/gollum/overview/Mordor/\">Mordor</a></li>\n<li class=\"breadcrumb-item\"><a href=\"/gollum/overview/Mordor/Eye-Of-Sauron/\">Eye-Of-Sauron</a></li>\n<li class=\"breadcrumb-item\" aria-current=\"page\">Saruman</li>\n</ol></nav>", @page.breadcrumb
   end
-  
-  test 'guard against malicious filenames' do
-    malicious_title = '<img src=x onerror=alert(1) />'
-    @page.instance_variable_set("@path", malicious_title)
+
+  test "breadcrumbs guard against malicious filenames" do
+    malicious_path = '<script>alert("malicious-content");/Very Bad'
+    @page.instance_variable_set("@path", malicious_path)
     @page.instance_variable_set("@base_url", "")
-    assert @page.breadcrumb.include?(">%3Cimg+src%3Dx+onerror%3Dalert%281%29+</a>")
+
+    refute_includes @page.breadcrumb, malicious_path
+    assert_includes @page.breadcrumb, ">&lt;script&gt;alert(&quot;malicious-content&quot;);</a>"
+  end
+
+  test "breadcrumbs retain unicode and ASCII characters" do
+    title = "数学 📘"
+    @page.instance_variable_set("@path", title)
+    @page.instance_variable_set("@base_url", "")
+
+    assert_includes @page.breadcrumb, title
   end
 
   test "breadcrumb with no path" do
@@ -77,6 +87,17 @@ context "Precious::Views::Overview" do
     assert_equal result[:url], '/gollum/overview/Mordor/Orc/'
     assert_equal result[:is_file], false
     assert_equal result[:name], 'Orc'
+  end
+
+  test "files_folders retain unicode and ASCII characters" do
+    @page.instance_variable_set("@path", "Mordor")
+    @page.instance_variable_set("@base_url", "")
+    @page.instance_variable_set("@results", [
+      FakePageResult.new("Mordor/Eye-Of-Sauron-👁️-数学.md")
+    ])
+    result = @page.files_folders.first
+
+    assert result[:name], "Eye Of Sauron 👁️ 数学"
   end
 
   test "base url" do
