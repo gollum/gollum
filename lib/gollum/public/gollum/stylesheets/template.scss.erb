@@ -149,36 +149,52 @@ a {
   table.toc {
     width: auto;
     display: inline-table;
+
     .anchor {
       display: none;
     }
   }
 
-  .anchor {
-    display: inline-block;
-    position: absolute;
-    opacity: 0;
-    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>') no-repeat;
-    background-size: 0.6em 1.35em;
-    padding-right: 0.5em;
-    padding-top: 0.4em;
-    margin-left: -0.8em;
-    width: 1em;
-    height: 1em;
-    text-decoration: none;
-    transition-property: opacity;
-    transition: 0.1s;
-  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    $anchor-icon-size: 20px;
 
-  *:hover > .anchor, .anchor:focus{
-    opacity: 1;
-  }
+    position: relative;
 
-  .anchor.edit {
-    margin-left: 2em !important;
-    margin-top: 0.5em;
-    height: 0.5em;
-    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>') no-repeat;
+    .anchor {
+      display: inline-block;
+      position: absolute;
+      margin-top: 0.1em;
+      width: $anchor-icon-size;
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.1s ease-in-out;
+
+      &:before {
+        content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
+      }
+
+      &:not(.edit) {
+        left: -($anchor-icon-size/2);
+      }
+
+      &.edit {
+        margin-left: ($anchor-icon-size/2);
+
+        &:before {
+          content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
+        }
+      }
+    }
+
+    &:hover > .anchor,
+    .anchor:focus {
+      opacity: 1;
+    }
   }
 
   a {
