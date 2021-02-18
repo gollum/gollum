@@ -1,0 +1,72 @@
+<details class="details-reset details-overlay">
+  <summary class="btn btn-invisible" aria-haspopup="true">
+    <span aria-label="Open menu">☰</span>
+  </summary>
+
+  <div class="SelectMenu mx-sm-2">
+    <div class="SelectMenu-modal">
+      <div class="SelectMenu-divider py-3">
+        <h2 class="h6">Current Page</h2>
+        <div>{{page_header}}</div>
+      </div>
+
+      {{#history}}
+        <a
+          class="SelectMenu-item"
+          href="{{history_path}}/{{escaped_url_path}}"
+          role="menuitem"
+        >
+          <span>History</span>
+        </a>
+      {{/history}}
+
+      {{#allow_editing}}
+        {{#allow_uploads}}
+          <a class="SelectMenu-item minibutton-upload-page" role="menuitem">
+            <span>Upload</span>
+          </a>
+        {{/allow_uploads}}
+
+        {{#editable}}
+          <a class="SelectMenu-item minibutton-rename-page" role="menuitem">
+            <span>Rename</span>
+          </a>
+
+          <a
+            class="SelectMenu-item minibutton-edit-page"
+            href="{{edit_path}}/{{escaped_url_path}}"
+            role="menuitem"
+          >
+            <span>Edit</span>
+          </a>
+        {{/editable}}
+      {{/allow_editing}}
+
+      <div class="SelectMenu-divider py-3">
+        <h2 class="h6">Main Menu</h2>
+      </div>
+
+      <div class="SelectMenu-list">
+        <a class="SelectMenu-item" role="menuitem" href="{{page_route}}">
+          Home
+        </a>
+
+        {{#overview}}
+          <a class="SelectMenu-item" role="menuitem" href="{{overview_path}}">
+            Overview
+          </a>
+        {{/overview}}
+
+        {{#latest_changes}}
+          <a
+            class="SelectMenu-item"
+            href="{{latest_changes_path}}"
+            role="menuitem"
+          >
+            Latest Changes
+          </a>
+        {{/latest_changes}}
+      </div>
+    </div>
+  </div>
+</details>

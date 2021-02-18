@@ -1,43 +1,105 @@
-<nav class="actions pt-4">
-	
-	<div class="TableObject">
-		<div class="TableObject-item">
-	    <a class="btn" id="minibutton-home" href="{{page_route}}">Home</a>
-	  </div>
+<nav class="actions pt-4 px-2 px-lg-0 overflow-x-scroll">
+  <div class="TableObject">
+    <div class="TableObject-item hide-lg hide-xl">
+      {{>mobilenav}}
+    </div>
 
+    <div class="TableObject-item hide-sm hide-md">
+      <a class="btn btn-sm" id="minibutton-home" href="{{page_route}}">
+        Home
+      </a>
+    </div>
 
-  	<div class="TableObject-item TableObject-item--primary px-2" {{^search}}style="visibility:hidden"{{/search}}>
-			{{>searchbar}}
-	  </div>
-		
-	  <div class="TableObject-item">
-	    {{#overview}}<a class="btn" id="minibutton-overview" href="{{overview_path}}">Overview</a>{{/overview}}
-			{{#latest_changes}}<a class="btn" id="minibutton-latest-changes" href="{{latest_changes_path}}">Latest Changes</a>{{/latest_changes}}
-	  </div>
-	
-		{{#history}}
-		<div class="TableObject-item pl-1">
-			<a class="btn" id="minibutton-history" href="{{history_path}}/{{escaped_url_path}}">Page History</a>
-		</div>
-		{{/history}}
-		
+    <div
+      class="TableObject-item TableObject-item--primary px-2"
+      {{^search}}style="visibility:hidden"{{/search}}
+    >
+      {{>searchbar}}
+    </div>
+
+    <div class="TableObject-item hide-sm hide-md">
+      <div class="BtnGroup" style="display: flex;">
+        {{#overview}}
+          <a
+            class="btn BtnGroup-item btn-sm"
+            href="{{overview_path}}"
+            id="minibutton-overview"
+          >
+            Overview
+          </a>
+        {{/overview}}
+
+        {{#latest_changes}}
+          <a
+            class="btn BtnGroup-item btn-sm"
+            href="{{latest_changes_path}}"
+            id="minibutton-latest-changes"
+          >
+            Latest Changes
+          </a>
+        {{/latest_changes}}
+      </div>
+    </div>
+
+    {{#history}}
+      <div class="TableObject-item pl-2 hide-sm hide-md">
+        <a
+          class="btn btn-sm"
+          href="{{history_path}}/{{escaped_url_path}}"
+          id="minibutton-history"
+        >
+          Page History
+        </a>
+      </div>
+    {{/history}}
+
     {{#allow_editing}}
-		  <div class="TableObject-item pl-1">
-				{{#allow_uploads}}
-					<a class="btn" id="minibutton-upload-page" href="#">Upload</a>
-	    	{{/allow_uploads}}
-				{{#editable}}
-					<a class="btn" id="minibutton-rename-page" href="#">Rename</a>
-					<a class="btn" id="minibutton-edit-page" href="{{edit_path}}/{{escaped_url_path}}">Edit</a>
-					<a class="btn btn-primary" id="minibutton-new-page" href="#">New</a>
-				{{/editable}}
-				{{^editable}}
-					{{#newable}}
-						<a class="btn btn-primary" id="minibutton-new-page" href="#">New</a>
-					{{/newable}}
-				{{/editable}}
-			</div>
-		{{/allow_editing}}
-			
-	</div>
+      <div class="TableObject-item px-2">
+        <div class="BtnGroup" style="display: flex;">
+          {{#allow_uploads}}
+            <a
+              class="btn BtnGroup-item btn-sm hide-sm hide-md
+                minibutton-upload-page"
+            >
+              Upload
+            </a>
+          {{/allow_uploads}}
+
+          {{#editable}}
+            <a
+              class="btn BtnGroup-item btn-sm hide-sm hide-md
+                minibutton-rename-page"
+            >
+              Rename
+            </a>
+            <a
+              class="btn BtnGroup-item btn-sm hide-sm hide-md"
+              href="{{edit_path}}/{{escaped_url_path}}"
+              id="minibutton-edit-page"
+            >
+              Edit
+            </a>
+          {{/editable}}
+        </div>
+      </div>
+
+      {{#editable}}
+        <div class="TableObject-item">
+          <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
+            New
+          </a>
+        </div>
+      {{/editable}}
+
+      {{^editable}}
+        {{#newable}}
+          <div class="TableObject-item">
+            <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
+              New
+            </a>
+          </div>
+        {{/newable}}
+      {{/editable}}
+    {{/allow_editing}}
+  </div>
 </nav>
