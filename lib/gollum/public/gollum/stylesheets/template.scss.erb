@@ -53,19 +53,85 @@ a {
 /* Markdown body */
 
 .header-enum {
-  h2 {counter-reset: h3}
-  h3 {counter-reset: h4}
-  h4 {counter-reset: h5}
-  h5 {counter-reset: h6}
-
   --header-enum-style: decimal;
-  
-  h1:before {counter-increment: h1; content: counter(h1, var(--header-enum-style)) ". ";}
-  h2:before {counter-increment: h2; content: counter(h1, var(--header-enum-style)) "."  counter(h2, var(--header-enum-style)) ". ";}
-  h3:before {counter-increment: h3; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) ". ";}
-  h4:before {counter-increment: h4; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) ". ";}
-  h5:before {counter-increment: h5; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) "." counter(h5, var(--header-enum-style)) ". ";}
-  h6:before {counter-increment: h6; content: counter(h1, var(--header-enum-style)) "." counter(h2, var(--header-enum-style)) "." counter(h3, var(--header-enum-style)) "." counter(h4, var(--header-enum-style)) "." counter(h5, var(--header-enum-style)) "." counter(h6, var(--header-enum-style)) ". ";}
+
+  h1 {
+    counter-increment: h1;
+    counter-reset: h2;
+
+    &:before {
+      content: counter(h1, var(--header-enum-style)) ". ";
+    }
+  }
+
+  h2 {
+    counter-increment: h2;
+    counter-reset: h3;
+
+    &:before {
+      content:
+        counter(h1, var(--header-enum-style))
+        "." counter(h2, var(--header-enum-style))
+        ". ";
+    }
+  }
+
+  h3 {
+    counter-reset: h4;
+    counter-increment: h3;
+
+    &:before {
+      content:
+        counter(h1, var(--header-enum-style))
+        "." counter(h2, var(--header-enum-style))
+        "." counter(h3, var(--header-enum-style))
+        ". ";
+    }
+  }
+
+  h4 {
+    counter-increment: h4;
+    counter-reset: h5;
+
+    &:before {
+      content:
+        counter(h1, var(--header-enum-style))
+        "." counter(h2, var(--header-enum-style))
+        "." counter(h3, var(--header-enum-style))
+        "." counter(h4, var(--header-enum-style))
+        ". ";
+    }
+  }
+
+  h5 {
+    counter-increment: h5;
+    counter-reset: h6;
+
+    &:before {
+      content:
+        counter(h1, var(--header-enum-style))
+        "." counter(h2, var(--header-enum-style))
+        "." counter(h3, var(--header-enum-style))
+        "." counter(h4, var(--header-enum-style))
+        "." counter(h5, var(--header-enum-style))
+        ". ";
+    }
+  }
+
+  h6 {
+    counter-increment: h6;
+
+    &:before {
+      content:
+        counter(h1, var(--header-enum-style))
+        "." counter(h2, var(--header-enum-style))
+        "." counter(h3, var(--header-enum-style))
+        "." counter(h4, var(--header-enum-style))
+        "." counter(h5, var(--header-enum-style))
+        "." counter(h6, var(--header-enum-style))
+        ". ";
+    }
+  }
 }
 
 #footer {
@@ -77,43 +143,58 @@ a {
   padding: 1em 1em 1em 0;
   font-size: 15px;
   line-height: 1.7;
-  overflow: hidden;
   word-wrap: break-word;
 
   /* MediaWiki's TOC table -- this does not pertain to gollum's own TOC functionality */
   table.toc {
     width: auto;
     display: inline-table;
+
     .anchor {
       display: none;
     }
   }
 
-  .anchor {
-    display: inline-block;
-    position: absolute;
-    opacity: 0;
-    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>') no-repeat;
-    background-size: 0.6em 1.35em;
-    padding-right: 0.5em;
-    padding-top: 0.4em;
-    margin-left: -0.8em;
-    width: 1em;
-    height: 1em;
-    text-decoration: none;
-    transition-property: opacity;
-    transition: 0.1s;
-  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    $anchor-icon-size: 20px;
 
-  *:hover > .anchor, .anchor:focus{
-    opacity: 1;
-  }
+    position: relative;
 
-  .anchor.edit {
-    margin-left: 2em !important;
-    margin-top: 0.5em;
-    height: 0.5em;
-    background: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>') no-repeat;
+    .anchor {
+      display: inline-block;
+      position: absolute;
+      margin-top: 0.1em;
+      width: $anchor-icon-size;
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.1s ease-in-out;
+
+      &:before {
+        content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
+      }
+
+      &:not(.edit) {
+        left: -($anchor-icon-size/2);
+      }
+
+      &.edit {
+        margin-left: ($anchor-icon-size/2);
+
+        &:before {
+          content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
+        }
+      }
+    }
+
+    &:hover > .anchor,
+    .anchor:focus {
+      opacity: 1;
+    }
   }
 
   a {
@@ -124,13 +205,6 @@ a {
     &[id].wiki-toc-anchor {
       color: inherit;
       text-decoration: none;
-    }
-
-    &:first-child {
-      h1, h2, h3, h4, h5, h6 {
-        margin-top: 0;
-        padding-top: 0;
-      }
     }
   }
 
@@ -164,18 +238,6 @@ a {
 
   h2 {
     border-bottom: 1px solid #eee;
-  }
-
-  h3 {
-  }
-
-  h4 {
-  }
-
-  h5 {
-  }
-
-  h6 {
   }
 
   p, blockquote, ul, ol, dl, table, pre {
