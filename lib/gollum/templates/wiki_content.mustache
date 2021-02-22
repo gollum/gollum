@@ -22,8 +22,8 @@
 	        {{{content}}}
 	      </div>
 	      {{#has_sidebar}}
-          <div id="wiki-sidebar" class="Box Box--condensed float-md-{{body_side}} col-md-3 px-4">
-	        <div id="sidebar-content" class="gollum-{{sidebar_format}}-content markdown-body">
+          <div id="wiki-sidebar" class="Box Box--condensed float-md-{{body_side}} col-md-3">
+	        <div id="sidebar-content" class="gollum-{{sidebar_format}}-content markdown-body px-4">
 	          {{{sidebar_content}}}
 	        </div>
 	      </div>
@@ -31,8 +31,8 @@
 	    </div>
 	  </div>
 	  {{#has_footer}}
-	  <div id="wiki-footer" class="gollum-{{footer_format}}-content my-2 my-md-0">
-	    <div id="footer-content" class="Box Box-condensed markdown-body pl-2">
+	  <div id="wiki-footer" class="gollum-{{footer_format}}-content my-2">
+	    <div id="footer-content" class="Box Box-condensed markdown-body px-4">
 	      {{{footer_content}}}
 	    </div>
 	  </div>
