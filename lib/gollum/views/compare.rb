@@ -20,7 +20,7 @@ module Precious
       def lines(diff = @diff)
         lines = []
         lines_to_parse = diff.split("\n")[3..-1]
-        lines_to_parse = lines_to_parse[2..-1] if lines_to_parse[0].start_with?('---')
+        lines_to_parse = lines_to_parse[2..-1] if lines_to_parse[0] =~ /^(---|rename to )/
 
         if lines_to_parse.nil? || lines_to_parse.empty?
           lines_to_parse = []  # File is created without content
