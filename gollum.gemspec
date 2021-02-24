@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '5.1.2'
-  s.date              = '2021-01-03'
+  s.version           = '5.2'
+  s.date              = '2021-02-24'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
@@ -59,6 +59,7 @@ Gem::Specification.new do |s|
     bin/gollum-migrate-tags
     config.rb
     config.ru
+    contrib/automation/gollum-post
     contrib/openrc/conf.d/gollum
     contrib/openrc/init.d/gollum
     contrib/systemd/gollum@.service
@@ -68,15 +69,15 @@ Gem::Specification.new do |s|
     lib/gollum/app.rb
     lib/gollum/assets.rb
     lib/gollum/helpers.rb
-    lib/gollum/public/assets/.sprockets-manifest-35882cacf71c40928e0c2dc9b8acf8fe.json
-    lib/gollum/public/assets/app-4215e58002a43c4b2e9f0f7caa05a81c7c09d22a918c6fe40cd8e423db3110b5.css
-    lib/gollum/public/assets/app-4215e58002a43c4b2e9f0f7caa05a81c7c09d22a918c6fe40cd8e423db3110b5.css.gz
-    lib/gollum/public/assets/app-6e925e38a12a40c4fa9e0400cc874e0f4f97b66fdeb90a144dea527dbb544fbd.js
-    lib/gollum/public/assets/app-6e925e38a12a40c4fa9e0400cc874e0f4f97b66fdeb90a144dea527dbb544fbd.js.gz
+    lib/gollum/public/assets/.sprockets-manifest-e3f9b0be36ac3bccc4c006a52e352500.json
+    lib/gollum/public/assets/app-7a0bbff2e8bad3033e7c17e0e0f886f336a9d23d3b912dcd2ae389c48b4b63e6.css
+    lib/gollum/public/assets/app-7a0bbff2e8bad3033e7c17e0e0f886f336a9d23d3b912dcd2ae389c48b4b63e6.css.gz
+    lib/gollum/public/assets/app-7a4bd115f4bc7ece39bc8073ca0ffad7c5e55cc5837b1464a12dead4905cefb2.js
+    lib/gollum/public/assets/app-7a4bd115f4bc7ece39bc8073ca0ffad7c5e55cc5837b1464a12dead4905cefb2.js.gz
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css.gz
-    lib/gollum/public/assets/editor-b621bfe2cb8823516fb3a96c32e82001b297f6754117b47bdad6e59db85a9d08.js
-    lib/gollum/public/assets/editor-b621bfe2cb8823516fb3a96c32e82001b297f6754117b47bdad6e59db85a9d08.js.gz
+    lib/gollum/public/assets/editor-db10c8351306e92f1926ba225d0cd9c8e886482b3b9820a85825ec3abab5f1cf.js
+    lib/gollum/public/assets/editor-db10c8351306e92f1926ba225d0cd9c8e886482b3b9820a85825ec3abab5f1cf.js.gz
     lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css
     lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css.gz
     lib/gollum/public/gollum/javascript/HOWTO_UPDATE_ACE.md
@@ -1174,18 +1175,18 @@ Gem::Specification.new do |s|
     lib/gollum/public/gollum/javascript/jquery-1.7.2.min.js
     lib/gollum/public/gollum/javascript/jquery.resize.js
     lib/gollum/public/gollum/javascript/mousetrap.min.js
+    lib/gollum/public/gollum/javascript/polyfills.js
     lib/gollum/public/gollum/stylesheets/_base.scss
     lib/gollum/public/gollum/stylesheets/_breakpoint.scss
     lib/gollum/public/gollum/stylesheets/_component.scss
     lib/gollum/public/gollum/stylesheets/_features.scss
-    lib/gollum/public/gollum/stylesheets/_layout.scss
     lib/gollum/public/gollum/stylesheets/_spinners.scss
     lib/gollum/public/gollum/stylesheets/app.scss
     lib/gollum/public/gollum/stylesheets/criticmarkup.scss
     lib/gollum/public/gollum/stylesheets/dialog.scss
     lib/gollum/public/gollum/stylesheets/editor.scss
     lib/gollum/public/gollum/stylesheets/emoji.scss
-    lib/gollum/public/gollum/stylesheets/primer.scss
+    lib/gollum/public/gollum/stylesheets/primer.css
     lib/gollum/public/gollum/stylesheets/print.scss
     lib/gollum/public/gollum/stylesheets/spinner.scss
     lib/gollum/public/gollum/stylesheets/tables.scss
@@ -1202,6 +1203,7 @@ Gem::Specification.new do |s|
     lib/gollum/templates/history_authors/none.mustache
     lib/gollum/templates/latest_changes.mustache
     lib/gollum/templates/layout.mustache
+    lib/gollum/templates/mobilenav.mustache
     lib/gollum/templates/navbar.mustache
     lib/gollum/templates/overview.mustache
     lib/gollum/templates/page.mustache

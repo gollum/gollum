@@ -1,3 +1,14 @@
+# 5.2 2021-02-24
+
+* Improved styling and Primer upgrade (@benjaminwil)
+* Add redirect to rename commit (@ViChyavIn)
+* Updated dependencies
+* Bugfixes
+
+# 5.1.2
+
+* Guard against malicious filenames in breadcrumbs
+
 # 5.1
 
 * Bugfixes
