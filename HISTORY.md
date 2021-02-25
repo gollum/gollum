@@ -1,3 +1,7 @@
+# 5.2.1 2021-02-25
+
+* Fix include call to a missing asset (@benjaminwil). This caused slow first page loads on JRuby.
+
 # 5.2 2021-02-24
 
 * Improved styling and Primer upgrade (@benjaminwil)
