@@ -117,7 +117,7 @@ module Precious
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
 
-      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment == :production || settings.environment == :staging)
+      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
       @mathjax_path = ::File.join(File.dirname(__FILE__), 'public/gollum/javascript/MathJax')
       
