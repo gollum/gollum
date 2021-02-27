@@ -804,7 +804,7 @@ context "Frontend with lotr" do
     assert last_response.ok?
     assert_equal last_response.body.include?('delete-link'), false
     assert_equal last_response.body.include?('page-info-toggle'), false
-    assert_match last_response.body, %r{This version of the page was edited by <b>Tom Preston-Werner</b> at <time datetime="2010-04-07T19:49:43Z" data-format="%Y-%m-%d %H:%M:%S">\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}</time>.}
+    assert_match %r{This version of the page was edited by <b>Tom Preston-Werner</b> at <time datetime="2010-04-07T19:49:43Z" data-format="%Y-%m-%d %H:%M:%S">\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}</time>.}, last_response.body
     assert last_response.body.include?("<a href=\"/Bilbo-Baggins.md\">View the most recent version.</a></p>")
   end
 
