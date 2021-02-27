@@ -1,3 +1,18 @@
+# 5.2.1 2021-02-25
+
+* Fix include call to a missing asset (@benjaminwil). This caused slow first page loads on JRuby.
+
+# 5.2 2021-02-24
+
+* Improved styling and Primer upgrade (@benjaminwil)
+* Add redirect to rename commit (@ViChyavIn)
+* Updated dependencies
+* Bugfixes
+
+# 5.1.2
+
+* Guard against malicious filenames in breadcrumbs
+
 # 5.1
 
 * Bugfixes

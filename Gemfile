@@ -6,5 +6,4 @@ end
 
 gemspec
 
-gem "rake", '~> 12.3', '>= 12.3.3'
-
+gem 'rake', '~> 13.0'

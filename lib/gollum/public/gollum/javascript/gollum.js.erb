@@ -173,12 +173,12 @@ $(document).ready(function() {
     });
   }
 
-  if ($('#minibutton-upload-page').length) {
+  if ($('.minibutton-upload-page').length) {
     new ClipboardJS('#ClipboardJSlink');
-    $('#minibutton-upload-page').parent().removeClass('jaws');
-    $('#minibutton-upload-page').click(function(e) {
+    $('.minibutton-upload-page').parent().removeClass('jaws');
+    $('.minibutton-upload-page').click(function(e) {
       e.preventDefault();
-      
+
       $.GollumDialog.init({
         title: 'Upload File',
         fields: [
@@ -230,9 +230,9 @@ $(document).ready(function() {
     });
   }
 
-  if ($('#minibutton-rename-page').length) {
-    $('#minibutton-rename-page').parent().removeClass('jaws');
-    $('#minibutton-rename-page').click(function(e) {
+  if ($('.minibutton-rename-page').length) {
+    $('.minibutton-rename-page').parent().removeClass('jaws');
+    $('.minibutton-rename-page').click(function(e) {
       e.preventDefault();
 
       var path = decodeURI(pagePath());
@@ -274,9 +274,9 @@ $(document).ready(function() {
     });
   }
 
-  if ($('#minibutton-new-page').length) {
-    $('#minibutton-new-page').parent().removeClass('jaws');
-    $('#minibutton-new-page').click(function(e) {
+  if ($('.minibutton-new-page').length) {
+    $('.minibutton-new-page').parent().removeClass('jaws');
+    $('.minibutton-new-page').click(function(e) {
       e.preventDefault();
       var path = pagePath();
       if( path === undefined && $('#file-browser').length != 0 ){

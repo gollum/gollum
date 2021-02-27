@@ -16,15 +16,10 @@ module Precious
       DEFAULT_AUTHOR = 'you'
       @@to_xml       = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
 
-      def title
-        h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
-      end
-
       def page_header
         title
       end
-            
+
       def breadcrumb
         path = Pathname.new(@page.url_path).parent
         return '' if path.to_s == '.'
@@ -32,7 +27,7 @@ module Precious
         path.descend do |crumb|
           element = "#{crumb.basename}"
           next if element == @page.title
-          breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{CGI.escape(element.to_s)}</a></li>}
+          breadcrumb << %{<li class="breadcrumb-item"><a href="#{overview_path}/#{crumb}/">#{CGI.escapeHTML(element.to_s)}</a></li>}
         end
         breadcrumb << %{</ol></nav>}
         breadcrumb.join("\n")
@@ -135,7 +130,11 @@ module Precious
       def bar_side
         @bar_side.to_s
       end
-      
+
+      def body_side
+        @bar_side == :right ? "left" : "right"
+      end
+
       def left_bar
         @bar_side == :left
       end
@@ -277,6 +276,10 @@ module Precious
         result << "</tr>\n</table>\n"
       end
 
+      def title
+        h1 = @h1_title ? page_header_from_content(@content) : false
+        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
+      end
     end
   end
 end

@@ -37,7 +37,7 @@
 			<button class="btn btn-sm function-button" id="function-h3" title="Heading 3">h3</button>
 			<span class="pr-2"></span>
 			<button class="btn btn-sm function-button" id="function-link" title="Link">{{#octicon}}link{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-image" title="Image">{{#octicon}}file-media{{/octicon}}</button>
+			<button class="btn btn-sm function-button" id="function-image" title="Image">{{#octicon}}image{{/octicon}}</button>
 			<span class="pr-2"></span>
 			{{#critic_markup}}
 			<button class="btn btn-sm function-button" id="function-critic-accept" title="Accept Selected CriticMarkup">{{#octicon}}plus{{/octicon}}</button>
@@ -50,13 +50,13 @@
 
     <div id="gollum-editor-format-selector">
       <label for="format">Keybinding</label>
-      <select id="keybinding" name="keybinding" class="form-select">
+      <select id="keybinding" name="keybinding" class="form-select input-sm">
         <option selected="selected">default</option>
         <option>vim</option>
         <option>emacs</option>
       </select>
       <label for="format">Markup</label>
-      <select id="wiki_format" name="format" class="form-select">
+      <select id="wiki_format" name="format" class="form-select input-sm">
       {{#formats}}
       {{#enabled}}
       <option {{#selected}}selected="selected" {{/selected}}value="{{id}}" data-ext="{{ext}}">

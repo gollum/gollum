@@ -12,7 +12,7 @@ require 'rhino' if RUBY_PLATFORM == 'java'
 require File.expand_path('../gollum/uri_encode_component', __FILE__)
 
 module Gollum
-  VERSION = '5.1.2'
+  VERSION = '5.2.1'
 
   def self.assets_path
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
@@ -33,4 +33,20 @@ module Gollum
       super(message || "Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.")
     end
   end
+  
+  class TemplateFilter
+    @@filters = {}
+
+    def self.add_filter(pattern, &replacement)
+      @@filters[pattern] = replacement
+    end
+
+    def self.apply_filters(data)
+      @@filters.each do |pattern, replacement|
+        data.gsub!(pattern, replacement.call)
+      end
+      data
+    end
+  end
+
 end

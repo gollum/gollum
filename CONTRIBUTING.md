@@ -62,6 +62,8 @@ Pull Requests fixing bugs, implementing new features, or updating documentation 
 	```
 	bundle exec rake test
 	```
+	
+To profile slow tests, you can use `bundle exec rake test TESTOPTS="--verbose"`.
 
 ### Working with test repositories
 
@@ -70,7 +72,7 @@ An example of how to add a test file to the bare repository lotr.git.
 ```
 mkdir tmp
 cd tmp
-git clone ../lotr.git/
+git clone ../test/examples/lotr.git/
 git log
 echo "test" > test.md
 git add .

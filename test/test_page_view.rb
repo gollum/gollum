@@ -13,15 +13,41 @@ context "Precious::Views::Page" do
     FileUtils.rm_rf(@path)
   end
 
-  test 'guard against malicious filenames' do
-    malicious_title = '<img src=x onerror=alert(1) />'
-    @wiki.write_page(malicious_title, :markdown, 'Is Bilbo a hobbit? Why certainly!')
-    page = @wiki.page(malicious_title)
+  test "breadcrumbs guard against malicious input" do
+    malicious_path = '<script>alert("malicious-content");/Very Bad'
+    @wiki.write_page(malicious_path, :markdown, 'Is Bilbo a hobbit? Why certainly!')
+    page = @wiki.page(malicious_path)
     @view = Precious::Views::Page.new
     @view.instance_variable_set :@page, page
     @view.instance_variable_set :@content, page.formatted_data
     @view.instance_variable_set :@h1_title, false
-    assert @view.breadcrumb.include?(">%3Cimg+src%3Dx+onerror%3Dalert%281%29+</a>")
+
+    refute_includes @view.breadcrumb, malicious_path
+    assert_includes @view.breadcrumb, ">&lt;script&gt;alert(&quot;malicious-content&quot;);</a>"
+  end
+
+  test "breadcrumbs retain unicode and ASCII characters" do
+    path = "数学 📘/Age of Bilbo"
+    @wiki.write_page(path, :markdown, "How old is Bilbo?")
+    page = @wiki.page(path)
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+
+    assert_include @view.breadcrumb, "数学 📘"
+  end
+
+  test "page header retains unicde and ASCII characters" do
+    title = "数学 📘"
+    @wiki.write_page(title, :markdown, "How old is Bilbo?")
+    page = @wiki.page(title)
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+
+    assert @view.page_header, "数学 📘"
   end
 
   test "h1 title sanitizes correctly" do
@@ -35,9 +61,45 @@ context "Precious::Views::Page" do
     @view.instance_variable_set :@h1_title, true
 
     # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
+    assert @view.page_header, "1 & 2"
   end
+
+  test "page header uses filename when h1_title is false" do
+    title = "H1"
+    contents = <<~TEXT
+      # First H1 header
+      # Second H1 header
+    TEXT
+
+    @wiki.write_page(title, :markdown, contents, commit_details)
+    page = @wiki.page(title)
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+
+    assert_equal @view.page_header, "H1"
+  end
+
+  test "page header uses filename when h1_title is true" do
+    contents = <<~TEXT
+      # First H1 header
+      # Second H1 header
+    TEXT
+
+    @wiki.write_page("H1", :markdown, contents, commit_details)
+    page = @wiki.page("H1")
+
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
+
+    assert_equal @view.page_header, "First H1 header"
+  end
+
+
 
   test "metadata is rendered into a table" do
     title = 'metadata test'
@@ -104,21 +166,6 @@ EOS
     assert_equal "594e928cc5dcb6d833dfb86bb36076fd4a84eea7", @view.id
   end
 
-  test "h1 title can be disabled" do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert("js")</script>' + "\n # 3", commit_details)
-    page = @wiki.page(title)
-
-    @view = Precious::Views::Page.new
-    @view.instance_variable_set :@page, page
-    @view.instance_variable_set :@content, page.formatted_data
-    @view.instance_variable_set :@h1_title, false
-
-    # Title is based on file name when h1_title is false.
-    actual = @view.title
-    assert_equal title, actual
-  end
-
   test "breadcrumbs" do
     @wiki.write_page('subdir/BC Test 1', :markdown, 'Test', commit_details)
     page = @wiki.page('subdir/BC Test 1')
@@ -137,6 +184,17 @@ EOS
     @view.instance_variable_set :@page, page
     @view.instance_variable_set :@content, page.formatted_data
     assert_equal @view.breadcrumb, ''
+  end
+
+  test "body_side is 'right' by default" do
+    @view = Precious::Views::Page.new
+    assert_equal @view.body_side, "right"
+  end
+
+  test "body_side is 'left' if bar_side side is 'right'" do
+    @view = Precious::Views::Page.new
+    @view.instance_variable_set :@bar_side, :right
+    assert_equal @view.body_side, "left"
   end
 
   test "links to pages containing ?" do

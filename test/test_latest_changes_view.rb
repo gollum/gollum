@@ -35,9 +35,11 @@ context 'Precious::Views::LatestChanges' do
     get(@url)
     body = last_response.body
 
+    commits_list_elements = body.scan(%r{<li class="Box-row Box-row--hover-gray border-top d-flex flex-items-center">})
+    assert !commits_list_elements.nil?, "the commits should be listed with this tag"
+    assert commits_list_elements.length == 10, "/latest_changes should include the :pagination_count commit"
+
     assert body.include?("Charles Pence</span>"), "/latest_changes should include Author Charles Pence"
-    assert body.include?('1db89eb'), "/latest_changes should include the :pagination_count commit"
-    assert !body.include?('a8ad3c0'), "/latest_changes should not include more than :pagination_count commits"
     assert body.include?('<a href="/Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e">Data-Two.csv</a>'), "/latest_changes include links to modified files in #{body}"
     assert body.include?('<a href="/Hobbit.md/874f597a5659b4c3b153674ea04e406ff393975e">Hobbit.md</a>'), "/latest_changes should include links to modified pages in #{body}"
   end
