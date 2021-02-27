@@ -123,7 +123,7 @@ EOF
     
     post "/gollum/edit/A", :content => 'def', :page => 'A',
          :format => page.format, :message => 'def', :etag => old_sha
-    assert_equal last_response.status, 412    
+    assert_equal last_response.status, 412
   end
 
   test "edit page with empty message" do
@@ -330,9 +330,9 @@ EOF
     page='_Template'
     post '/gollum/create', :content => 'fake template', :page => page,
       :path               => '/', :format => 'markdown', :message => ''
-    follow_redirect!      
+    follow_redirect!
     assert last_response.ok?
-    @wiki.clear_cache    
+    @wiki.clear_cache
     get "/gollum/create/TT"
     assert last_response.ok?
     post '/gollum/delete/_Template'
@@ -340,7 +340,7 @@ EOF
   end
 
   test "create with template succeed if template doesn't exist" do
-    Precious::App.set(:wiki_options, { :template_page => true }) 
+    Precious::App.set(:wiki_options, { :template_page => true })
     get "/gollum/create/TT"
     assert last_response.ok?
     Precious::App.set(:wiki_options, { :template_page => false })
@@ -804,7 +804,7 @@ context "Frontend with lotr" do
     assert last_response.ok?
     assert_equal last_response.body.include?('delete-link'), false
     assert_equal last_response.body.include?('page-info-toggle'), false
-    assert last_response.body.include?('This version of the page was edited by <b>Tom Preston-Werner</b> at <time datetime="2010-04-07T19:49:43Z" data-format="%Y-%m-%d %H:%M:%S">2010-04-07 12:49:43</time>.')
+    assert_match last_response.body, %r{This version of the page was edited by <b>Tom Preston-Werner</b> at <time datetime="2010-04-07T19:49:43Z" data-format="%Y-%m-%d %H:%M:%S">\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}</time>.}
     assert last_response.body.include?("<a href=\"/Bilbo-Baggins.md\">View the most recent version.</a></p>")
   end
 
@@ -975,5 +975,5 @@ context 'Frontend with base path' do
   
   def app
     Precious::MapGollum.new(@base_path)
-  end  
+  end
 end
