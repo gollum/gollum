@@ -1,6 +1,7 @@
 rvm:
   - 2.4.0
   - 2.6.0
+  - 3.0.0
   - jruby-9.2.9.0
 jdk:
   - oraclejdk9
