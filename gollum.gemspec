@@ -46,7 +46,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
   s.add_development_dependency 'mocha', '~> 1.8.0'
   s.add_development_dependency 'test-unit', '~> 3.3.0'
-  s.add_development_dependency 'webrick', '~> 1.4.2'
 
   # = MANIFEST =
   s.files = %w[
