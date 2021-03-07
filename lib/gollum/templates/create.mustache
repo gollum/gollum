@@ -4,13 +4,15 @@
   <h1 class="py-4">Create New Page</h1>
 </div>
 <div id="wiki-content" class="create edit">
-	<div class="tabnav">
-	  <nav class="tabnav-tabs" aria-label="Foo bar">
-	    <a href="#" id="edit" class="tabnav-tab selected" aria-current="edit">Edit</a>
-	    <a href="#" id="preview" class="tabnav-tab" aria-current="preview">Preview</a>
-	  </nav>
-	</div>
-	
+  <div class="tabnav">
+    <nav class="tabnav-tabs" aria-label="Toggle edit or preview mode">
+      <a href="#" id="edit" class="tabnav-tab selected" aria-current="page">
+        Edit
+      </a>
+      <a href="#" id="preview" class="tabnav-tab">Preview</a>
+    </nav>
+  </div>
+
   <div class="has-sidebar tabnav-div" id="edit-content">
     {{>editor}}
   </div>
