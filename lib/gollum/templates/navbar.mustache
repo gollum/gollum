@@ -18,7 +18,7 @@
     </div>
 
     <div class="TableObject-item hide-sm hide-md">
-      <div class="BtnGroup" style="display: flex;">
+      <div class="BtnGroup d-flex">
         {{#overview}}
           <a
             class="btn BtnGroup-item btn-sm"
@@ -41,21 +41,19 @@
       </div>
     </div>
 
-    {{#history}}
-      <div class="TableObject-item pl-2 hide-sm hide-md">
-        <a
-          class="btn btn-sm"
-          href="{{history_path}}/{{escaped_url_path}}"
-          id="minibutton-history"
-        >
-          Page History
-        </a>
-      </div>
-    {{/history}}
+    <div class="TableObject-item px-2">
+      <div class="BtnGroup d-flex">
+        {{#history}}
+          <a
+            class="btn BtnGroup-item btn-sm hide-sm hide-md"
+            href="{{history_path}}/{{escaped_url_path}}"
+            id="minibutton-history"
+          >
+            History
+          </a>
+        {{/history}}
 
-    {{#allow_editing}}
-      <div class="TableObject-item px-2">
-        <div class="BtnGroup" style="display: flex;">
+        {{#allow_editing}}
           {{#allow_uploads}}
             <a
               class="btn BtnGroup-item btn-sm hide-sm hide-md
@@ -80,9 +78,12 @@
               Edit
             </a>
           {{/editable}}
-        </div>
+        {{/allow_editing}}
       </div>
+    </div>
 
+
+    {{#allow_editing}}
       {{#editable}}
         <div class="TableObject-item">
           <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
