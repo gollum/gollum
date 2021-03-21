@@ -54,21 +54,21 @@
 
       {{#allow_editing}}
         {{#allow_uploads}}
-          <a
+          <button
             class="btn BtnGroup-item btn-sm hide-sm hide-md
               minibutton-upload-page"
           >
             Upload
-          </a>
+          </button>
         {{/allow_uploads}}
 
         {{#editable}}
-          <a
+          <button
             class="btn BtnGroup-item btn-sm hide-sm hide-md
               minibutton-rename-page"
           >
             Rename
-          </a>
+          </button>
           <a
             class="btn BtnGroup-item btn-sm hide-sm hide-md"
             href="{{edit_path}}/{{escaped_url_path}}"
@@ -80,7 +80,6 @@
       {{/allow_editing}}
     </div>
   </div>
-
 
   {{#allow_editing}}
     {{#editable}}
