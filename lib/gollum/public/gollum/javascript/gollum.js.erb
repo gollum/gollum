@@ -380,8 +380,12 @@ $(document).ready(function() {
       active_tab = '#edit.tabnav-tab';
     }
 
+    $('.tabnav-tab.selected').removeAttr('aria-current');
     $('.tabnav-tab.selected').removeClass('selected');
+
+    $(active_tab).attr('aria-current', 'page');
     $(active_tab).addClass('selected');
+
     $('.tabnav-div').hide();
     $(active_div).show();
   }
