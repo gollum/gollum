@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9'
 
   s.name              = 'gollum'
-  s.version           = '5.2.1'
-  s.date              = '2021-02-25'
+  s.version           = '5.2.2'
+  s.date              = '2021-03-27'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
@@ -69,11 +69,11 @@ Gem::Specification.new do |s|
     lib/gollum/app.rb
     lib/gollum/assets.rb
     lib/gollum/helpers.rb
-    lib/gollum/public/assets/.sprockets-manifest-15b663a27211dc9de9a452b4b74462d7.json
-    lib/gollum/public/assets/app-7a0bbff2e8bad3033e7c17e0e0f886f336a9d23d3b912dcd2ae389c48b4b63e6.css
-    lib/gollum/public/assets/app-7a0bbff2e8bad3033e7c17e0e0f886f336a9d23d3b912dcd2ae389c48b4b63e6.css.gz
-    lib/gollum/public/assets/app-7a4bd115f4bc7ece39bc8073ca0ffad7c5e55cc5837b1464a12dead4905cefb2.js
-    lib/gollum/public/assets/app-7a4bd115f4bc7ece39bc8073ca0ffad7c5e55cc5837b1464a12dead4905cefb2.js.gz
+    lib/gollum/public/assets/.sprockets-manifest-de7bb79aec424e55af1acdcc4237b301.json
+    lib/gollum/public/assets/app-0fd228e26bfbe6fe31a2da268eb0e98e780c1191c1a918adf383377946e9c838.js
+    lib/gollum/public/assets/app-0fd228e26bfbe6fe31a2da268eb0e98e780c1191c1a918adf383377946e9c838.js.gz
+    lib/gollum/public/assets/app-ad43ca64b295d8444b10f22ee868f18429268af498f1bc515434878b690e37a2.css
+    lib/gollum/public/assets/app-ad43ca64b295d8444b10f22ee868f18429268af498f1bc515434878b690e37a2.css.gz
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css.gz
     lib/gollum/public/assets/editor-db10c8351306e92f1926ba225d0cd9c8e886482b3b9820a85825ec3abab5f1cf.js
