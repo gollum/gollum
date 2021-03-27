@@ -47,7 +47,7 @@ module Precious
       end
 
       def mathjax_js
-        page_route("gollum/assets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
+        "#{page_route('gollum/assets/mathjax/MathJax.js')}?config=TeX-AMS-MML_HTMLorMML"
       end
 
       def css # custom css
