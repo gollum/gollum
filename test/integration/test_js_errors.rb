@@ -13,7 +13,7 @@ def expected_errors
   ]
 end
 
-context 'Frontend with matjax' do
+context 'Frontend with mathjax' do
   include Capybara::DSL
   
   setup do
@@ -27,12 +27,15 @@ context 'Frontend with matjax' do
   end
   
   test 'expected asset errors' do
-    visit '/'
-    console_logs(page) do |logs|
-      expected_errors.each do |error|
-        assert logs.find {|log| log.message.match?(error) }
+    test_routes = ['/', '/create/Foobar.rst']
+    test_routes.each do |route|
+      visit route
+      console_logs(page) do |logs|
+        expected_errors.each do |error|
+          assert logs.find {|log| log.message.match?(error) }
+        end
+        assert logs.size == expected_errors.size # No other errors
       end
-      assert logs.size == expected_errors.size # No other errors
     end
   end
   
