@@ -17,22 +17,6 @@ module Gollum
   def self.assets_path
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
   end
-
-  class Error < StandardError;
-  end
-
-  class DuplicatePageError < Error
-    attr_accessor :dir
-    attr_accessor :existing_path
-    attr_accessor :attempted_path
-
-    def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || "Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.")
-    end
-  end
   
   class TemplateFilter
     @@filters = {}
