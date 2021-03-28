@@ -1,16 +1,19 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'helper'))
 require 'selenium-webdriver'
-require 'capybara'
 require 'capybara/dsl'
 
-def console_logs(page, level = :severe, &block)
-  yield page.driver.browser.manage.logs.get(:browser).select{|log| log.level == level.to_s.upcase }
+def console_log(page, level = :severe)
+  page.driver.browser.manage.logs.get(:browser).select{|log| log.level == level.to_s.upcase }
 end
 
 def expected_errors
-  [
+  Regexp.union([
     %r{Refused to apply style from 'http:.*/gollum/create/custom.css'}
-  ]
+  ])
+end
+
+def assert_only_expected_errors(log)
+  assert_equal [], log.reject {|err| err.message.match?(expected_errors) }
 end
 
 context 'Frontend with mathjax' do
@@ -26,17 +29,16 @@ context 'Frontend with mathjax' do
     Capybara.server = :webrick
   end
   
-  test 'expected asset errors' do
-    test_routes = ['/', '/create/Foobar.rst']
-    test_routes.each do |route|
-      visit route
-      console_logs(page) do |logs|
-        expected_errors.each do |error|
-          assert logs.find {|log| log.message.match?(error) }
-        end
-        assert logs.size == expected_errors.size # No other errors
-      end
-    end
+  test 'no unexpected errors on /' do
+    visit '/'
+    log = console_log(page)
+    assert_only_expected_errors(log)
+  end
+  
+  test 'no unexpected errors on /create/' do
+    visit '/create/Foobar'
+    log = console_log(page)
+    assert_only_expected_errors(log)
   end
   
   teardown do
