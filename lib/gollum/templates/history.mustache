@@ -16,7 +16,7 @@
 				<li class="Box-row border-top Box-row--hover-gray d-flex flex-items-center">
 					<span class="pr-2"><input class="checkbox" type="checkbox" name="versions[]" value="{{id}}"></span>
 					<span class="float-left col-2" id="user-icons">{{>author_template}}</span>
-					<span class="flex-auto col-1 text-gray-light">{{date}}</span>
+					<time class="flex-auto col-1 text-gray-light" datetime="{{datetime}}" data-format="{{date_format}}">{{date}}</time>
 					<span class="flex-auto col-5">{{message}}</span>
 					<span class="pl-4 float-right">
 						<a href="{{href}}" class="btn btn-outline text-mono">{{id7}}</a>

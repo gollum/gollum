@@ -47,11 +47,23 @@ module Precious
         return DEFAULT_AUTHOR unless first
         first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
       end
+      
+      def date_full
+        first = @version ? page.version : page.last_version
+        return Time.now unless first
+        first.authored_date
+      end
 
       def date
-        first = @version ? page.version : page.last_version
-        return Time.now.strftime(DATE_FORMAT) unless first
-        first.authored_date.strftime(DATE_FORMAT)
+        date_full.strftime(DATE_FORMAT)
+      end
+      
+      def datetime
+        date_full.utc.iso8601
+      end
+      
+      def date_format
+        DATE_FORMAT
       end
 
       def noindex
