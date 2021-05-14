@@ -110,7 +110,12 @@ module Precious
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
 
       forbid unless @allow_editing || request.request_method == 'GET'
-      Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
+
+      if settings.wiki_options[:template_dir]
+        require 'gollum/views/template_cascade'
+        Precious::Views::Layout.extend Precious::Views::TemplateCascade
+        Precious::Views::Layout.template_priority_path = settings.wiki_options[:template_dir]
+      end
 
       @base_url = url('/', false).chomp('/').force_encoding('utf-8')
       @page_dir = settings.wiki_options[:page_file_dir].to_s
