@@ -271,7 +271,6 @@ else
   Precious::App.set(:environment, ENV.fetch('RACK_ENV', :production).to_sym)
   Precious::App.set(:gollum_path, gollum_path)
   Precious::App.set(:wiki_options, wiki_options)
-  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
 
   if cfg = options[:config]
     # If the path begins with a '/' it will be considered an absolute path,
