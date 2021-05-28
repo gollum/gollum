@@ -22,6 +22,7 @@ require 'gollum/views/has_page'
 require 'gollum/views/has_user_icons'
 require 'gollum/views/pagination'
 require 'gollum/views/rss.rb'
+require 'gollum/views/template_cascade'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -112,7 +113,6 @@ module Precious
       forbid unless @allow_editing || request.request_method == 'GET'
 
       if settings.wiki_options[:template_dir]
-        require 'gollum/views/template_cascade'
         Precious::Views::Layout.extend Precious::Views::TemplateCascade
         Precious::Views::Layout.template_priority_path = settings.wiki_options[:template_dir]
       end

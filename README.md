@@ -126,7 +126,7 @@ Gollum comes with the following command line options:
 | --no-display-metadata | none  | Do not render metadata tables in pages. |
 | --user-icons      | [MODE]    | Tell Gollum to use specific user icons for history view. Can be set to `gravatar`, `identicon` or `none`. Default: `none`. |
 | --mathjax-config  | [FILE]    | Specify path to a custom MathJax configuration. If not specified, uses the `mathjax.config.js` file from repository root. |
-| --template-dir    | [PATH]    | Specify custom mustache template directory. Only templates you wish to override need to exist in this path. |
+| --template-dir    | [PATH]    | Specify custom mustache template directory. Only overrides templates that exist in this directory. |
 | --template-page   | none      | Use _Template in root as a template for new pages. Must be committed. |
 | --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
 | --lenient-tag-lookup | none | Internal links resolve case-insensitively, will treat spaces as hyphens, and will match the first page found with a certain filename, anywhere in the repository. Provides compatibility with Gollum 4.x. |
