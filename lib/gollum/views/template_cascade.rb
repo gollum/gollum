@@ -13,7 +13,6 @@ module Precious
       def first_path_available(name)
         priority = "#{template_priority_path}/#{name}.#{template_extension}"
         default = "#{template_path}/#{name}.#{template_extension}"
-puts exist: File.exists?(priority), priority: priority, default: default
         File.exists?(priority) ? priority : default
       end
 
