@@ -149,7 +149,7 @@ MSG
     'Can be set to \'gravatar\' or \'identicon\'. Default: standard avatar.') do |mode|
     wiki_options[:user_icons] = mode.to_s
   end
-  opts.on('--template-dir [PATH]', 'Specify custom mustache template directory. Only templates you wish to override need to exist in this path.') do |path|
+  opts.on('--template-dir [PATH]', 'Specify custom mustache template directory. Only overrides templates that exist in this directory.') do |path|
     wiki_options[:template_dir] = path
   end
   opts.on('--template-page', 'Use _Template.{ext} as a template for new pages.') do
