@@ -5,9 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [2.4.0, 2.6.0, 3.0.0]
-        # https://github.com/jruby/jruby/issues/4834
-        # Not including jruby due to issue above
+        ruby: [2.4.0, 2.6.0, 3.0.0, jruby-9.2.18.0]
     steps:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
