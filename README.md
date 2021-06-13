@@ -46,7 +46,7 @@ Installation examples for individual systems can be seen [here](https://github.c
 
 To run, simply:
 
-1. Run: `gollum /path/to/wiki`.
+1. Run: `gollum /path/to/wiki` where `/path/to/wiki` is an initialized Git repository.
 2. Open `http://localhost:4567` in your browser.
 
 See [below](#running-from-source) for information on running Gollum from source, as a Rack app, and more.
