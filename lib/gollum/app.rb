@@ -1,4 +1,5 @@
-# ~*~ encoding: utf-8 ~*~
+# encoding: UTF-8
+
 require 'cgi'
 require 'sinatra'
 require 'sinatra/namespace'
@@ -40,7 +41,7 @@ Gollum::set_git_max_filesize(190 * 10**6)
 # See the wiki.rb file for more details on wiki options
 
 module Precious
-  
+
   # For use with the --base-path option.
   class MapGollum
     def initialize(base_path)
@@ -63,12 +64,14 @@ module Precious
       @mg.call(env)
     end
   end
-  
+
   class App < Sinatra::Base
     register Mustache::Sinatra
     register Sinatra::Namespace
     include Precious::Helpers
-    
+
+    Encoding.default_external = "UTF-8"
+
     dir = File.dirname(File.expand_path(__FILE__))
 
     set :sprockets, ::Precious::Assets.sprockets(dir)
@@ -102,7 +105,7 @@ module Precious
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
-      
+
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
 
       forbid unless @allow_editing || request.request_method == 'GET'
@@ -120,7 +123,7 @@ module Precious
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
       @mathjax_path = ::File.join(File.dirname(__FILE__), 'public/gollum/javascript/MathJax')
-      
+
       Sprockets::Helpers.configure do |config|
         config.environment = settings.sprockets
         config.environment.context_class.class_variable_set(:@@base_url, @base_url)
@@ -219,7 +222,7 @@ module Precious
 
       # AJAX calls only
       post '/upload_file' do
-        
+
         wiki = wiki_new
         halt 405 unless wiki.allow_uploads
 
@@ -235,7 +238,7 @@ module Precious
           dir.sub!(/^#{wiki.base_path}/, '') if wiki.base_path
           # remove base_url and gollum/* subpath if necessary
           dir.sub!(/^\/gollum\/[-\w]+\//, '')
-          # remove file extension 
+          # remove file extension
           dir.sub!(/#{::File.extname(dir)}$/, '')
           # revert escaped whitespaces
           dir.gsub!(/%20/, ' ')
@@ -317,7 +320,7 @@ module Precious
       end
 
       post '/edit/*' do
-        etag      = params[:etag]        
+        etag      = params[:etag]
         path      = "/#{clean_url(sanitize_empty_params(params[:path]))}"
         wiki      = wiki_new
         page      = wiki.page(::File.join(path, params[:page]))
@@ -327,7 +330,7 @@ module Precious
           # Signal edit collision and return the page's most recent version
           halt 412, {etag: page.sha, text_data: page.text_data}.to_json
         end
-        
+
         committer = Gollum::Committer.new(wiki, commit_message)
         commit    = { :committer => committer }
 
@@ -348,7 +351,7 @@ module Precious
           commit[:message] = "Deleted #{filepath}"
           wiki.delete_file(filepath, commit)
         end
-      end      
+      end
 
       get '/create/*' do
         forbid unless @allow_editing
@@ -625,7 +628,7 @@ module Precious
         end
       end
     end
-    
+
     def show_file(file)
       return unless file
       if file.on_disk?
