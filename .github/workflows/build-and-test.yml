@@ -1,14 +1,15 @@
 name: Build and Test Docker
 on: [push]
 env:
-  CI_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:latest
+  CI_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:dev-${{ github.sha }}
+  DEPLOY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:latest
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
         uses: actions/checkout@v2
-      - name: Login to Docker Hub
+      - name: Login
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -31,7 +32,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:${{ github.sha }}
+          tags: ${{ env.CI_IMAGE }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       - name: Image digest
@@ -42,7 +43,28 @@ jobs:
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
+      - name: Login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       - name: Pull
-        run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:${{ github.sha }}
+        run: docker pull ${{ env.CI_IMAGE }}
       - name: Run tests
-        run: docker run -e CI=true -w /app --entrypoint bundle ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:latest exec rake
+        run: docker run -e CI=true -w /app --entrypoint bundle ${{ env.CI_IMAGE }} exec rake
+  deploy-on-master:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/master' }}
+    needs: test
+    steps:
+      - name: Login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Pull
+        run: docker pull ${{ env.CI_IMAGE }}
+      - name: Tag
+        run: docker tag ${{ env.CI_IMAGE }} ${{ env.DEPLOY_IMAGE }}
+      - name: Push
+        run: docker push ${{ env.DEPLOY_IMAGE }}
