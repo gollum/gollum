@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Initialize the wiki
-git init
+if [ ! -d .git ]; then
+    git init
+fi
 
 # Start gollum service
-gollum
+gollum --mathjax

@@ -10,10 +10,20 @@ COPY gollum.gemspec* /tmp/
 WORKDIR /tmp
 RUN bundle install
 
+RUN gem install \
+    asciidoctor \
+    creole \
+    wikicloth \
+    org-ruby \
+    RedCloth \
+    bibtex-ruby \
+    && echo "gem-extra complete"
+
 WORKDIR /app
 COPY . /app
 RUN bundle exec rake install
 
 VOLUME /wiki
 WORKDIR /wiki
-ENTRYPOINT ["/app/docker-run.sh"]
+COPY docker-run.sh /docker-run.sh
+ENTRYPOINT ["/docker-run.sh"]
