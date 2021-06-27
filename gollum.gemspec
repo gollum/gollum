@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rss', '~> 0.2.9'
   s.add_dependency 'therubyrhino', '~> 2.1.0'
   s.add_dependency 'webrick', '~> 1.7'
+  s.add_dependency 'i18n', '~> 1.8'
 
   s.add_development_dependency 'rack-test', '~> 0.6.3'
   s.add_development_dependency 'shoulda', '~> 3.6.0'
