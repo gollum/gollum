@@ -13,7 +13,7 @@
   <div class="Box-header border-bottom p-0"></div>
   {{#results}}
     <li class="Box-row Box-row--gray">
-      <span class="Counter Counter--gray tooltipped tooltipped-w" aria-label="{{filename_count}} hits in filename - {{count}} hits in content">{{filename_count}} - {{count}}</span>&nbsp;
+      <span class="Counter Counter--gray tooltipped tooltipped-w" aria-label="rank {{rank}} - {{filename_count}} hits in filename - {{count}} hits in content">{{rank}} - {{filename_count}} - {{count}}</span>&nbsp;
       <span class="text-bold"><a href="{{href}}">{{name}}</a></span>
       <button class="btn-link tooltipped tooltipped-w float-right toggle-context" aria-label="Show all {{count}} hits in this page">{{#octicon}}search{{/octicon}}</button>
     </li>

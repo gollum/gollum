@@ -9,11 +9,13 @@ module Precious
           if b.nil?
             b_filename_count = 0
             b_count          = 0
+            b_rank           = 0
           else
             b_filename_count = b[:filename_count]
             b_count          = b[:count]
+            b_rank           = b[:rank]
           end
-          [a[:filename_count], a[:count]] <=> [b_filename_count, b_count]
+          [a[:rank], a[:filename_count], a[:count]] <=> [b_rank, b_filename_count, b_count]
         end.reverse.slice((@page_num - 1) * @max_count, @max_count)
         sorted.each {|x| x[:href] = page_route(x[:name])}
       end
