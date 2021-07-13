@@ -1,5 +1,5 @@
 name: Build and Test Docker
-on: [push]
+on: [push, pull_request]
 env:
   CI_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:dev-${{ github.sha }}
   DEPLOY_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/gollum:latest
