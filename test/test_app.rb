@@ -47,6 +47,15 @@ context "Frontend" do
     get '/gollum/assets/mathjax/MathJax.js'
     assert last_response.ok?
   end
+  
+  test 'compare with utf8' do
+    commit = { :name => 'user1', :email => 'user1' }
+    @wiki.write_page('Utf8', :markdown, '\n中文', commit)
+    page = @wiki.page('Utf8')
+    @wiki.update_page(page, nil, nil, "No utf-8", commit)
+    get "/gollum/compare/Utf8.md/#{page.versions.first.id}..#{page.versions.last.id}"
+    assert last_response.body.include?('<div class="gi pl-2">+\n中文</div>')
+  end
 
   test "UTF-8 headers href preserved" do
     page = 'utfh1'

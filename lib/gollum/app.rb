@@ -410,7 +410,7 @@ module Precious
         else
           sha2, sha1 = sha1, "#{sha1}^" if !sha2
           @versions  = [sha1, sha2]
-          @diff      = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+          @diff      = wiki.repo.diff(@versions.first, @versions.last, @page.path).force_encoding('utf-8')
           @message   = 'The patch does not apply.'
           mustache :compare
         end
@@ -475,7 +475,7 @@ module Precious
         @versions = [start_version, end_version]
         wiki      = wikip.wiki
         @page     = wikip.page
-        @diff     = wiki.repo.diff(@versions.first, @versions.last, @page.path)
+        @diff     = wiki.repo.diff(@versions.first, @versions.last, @page.path).force_encoding('utf-8')
         if @diff.empty?
           @message = 'Could not compare these two revisions, no differences were found.'
           mustache :error
@@ -519,7 +519,7 @@ module Precious
           @commit = wiki.repo.commit(version)
           parent = @commit.parent
           parent_id = parent.nil? ? nil : parent.id
-          @diff = wiki.repo.diff(parent_id, version)
+          @diff = wiki.repo.diff(parent_id, version).force_encoding('utf-8')
           mustache :commit
         rescue Gollum::Git::NoSuchShaFound
           @message = "Invalid commit: #{@version}"
