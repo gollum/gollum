@@ -5,7 +5,7 @@ module Precious
     end
 
     def default_keybinding
-      Precious::App.settings.wiki_options[:default_keybinding]
+      @default_keybinding
     end
 
     def keybindings

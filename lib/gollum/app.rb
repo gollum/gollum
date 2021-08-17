@@ -102,13 +102,13 @@ module Precious
 
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
-      @default_keybinding = settings.wiki_options[:default_keybinding]
       @allow_editing = settings.wiki_options[:allow_editing]
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
 
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
+      @default_keybinding = settings.wiki_options.fetch(:default_keybinding, "default")
 
       forbid unless @allow_editing || request.request_method == 'GET'
       Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
