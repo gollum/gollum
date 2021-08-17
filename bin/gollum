@@ -16,7 +16,6 @@ options      = {
 wiki_options = {
   :allow_uploads => false,
   :allow_editing => true,
-  :default_keybinding => "default",
 }
 
 opts = OptionParser.new do |opts|
@@ -164,7 +163,7 @@ MSG
   opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:) except when the leading colon is backslashed (e.g. \\:heart:).') do
     wiki_options[:emoji] = true
   end
-  opts.on('--default-keybinding [KEYBINDING]', 'Set the default keybinding for editable pages. Acceptable values \'default\', \'vim\', and \'emacs\'. Default: \'default\'') do |keybinding|
+  opts.on('--default-keybinding [KEYBINDING]', [:vim, :emacs], 'Set the default keybinding for editable pages. Can be set to \'vim\', or \'emacs\'. Default: \'default\'') do |keybinding|
     wiki_options[:default_keybinding] = keybinding.to_s 
   end
   opts.separator ''
