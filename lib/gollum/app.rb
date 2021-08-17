@@ -102,6 +102,7 @@ module Precious
 
     before do
       settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
+      @default_keybinding = settings.wiki_options[:default_keybinding]
       @allow_editing = settings.wiki_options[:allow_editing]
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)

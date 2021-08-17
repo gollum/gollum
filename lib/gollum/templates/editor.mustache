@@ -51,9 +51,9 @@
     <div id="gollum-editor-format-selector">
       <label for="format">Keybinding</label>
       <select id="keybinding" name="keybinding" class="form-select input-sm">
-        <option selected="selected">default</option>
-        <option>vim</option>
-        <option>emacs</option>
+      {{#keybindings}}
+      <option {{#selected}}selected="selected" {{/selected}}value="{{name}}">{{name}}</option>
+      {{/keybindings}}
       </select>
       <label for="format">Markup</label>
       <select id="wiki_format" name="format" class="form-select input-sm">

@@ -30,6 +30,9 @@
   {{#is_create_page}}
     var default_markup = '{{default_markup}}';
   {{/is_create_page}}
+  {{#has_editor}}
+     var default_keybinding = '{{default_keybinding}}';
+  {{/has_editor}}
 
   </script>
   {{#sprockets_javascript_tag}}app{{/sprockets_javascript_tag}}
