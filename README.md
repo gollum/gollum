@@ -136,6 +136,7 @@ Gollum comes with the following command line options:
 | --template-dir    | [PATH]    | Specify custom mustache template directory. Only overrides templates that exist in this directory. |
 | --template-page   | none      | Use _Template in root as a template for new pages. Must be committed. |
 | --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
+| --default-keybind | none      | Set the default keybinding for the editor. Can be set to `vim`, or `emacs`. |
 | --lenient-tag-lookup | none | Internal links resolve case-insensitively, will treat spaces as hyphens, and will match the first page found with a certain filename, anywhere in the repository. Provides compatibility with Gollum 4.x. |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
