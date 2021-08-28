@@ -430,23 +430,17 @@ module Precious
         mustache :page
       end
 
+      get %r{
+        /history/             # match any URL beginning with /history/
+        (.+?)                 # extract the full path (including any directories)
+        /
+        ([0-9a-f]{40})        # match SHA
+      }x do |path, version|
+        show_history(path, wiki_new.commit_for(version))
+      end
+
       get '/history/*' do
-        wikip      = wiki_page(params[:splat].first)
-        @name      = wikip.fullname
-        @page      = wikip.page
-        @page_num  = [params[:page_num].to_i, 1].max
-        @max_count = settings.wiki_options.fetch(:pagination_count, 10)
-        unless @page.nil?
-          @wiki      = @page.wiki
-          @versions = @page.versions(
-            per_page: @max_count,
-            page_num: @page_num,
-            follow: settings.wiki_options.fetch(:follow_renames, true)
-          )
-          mustache :history
-        else
-          redirect to("/")
-        end
+        show_history(params[:splat].first)
       end
 
       get '/latest_changes' do
@@ -592,6 +586,25 @@ module Precious
     end
 
     private
+
+    def show_history(path, version=nil)
+      wikip      = wiki_page(path, version)
+      @name      = wikip.fullname
+      @page      = wikip.page
+      @page_num  = [params[:page_num].to_i, 1].max
+      @max_count = settings.wiki_options.fetch(:pagination_count, 10)
+      unless @page.nil?
+        @wiki     = @page.wiki
+        @versions = @page.versions(
+          per_page: @max_count,
+          page_num: @page_num,
+          follow: settings.wiki_options.fetch(:follow_renames, true)
+        )
+        mustache :history
+      else
+        redirect to("/")
+      end
+    end
 
     def show_page_or_file(fullpath)
       wiki = wiki_new
