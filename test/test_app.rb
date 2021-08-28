@@ -328,7 +328,7 @@ EOF
   test "create with template succeed if template exists" do
     Precious::App.set(:wiki_options, { :template_page => true })
     page='_Template'
-    post '/gollum/create', :content => 'fake template', :page => page,
+    post '/gollum/create', :content => 'fake template with some Utf-8: Ü', :page => page,
       :path               => '/', :format => 'markdown', :message => ''
     follow_redirect!      
     assert last_response.ok?
