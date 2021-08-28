@@ -9,7 +9,7 @@ module Precious
     end
 
     def keybindings
-      ['default', 'vim', 'emacs'].map do |kb|
+      Gollum::KEYBINDINGS.map do |kb|
         { :name => kb,
           :selected => default_keybinding == kb
         }
