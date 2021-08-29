@@ -436,11 +436,12 @@ module Precious
         /
         ([0-9a-f]{40})        # match SHA
       }x do |path, version|
-        show_history(path, wiki_new.commit_for(version))
+        wiki = wiki_new
+        show_history wiki_page(path, wiki.commit_for(version), wiki)
       end
 
       get '/history/*' do
-        show_history(params[:splat].first)
+        show_history wiki_page(params[:splat].first)
       end
 
       get '/latest_changes' do
@@ -587,8 +588,7 @@ module Precious
 
     private
 
-    def show_history(path, version=nil)
-      wikip      = wiki_page(path, version)
+    def show_history(wikip)
       @name      = wikip.fullname
       @page      = wikip.page
       @page_num  = [params[:page_num].to_i, 1].max
@@ -663,9 +663,9 @@ module Precious
       wiki.update_page(page, name, format, content.to_s, commit)
     end
 
-    def wiki_page(path, version = nil)
+    def wiki_page(path, version = nil, wiki = nil)
       pathname = (Pathname.new('/') + path).cleanpath
-      wiki = wiki_new
+      wiki = wiki_new if wiki.nil?
       OpenStruct.new(:wiki => wiki, :page => wiki.page(pathname.to_s, version = version),
                      :name => pathname.basename.sub_ext('').to_s, :path => pathname.dirname.to_s, :ext => pathname.extname, :fullname => pathname.basename.to_s, :fullpath => pathname.to_s)
     end
