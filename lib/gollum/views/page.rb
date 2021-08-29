@@ -16,6 +16,11 @@ module Precious
       DEFAULT_AUTHOR = 'you'
       @@to_xml       = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
 
+      def title
+        h1 = @h1_title ? page_header_from_content(@content) : false
+        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
+      end
+
       def page_header
         title
       end
@@ -262,11 +267,6 @@ module Precious
             result << "<td>" << (value.respond_to?(:each) ? table(value) : CGI.escapeHTML(value.to_s)) << "</td>\n"
           end
         result << "</tr>\n</table>\n"
-      end
-
-      def title
-        h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
       end
     end
   end

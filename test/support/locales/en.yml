@@ -1,0 +1,8 @@
+en:
+  test_class:
+    author_info:
+      full: Author %{author} is from %{location}
+    has_invalid_argument: Welcome to %{no_matching_method}
+    hello_world: Hello world
+  nonexistant_test_class:
+    never_called: Never called

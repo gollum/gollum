@@ -953,7 +953,7 @@ context 'Frontend with base path' do
   test 'base path mathjax assets' do
     get '/wiki/Home'
     assert last_response.ok?
-    assert last_response.body.include?('<script defer src="/wiki/gollum/assets/mathjax/MathJax.js')
+    assert last_response.body.include?('<script defer src="/wiki/gollum/assets/mathjax/MathJax.js?config=')
   end
   
   test 'compare view' do

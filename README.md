@@ -2,9 +2,10 @@ gollum -- A git-based Wiki
 ====================================
 
 [![Gem Version](https://badge.fury.io/rb/gollum.svg)](http://badge.fury.io/rb/gollum)
-[![Build Status](https://travis-ci.org/gollum/gollum.svg?branch=master)](https://travis-ci.org/gollum/gollum)
+![Build Status](https://github.com/gollum/gollum/actions/workflows/test.yaml/badge.svg)
 [![Open Source Helpers](https://www.codetriage.com/gollum/gollum/badges/users.svg)](https://www.codetriage.com/gollum/gollum)
 [![Cutting Edge Dependency Status](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/svg 'Cutting Edge Dependency Status')](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/info)
+
 
 **Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to Gollum version 4.x, and see some [Screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
 
@@ -45,7 +46,7 @@ Installation examples for individual systems can be seen [here](https://github.c
 
 To run, simply:
 
-1. Run: `gollum /path/to/wiki`.
+1. Run: `gollum /path/to/wiki` where `/path/to/wiki` is an initialized Git repository.
 2. Open `http://localhost:4567` in your browser.
 
 See [below](#running-from-source) for information on running Gollum from source, as a Rack app, and more.
@@ -149,3 +150,7 @@ When `--config` option is used, certain inner parts of Gollum can be customized.
 ## CONTRIBUTING
 
 Please consider helping out! See [CONTRIBUTING](CONTRIBUTING.md) for information on how to submit issues, and how to start hacking on gollum.
+
+## THANKS TO
+
+[![Testing Powered By SauceLabs](https://opensource.saucelabs.com/images/opensauce/powered-by-saucelabs-badge-gray.png?sanitize=true "Testing Powered By SauceLabs")](https://saucelabs.com)

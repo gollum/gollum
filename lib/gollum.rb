@@ -5,35 +5,23 @@ require 'digest/sha1'
 require 'ostruct'
 
 # external
+require 'i18n'
 require 'github/markup'
 require 'rhino' if RUBY_PLATFORM == 'java'
 
 # internal
-require File.expand_path('../gollum/uri_encode_component', __FILE__)
+require ::File.expand_path('../gollum/uri_encode_component', __FILE__)
 
 module Gollum
-  VERSION = '5.2.1'
+  VERSION = '5.2.3'
+
+  ::I18n.available_locales = [:en]
+  ::I18n.load_path = Dir[::File.expand_path("lib/gollum/locales") + "/*.yml"]
 
   def self.assets_path
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
   end
 
-  class Error < StandardError;
-  end
-
-  class DuplicatePageError < Error
-    attr_accessor :dir
-    attr_accessor :existing_path
-    attr_accessor :attempted_path
-
-    def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || "Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.")
-    end
-  end
-  
   class TemplateFilter
     @@filters = {}
 
@@ -48,5 +36,4 @@ module Gollum
       data
     end
   end
-
 end

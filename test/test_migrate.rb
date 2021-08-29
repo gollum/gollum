@@ -44,7 +44,7 @@ def load_script(**args)
   end  
 end
 
-unless ENV['TRAVIS']
+unless ENV['CI']
 
   context '4.x -> 5.x tag migrator' do
     include Rack::Test::Methods
