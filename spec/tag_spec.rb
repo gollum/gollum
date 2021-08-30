@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Tag do
   before(:each) do
     @bare_repo = Repo.new(TEST_BARE_REPO_PATH, is_bare: true, create: false)
+    $stderr.puts "repo has these tags:"
+    $stderr.puts @bare_repo.tags
     @tag = @bare_repo.tags['v0.7.0']
   end
   
@@ -25,8 +27,8 @@ describe Tag do
   end
   
   it "has a message" do
-    expect(@tag.full_message).to match /xEQAoIUGzPXEp7yZqzSLSXt4mCn1U6rn/
-    expect(@tag.short_message).to match /GnuPG v1.4.8/
+    expect(@tag.full_message).to match /v0.7.0/
+    expect(@tag.short_message).to match /v0.7.0/
   end
   
 end
