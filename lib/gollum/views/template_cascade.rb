@@ -16,11 +16,12 @@ module Precious
         File.exists?(priority) ? priority : default
       end
 
-      # Following methods should track lib/mustache/settings.rb from Mustache project.
+      # Method should track lib/mustache/settings.rb from Mustache project.
       def template_file
         @template_file || first_path_available(template_name)
       end
 
+      # Method should track lib/mustache.rb from Mustache project.
       def partial(name)
         path = first_path_available(name)
         begin
