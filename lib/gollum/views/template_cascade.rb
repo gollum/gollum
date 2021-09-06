@@ -11,8 +11,8 @@ module Precious
       end
 
       def first_path_available(name)
-        priority = "#{template_priority_path}/#{name}.#{template_extension}"
-        default = "#{template_path}/#{name}.#{template_extension}"
+        priority = File.join(template_priority_path, "#{name}.#{template_extension}")
+        default = File.join(template_path, "#{name}.#{template_extension}")
         File.exists?(priority) ? priority : default
       end
 
