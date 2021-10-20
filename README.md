@@ -3,7 +3,7 @@ RJGit
 
 ### A JRuby wrapper around the [JGit library](https://github.com/eclipse/jgit) for manipulating Git repositories, the Ruby way.
 
-[![Build Status](https://travis-ci.org/repotag/rjgit.png)](https://travis-ci.org/repotag/rjgit)
+[![Ruby Build](https://github.com/repotag/rjgit/actions/workflows/test.yaml/badge.svg)](https://github.com/repotag/rjgit/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/repotag/rjgit/badge.png?branch=master)](https://coveralls.io/r/repotag/rjgit)
 [![Gem Version](https://badge.fury.io/rb/rjgit.png)](http://badge.fury.io/rb/rjgit)
 [![Cutting Edge Dependency Status](https://dometto-cuttingedge.herokuapp.com/github/repotag/rjgit/svg 'Cutting Edge Dependency Status')](https://dometto-cuttingedge.herokuapp.com/github/repotag/rjgit/info)
