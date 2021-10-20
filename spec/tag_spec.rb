@@ -3,8 +3,6 @@ require 'spec_helper'
 describe Tag do
   before(:each) do
     @bare_repo = Repo.new(TEST_BARE_REPO_PATH, is_bare: true, create: false)
-    $stderr.puts "repo has these tags:"
-    $stderr.puts @bare_repo.tags
     @tag = @bare_repo.tags['v0.7.0']
   end
   
