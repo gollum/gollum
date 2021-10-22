@@ -365,6 +365,7 @@ module Precious
         @name = wikip.name
         @ext  = wikip.ext
         @path = wikip.path
+        @mathjax = wikip.wiki.mathjax
         @template_page = load_template(@path) if settings.wiki_options[:template_page]
         @allow_uploads = wikip.wiki.allow_uploads
         @upload_dest   = find_upload_dest(wikip.fullpath)

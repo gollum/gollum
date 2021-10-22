@@ -18,9 +18,13 @@ module Precious
       def page_name
         @name
       end
-      
+
       def mathjax
         @mathjax
+      end
+
+      def mathjax_config
+        @mathjax_config
       end
 
       def header
@@ -67,7 +71,7 @@ module Precious
       def etag
         @etag
       end
-      
+
       def allow_uploads
         @allow_uploads
       end

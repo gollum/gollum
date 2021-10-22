@@ -37,6 +37,10 @@
   {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
   {{/has_editor}}
   {{#mathjax}}
+  {{#mathjax_config}}
+  <script type="text/javascript" src="{{mathjax_config_path}}"></script>
+  {{/mathjax_config}}
+  {{^mathjax_config}}
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {
@@ -47,8 +51,6 @@
       TeX: { extensions: ["autoload-all.js"] }
     };
   </script>
-  {{#mathjax_config}}
-  <script type="text/javascript" src="{{mathjax_config_path}}"></script>
   {{/mathjax_config}}
   <script defer src="{{mathjax_js}}"></script>
   {{/mathjax}}

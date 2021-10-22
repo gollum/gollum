@@ -29,6 +29,14 @@ module Precious
         @name
       end
 
+      def mathjax
+        @mathjax
+      end
+
+      def mathjax_config
+        @mathjax_config
+      end
+
       def formats
         super(find_format)
       end
