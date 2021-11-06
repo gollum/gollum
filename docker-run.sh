@@ -6,5 +6,4 @@ if [ ! -d .git ]; then
 fi
 
 # Start gollum service
-[[ "$@" != *--mathjax* ]] && echo "WARNING: Mathjax will soon be disabled by default. To explicitly enable it, use --mathjax" >&2
-exec gollum "$@ --ajax"
+exec gollum "$@"
