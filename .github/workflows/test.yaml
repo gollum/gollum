@@ -19,7 +19,7 @@ jobs:
           ls ${{ github.workspace }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: '11'
       - uses: ruby/setup-ruby@v1
         with:
