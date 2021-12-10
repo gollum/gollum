@@ -1,5 +1,4 @@
-FROM ruby:2.7
-ENV DEBIAN_FRONTEND="noninteractive"
+FROM ruby:2.7 AS builder
 
 RUN apt-get update && apt-get install -y \
     libicu-dev \
@@ -22,6 +21,16 @@ RUN gem install \
 WORKDIR /app
 COPY . /app
 RUN bundle exec rake install
+
+
+FROM ruby:2.7-slim
+
+COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 VOLUME /wiki
 WORKDIR /wiki

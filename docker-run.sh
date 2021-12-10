@@ -6,4 +6,4 @@ if [ ! -d .git ]; then
 fi
 
 # Start gollum service
-gollum --mathjax
+exec gollum --mathjax $@
