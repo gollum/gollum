@@ -26,4 +26,4 @@ RUN bundle exec rake install
 VOLUME /wiki
 WORKDIR /wiki
 COPY docker-run.rb /docker-run.rb
-ENTRYPOINT ["/docker-run.rb"]
+ENTRYPOINT "/docker-run.rb" $GOLLUM_OPTIONS
