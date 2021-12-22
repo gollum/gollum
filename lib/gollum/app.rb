@@ -20,6 +20,7 @@ require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
 require 'gollum/views/has_user_icons'
+require 'gollum/views/has_math'
 require 'gollum/views/pagination'
 require 'gollum/views/rss.rb'
 require 'gollum/views/template_cascade'
@@ -125,6 +126,7 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
+      @mathjax = settings.wiki_options[:mathjax]
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
@@ -217,7 +219,6 @@ module Precious
           if page = wikip.page
               @page         = page
               @content      = page.text_data
-              @mathjax      = wiki.mathjax
               @etag         = page.sha
               mustache :edit
           else
@@ -613,7 +614,6 @@ module Precious
         # Extensions and layout data
         @editable      = true
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
-        @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
         @bar_side      = wiki.bar_side
         @allow_uploads = wiki.allow_uploads
