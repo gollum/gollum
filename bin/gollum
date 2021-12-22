@@ -206,7 +206,7 @@ begin
 rescue OptionParser::InvalidOption => e
   puts "gollum: #{e.message}"
   puts 'gollum: try \'gollum --help\' for more information'
-  exit
+  exit 1
 end
 
 # --gollum-path wins over ARGV[0]
