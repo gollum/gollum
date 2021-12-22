@@ -9,3 +9,5 @@ Gemfile.lock
 !.sprockets*
 !lib/gollum/public/gollum/stylesheets/_styles.css
 !.github*
+!.env_example
+wiki
