@@ -34,7 +34,7 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: docker state
         run: docker image ls
-      - name: Check git repo present
-        run: docker run -e CI=true --entrypoint git ${{ env.CI_IMAGE }} -C /wiki rev-parse
       - name: Run gollum as test
         run: docker run -e CI=true ${{ env.CI_IMAGE }} --versions
+      - name: Check git repo present
+        run: docker run -e CI=true --entrypoint git ${{ env.CI_IMAGE }} -C /wiki rev-parse
