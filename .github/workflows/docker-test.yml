@@ -34,5 +34,5 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: docker state
         run: docker image ls
-      - name: Run tests
+      - name: Run gollum as test
         run: docker run -e CI=true -w /app ${{ env.CI_IMAGE }} --versions
