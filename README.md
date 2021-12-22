@@ -5,7 +5,7 @@ gollum -- A git-based Wiki
 ![Build Status](https://github.com/gollum/gollum/actions/workflows/test.yaml/badge.svg)
 [![Open Source Helpers](https://www.codetriage.com/gollum/gollum/badges/users.svg)](https://www.codetriage.com/gollum/gollum)
 [![Cutting Edge Dependency Status](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/svg 'Cutting Edge Dependency Status')](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/info)
-
+![Docker Pulls](https://img.shields.io/docker/pulls/gollumwiki/gollum)
 
 **Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to Gollum version 4.x, and see some [Screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
 
