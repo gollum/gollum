@@ -35,4 +35,4 @@ jobs:
       - name: docker state
         run: docker image ls
       - name: Run gollum as test
-        run: echo "exit" | docker run -e CI=true ${{ env.CI_IMAGE }} --irb
+        run: docker run -e CI=true ${{ env.CI_IMAGE }} --irb
