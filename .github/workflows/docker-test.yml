@@ -35,4 +35,4 @@ jobs:
       - name: docker state
         run: docker image ls
       - name: Run tests
-        run: docker run -e CI=true -w /app --entrypoint bundle ${{ env.CI_IMAGE }} exec rake
+        run: docker run -e CI=true -w /app ${{ env.CI_IMAGE }} --versions
