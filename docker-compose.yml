@@ -1,9 +1,7 @@
 version: "3"
 services:
   gollum:
-    image: "gollum"
-    build:
-      context: ./
+    image: "gollumwiki/gollum"
     ports:
       - "4567:4567"
     volumes:
