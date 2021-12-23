@@ -31,8 +31,9 @@ jobs:
           context: ./
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.DEPLOY_NAME }}
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       - name: Image digest
