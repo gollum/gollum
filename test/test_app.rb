@@ -447,6 +447,21 @@ EOF
     Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
   
+  test "upload a file with https referer" do
+    temp_upload_file = Tempfile.new(['https_upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'https://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: Home), based on referer
+    file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
+  end
+  
+  
   test "guard against uploading an existing file" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close

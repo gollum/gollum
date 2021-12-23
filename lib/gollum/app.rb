@@ -240,7 +240,7 @@ module Precious
         halt 500 unless tempfile.is_a? Tempfile
 
         if wiki.per_page_uploads
-          dir = request.referer.sub(request.base_url, '')
+          dir = request.referer.match(/^https?:\/\/#{request.host_with_port}\/(.*)/)[1]          
           # remove base path if it is set
           dir.sub!(/^#{wiki.base_path}/, '') if wiki.base_path
           # remove base_url and gollum/* subpath if necessary
