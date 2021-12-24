@@ -2,6 +2,7 @@ module Precious
   module Views
     class Page < Layout
       include HasPage
+      include HasMath
 
       attr_reader :content, :page, :header, :footer, :preview, :historical, :version
       
@@ -61,11 +62,11 @@ module Precious
       def editable
         @editable
       end
-      
+
       def search
         true
       end
-      
+
       def history
         true
       end
@@ -73,11 +74,11 @@ module Precious
       def latest_changes
         true
       end
-      
+
       def overview
-        true 
+        true
       end
-        
+
       def allow_editing
         @allow_editing
       end
@@ -157,14 +158,6 @@ module Precious
         @toc_content
       end
 
-      def mathjax
-        @mathjax
-      end
-
-      def mathjax_config
-        @mathjax_config
-      end
-
       def use_identicon
         @page.wiki.user_icons == 'identicon'
       end
@@ -182,7 +175,7 @@ module Precious
       # Returns Hash.
       def metadata
         @page.metadata
-      end   
+      end
 
       # Access to embedded metadata.
       #

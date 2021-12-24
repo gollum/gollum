@@ -2,6 +2,7 @@ module Precious
   module Views
     class Create < Layout
       include Editable
+      include HasMath
 
       attr_reader :page, :name
 
@@ -41,9 +42,9 @@ module Precious
       def content
         @template_page
       end
-      
+
       private
-      
+
       def find_format
         @found_format ||= (Gollum::Page.format_for("#{@name}#{@ext}") || default_markup)
       end

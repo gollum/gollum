@@ -1,9 +1,11 @@
-FROM ruby:2.7
-ENV DEBIAN_FRONTEND="noninteractive"
+FROM ruby:2.7-alpine AS builder
 
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    cmake
+RUN apk add \
+    build-base \
+    cmake \
+    git \
+    icu-dev \
+    openssl-dev
 
 COPY Gemfile* /tmp/
 COPY gollum.gemspec* /tmp/
@@ -22,6 +24,15 @@ RUN gem install \
 WORKDIR /app
 COPY . /app
 RUN bundle exec rake install
+
+
+FROM ruby:2.7-alpine
+
+COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+
+RUN apk add \
+    bash \
+    git
 
 VOLUME /wiki
 WORKDIR /wiki

@@ -3,6 +3,7 @@ module Precious
     class Edit < Layout
       include Editable
       include HasPage
+      include HasMath
 
       attr_reader :page, :content
 
@@ -17,10 +18,6 @@ module Precious
 
       def page_name
         @name
-      end
-      
-      def mathjax
-        @mathjax
       end
 
       def header
@@ -67,7 +64,7 @@ module Precious
       def etag
         @etag
       end
-      
+
       def allow_uploads
         @allow_uploads
       end

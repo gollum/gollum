@@ -20,8 +20,10 @@ require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
 require 'gollum/views/has_user_icons'
+require 'gollum/views/has_math'
 require 'gollum/views/pagination'
 require 'gollum/views/rss.rb'
+require 'gollum/views/template_cascade'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -110,7 +112,11 @@ module Precious
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
 
       forbid unless @allow_editing || request.request_method == 'GET'
-      Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
+
+      if settings.wiki_options[:template_dir]
+        Precious::Views::Layout.extend Precious::Views::TemplateCascade
+        Precious::Views::Layout.template_priority_path = settings.wiki_options[:template_dir]
+      end
 
       @base_url = url('/', false).chomp('/').force_encoding('utf-8')
       @page_dir = settings.wiki_options[:page_file_dir].to_s
@@ -120,6 +126,7 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
+      @mathjax = settings.wiki_options[:mathjax]
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
@@ -212,7 +219,6 @@ module Precious
           if page = wikip.page
               @page         = page
               @content      = page.text_data
-              @mathjax      = wiki.mathjax
               @etag         = page.sha
               mustache :edit
           else
@@ -234,7 +240,7 @@ module Precious
         halt 500 unless tempfile.is_a? Tempfile
 
         if wiki.per_page_uploads
-          dir = request.referer.sub(request.base_url, '')
+          dir = request.referer.match(/^https?:\/\/#{request.host_with_port}\/(.*)/)[1]          
           # remove base path if it is set
           dir.sub!(/^#{wiki.base_path}/, '') if wiki.base_path
           # remove base_url and gollum/* subpath if necessary
@@ -621,7 +627,6 @@ module Precious
         # Extensions and layout data
         @editable      = true
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
-        @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
         @bar_side      = wiki.bar_side
         @allow_uploads = wiki.allow_uploads
@@ -655,7 +660,7 @@ module Precious
 
     def load_template(path)
       template_page = wiki_page(::File.join(path, '_Template')).page || wiki_page('/_Template').page
-      template_page ? Gollum::TemplateFilter.apply_filters(template_page.raw_data) : nil
+      template_page ? Gollum::TemplateFilter.apply_filters(template_page.text_data) : nil
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
