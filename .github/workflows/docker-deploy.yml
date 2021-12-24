@@ -1,7 +1,7 @@
 name: Deploy docker
 on: [push]
 env:
-  DEPLOY_NAME: gollumwiki/gollum:latest
+  DEPLOY_NAME: magnusviri/gollum:latest
 jobs:
   build:
     runs-on: ubuntu-latest
