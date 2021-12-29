@@ -39,31 +39,29 @@ context "Frontend" do
     assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
   end
 
-  def nfd utf8
-    TwitterCldr::Normalization.normalize(utf8, using: :nfd)
-  end
-  
   test 'mathjax assets are served' do
     get '/gollum/assets/mathjax/MathJax.js'
     assert last_response.ok?
   end
 
   test "UTF-8 headers href preserved" do
-    page = 'utfh1'
-    text = nfd('한글')
+    page_content = <<~TEXT
+      ## 한글
 
-    # don't use h1 or it will be promoted to replace file name
-    # which doesn't generate a normal header link
-    @wiki.write_page(page, :markdown, '## ' + text,
-                     { :name => 'user1', :email => 'user1' });
+      Test page "utfh1" content.
+    TEXT
 
-    get page
-    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"></a>#{text}</h2>"
-    actual   = nfd(last_response.body)
+    @wiki.write_page('utfh1',
+                     :markdown,
+                     page_content,
+                     {name: 'user1', email: 'user1'})
 
-    assert_match /#{expected}/, actual
+    get 'utfh1'
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?한글\" (href|id)=\"(#)?한글\"></a>한글</h2>"
+
+    assert_match /#{expected}/, last_response.body
   end
-  
+
   test 'rss feed' do
     channel_title = <<EOF
 <title>Gollum Wiki Latest Changes</title>
