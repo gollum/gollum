@@ -489,9 +489,9 @@ EOF
   test "previews content" do
     post "/gollum/preview", :content => 'abc', :format => 'markdown', :page => 'Samewise Gamgee.mediawiki'
     assert last_response.ok?
-    assert last_response.body.include?('Samewise Gamgee</h1>')
+    assert last_response.body.include?('Samewise Gamgee')
   end
-  
+
   test 'throws an error when comparing two identical revisions for a page' do
     get '/gollum/compare/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac...fc66539528eb96f21b2bbdbf557788fe8a1196ac'
     assert last_response.ok?
