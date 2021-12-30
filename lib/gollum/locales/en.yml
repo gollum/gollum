@@ -8,3 +8,14 @@ en:
     revert: Revert Changes
   precious/views/error:
     error: Error
+  precious/views/history:
+    browse_in_history_description: Browse the page at this point in the history
+    compare_revisions: Compare Revisions
+    history_for: History for
+    pagination:
+      aria:
+        label: Pagination
+        next_page: Next page
+        previous_page: Previous page
+      next: Next
+      previous: Previous
