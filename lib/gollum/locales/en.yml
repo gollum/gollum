@@ -6,3 +6,5 @@ en:
     comparing_versions_of: Comparing versions of
     comparing_from: "Comparing %{before} to %{after}"
     revert: Revert Changes
+  precious/views/error:
+    error: Error
