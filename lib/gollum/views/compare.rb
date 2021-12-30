@@ -6,7 +6,7 @@ module Precious
       attr_reader :page, :diff, :versions, :message, :allow_editing
 
       def title
-        "Comparison of #{@page.title}"
+        [t[:comparison_of], @page.title].join(" ")
       end
 
       def before

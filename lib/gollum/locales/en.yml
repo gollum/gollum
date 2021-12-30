@@ -1,0 +1,8 @@
+en:
+  precious/views/compare:
+    back_to_page_history: Back to Page History
+    back_to_top: Back to Top
+    comparison_of: Comparison of
+    comparing_versions_of: Comparing versions of
+    comparing_from: "Comparing %{before} to %{after}"
+    revert: Revert Changes
