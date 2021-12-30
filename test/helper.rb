@@ -6,7 +6,6 @@ require 'mocha/setup'
 require 'fileutils'
 require 'minitest/reporters'
 require 'minitest/spec'
-require 'twitter_cldr'
 require 'tmpdir'
 
 # Silence locale validation warning
