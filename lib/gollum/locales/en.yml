@@ -19,3 +19,5 @@ en:
         previous_page: Previous page
       next: Next
       previous: Previous
+  precious/views/latest_changes:
+    title: Latest Changes (Globally)
