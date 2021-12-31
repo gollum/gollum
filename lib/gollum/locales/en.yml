@@ -21,3 +21,5 @@ en:
       previous: Previous
   precious/views/latest_changes:
     title: Latest Changes (Globally)
+  precious/views/layout:
+    title: Home
