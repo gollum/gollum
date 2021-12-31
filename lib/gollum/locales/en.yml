@@ -29,4 +29,17 @@ en:
     no_pages_in: There are no pages in
     on: "on"
     title: "Overview of %{ref}"
-
+  precious/views/search:
+    aria:
+      show_all: "Show all %{count} hits in this page"
+    back_to_top: Back to Top
+    no_results: There are no results for your search
+    pagination:
+      aria:
+        label: Pagination
+        next_page: Next page
+        previous_page: Previous page
+      next: Next
+      previous: Previous
+    search_results_for: Search results for
+    title: "Search results for %{query}"
