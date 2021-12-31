@@ -35,7 +35,7 @@ context "Precious::Views::Page" do
     @view.instance_variable_set :@content, page.formatted_data
     @view.instance_variable_set :@h1_title, false
 
-    assert_include @view.breadcrumb, "数学 📘"
+    assert_includes @view.breadcrumb, "数学 📘"
   end
 
   test 'page <title> is the page header from content, if present' do

@@ -37,7 +37,11 @@ class TestTemplateCascade < Minitest::Unit::TestCase
     get '/Home'
     assert_equal '/Home', last_request.fullpath
     assert last_response.ok?
-    assert_no_match /PAGE_OVERRIDE/, last_response.body
-    assert_no_match /NAVBAR_OVERRIDE/, last_response.body
+    refute_match /PAGE_OVERRIDE/, last_response.body
+    refute_match /NAVBAR_OVERRIDE/, last_response.body
+  end
+
+  def teardown
+    FileUtils.rm_rf(@path)
   end
 end

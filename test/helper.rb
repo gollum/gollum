@@ -1,11 +1,11 @@
 require 'rubygems'
 require 'rack/test'
-require 'test/unit'
 require 'shoulda'
-require 'mocha/setup'
-require 'fileutils'
+require 'minitest/autorun'
 require 'minitest/reporters'
 require 'minitest/spec'
+require 'mocha/setup'
+require 'fileutils'
 require 'tmpdir'
 
 # Silence locale validation warning
@@ -62,14 +62,29 @@ def normal(text)
   text
 end
 
-# test/spec/mini 3
-# http://gist.github.com/25455
-# chris@ozmm.org
-# file:lib/test/spec/mini.rb
+# The following configuration originates from this gist:
+
+#     http://gist.github.com/25455
+#
+# But it has been modified since it was first committed. It allows you to
+# write tests with an RSpec-like DSL:
+#
+#    context "my test context" do
+#      setup do
+#        # My test setup
+#      end
+#
+#      teardown do
+#        # My test teardown
+#      end
+#
+#      test "some functionality" do
+#        assert true
+#      end
+#    end
 def context(*args, &block)
   return super unless (name = args.first) && block
-  require 'test/unit'
-  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
+  klass = Class.new(Minitest::Test) do
     def self.test(name, &block)
       define_method("test_#{name.gsub(/\W/, '_')}", &block) if block
     end
@@ -85,10 +100,13 @@ def context(*args, &block)
       define_method(:teardown, &block)
     end
   end
+
   (
-  class << klass;
-    self
-  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
+    class << klass;
+      self
+    end
+  ).send(:define_method, :name) { name.gsub(/\W/, '_') }
+
   $contexts << klass
   klass.class_eval &block
 end
