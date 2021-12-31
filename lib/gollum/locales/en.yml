@@ -23,3 +23,10 @@ en:
     title: Latest Changes (Globally)
   precious/views/layout:
     title: Home
+  precious/views/overview:
+    back_to_top: Back to Top
+    delete_confirmation: "Are you sure you want to delete %{name}?"
+    no_pages_in: There are no pages in
+    on: "on"
+    title: "Overview of %{ref}"
+
