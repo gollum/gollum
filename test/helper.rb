@@ -12,7 +12,9 @@ require 'tmpdir'
 require 'i18n'
 I18n.enforce_available_locales = false
 
-MiniTest::Reporters.use!
+Minitest::Reporters.use! [
+  Minitest::Reporters::DefaultReporter.new({color: true})
+]
 
 dir = File.dirname(File.expand_path(__FILE__))
 $LOAD_PATH.unshift(File.join(dir, '..', 'lib'))
