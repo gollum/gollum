@@ -3,8 +3,9 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'helper'))
 
 context "Precious::Views::Editing" do
   include Rack::Test::Methods
+
   setup do
-    @path    = cloned_testpath('examples/revert.git')
+    @path = cloned_testpath('examples/revert.git')
     Precious::App.set(:gollum_path, @path)
     @wiki = Gollum::Wiki.new(@path)
   end
@@ -13,14 +14,20 @@ context "Precious::Views::Editing" do
     FileUtils.rm_rf(@path)
   end
 
-  test "creating page is blocked" do
-    Precious::App.set(:wiki_options, { allow_editing: false})
-    post "/gollum/create", :content => 'abc', :page => "D",
-         :format             => 'markdown', :message => 'def'
-    assert !last_response.ok?
+  test 'creating pages is blocked' do
+    Precious::App.set(:wiki_options, {allow_editing: false})
 
-    page = @wiki.page('D')
-    assert page.nil?
+    post '/gollum/create',
+      content: 'abc',
+      format: 'markdown',
+      message: 'def',
+      page: 'D'
+
+    assert last_response.body.include? 'Forbidden. This wiki is set to no-edit mode.'
+
+    refute last_response.ok?
+
+    assert_nil @wiki.page('D')
   end
 
   test ".redirects.gollum file should not be accessible" do
@@ -28,7 +35,7 @@ context "Precious::Views::Editing" do
     get '/.redirects.gollum'
     assert_match /Accessing this resource is not allowed/, last_response.body
   end
-  
+
   test ".redirects.gollum file should not be editable" do
     Precious::App.set(:wiki_options, { allow_editing: true, allow_uploads: true })
     get '/gollum/edit/.redirects.gollum'
