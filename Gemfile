@@ -17,9 +17,6 @@ gem 'warbler', platforms: :jruby
 # Note that Nokogiri 1.11+ does not support Ruby v2.4.x anymore. So to make our
 # current CI workflows pass, we should only try to install this version of
 # Nokogiri for newer Ruby versions.
-#
-# [1]: https://github.com/gollum/gollum/issues/1779
-gem 'nokogiri', '1.12.4' unless RUBY_VERSION.include? '2.4'
 
 gemspec
 
