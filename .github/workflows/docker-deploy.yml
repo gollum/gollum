@@ -11,10 +11,12 @@ jobs:
     steps:
       - name: Set deploy name to master
         if: github.ref == 'refs/heads/master'
-        run: | echo "DEPLOY_NAME=gollumwiki/gollum:master"
+        run: |
+          echo "DEPLOY_NAME=gollumwiki/gollum:master"
       - name: Set deploy name to release version
         if: startsWith(github.ref, 'refs/tags/')
-        run: | echo "DEPLOY_NAME=gollumwiki/gollum:${{ github.ref_name }}"
+        run: |
+          echo "DEPLOY_NAME=gollumwiki/gollum:${{ github.ref_name }}"
       - name: Check Out Repo
         uses: actions/checkout@v2
       - name: Login
