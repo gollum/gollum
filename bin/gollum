@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env -S ruby -Eutf-8
 
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
