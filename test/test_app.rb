@@ -171,7 +171,7 @@ EOF
     assert_equal 'sidebar', side_2.raw_data
     assert_equal 'def', side_2.version.message
     assert_not_equal side_1.version.sha, side_2.version.sha
-    assert_equal commits+1, @wiki.repo.commits('master').size
+    assert_equal commits, @wiki.repo.commits('master').size
   end
 
   test "renames page" do
@@ -666,6 +666,13 @@ EOF
     assert_equal last_request.fullpath, '/'
     # redirect again from / to /Home
     assert_equal last_response.status, 302
+  end
+
+  test "view deleted page in history" do
+    get 'C/db8b297cf5a31b46ac24500edfdbd0d3d8eed4eb'
+
+    assert last_response.ok?
+    assert_match /This page will be deleted in the next commit :\(/, last_response.body
   end
 
   def app

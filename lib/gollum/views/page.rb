@@ -4,8 +4,8 @@ module Precious
       include HasPage
       include HasMath
 
-      attr_reader :content, :page, :header, :footer, :preview, :historical
-
+      attr_reader :content, :page, :header, :footer, :preview, :historical, :version
+      
       VALID_COUNTER_STYLES = ['decimal', 'decimal-leading-zero', 'arabic-indic', 'armenian', 'upper-armenian',
         'lower-armenian', 'bengali', 'cambodian', 'khmer', 'cjk-decimal', 'devanagari', 'georgian', 'gujarati', 'gurmukhi',
         'hebrew', 'kannada', 'lao', 'malayalam', 'mongolian', 'myanmar', 'oriya', 'persian', 'lower-roman', 'upper-roman',
