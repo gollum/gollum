@@ -1,12 +1,12 @@
-# 5.2.3 2021-04-18
+# 5.2.3 / 2021-04-18
 
 * Fix bug preventing page titles from being displayed
 
-# 5.2.1 2021-02-25
+# 5.2.1 / 2021-02-25
 
 * Fix include call to a missing asset (@benjaminwil). This caused slow first page loads on JRuby.
 
-# 5.2 2021-02-24
+# 5.2 / 2021-02-24
 
 * Improved styling and Primer upgrade (@benjaminwil)
 * Add redirect to rename commit (@ViChyavIn)
