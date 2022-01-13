@@ -2,11 +2,11 @@ Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
   s.rubygems_version = '1.3.5'
-  s.required_ruby_version = '>= 1.9'
+  s.required_ruby_version = '>= 2.6'
 
   s.name              = 'gollum'
-  s.version           = '5.2.1'
-  s.date              = '2021-02-25'
+  s.version           = '5.2.3'
+  s.date              = '2021-04-18'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kramdown-parser-gfm', '~> 1.1.0'
   s.add_dependency 'sinatra', '~> 2.0'
   s.add_dependency 'sinatra-contrib', '~> 2.0'
-  s.add_dependency 'mustache-sinatra', '~> 1.0'
+  s.add_dependency 'mustache-sinatra', '>= 1.0.1', '< 2'
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 4.1'
   s.add_dependency 'octicons', '~> 12.0'
@@ -38,14 +38,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'sprockets-helpers', '~> 1.2'
   s.add_dependency 'rss', '~> 0.2.9'
   s.add_dependency 'therubyrhino', '~> 2.1.0'
+  s.add_dependency 'webrick', '~> 1.7'
+  s.add_dependency 'i18n', '~> 1.8'
 
   s.add_development_dependency 'rack-test', '~> 0.6.3'
   s.add_development_dependency 'shoulda', '~> 3.6.0'
   s.add_development_dependency 'minitest-reporters', '~> 1.3.6'
-  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
   s.add_development_dependency 'mocha', '~> 1.8.0'
   s.add_development_dependency 'test-unit', '~> 3.3.0'
-  s.add_development_dependency 'webrick', '~> 1.4.2'
 
   # = MANIFEST =
   s.files = %w[
@@ -69,11 +69,11 @@ Gem::Specification.new do |s|
     lib/gollum/app.rb
     lib/gollum/assets.rb
     lib/gollum/helpers.rb
-    lib/gollum/public/assets/.sprockets-manifest-15b663a27211dc9de9a452b4b74462d7.json
-    lib/gollum/public/assets/app-7a0bbff2e8bad3033e7c17e0e0f886f336a9d23d3b912dcd2ae389c48b4b63e6.css
-    lib/gollum/public/assets/app-7a0bbff2e8bad3033e7c17e0e0f886f336a9d23d3b912dcd2ae389c48b4b63e6.css.gz
-    lib/gollum/public/assets/app-7a4bd115f4bc7ece39bc8073ca0ffad7c5e55cc5837b1464a12dead4905cefb2.js
-    lib/gollum/public/assets/app-7a4bd115f4bc7ece39bc8073ca0ffad7c5e55cc5837b1464a12dead4905cefb2.js.gz
+    lib/gollum/public/assets/.sprockets-manifest-de7bb79aec424e55af1acdcc4237b301.json
+    lib/gollum/public/assets/app-0fd228e26bfbe6fe31a2da268eb0e98e780c1191c1a918adf383377946e9c838.js
+    lib/gollum/public/assets/app-0fd228e26bfbe6fe31a2da268eb0e98e780c1191c1a918adf383377946e9c838.js.gz
+    lib/gollum/public/assets/app-ad43ca64b295d8444b10f22ee868f18429268af498f1bc515434878b690e37a2.css
+    lib/gollum/public/assets/app-ad43ca64b295d8444b10f22ee868f18429268af498f1bc515434878b690e37a2.css.gz
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css.gz
     lib/gollum/public/assets/editor-db10c8351306e92f1926ba225d0cd9c8e886482b3b9820a85825ec3abab5f1cf.js

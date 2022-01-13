@@ -1,4 +1,5 @@
-# ~*~ encoding: utf-8 ~*~
+# encoding: UTF-8
+
 require 'cgi'
 require 'sinatra'
 require 'sinatra/namespace'
@@ -14,12 +15,15 @@ require 'pathname'
 require 'gollum'
 require 'gollum/assets'
 require 'gollum/views/helpers'
+require 'gollum/views/helpers/locale_helpers'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
 require 'gollum/views/has_user_icons'
+require 'gollum/views/has_math'
 require 'gollum/views/pagination'
 require 'gollum/views/rss.rb'
+require 'gollum/views/template_cascade'
 
 require File.expand_path '../helpers', __FILE__
 
@@ -40,7 +44,7 @@ Gollum::set_git_max_filesize(190 * 10**6)
 # See the wiki.rb file for more details on wiki options
 
 module Precious
-  
+
   # For use with the --base-path option.
   class MapGollum
     def initialize(base_path)
@@ -63,12 +67,14 @@ module Precious
       @mg.call(env)
     end
   end
-  
+
   class App < Sinatra::Base
     register Mustache::Sinatra
     register Sinatra::Namespace
     include Precious::Helpers
-    
+
+    Encoding.default_external = "UTF-8"
+
     dir = File.dirname(File.expand_path(__FILE__))
 
     set :sprockets, ::Precious::Assets.sprockets(dir)
@@ -107,7 +113,11 @@ module Precious
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
 
       forbid unless @allow_editing || request.request_method == 'GET'
-      Precious::App.set(:mustache, {:templates => settings.wiki_options[:template_dir]}) if settings.wiki_options[:template_dir]
+
+      if settings.wiki_options[:template_dir]
+        Precious::Views::Layout.extend Precious::Views::TemplateCascade
+        Precious::Views::Layout.template_priority_path = settings.wiki_options[:template_dir]
+      end
 
       @base_url = url('/', false).chomp('/').force_encoding('utf-8')
       @page_dir = settings.wiki_options[:page_file_dir].to_s
@@ -117,11 +127,12 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
+      @mathjax = settings.wiki_options[:mathjax]
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
       @mathjax_path = ::File.join(File.dirname(__FILE__), 'public/gollum/javascript/MathJax')
-      
+
       Sprockets::Helpers.configure do |config|
         config.environment = settings.sprockets
         config.environment.context_class.class_variable_set(:@@base_url, @base_url)
@@ -211,7 +222,6 @@ module Precious
           if page = wikip.page
               @page         = page
               @content      = page.text_data
-              @mathjax      = wiki.mathjax
               @etag         = page.sha
               mustache :edit
           else
@@ -222,7 +232,7 @@ module Precious
 
       # AJAX calls only
       post '/upload_file' do
-        
+
         wiki = wiki_new
         halt 405 unless wiki.allow_uploads
 
@@ -233,7 +243,7 @@ module Precious
         halt 500 unless tempfile.is_a? Tempfile
 
         if wiki.per_page_uploads
-          dir = request.referer.sub(request.base_url, '')
+          dir = request.referer.match(/^https?:\/\/#{request.host_with_port}\/(.*)/)[1]          
           # remove base path if it is set
           dir.sub!(/^#{wiki.base_path}/, '') if wiki.base_path
           # remove base_url and gollum/* subpath if necessary
@@ -330,7 +340,7 @@ module Precious
           # Signal edit collision and return the page's most recent version
           halt 412, {etag: page.sha, text_data: page.text_data}.to_json
         end
-        
+
         committer = Gollum::Committer.new(wiki, commit_message)
         commit    = { :committer => committer }
 
@@ -433,23 +443,18 @@ module Precious
         mustache :page
       end
 
+      get %r{
+        /history/             # match any URL beginning with /history/
+        (.+?)                 # extract the full path (including any directories)
+        /
+        ([0-9a-f]{40})        # match SHA
+      }x do |path, version|
+        wiki = wiki_new
+        show_history wiki_page(path, wiki.commit_for(version), wiki)
+      end
+
       get '/history/*' do
-        wikip      = wiki_page(params[:splat].first)
-        @name      = wikip.fullname
-        @page      = wikip.page
-        @page_num  = [params[:page_num].to_i, 1].max
-        @max_count = settings.wiki_options.fetch(:pagination_count, 10)
-        unless @page.nil?
-          @wiki      = @page.wiki
-          @versions = @page.versions(
-            per_page: @max_count,
-            page_num: @page_num,
-            follow: settings.wiki_options.fetch(:follow_renames, true)
-          )
-          mustache :history
-        else
-          redirect to("/")
-        end
+        show_history wiki_page(params[:splat].first)
       end
 
       get '/latest_changes' do
@@ -596,6 +601,24 @@ module Precious
 
     private
 
+    def show_history(wikip)
+      @name      = wikip.fullname
+      @page      = wikip.page
+      @page_num  = [params[:page_num].to_i, 1].max
+      @max_count = settings.wiki_options.fetch(:pagination_count, 10)
+      unless @page.nil?
+        @wiki     = @page.wiki
+        @versions = @page.versions(
+          per_page: @max_count,
+          page_num: @page_num,
+          follow: settings.wiki_options.fetch(:follow_renames, true)
+        )
+        mustache :history
+      else
+        redirect to("/")
+      end
+    end
+
     def show_page_or_file(fullpath)
       wiki = wiki_new
       if page = wiki.page(fullpath)
@@ -607,7 +630,6 @@ module Precious
         # Extensions and layout data
         @editable      = true
         @toc_content   = wiki.universal_toc ? @page.toc_data : nil
-        @mathjax       = wiki.mathjax
         @h1_title      = wiki.h1_title
         @bar_side      = wiki.bar_side
         @allow_uploads = wiki.allow_uploads
@@ -628,7 +650,7 @@ module Precious
         end
       end
     end
-    
+
     def show_file(file)
       return unless file
       if file.on_disk?
@@ -641,7 +663,7 @@ module Precious
 
     def load_template(path)
       template_page = wiki_page(::File.join(path, '_Template')).page || wiki_page('/_Template').page
-      template_page ? Gollum::TemplateFilter.apply_filters(template_page.raw_data) : nil
+      template_page ? Gollum::TemplateFilter.apply_filters(template_page.text_data) : nil
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
@@ -653,9 +675,9 @@ module Precious
       wiki.update_page(page, name, format, content.to_s, commit)
     end
 
-    def wiki_page(path, version = nil)
+    def wiki_page(path, version = nil, wiki = nil)
       pathname = (Pathname.new('/') + path).cleanpath
-      wiki = wiki_new
+      wiki = wiki_new if wiki.nil?
       OpenStruct.new(:wiki => wiki, :page => wiki.page(pathname.to_s, version = version),
                      :name => pathname.basename.sub_ext('').to_s, :path => pathname.dirname.to_s, :ext => pathname.extname, :fullname => pathname.basename.to_s, :fullpath => pathname.to_s)
     end

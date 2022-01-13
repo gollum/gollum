@@ -38,7 +38,31 @@ context "Precious::Views::Page" do
     assert_include @view.breadcrumb, "数学 📘"
   end
 
-  test "page header retains unicde and ASCII characters" do
+  test 'page <title> is the page header from content, if present' do
+    page_title = 'Page header from content'
+    @wiki.write_page(page_title, :markdown, 'Contents', commit_details)
+
+    @view = Precious::Views::Page.new.tap do |view|
+      view.instance_variable_set :@page, @wiki.page(page_title)
+      view.instance_variable_set :@h1_title, true
+    end
+
+    assert_equal @view.title, 'Page header from content'
+  end
+
+  test 'page <title> is URL path title if no h1 present' do
+    @wiki.write_page('dir/My path title', :markdown, 'Contents', commit_details)
+    page = @wiki.page('dir/My path title')
+
+    @view = Precious::Views::Page.new.tap do |view|
+      view.instance_variable_set :@page, page
+      view.instance_variable_set :@h1_title, false
+    end
+
+    assert_equal @view.title, 'My path title'
+  end
+
+  test "page header retains unicode and ASCII characters" do
     title = "数学 📘"
     @wiki.write_page(title, :markdown, "How old is Bilbo?")
     page = @wiki.page(title)

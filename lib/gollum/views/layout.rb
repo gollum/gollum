@@ -6,10 +6,11 @@ module Precious
       include Rack::Utils
       include Sprockets::Helpers
       include Precious::Views::AppHelpers
+      include Precious::Views::LocaleHelpers
       include Precious::Views::SprocketsHelpers
       include Precious::Views::RouteHelpers
       include Precious::Views::OcticonHelpers
-      
+
       alias_method :h, :escape_html
 
       attr_reader :name, :path
@@ -47,7 +48,7 @@ module Precious
       end
 
       def mathjax_js
-        page_route("gollum/assets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
+        "#{page_route('gollum/assets/mathjax/MathJax.js')}?config=TeX-AMS-MML_HTMLorMML"
       end
 
       def css # custom css

@@ -39,31 +39,29 @@ context "Frontend" do
     assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
   end
 
-  def nfd utf8
-    TwitterCldr::Normalization.normalize(utf8, using: :nfd)
-  end
-  
   test 'mathjax assets are served' do
     get '/gollum/assets/mathjax/MathJax.js'
     assert last_response.ok?
   end
 
   test "UTF-8 headers href preserved" do
-    page = 'utfh1'
-    text = nfd('한글')
+    page_content = <<~TEXT
+      ## 한글
 
-    # don't use h1 or it will be promoted to replace file name
-    # which doesn't generate a normal header link
-    @wiki.write_page(page, :markdown, '## ' + text,
-                     { :name => 'user1', :email => 'user1' });
+      Test page "utfh1" content.
+    TEXT
 
-    get page
-    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?#{text}\" (href|id)=\"(#)?#{text}\"></a>#{text}</h2>"
-    actual   = nfd(last_response.body)
+    @wiki.write_page('utfh1',
+                     :markdown,
+                     page_content,
+                     {name: 'user1', email: 'user1'})
 
-    assert_match /#{expected}/, actual
+    get 'utfh1'
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?한글\" (href|id)=\"(#)?한글\"></a>한글</h2>"
+
+    assert_match /#{expected}/, last_response.body
   end
-  
+
   test 'rss feed' do
     channel_title = <<EOF
 <title>Gollum Wiki Latest Changes</title>
@@ -173,7 +171,7 @@ EOF
     assert_equal 'sidebar', side_2.raw_data
     assert_equal 'def', side_2.version.message
     assert_not_equal side_1.version.sha, side_2.version.sha
-    assert_equal commits+1, @wiki.repo.commits('master').size
+    assert_equal commits, @wiki.repo.commits('master').size
   end
 
   test "renames page" do
@@ -328,7 +326,7 @@ EOF
   test "create with template succeed if template exists" do
     Precious::App.set(:wiki_options, { :template_page => true })
     page='_Template'
-    post '/gollum/create', :content => 'fake template', :page => page,
+    post '/gollum/create', :content => 'fake template with some Utf-8: Ü', :page => page,
       :path               => '/', :format => 'markdown', :message => ''
     follow_redirect!
     assert last_response.ok?
@@ -447,6 +445,21 @@ EOF
     Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
   
+  test "upload a file with https referer" do
+    temp_upload_file = Tempfile.new(['https_upload', '.file']) << 'abc'
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'https://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
+    
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: Home), based on referer
+    file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
+    assert_equal 'abc', file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
+  end
+  
+  
   test "guard against uploading an existing file" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close
@@ -476,9 +489,9 @@ EOF
   test "previews content" do
     post "/gollum/preview", :content => 'abc', :format => 'markdown', :page => 'Samewise Gamgee.mediawiki'
     assert last_response.ok?
-    assert last_response.body.include?('Samewise Gamgee</h1>')
+    assert last_response.body.include?('Samewise Gamgee')
   end
-  
+
   test 'throws an error when comparing two identical revisions for a page' do
     get '/gollum/compare/A.md/fc66539528eb96f21b2bbdbf557788fe8a1196ac...fc66539528eb96f21b2bbdbf557788fe8a1196ac'
     assert last_response.ok?
@@ -653,6 +666,13 @@ EOF
     assert_equal last_request.fullpath, '/'
     # redirect again from / to /Home
     assert_equal last_response.status, 302
+  end
+
+  test "view deleted page in history" do
+    get 'C/db8b297cf5a31b46ac24500edfdbd0d3d8eed4eb'
+
+    assert last_response.ok?
+    assert_match /This page will be deleted in the next commit :\(/, last_response.body
   end
 
   def app
@@ -953,7 +973,7 @@ context 'Frontend with base path' do
   test 'base path mathjax assets' do
     get '/wiki/Home'
     assert last_response.ok?
-    assert last_response.body.include?('<script defer src="/wiki/gollum/assets/mathjax/MathJax.js')
+    assert last_response.body.include?('<script defer src="/wiki/gollum/assets/mathjax/MathJax.js?config=')
   end
   
   test 'compare view' do

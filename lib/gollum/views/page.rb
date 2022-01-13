@@ -2,8 +2,9 @@ module Precious
   module Views
     class Page < Layout
       include HasPage
+      include HasMath
 
-      attr_reader :content, :page, :header, :footer, :preview, :historical
+      attr_reader :content, :page, :header, :footer, :preview, :historical, :version
       
       VALID_COUNTER_STYLES = ['decimal', 'decimal-leading-zero', 'arabic-indic', 'armenian', 'upper-armenian',
         'lower-armenian', 'bengali', 'cambodian', 'khmer', 'cjk-decimal', 'devanagari', 'georgian', 'gujarati', 'gurmukhi',
@@ -15,6 +16,11 @@ module Precious
       DATE_FORMAT    = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
       @@to_xml       = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
+
+      def title
+        h1 = @h1_title ? page_header_from_content(@content) : false
+        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
+      end
 
       def page_header
         title
@@ -68,11 +74,11 @@ module Precious
       def editable
         @editable
       end
-      
+
       def search
         true
       end
-      
+
       def history
         true
       end
@@ -80,11 +86,11 @@ module Precious
       def latest_changes
         true
       end
-      
+
       def overview
-        true 
+        true
       end
-        
+
       def allow_editing
         @allow_editing
       end
@@ -164,14 +170,6 @@ module Precious
         @toc_content
       end
 
-      def mathjax
-        @mathjax
-      end
-
-      def mathjax_config
-        @mathjax_config
-      end
-
       def use_identicon
         @page.wiki.user_icons == 'identicon'
       end
@@ -189,7 +187,7 @@ module Precious
       # Returns Hash.
       def metadata
         @page.metadata
-      end   
+      end
 
       # Access to embedded metadata.
       #
@@ -274,11 +272,6 @@ module Precious
             result << "<td>" << (value.respond_to?(:each) ? table(value) : CGI.escapeHTML(value.to_s)) << "</td>\n"
           end
         result << "</tr>\n</table>\n"
-      end
-
-      def title
-        h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.url_path_title # url_path_title is the metadata title if present, otherwise the filename-based title
       end
     end
   end

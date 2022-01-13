@@ -362,7 +362,7 @@ $(document).ready(function() {
     var formData = new FormData($('#gollum-editor-form').get(0));
     var paths = window.location.pathname.split('/');
     var sectionAnchor = window.location.hash.substr(1);
-    formData.append('page', paths[ paths.length - 1 ] || '')
+    formData.append('page', decodeURIComponent(paths[ paths.length - 1 ]) || '')
     $.ajax({
       url: routePath('preview'),
       data: formData,
@@ -397,8 +397,12 @@ $(document).ready(function() {
       active_tab = '#edit.tabnav-tab';
     }
 
+    $('.tabnav-tab.selected').removeAttr('aria-current');
     $('.tabnav-tab.selected').removeClass('selected');
+
+    $(active_tab).attr('aria-current', 'page');
     $(active_tab).addClass('selected');
+
     $('.tabnav-div').hide();
     $(active_div).show();
   }
