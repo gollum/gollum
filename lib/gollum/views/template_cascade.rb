@@ -17,7 +17,7 @@ module Precious
             File.join(template_priority_path, "#{name}.#{template_extension}")
           end
 
-        priority && File.exists?(priority) ? priority : default
+        priority && File.exist?(priority) ? priority : default
       end
 
       # Method should track lib/mustache/settings.rb from Mustache project.
