@@ -413,7 +413,15 @@ EOF
   test "uploading is not allowed unless explicitly enabled" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
     temp_upload_file.close
-    post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
+
+    Precious::App.set(
+      :wiki_options,
+      {allow_uploads: false, per_page_uploads: false}
+    )
+
+    post '/gollum/upload_file',
+      file: Rack::Test::UploadedFile.new(File.open(temp_upload_file))
+
     assert_equal 405, last_response.status
   end
 
