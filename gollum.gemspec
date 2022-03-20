@@ -1,12 +1,9 @@
 Gem::Specification.new do |s|
-  s.specification_version = 2 if s.respond_to? :specification_version=
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = '1.3.5'
   s.required_ruby_version = '>= 2.6'
 
   s.name              = 'gollum'
   s.version           = '5.2.3'
-  s.date              = '2021-04-18'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
