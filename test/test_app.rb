@@ -344,6 +344,26 @@ EOF
     Precious::App.set(:wiki_options, { :template_page => false })
   end
 
+  test "create with template filter without parameter succeed" do
+    Precious::App.set(:wiki_options, { :template_page => true })
+
+    # arrange
+    now = Time.parse('2022-04-16')
+    Gollum::TemplateFilter.add_filter("{{today}}", & -> () { now.strftime("%Y-%m-%d") })
+    template_content = "# Daily Log, {{today}}"
+
+    @wiki.write_page("daily-logs/_Template",
+                     :markdown,
+                     template_content)
+    # act
+    get "/gollum/create/daily-logs/test"
+    # assert
+    assert last_response.ok?
+    assert_match("# Daily Log, 2022-04-16", last_response.body)
+
+    Precious::App.set(:wiki_options, { :template_page => false })
+  end
+
   test "edit returns nil for non-existant page" do
     # post '/edit' fails. post '/edit/' works.
     page = 'not-real-page'
