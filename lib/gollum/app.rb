@@ -369,7 +369,7 @@ module Precious
         @name = wikip.name
         @ext  = wikip.ext
         @path = wikip.path
-        @template_page = load_template(@path) if settings.wiki_options[:template_page]
+        @template_page = load_template(wikip, @path) if settings.wiki_options[:template_page]
         @allow_uploads = wikip.wiki.allow_uploads
         @upload_dest   = find_upload_dest(wikip.fullpath)
 
@@ -661,9 +661,9 @@ module Precious
       end
     end
 
-    def load_template(path)
+    def load_template(wiki_page, path)
       template_page = wiki_page(::File.join(path, '_Template')).page || wiki_page('/_Template').page
-      template_page ? Gollum::TemplateFilter.apply_filters(template_page.text_data) : nil
+      template_page ? Gollum::TemplateFilter.apply_filters(wiki_page, template_page.text_data) : nil
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)

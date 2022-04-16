@@ -29,9 +29,10 @@ module Gollum
       @@filters[pattern] = replacement
     end
 
-    def self.apply_filters(data)
+    def self.apply_filters(wiki_page, data)
       @@filters.each do |pattern, replacement|
-        data.gsub!(pattern, replacement.call)
+        ps = replacement.parameters.length == 0 ? () : (wiki_page)
+        data.gsub!(pattern, replacement.call(*ps))
       end
       data
     end
