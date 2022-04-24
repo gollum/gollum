@@ -344,7 +344,7 @@ EOF
     Precious::App.set(:wiki_options, { :template_page => false })
   end
 
-  test "create with template filter without parameter succeed" do
+  test "create with template filter without parameter" do
     Precious::App.set(:wiki_options, { :template_page => true })
 
     # arrange
@@ -364,7 +364,7 @@ EOF
     Precious::App.set(:wiki_options, { :template_page => false })
   end
 
-  test "create with template filter with parameter succeed" do
+  test "create with template filter with parameter" do
     Precious::App.set(:wiki_options, { :template_page => true })
 
     # arrange
