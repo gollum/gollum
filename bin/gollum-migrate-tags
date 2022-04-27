@@ -11,8 +11,11 @@ migrate_options = {
   :hyphenate => true
 }
 
-def setting(const)
-  Object.const_defined?(const.upcase) && Object.const_get(const.upcase)
+def setting(variable_name)
+  class_variable_name = :"@@#{variable_name.to_s}"
+
+  Object.class_variable_defined?(class_variable_name) &&
+    Object.class_variable_get(class_variable_name)
 end
 
 opts = OptionParser.new do |opts|
@@ -25,7 +28,7 @@ It finds and repairs Gollum link tags that no longer work under 5.x for three re
 * 5.x wiki internal links are no longer 'global'.
 
 * NB: you can use the --lenient-tag-lookup option in gollum >= 5.x to enable 4.x-backwards compatible tags.
-  
+
 See https://github.com/gollum/gollum/wiki/5.0-release-notes#filename-handling for more information.
 Usage of this script comes without any warranty.
 
@@ -38,7 +41,7 @@ You can use the --page-file-dir and --config options as you would normally with 
 Requires a non-bare repository. Recommended usage:
 
 1. Clone your wiki's repository to create a backup.
-2. Run this script on your cloned repo. 
+2. Run this script on your cloned repo.
 3. If all looks sane, run the script with the --write option. This will overwrite files in your working directory, but not commit the changes, so you have time to review them.
 4. Do a 'git diff' to inspect the changes.
 5. Commit the changes if all looks sane, and push/pull them back into your original repo.
@@ -52,23 +55,23 @@ EOF
   opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.') do |path|
     wiki_options[:page_file_dir] = path
   end
-    
+
   opts.on('--prefer-relative-links', 'When specified, will try to replace broken links with relative links (\'[[Foo/Bar]]\' instead of \'[[/Subdir/Foo/Bar]]\') where possible.') do
     migrate_options[:prefer_relative] = true
   end
-  
+
   opts.on('--hyphenate', 'Default. Repair links that use spaces instead of hyphens: [[Bilbo Baggins]] -> [[Bilbo-Baggins]]') do
     migrate_options[:hyphenate] = true
   end
-  
+
   opts.on('--no-hyphenate', 'Turn off the --hyphenate option.') do
     migrate_options[:hyphenate] = false
   end
-  
+
   opts.on('--run-silent', 'Don\'t output anything.') do
     migrate_options[:run_silent] = true
   end
-  
+
   opts.on('--write', 'No dry run: actually perform the substitutions.') do
     migrate_options[:no_dry_run] = true
   end
@@ -78,8 +81,11 @@ end
 begin
   opts.parse!
   migrate_options.each do |setting, value|
-    const = setting.to_s.upcase
-    Object.const_set(const, value) unless Object.const_defined?(const)
+    variable_name = :"@@#{setting.to_s}"
+
+    unless Object.class_variable_defined?(variable_name)
+      Object.class_variable_set(variable_name, value)
+    end
   end
   wiki_options[:page_file_dir] = setting(:page_file_dir) ? setting(:page_file_dir) : wiki_options[:page_file_dir] # Allow settings :page_file_dir through PAGE_FILE_DIR constant.
 rescue OptionParser::InvalidOption
@@ -88,7 +94,7 @@ rescue OptionParser::InvalidOption
   exit
 end
 
-REPO = ARGV[0] || Dir.pwd
+wiki_directory = ARGV[0] || Dir.pwd
 
 require 'gollum-lib'
 
@@ -98,7 +104,7 @@ if cfg = options[:config]
   cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
   require cfg
 end
-  
+
 class Gollum::Filter::CodeMigrator < Gollum::Filter::Code
   def extract(data)
     case @markup.format
@@ -126,7 +132,7 @@ class Gollum::Filter::CodeMigrator < Gollum::Filter::Code
         next '' if m_end.length < m_start.length
         lang = m_lang ? m_lang.strip.split.first : nil
         cache_codeblock($~.to_s)
-      end  
+      end
     end
 
     data.gsub!(/^([ ]{0,3})``` ?([^\r\n]+)?\r?\n(.+?)\r?\n[ ]{0,3}```[ \t]*\r?$/m) do
@@ -134,7 +140,7 @@ class Gollum::Filter::CodeMigrator < Gollum::Filter::Code
     end
     data
   end
-  
+
   def process(data)
     return data if data.nil? || data.size.zero? || @map.size.zero?
     @map.each do |id, block| ## Just put the code blocks back in verbatim
@@ -142,23 +148,23 @@ class Gollum::Filter::CodeMigrator < Gollum::Filter::Code
     end
     data
   end
-  
+
   def cache_codeblock(block)
     id = "#{open_pattern}#{Digest::SHA1.hexdigest(block)}#{close_pattern}"
     @map[id] = block
     id
   end
 end
-  
+
 class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
   def process_tag(tag)
     link_part, extra = parse_tag_parts(tag)
     orig_tag = %{[[#{tag}]]}
     return orig_tag if link_part.nil?
-    
+
     img_args = extra ? [extra, link_part] : [link_part]
     mime = MIME::Types.type_for(::File.extname(img_args.first.to_s)).first
-    
+
     # For any kind of tag other than an internal link: just return the tag.
     if tag =~ /^_TOC_/ || link_part =~ /^_$/ || link_part =~ /^#{INCLUDE_TAG}/ || (mime && mime.content_type =~ /^image/) || process_external_link_tag(link_part, extra) || process_file_link_tag(link_part, extra)
       return orig_tag
@@ -168,7 +174,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
     link = link_part
     page = find_page_or_file_from_path(link)
     anchor = nil
-    
+
     if page.nil? # No match yet, now try finding the page with anchor removed
       if pos = link.rindex('#')
         anchor = link[pos..-1]
@@ -203,12 +209,12 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
         pick = possibles.first
         return tag_for_pick(pick, orig_tag, extra, anchor, @markup.page.path)
       end
-        
+
     end
   end
-  
+
   private
-  
+
   def tag_for_pick(pick, orig_tag, extra, anchor, linking_page_path)
     pick = if setting(:prefer_relative)
       overlapping_path = Pathname.new(linking_page_path).dirname.to_s
@@ -220,7 +226,7 @@ class ::Gollum::Filter::TagMigrator < Gollum::Filter::Tags
     end
     new_tag = extra.nil? ? %{[[#{pick}#{anchor}]]} : %{[[#{extra}|#{pick}#{anchor}]]}
     log(:info, "#{@markup.page.path}: Changing #{orig_tag} -> #{new_tag}")
-    new_tag    
+    new_tag
   end
 end
 
@@ -232,8 +238,12 @@ end
 
 filter_chain = [:PlainTextMigrator, :CodeMigrator, :TagMigrator]
 
-wiki = ::Gollum::Wiki.new(REPO, wiki_options.merge({:filter_chain => filter_chain}))
-TREE = wiki.tree_list(wiki.ref, true, true).map {|file| ::File.join('/', file.path)}
+wiki = ::Gollum::Wiki.new(wiki_directory, wiki_options.merge({:filter_chain => filter_chain}))
+
+Object.class_variable_set(
+  :"@@wiki_tree",
+  wiki.tree_list(wiki.ref, true, true).map {|file| ::File.join('/', file.path)}
+)
 
 def find_linked(link)
   link.gsub!(' ', '-') if setting(:hyphenate) # Match paths containing dashes instead of spaces
@@ -243,7 +253,9 @@ def find_linked(link)
   test_path = ::File.extname(link).empty? ? /#{link}\..+/ : link
   # Select pages from the wiki whose path =~ 'Foo/Bar/Samwi.*'
   # Match case-insenstively to mimic 4.x behavior!
-  TREE.select {|path| path =~ /^\/(.*\/)?#{test_path}/i}
+  Object.class_variable_get(:"@@wiki_tree").select { |path|
+    path =~ /^\/(.*\/)?#{test_path}/i
+  }
 end
 
 def log(kind, msg = nil)

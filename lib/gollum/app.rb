@@ -103,16 +103,13 @@ module Precious
     end
 
     before do
-      settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
-      @allow_editing = settings.wiki_options[:allow_editing]
+      @allow_editing = settings.wiki_options.fetch(:allow_editing, true)
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
       @show_local_time = settings.wiki_options.fetch(:show_local_time, false)
       
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
-
-      forbid unless @allow_editing || request.request_method == 'GET'
 
       if settings.wiki_options[:template_dir]
         Precious::Views::Layout.extend Precious::Views::TemplateCascade
@@ -143,6 +140,8 @@ module Precious
           config.manifest = Sprockets::Manifest.new(settings.sprockets, @static_assets_path)
         end
       end
+
+      forbid unless @allow_editing || request.request_method == 'GET'
     end
 
     get '/' do
