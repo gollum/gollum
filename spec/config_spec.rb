@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-  import 'org.eclipse.jgit.errors.ConfigInvalidException'
+  java_import 'org.eclipse.jgit.errors.ConfigInvalidException'
   
 describe RJGit::Configuration do
   

@@ -190,7 +190,7 @@ With special thanks to:
 
 License
 -------
-Copyright (c) 2011 - 2015, Team Repotag
+Copyright (c) 2011 - 2022, Team Repotag
 
 (Modified BSD License)
 
