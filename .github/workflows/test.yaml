@@ -20,8 +20,8 @@ jobs:
           ls ${{ github.workspace }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '9'
+          distribution: 'temurin'
+          java-version: '17'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
