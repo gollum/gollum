@@ -25,62 +25,60 @@ def load_script(**args)
   end
 end
 
-unless ENV['CI']
-  context '4.x -> 5.x tag migrator' do
-    include Rack::Test::Methods
+context '4.x -> 5.x tag migrator' do
+  include Rack::Test::Methods
 
-    setup do
-      @path = cloned_testpath("examples/lotr_migration.git")
-    end
+  setup do
+    @path = cloned_testpath("examples/lotr_migration.git")
+  end
 
-    test 'repair broken links' do
-      # The original contents of Subdir/Foo.md:
-      #
-      # waa
-      # [[Samwi]]
-      # [[samwise gamgee.mediaWiki]]
-      # [[Samwise Gamgee.mediawiki]]
-      # [[Samwise Gamgee]]
-      # [[Test|Samwise Gamgee#Anchor]]
-      # [[Waaa|Test]]
-      # [[Zaa]]
-      #
-      # The contents will be updated after running the migration script.
-      load_script
+  test 'repair broken links' do
+    # The original contents of Subdir/Foo.md:
+    #
+    # waa
+    # [[Samwi]]
+    # [[samwise gamgee.mediaWiki]]
+    # [[Samwise Gamgee.mediawiki]]
+    # [[Samwise Gamgee]]
+    # [[Test|Samwise Gamgee#Anchor]]
+    # [[Waaa|Test]]
+    # [[Zaa]]
+    #
+    # The contents will be updated after running the migration script.
+    load_script
 
-      file = ::File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
-      assert_equal <<~FILE_CONTENTS, file.read
-        waa
-        [[Samwi]]
-        [[/Samwise Gamgee.mediawiki]]
-        [[/Samwise Gamgee.mediawiki]]
-        [[/Samwise Gamgee.md]]
-        [[Test|/Samwise Gamgee.md#Anchor]]
-        [[Waaa|/Bar/Test.md]]
-        [[Subsub/Zaa.md]]
-      FILE_CONTENTS
-    end
+    file = ::File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
+    assert_equal <<~FILE_CONTENTS, file.read
+      waa
+      [[Samwi]]
+      [[/Samwise Gamgee.mediawiki]]
+      [[/Samwise Gamgee.mediawiki]]
+      [[/Samwise Gamgee.md]]
+      [[Test|/Samwise Gamgee.md#Anchor]]
+      [[Waaa|/Bar/Test.md]]
+      [[Subsub/Zaa.md]]
+    FILE_CONTENTS
+  end
 
-    test 'change spaced filenames to hyphenated filenames' do
-      load_script(hyphenate: true)
+  test 'change spaced filenames to hyphenated filenames' do
+    load_script(hyphenate: true)
 
-      f = ::File.new(::File.join(@path, 'Home.textile'), 'r')
-      output = f.read
-      assert_equal true, output.include?('[[Bilbo-Baggins.md]]')
-      assert_equal true, output.include?('[[evil|Mordor/Eye-Of-Sauron.md]]')
-    end
+    f = ::File.new(::File.join(@path, 'Home.textile'), 'r')
+    output = f.read
+    assert_equal true, output.include?('[[Bilbo-Baggins.md]]')
+    assert_equal true, output.include?('[[evil|Mordor/Eye-Of-Sauron.md]]')
+  end
 
-    test 'migration with page file dir' do
-      load_script(page_file_dir: 'Subdir')
+  test 'migration with page file dir' do
+    load_script(page_file_dir: 'Subdir')
 
-      f = ::File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
-      output = f.read
-      assert_equal true, output.include?('[[Subsub/Zaa.md]]')
-      assert_equal true, output.include?('[[Samwi]]')
-    end
+    f = ::File.new(::File.join(@path, 'Subdir/Foo.md'), 'r')
+    output = f.read
+    assert_equal true, output.include?('[[Subsub/Zaa.md]]')
+    assert_equal true, output.include?('[[Samwi]]')
+  end
 
-    teardown do
-      FileUtils.rm_rf(@path)
-    end
+  teardown do
+    FileUtils.rm_rf(@path)
   end
 end
