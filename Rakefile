@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'rake'
-require 'date'
 
 #############################################################################
 #
@@ -36,14 +35,6 @@ def bump_version
   File.write("lib/#{name}.rb", old_file)
 
   new_version
-end
-
-def date
-  Date.today.to_s
-end
-
-def rubyforge_project
-  name
 end
 
 def gemspec_file
@@ -143,12 +134,9 @@ task :gemspec => :validate do
   spec = File.read(gemspec_file)
   head, manifest, tail = spec.split("  # = MANIFEST =\n")
 
-  # replace name version and date
+  # replace name and version
   replace_header(head, :name)
   replace_header(head, :version)
-  replace_header(head, :date)
-  #comment this out if your rubyforge_project has a different name
-  replace_header(head, :rubyforge_project)
 
   # determine file list from git ls-files
   files = `git ls-files`.
