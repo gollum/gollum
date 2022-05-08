@@ -15,12 +15,13 @@ describe Precious::Views::LocaleHelpers do
   end
 
   def setup
-    ::I18n.available_locales = [:en, :de]
-    ::I18n.load_path = Dir[File.expand_path("test/support/locales" + "/*.yml")]
+    I18n.available_locales = [:en, :de]
+    I18n.load_path = Dir[File.expand_path("test/support/locales" + "/*.yml")]
   end
 
   def teardown
     I18n.locale = :en
+    I18n.load_path = Dir[::File.expand_path("lib/gollum/locales") + "/*.yml"]
   end
 
   let(:dummy_instance) { TestClass.new }
