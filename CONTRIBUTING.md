@@ -29,14 +29,85 @@ Lastly, please **consider helping out** by opening a Pull Request!
 
 You can triage issues which may include reproducing bug reports or asking for vital information, such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to gollum on CodeTriage](https://www.codetriage.com/gollum/gollum).
 
+## Set up your development environment
+
+If you want to hack on Gollum, you'll need to set up a development
+environment.
+
+To get started, you'll need:
+
+  - A recent version of [Git][git]
+  - A recent version of [Ruby][rubylang].
+  - A recent version of [Node JS][nodejs].
+
+Refer to their installation instructions. Installation methods differ depending
+on your operating system.
+
+Once you have those:
+
+  - Install Bundler, the Ruby package manager. In a terminal:
+    ```sh
+    gem install bundler
+    ```
+  - Install Yarn, a JavaScript package manager. [See Yarn's install
+    guide][yarn-install].
+
+Now, you can start setting up Gollum to run locally:
+
+  1. Clone the git repository. In a terminal:
+
+     ```sh
+     git clone https://github.com/gollum/gollum.git
+     ```
+  2. Change directory into the cloned project:
+     ```sh
+     cd gollum
+     ```
+  3. Bundle the project's Ruby dependencies using Bundler:
+     ```sh
+     [sudo] bundle install
+     ```
+  4. Install the project's JavaScript dependencies using Yarn:
+     ```sh
+     yarn install
+     ```
+If all went well, you should now be able to run the test suite using the
+following command:
+
+```sh
+bundle exec rake
+```
+
+If you already have a Gollum wiki, you can also browse it via your local version
+of Gollum:
+
+```sh
+bundle exec gollum <path/to/my/wiki/root>
+```
+
+Or you can clone an example wiki and browse that:
+
+```sh
+git clone test/examples/lotr.git ~/lotr-wiki
+bundle exec gollum ~/lotr-wiki
+```
+
+With this, you're ready to start contributing and open your first [pull
+request](#opening-a-pull-request).
+
+[git]: https://git-scm.com/downloads
+[nodejs]: https://nodejs.org
+[rubylang]: https://www.ruby-lang.org
+[yarn-install]: https://yarnpkg.com/getting-started/install
 
 ## Opening a Pull Request
 
 Pull Requests fixing bugs, implementing new features, or updating documentation and dependencies are all very welcome! If you would like to help out with the project, you can pick an open issue from the issue tracker. We're more than happy to help you get started! Here's how you can proceed:
 
-1. Fork and clone Gollum.
+1. Fork and clone Gollum. See [Set up your development
+   environment](#set-up-your-development-environment).
 2. Create a thoughtfully named topic branch to contain your changes.
-3. If you haven't installed dependencies yet, navigate to your clone and execute:  
+3. If you haven't installed dependencies yet, navigate to your clone and execute:
 	```
 	[sudo] bundle install
 	```
@@ -47,23 +118,32 @@ Pull Requests fixing bugs, implementing new features, or updating documentation 
 8. Push the branch to your fork on GitHub.
 9. Create a pull request for Gollum.
 
-**Notes:**
-* Do not change Gollum's version numbers, we will do that on our own.
+Do not change Gollum's version number, we will do that on our own.
 
 ### Running tests
 
 1. Install [Bundler](http://bundler.io/).
 2. Navigate to the cloned source of Gollum.
-3. Install dependencies:  
+3. Install dependencies:
 	```
 	[sudo] bundle install
 	```
-4. Run the tests:  
+4. Run the tests:
 	```
 	bundle exec rake test
 	```
-	
-To profile slow tests, you can use `bundle exec rake test TESTOPTS="--verbose"`.
+
+To profile slow tests, you can use the `--verbose` flag:
+
+```sh
+bundle exec rake test TESTOPTS="--verbose"
+```
+
+You can also run a single test file with the following command:
+
+```sh
+bundle exec ruby <test/test_the_file_i_want_to_run.rb>
+```
 
 ### Working with test repositories
 
@@ -82,7 +162,12 @@ git push ../lotr.git/ master
 
 ## Updating static assets
 
-This is necessary whenever changes have been made to the assets in `lib/gollum/public/gollum/javascript` (mostly SASS, CSS, and JS files), to ensure the changes are also present in the [released](#releasing-the-gem) version of the gem. Steps:
+This is necessary whenever changes have been made to the assets in
+`lib/gollum/public/gollum/javascript` (mostly SASS, CSS, and JS files), to
+ensure the changes are also present in the [released](#releasing-the-gem)
+version of the gem.
+
+Steps:
 
 1. `git rm -r lib/gollum/public/assets`
 1. `bundle exec rake precompile`
