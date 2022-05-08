@@ -21,6 +21,13 @@ module Precious
         autofill I18n.t(locale_klass_name)
       end
 
+      # Returns all I18n translation strings from the root of an I18n YAML file.
+      # Otherwise, it works exactly like the `#t` method that's also defined in
+      # this file.
+      def tt
+        autofill I18n.t('.')
+      end
+
       private
 
       # Recursively looks up I18n translation values and autofills any YAML
