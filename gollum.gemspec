@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mustache-sinatra', '~> 2.0'
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 4.1'
-  s.add_dependency 'octicons', '~> 12.0'
+  s.add_dependency 'octicons', '~> 17.0'
   s.add_dependency 'sprockets', '~> 4.1'
   s.add_dependency 'sprockets-helpers', '~> 1.2'
   s.add_dependency 'rss', '~> 0.2.9'
