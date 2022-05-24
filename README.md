@@ -5,21 +5,24 @@ gollum -- A git-based Wiki
 ![Build Status](https://github.com/gollum/gollum/actions/workflows/test.yaml/badge.svg)
 [![Open Source Helpers](https://www.codetriage.com/gollum/gollum/badges/users.svg)](https://www.codetriage.com/gollum/gollum)
 [![Cutting Edge Dependency Status](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/svg 'Cutting Edge Dependency Status')](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/info)
+[![Docker Pulls](https://img.shields.io/docker/pulls/gollumwiki/gollum)](https://hub.docker.com/r/gollumwiki/gollum)
 
-
-**Gollum version 5.0 is out!** See [here](https://github.com/gollum/gollum/wiki/5.0-release-notes) for a list of changes and new features compared to Gollum version 4.x, and see some [Screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
+See the [wiki](https://github.com/gollum/gollum/wiki) for extensive documentation, along with [screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
 
 ## DESCRIPTION
 
 Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a git repository of a specific nature:
+
 * A Gollum repository's contents are human-editable text or markup files.
 * Pages may be organized into directories any way you choose.
 * Other content can also be included, for example images, PDFs and headers/footers for your pages.
 * Gollum pages:
 	* May be written in a variety of [markups](#markups).
-	* Can be edited with your favourite system editor or IDE (changes will be visible after committing) or with the built-in web interface.
+	* Can be edited with your favourite editor (changes will be visible after committing) or with the built-in web interface.
 	* Can be displayed in all versions, reverted, etc.
-* Gollum strives to be compatible with GitHub wikis (see `--lenient-tag-lookup`)
+* Gollum strives to be [compatible](https://github.com/gollum/gollum/wiki/5.0-release-notes#compatibility-option) with [GitHub](https://docs.github.com/en/communities/documenting-your-project-with-wikis/about-wikis) and [GitLab](https://docs.gitlab.com/ee/user/project/wiki/#create-or-edit-wiki-pages-locally) wikis.
+  * Just clone your GitHub/GitLab wiki and view and edit it locally!
+	
 * Gollum supports advanced functionality like:
   * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
   * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
@@ -32,16 +35,17 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 
 ### SYSTEM REQUIREMENTS
 
-Gollum runs on Unix-like systems using its [adapter](https://github.com/gollum/rugged_adapter) for [rugged](https://github.com/libgit2/rugged) by default. You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
+Gollum runs on Unix-like systems using its default [adapter](https://github.com/gollum/rugged_adapter) for [rugged](https://github.com/libgit2/rugged). You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
 
 ## INSTALLATION
 
-1. Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of choice.
-2. Gollum is best installed via RubyGems:
-	```
-	[sudo] gem install gollum
-	```
+### As a Ruby Gem
 
+Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of choice. Then simply:
+	```
+	gem install gollum
+	```
+	
 Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
 To run, simply:
@@ -49,24 +53,30 @@ To run, simply:
 1. Run: `gollum /path/to/wiki` where `/path/to/wiki` is an initialized Git repository.
 2. Open `http://localhost:4567` in your browser.
 
+### Via Docker
+
+See [here](https://github.com/gollum/gollum/wiki/Gollum-via-Docker) for instructions on how to run Gollum via Docker.
+
+### Misc
+
 See [below](#running-from-source) for information on running Gollum from source, as a Rack app, and more.
 
-### Markups
+## MARKUPS
 
 Gollum allows using different markup languages on different wiki pages. It presently ships with support for the following markups:
 * [Markdown](http://daringfireball.net/projects/markdown/syntax) (see [below](#Markdown-flavors) for more information on Markdown flavors)
 * [RDoc](http://rdoc.sourceforge.net/)
 
 You can easily activate support for other markups by installing additional renderers (any that are supported by [github-markup](https://github.com/github/markup)):
-* [AsciiDoc](http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/) -- `[sudo] gem install asciidoctor`
-* [Creole](http://www.wikicreole.org/wiki/CheatSheet) -- `[sudo] gem install creole`
-* [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `[sudo] gem install wikicloth`
-* [Org](http://orgmode.org/worg/dev/org-syntax.html) -- `[sudo] gem install org-ruby`
+* [AsciiDoc](http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/) -- `gem install asciidoctor`
+* [Creole](http://www.wikicreole.org/wiki/CheatSheet) -- `gem install creole`
+* [MediaWiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth`
+* [Org](http://orgmode.org/worg/dev/org-syntax.html) -- `gem install org-ruby`
 * [Pod](http://perldoc.perl.org/perlpod.html) -- requires Perl >= 5.10 (the `perl` command must be available on your command line)
 	* Lower versions should install `Pod::Simple` from CPAN.
-* [ReStructuredText](http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html) -- requires python >= 2 (the `python2` command must be available on your command line)
-	* Note that Gollum will also need you to install `docutils` for your Python 2.
-* [Textile](http://redcloth.org/hobix.com/textile/quick.html) -- `[sudo] gem install RedCloth`
+* [ReStructuredText](http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html) -- requires python >= 3
+	* Note that Gollum will also need you to install `docutils` for python
+* [Textile](http://redcloth.org/hobix.com/textile/quick.html) -- `gem install RedCloth`
 
 ### Markdown flavors
 
@@ -90,10 +100,6 @@ Gollum can also be run with any [rack-compatible web server](https://github.com/
 
 Gollum can also be run alongside a CAS (Central Authentication Service) SSO (single sign-on) server. With a bit of tweaking, this adds basic user-support to Gollum. To see an example and an explanation, navigate [over here](https://github.com/gollum/gollum/wiki/Gollum-via-Rack-and-CAS-SSO).
 
-### Docker
-
-Gollum can also be run via [Docker](https://www.docker.com/). More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-via-Docker).
-
 ### Service
 
 Gollum can also be run as a service. More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-as-a-service).
@@ -106,7 +112,7 @@ Gollum comes with the following command line options:
 | ----------------- | --------- | ----------- |
 | --host            | [HOST]    | Specify the hostname or IP address to listen on. Default: '0.0.0.0'.<sup>1</sup> |
 | --port            | [PORT]    | Specify the port to bind Gollum with. Default: `4567`. |
-| --config          | [FILE]    | Specify path to Gollum's configuration file. |
+| --config          | [FILE]    | Specify path to Gollum's [configuration file](#Config-file). |
 | --ref             | [REF]     | Specify the git branch to serve. Default: `master`. |
 | --bare            | none      | Tell Gollum that the git repository should be treated as bare. |
 | --adapter         | [ADAPTER] | Launch Gollum using a specific git adapter. Default: `rugged`.<sup>2</sup> |

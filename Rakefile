@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'rake'
+require 'date'
+require 'tempfile'
 
 #############################################################################
 #
@@ -14,6 +16,14 @@ end
 def version
   line = File.read("lib/#{name}.rb")[/^\s*VERSION\s*=\s*.*/]
   line.match(/.*VERSION\s*=\s*['"](.*)['"]/)[1]
+end
+
+def latest_changes_file
+  'LATEST_CHANGES.md'
+end
+
+def history_file
+  'HISTORY.md'
 end
 
 # assumes x.y.z all digit version
@@ -105,6 +115,7 @@ task :release => :build do
     puts "You must be on the master branch to release!"
     exit!
   end
+  Rake::Task[:changelog].execute
   sh "git commit --allow-empty -a -m 'Release #{version}'"
   sh "git pull --rebase origin master"
   sh "git tag v#{version}"
@@ -165,6 +176,46 @@ task :validate do
     puts "A `VERSION` file at root level violates Gem best practices."
     exit!
   end
+end
+
+desc 'Build changlog'
+task :changelog do
+  [latest_changes_file, history_file].each do |f|
+    unless File.exists?(f)
+      puts "#{f} does not exist but is required to build a new release."
+      exit!
+    end
+  end
+  
+  latest_changes = File.open(latest_changes_file)
+  version_pattern = "# #{version}"
+  
+  if !`grep "#{version_pattern}" #{history_file}`.empty?
+    puts "#{version} is already described in #{history_file}"
+    exit!
+  end
+
+  begin
+    unless latest_changes.readline.chomp! =~ %r{#{version_pattern}}
+      puts "#{latest_changes_file} should begin with '#{version_pattern}'"
+      exit!
+    end
+  rescue EOFError
+    puts "#{latest_changes_file} is empty!"
+    exit!
+  end
+  
+  body = latest_changes.read
+  body.scan(/\s*#\s+\d\.\d.*/) do |match|
+    puts "#{latest_changes_file} may not contain multiple markdown headers!"
+    exit!
+  end
+  
+  temp = Tempfile.new
+  temp.puts("#{version_pattern} / #{date}\n#{body}\n")
+  temp.close
+  `cat #{history_file} >> #{temp.path}`
+  `cat #{temp.path} > #{history_file}`
 end
 
 desc 'Precompile assets'
