@@ -32,7 +32,8 @@ COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 
 RUN apk add \
     bash \
-    git
+    git \
+    libc6-compat
 
 VOLUME /wiki
 WORKDIR /wiki

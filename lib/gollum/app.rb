@@ -103,16 +103,13 @@ module Precious
     end
 
     before do
-      settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
-      @allow_editing = settings.wiki_options[:allow_editing]
+      @allow_editing = settings.wiki_options.fetch(:allow_editing, true)
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
       @show_local_time = settings.wiki_options.fetch(:show_local_time, false)
       
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
-
-      forbid unless @allow_editing || request.request_method == 'GET'
 
       if settings.wiki_options[:template_dir]
         Precious::Views::Layout.extend Precious::Views::TemplateCascade
@@ -143,6 +140,8 @@ module Precious
           config.manifest = Sprockets::Manifest.new(settings.sprockets, @static_assets_path)
         end
       end
+
+      forbid unless @allow_editing || request.request_method == 'GET'
     end
 
     get '/' do
@@ -369,7 +368,7 @@ module Precious
         @name = wikip.name
         @ext  = wikip.ext
         @path = wikip.path
-        @template_page = load_template(@path) if settings.wiki_options[:template_page]
+        @template_page = load_template(wikip, @path) if settings.wiki_options[:template_page]
         @allow_uploads = wikip.wiki.allow_uploads
         @upload_dest   = find_upload_dest(wikip.fullpath)
 
@@ -661,9 +660,9 @@ module Precious
       end
     end
 
-    def load_template(path)
+    def load_template(wiki_page, path)
       template_page = wiki_page(::File.join(path, '_Template')).page || wiki_page('/_Template').page
-      template_page ? Gollum::TemplateFilter.apply_filters(template_page.text_data) : nil
+      template_page ? Gollum::TemplateFilter.apply_filters(wiki_page, template_page.text_data) : nil
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
