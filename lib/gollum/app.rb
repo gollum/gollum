@@ -273,7 +273,7 @@ module Precious
           options.merge! author
         end
 
-        normalize = Gollum::Page.valid_extension?(fullname)
+        options[:normalize] = Gollum::Page.valid_extension?(fullname)
 
         begin
           wiki.write_file(reponame, contents, options)
