@@ -103,15 +103,13 @@ module Precious
     end
 
     before do
-      settings.wiki_options[:allow_editing] = settings.wiki_options.fetch(:allow_editing, true)
-      @allow_editing = settings.wiki_options[:allow_editing]
+      @allow_editing = settings.wiki_options.fetch(:allow_editing, true)
       @critic_markup = settings.wiki_options[:critic_markup]
       @redirects_enabled = settings.wiki_options.fetch(:redirects_enabled, true)
       @per_page_uploads = settings.wiki_options[:per_page_uploads]
-
+      @show_local_time = settings.wiki_options.fetch(:show_local_time, false)
+      
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
-
-      forbid unless @allow_editing || request.request_method == 'GET'
 
       if settings.wiki_options[:template_dir]
         Precious::Views::Layout.extend Precious::Views::TemplateCascade
@@ -142,6 +140,8 @@ module Precious
           config.manifest = Sprockets::Manifest.new(settings.sprockets, @static_assets_path)
         end
       end
+
+      forbid unless @allow_editing || request.request_method == 'GET'
     end
 
     get '/' do
@@ -178,7 +178,9 @@ module Precious
         content_type :json
         if page = wiki_page(params[:path]).page
           version = page.last_version
-          {:author => version.author.name, :date => version.authored_date}.to_json
+          authored_date = version.authored_date
+          authored_date = authored_date.utc.iso8601 if @show_local_time
+          {:author => version.author.name, :date => authored_date}.to_json
         end
       end
 
@@ -366,7 +368,7 @@ module Precious
         @name = wikip.name
         @ext  = wikip.ext
         @path = wikip.path
-        @template_page = load_template(@path) if settings.wiki_options[:template_page]
+        @template_page = load_template(wikip, @path) if settings.wiki_options[:template_page]
         @allow_uploads = wikip.wiki.allow_uploads
         @upload_dest   = find_upload_dest(wikip.fullpath)
 
@@ -440,23 +442,18 @@ module Precious
         mustache :page
       end
 
+      get %r{
+        /history/             # match any URL beginning with /history/
+        (.+?)                 # extract the full path (including any directories)
+        /
+        ([0-9a-f]{40})        # match SHA
+      }x do |path, version|
+        wiki = wiki_new
+        show_history wiki_page(path, wiki.commit_for(version), wiki)
+      end
+
       get '/history/*' do
-        wikip      = wiki_page(params[:splat].first)
-        @name      = wikip.fullname
-        @page      = wikip.page
-        @page_num  = [params[:page_num].to_i, 1].max
-        @max_count = settings.wiki_options.fetch(:pagination_count, 10)
-        unless @page.nil?
-          @wiki      = @page.wiki
-          @versions = @page.versions(
-            per_page: @max_count,
-            page_num: @page_num,
-            follow: settings.wiki_options.fetch(:follow_renames, true)
-          )
-          mustache :history
-        else
-          redirect to("/")
-        end
+        show_history wiki_page(params[:splat].first)
       end
 
       get '/latest_changes' do
@@ -603,6 +600,24 @@ module Precious
 
     private
 
+    def show_history(wikip)
+      @name      = wikip.fullname
+      @page      = wikip.page
+      @page_num  = [params[:page_num].to_i, 1].max
+      @max_count = settings.wiki_options.fetch(:pagination_count, 10)
+      unless @page.nil?
+        @wiki     = @page.wiki
+        @versions = @page.versions(
+          per_page: @max_count,
+          page_num: @page_num,
+          follow: settings.wiki_options.fetch(:follow_renames, true)
+        )
+        mustache :history
+      else
+        redirect to("/")
+      end
+    end
+
     def show_page_or_file(fullpath)
       wiki = wiki_new
       if page = wiki.page(fullpath)
@@ -645,9 +660,9 @@ module Precious
       end
     end
 
-    def load_template(path)
+    def load_template(wiki_page, path)
       template_page = wiki_page(::File.join(path, '_Template')).page || wiki_page('/_Template').page
-      template_page ? Gollum::TemplateFilter.apply_filters(template_page.text_data) : nil
+      template_page ? Gollum::TemplateFilter.apply_filters(wiki_page, template_page.text_data) : nil
     end
 
     def update_wiki_page(wiki, page, content, commit, name = nil, format = nil)
@@ -659,9 +674,9 @@ module Precious
       wiki.update_page(page, name, format, content.to_s, commit)
     end
 
-    def wiki_page(path, version = nil)
+    def wiki_page(path, version = nil, wiki = nil)
       pathname = (Pathname.new('/') + path).cleanpath
-      wiki = wiki_new
+      wiki = wiki_new if wiki.nil?
       OpenStruct.new(:wiki => wiki, :page => wiki.page(pathname.to_s, version = version),
                      :name => pathname.basename.sub_ext('').to_s, :path => pathname.dirname.to_s, :ext => pathname.extname, :fullname => pathname.basename.to_s, :fullpath => pathname.to_s)
     end

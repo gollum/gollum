@@ -42,7 +42,7 @@ module Precious
       end
 
       def fill_argument_content(i18n_key, i18n_value)
-        i18n_value.gsub!(YAML_VARIABLE_REGEXP) do |argument|
+        i18n_value = i18n_value.gsub(YAML_VARIABLE_REGEXP) do |argument|
           method_name = argument.gsub(/[^\w]/, '')
 
           next if method_name.nil?

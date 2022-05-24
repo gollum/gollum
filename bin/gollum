@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env -S ruby -Eutf-8
 
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
@@ -111,6 +111,9 @@ MSG
   end
   opts.on('--no-edit', 'Disable the feature of editing pages.')  do
     wiki_options[:allow_editing] = false
+  end
+  opts.on('--local-time', "Use the browser's local timezone instead of the server's for displaying dates.")  do
+    wiki_options[:show_local_time] = true
   end
   opts.on('--follow-renames', 'Follow pages across renames in the History view. Default: true.') do
     wiki_options[:follow_renames] = true

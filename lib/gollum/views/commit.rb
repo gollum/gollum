@@ -17,6 +17,10 @@ module Precious
       def authored_date
         @commit.authored_date
       end
+      
+      def datetime
+        authored_date.utc.iso8601
+      end
 
       def message
         @commit.message

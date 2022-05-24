@@ -96,6 +96,13 @@ function preparePage () {
   }
 }
 
+function getLocalTime(datetime_string, format) {
+  if (format === undefined) { format = 'Y-m-d %H:%M:%S O'; }
+
+  var date = new Date(datetime_string);
+  return date.format(format);
+}
+
 function flashNotice(type, notice, button_label, button_function, button_type) {
   // accepted types: info, success, warn, error
   nested_button_html = '';
@@ -155,6 +162,16 @@ $(document).ready(function() {
     }
   }
 
+  // Set time in local time
+  if (showLocalTime) {
+    $(function() {
+      $('time').each(function() {
+        var datetime = $(this).attr('datetime');
+        var format = $(this).data('format');
+        $(this).html(getLocalTime(datetime, format));
+      });
+    });
+  }
 
   if ($('.minibutton-upload-page').length) {
     new ClipboardJS('#ClipboardJSlink');
@@ -574,8 +591,9 @@ $(document).ready(function() {
         url: routePath('last_commit_info'),
         data: {path: $("#page-info-toggle").data('pagepath')},
         success: function ( data ) {
+          var date = showLocalTime ? getLocalTime(data.date) : data.date;
           $("#last-edit").next(".dotted-spinner").toggleClass('hidden');
-          $("#last-edit-in-progress").html('Last edited by <b>' + data.author + '</b>, ' + data.date);
+          $("#last-edit-in-progress").html('Last edited by <b>' + data.author + '</b>, ' + date);
         }
       });
       $("#last-edit").next(".dotted-spinner").toggleClass('hidden')
