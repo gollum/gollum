@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.6'
 
   s.name              = 'gollum'
-  s.version           = '5.2.3'
+  s.version           = '5.3.0'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
@@ -48,8 +48,10 @@ Gem::Specification.new do |s|
   # = MANIFEST =
   s.files = %w[
     CONTRIBUTING.md
+    Dockerfile
     Gemfile
     HISTORY.md
+    LATEST_CHANGES.md
     LICENSE
     README.md
     Rakefile
@@ -62,20 +64,21 @@ Gem::Specification.new do |s|
     contrib/openrc/init.d/gollum
     contrib/systemd/gollum@.service
     contrib/sysv-debian/init.d/gollum
+    docker-run.sh
     gollum.gemspec
     lib/gollum.rb
     lib/gollum/app.rb
     lib/gollum/assets.rb
     lib/gollum/helpers.rb
-    lib/gollum/public/assets/.sprockets-manifest-de7bb79aec424e55af1acdcc4237b301.json
-    lib/gollum/public/assets/app-0fd228e26bfbe6fe31a2da268eb0e98e780c1191c1a918adf383377946e9c838.js
-    lib/gollum/public/assets/app-0fd228e26bfbe6fe31a2da268eb0e98e780c1191c1a918adf383377946e9c838.js.gz
-    lib/gollum/public/assets/app-ad43ca64b295d8444b10f22ee868f18429268af498f1bc515434878b690e37a2.css
-    lib/gollum/public/assets/app-ad43ca64b295d8444b10f22ee868f18429268af498f1bc515434878b690e37a2.css.gz
+    lib/gollum/public/assets/.sprockets-manifest-160337b312f8e438181baac4aaa37319.json
+    lib/gollum/public/assets/app-309be032396e783b13a47df58f389b7c8e11c2b2d42640560b874f677c25f6e5.css
+    lib/gollum/public/assets/app-309be032396e783b13a47df58f389b7c8e11c2b2d42640560b874f677c25f6e5.css.gz
+    lib/gollum/public/assets/app-f05401ee374f0c7f48fc2bc08e30b4f4db705861fd5895ed70998683b383bfb5.js
+    lib/gollum/public/assets/app-f05401ee374f0c7f48fc2bc08e30b4f4db705861fd5895ed70998683b383bfb5.js.gz
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css
     lib/gollum/public/assets/criticmarkup-31ae5d3282bbb8e7b7c3c9917e9fb68e3315a6b4a75da6cec48d21b8846905c4.css.gz
-    lib/gollum/public/assets/editor-db10c8351306e92f1926ba225d0cd9c8e886482b3b9820a85825ec3abab5f1cf.js
-    lib/gollum/public/assets/editor-db10c8351306e92f1926ba225d0cd9c8e886482b3b9820a85825ec3abab5f1cf.js.gz
+    lib/gollum/public/assets/editor-9881d0c7ae663293f0e3a7e72729eec7e940fa613185c076709b76d292f5703a.js
+    lib/gollum/public/assets/editor-9881d0c7ae663293f0e3a7e72729eec7e940fa613185c076709b76d292f5703a.js.gz
     lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css
     lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css.gz
     lib/gollum/public/gollum/javascript/HOWTO_UPDATE_ACE.md
@@ -1217,9 +1220,11 @@ Gem::Specification.new do |s|
     lib/gollum/views/edit.rb
     lib/gollum/views/editable.rb
     lib/gollum/views/error.rb
+    lib/gollum/views/has_math.rb
     lib/gollum/views/has_page.rb
     lib/gollum/views/has_user_icons.rb
     lib/gollum/views/helpers.rb
+    lib/gollum/views/helpers/locale_helpers.rb
     lib/gollum/views/history.rb
     lib/gollum/views/latest_changes.rb
     lib/gollum/views/layout.rb
@@ -1228,6 +1233,7 @@ Gem::Specification.new do |s|
     lib/gollum/views/pagination.rb
     lib/gollum/views/rss.rb
     lib/gollum/views/search.rb
+    lib/gollum/views/template_cascade.rb
     licenses/licenses.txt
   ]
   # = MANIFEST =

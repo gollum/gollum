@@ -9,6 +9,10 @@ require 'tempfile'
 #
 #############################################################################
 
+def date
+   Time.now.strftime("%Y-%m-%d")
+end
+
 def name
   @name ||= Dir['*.gemspec'].first.split('.').first
 end
