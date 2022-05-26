@@ -4,6 +4,18 @@ module Precious
       true
     end
 
+    def default_keybinding
+      @default_keybinding
+    end
+
+    def keybindings
+      Gollum::KEYBINDINGS.map do |kb|
+        { :name => kb,
+          :selected => default_keybinding == kb
+        }
+      end
+    end
+
     def formats(selected = @page.format)
       Gollum::Markup.formats.map do |key, val|
         { :name     => val[:name],

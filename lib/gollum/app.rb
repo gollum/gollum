@@ -110,6 +110,7 @@ module Precious
       @show_local_time = settings.wiki_options.fetch(:show_local_time, false)
       
       @wiki_title = settings.wiki_options.fetch(:title, 'Gollum Wiki')
+      @default_keybinding = settings.wiki_options.fetch(:default_keybinding, 'default')
 
       if settings.wiki_options[:template_dir]
         Precious::Views::Layout.extend Precious::Views::TemplateCascade
