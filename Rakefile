@@ -190,10 +190,10 @@ task :changelog do
       exit!
     end
   end
-  
+
   latest_changes = File.open(latest_changes_file)
   version_pattern = "# #{version}"
-  
+
   if !`grep "#{version_pattern}" #{history_file}`.empty?
     puts "#{version} is already described in #{history_file}"
     exit!
@@ -208,13 +208,13 @@ task :changelog do
     puts "#{latest_changes_file} is empty!"
     exit!
   end
-  
+
   body = latest_changes.read
   body.scan(/\s*#\s+\d\.\d.*/) do |match|
     puts "#{latest_changes_file} may not contain multiple markdown headers!"
     exit!
   end
-  
+
   temp = Tempfile.new
   temp.puts("#{version_pattern} / #{date}\n#{body}\n")
   temp.close
@@ -224,11 +224,29 @@ end
 
 desc 'Precompile assets'
 task :precompile do
+  # Attempt to install JavaScript dependencies managed by Yarn via the
+  # `package.json` file in Gollum's project root. If it fails, raise an error
+  # and exit the task early.
+  puts "\n  Installing `yarn`-managed JavaScript dependencies...  \n\n"
+  system "yarn install"
+    unless $?.success?
+    raise "This task tried to run `yarn install` to get up-to-date "          \
+      "JavaScript dependencies before precompilation. But it failed. Please " \
+      "run `yarn install` manually from your shell and resolve any issues. "  \
+      "It's possible that you just need to install `yarn` on your system."
+  end
+
   require './lib/gollum/app.rb'
+
+  # Next, configure the Sprockets asset pipeline and precompile production-
+  # ready assets.
   Precious::App.set(:environment, :production)
+
   env = Precious::Assets.sprockets
-  path = ENV.fetch('GOLLUM_ASSETS_PATH', ::File.join(File.dirname(__FILE__), 'lib/gollum/public/assets'))
+  path = ENV.fetch 'GOLLUM_ASSETS_PATH',
+    File.join(File.dirname(__FILE__), 'lib/gollum/public/assets')
   manifest = Sprockets::Manifest.new(env, path)
+
   Sprockets::Helpers.configure do |config|
     config.environment = env
     config.prefix      = Precious::Assets::ASSET_URL
@@ -236,6 +254,7 @@ task :precompile do
     config.public_path = path
     config.manifest    = manifest
   end
-  puts "Precompiling assets to #{path}..."
+
+  puts "\n  Precompiling assets to #{path}...  \n\n"
   manifest.compile(Precious::Assets::MANIFEST)
 end
