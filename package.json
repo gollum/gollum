@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mousetrap": "^1.6.5"
+  },
+  "engines": {
+    "node" : ">=16.15.0"
+  }
+}
