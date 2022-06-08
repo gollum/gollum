@@ -241,22 +241,9 @@ module Precious
           tempfile = params[:file][:tempfile]
         end
         halt 500 unless tempfile.is_a? Tempfile
+        
+        dir = wiki.per_page_uploads ? find_per_page_upload_subdir(request.referer, request.host_with_port, wiki.base_path) : 'uploads'
 
-        if wiki.per_page_uploads
-          dir = request.referer.match(/^https?:\/\/#{request.host_with_port}\/(.*)/)[1]          
-          # remove base path if it is set
-          dir.sub!(/^#{wiki.base_path}/, '') if wiki.base_path
-          # remove base_url and gollum/* subpath if necessary
-          dir.sub!(/^\/gollum\/[-\w]+\//, '')
-          # remove file extension
-          dir.sub!(/#{::File.extname(dir)}$/, '')
-          # revert escaped whitespaces
-          dir.gsub!(/%20/, ' ')
-          dir = ::File.join('uploads', dir)
-        else
-          # store all uploads together
-          dir = 'uploads'
-        end
         halt 500 if dir.include?('..')
         halt 500 unless Pathname(dir).relative?
 
