@@ -44,3 +44,25 @@ jobs:
           bundler-cache: true
       - name: Run tests
         run: bundle exec rake
+  selenium:
+    name: Selenium on MRI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Install Chromedriver
+        uses: nanasess/setup-chromedriver@v1
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake test:capybara
