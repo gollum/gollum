@@ -32,7 +32,7 @@ ENV['RACK_ENV'] = 'test'
 require 'gollum'
 require 'gollum/app'
 
-CAPYBARA_DRIVER = ENV.fetch('CAPYBARA_DRIVER', :selenium_chrome).to_sym
+CAPYBARA_DRIVER = ENV['CI'] ? :selenium_chrome_headless : ENV.fetch('CAPYBARA_DRIVER', :selenium_chrome).to_sym
 
 # Disable the metadata feature
 $METADATA = false
