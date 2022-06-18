@@ -3,7 +3,7 @@ if ENV['CI'] || ENV['CAPYBARA'] then
   require 'selenium-webdriver'
   require 'capybara/dsl'
 
-  Capybara.default_driver = :selenium_headless
+  Capybara.default_driver = :selenium_chrome_headless
   Capybara.server = :webrick
 
   def console_log(page, level = :severe)
