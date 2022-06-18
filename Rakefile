@@ -72,6 +72,16 @@ end
 task :default => :test
 
 require 'rake/testtask'
+
+namespace :test do
+  Rake::TestTask.new('capybara') do |test|
+    test.libs << 'lib' << 'test' << '.'
+    test.pattern = 'test/integration/**/test_*.rb'
+    test.verbose = true
+    test.warning = false
+  end
+end
+
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test' << '.'
   test.pattern = 'test/**/test_*.rb'
