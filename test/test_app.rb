@@ -505,7 +505,21 @@ EOF
     assert_equal "abc", file.raw_data
     Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
+  
+  test 'upload a file with mode page from the edit page (drag and drop)' do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << "abc\r"
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
+    post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/gollum/edit/foo/Bar.md', 'HTTP_HOST' => 'localhost:4567'}
 
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: foo/Bar), based on referer
+    file = @wiki.file("uploads/foo/Bar/#{::File.basename(temp_upload_file.path)}")
+    assert_equal "abc\r", file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})    
+  end
+  
   test "upload a file with https referer" do
     temp_upload_file = Tempfile.new(['https_upload', '.file']) << 'abc'
     temp_upload_file.close
@@ -519,7 +533,6 @@ EOF
     assert_equal 'abc', file.raw_data
     Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
-
 
   test "guard against uploading an existing file" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << 'abc'
@@ -1053,7 +1066,21 @@ context 'Frontend with base path' do
     assert last_response.ok?
     assert_equal '/wiki/gollum/history/Bilbo-Baggins.md', last_request.fullpath
   end
+  
+  test 'upload a file with mode page from the edit page (drag and drop)' do
+    temp_upload_file = Tempfile.new(['upload', '.file']) << "abc\r"
+    temp_upload_file.close
+    Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
+    post "/wiki/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/wiki/gollum/edit/foo/Bar.md', 'HTTP_HOST' => 'localhost:4567'}
 
+    assert_equal 302, last_response.status # redirect is expected
+    @wiki.clear_cache
+    # Find the file in a page-specific subdir (here: foo/Bar), based on referer
+    file = @wiki.file("uploads/foo/Bar/#{::File.basename(temp_upload_file.path)}")
+    assert_equal "abc\r", file.raw_data
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})    
+  end
+  
   def app
     Precious::MapGollum.new(@base_path)
   end

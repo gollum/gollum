@@ -5,6 +5,20 @@ module Precious
   module Helpers
 
     EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
+    
+    def find_per_page_upload_subdir(referer, host_with_port, base_path)
+      base = base_path ? remove_leading_and_trailing_slashes(base_path) : ''
+      dir = referer.match(/^https?:\/\/#{host_with_port}\/#{base}\/?(.*)/)[1]
+      
+      # remove gollum/* subpath if necessary
+      dir.sub!(/^gollum\/[-\w]+\//, '')
+      # remove file extension
+      dir.sub!(/#{::File.extname(dir)}$/, '')
+      # revert escaped whitespaces
+      dir.gsub!(/%20/, ' ')
+      
+      return ::File.join('uploads', dir)
+    end
 
     def sanitize_empty_params(param)
       [nil, ''].include?(param) ? nil : CGI.unescape(param)
@@ -13,6 +27,10 @@ module Precious
     def strip_page_name(name)
       # Check if name already has a format extension, and if so, strip it.
       Gollum::Page.valid_extension?(name) ? Gollum::Page.strip_filename(name) : name
+    end
+    
+    def remove_leading_and_trailing_slashes(str)
+      str.sub(%r{^(/+)}, '').sub(%r{/+$}, '')
     end
 
     # Remove all slashes from the start of string.
