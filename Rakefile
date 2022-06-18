@@ -84,7 +84,9 @@ end
 
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test' << '.'
-  test.pattern = 'test/**/test_*.rb'
+  test.test_files = FileList.new('test/**/test_*.rb') do |fl|
+    fl.exclude('test/integration/**/test_*.rb')
+  end
   test.verbose = true
   test.warning = false
 end
