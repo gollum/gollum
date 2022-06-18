@@ -72,9 +72,21 @@ end
 task :default => :test
 
 require 'rake/testtask'
+
+namespace :test do
+  Rake::TestTask.new('capybara') do |test|
+    test.libs << 'lib' << 'test' << '.'
+    test.pattern = 'test/integration/**/test_*.rb'
+    test.verbose = true
+    test.warning = false
+  end
+end
+
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test' << '.'
-  test.pattern = 'test/**/test_*.rb'
+  test.test_files = FileList.new('test/**/test_*.rb') do |fl|
+    fl.exclude('test/integration/**/test_*.rb')
+  end
   test.verbose = true
   test.warning = false
 end
