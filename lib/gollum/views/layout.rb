@@ -50,6 +50,10 @@ module Precious
       def mathjax_js
         "#{page_route('gollum/assets/mathjax/MathJax.js')}?config=TeX-AMS-MML_HTMLorMML"
       end
+      
+      def mermaid
+        @mermaid
+      end
 
       def css # custom css
         @css

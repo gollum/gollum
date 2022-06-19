@@ -8,6 +8,7 @@
   {{#sprockets_stylesheet_tag}}app{{/sprockets_stylesheet_tag}}
   {{#sprockets_stylesheet_tag}}print print{{/sprockets_stylesheet_tag}}
 
+
   {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_css}}" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
 
@@ -40,6 +41,29 @@
   {{#has_editor}}
   {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
   {{/has_editor}}
+  
+  {{#mermaid}}
+  {{#sprockets_javascript_tag}}mermaid{{/sprockets_javascript_tag}}
+  <script>
+    mermaid.initialize({ startOnLoad: true, securityLevel: 'sandbox' });
+    mermaid.parseError = function(err,hash){
+      console.log("ERROR");
+    };
+    $(document).ready(function(){
+      $('iframe').ready(function(){
+        var newDoctype = document.implementation.createDocumentType(
+            'html',
+            '',
+            ''
+         );
+         $('iframe').each( function () {
+           $this.contentDocument.insertBefore(newDoctype,iframe[0].contentDocument.childNodes[0]);
+         })
+      });
+    });
+  </script>
+  {{/mermaid}}
+  
   {{#mathjax}}
   <script type="text/javascript">
     window.MathJax = {
