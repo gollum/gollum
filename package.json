@@ -1,8 +1,9 @@
 {
   "dependencies": {
+    "mermaid": "^9.1.2",
     "mousetrap": "^1.6.5"
   },
   "engines": {
-    "node" : ">=16.15.0"
+    "node": ">=16.15.0"
   }
 }
