@@ -46,21 +46,6 @@
   {{#sprockets_javascript_tag}}mermaid{{/sprockets_javascript_tag}}
   <script>
     mermaid.initialize({ startOnLoad: true, securityLevel: 'sandbox' });
-    mermaid.parseError = function(err,hash){
-      console.log("ERROR");
-    };
-    $(document).ready(function(){
-      $('iframe').ready(function(){
-        var newDoctype = document.implementation.createDocumentType(
-            'html',
-            '',
-            ''
-         );
-         $('iframe').each( function () {
-           $this.contentDocument.insertBefore(newDoctype,iframe[0].contentDocument.childNodes[0]);
-         })
-      });
-    });
   </script>
   {{/mermaid}}
   
