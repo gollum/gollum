@@ -21,7 +21,7 @@ context 'Frontend with mathjax' do
     @path = cloned_testpath("examples/lotr.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {mathjax: true})
+    Precious::App.set(:wiki_options, {mathjax: true, mermaid: true})
     Capybara.app = Precious::App
   end
 
