@@ -63,18 +63,10 @@ context "Frontend" do
   end
 
   test 'rss feed' do
-    channel_title = <<EOF
-<title>Gollum Wiki Latest Changes</title>
-EOF
-    item = <<EOF
-<description>Commited by: &lt;a href=&quot;mailto:dawa.ometto@phil.uu.nl&quot;&gt;Dawa Ometto&lt;/a&gt;&lt;br/&gt;Commit ID: 02796b1&lt;br/&gt;&lt;br/&gt;Affected files:&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;http://example.org/custom.css/02796b1450691f90db5d6dc6a816a4980ce80d07&quot;&gt;custom.css&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;http://example.org/custom.js/02796b1450691f90db5d6dc6a816a4980ce80d07&quot;&gt;custom.js&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</description>
-EOF
     get '/gollum/feed/'
+
     assert last_response.ok?
     assert_equal 'application/rss+xml', last_response.headers['Content-Type']
-    assert last_response.body.start_with?('<?xml')
-    assert last_response.body.include?(item)
-    assert last_response.body.include?(channel_title)
   end
 
   test "show sidebar, header, footer when present" do
@@ -477,7 +469,7 @@ EOF
     assert_equal 'abc', file.raw_data
     Precious::App.set(:wiki_options, {allow_uploads: false})
   end
-  
+
   test "upload a file with mode page" do
     temp_upload_file = Tempfile.new(['upload', '.file']) << "abc\r"
     temp_upload_file.close
@@ -491,7 +483,7 @@ EOF
     assert_equal "abc\r", file.raw_data
     Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
-  
+
   test "upload a file with valid extension" do
     temp_upload_file = Tempfile.new(['upload', '.txt']) << "abc\r"
     temp_upload_file.close
@@ -505,7 +497,7 @@ EOF
     assert_equal "abc", file.raw_data
     Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
-  
+
   test 'upload a file with mode page from the edit page (drag and drop)' do
     temp_upload_file = Tempfile.new(['upload', '.file']) << "abc\r"
     temp_upload_file.close
@@ -517,9 +509,9 @@ EOF
     # Find the file in a page-specific subdir (here: foo/Bar), based on referer
     file = @wiki.file("uploads/foo/Bar/#{::File.basename(temp_upload_file.path)}")
     assert_equal "abc\r", file.raw_data
-    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})    
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
-  
+
   test "upload a file with https referer" do
     temp_upload_file = Tempfile.new(['https_upload', '.file']) << 'abc'
     temp_upload_file.close
@@ -1066,7 +1058,7 @@ context 'Frontend with base path' do
     assert last_response.ok?
     assert_equal '/wiki/gollum/history/Bilbo-Baggins.md', last_request.fullpath
   end
-  
+
   test 'upload a file with mode page from the edit page (drag and drop)' do
     temp_upload_file = Tempfile.new(['upload', '.file']) << "abc\r"
     temp_upload_file.close
@@ -1078,9 +1070,9 @@ context 'Frontend with base path' do
     # Find the file in a page-specific subdir (here: foo/Bar), based on referer
     file = @wiki.file("uploads/foo/Bar/#{::File.basename(temp_upload_file.path)}")
     assert_equal "abc\r", file.raw_data
-    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})    
+    Precious::App.set(:wiki_options, {allow_uploads: false, per_page_uploads: false})
   end
-  
+
   def app
     Precious::MapGollum.new(@base_path)
   end
