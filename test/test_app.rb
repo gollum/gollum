@@ -1086,11 +1086,11 @@ context "Default keybindings" do
     @wiki = Gollum::Wiki.new(@path)
     @url = '/gollum/create/test'
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {})
   end
 
   teardown do
     FileUtils.rm_rf(@path)
+    Precious::App.set(:wiki_options, {default_keybinding: nil})
   end
 
   test 'keybinding unset' do
