@@ -4,55 +4,84 @@
 
     <h1 class="header-title text-center text-md-left py-4">
       <span class="f1-light text-gray-light">
-        Comparing versions of
+        {{t.comparing_versions_of}}
       </span>
       {{name}}
     </h1>
   </div>
 
 {{#message}}
-	<p>{{message}}</p>
+  <p>{{message}}</p>
 {{/message}}
 
-	<div id="compare-content">
+  <div id="compare-content">
 
-		<div class="py-4" id="actions">
-		  {{#show_revert}}
-		    {{#allow_editing}}
-				<form name="gollum-revert" action="{{revert_path}}/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form"></form>
-				<span class="pb-4">
-					<button class="btn btn-sm" type="submit" onclick="$('#gollum-revert-form').submit()">Revert Changes</button>
-				</span>
-		    {{/allow_editing}}
-		  {{/show_revert}}
-			<a href="{{history_path}}/{{escaped_url_path}}" class="btn btn-sm action-page-history">Back to Page History</a>
-		</div>
+    <div class="py-4" id="actions">
+      {{#show_revert}}
+        {{#allow_editing}}
+        <form name="gollum-revert" action="{{revert_path}}/{{escaped_url_path}}/{{before}}/{{after}}" method="post" id="gollum-revert-form"></form>
+        <span class="pb-4">
+          <button
+            class="btn btn-sm"
+            onclick="$('#gollum-revert-form').submit()"
+            type="submit"
+          >
+            {{t.revert}}
+          </button>
+        </span>
+        {{/allow_editing}}
+      {{/show_revert}}
 
-	  <div class="Box data highlight">
-			<div class="Box-header Box--condensed Box-header--gray">{{path}} <span class="px-2 float-right">Comparing {{before}} to {{after}}</span></div>
-	    <table >
-	      {{#lines}}
-	        <tr>
-	          <td class="line_numbers">{{ldln}}</td>
-	          <td class="line_numbers">{{rdln}}</td>
-	          <td>
-	            <div class="{{class}} pl-2">{{line}}</div>
-	          </td>
-	        </tr>
-	      {{/lines}}
-	    </table>
-		</div>
-	</div>
+      <a
+        class="btn btn-sm action-page-history"
+        href="{{history_path}}/{{escaped_url_path}}"
+      >
+        {{t.back_to_page_history}}
+      </a>
+    </div>
 
-	<div class="pt-4" id="footer">
-	   {{#show_revert}}
-	   {{#allow_editing}}
-				<span class="pt-4"><button class="btn btn-sm gollum-revert-button" type="submit" onclick="$('#gollum-revert-form').submit()">Revert Changes</button></span>
-	   {{/allow_editing}}
-	   {{/show_revert}}
-		<div class="pt-4">
-	   <a href="#">Back to Top</a>
-		</div>
-	</div>
+    <div class="Box data highlight">
+      <div class="Box-header Box--condensed Box-header--gray">
+        {{path}}
+
+        <span class="px-2 float-right">
+          {{t.comparing_from}}
+        </span>
+      </div>
+
+      <table>
+        {{#lines}}
+          <tr>
+            <td class="line_numbers">{{ldln}}</td>
+            <td class="line_numbers">{{rdln}}</td>
+            <td>
+              <div class="{{class}} pl-2">{{line}}</div>
+            </td>
+          </tr>
+        {{/lines}}
+      </table>
+    </div>
+  </div>
+
+  <div class="pt-4" id="footer">
+     {{#show_revert}}
+     {{#allow_editing}}
+       <span class="pt-4">
+         <button
+           class="btn btn-sm gollum-revert-button"
+           onclick="$('#gollum-revert-form').submit()"
+           type="submit"
+         >
+           {{t.revert}}
+         </button>
+       </span>
+     {{/allow_editing}}
+     {{/show_revert}}
+
+    <div class="pt-4">
+      <a href="#">
+        {{t.back_to_top}}
+      </a>
+    </div>
+  </div>
 </div>
-

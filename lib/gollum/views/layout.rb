@@ -20,7 +20,7 @@ module Precious
       end
 
       def title
-        "Home"
+        t[:title]
       end
 
       def has_path
@@ -58,11 +58,11 @@ module Precious
       def js # custom js
         @js
       end
-      
+
       def critic_markup
         @critic_markup
       end
-      
+
       def per_page_uploads
         @per_page_uploads
       end
@@ -75,19 +75,19 @@ module Precious
       def search
         false
       end
-      
+
       def history
         false
       end
-      
+
       def overview
         false
       end
-      
+
       def latest_changes
         false
       end
-      
+
     end
   end
 end

@@ -23,7 +23,7 @@ module Precious
       end
 
       def title
-        "Search results for " + @query
+        t[:title]
       end
 
       def search

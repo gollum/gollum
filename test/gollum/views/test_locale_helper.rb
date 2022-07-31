@@ -15,12 +15,13 @@ describe Precious::Views::LocaleHelpers do
   end
 
   def setup
-    ::I18n.available_locales = [:en, :de]
-    ::I18n.load_path = Dir[File.expand_path("test/support/locales" + "/*.yml")]
+    I18n.available_locales = [:en, :de]
+    I18n.load_path = Dir[File.expand_path("test/support/locales" + "/*.yml")]
   end
 
   def teardown
     I18n.locale = :en
+    I18n.load_path = Dir[::File.expand_path("lib/gollum/locales") + "/*.yml"]
   end
 
   let(:dummy_instance) { TestClass.new }
@@ -118,6 +119,101 @@ describe Precious::Views::LocaleHelpers do
 
       describe "auto-filled YAML arguments" do
         let(:subject) { dummy_instance.t[:author_info][:full] }
+
+        it "auto-fills in the default locale" do
+          _(subject).must_equal "Author J.R.R. is from Bloemfontein"
+        end
+
+        it "auto-fills in a configured locale" do
+          I18n.locale = :de
+
+          _(subject).must_equal "Autor J.R.R. ist vom Bloemfontein"
+        end
+      end
+    end
+  end
+
+  describe "#tt" do
+    describe "mustache usage" do
+      let(:subject) { dummy_instance.render(mustache_template) }
+
+      let(:mustache_template) { "{{ tt.test_class.hello_world }}" }
+
+      describe "in the default locale" do
+        it "returns the translation string" do
+          _(subject).must_equal "Hello world"
+        end
+      end
+
+      describe "in the configured locale" do
+        it "returns the translation string" do
+          I18n.locale = :de
+
+          _(subject).must_equal "Hallo Welt"
+        end
+      end
+
+      describe "translations with YAML arguments" do
+        let(:mustache_template) { "{{ tt.test_class.author_info.full }}" }
+
+        describe "in the default locale" do
+          it "autofills YAML arguments" do
+            _(subject).must_equal "Author J.R.R. is from Bloemfontein"
+          end
+        end
+
+        describe "in the configured locale" do
+          it "autofills YAML arguments" do
+            I18n.locale = :de
+
+            _(subject).must_equal "Autor J.R.R. ist vom Bloemfontein"
+          end
+        end
+      end
+
+      describe "translations with invalid arguments" do
+        let(:mustache_template) { "{{ tt.test_class.has_invalid_argument }}" }
+
+        it "fails gracefully with embedded error message" do
+          expected_string = "Welcome to " \
+            "[#{TestClass::NO_METHOD_MESSAGE}: no_matching_method]"
+
+          _(subject).must_equal expected_string
+        end
+      end
+
+      describe "missing translations" do
+        let(:mustache_template) {
+          "{{ tt.test_class.nested.nonexistent_key }}"
+        }
+
+        it "outputs an empty string" do
+          _(subject).must_be_empty
+        end
+      end
+    end
+
+    describe "usage" do
+      let(:subject) { dummy_instance.tt }
+
+      it "returns a hash" do
+        _(subject).must_be_kind_of Hash
+      end
+
+      it "returns all present translation keys" do
+        i18n_keys = I18n.t(".").keys
+
+        _(subject.keys).must_equal i18n_keys
+      end
+
+      it "returns nested keys" do
+        nested_keys = subject[:test_class][:author_info].keys
+
+        _(nested_keys).must_equal [:full]
+      end
+
+      describe "auto-filled YAML arguments" do
+        let(:subject) { dummy_instance.tt[:test_class][:author_info][:full] }
 
         it "auto-fills in the default locale" do
           _(subject).must_equal "Author J.R.R. is from Bloemfontein"

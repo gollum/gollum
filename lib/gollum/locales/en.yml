@@ -1,0 +1,38 @@
+en:
+  pagination:
+    aria:
+      label: Pagination
+      next_page: Next page
+      previous_page: Previous page
+    next: Next
+    previous: Previous
+  precious/views/compare:
+    back_to_page_history: Back to Page History
+    back_to_top: Back to Top
+    comparison_of: Comparison of
+    comparing_versions_of: Comparing versions of
+    comparing_from: "Comparing %{before} to %{after}"
+    revert: Revert Changes
+  precious/views/error:
+    error: Error
+  precious/views/history:
+    browse_in_history_description: Browse the page at this point in the history
+    compare_revisions: Compare Revisions
+    history_for: History for
+  precious/views/latest_changes:
+    title: Latest Changes (Globally)
+  precious/views/layout:
+    title: Home
+  precious/views/overview:
+    back_to_top: Back to Top
+    delete_confirmation: "Are you sure you want to delete %{name}?"
+    no_pages_in: There are no pages in
+    on: "on"
+    title: "Overview of %{ref}"
+  precious/views/search:
+    aria:
+      show_all: "Show all %{count} hits in this page"
+    back_to_top: Back to Top
+    no_results: There are no results for your search
+    search_results_for: Search results for
+    title: "Search results for %{query}"

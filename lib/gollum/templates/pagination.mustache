@@ -1,6 +1,23 @@
-<nav class="paginate-container" aria-label="Pagination">
+<nav class="paginate-container" aria-label="{{tt.pagination.aria.label}}">
   <div class="pagination" id="pagination">
-    <a id="prev" href="?page_num={{previous_page}}{{query_string}}" class="previous_page {{^previous_page}}disabled{{/previous_page}}">Previous</span>
-    <a id="next" href="?page_num={{next_page}}{{query_string}}" class="next_page {{^next_page}}disabled{{/next_page}}" rel="next" aria-label="Next Page">Next</a>
+    <a
+      aria-label="{{td.pagination.aria.previous_page}}"
+      class="previous_page {{^previous_page}}disabled{{/previous_page}}"
+      href="?page_num={{previous_page}}{{query_string}}"
+      id="prev"
+      rel="prev"
+    >
+      {{tt.pagination.previous}}
+    </a>
+
+    <a
+      aria-label="{{td.pagination.aria.next_page}}"
+      class="next_page {{^next_page}}disabled{{/next_page}}"
+      href="?page_num={{next_page}}{{query_string}}"
+      id="next"
+      rel="next"
+    >
+      {{tt.pagination.next}}
+    </a>
   </div>
 </nav>

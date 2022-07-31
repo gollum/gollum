@@ -4,7 +4,7 @@
 
   <h1 class="header-title text-center text-md-left py-4">
     <span class="f1-light text-gray-light">
-      History for
+      {{t.history_for}}
     </span>
     {{name}}
   </h1>
@@ -14,32 +14,41 @@
 
   {{>pagination}}
 
-    <form name="selection-form" id="selection-form" method="get" action="{{compare_path}}/{{escaped_url_path}}"></form>
+  <form name="selection-form" id="selection-form" method="get" action="{{compare_path}}/{{escaped_url_path}}"></form>
 
-	<div id="page-history-list" class="Box Box--condensed flex-auto">
-		<form id="version-form">
-			<ul> 	
-	    	{{#versions}}
-				<li class="Box-row border-top Box-row--hover-gray d-flex flex-items-center">
-					<span class="pr-2"><input class="checkbox" type="checkbox" name="versions[]" value="{{id}}"></span>
-					<span class="float-left col-2" id="user-icons">{{>author_template}}</span>
-					<time class="flex-auto col-1 text-gray-light" datetime="{{datetime}}" data-format="{{date_format}}">{{date}}</time>
-					<span class="flex-auto col-5">{{message}}</span>
-					<span class="pl-4 float-right">
-						<a href="{{href}}" class="btn btn-outline text-mono">{{id7}}</a>
-						<a href="{{href_page}}" title="Browse the page at this point in the history" class="btn btn-outline">{{#octicon}}code{{/octicon}}</a>
-					</span>
-				</li>
-				{{/versions}}
-			</ul>
-		</form>
-	</div>
-	
+  <div id="page-history-list" class="Box Box--condensed flex-auto">
+    <form id="version-form">
+      <ul>
+        {{#versions}}
+        <li class="Box-row border-top Box-row--hover-gray d-flex flex-items-center">
+          <span class="pr-2"><input class="checkbox" type="checkbox" name="versions[]" value="{{id}}"></span>
+          <span class="float-left col-2" id="user-icons">{{>author_template}}</span>
+          <time class="flex-auto col-1 text-gray-light" datetime="{{datetime}}" data-format="{{date_format}}">{{date}}</time>
+          <span class="flex-auto col-5">{{message}}</span>
+          <span class="pl-4 float-right">
+            <a href="{{href}}" class="btn btn-outline text-mono">{{id7}}</a>
+            <a
+              class="btn btn-outline"
+              href="{{href_page}}"
+              title="{{t.browse_in_history_description}}"
+            >
+              {{#octicon}}code{{/octicon}}
+            </a>
+          </span>
+        </li>
+        {{/versions}}
+      </ul>
+    </form>
+  </div>
 
-
-<div id="footer">
-	<div class="pt-4">
-  	<button class="btn btn-sm action-compare-revision" type="submit">Compare Revisions</button>
-	</div>
-</div>
+  <div id="footer">
+    <div class="pt-4">
+      <button
+        class="btn btn-sm action-compare-revision"
+        type="submit"
+      >
+        {{t.compare_revisions}}
+      </button>
+    </div>
+  </div>
 </div>

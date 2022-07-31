@@ -3,11 +3,11 @@ require 'pathname'
 module Precious
   module Views
     class Overview < Layout
-      attr_reader :results, :ref, :allow_editing, :newable
+      attr_reader :name, :results, :ref, :allow_editing, :newable
       HIDDEN_PATHS = ['.gitkeep']
 
       def title
-        "Overview of #{@ref}"
+        t[:title]
       end
 
       # def editable
@@ -38,21 +38,21 @@ module Precious
         end
       end
 
-      
+
       def files_folders
         if has_results
           files_and_folders = []
-          
+
           @results.each do |result|
             result_path = result.url_path
-            result_path = result_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?            
+            result_path = result_path.sub(/^#{Regexp.escape(@path)}\//, '') unless @path.nil?
             if result_path.include?('/')
               # result contains a folder
               folder_name = result_path.split('/').first
               folder_path = @path ? "#{@path}/#{folder_name}" : folder_name
               folder_url  = "#{overview_path}/#{folder_path}/"
               files_and_folders << {name: folder_name, icon: rocticon('file-directory'), type: 'dir', url: folder_url, is_file: false}
-            elsif !HIDDEN_PATHS.include?(result_path) 
+            elsif !HIDDEN_PATHS.include?(result_path)
               file_url = page_route(result.escaped_url_path)
               files_and_folders << {name: result.filename, icon: rocticon('file'), type: 'file', url: file_url, file_path: result.escaped_url_path, is_file: true}
             end
@@ -61,7 +61,7 @@ module Precious
           files_and_folders.uniq{|f| f[:name]}.sort_by!{|f| [f[:type], f[:name]]}
         end
       end
-      
+
 
       def has_results
         !@results.empty?
@@ -70,12 +70,12 @@ module Precious
       def no_results
         @results.empty?
       end
-      
+
       def latest_changes
         true
       end
-    
-      
+
+
     end
   end
 end

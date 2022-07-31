@@ -4,7 +4,7 @@
 
     <h1 class="header-title text-center text-md-left py-4">
       <span class="f1-light text-gray-light">
-        Search results for
+        {{t.search_results_for}}
       </span>
       {{name}}
     </h1>
@@ -21,7 +21,12 @@
     <li class="Box-row Box-row--gray">
       <span class="Counter Counter--gray tooltipped tooltipped-w" aria-label="{{filename_count}} hits in filename - {{count}} hits in content">{{filename_count}} - {{count}}</span>&nbsp;
       <span class="text-bold"><a href="{{href}}">{{name}}</a></span>
-      <button class="btn-link tooltipped tooltipped-w float-right toggle-context" aria-label="Show all {{count}} hits in this page">{{#octicon}}search{{/octicon}}</button>
+      <button
+        class="btn-link tooltipped tooltipped-w float-right toggle-context"
+        aria-label="{{t.aria.show_all}}"
+      >
+        {{#octicon}}search{{/octicon}}
+      </button>
     </li>
 
     <div class="search-context">
@@ -29,7 +34,6 @@
       <li class="Box-row border-0"><span class="text-italic">{{.}}</span></li>
       {{/context}}
     </div>
-
   {{/results}}
   </ul>
 </div>
@@ -37,12 +41,12 @@
 
 {{#no_results}}
   <p id="no-results">
-    There are no results for your search <strong>{{query}}</strong>.
+    {{t.no_results}} <strong>{{query}}</strong>.
   </p>
 {{/no_results}}
 
 <div id="footer" class="mt-4">
-    <a class="btn" href="#">Back to Top</a>
+  <a class="btn" href="#">{{t.back_to_top}}</a>
 </div>
 
 </div>
