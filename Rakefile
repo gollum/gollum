@@ -194,7 +194,7 @@ task :validate do
   end
 end
 
-desc 'Build changlog'
+desc 'Build changelog'
 task :changelog do
   [latest_changes_file, history_file].each do |f|
     unless File.exists?(f)
