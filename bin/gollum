@@ -190,7 +190,7 @@ MSG
     gollum_gems = ['gollum-lib', 'gollum-rjgit_adapter', 'rjgit', 'gollum-rugged_adapter', 'rugged']
     puts Gem.loaded_specs.select{|name, spec| gollum_gems.include?(name)}.map {|name, spec| "#{name} #{spec.version}"}
     puts "Markdown rendering gem: #{GitHub::Markup::Markdown.implementation_name}"
-    puts 'Other renderering gems:'
+    puts 'Other rendering gems:'
     renderer_gems = ['RedCloth', 'org-ruby', 'creole', 'asciidoctor', 'wikicloth']
     renderer_gems.each do |renderer|
       begin
