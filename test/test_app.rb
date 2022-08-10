@@ -205,8 +205,8 @@ context "Frontend" do
     assert_equal last_response.status, 500
   end
 
-  test "rename page catches non-existent target" do
-    # Non-existent rename target
+  test "rename page catches nonexistent target" do
+    # Nonexistent rename target
     post "/gollum/rename/B", :message => 'def'
     assert !last_response.ok?
     assert_equal last_response.status, 500
