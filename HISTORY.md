@@ -34,7 +34,7 @@
 
 * Bugfixes
 * Add autosave feature (#1576)
-* Add Add quick access to diff of each commit in the history
+* Add quick access to diff of each commit in the history
 
 # 5.0 / 2020-03-17
 
