@@ -1,7 +1,7 @@
 require_relative "helper"
 
 context "Precious::Views::RSS" do
-  # Simplisticially mimics a `Gollum::Git::Actor` object.
+  # Simplistically mimics a `Gollum::Git::Actor` object.
   #
   MockAuthor = Struct.new(:name, :email)
 
