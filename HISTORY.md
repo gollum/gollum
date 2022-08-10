@@ -82,7 +82,7 @@ Many of these changes have been made possible by removing the default grit adapt
 * Major enhancements
   * Made the Gollum theme responsive [@rtrvrtg](https://github.com/rtrvrtg) (#831)
   * Depends on new [gollum-lib](https://github.com/gollum/gollum-lib) `4.0.0`
-    * Allows specifiying [git adapter](https://github.com/gollum/gollum/wiki/Git-adapters) with `--adapter` [@bartkamphorst](https://github.com/bartkamphorst), [@dometto](https://github.com/dometto)
+    * Allows specifying [git adapter](https://github.com/gollum/gollum/wiki/Git-adapters) with `--adapter` [@bartkamphorst](https://github.com/bartkamphorst), [@dometto](https://github.com/dometto)
 * Numerous bugfixes
   * **NB**: please pass `--h1-title` if you do not want page titles to default to the page's filepath. See [here](https://github.com/gollum/gollum/wiki/Page-titles).
 
