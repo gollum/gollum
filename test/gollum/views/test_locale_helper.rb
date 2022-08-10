@@ -106,7 +106,7 @@ describe Precious::Views::LocaleHelpers do
       end
 
       it "does not return translation keys under other classes" do
-        other_i18n_keys = I18n.t("nonexistant_test_class").keys
+        other_i18n_keys = I18n.t("nonexistent_test_class").keys
 
         _(subject.keys).wont_include other_i18n_keys
       end
