@@ -252,7 +252,7 @@ def find_linked(link)
   # If it has an explicit file extension ('Samwi.md'), just test against that.
   test_path = ::File.extname(link).empty? ? /#{link}\..+/ : link
   # Select pages from the wiki whose path =~ 'Foo/Bar/Samwi.*'
-  # Match case-insenstively to mimic 4.x behavior!
+  # Match case-insensitively to mimic 4.x behavior!
   Object.class_variable_get(:"@@wiki_tree").select { |path|
     path =~ /^\/(.*\/)?#{test_path}/i
   }
