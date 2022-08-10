@@ -24,7 +24,7 @@ Use this tool to migrate a wiki repository created under Gollum versions 4.x or 
 It finds and repairs Gollum link tags that no longer work under 5.x for three reasons:
 
 * 5.x wiki internal links may contain spaces. [[Bilbo Baggins]] and [[Bilbo-Baggins]] therefore link to distinct pages.
-* 5.x wiki internal links are case senitive
+* 5.x wiki internal links are case sensitive
 * 5.x wiki internal links are no longer 'global'.
 
 * NB: you can use the --lenient-tag-lookup option in gollum >= 5.x to enable 4.x-backwards compatible tags.
