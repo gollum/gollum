@@ -85,7 +85,7 @@ context 'Latest changes with page-file-dir' do
     assert body.include?('Elrond.md'), 'latest changes should log changes in page_file_dir'
   end
 
-  test 'latest chages should strip off page_file_dir' do
+  test 'latest changes should strip off page_file_dir' do
     get('/gollum/latest_changes')
     body = last_response.body
     assert_equal body.include?('<a href="/Rivendell/Elrond.md/'), false
