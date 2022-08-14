@@ -1,4 +1,7 @@
 en:
+  editor:
+    function_bar:
+      help: Help
   pagination:
     aria:
       label: Pagination

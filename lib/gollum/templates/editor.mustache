@@ -41,11 +41,19 @@
 			<span class="pr-2"></span>
 			{{#critic_markup}}
 			<button class="btn btn-sm function-button" id="function-critic-accept" title="Accept Selected CriticMarkup">{{#octicon}}plus{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-critic-reject" title="Reject Selected CriticMarkup">{{#octicon}}dash{{/octicon}}</button>					
+			<button class="btn btn-sm function-button" id="function-critic-reject" title="Reject Selected CriticMarkup">{{#octicon}}dash{{/octicon}}</button>
 			<span class="pr-2"></span>
 			{{/critic_markup}}
       <button class="btn btn-sm function-button" id="function-text-direction" title="Reverse Text Direction">{{#octicon}}arrow-both{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-help" title="Help">{{#octicon}}question{{/octicon}}</button>
+			<button
+				aria-label="{{tt.editor.function_bar.help}}"
+				class="btn btn-sm function-button"
+				data-help-text="{{help_text}}"
+				id="function-help"
+				title="{{tt.editor.function_bar.help}}"
+			>
+				{{#octicon}}question{{/octicon}}
+			</button>
     </div>
 
     <div id="gollum-editor-format-selector">
