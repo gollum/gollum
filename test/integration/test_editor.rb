@@ -35,9 +35,9 @@ context "editor interface" do
       click_on "Emoji"
 
       assert_includes page.text,
-        "See the EmojiOne demo for all available emoji. To include one, " \
-        "wrap the emoji name in colons and use underscores instead of "   \
-        "spaces (e.g. :heart: or :point_up:)."
+        "Gollum uses JoyPixels 4 for its emoji. To include one, wrap the "  \
+        "emoji name in colons and use underscores instead of spaces (e.g. " \
+        ":heart: or :point_up:)."
     end
 
   end
