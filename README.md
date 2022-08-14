@@ -158,7 +158,3 @@ When `--config` option is used, certain inner parts of Gollum can be customized.
 ## CONTRIBUTING
 
 Please consider helping out! See [CONTRIBUTING](CONTRIBUTING.md) for information on how to submit issues, and how to start hacking on gollum.
-
-## THANKS TO
-
-[![Testing Powered By SauceLabs](https://opensource.saucelabs.com/images/opensauce/powered-by-saucelabs-badge-gray.png?sanitize=true "Testing Powered By SauceLabs")](https://saucelabs.com)
