@@ -3,6 +3,8 @@ require_relative 'helper'
 require 'selenium-webdriver'
 require 'capybara/dsl'
 
+Selenium::WebDriver::Chrome.path = ENV['CHROME_PATH'] if ENV['CHROME_PATH']
+
 CAPYBARA_DRIVER =
   if ENV['CI']
     :selenium_chrome_headless
