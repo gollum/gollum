@@ -42,13 +42,6 @@
   {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
   {{/has_editor}}
   
-  {{#mermaid}}
-  {{#sprockets_javascript_tag}}mermaid{{/sprockets_javascript_tag}}
-  <script>
-    mermaid.initialize({ startOnLoad: true, securityLevel: 'sandbox' });
-  </script>
-  {{/mermaid}}
-  
   {{#mathjax}}
   <script type="text/javascript">
     window.MathJax = {
@@ -65,8 +58,26 @@
   {{/mathjax_config}}
   <script defer src="{{mathjax_js}}"></script>
   {{/mathjax}}
+  
+  {{#mermaid}}
+  <script>
+  var mermaid_conf = {
+    startOnLoad: true,
+    securityLevel: 'strict'
+  };
+  </script>
+  {{/mermaid}}
+  
   {{#js}}<script type="text/javascript" src="{{custom_js}}"></script>{{/js}}
 
+  {{#mermaid}}
+  {{#sprockets_javascript_tag}}mermaid{{/sprockets_javascript_tag}}
+  <script>
+    console.log(mermaid_conf)
+    mermaid.initialize(mermaid_conf);
+  </script>
+  {{/mermaid}}
+  
   <title>{{title}}</title>
 </head>
 <body>
