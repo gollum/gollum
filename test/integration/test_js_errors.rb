@@ -14,7 +14,7 @@ def assert_only_expected_errors(log)
   assert_equal [], log.reject {|err| err.message.match?(expected_errors) }
 end
 
-context 'Frontend with mathjax' do
+context 'Frontend with mathjax and mermaid' do
   include Capybara::DSL
 
   setup do
