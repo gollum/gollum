@@ -9,7 +9,10 @@ require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
 require 'octicons'
-require 'sass'
+require 'sassc'
+if RUBY_PLATFORM == 'java' then
+  require 'sassc-embedded'
+end 
 require 'pathname'
 
 require 'gollum'
