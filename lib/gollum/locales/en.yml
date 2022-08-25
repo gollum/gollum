@@ -31,7 +31,7 @@ en:
     title: "Overview of %{ref}"
   precious/views/search:
     aria:
-      show_all: "Show all %{count} hits in this page"
+      show_all: Show all hits on this page
     back_to_top: Back to Top
     no_results: There are no results for your search
     search_results_for: Search results for
