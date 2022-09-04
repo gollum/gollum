@@ -1082,59 +1082,68 @@ context "Default keybindings" do
   include Rack::Test::Methods
 
   setup do
-    @path = cloned_testpath("examples/empty.git")
-    @wiki = Gollum::Wiki.new(@path)
+    @path = cloned_testpath "examples/empty.git"
+    @wiki = Gollum::Wiki.new @path
     @url = '/gollum/create/test'
-    Precious::App.set(:gollum_path, @path)
+
+    Precious::App.set :gollum_path, @path
+    Precious::App.set :wiki_options, {default_keybinding: nil}
   end
 
   teardown do
-    FileUtils.rm_rf(@path)
-    Precious::App.set(:wiki_options, {default_keybinding: nil})
+    FileUtils.rm_rf @path
+
+    @path = nil
+    @wiki = nil
+    @url = nil
   end
 
   test 'keybinding unset' do
     get @url
+
     assert_equal last_response.body.include?('selected="selected" value="default"'), false
     assert_equal last_response.body.include?('selected="selected" value="vim"'), false
     assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
   end
 
-  test 'keybinding `dne`' do
-    # dne := does not exist
-    Precious::App.set(:wiki_options, {:default_keybinding => 'dne'})
+  test 'nonexistent keybinding' do
+    Precious::App.set :wiki_options, {:default_keybinding => 'does-not-exist'}
+
     get @url
+
     assert_equal last_response.body.include?('selected="selected" value="default"'), false
     assert_equal last_response.body.include?('selected="selected" value="vim"'), false
     assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
-    Precious::App.set(:wiki_options, {:default_keybinding => 'none'})
   end
 
   test 'keybinding `default`' do
-    Precious::App.set(:wiki_options, {:default_keybinding => 'default'})
+    Precious::App.set :wiki_options, {:default_keybinding => 'default'}
+
     get @url
+
     assert_equal last_response.body.include?('selected="selected" value="default"'), true
     assert_equal last_response.body.include?('selected="selected" value="vim"'), false
     assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
-    Precious::App.set(:wiki_options, {:default_keybinding => 'none'})
   end
 
   test 'keybinding `vim`' do
-    Precious::App.set(:wiki_options, {:default_keybinding => 'vim'})
+    Precious::App.set :wiki_options, {:default_keybinding => 'vim'}
+
     get @url
+
     assert_equal last_response.body.include?('selected="selected" value="default"'), false
     assert_equal last_response.body.include?('selected="selected" value="vim"'), true
     assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
-    Precious::App.set(:wiki_options, {:default_keybinding => 'none'})
   end
 
   test 'keybinding `emacs`' do
-    Precious::App.set(:wiki_options, {:default_keybinding => 'emacs'})
+    Precious::App.set :wiki_options, {:default_keybinding => 'emacs'}
+
     get @url
+
     assert_equal last_response.body.include?('selected="selected" value="default"'), false
     assert_equal last_response.body.include?('selected="selected" value="vim"'), false
     assert_equal last_response.body.include?('selected="selected" value="emacs"'), true
-    Precious::App.set(:wiki_options, {:default_keybinding => 'none'})
   end
 
   def app
