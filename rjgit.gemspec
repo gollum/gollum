@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.homepage          = "https://github.com/repotag/rjgit"
   s.require_paths     = ["lib"]
   s.files             = Dir['lib/**/*.rb'] + ["README.md", "LICENSE", "Gemfile"] + Dir['lib/java/jars/*.jar']
-  s.has_rdoc          = true
   s.extra_rdoc_files  = ["README.md"]
   s.licenses          = ['Modified BSD', 'EPL']
   s.rdoc_options = ["--charset=UTF-8"]

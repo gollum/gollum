@@ -13,7 +13,7 @@ module RJGit
   import 'org.eclipse.jgit.diff.DiffEntry'
   import 'org.eclipse.jgit.treewalk.filter.PathFilter'
   import 'org.eclipse.jgit.api.TransportConfigCallback'
-  import 'org.eclipse.jgit.transport.JschConfigSessionFactory'
+  import 'org.eclipse.jgit.transport.ssh.jsch.JschConfigSessionFactory'
   import 'org.eclipse.jgit.transport.SshTransport'
   import 'org.eclipse.jgit.revwalk.FollowFilter'
   import 'org.eclipse.jgit.revwalk.TreeRevFilter'

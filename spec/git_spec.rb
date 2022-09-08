@@ -315,7 +315,7 @@ describe RubyGit do
 
     it "configures for ssh default behavior when no specifics given" do
       options = {}
-      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransportSshJsch.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
       expect(dummy_session).to_not receive(:setUserName)
       expect(dummy_session).to_not receive(:setPassword)
       expect(dummy_j_sch).to_not receive(:removeAllIdentity)
@@ -327,7 +327,7 @@ describe RubyGit do
 
     it "configures for a specific known hosts file if options[:known_hosts_file]" do
       options = {known_hosts_file: 'aknownhostsfile'}
-      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransportSshJsch.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
       expect(dummy_session).to_not receive(:setUserName)
       expect(dummy_session).to_not receive(:setPassword)
       expect(dummy_j_sch).to_not receive(:removeAllIdentity)
@@ -339,7 +339,7 @@ describe RubyGit do
 
     it "configures for a specific private key file if options[:private_key_file]" do
       options = {private_key_file: 'aprivatekeyfile'}
-      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransportSshJsch.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
       expect(dummy_session).to_not receive(:setUserName)
       expect(dummy_session).to_not receive(:setPassword)
       expect(dummy_j_sch).to receive(:removeAllIdentity).with(no_args).and_return(true)
@@ -351,7 +351,7 @@ describe RubyGit do
 
     it "configures for a specific encrypted private key file if options[:private_key_file] and options[:priavte_key_passphrase]" do
       options = {private_key_file: 'something', private_key_passphrase: 'another_thing'}
-      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransportSshJsch.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
       expect(dummy_session).to_not receive(:setUserName)
       expect(dummy_session).to_not receive(:setPassword)
       expect(dummy_j_sch).to receive(:removeAllIdentity).with(no_args)
@@ -364,7 +364,7 @@ describe RubyGit do
     it "configures for ssh username if options[:username]" do
       options = {username: 'gituser'}
       allow(dummy_session).to receive(:setUserName)
-      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransportSshJsch.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
       expect(dummy_session).to receive(:setUserName).with(options[:username])
       expect(dummy_session).to_not receive(:setPassword)
       expect(dummy_j_sch).to_not receive(:removeAllIdentity)
@@ -377,7 +377,7 @@ describe RubyGit do
     it "configures for ssh password if options[:password]" do
       options = {password: 'something'}
       allow(dummy_session).to receive(:setUserName)
-      allow_any_instance_of(::Java::OrgEclipseJgitTransport.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
+      allow_any_instance_of(::Java::OrgEclipseJgitTransportSshJsch.JschConfigSessionFactory).to receive(:createDefaultJSch).and_return(dummy_j_sch)
       expect(dummy_session).to_not receive(:setUserName)
       expect(dummy_session).to receive(:setPassword).with(options[:password])
       expect(dummy_j_sch).to_not receive(:removeAllIdentity)
