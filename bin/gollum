@@ -94,13 +94,7 @@ MSG
     'Example: setting this to \'pages\' will make Gollum serve only pages at \'<git-repo>/pages/*\'.') do |path|
     wiki_options[:page_file_dir] = path
   end
-  opts.on('--static', 'Use static assets. Defaults to false in development/test, defaults to true in production/staging.') do
-    wiki_options[:static] = true
-  end
-  opts.on('--no-static', 'Do not use static assets (even when in production/staging).') do
-    wiki_options[:static] = false
-  end
-  opts.on('--assets [PATH]', 'Set the path to look for static assets. Only used if --static is set to true, or environment is production/staging. Default: ./public/assets') do |path|
+  opts.on('--assets [PATH]', 'Set the path to look for stylesheets and javascript. Only used if environment is production/staging. Default: ./public/assets') do |path|
     wiki_options[:static_assets_path] = path
   end
   opts.on('--css', 'Inject custom CSS into each page. The \'<wiki-root>/custom.css\' file is used (must be committed).') do
@@ -205,6 +199,11 @@ MSG
 
 
   opts.separator ''
+  opts.separator '  Development:'
+
+  opts.on('--development-assets', 'For development purposes only. Use local stylesheets and javascript instead of the packaged assets.') do
+    wiki_options[:static] = false
+  end
 end
 
 # Read command line options into `options` hash
