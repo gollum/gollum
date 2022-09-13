@@ -8,6 +8,7 @@
   {{#sprockets_stylesheet_tag}}app{{/sprockets_stylesheet_tag}}
   {{#sprockets_stylesheet_tag}}print print{{/sprockets_stylesheet_tag}}
 
+
   {{#css}}<link rel="stylesheet" type="text/css" href="{{custom_css}}" media="all">{{/css}}
   {{#noindex}}<meta name="robots" content="noindex, nofollow" />{{/noindex}}
 
@@ -40,6 +41,7 @@
   {{#has_editor}}
   {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
   {{/has_editor}}
+  
   {{#mathjax}}
   <script type="text/javascript">
     window.MathJax = {
@@ -56,8 +58,25 @@
   {{/mathjax_config}}
   <script defer src="{{mathjax_js}}"></script>
   {{/mathjax}}
+  
+  {{#mermaid}}
+  <script>
+  var mermaid_conf = {
+    startOnLoad: true,
+    securityLevel: 'strict'
+  };
+  </script>
+  {{/mermaid}}
+  
   {{#js}}<script type="text/javascript" src="{{custom_js}}"></script>{{/js}}
 
+  {{#mermaid}}
+  {{#sprockets_javascript_tag}}mermaid{{/sprockets_javascript_tag}}
+  <script>
+    mermaid.initialize(mermaid_conf);
+  </script>
+  {{/mermaid}}
+  
   <title>{{title}}</title>
 </head>
 <body>

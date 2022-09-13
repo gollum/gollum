@@ -31,6 +31,8 @@ require File.expand_path '../helpers', __FILE__
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
 
+Gollum::Filter::Code.language_handlers[/mermaid/] = Proc.new { |lang, code| "<div class=\"mermaid\">\n#{code}\n</div>" }
+
 # Run the frontend, based on Sinatra
 #
 # There are a number of wiki options that can be set for the frontend
@@ -126,6 +128,8 @@ module Precious
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
       @mathjax = settings.wiki_options[:mathjax]
+      @mermaid = settings.wiki_options[:mermaid]
+      Gollum::Filter::Code.language_handlers.delete(/mermaid/) unless @mermaid
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))

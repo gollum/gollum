@@ -14,14 +14,14 @@ def assert_only_expected_errors(log)
   assert_equal [], log.reject {|err| err.message.match?(expected_errors) }
 end
 
-context 'Frontend with mathjax' do
+context 'Frontend with mathjax and mermaid' do
   include Capybara::DSL
 
   setup do
     @path = cloned_testpath("examples/lotr.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {mathjax: true})
+    Precious::App.set(:wiki_options, {mathjax: true, mermaid: true})
     Capybara.app = Precious::App
   end
 
@@ -32,7 +32,7 @@ context 'Frontend with mathjax' do
   end
 
   test 'no unexpected errors on /create/' do
-    visit '/create/Foobar'
+    visit '/gollum/create/Foobar'
     log = console_log(page)
     assert_only_expected_errors(log)
   end
