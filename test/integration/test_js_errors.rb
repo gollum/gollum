@@ -32,7 +32,7 @@ context 'Frontend with mathjax and mermaid' do
   end
 
   test 'no unexpected errors on /create/' do
-    visit '/create/Foobar'
+    visit '/gollum/create/Foobar'
     log = console_log(page)
     assert_only_expected_errors(log)
   end
