@@ -47,8 +47,8 @@ jobs:
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
       - name: Run gollum from Docker
         run: |
-          RUNNER_TRACKING_ID="" docker run --rm -p 4567:4567 -v $(pwd):/wiki -e CI=true ${{ env.CI_IMAGE }} &
-          netstat -lt
+          git clone test/examples/lotr.git lotr.git
+          RUNNER_TRACKING_ID="" docker run --rm -p 4567:4567 -v lotr.git:/wiki -e CI=true ${{ env.CI_IMAGE }} &
           sleep 10
           netstat -lt
       - name: Run capybara tests against Dockerized instance

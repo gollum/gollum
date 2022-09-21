@@ -248,6 +248,13 @@ task :precompile do
       "It's possible that you just need to install `yarn` on your system."
   end
 
+  require 'uglifier'
+  module Precious
+    module Assets
+      JS_COMPRESSOR = ::Uglifier.new(harmony: true)
+    end
+  end
+  
   require './lib/gollum/app.rb'
 
   # Next, configure the Sprockets asset pipeline and precompile production-
