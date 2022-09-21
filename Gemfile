@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-gem 'gollum-lib', :git => 'https://github.com/repotag/gollum-lib.git', :branch => 'mermaid'
 gem 'warbler', platforms: :jruby
 
 # FIXME:
