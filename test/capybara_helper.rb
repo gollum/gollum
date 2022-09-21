@@ -14,7 +14,15 @@ CAPYBARA_DRIVER =
 
 Capybara.default_driver = CAPYBARA_DRIVER
 Capybara.enable_aria_label = true
-Capybara.server = :webrick
+
+if ENV['GOLLUM_CAPYBARA_URL']
+  Capybara.configure do |config|
+    config.run_server = false
+    config.app_host = ENV['GOLLUM_CAPYBARA_URL']
+  end
+else
+  Capybara.server = :webrick
+end
 
 def console_log(page, level = :severe)
   page.driver.browser.logs.get(:browser).select { |log| log.level == level.to_s.upcase }
