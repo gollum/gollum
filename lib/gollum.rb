@@ -17,7 +17,7 @@ module Gollum
   KEYBINDINGS = ['default', 'vim', 'emacs']
   
   ::I18n.available_locales = [:en]
-  ::I18n.load_path = Dir[::File.expand_path("lib/gollum/locales") + "/*.yml"]
+  ::I18n.load_path = Dir[::File.expand_path("../gollum/locales",  __FILE__) + "/*.yml"]
 
   def self.assets_path
     ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
