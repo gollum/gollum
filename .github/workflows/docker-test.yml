@@ -34,5 +34,23 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: docker state
         run: docker image ls
-      - name: Run gollum as test
-        run: docker run -e CI=true ${{ env.CI_IMAGE }} --irb
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+          bundler-cache: true
+      - name: Install Chromedriver
+        uses: nanasess/setup-chromedriver@v1
+      - run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+      - name: Run gollum from Docker
+        run: |
+          RUNNER_TRACKING_ID="" docker run -d --rm -p 4567:4567 -v $(pwd):/wiki -e CI=true ${{ env.CI_IMAGE }} &
+          netstat -lt
+          sleep 10
+          netstat -lt
+          curl http://127.0.0.1:4567
+      - name: Run capybara tests against Dockerized instance
+        run: "GOLLUM_CAPYBARA_URL=http://127.0.0.1:4567 bundle exec rake test:capybara"
