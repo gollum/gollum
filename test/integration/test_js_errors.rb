@@ -6,7 +6,8 @@ end
 
 def expected_errors
   Regexp.union([
-    %r{Refused to apply style from 'http:.*/gollum/create/custom.css'}
+    %r{Refused to apply style from 'http:.*/gollum/create/custom.css'},
+    %r{.*/gollum/create/mathjax.config.js - Failed to load resource: the server responded with a status of 403}
   ])
 end
 
@@ -21,7 +22,11 @@ context 'Frontend with mathjax and mermaid' do
     @path = cloned_testpath("examples/lotr.git")
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {mathjax: true, mermaid: true})
+    Precious::App.set(:wiki_options, {
+      mathjax: true,
+      mermaid: true,
+      mathjax_config: 'mathjax.config.js'
+    })
     Capybara.app = Precious::App
   end
 
