@@ -19,7 +19,7 @@ context 'Localized frontend' do
     fill_in('Search', with: 'something-to-return-no-results')
       .native
       .send_keys(:return)
-    puts "DEBUG: #{page.text}"
+
     assert_includes page.text,
       'Search results for something-to-return-no-results'
     assert_includes page.text,
