@@ -19,7 +19,7 @@ module Precious
       end
 
       def query_string
-        "&q=#{@query}"
+        "&q=%s" % CGI.escape(@query)
       end
 
       def title
