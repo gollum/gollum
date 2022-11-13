@@ -1,15 +1,52 @@
-gollum -- A git-based Wiki
+GOLLUM -- A git-based Wiki
 ====================================
+In this fork we modify:
+- We removed the Dockerfile to run as root.
+- We have added REDIS to the default config.
+- We added HEALTHCHECK to the Dockerfile.
 
+[![GitHub](https://img.shields.io/static/v1.svg?color=blue&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=JuanRodenas&message=GitHub&logo=github)](https://github.com/JuanRodenas "view the source for all of our repositories.")
+![Docker Pulls](https://img.shields.io/docker/pulls/juanico/gollum?logo=docker&style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/JuanRodenas/gollum?color=blue&logo=Github&style=for-the-badge)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/JuanRodenas/gollum?label=versi%C3%B3n&logo=GITHUB&style=for-the-badge)
 
+#### New docker compose:
+```yaml
+version: '3.3'
 
+services:
+  backend:
+    image: juanico/gollum:dev
+    restart: unless-stopped
+    command: --allow-uploads dir --emoji --mathjax --critic-markup
+    container_name: gollum
+    volumes:
+        - '/patch/to/data/wiki:/wiki'
+    depends_on:
+      - backend-cache
+    ports:
+        - '4567:4567'
+    environment:
+      - UID=${UID}
+      - GID=${GID}
+
+  backend-cache:
+    image: redis:latest
+    container_name: backend-cache
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+```
 
 ### Service
-
-Gollum can also be run as a service. More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-as-a-service).
+Gollum WIKI. More about it, click here. -->
+<a title="WIKI" href="https://github.com/gollum/gollum/wiki"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Wikitext.png" alt="download" width="100" align="center" /></a>
 
 ## CONFIGURATION
-
+====================================
 Gollum comes with the following command line options:
 
 | Option            | Arguments | Description |
@@ -45,3 +82,7 @@ Gollum comes with the following command line options:
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
 | --versions        | none      | Display the current version of Gollum and auxiliary gems. |
+
+## Future updates
+====================================
+- add files to the folder and have Gollum register them
