@@ -15,10 +15,9 @@ context "pages" do
   end
 
   test 'last modified link is correctly encoded' do
-    @wiki.write_page('Foo bar', :markdown, 'Test', {:name => 'user1', :email => 'user1'})
-    visit '/Foo bar'
+    visit '/Samwise Gamgee'
     find(:id, 'page-info-toggle').click
-    assert_includes page.text, "Last edited by user1"
+    assert_includes page.text, "Last edited by Arran Cudbard-Bell"
   end
 
   teardown do
