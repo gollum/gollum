@@ -86,3 +86,4 @@ Gollum comes with the following command line options:
 ## Future updates
 ====================================
 - add files to the folder and have Gollum register them
+- pull log from container and send to syslog
