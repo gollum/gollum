@@ -1,13 +1,15 @@
 FROM ruby:3.0-alpine AS builder
 LABEL author="juan rodenas"
 
-RUN apk add \
-    build-base \
-    cmake \
-    git \
-    icu-dev \
-    openssl-dev && \
-    rm -rf /var/cache/apk/*
+RUN apk add --update \
+            --no-cache \
+            build-base \
+            cmake \
+            git \
+            icu-dev \
+            openssl-dev \
+            redis \
+    && rm -rf /var/cache/apk/*
 
 COPY Gemfile* /tmp/
 COPY gollum.gemspec* /tmp/
@@ -35,15 +37,16 @@ ARG GID=${GID:-1000}
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 
 WORKDIR /wiki
-RUN apk add \
-    bash \
-    git \
-    shadow \
-    curl \
-    libc6-compat && \
-    rm -rf /var/cache/apk/* && \
-    groupmod -g $GID www-data && \
-    adduser -u $UID -S www-data -G www-data
+RUN apk add --update \
+            --no-cache \
+            bash \
+            git \
+            shadow \
+            curl \
+            libc6-compat \
+    && rm -rf /var/cache/apk/* \
+    && groupmod -g $GID www-data \
+    && adduser -u $UID -S www-data -G www-data
 
 COPY docker-run.sh /docker-run.sh
 RUN chmod +x /docker-run.sh
@@ -51,7 +54,7 @@ USER www-data
 VOLUME /wiki
 EXPOSE 4567
 
-HEALTHCHECK --start-period=2s --interval=5s --timeout=3s \
+HEALTHCHECK --start-period=2s --interval=5m --timeout=3s \
   CMD curl -f http://localhost:4567 || exit 1
 
 ENTRYPOINT ["/docker-run.sh"]
