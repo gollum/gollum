@@ -443,6 +443,11 @@ a {
     padding: 6px 10px;
     border-radius: 3px;
 
+    position: relative;
+
+    /* Prevent the overflow of copy to clipboard button */
+    min-height: 3rem;
+
     > tt, > code {
       margin: 0;
       padding: 0;
@@ -461,6 +466,32 @@ a {
       padding: 0;
     }
   }
+
+  .btn-copy {
+    $size: 25px;
+
+    width: $size * 2;
+    height: $size;
+
+    background-image:  url('data:image/svg+xml;utf8,<%= rocticon_css(:copy) %>');
+    background-repeat: no-repeat;
+    background-size: 80% 90%;
+    background-position: center;
+
+    position: absolute;
+    top: max(1%, 0.5rem);
+    right: 1%;
+
+    transition: all 200ms ease-in;
+  }
+
+  .btn-copy:hover {
+    cursor: pointer;
+   }
+
+  .btn-copy.active {
+    background-image:  url('data:image/svg+xml;utf8,<%= rocticon_css(:check) %>');
+   }
 }
 
 /* Table of contents */

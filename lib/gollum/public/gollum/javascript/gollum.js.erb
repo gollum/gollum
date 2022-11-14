@@ -658,6 +658,37 @@ $(document).ready(function() {
         }
       });
     }
+
+    if (navigator.clipboard) {
+      // Create copy to clipboard buttons for code-blocks
+      const codeBlocks = document.querySelectorAll("pre > code");
+
+      const copyToClipboard = async ({ target }) => {
+        const codeBlock = document.querySelector(`#${target.dataset.codeblock}`);
+        await navigator.clipboard.writeText(codeBlock.textContent);
+
+        target.classList.add('active');
+        // wait 3 secconds
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        target.classList.remove('active');
+      };
+
+      codeBlocks.forEach((item) => {
+        // assing a random & unique ID so the element can be selected later.
+        const id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
+
+        const button = document.createElement("button");
+
+        button.classList.add("btn", "btn-copy");
+        button.setAttribute('aria-label', 'copy to clipboard');
+        button.dataset.codeblock = id;
+        item.id = id;
+
+        button.onclick = copyToClipboard;
+
+        item.parentNode.appendChild(button);
+      });
+    }
   }
 
   if( $('#wiki-history').length || $('#page-history').length){
