@@ -1,5 +1,4 @@
 FROM ruby:3.0-alpine AS builder
-LABEL author="juan rodenas"
 
 RUN apk add --update \
             --no-cache \
