@@ -3,7 +3,8 @@ require_relative '../capybara_helper'
 def expected_errors
   Regexp.union([
     %r{Refused to apply style from 'http:.*/gollum/create/custom.css'},
-    %r{.*/gollum/create/mathjax.config.js - Failed to load resource: the server responded with a status of 403}
+    %r{.*/gollum/create/mathjax.config.js - Failed to load resource: the server responded with a status of 403},
+    %r{Refused to execute script from .*/gollum/create/mathjax.config.js}
   ])
 end
 
