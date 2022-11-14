@@ -27,5 +27,3 @@ end
 def console_log(page, level = :severe)
   page.driver.browser.logs.get(:browser).select { |log| log.level == level.to_s.upcase }
 end
-
-
