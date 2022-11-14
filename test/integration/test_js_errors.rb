@@ -1,9 +1,5 @@
 require_relative '../capybara_helper'
 
-def console_log(page, level = :severe)
-  page.driver.browser.logs.get(:browser).select{|log| log.level == level.to_s.upcase }
-end
-
 def expected_errors
   Regexp.union([
     %r{Refused to apply style from 'http:.*/gollum/create/custom.css'},

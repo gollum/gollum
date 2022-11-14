@@ -47,7 +47,7 @@
 	<div id="footer" class="pt-4">
 	  {{^historical}}
 		{{^preview}}
-		  <p id="last-edit"><div class="dotted-spinner hidden"></div> <a id="page-info-toggle" data-pagepath="{{escaped_url_path}}">When was this page last modified?</a></p>
+		  <p id="last-edit"><div class="dotted-spinner hidden"></div> <a id="page-info-toggle" data-pagepath="{{path}}">When was this page last modified?</a></p>
 		  {{#allow_editing}}
 		    <p>
 		      <a id="delete-link" href="{{escaped_url_path}}" data-confirm="Are you sure you want to delete this page?"><span>Delete this Page</span></a>
