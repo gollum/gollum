@@ -46,10 +46,6 @@ module Precious
       def mathjax_config_path
         page_route(@mathjax_config)
       end
-
-      def mathjax_js
-        "#{page_route('gollum/assets/mathjax/MathJax.js')}?config=TeX-AMS-MML_HTMLorMML"
-      end
       
       def mermaid
         @mermaid

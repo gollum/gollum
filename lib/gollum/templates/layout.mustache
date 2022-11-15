@@ -44,19 +44,47 @@
   
   {{#mathjax}}
   <script type="text/javascript">
+  
     window.MathJax = {
-      tex2jax: {
-        inlineMath:  [ ['$','$'], ['\\(','\\)'] ],
-        displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
-        processEscapes: true
+      loader: {
+        paths: {
+          gollum: '[mathjax]/mathjax_root',
+        },
+        source: {
+          'output/svg': '[gollum]/svg/svg',
+          'output/svg/fonts/tex': '[gollum]/svg/tex',
+          'ui/safe': '[gollum]/ui/safe',
+        },
+        load: ['ui/safe'],
       },
-      TeX: { extensions: ["autoload-all.js"] }
-    };
+      chtml: {
+        fontURL: '{{sprockets_asset_root}}',
+      },
+      tex: {
+        inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+        displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
+        processEscapes: true,
+      },
+      options: {
+        safeOptions: {
+          allow: {
+            //
+            //  Values can be "all", "safe", or "none"
+            //
+            URLs:    'none',
+            classes: 'none',
+            cssIDs:  'none',
+            styles:  'none',
+          },
+        },
+      },
+    }
+    
   </script>
   {{#mathjax_config}}
   <script type="text/javascript" src="{{mathjax_config_path}}"></script>
   {{/mathjax_config}}
-  <script defer src="{{mathjax_js}}"></script>
+  <script async type="text/javascript" src="{{#sprockets_asset_path}}mathjax.js{{/sprockets_asset_path}}"></script>
   {{/mathjax}}
   
   {{#mermaid}}

@@ -107,6 +107,10 @@ module Precious
             send(:stylesheet_tag, name, options)
           end
         end
+
+        def sprockets_asset_root
+          Sprockets::Helpers.settings.prefix
+        end
         
         def sprockets_asset_path
           lambda do |name|

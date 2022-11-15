@@ -133,7 +133,6 @@ module Precious
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
-      @mathjax_path = ::File.join(File.dirname(__FILE__), 'public/gollum/javascript/MathJax')
 
       Sprockets::Helpers.configure do |config|
         config.environment = settings.sprockets
@@ -162,11 +161,6 @@ module Precious
         )
         content_type :rss
         RSSView.new(@base_url, @wiki_title, url, changes).render
-      end
-
-      get '/assets/mathjax/*' do
-        env['PATH_INFO'].sub!('/gollum/assets/mathjax', '')
-        Rack::Static.new(not_found_proc, {:root => @mathjax_path, :urls => ['']}).call(env)
       end
 
       get '/assets/*' do
