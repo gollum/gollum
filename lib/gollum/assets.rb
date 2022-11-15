@@ -2,7 +2,7 @@ require 'octicons'
 
 module Precious
   module Assets
-    MANIFEST = %w(app.js editor.js mathjax.js mermaid.js app.css criticmarkup.css fileview.css ie7.css print.css *.png *.jpg *.svg *.eot *.ttf *.woff)
+    MANIFEST = %w(app.js editor.js mathjax.js mathjax/ui/safe.js mathjax/svg/svg.js mathjax/svg/tex.js mermaid.js app.css criticmarkup.css fileview.css ie7.css print.css *.png *.jpg *.svg *.eot *.ttf)
     ASSET_URL = 'gollum/assets'
     JS_COMPRESSOR = :uglify unless defined?(JS_COMPRESSOR)
 
