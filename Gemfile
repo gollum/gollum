@@ -23,6 +23,8 @@ group :test do
   gem 'capybara', require: false
 end
 
+gem 'terser', require: false, platforms: :mri 
+
 gemspec
 
 gem 'rake', '~> 13.0'

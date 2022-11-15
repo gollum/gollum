@@ -47,13 +47,10 @@
   
     window.MathJax = {
       loader: {
-        paths: {
-          gollum: '[mathjax]/mathjax_root',
-        },
         source: {
-          'output/svg': '[gollum]/svg/svg',
-          'output/svg/fonts/tex': '[gollum]/svg/tex',
-          'ui/safe': '[gollum]/ui/safe',
+          'output/svg': '{{#sprockets_asset_path}}mathjax/svg/svg.js{{/sprockets_asset_path}}',
+          'output/svg/fonts/tex': '{{#sprockets_asset_path}}mathjax/svg/tex.js{{/sprockets_asset_path}}',
+          'ui/safe': '{{#sprockets_asset_path}}mathjax/ui/safe.js{{/sprockets_asset_path}}',
         },
         load: ['ui/safe'],
       },
