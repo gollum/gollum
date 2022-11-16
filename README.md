@@ -151,7 +151,7 @@ Gollum comes with the following command line options:
 
 ### Config file
 
-When `--config` option is used, certain inner parts of Gollum can be customized. This is used throughout our wiki for certain user-level alterations, among which [customizing supported markups](https://github.com/gollum/gollum/wiki/Formats-and-extensions) will probably stand out.
+When `--config` option is used, certain inner parts of Gollum can be customized. This is used throughout our wiki for certain user-level alterations, among which [customizing supported markups](https://github.com/gollum/gollum/wiki/Formats-and-extensions) will probably stand out. See [here](https://github.com/gollum/gollum/wiki/Sample-config.rb) for documentation about settings configurable in `config.rb` .
 
 **All of the mentioned alterations work both for Gollum's config file (`config.rb`) and Rack's config file (`config.ru`).**
 
