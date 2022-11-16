@@ -1,5 +1,10 @@
 // Helpers
 
+const htmlDecode = (input) => {
+  const doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+}
+
 // Replace broken user icons with 'person' octicon
 function brokenAvatarImage(image){
   image.onerror = '';
@@ -86,6 +91,20 @@ function setTextDirection () {
   $('.markdown-body p, .markdown-body span, .markdown-body pre, .markdown-body table').attr('dir','auto');
 }
 
+function replace_blocks (pre, data) {
+  pre.html(data['value']['value'][0])
+}
+
+function knitr () {
+  $( "pre.knitr" ).each(function (index) {
+    var pre = $(this)
+    code = $(this).children("code")
+    knitr_block =  htmlDecode(('```' + code.attr('class') + "\n" + code.html() + "\n```\n")).replace(/"/g, '\\"'); 
+    knitr_cmd = "doc <- \"" + knitr_block + "\"\nlibrary(knitr)\nprint(knitr::knit2html(text = doc, fragment.only = TRUE, quiet = TRUE))"
+    rserve.eval(knitr_cmd, function (err, result) { if (err === null) { replace_blocks(pre, result);  } } )
+  })
+}
+
 function preparePage () {
   setTextDirection();
   if(criticMarkup == 'true') {
@@ -94,6 +113,11 @@ function preparePage () {
     $('span.critic.comment').wrap('<span class="popover" />');
     $('span.critic.comment').filter(function() {return $(this).text()!="";}).before('&#8225;');
   }
+  // Todo: check whether RMarkdown is enabled, make server configurable
+  var rserve = Rserve.create({
+    host: 'ws://127.0.0.1:2376',
+    on_connect: knitr
+  });
 }
 
 function getLocalTime(datetime_string, format) {

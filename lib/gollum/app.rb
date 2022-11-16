@@ -32,6 +32,7 @@ Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
 
 Gollum::Filter::Code.language_handlers[/mermaid/] = Proc.new { |lang, code| "<div class=\"mermaid\">\n#{code}\n</div>" }
+Gollum::Filter::Code.language_handlers[/{.*}/] =Proc.new { |lang, code| "<pre class=\"knitr\"><code class=\"#{lang}\">\n#{code}\n</code></pre>"}
 
 # Run the frontend, based on Sinatra
 #
