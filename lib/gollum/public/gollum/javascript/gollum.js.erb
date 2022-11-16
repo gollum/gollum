@@ -673,9 +673,9 @@ $(document).ready(function() {
         target.classList.remove('active');
       };
 
-      codeBlocks.forEach((item) => {
+      codeBlocks.forEach((item, idx) => {
         // assign a random & unique ID so the element can be selected later.
-        const id = Math.random().toString(36).substr(2, 10);
+        const id = `code-clipboard-${idx + 1}`;
 
         const button = document.createElement("button");
 
