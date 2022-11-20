@@ -665,14 +665,28 @@ $(document).ready(function() {
       const iconCopyDefault = `<%=rocticon('copy', {:width => 18, :height => 18})%>`;
       const iconCopyActive = `<%=rocticon('check', {:width => 18, :height => 18})%>`;
 
-      const copyToClipboard = async ({ target }) => {
-        const codeBlock = document.querySelector(`#${target.dataset.codeblock}`);
+      const copyToClipboard = async (event) => {
+        const { currentTarget: button } = event;
+
+        const codeBlock = document.querySelector(`#${button.dataset.codeblock}`);
+
+        if (!codeBlock) {
+          throw('Error while coping to clipboard: codeblock not found.');
+          return;
+        }
+
         await navigator.clipboard.writeText(codeBlock.textContent);
 
-        target.innerHTML = iconCopyActive;
-        // wait 1 secconds
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        target.innerHTML = iconCopyDefault;
+        button.innerHTML = iconCopyActive;
+        button.classList.add("tooltipped", "tooltipped-no-delay", "tooltipped-w");
+        button.setAttribute('aria-label', 'Copied!');
+
+        // wait 2 secconds
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        button.innerHTML = iconCopyDefault;
+        button.classList.remove("tooltipped", "tooltipped-no-delay", "tooltipped-w");
+        button.setAttribute('aria-label', 'copy to clipboard');
       };
 
       codeBlocks.forEach((item, idx) => {
@@ -681,7 +695,7 @@ $(document).ready(function() {
 
         const button = document.createElement("button");
 
-        button.classList.add("btn", "btn-copy", "btn-small", "position-absolute", "top-2", "right-2");
+        button.classList.add("btn", "btn-octicon", "border", "position-absolute", "top-2", "right-2");
         button.setAttribute('aria-label', 'copy to clipboard');
         button.dataset.codeblock = id;
         button.innerHTML = iconCopyDefault;
