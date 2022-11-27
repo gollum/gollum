@@ -450,6 +450,11 @@ a {
     padding: 6px 10px;
     border-radius: 3px;
 
+    position: relative;
+
+    /* Prevent the overflow of copy to clipboard button */
+    min-height: 3rem;
+
     > tt, > code {
       margin: 0;
       padding: 0;
@@ -466,6 +471,12 @@ a {
     pre {
       margin: 0;
       padding: 0;
+    }
+  }
+
+  pre:hover {
+    button {
+      animation: fade-in 200ms both;
     }
   }
 }
