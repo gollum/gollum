@@ -1,11 +1,14 @@
-FROM ruby:2.7-alpine AS builder
+FROM ruby:3.0-alpine AS builder
 
-RUN apk add \
-    build-base \
-    cmake \
-    git \
-    icu-dev \
-    openssl-dev
+RUN apk add --update \
+            --no-cache \
+            build-base \
+            cmake \
+            git \
+            icu-dev \
+            openssl-dev \
+            redis \
+    && rm -rf /var/cache/apk/*
 
 COPY Gemfile* /tmp/
 COPY gollum.gemspec* /tmp/
@@ -25,17 +28,27 @@ WORKDIR /app
 COPY . /app
 RUN bundle exec rake install
 
+FROM ruby:3.0-alpine
 
-FROM ruby:2.7-alpine
+ARG UID=${UID:-1000}
+ARG GID=${GID:-1000}
 
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 
-RUN apk add \
-    bash \
-    git \
-    libc6-compat
-
-VOLUME /wiki
 WORKDIR /wiki
+RUN apk add --update \
+            --no-cache \
+            bash \
+            git \
+            libc6-compat \
+            shadow \
+    && rm -rf /var/cache/apk/* \
+    && groupmod -g $GID www-data \
+    && adduser -u $UID -S www-data -G www-data
+
 COPY docker-run.sh /docker-run.sh
+RUN chmod +x /docker-run.sh
+USER www-data
+VOLUME /wiki
+
 ENTRYPOINT ["/docker-run.sh"]
