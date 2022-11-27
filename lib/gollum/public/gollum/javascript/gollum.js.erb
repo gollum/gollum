@@ -443,6 +443,9 @@ $(document).ready(function() {
         if (window.MathJax != null) {
           window.MathJax.Hub.Queue(['Typeset',window.MathJax.Hub,'preview-content']);
         }
+        if (mermaid) {
+          mermaid.init();
+        }
       },
       error: function(data, textStatus, errorThrown) {
         console.log('something went wrong: ' + textStatus + errorThrown);
