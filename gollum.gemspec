@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.summary     = 'A simple, Git-powered wiki.'
   s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
 
-  s.authors  = ['Tom Preston-Werner', 'Rick Olson', 'Juan rodenas']
-  s.email    = 'juanrodenas07@gmail.com'
+  s.authors  = ['Tom Preston-Werner', 'Rick Olson',]
+  s.email    = 'tom@github.com'
   s.homepage = 'http://github.com/gollum/gollum'
 
   s.require_paths = %w[lib]
