@@ -1,13 +1,10 @@
 require_relative '../capybara_helper'
 
-def console_log(page, level = :severe)
-  page.driver.browser.logs.get(:browser).select{|log| log.level == level.to_s.upcase }
-end
-
 def expected_errors
   Regexp.union([
     %r{Refused to apply style from 'http:.*/gollum/create/custom.css'},
-    %r{.*/gollum/create/mathjax.config.js - Failed to load resource: the server responded with a status of 403}
+    %r{.*/gollum/create/mathjax.config.js - Failed to load resource: the server responded with a status of 403},
+    %r{Refused to execute script from .*/gollum/create/mathjax.config.js}
   ])
 end
 
