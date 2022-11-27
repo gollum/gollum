@@ -41,8 +41,6 @@ RUN apk add --update \
             bash \
             git \
             shadow \
-            curl \
-            libc6-compat \
     && rm -rf /var/cache/apk/* \
     && groupmod -g $GID www-data \
     && adduser -u $UID -S www-data -G www-data
@@ -51,10 +49,5 @@ COPY docker-run.sh /docker-run.sh
 RUN chmod +x /docker-run.sh
 USER www-data
 VOLUME /wiki
-EXPOSE 4567
-
-HEALTHCHECK --start-period=2s --interval=5m --timeout=3s \
-  CMD curl -f http://localhost:4567 || exit 1
 
 ENTRYPOINT ["/docker-run.sh"]
-CMD ["/bin/sh", "/docker-run.sh"]
