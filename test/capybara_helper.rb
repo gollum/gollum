@@ -27,3 +27,10 @@ end
 def console_log(page, level = :severe)
   page.driver.browser.logs.get(:browser).select { |log| log.level == level.to_s.upcase }
 end
+
+def wait_for_ajax
+  # https://thoughtbot.com/blog/automatically-wait-for-ajax-with-capybara
+  Timeout.timeout(Capybara.default_max_wait_time) do
+    loop until page.evaluate_script('jQuery.active').zero?
+  end
+end
