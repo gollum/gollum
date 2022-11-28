@@ -17,7 +17,8 @@ context "pages" do
   test 'last modified link is correctly encoded' do
     visit '/Samwise Gamgee'
     find(:id, 'page-info-toggle').click
-    assert_includes page.text, "Last edited by Arran Cudbard-Bell"
+    wait_for_ajax
+    assert_includes page.text, "Last edited by Arran Cudbard-Bell"    
   end
 
   teardown do
