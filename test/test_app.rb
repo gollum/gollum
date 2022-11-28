@@ -40,7 +40,7 @@ context "Frontend" do
   end
 
   test 'mathjax assets are served' do
-    get '/gollum/assets/mathjax/MathJax.js'
+    get '/gollum/assets/mathjax/tex-mml-chtml.js'
     assert last_response.ok?
   end
 
@@ -1039,7 +1039,7 @@ context 'Frontend with base path' do
   test 'base path mathjax assets' do
     get '/wiki/Home'
     assert last_response.ok?
-    assert last_response.body.include?('<script defer src="/wiki/gollum/assets/mathjax/MathJax.js?config=')
+    assert last_response.body.include?('<script async src="/wiki/gollum/assets/mathjax/tex-mml-chtml.js')
   end
 
   test 'compare view' do

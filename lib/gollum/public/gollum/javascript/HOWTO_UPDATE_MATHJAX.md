@@ -1,41 +1,21 @@
 # How to update MathJax
 
 Our intention is to bundle a SLIM MathJax in gollum, so that gollum can work
-offline with latex equations without bloating the gollum release tarball.
+offline with latex equations without bloating the gollum release tarball. We do this by removing the combined component files that we don't need: all we need are `tex-mml-chtml.js` and `tex-chtml-full-speech.js` (for accessibility). **From the root of the gollum repository**:
 
-1. Clone the customized mathjax-cleaner from
-   https://github.com/programfan/mathjax-cleaner
+1. Start by cloning the latest MathJax: `git clone https://github.com/mathjax/MathJax.git /tmp/MathJax`
+2. Remove old mathjax: `git rm -r lib/gollum/public/gollum/javascript/MathJax/*`
+3. `cp -r /tmp/MathJax/es5/* lib/gollum/public/gollum/javascript/MathJax/`
+4. Then remove the following files:
+  * lib/gollum/public/gollum/javascript/MathJax/mml-chtml.js
+  * lib/gollum/public/gollum/javascript/MathJax/mml-svg.js
+  * lib/gollum/public/gollum/javascript/MathJax/tex-chtml-full.js
+  * lib/gollum/public/gollum/javascript/MathJax/tex-chtml.js
+  * lib/gollum/public/gollum/javascript/MathJax/tex-mml-svg.js
+  * lib/gollum/public/gollum/javascript/MathJax/tex-svg-full.js
+  * lib/gollum/public/gollum/javascript/MathJax/tex-svg.js
+5. `git add lib/gollum/public/gollum/javascript/MathJax`
 
-      git clone https://github.com/programfan/MathJax-grunt-cleaner
+Oneliner for removing the files:
 
-2. Install node, npm and grunt. Most of the time the package manager is
-   enough. In case the package manager does not yet provide these packages,
-   follow the instructions on https://www.gruntjs.net.
-
-3. Install mathjax-cleaner dependencies.
-
-      cd MathJax-grunt-cleaner && npm install 
-
-4. Download latest mathjax release from
-   https://github.com/mathjax/mathjax/releases and unzip to the
-   directory of MathJax-grunt-cleaner.
-
-5. Prepare grunt environments
-
-      cp Gruntfile.js MathJax-x.y.z
-      cp -r node_modules MathJax-x.y.z
-
-6. Slimify mathjax
-
-      cd MathJax-x.y.z && grunt && cd ..
-      
-7. Remove old mathjax (careful!)
-
-     rm -rf ${GOLLUM_ROOT}/lib/gollum/public/gollum/javascript/MathJax
-
-8. Replace bundled mathjax with newly generated one
-
-      cp MathJax-x.y.z ${GOLLUM_ROOT}/lib/gollum/public/gollum/javascript/MathJax
-
-9. Update mathjax version in ${GOLLUM_ROOT}/lib/gollum/templates/layout.mustache
-
+`git rm lib/gollum/public/gollum/javascript/MathJax/mml-chtml.js  lib/gollum/public/gollum/javascript/MathJax/mml-svg.js lib/gollum/public/gollum/javascript/MathJax/tex-chtml-full.js lib/gollum/public/gollum/javascript/MathJax/tex-chtml.js lib/gollum/public/gollum/javascript/MathJax/tex-mml-svg.js  lib/gollum/public/gollum/javascript/MathJax/tex-svg-full.js lib/gollum/public/gollum/javascript/MathJax/tex-svg.js`

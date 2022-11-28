@@ -45,18 +45,40 @@
   {{#mathjax}}
   <script type="text/javascript">
     window.MathJax = {
-      tex2jax: {
-        inlineMath:  [ ['$','$'], ['\\(','\\)'] ],
-        displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
-        processEscapes: true
+    tex: {
+      inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+      displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+      processEscapes: true,
+      autoload: {
+        color: [],
+        colorv2: ['color']
       },
-      TeX: { extensions: ["autoload-all.js"] }
-    };
+      packages: {'[+]': ['noerrors']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process',
+      safeOptions: {
+        allow: {
+          //
+          //  Values can be "all", "safe", or "none"
+          //
+          URLs:    'safe',
+          classes: 'none',
+          cssIDs:  'none',
+          styles:  'none',
+        },
+      },
+    },
+    loader: {
+      load: ['[tex]/noerrors', 'ui/safe']
+    },
+  };
   </script>
   {{#mathjax_config}}
   <script type="text/javascript" src="{{mathjax_config_path}}"></script>
   {{/mathjax_config}}
-  <script defer src="{{mathjax_js}}"></script>
+  <script async src="{{mathjax_js}}"></script>
   {{/mathjax}}
   
   {{#mermaid}}
