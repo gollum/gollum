@@ -26,18 +26,6 @@ context "search" do
 
     search_term = "#find-me"
 
-    create_page name: "Result 1", content: search_term
-    create_page name: "Result 2", content: search_term
-    create_page name: "Result 3", content: search_term
-    create_page name: "Result 4", content: search_term
-    create_page name: "Result 5", content: search_term
-    create_page name: "Result 6", content: search_term
-    create_page name: "Result 7", content: search_term
-    create_page name: "Result 8", content: search_term
-    create_page name: "Result 9", content: search_term
-    create_page name: "Result 10", content: search_term
-    create_page name: "Result 11", content: search_term
-
     fill_in "Search site", with: search_term
     send_keys :enter
 
@@ -58,16 +46,6 @@ context "search" do
     # present in the search term.
     page_two_search_results = find_all ".search-result"
     assert_equal page_two_search_results.count, 1
-  end
-
-  def create_page(name:, content:)
-    click_on "New"
-    fill_in "Page Name", with: name
-    click_on "OK"
-
-    find(".ace_content").click
-    send_keys content
-    click_on "Save"
   end
 
   def on_page_two?
