@@ -8,7 +8,7 @@ context 'Localized frontend' do
     @wiki = Gollum::Wiki.new(@path)
 
     Precious::App.set :gollum_path, @path
-    Precious::App.set :wiki_options, {mathjax: true}
+    Precious::App.set :wiki_options, {math: :katex}
 
     Capybara.app = Precious::App
   end

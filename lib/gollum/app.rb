@@ -131,8 +131,8 @@ module Precious
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
-      @mathjax_config = settings.wiki_options[:mathjax_config]
-      @mathjax = settings.wiki_options[:mathjax]
+      @math = settings.wiki_options[:math]
+      @math_config = settings.wiki_options.fetch(:math_config, false)
       @mermaid = settings.wiki_options.fetch(:mermaid, true)
       Gollum::Filter::Code.language_handlers.delete(/mermaid/) unless @mermaid
 
@@ -217,15 +217,15 @@ module Precious
         end
       end
 
-      get %r{/(edit|create)/(\.redirects.gollum|(custom|mathjax\.config)\.(js|css))} do
+      get %r{/(edit|create)/(\.redirects.gollum|(custom|math\.config)\.(js|css))} do
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/(delete|rename|edit|create)/(\.redirects.gollum|(custom|mathjax\.config)\.(js|css))} do
+      post %r{/(delete|rename|edit|create)/(\.redirects.gollum|(custom|math\.config)\.(js|css))} do
         forbid('Changing this resource is not allowed.')
       end
 
-      post %r{/revert/(\.redirects.gollum|(custom|mathjax\.config\.)\.(js|css)/.*/.*)} do
+      post %r{/revert/(\.redirects.gollum|(custom|math\.config\.)\.(js|css)/.*/.*)} do
         forbid('Changing this resource is not allowed.')
       end
 

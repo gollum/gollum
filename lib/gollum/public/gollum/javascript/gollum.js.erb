@@ -456,10 +456,16 @@ $(document).ready(function() {
             sectionHeading.scrollIntoView();
           }
         }
+        previewContent = $('.tabnav-div#preview-content')[0];
         if (window.MathJax != null) {
-          MathJax.startup.defaultReady();
+          MathJax.texReset();
+          MathJax.typesetClear();
+          MathJax.typesetPromise([previewContent]);
+          //MathJax.startup.defaultReady();
+        } else if (typeof(katex_conf) !== 'undefined') {
+          renderMathInElement(previewContent, katex_conf);
         }
-        if (mermaid) {
+        if (typeof(mermaid) !== 'undefined') {
           mermaid.init();
         }
       },

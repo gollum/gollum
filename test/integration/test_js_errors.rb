@@ -3,8 +3,8 @@ require_relative '../capybara_helper'
 def expected_errors
   Regexp.union([
     %r{Refused to apply style from 'http:.*/gollum/create/custom.css'},
-    %r{.*/gollum/create/mathjax.config.js - Failed to load resource: the server responded with a status of 403},
-    %r{Refused to execute script from .*/gollum/create/mathjax.config.js}
+    %r{.*/gollum/create/math.config.js - Failed to load resource: the server responded with a status of 403},
+    %r{Refused to execute script from .*/gollum/create/math.config.js}
   ])
 end
 
@@ -20,9 +20,9 @@ context 'Frontend with mathjax and mermaid' do
     @wiki = Gollum::Wiki.new(@path)
     Precious::App.set(:gollum_path, @path)
     Precious::App.set(:wiki_options, {
-      mathjax: true,
+      math: :mathjax,
       mermaid: true,
-      mathjax_config: 'mathjax.config.js'
+      math_config: 'math.config.js'
     })
     Capybara.app = Precious::App
   end

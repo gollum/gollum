@@ -3,6 +3,8 @@ require 'rake'
 require 'date'
 require 'tempfile'
 
+NODE_MODULES = File.join(File.dirname(__FILE__), 'node_modules')
+
 #############################################################################
 #
 # Helper functions
@@ -65,6 +67,15 @@ end
 
 def replace_header(head, header_name)
   head.sub!(/(\.#{header_name}\s*= ').*'/) { "#{$1}#{send(header_name)}'"}
+end
+
+def bundle_katex_fonts(assets_path)
+  fonts_subpath = File.join('katex', 'dist', 'fonts')
+  fonts_source = File.join(NODE_MODULES, fonts_subpath)
+  fonts_target = File.join(assets_path, fonts_subpath)
+  puts "\n  Copying KaTeX fonts from #{fonts_source} to #{fonts_target}..."
+  `mkdir #{fonts_target}`
+  `cp #{fonts_source}/*.woff2 #{fonts_target}/`
 end
 
 #############################################################################
@@ -281,4 +292,5 @@ task :precompile do
 
   puts "\n  Precompiling assets to #{path}...  \n\n"
   manifest.compile(Precious::Assets::MANIFEST)
+  bundle_katex_fonts(path)
 end
