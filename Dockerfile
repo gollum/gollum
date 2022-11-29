@@ -7,7 +7,6 @@ RUN apk add --update \
             git \
             icu-dev \
             openssl-dev \
-            redis \
     && rm -rf /var/cache/apk/*
 
 COPY Gemfile* /tmp/
