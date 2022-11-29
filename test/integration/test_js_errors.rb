@@ -49,14 +49,28 @@ context 'Frontend with mathjax and mermaid' do
     assert_only_expected_errors(log)
   end
 
+  test 'no unexpected errors on editor' do
+    visit '/gollum/edit/Bilbo-Baggins'
+
+    formats =  find(:id, 'wiki_format')
+    commit_msg_field = find(:id, 'gollum-editor-message-field')
+    options_for_select(formats).each do |opt|
+      select opt.text, from: 'wiki_format'
+      assert commit_msg_field.value.include?(opt.value)
+      log = console_log(page)
+      assert_only_expected_errors(log)
+    end
+
+    bindings =  find(:id, 'keybinding')
+    options_for_select(bindings).each do |opt|
+      select opt.text, from: 'keybinding'
+      log = console_log(page)
+      assert_only_expected_errors(log)
+    end
+  end
+
   teardown do
     Capybara.reset_sessions!
     Capybara.use_default_driver
-  end
-
-
-  def mathjax_ready?(page)
-    html = Nokogiri::HTML(page.html)
-    html.css('.MathJax_Processing').empty? && html.css('.MathJax_Processed').empty?
   end
 end
