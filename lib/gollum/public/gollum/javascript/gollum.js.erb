@@ -441,7 +441,7 @@ $(document).ready(function() {
           }
         }
         if (window.MathJax != null) {
-          window.MathJax.Hub.Queue(['Typeset',window.MathJax.Hub,'preview-content']);
+          MathJax.startup.defaultReady();
         }
         if (mermaid) {
           mermaid.init();
