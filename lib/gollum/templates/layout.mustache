@@ -41,7 +41,24 @@
   {{#has_editor}}
   {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
   {{/has_editor}}
-  
+
+  {{#sprockets_stylesheet_tag}}katex/dist/katex{{/sprockets_stylesheet_tag}}
+  <script defer src="{{#sprockets_asset_path}}katex.js{{/sprockets_asset_path}}"></script>
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : false
+        });
+    });
+  </script>
+
   {{#mathjax}}
   <script type="text/javascript">
     window.MathJax = {
