@@ -34,3 +34,12 @@ def wait_for_ajax
     loop until page.evaluate_script('jQuery.active').zero?
   end
 end
+
+def options_for_select(select)
+  select.all(:css, "option")
+end
+
+def mathjax_ready?(page)
+  html = Nokogiri::HTML(page.html)
+  html.css('.MathJax_Processing').empty? && html.css('.MathJax_Processed').empty?
+end

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "ace-builds": "^1.13.1",
     "mermaid": "^9.1.2",
     "mousetrap": "^1.6.5"
   },
