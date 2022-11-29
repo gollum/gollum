@@ -39,6 +39,13 @@ context 'Frontend with mathjax and mermaid' do
     assert_only_expected_errors(log)
   end
 
+  test 'no unexpected errors in preview tab' do
+    visit '/gollum/edit/Bilbo-Baggins'
+    click_on 'Preview'
+    log = console_log(page)
+    assert_only_expected_errors(log)
+  end
+
   teardown do
     Capybara.reset_sessions!
     Capybara.use_default_driver
