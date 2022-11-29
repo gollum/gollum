@@ -42,6 +42,9 @@ context 'Frontend with mathjax and mermaid' do
   test 'no unexpected errors in preview tab' do
     visit '/gollum/edit/Bilbo-Baggins'
     click_on 'Preview'
+    Timeout.timeout(Capybara.default_max_wait_time) do
+      loop until mathjax_ready?(page)
+    end
     log = console_log(page)
     assert_only_expected_errors(log)
   end
@@ -49,5 +52,11 @@ context 'Frontend with mathjax and mermaid' do
   teardown do
     Capybara.reset_sessions!
     Capybara.use_default_driver
+  end
+
+
+  def mathjax_ready?(page)
+    html = Nokogiri::HTML(page.html)
+    html.css('.MathJax_Processing').empty? && html.css('.MathJax_Processed').empty?
   end
 end
