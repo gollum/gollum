@@ -27,7 +27,7 @@ a.tabnav-tab:focus {
 
 #gollum-editor-body-ace {
   overflow: hidden;
-  font-family: Consolas, "Liberation Mono", Courier, monospace;
+  font-family: $font-editor;
   font-size: 1em;
   padding: 0;
 }
