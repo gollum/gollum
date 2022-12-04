@@ -46,7 +46,7 @@
   {{#sprockets_stylesheet_tag}}katex/dist/katex{{/sprockets_stylesheet_tag}}
   <script defer src="{{#sprockets_asset_path}}katex.js{{/sprockets_asset_path}}"></script>
   <script type="text/javascript">
-    katex_conf = {
+    var katex_conf = {
       delimiters: [
           {left: '$$', right: '$$', display: true},
           {left: '$', right: '$', display: false},
