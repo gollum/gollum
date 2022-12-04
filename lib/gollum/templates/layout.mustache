@@ -42,60 +42,55 @@
   {{#sprockets_javascript_tag}}editor{{/sprockets_javascript_tag}}
   {{/has_editor}}
 
+  {{#katex}}
   {{#sprockets_stylesheet_tag}}katex/dist/katex{{/sprockets_stylesheet_tag}}
   <script defer src="{{#sprockets_asset_path}}katex.js{{/sprockets_asset_path}}"></script>
   <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-          delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false},
-              {left: '\\(', right: '\\)', display: false},
-              {left: '\\[', right: '\\]', display: true}
-          ],
-          // • rendering keys, e.g.:
-          throwOnError : false
-        });
-    });
+    katex_conf = {
+      delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError : false
+    };
   </script>
+  {{/katex}}
 
   {{#mathjax}}
   <script type="text/javascript">
     window.MathJax = {
-    tex: {
-      inlineMath: [ ['$','$'], ['\\(','\\)'] ],
-      displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
-      processEscapes: true,
-      autoload: {
-        color: [],
-        colorv2: ['color']
+      tex: {
+        inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+        displayMath: [ ['$$','$$'], ['\\[','\\]'] ],
+        processEscapes: true,
+        autoload: {
+          color: [],
+          colorv2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
       },
-      packages: {'[+]': ['noerrors']}
-    },
-    options: {
-      ignoreHtmlClass: 'tex2jax_ignore',
-      processHtmlClass: 'tex2jax_process',
-      safeOptions: {
-        allow: {
-          //
-          //  Values can be "all", "safe", or "none"
-          //
-          URLs:    'safe',
-          classes: 'none',
-          cssIDs:  'none',
-          styles:  'none',
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process',
+        safeOptions: {
+          allow: {
+            //
+            //  Values can be "all", "safe", or "none"
+            //
+            URLs:    'safe',
+            classes: 'none',
+            cssIDs:  'none',
+            styles:  'none',
+          },
         },
       },
-    },
-    loader: {
-      load: ['[tex]/noerrors', 'ui/safe']
-    },
+      loader: {
+        load: ['[tex]/noerrors', 'ui/safe']
+      },
   };
   </script>
-  {{#mathjax_config}}
-  <script type="text/javascript" src="{{mathjax_config_path}}"></script>
-  {{/mathjax_config}}
-  <script async src="{{mathjax_js}}"></script>
   {{/mathjax}}
   
   {{#mermaid}}
@@ -108,6 +103,17 @@
   {{/mermaid}}
   
   {{#js}}<script type="text/javascript" src="{{custom_js}}"></script>{{/js}}
+
+  {{#mathjax}}
+  <script async src="{{mathjax_js}}"></script>
+  {{/mathjax}}
+  {{#katex}}
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, katex_conf);
+    });
+  </script>
+  {{/katex}}
 
   {{#mermaid}}
   {{#sprockets_javascript_tag}}gollum.mermaid.js{{/sprockets_javascript_tag}}

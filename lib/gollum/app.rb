@@ -131,8 +131,7 @@ module Precious
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
-      @mathjax_config = settings.wiki_options[:mathjax_config]
-      @mathjax = settings.wiki_options[:mathjax]
+      @math = settings.wiki_options[:math]
       @mermaid = settings.wiki_options.fetch(:mermaid, true)
       Gollum::Filter::Code.language_handlers.delete(/mermaid/) unless @mermaid
 

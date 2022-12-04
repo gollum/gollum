@@ -1,11 +1,11 @@
 module Precious
   module HasMath
     def mathjax
-      @mathjax
+      @math == :mathjax
     end
 
-    def mathjax_config
-      @mathjax_config
+    def katex
+      @math == :katex
     end
   end
 end

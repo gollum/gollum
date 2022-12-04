@@ -121,10 +121,13 @@ MSG
     wiki_options[:allow_uploads]    = true
     wiki_options[:per_page_uploads] = true if mode == :page
   end
-  opts.on('--mathjax', 'Enable MathJax (renders mathematical equations).',
-    'By default, uses the \'TeX-AMS-MML_HTMLorMML\' config with the \'autoload-all\' extension.') do
-    wiki_options[:mathjax] = true
-    wiki_options[:mathjax_config] = 'mathjax.config.js'
+  opts.on('--math [RENDERER]', [:mathjax, :katex], 'Enable rendering of mathematical equations.',
+    'Valid renderers: mathjax, katex. Default: mathjax.') do |mode|
+    wiki_options[:math] = mode.nil? ? :mathjax : mode.to_sym
+  end
+  opts.on('--mathjax', 'Enable rendering of mathematical equations via mathjax.') do |mode|
+    puts 'DEPRECATION WARNING: --mathjax. This switch will be removed in the future. Please use --math.'
+    wiki_options[:math] = :mathjax
   end
   opts.on('--critic-markup', 'Enable support for annotations using CriticMarkup.') do
     wiki_options[:critic_markup] = true
