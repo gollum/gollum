@@ -6,6 +6,7 @@ Gemfile.lock
 *.gem
 *.swp
 .*
+node_modules
 !.sprockets*
 !lib/gollum/public/gollum/stylesheets/_styles.css
 !.github*
