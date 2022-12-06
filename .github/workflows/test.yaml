@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [jruby-9.3.2.0]
+        ruby: [jruby-9.4.0.0]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ['2.6', '2.7', '3.0', '3.1']
+        ruby: ['2.7', '3.0', '3.1']
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
