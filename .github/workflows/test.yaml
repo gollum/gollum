@@ -11,6 +11,9 @@ jobs:
       matrix:
         ruby: [jruby-9.4.0.0]
     steps:
+      - name: Install required system dependencies
+        run: |
+          sudo apt-get install -y libyaml-dev
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: List files in the repository
@@ -35,6 +38,9 @@ jobs:
       matrix:
         ruby: ['2.7', '3.0', '3.1']
     steps:
+      - name: Install required system dependencies
+        run: |
+          sudo apt-get install -y libyaml-dev
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: List files in the repository
@@ -51,6 +57,9 @@ jobs:
     name: Selenium on MRI
     runs-on: ubuntu-latest
     steps:
+      - name: Install required system dependencies
+        run: |
+          sudo apt-get install -y libyaml-dev
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Install Chromedriver
