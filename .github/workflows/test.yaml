@@ -1,9 +1,7 @@
 name: Ruby Build
 on:
   push:
-    branches: master
-  pull_request:
-    types: [opened, reopened]
+  pull_request: [reopened]
 jobs:
   jruby_build:
     name: JRuby (${{ matrix.ruby }})

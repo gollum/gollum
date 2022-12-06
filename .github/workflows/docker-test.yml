@@ -1,9 +1,7 @@
 name: Build and Test Docker
 on:
   push:
-    branches: master
-  pull_request:
-    types: [opened, reopened]
+  pull_request: [reopened]
 env:
   CI_IMAGE: gollum-ci-img
 jobs:
