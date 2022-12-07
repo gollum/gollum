@@ -11,9 +11,6 @@ jobs:
       matrix:
         ruby: [jruby-9.4.0.0]
     steps:
-      - name: Install required system dependencies
-        run: |
-          sudo apt-get install -y libyaml-dev
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: List files in the repository
