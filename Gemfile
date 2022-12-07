@@ -23,8 +23,6 @@ group :test do
   gem 'capybara', require: false
 end
 
-gem 'ruby-maven', platforms: :jruby
-
 gemspec
 
 gem 'rake', '~> 13.0'
