@@ -12,15 +12,15 @@ jobs:
         ruby: [jruby-9.4.0.0]
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: '17'
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
