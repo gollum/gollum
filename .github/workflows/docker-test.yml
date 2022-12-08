@@ -1,11 +1,16 @@
 name: Build and Test Docker
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 env:
   CI_IMAGE: gollum-ci-img
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Install required system dependencies
+        run: |
+          sudo apt-get install -y libyaml-dev
       - name: Check Out Repo
         uses: actions/checkout@v2
       - name: Set up Docker Buildx
