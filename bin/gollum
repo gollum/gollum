@@ -127,8 +127,9 @@ MSG
   end
   opts.on('--mathjax', 'Enable rendering of mathematical equations via mathjax.') do |mode|
     puts 'DEPRECATION WARNING: --mathjax. This switch will be removed in the future. Please use --math.'
+    puts 'If you are using a custom mathjax.config.js, please rename it to math.config.js'
     wiki_options[:math] = :mathjax
-    wiki_options[:math_config] = 'mathjax.config.js'
+    wiki_options[:math_config] = true
   end
   opts.on('--critic-markup', 'Enable support for annotations using CriticMarkup.') do
     wiki_options[:critic_markup] = true
