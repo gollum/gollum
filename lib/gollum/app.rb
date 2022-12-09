@@ -132,6 +132,7 @@ module Precious
       @css = settings.wiki_options[:css]
       @js  = settings.wiki_options[:js]
       @math = settings.wiki_options[:math]
+      @math_config = settings.wiki_options[:math_config]
       @mermaid = settings.wiki_options.fetch(:mermaid, true)
       Gollum::Filter::Code.language_handlers.delete(/mermaid/) unless @mermaid
 

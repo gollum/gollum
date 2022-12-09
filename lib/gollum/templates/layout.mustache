@@ -102,7 +102,12 @@
   </script>
   {{/mermaid}}
   
-  {{#js}}<script type="text/javascript" src="{{custom_js}}"></script>{{/js}}
+  {{#js}}
+  <script type="text/javascript" src="{{custom_js}}"></script>
+  {{/js}}
+  {{#math_config}}
+  <script type="text/javascript" src="{{math_config}}"></script>
+  {{/math_config}}
 
   {{#mathjax}}
   <script async src="{{mathjax_js}}"></script>
