@@ -123,11 +123,12 @@ MSG
   end
   opts.on('--math [RENDERER]', [:mathjax, :katex], 'Enable rendering of mathematical equations.',
     'Valid renderers: mathjax, katex. Default: katex.') do |mode|
+    puts "To set a custom configuration for #{mode} please use the --js option, or activate math.config.js via --config."
     wiki_options[:math] = mode.nil? ? :katex : mode.to_sym
   end
   opts.on('--mathjax', 'Enable rendering of mathematical equations via mathjax.') do |mode|
     puts 'DEPRECATION WARNING: --mathjax. This switch will be removed in the future. Please use --math.'
-    puts 'If you are using a custom mathjax.config.js, please rename it to math.config.js'
+    puts 'If you are using a custom mathjax.config.js, please remame it to math.config.js, or use the --js option to configure mathjax instead.'
     wiki_options[:math] = :mathjax
     wiki_options[:math_config] = true
   end
