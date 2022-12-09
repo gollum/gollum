@@ -676,8 +676,8 @@ context "Frontend" do
         get "/gollum/#{route}/custom#{ext}"
         assert_equal 403, last_response.status, "get /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
-      get "/gollum/#{route}/mathjax.config.js"
-      assert_equal 403, last_response.status, "get /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
+      get "/gollum/#{route}/math.config.js"
+      assert_equal 403, last_response.status, "get /gollum/#{route}/math.config.js -- #{last_response.inspect}"
     end
 
     ['delete', 'rename', 'edit', 'create'].each do |route|
@@ -685,8 +685,8 @@ context "Frontend" do
         post "/gollum/#{route}/custom#{ext}"
         assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
       end
-      post "/gollum/#{route}/mathjax.config.js"
-      assert_equal 403, last_response.status, "post /gollum/#{route}/mathjax.config.js -- #{last_response.inspect}"
+      post "/gollum/#{route}/math.config.js"
+      assert_equal 403, last_response.status, "post /gollum/#{route}/math.config.js -- #{last_response.inspect}"
     end
 
     ['.css', '.js'].each do |ext|
