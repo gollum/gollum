@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Initialize the wiki
-if [ ! -d .git ]; then
+if [ ! -d .git ] && [ "$(git rev-parse  --is-bare-repository 2>/dev/null)" != "true" ]; then
     git init
 fi
 
