@@ -10,7 +10,7 @@ module Precious
 
       env.append_path defined?(::Precious::Assets::NODE_MODULES) ?
         ::Precious::Assets::NODE_MODULES :
-        ::File.join(Dir.pwd, 'node_modules')
+        ::File.join(dir, '../../node_modules')
 
       env.append_path ::File.join(dir, 'public/gollum/javascript')
       env.append_path ::File.join(dir, 'public/gollum/stylesheets/')

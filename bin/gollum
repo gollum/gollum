@@ -204,7 +204,7 @@ MSG
   opts.separator ''
   opts.separator '  Development:'
 
-  opts.on('--development-assets [PATH]', 'For development purposes only. Use local node modules instead of the packaged assets. Path defaults to ./node_modules.') do |path|
+  opts.on('--development-assets [PATH]', 'For development purposes only. Use assets in PATH (default: `node_modules` in the gollum project root) instead of the packaged assets.') do |path|
     if path
       module Precious
         module Assets
