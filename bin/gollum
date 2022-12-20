@@ -204,7 +204,14 @@ MSG
   opts.separator ''
   opts.separator '  Development:'
 
-  opts.on('--development-assets', 'For development purposes only. Use local stylesheets and javascript instead of the packaged assets.') do
+  opts.on('--development-assets [PATH]', 'For development purposes only. Use local node modules instead of the packaged assets. Path defaults to ./node_modules.') do |path|
+    if path
+      module Precious
+        module Assets
+        end
+      end
+      ::Precious::Assets.const_set('NODE_MODULES', path)
+    end
     wiki_options[:static] = false
   end
 end
