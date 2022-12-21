@@ -24,6 +24,10 @@ require 'gollum/views/pagination'
 require 'gollum/views/rss.rb'
 require 'gollum/views/template_cascade'
 
+['sassc', 'sassc-embedded'].each do |gem|
+  require gem if Gem::Specification.find {|spec| spec.name == gem}
+end
+
 require File.expand_path '../helpers', __FILE__
 
 #required to upload bigger binary files
