@@ -298,7 +298,7 @@ module Precious
           rename                    = "#{target_dir}/#{target_name}"
         end
 
-        committer = Gollum::Committer.new(wiki, commit_message)
+        committer = Gollum::Committer.new(wiki, commit_options)
         commit    = { :committer => committer }
 
         success = wiki.rename_page(page, rename, commit)
@@ -332,7 +332,7 @@ module Precious
           halt 412, {etag: page.sha, text_data: page.text_data}.to_json
         end
 
-        committer = Gollum::Committer.new(wiki, commit_message)
+        committer = Gollum::Committer.new(wiki, commit_options)
         commit    = { :committer => committer }
 
         update_wiki_page(wiki, page, params[:content], commit, page.name, params[:format])
@@ -348,7 +348,7 @@ module Precious
         wiki = wiki_new
         filepath = params[:splat].first
         unless filepath.nil?
-          commit           = commit_message
+          commit           = commit_options
           commit[:message] = "Deleted #{filepath}"
           wiki.delete_file(filepath, commit)
         end
@@ -385,7 +385,7 @@ module Precious
         path.gsub!(/^\//, '')
 
         begin
-          wiki.write_page(::File.join(path, name), format, params[:content], commit_message)
+          wiki.write_page(::File.join(path, name), format, params[:content], commit_options)
 
           redirect to("/#{clean_url(::File.join(encodeURIComponent(path), encodeURIComponent(wiki.page_file_name(name, format))))}")
         rescue Gollum::DuplicatePageError, Gollum::IllegalDirectoryPath => e
@@ -403,7 +403,7 @@ module Precious
         sha1  = params[:sha1]
         sha2  = params[:sha2]
 
-        commit           = commit_message
+        commit           = commit_options
         commit[:message] = "Revert commit #{sha2.chars.take(7).join}"
         if wiki.revert_page(@page, sha1, sha2, commit)
           redirect to("/#{@page.escaped_url_path}")
@@ -682,13 +682,15 @@ module Precious
     #     :name      - The String author full name.
     #     :email     - The String email address.
     # message is sourced from the incoming request parameters
-    # author details are sourced from the session, to be populated by rack middleware ahead of us
-    def commit_message
+    # optional author details are sourced from the session, to be populated by rack middleware ahead of us.
+    # optional note is equally sourced from the session.
+    def commit_options
       msg               = (params[:message].nil? or params[:message].empty?) ? "[no message]" : params[:message]
-      commit_message    = { :message => msg }
+      commit_options    = { message: msg, note: session['gollum.note'] }
       author_parameters = session['gollum.author']
-      commit_message.merge! author_parameters unless author_parameters.nil?
-      commit_message
+      commit_options.merge! author_parameters unless author_parameters.nil?
+      puts commit_options.inspect
+      commit_options
     end
 
     def find_upload_dest(path)
