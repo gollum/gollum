@@ -1,4 +1,4 @@
-FROM ruby:3.0-alpine AS builder
+FROM ruby:3.1-alpine AS builder
 
 RUN apk add --update \
             --no-cache \
@@ -7,6 +7,7 @@ RUN apk add --update \
             git \
             icu-dev \
             openssl-dev \
+            yaml-dev \
     && rm -rf /var/cache/apk/*
 
 COPY Gemfile* /tmp/
@@ -27,7 +28,7 @@ WORKDIR /app
 COPY . /app
 RUN bundle exec rake install
 
-FROM ruby:3.0-alpine
+FROM ruby:3.1-alpine
 
 ARG UID=${UID:-1000}
 ARG GID=${GID:-1000}

@@ -9,7 +9,6 @@ require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
 require 'octicons'
-require 'sass'
 require 'pathname'
 
 require 'gollum'
@@ -24,6 +23,10 @@ require 'gollum/views/has_math'
 require 'gollum/views/pagination'
 require 'gollum/views/rss.rb'
 require 'gollum/views/template_cascade'
+
+['sassc', 'sassc-embedded'].each do |gem|
+  require gem if Gem::Specification.find {|spec| spec.name == gem}
+end
 
 require File.expand_path '../helpers', __FILE__
 
