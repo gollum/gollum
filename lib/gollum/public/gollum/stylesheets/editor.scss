@@ -106,7 +106,7 @@ a.tabnav-tab:focus {
         margin: 1px 1px 0 0;
         
         @include editor-button-size;
-        @include button-base;
+
 
         @include desktop-breakpoint {
           margin: 0.2em 0.5em 0 0;
@@ -115,7 +115,6 @@ a.tabnav-tab:focus {
         span {
           display: block;
           
-          @include button-sprites;
           @include text-conceal-simple;
           @include editor-button-size;
         }
