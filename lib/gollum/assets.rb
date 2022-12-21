@@ -8,9 +8,7 @@ module Precious
     def self.sprockets(dir = File.dirname(File.expand_path(__FILE__)))
       env = Sprockets::Environment.new
 
-      env.append_path defined?(::Precious::Assets::NODE_MODULES) ?
-        ::Precious::Assets::NODE_MODULES :
-        ::File.join(dir, '../../node_modules')
+      env.append_path ENV.fetch('GOLLUM_DEV_ASSETS', ::File.join(dir, '../../node_modules'))
 
       env.append_path ::File.join(dir, 'public/gollum/javascript')
       env.append_path ::File.join(dir, 'public/gollum/stylesheets/')
