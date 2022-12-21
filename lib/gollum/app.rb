@@ -692,7 +692,6 @@ module Precious
       commit_options    = { message: msg, note: session['gollum.note'] }
       author_parameters = session['gollum.author']
       commit_options.merge! author_parameters unless author_parameters.nil?
-      puts commit_options.inspect
       commit_options
     end
 
