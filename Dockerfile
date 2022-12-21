@@ -1,4 +1,4 @@
-FROM ruby:3.0-alpine AS builder
+FROM ruby:3.1-alpine AS builder
 
 RUN apk add --update \
             --no-cache \
@@ -7,6 +7,7 @@ RUN apk add --update \
             git \
             icu-dev \
             openssl-dev \
+            yaml-dev \
     && rm -rf /var/cache/apk/*
 
 COPY Gemfile* /tmp/
