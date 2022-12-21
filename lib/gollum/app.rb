@@ -682,12 +682,14 @@ module Precious
     #     :name      - The String author full name.
     #     :email     - The String email address.
     # message is sourced from the incoming request parameters
-    # author details are sourced from the session, to be populated by rack middleware ahead of us
+    # optional author details are sourced from the session, to be populated by rack middleware ahead of us.
+    # optional note is equally sourced from the session.
     def commit_options
       msg               = (params[:message].nil? or params[:message].empty?) ? "[no message]" : params[:message]
-      commit_options    = { message: msg, notes: session['gollum.notes'] }
+      commit_options    = { message: msg, note: session['gollum.note'] }
       author_parameters = session['gollum.author']
       commit_options.merge! author_parameters unless author_parameters.nil?
+      puts commit_options.inspect
       commit_options
     end
 
