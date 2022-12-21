@@ -9,8 +9,6 @@ require 'json'
 require 'sprockets'
 require 'sprockets-helpers'
 require 'octicons'
-require 'sassc'
-require 'sassc-embedded'
 require 'pathname'
 
 require 'gollum'

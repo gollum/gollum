@@ -31,8 +31,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'gemojione', '~> 4.1'
   s.add_dependency 'octicons', '~> 12.0'
   s.add_dependency 'sprockets', '~> 4.1'
-  s.add_dependency 'sassc', '~> 2.4'
-  s.add_dependency 'sassc-embedded', '~> 1.54'
   s.add_dependency 'sprockets-helpers', '~> 1.2'
   s.add_dependency 'rss', '~> 0.2.9'
   s.add_dependency 'therubyrhino', '~> 2.1.0'
