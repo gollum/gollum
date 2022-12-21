@@ -199,12 +199,11 @@ MSG
     puts results.empty? ? 'none' : results
     exit 0
   end
-
-
+  
   opts.separator ''
   opts.separator '  Development:'
 
-  opts.on('--development-assets', 'For development purposes only. Use local stylesheets and javascript instead of the packaged assets.') do
+  opts.on('--development-assets', 'For development purposes only. Use local instead of packaged assets.') do
     wiki_options[:static] = false
   end
 end

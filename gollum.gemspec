@@ -33,7 +33,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'sprockets', '~> 4.1'
   s.add_dependency 'sassc', '~> 2.4'
   s.add_dependency 'sassc-embedded', '~> 1.54'
-  s.add_dependency 'uglifier', '~> 4.2'
   s.add_dependency 'sprockets-helpers', '~> 1.2'
   s.add_dependency 'rss', '~> 0.2.9'
   s.add_dependency 'therubyrhino', '~> 2.1.0'
@@ -45,6 +44,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'minitest-reporters', '~> 1.3.6'
   s.add_development_dependency 'mocha', '~> 1.8.0'
   s.add_development_dependency 'test-unit', '~> 3.3.0'
+  s.add_development_dependency 'uglifier', '~> 4.2'
 
   # = MANIFEST =
   s.files = %w[
