@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Install required system dependencies
         run: |
-          sudo apt-get install -y libyaml-dev
+          sudo apt-get install -y libyaml-dev libyaml
       - name: Check Out Repo
         uses: actions/checkout@v2
       - name: Set up Docker Buildx
