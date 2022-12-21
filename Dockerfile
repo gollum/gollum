@@ -28,7 +28,7 @@ WORKDIR /app
 COPY . /app
 RUN bundle exec rake install
 
-FROM ruby:3.0-alpine
+FROM ruby:3.1-alpine
 
 ARG UID=${UID:-1000}
 ARG GID=${GID:-1000}
