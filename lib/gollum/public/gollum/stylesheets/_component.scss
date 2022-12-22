@@ -1,12 +1,5 @@
 // Describes common component styles for Gollum pages
 
-// Sets a reusable component container.
-@mixin component-base {
-  background-color: $light-grey;
-  border: $border-standard;
-  border-radius: 0.5em;
-}
-
 
 // Sets textarea styles.
 @mixin component-textarea {

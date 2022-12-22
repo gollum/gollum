@@ -37,8 +37,7 @@ a.tabnav-tab:focus {
   .singleline {
     display: block;
     margin: 0 0 0.7em 0;
-/*    @include clearfix;
-*/
+
     input {
       font-size: 1.1em;
       font-family: $font-default;
