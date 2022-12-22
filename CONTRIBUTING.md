@@ -160,6 +160,10 @@ git commit -am "Add test"
 git push ../lotr.git/ master
 ```
 
+## Assets
+
+Gollum uses `yarn` and `sprockets` to manage assets. By default, Gollum uses the precompiled static assets that are packaged with the gem (under `lib/gollum/public/assets`). If you're making changes to Gollum's JavaScript or (S)CSS assets, you might want to develop by calling `gollum` with the `--development-assets` flag. This will cause the application to use the unpackaged assets that you are editing (under `lib/gollum/public/gollum/` and in your local `node_modules` directory), so you can test and tweak. Once you are satisfied with your changes, it's time to [update the static assets](#updating-static-assets)!
+
 ## Updating static assets
 
 This is necessary whenever changes have been made to the assets in
