@@ -57,12 +57,7 @@ a.tabnav-tab:focus {
     }
   }
 
-  .path_note {
-    text-align: right;
-    font-size: small;
-    padding-top: 5px;
-    padding-right: 5px;
-  }
+
 
   /* @control editor-view-tab */
   #gollum-editor-type-switcher {
@@ -71,8 +66,6 @@ a.tabnav-tab:focus {
 
   /* @control function-bar */
   #gollum-editor-function-bar  {
-    border-bottom: $border-standard;
-    padding: 0;
 
     @include desktop-breakpoint {
       overflow: hidden;
