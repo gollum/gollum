@@ -248,10 +248,10 @@ task :precompile do
       "It's possible that you just need to install `yarn` on your system."
   end
 
-  require 'uglifier'
+  require 'terser'
   module Precious
     module Assets
-      JS_COMPRESSOR = ::Uglifier.new(harmony: true)
+      JS_COMPRESSOR = ::Terser.new
     end
   end
   
