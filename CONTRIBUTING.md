@@ -162,7 +162,7 @@ git push ../lotr.git/ master
 
 ## Assets
 
-Gollum uses [yarn](https://yarnpkg.com/) and [sprockets](https://yarnpkg.com/) to manage assets. By default, Gollum uses the precompiled static assets that are packaged with the gem (under `lib/gollum/public/assets`). If you're making changes to Gollum's JavaScript or (S)CSS assets, you might want to develop by calling `gollum` with the `--development-assets` flag. This will cause the application to use the unpackaged assets that you are editing (under `lib/gollum/public/gollum/` and in your local `node_modules` directory), so you can test and tweak. Once you are satisfied with your changes, it's time to [update the static assets](#updating-static-assets)!
+Gollum uses [yarn](https://yarnpkg.com/) and [sprockets](https://github.com/rails/sprockets) to manage assets. By default, Gollum uses the precompiled static assets that are packaged with the gem (under `lib/gollum/public/assets`). If you're making changes to Gollum's JavaScript or (S)CSS assets, you might want to develop by calling `gollum` with the `--development-assets` flag. This will cause the application to use the unpackaged assets that you are editing (under `lib/gollum/public/gollum/` and in your local `node_modules` directory), so you can test and tweak. Once you are satisfied with your changes, it's time to [update the static assets](#updating-static-assets)!
 
 For convenience, Gollum also allows developers to set a custom location for `node_modules` (by default expected to be in the root of the project) when using `--development-assets`. Set the `GOLLUM_DEV_ASSETS` environment variable to do this, e.g.: `GOLLUM_DEV_ASSETS=/path/to/my/node_modules gollum --development-assets`
 
