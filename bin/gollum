@@ -129,9 +129,6 @@ MSG
   opts.on('--critic-markup', 'Enable support for annotations using CriticMarkup.') do
     wiki_options[:critic_markup] = true
   end
-  opts.on('--mermaid', 'Enable support for Mermaid diagrams.') do
-    wiki_options[:mermaid] = true
-  end
   opts.on('--irb', 'Launch Gollum in \'console mode\', with a predefined API.') do
     options[:irb] = true
   end
