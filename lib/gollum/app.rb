@@ -131,7 +131,7 @@ module Precious
       @js  = settings.wiki_options[:js]
       @mathjax_config = settings.wiki_options[:mathjax_config]
       @mathjax = settings.wiki_options[:mathjax]
-      @mermaid = settings.wiki_options[:mermaid]
+      @mermaid = settings.wiki_options.fetch(:mermaid, true)
       Gollum::Filter::Code.language_handlers.delete(/mermaid/) unless @mermaid
 
       @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
