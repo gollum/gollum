@@ -1,9 +1,6 @@
 // Describes basic parameters (colours, sizes, font stacks, etc.)
 
 // Colors
-$grey: #ddd;
-$red: #c00;
-
 
 $color-editor-element-border: #eee;
 $color-editor-component-border: #e4e4e4;
@@ -15,7 +12,7 @@ $font-console: Inconsolata, Consolas, "Liberation Mono", 'Monaco', 'Andale Mono'
 
 
 // Borders
-$border-standard: 1px solid $grey;
+$border-standard: 1px solid #ddd;
 $border-editor-component: 1px solid $color-editor-component-border;
 $border-editor-element: 1px solid $color-editor-element-border;
 
