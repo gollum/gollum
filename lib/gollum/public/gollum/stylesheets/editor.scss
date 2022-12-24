@@ -274,12 +274,6 @@ a#function-search { @include editor-button(16); }
 
 /* @section help */
 #gollum-editor-help {
-  clear: both;
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-  border: $border-standard;
-  border-width: 0 1px 1px 1px;
 
   @include desktop-breakpoint {
     clear: none;
