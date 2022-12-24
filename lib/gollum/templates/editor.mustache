@@ -21,8 +21,8 @@
   {{/is_edit_page}}
   <input type="hidden" name="path" id="gollum-editor-page-path" value="{{path}}">
   
-	<div id="gollum-editor-function-bar">
-    <div id="gollum-editor-function-buttons">
+	<div id="gollum-editor-function-bar" class="border-bottom clearfix">
+    <div id="gollum-editor-function-buttons" class="overflow-auto no-wrap">
       <div class="BtnGroup">
         <button class="btn btn-sm BtnGroup-item function-button" id="function-h1" title="Heading 1">h1</button>
 			  <button class="btn btn-sm BtnGroup-item function-button" id="function-h2" title="Heading 2">h2</button>
@@ -115,7 +115,7 @@
       </div>
     </div>
   </div>
-  <div id="gollum-autorecover-msg" class="flash" hidden>
+  <div id="gollum-autorecover-msg" class="flash my-2" hidden>
       Autosaved text is available. Click the button to restore it.
       <button id="gollum-autorecover-button" class="btn btn-sm primary flash-action">Restore Text</button>
   </div>

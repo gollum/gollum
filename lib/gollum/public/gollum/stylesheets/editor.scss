@@ -127,10 +127,6 @@ a.tabnav-tab:focus {
     }
 
     #gollum-editor-format-selector {
-      padding: 0.2em 0 0.5em 0;
-      clear: both;
-
-      @include clearfix;
 
       @include desktop-breakpoint {
         clear: none;
@@ -210,7 +206,7 @@ a.tabnav-tab:focus {
   }
 
   input#gollum-editor-page-title {
-    margin-top: 0;
+
 
     &.ph {
       color: #000;
@@ -218,7 +214,7 @@ a.tabnav-tab:focus {
   }
 
   & + #gollum-editor-function-bar {
-    margin-top: 0.6em;
+
   }
 }
 
