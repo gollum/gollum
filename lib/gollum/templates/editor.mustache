@@ -109,7 +109,7 @@
       Autosaved text is available. Click the button to restore it.
       <button id="gollum-autorecover-button" class="btn btn-sm primary flash-action">Restore Text</button>
   </div>
-    <textarea id="gollum-editor-body" class="form-control"
+    <textarea id="gollum-editor-body" class="form-control text-mono"
      data-markup-lang="{{format}}" name="content" class="mousetrap">{{content}}</textarea>
     <div id="uploading">
       <p><div class="dotted-spinner"></div> Uploading file...</p>
@@ -120,7 +120,7 @@
     <div id="gollum-editor-edit-header" class="collapsed">
 			<button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
       <h4>Header</h4>
-      <textarea id="gollum-editor-header" name="header" class="form-control">{{header}}</textarea>
+      <textarea id="gollum-editor-header" name="header" class="form-control text-mono">{{header}}</textarea>
     </div>
     {{/header}}
 
@@ -128,7 +128,7 @@
     <div id="gollum-editor-edit-footer" class="collapsed">
       <button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
       <h4>Footer</h4>
-      <textarea id="gollum-editor-footer" name="footer" class="form-control">{{footer}}</textarea>
+      <textarea id="gollum-editor-footer" name="footer" class="form-control text-mono">{{footer}}</textarea>
     </div>
     {{/footer}}
 
@@ -137,7 +137,7 @@
       <button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
 			<h4>Sidebar</h4>
       
-      <textarea id="gollum-editor-sidebar" name="sidebar" class="form-control">{{sidebar}}</textarea>
+      <textarea id="gollum-editor-sidebar" name="sidebar" class="form-control text-mono">{{sidebar}}</textarea>
     </div>
     {{/sidebar}}
 
