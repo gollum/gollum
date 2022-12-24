@@ -38,8 +38,6 @@ a.tabnav-tab:focus {
 
     input {
       font-size: 1.1em;
-      font-family: $font-default;
-      line-height: 1.5em;
       margin: 1em 0 0.4em;
       padding: 0.5em;
       width: 100%;
@@ -56,11 +54,6 @@ a.tabnav-tab:focus {
   }
 
 
-
-  /* @control editor-view-tab */
-  #gollum-editor-type-switcher {
-    display: none;
-  }
 
   /* @control function-bar */
   #gollum-editor-function-bar  {
