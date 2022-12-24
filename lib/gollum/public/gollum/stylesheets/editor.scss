@@ -199,27 +199,17 @@ a.tabnav-tab:focus {
     }
   }
 
-  #gollum-editor-body {
-    & + .collapsed, & + .expanded {
-      border-top: $border-standard;
-      margin-top: 0.7em;
-    }
-
-  }
-
 }
 
 /* @control title */
 
 #gollum-editor-title-field {
   &.active {
-    display: block;
     margin: 0 0 0.3em 0;
     padding: 0 0 0.5em 0;
   }
 
   input#gollum-editor-page-title {
-    font-weight: bold;
     margin-top: 0;
 
     &.ph {
