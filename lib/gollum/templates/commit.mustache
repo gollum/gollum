@@ -1,5 +1,6 @@
 <div id="wiki-wrapper" class="compare">
   <div id="head">
+    {{>navbar}}
     <h1 class="header-title text-center text-md-left py-4">
       {{message}}
     </h1>
@@ -9,7 +10,7 @@
 
   <div id="compare-content">
 	  {{#files}}
-    <div class="Box data highlight my-3">
+    <div class="Box data highlight my-3 text-mono">
       <div class="Box-header Box--condensed Box-header--gray">
 				<code>{{path}}</code>
 			</div>
