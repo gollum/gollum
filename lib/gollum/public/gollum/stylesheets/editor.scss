@@ -330,13 +330,11 @@ a#function-search { @include editor-button(16); }
   }
 }
 
-#gollum-editor-help-parent {
-  border-right: $border-editor-element;
-}
+
 
 #gollum-editor-help-list {
   background: #fafafa;
-  border-right: $border-editor-element;
+
 }
 
 #gollum-editor-help-wrapper {
