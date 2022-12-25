@@ -157,7 +157,6 @@ a {
   .expanded {
 
     textarea {
-      @include component-textarea;
       height: 7em;
     }
   }
