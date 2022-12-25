@@ -34,32 +34,4 @@
   }
 }
 
-// Defines a common editor button style using image sprites.
-@mixin editor-button($row-pos: 0) {
-  $left: $editor-button-img-width * -1 * $row-pos;
-  $left-mobile: $left + $editor-button-mobile-margin;
 
-  $top: 0;
-  $top-hover: -1 * $editor-button-img-height;
-  $top-mobile: $editor-button-mobile-margin;
-  $top-mobile-hover: -1 * $editor-button-img-height + $editor-button-mobile-margin;
-
-  span {
-    background-position: $left-mobile $top-mobile;
-  }
-  &:hover {
-    span {
-      background-position: $left-mobile $top-mobile-hover;
-    }
-  }
-  @include desktop-breakpoint {
-    span {
-      background-position: $left $top;
-    }
-    &:hover {
-      span {
-        background-position: $left $top-hover;
-      }
-    }
-  }
-}
