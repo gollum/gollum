@@ -100,7 +100,6 @@ a {
     }
 
 
-
     #gollum-editor-format-selector {
 
       @include desktop-breakpoint {
@@ -150,19 +149,12 @@ a {
       color: #bbb;
     }
 
-    a.button {
-      @include editor-button(13);
-    }
-
     textarea {
       display: none;
     }
   }
 
   .expanded {
-    a.button {
-      @include editor-button(14);
-    }
 
     textarea {
       @include component-textarea;
@@ -193,25 +185,6 @@ a {
   }
 }
 
-/* @control editor-buttons */
-
-a#function-bold { @include editor-button(0); }
-a#function-italic { @include editor-button(1); }
-a#function-underline { @include editor-button(2); }
-a#function-code { @include editor-button(3); }
-a#function-ul { @include editor-button(4); }
-a#function-ol { @include editor-button(5); }
-a#function-blockquote { @include editor-button(6); }
-a#function-hr { @include editor-button(7); }
-a#function-h1 { @include editor-button(8); }
-a#function-h2 { @include editor-button(9); }
-a#function-h3 { @include editor-button(10); }
-a#function-link { @include editor-button(11); }
-a#function-image { @include editor-button(12); }
-a#function-critic-accept { @include editor-button(13); }
-a#function-critic-reject { @include editor-button(14); }
-a#function-help { @include editor-button(15); }
-a#function-search { @include editor-button(16); }
 
 /* @section uploads */
 
