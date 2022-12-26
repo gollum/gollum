@@ -29,29 +29,6 @@ a {
 
 #gollum-editor {
 
-  .singleline {
-    display: block;
-    margin: 0 0 0.7em 0;
-
-    input {
-      font-size: 1.1em;
-      margin: 1em 0 0.4em;
-      padding: 0.5em;
-      width: 100%;
-
-      &.ph {
-        color: #999;
-      }
-
-      .ie & {
-        padding-top: 0.25em;
-        padding-bottom: 0.75em;
-      }
-    }
-  }
-
-
-
   /* @control function-bar */
   #gollum-editor-function-bar  {
 
@@ -134,13 +111,7 @@ a {
       display: inline-block;
 
       padding: 0.25em 0 0 0.3em;
-
       text-shadow: 0 -1px 0 #fff;
-      line-height: $editor-button-size;
-
-      @include desktop-breakpoint {
-        line-height: $editor-button-desktop-size;
-      }
     }
   }
 
@@ -169,14 +140,6 @@ a {
   &.active {
     margin: 0 0 0.3em 0;
     padding: 0 0 0.5em 0;
-  }
-
-  input#gollum-editor-page-title {
-
-
-    &.ph {
-      color: #000;
-    }
   }
 
 
