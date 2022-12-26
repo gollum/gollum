@@ -1,6 +1,6 @@
 // Wiki editor formatting
 
-@import "_base", "_features", "_breakpoint", "_component";
+@import "_base", "_features", "_breakpoint";
 
 a {
   -moz-outline: none !important;
@@ -43,8 +43,6 @@ a {
     &.active {
       #gollum-editor-function-buttons {
         display: block;
-        margin: 0;
-        padding: 0;
 
         @include desktop-breakpoint {
           overflow: hidden;
@@ -60,14 +58,14 @@ a {
         float: left;
         overflow: hidden;
         
-        @include editor-button-size;
+
 
 
         span {
           display: block;
           
           @include text-conceal-simple;
-          @include editor-button-size;
+
         }
       }
 
