@@ -7,9 +7,9 @@
 {{/is_edit_page}}
   <fieldset id="gollum-editor-fields">
   {{#is_create_page}}
-  <div id="gollum-editor-title-field" class="singleline">
+  <div id="gollum-editor-title-field" class="mb-2">
     <label for="page" class="jaws">Page Title</label>
-    <input class="form-control input-lg input-block text-bold" placeholder="Page title" type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
+    <input class="form-control mb-2 input-lg input-block text-bold f5" placeholder="Page title" type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
     {{#has_path}}
     <p class="path_note"><strong>NOTE:</strong> This page will be created within the &quot;<strong>{{path}}</strong>&quot; directory</p>
     {{/has_path}}
@@ -151,13 +151,13 @@
     </div>
     {{/sidebar}}
 
-    <div id="gollum-editor-edit-summary" class="singleline">
+    <div id="gollum-editor-edit-summary" class="my-2">
       <label for="message" class="jaws">Edit message:</label>
       {{#is_create_page}}
-      <input type="text" name="message" class="form-control input-lg input-block" id="gollum-editor-message-field" value="Created {{page_name}} ({{format}})">
+      <input type="text" name="message" class="form-control input-lg input-block f5 text-gray-light" id="gollum-editor-message-field" value="Created {{page_name}} ({{format}})">
       {{/is_create_page}}
       {{#is_edit_page}}
-      <input type="text" name="message" class="form-control input-lg input-block" id="gollum-editor-message-field" value="Updated {{page_name}} ({{format}})">
+      <input type="text" name="message" class="form-control input-lg input-block f5 text-gray-light" id="gollum-editor-message-field" value="Updated {{page_name}} ({{format}})">
       {{/is_edit_page}}
     </div>
 
