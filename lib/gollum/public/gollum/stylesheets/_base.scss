@@ -1,11 +1,5 @@
 // Describes basic parameters (colours, sizes, font stacks, etc.)
 
-// Colors
-
-$color-editor-element-border: #eee;
-$color-editor-component-border: #e4e4e4;
-$color-editor-component: #f9f9f9;
-
 // Font stack
 $font-default: "Helvetica Neue", Helvetica, Arial, freesans, clean, sans-serif;
 $font-console: Inconsolata, Consolas, "Liberation Mono", 'Monaco', 'Andale Mono', 'Courier New', monospace;
@@ -13,8 +7,6 @@ $font-console: Inconsolata, Consolas, "Liberation Mono", 'Monaco', 'Andale Mono'
 
 // Borders
 $border-standard: 1px solid #ddd;
-$border-editor-component: 1px solid $color-editor-component-border;
-$border-editor-element: 1px solid $color-editor-element-border;
 
 // Editor buttons
 $editor-button-size: 32px;

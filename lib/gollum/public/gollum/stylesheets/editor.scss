@@ -179,9 +179,7 @@ a {
     }
   }
 
-  & + #gollum-editor-function-bar {
 
-  }
 }
 
 
@@ -261,7 +259,7 @@ a {
       }
 
       &.selected {
-        border: $border-editor-element;
+        border: $border-standard;
         border-bottom-color: #e7e7e7;
         border-width: 1px 0;
         background: #fff;
