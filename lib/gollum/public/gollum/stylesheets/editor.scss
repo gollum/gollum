@@ -57,9 +57,6 @@ a {
       &.function-button {
         float: left;
         overflow: hidden;
-        
-
-
 
         span {
           display: block;
@@ -85,32 +82,10 @@ a {
   }
 
 
-
   /* @section form-fields */
 
   textarea {
     height: 30em;
-    overflow: hidden;
-  }
-
-  .collapsed, .expanded {
-    display: block;
-    overflow: hidden;
-    padding: 0.5em 0 0;
-
-    button {
-      margin-bottom: 6px;
-    }
-    
-
-    h4 {
-      font-size: 1.6em;
-      margin: 0;
-      display: inline-block;
-
-      padding: 0.25em 0 0 0.3em;
-      text-shadow: 0 -1px 0 #fff;
-    }
   }
 
   .collapsed {
@@ -132,16 +107,6 @@ a {
 
 }
 
-/* @control title */
-
-#gollum-editor-title-field {
-  &.active {
-    margin: 0 0 0.3em 0;
-    padding: 0 0 0.5em 0;
-  }
-
-
-}
 
 
 /* @section uploads */
