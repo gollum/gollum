@@ -7,7 +7,7 @@
 {{/is_edit_page}}
   <fieldset id="gollum-editor-fields">
   {{#is_create_page}}
-  <div id="gollum-editor-title-field" class="mb-2">
+  <div id="gollum-editor-title-field" class="mb-4">
     <label for="page" class="jaws">Page Title</label>
     <input class="form-control mb-2 input-lg input-block text-bold f5" placeholder="Page title" type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
     {{#has_path}}
@@ -127,25 +127,25 @@
 
     {{#header}}
 
-    <div id="gollum-editor-edit-header" class="collapsed border-bottom">
-			<button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
-      <h4>Header</h4>
+    <div id="gollum-editor-edit-header" class="collapsed border-bottom pt-2">
+			<button class="btn btn-sm collapsable mb-2">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable mb-2" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
+      <h4 class="d-inline-block pl-2 f3">Header</h4>
       <textarea id="gollum-editor-header" name="header" class="form-control input-block mb-2 text-mono overflow-auto">{{header}}</textarea>
     </div>
     {{/header}}
 
     {{#footer}}
-    <div id="gollum-editor-edit-footer" class="collapsed border-bottom">
-      <button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
-      <h4>Footer</h4>
+    <div id="gollum-editor-edit-footer" class="collapsed border-bottom pt-2">
+      <button class="btn btn-sm collapsable mb-2">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable mb-2" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
+      <h4 class="d-inline-block pl-2 f3">Footer</h4>
       <textarea id="gollum-editor-footer" name="footer" class="form-control input-block mb-2 text-mono overflow-auto">{{footer}}</textarea>
     </div>
     {{/footer}}
 
     {{#sidebar}}
-    <div id="gollum-editor-edit-sidebar" class="collapsed border-bottom">
-      <button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
-			<h4>Sidebar</h4>
+    <div id="gollum-editor-edit-sidebar" class="collapsed border-bottom pt-2">
+      <button class="btn btn-sm collapsable mb-2">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable mb-2" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
+			<h4 class="d-inline-block pl-2 f3">Sidebar</h4>
       
       <textarea id="gollum-editor-sidebar" name="sidebar" class="form-control input-block mb-2 text-mono overflow-auto">{{sidebar}}</textarea>
     </div>
