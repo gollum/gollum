@@ -3,7 +3,7 @@
     {{>navbar}}
 
     <h1 class="header-title text-center text-md-left py-4">
-      <span class="f1-light text-gray-light">
+      <span class="f1-light color-text-tertiary">
         {{t.search_results_for}}
       </span>
       {{name}}
@@ -19,7 +19,7 @@
   <div class="Box-header border-bottom p-0"></div>
   {{#results}}
     <li class="Box-row Box-row--gray search-result">
-      <span class="Counter Counter--gray tooltipped tooltipped-w" aria-label="{{filename_count}} hits in filename - {{count}} hits in content">{{filename_count}} - {{count}}</span>&nbsp;
+      <span class="Counter Counter--primary tooltipped tooltipped-w" aria-label="{{filename_count}} hits in filename - {{count}} hits in content">{{filename_count}} - {{count}}</span>&nbsp;
       <span class="text-bold"><a href="{{href}}">{{name}}</a></span>
       <button
         class="btn-link tooltipped tooltipped-w float-right toggle-context"
