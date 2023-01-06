@@ -22,6 +22,17 @@ describe Commit do
         end
     
       end
+      
+      describe "creating notes" do
+        it "reads and sets notes" do
+          commit = @repo.head
+          commit.note = "This is a note"
+          expect(commit.note.to_s).to match /This is a note/
+          expect(commit.note.annotates).to eq commit.id
+          commit.remove_note
+          expect(commit.note).to be_nil
+        end
+      end
     
     after(:all) do
       remove_temp_repo(@temp_repo_path)
@@ -73,6 +84,7 @@ describe Commit do
     it "has a short message" do
       expect(@commit.short_message).to match /pure-ruby git library/
     end
+
 
     it "has a count" do
       expect(@commit.parent_count).to eq 1

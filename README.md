@@ -67,6 +67,19 @@ repo.commits('master')
 repo.commits('959329025f67539fb82e76b02782322fad032821')
 repo.head
 commit = repo.commits('master').first # a Commit object; try commit.actor, commit.id, etc.
+```
+
+### Getting notes
+```ruby
+repo.notes
+note = repo.head.note
+note.message # the String message of the note
+note.annotates # the SHA ID of the object this note is attached to
+repo.head.note = "Happy note writing"
+repo.head.note_remove
+```
+
+
 # Similarly for getting tags, branches, trees (directories), and blobs (files).
 ```
 

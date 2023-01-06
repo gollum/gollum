@@ -83,7 +83,7 @@ module RJGit
   end
   
   def self.repository_type(repository)
-    repo = case repository
+    case repository
       when Repo then repository.jrepo
       when org.eclipse.jgit.lib.Repository then repository
       else nil
@@ -91,7 +91,7 @@ module RJGit
   end
   
   def self.actor_type(actor)
-    person_ident = case actor
+    case actor
       when Actor then actor.person_ident
       when org.eclipse.jgit.lib.PersonIdent then actor
       else nil
@@ -99,7 +99,7 @@ module RJGit
   end
   
   def self.tree_type(tree)
-    treeobj = case tree
+    case tree
       when Tree then tree.jtree
       when org.eclipse.jgit.revwalk.RevTree then tree
       when org.eclipse.jgit.lib.ObjectId then tree
@@ -108,15 +108,23 @@ module RJGit
   end
   
   def self.blob_type(blob)
-    blobobj = case blob
+    case blob
       when Blob then blob.jblob
       when org.eclipse.jgit.revwalk.RevBlob then blob
       else nil
     end
   end
   
+  def self.note_type(note)
+    case note
+      when Note then note.jnote
+      when org.eclipse.jgit.notes.Note then note
+      else nil
+    end
+  end
+  
   def self.commit_type(commit)
-    commitobj = case commit
+    case commit
       when Commit then commit.jcommit
       when org.eclipse.jgit.lib.ObjectId then commit
       else nil

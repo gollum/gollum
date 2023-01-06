@@ -268,6 +268,14 @@ describe Repo do
       @repo = Repo.new(@temp_repo_path)
     end
 
+    it "finds all objects with notes" do
+      expect(@repo.notes).to be_a Array
+      @repo.head.note = "This is a note"
+      expect(@repo.notes.first).to be_a Note
+      expect(@repo.notes.first.message).to eq "This is a note"
+      @repo.head.remove_note
+    end
+    
     it "adds files to itself" do
       File.open(File.join(@temp_repo_path, "rspec-addfile.txt"), 'w') {|file| file.write("This is a new file to add.") }
       @repo.add("rspec-addfile.txt")

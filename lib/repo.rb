@@ -216,6 +216,12 @@ module RJGit
     def tree(file_path, revstring=Constants::HEAD)
       Tree.find_tree(@jrepo, file_path, revstring)
     end
+      
+    def notes(ref=Note::DEFAULT_REF)
+      @git.jgit.notes_list().set_notes_ref(ref).call().to_a.map do |jnote|
+        Note.new(@jrepo, jnote)
+      end
+    end
     
     def update_ref(commit, force = false, ref = "refs/heads/#{Constants::MASTER}")
       ref_updater = @jrepo.updateRef(ref)

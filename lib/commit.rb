@@ -4,6 +4,7 @@ module RJGit
   import 'org.eclipse.jgit.revwalk.RevCommit'
   import 'org.eclipse.jgit.diff.DiffFormatter'
   import 'org.eclipse.jgit.util.io.DisabledOutputStream'
+  import 'org.eclipse.jgit.api.Git'
   
   class Commit
 
@@ -28,6 +29,20 @@ module RJGit
     
     def tree
       @tree ||= Tree.new(@jrepo, TREE_TYPE, nil, @jcommit.get_tree)
+    end
+  
+    def note(ref=Note::DEFAULT_REF)
+      jnote = Git.new(@jrepo).notes_show().set_notes_ref(ref).setObjectId(@jcommit).call()
+      jnote ? Note.new(@jrepo, jnote) : nil
+    end
+    
+    def note=(message, ref=Note::DEFAULT_REF)
+      Note.new(@jrepo, Git.new(@jrepo).notes_add.set_message(message).set_notes_ref(ref).setObjectId(@jcommit).call())
+    end
+    
+    def remove_note(ref=Note::DEFAULT_REF)
+      Git.new(@jrepo).notes_remove.set_notes_ref(ref).setObjectId(@jcommit).call()
+      return nil
     end
   
     def parents
