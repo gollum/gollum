@@ -6,7 +6,7 @@ RJGit
 [![Ruby Build](https://github.com/repotag/rjgit/actions/workflows/test.yaml/badge.svg)](https://github.com/repotag/rjgit/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/repotag/rjgit/badge.png?branch=master)](https://coveralls.io/r/repotag/rjgit)
 [![Gem Version](https://badge.fury.io/rb/rjgit.png)](http://badge.fury.io/rb/rjgit)
-[![Cutting Edge Dependency Status](https://dometto-cuttingedge.herokuapp.com/github/repotag/rjgit/svg 'Cutting Edge Dependency Status')](https://dometto-cuttingedge.herokuapp.com/github/repotag/rjgit/info)
+[![Cutting Edge Dependency Status](https://cuttingedge.onrender.com/github/repotag/rjgit/svg 'Cutting Edge Dependency Status')](https://cuttingedge.onrender.com/github/repotag/rjgit/info)
 
 Summary
 -------
@@ -15,20 +15,12 @@ RJGit provides a fully featured library for accessing and manipulating git repos
 
 Installation
 ------------
-Install the rjgit gem with the command:
+
+Install the rjgit gem with:
 
 ```sh
 $ gem install rjgit
 ```
-
-#### Dependencies for using RJGit:
-- JRuby >= 1.7.0
-- mime-types >= 1.15
-
-#### Further dependencies for developing RJGIT:
-- rake >= 0.9.2.2
-- rspec >= 2.0
-- simplecov
 
 #### Version scheme
 
@@ -69,18 +61,10 @@ repo.head
 commit = repo.commits('master').first # a Commit object; try commit.actor, commit.id, etc.
 ```
 
-### Getting notes
+### Getting branches
+
 ```ruby
-repo.notes
-note = repo.head.note
-note.message # the String message of the note
-note.annotates # the SHA ID of the object this note is attached to
-repo.head.note = "Happy note writing"
-repo.head.note_remove
-```
-
-
-# Similarly for getting tags, branches, trees (directories), and blobs (files).
+repo.branches
 ```
 
 ### Finding a single object by SHA
@@ -89,19 +73,20 @@ repo.find('959329025f67539fb82e76b02782322fad032821')
 repo.find('959329025f67539fb82e76b02782322fad032821', :commit) # Find a specific :commit, :blob, :tree, or :tag
 ```
 
-### Logs
+### Blobs and Trees
 
 ```ruby
-repo.git.log # Returns an Array of Commits constituting the log for the default branch
-repo.git.log("follow-rename.txt", "HEAD", follow: true, list_renames: true) # Log for a specific path, tracking the pathname over renames. Returns an Array of TrackingCommits, which store the tracked filename: [#<RJGit::TrackingCommit:0x773014d3 @tracked_pathname="follow-rename.txt" ...>]
-```
-
-### Getting diffs
-```ruby
-sha1 = repo.head.id
-sha2 = repo.commits.last.id
-options = {:old_rev => sha2, :new_rev => sha1, :file_path => "some/path.txt", :patch => true}
-Porcelain.diff(repo, options)
+blob = repo.blob("example/file.txt") # Retrieve a file by filepath, from the HEAD commit...
+blob = repo.blob("example/file.txt", "refs/heads/mybranch') # Retrieve the same file from a different branch
+blob = repo.find("959329025f67539fb82e76b02782322fad032822", :blob) # ...or by SHA
+blob.data # Cat the file; also blob.id, blob.mode, etc.
+tree = repo.tree("example") # Retrieve a tree by filepath...
+tree = repo.find("959329025f67539fb82e76b02782322fad032000", :tree) #...or by SHA
+tree.data # List the tree's contents (blobs and trees). Also tree.id, tree.mode, etc.
+tree.each {|entry| puts entry.inspect} # Loop over the Tree's children (Blobs and Trees)
+tree.trees # An array of the Tree's child Trees
+tree.blobs # An array of the Tree's child Blobs
+Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :ref => 'mybranch') # Outputs the Tree's contents to $stdout. Faster for recursive listing than Tree#each. Passing nil as the second argument lists the entire repository. ref defaults to HEAD.
 ```
 
 ### Getting tags
@@ -112,18 +97,30 @@ tag.author.name # Etcetera
 some_object = Porcelain.object_for_tag(repo, tag) # Returns the tagged object; e.g. a Commit
 ```
 
-### Blobs and Trees
+### Getting notes
+
 ```ruby
-blob = repo.blob("example/file.txt") # Retrieve a file by filepath...
-blob = repo.find("959329025f67539fb82e76b02782322fad032822", :blob) # ...or by SHA
-blob.data # Cat the file; also blob.id, blob.mode, etc.
-tree = repo.tree("example") # Retrieve a tree by filepath...
-tree = repo.find("959329025f67539fb82e76b02782322fad032000", :tree) #...or by SHA
-tree.data # List the tree's contents (blobs and trees). Also tree.id, tree.mode, etc.
-tree.each {|entry| puts entry.inspect} # Loop over the Tree's children (Blobs and Trees)
-tree.trees # An array of the Tree's child Trees
-tree.blobs # An array of the Tree's child Blobs
-Porcelain::ls_tree(repo, repo.tree("example"), :print => true, :recursive => true, :ref => 'mybranch') # Outputs the Tree's contents to $stdout. Faster for recursive listing than Tree#each. Passing nil as the second argument lists the entire repository. ref defaults to HEAD.
+repo.notes
+note = repo.head.note
+note.message # the String message of the note
+note.annotates # the SHA ID of the object this note is attached to
+repo.head.note = "Happy note writing"
+repo.head.note_remove
+```
+
+### Getting diffs
+```ruby
+sha1 = repo.head.id
+sha2 = repo.commits.last.id
+options = {:old_rev => sha2, :new_rev => sha1, :file_path => "some/path.txt", :patch => true}
+Porcelain.diff(repo, options)
+```
+
+### Logs
+
+```ruby
+repo.git.log # Returns an Array of Commits constituting the log for the default branch
+repo.git.log("follow-rename.txt", "HEAD", follow: true, list_renames: true) # Log for a specific path, tracking the pathname over renames. Returns an Array of TrackingCommits, which store the tracked filename: [#<RJGit::TrackingCommit:0x773014d3 @tracked_pathname="follow-rename.txt" ...>]
 ```
 
 ### Creating blobs and trees from scratch
@@ -170,21 +167,9 @@ Contributing
 1. Create a new branch
 1. Modify the sources
 1. Add specs with full coverage for your new code
-1. Make sure the whole test suite passes by running rake
+1. Make sure the whole test suite passes by running `bundle exec rake`
 1. Push the branch up to GitHub
 1. Send us a pull request
-
-Running RSpec tests (the recommended way)
----------------
-
-1. Start the nailgun server
-```
-jruby --ng-server &
-```
-1. Run rake against the nailgun instance
-```
-jruby --ng -S rake
-```
 
 Authors
 -------
