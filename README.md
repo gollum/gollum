@@ -4,7 +4,7 @@ gollum -- A git-based Wiki
 [![Gem Version](https://badge.fury.io/rb/gollum.svg)](http://badge.fury.io/rb/gollum)
 ![Build Status](https://github.com/gollum/gollum/actions/workflows/test.yaml/badge.svg)
 [![Open Source Helpers](https://www.codetriage.com/gollum/gollum/badges/users.svg)](https://www.codetriage.com/gollum/gollum)
-[![Cutting Edge Dependency Status](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/svg 'Cutting Edge Dependency Status')](https://dometto-cuttingedge.herokuapp.com/github/gollum/gollum/info)
+[![Cutting Edge Dependency Status](https://cuttingedge.onrender.com/github/repotag/cutting_edge/svg 'Cutting Edge Dependency Status')](https://cuttingedge.onrender.com/github/repotag/cutting_edge/info)
 [![Docker Pulls](https://img.shields.io/docker/pulls/gollumwiki/gollum)](https://hub.docker.com/r/gollumwiki/gollum)
 
 See the [wiki](https://github.com/gollum/gollum/wiki) for extensive documentation, along with [screenshots](https://github.com/gollum/gollum/wiki/Screenshots) of Gollum's features.
