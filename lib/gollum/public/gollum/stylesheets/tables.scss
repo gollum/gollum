@@ -1,5 +1,3 @@
-@import "_base", "_breakpoint";
-
 /* @section history */
 
 #user-icons {
@@ -23,13 +21,11 @@
 /* @section compare */
 .compare {
 
-
   .data {
 
     table {
 
       tr td {
-        font-family: $font-console;
         line-height: 1.5em;
 
         & + td + td {

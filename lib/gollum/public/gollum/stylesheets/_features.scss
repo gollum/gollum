@@ -1,12 +1,5 @@
 // Describes feature mixins
 
-// Sets the basic desktop page layout.
-// We made this reusable so the IE7/8 template can use it too.
-@mixin desktop-page-layout {
-  max-width: $layout-body-width;
-  padding-left: $layout-body-padding;
-  padding-right: $layout-body-padding;
-}
 
 // Sets the alternative box model so borders are counted as part of the width.
 @mixin alt-box-model {

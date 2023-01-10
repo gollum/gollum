@@ -7,9 +7,9 @@
 {{/is_edit_page}}
   <fieldset id="gollum-editor-fields">
   {{#is_create_page}}
-  <div id="gollum-editor-title-field" class="singleline">
+  <div id="gollum-editor-title-field" class="mb-4">
     <label for="page" class="jaws">Page Title</label>
-    <input class="form-control input-lg" placeholder="Page title" type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
+    <input class="form-control mb-2 input-lg input-block text-bold f5" placeholder="Page title" type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
     {{#has_path}}
     <p class="path_note"><strong>NOTE:</strong> This page will be created within the &quot;<strong>{{path}}</strong>&quot; directory</p>
     {{/has_path}}
@@ -21,39 +21,48 @@
   {{/is_edit_page}}
   <input type="hidden" name="path" id="gollum-editor-page-path" value="{{path}}">
   
-	<div id="gollum-editor-function-bar">
-    <div id="gollum-editor-function-buttons">
-			<button class="btn btn-sm function-button" id="function-bold" title="Bold">{{#octicon}}bold{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-italic" title="Italic">{{#octicon}}italic{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-code" title="Code">{{#octicon}}code{{/octicon}}</button>
-			<span class="pr-2"></span>
-			<button class="btn btn-sm function-button" id="function-ul" title="Unordered list">{{#octicon}}list-unordered{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-ol" title="Ordered list">{{#octicon}}list-ordered{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-blockquote" title="Blockquote">{{#octicon}}quote{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-hr" title="Horizontal rule">{{#octicon}}horizontal-rule{{/octicon}}</button>
-			<span class="pr-2"></span>
-			<button class="btn btn-sm function-button" id="function-h1" title="Heading 1">h1</button>
-			<button class="btn btn-sm function-button" id="function-h2" title="Heading 2">h2</button>
-			<button class="btn btn-sm function-button" id="function-h3" title="Heading 3">h3</button>
-			<span class="pr-2"></span>
-			<button class="btn btn-sm function-button" id="function-link" title="Link">{{#octicon}}link{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-image" title="Image">{{#octicon}}image{{/octicon}}</button>
-			<span class="pr-2"></span>
-			{{#critic_markup}}
-			<button class="btn btn-sm function-button" id="function-critic-accept" title="Accept Selected CriticMarkup">{{#octicon}}plus{{/octicon}}</button>
-			<button class="btn btn-sm function-button" id="function-critic-reject" title="Reject Selected CriticMarkup">{{#octicon}}dash{{/octicon}}</button>
-			<span class="pr-2"></span>
-			{{/critic_markup}}
+  <div id="gollum-editor-function-bar" class="border-bottom clearfix mb-2">
+    <div id="gollum-editor-function-buttons" class="overflow-auto no-wrap">
+      <div class="BtnGroup">
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-h1" title="Heading 1">h1</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-h2" title="Heading 2">h2</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-h3" title="Heading 3">h3</button>
+      </div>
+
+      <div class="BtnGroup">
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-link" title="Link">{{#octicon}}link{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-image" title="Image">{{#octicon}}image{{/octicon}}</button>
+      </div>
+
+      <div class="BtnGroup">
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-bold" title="Bold">{{#octicon}}bold{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-italic" title="Italic">{{#octicon}}italic{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-code" title="Code">{{#octicon}}code{{/octicon}}</button>
+      </div>
+
+      <div class="BtnGroup">
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-ul" title="Unordered list">{{#octicon}}list-unordered{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-ol" title="Ordered list">{{#octicon}}list-ordered{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-blockquote" title="Blockquote">{{#octicon}}quote{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-hr" title="Horizontal rule">{{#octicon}}horizontal-rule{{/octicon}}</button>
+      </div>
+
+      {{#critic_markup}}
+      <div class="BtnGroup">
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-critic-accept" title="Accept Selected CriticMarkup">{{#octicon}}plus{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-critic-reject" title="Reject Selected CriticMarkup">{{#octicon}}dash{{/octicon}}</button>
+      </div>
+      {{/critic_markup}}
+
       <button class="btn btn-sm function-button" id="function-text-direction" title="Reverse Text Direction">{{#octicon}}arrow-both{{/octicon}}</button>
-			<button
-				aria-label="{{tt.editor.function_bar.help}}"
-				class="btn btn-sm function-button"
-				data-help-text="{{help_text}}"
-				id="function-help"
-				title="{{tt.editor.function_bar.help}}"
-			>
-				{{#octicon}}question{{/octicon}}
-			</button>
+      <button
+        aria-label="{{tt.editor.function_bar.help}}"
+        class="btn btn-sm function-button"
+        data-help-text="{{help_text}}"
+        id="function-help"
+        title="{{tt.editor.function_bar.help}}">
+        {{#octicon}}question{{/octicon}}
+      </button>
     </div>
 
     <div id="gollum-editor-format-selector">
@@ -83,33 +92,33 @@
     </div>
   </div>
 
-  <div id="gollum-editor-help" class="jaws">
-    <ul id="gollum-editor-help-parent">
-      <li><a href="javascript:void(0);" class="selected">Help 1</a></li>
-      <li><a href="javascript:void(0);">Help 1</a></li>
-      <li><a href="javascript:void(0);">Help 1</a></li>
-    </ul>
-    <ul id="gollum-editor-help-list">
-      <li><a href="javascript:void(0);">Help 2</a></li>
-      <li><a href="javascript:void(0);">Help 3</a></li>
-      <li><a href="javascript:void(0);">Help 4</a></li>
-      <li><a href="javascript:void(0);">Help 5</a></li>
-      <li><a href="javascript:void(0);">Help 6</a></li>
-      <li><a href="javascript:void(0);">Help 7</a></li>
-      <li><a href="javascript:void(0);">Help 8</a></li>
-    </ul>
+  <div id="gollum-editor-help" class="jaws border rounded-2 overflow-hidden mb-2">
+    <nav id="gollum-editor-help-parent" class="menu rounded-0 float-left border-top-0 border-bottom-0 border-left-0">
+      <a href="javascript:void(0);" class="selected menu-item border-bottom">Help 1</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 1</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 1</a>
+    </nav>
+    <nav id="gollum-editor-help-list" class="menu rounded-0 float-left border-top-0 border-bottom-0 border-left-0">
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 2</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 3</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 4</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 5</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 6</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 7</a>
+      <a href="javascript:void(0);" class="menu-item border-bottom">Help 8</a>
+    </nav>
     <div id="gollum-editor-help-wrapper">
-      <div id="gollum-editor-help-content">
+      <div id="gollum-editor-help-content" class="f4">
       <p>
       </p>
       </div>
     </div>
   </div>
-  <div id="gollum-autorecover-msg" class="flash" hidden>
+  <div id="gollum-autorecover-msg" class="flash my-2" hidden>
       Autosaved text is available. Click the button to restore it.
       <button id="gollum-autorecover-button" class="btn btn-sm primary flash-action">Restore Text</button>
   </div>
-    <textarea id="gollum-editor-body" class="form-control"
+    <textarea id="gollum-editor-body" class="form-control text-mono"
      data-markup-lang="{{format}}" name="content" class="mousetrap">{{content}}</textarea>
     <div id="uploading">
       <p><div class="dotted-spinner"></div> Uploading file...</p>
@@ -117,37 +126,37 @@
 
     {{#header}}
 
-    <div id="gollum-editor-edit-header" class="collapsed">
-			<button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
-      <h4>Header</h4>
-      <textarea id="gollum-editor-header" name="header" class="form-control">{{header}}</textarea>
+    <div id="gollum-editor-edit-header" class="collapsed border-bottom pt-2">
+			<button class="btn btn-sm collapsable mb-2">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable mb-2" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
+      <h4 class="d-inline-block pl-2 f3">Header</h4>
+      <textarea id="gollum-editor-header" name="header" class="form-control input-block mb-2 text-mono overflow-auto">{{header}}</textarea>
     </div>
     {{/header}}
 
     {{#footer}}
-    <div id="gollum-editor-edit-footer" class="collapsed">
-      <button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
-      <h4>Footer</h4>
-      <textarea id="gollum-editor-footer" name="footer" class="form-control">{{footer}}</textarea>
+    <div id="gollum-editor-edit-footer" class="collapsed border-bottom pt-2">
+      <button class="btn btn-sm collapsable mb-2">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable mb-2" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
+      <h4 class="d-inline-block pl-2 f3">Footer</h4>
+      <textarea id="gollum-editor-footer" name="footer" class="form-control input-block mb-2 text-mono overflow-auto">{{footer}}</textarea>
     </div>
     {{/footer}}
 
     {{#sidebar}}
-    <div id="gollum-editor-edit-sidebar" class="collapsed">
-      <button class="btn btn-sm collapsable">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
-			<h4>Sidebar</h4>
+    <div id="gollum-editor-edit-sidebar" class="collapsed border-bottom pt-2">
+      <button class="btn btn-sm collapsable mb-2">{{#octicon}}triangle-down{{/octicon}}</button><button class="btn btn-sm collapsable mb-2" hidden>{{#octicon}}triangle-up{{/octicon}}</button>
+			<h4 class="d-inline-block pl-2 f3">Sidebar</h4>
       
-      <textarea id="gollum-editor-sidebar" name="sidebar" class="form-control">{{sidebar}}</textarea>
+      <textarea id="gollum-editor-sidebar" name="sidebar" class="form-control input-block mb-2 text-mono overflow-auto">{{sidebar}}</textarea>
     </div>
     {{/sidebar}}
 
-    <div id="gollum-editor-edit-summary" class="singleline">
+    <div id="gollum-editor-edit-summary" class="my-2">
       <label for="message" class="jaws">Edit message:</label>
       {{#is_create_page}}
-      <input type="text" name="message" class="form-control input-block" id="gollum-editor-message-field" value="Created {{page_name}} ({{format}})">
+      <input type="text" name="message" class="form-control input-lg input-block f5 color-fg-subtle" id="gollum-editor-message-field" value="Created {{page_name}} ({{format}})">
       {{/is_create_page}}
       {{#is_edit_page}}
-      <input type="text" name="message" class="form-control input-block" id="gollum-editor-message-field" value="Updated {{page_name}} ({{format}})">
+      <input type="text" name="message" class="form-control input-lg input-block f5 color-fg-subtle" id="gollum-editor-message-field" value="Updated {{page_name}} ({{format}})">
       {{/is_edit_page}}
     </div>
 

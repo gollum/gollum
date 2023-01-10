@@ -1,6 +1,6 @@
 /* @control dialog */
 
-@import "_base", "_features", "_breakpoint", "_component";
+@import "_base", "_features", "_breakpoint";
 
 #gollum-dialog-dialog {
   display: block;
@@ -71,15 +71,6 @@
     @include four-edge-position(auto);
   }
 
-  h4 {
-    border-bottom: $border-standard;
-    color: #000;
-    font-size: 1.8em;
-    line-height: normal;
-    font-weight: bold;
-    margin: 0 0 0.75em 0;
-    padding: 0 0 0.3em 0;
-  }
 }
 
 #gollum-dialog-dialog-bg {
