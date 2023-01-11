@@ -1,4 +1,7 @@
-//= require primer
+//  Simply importing @primer/css/index.scss also imports the unneeded marketing styles, so import the following components manually:
+//= require @primer/css/color-modes
+//= require @primer/css/core
+
 //= require editor
 //= require dialog
 //= require criticmarkup
