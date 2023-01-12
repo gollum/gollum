@@ -1,24 +1,24 @@
 //= require template
-//= require highlights
 //= require editor
-//= require dialog
 //= require criticmarkup
 //= require tables
 //= require emoji
+//= require dialog
+//= require highlights
 
 //  Simply importing @primer/css/index.scss also imports the unneeded marketing styles, so import the following components manually:
+//= require @primer/css/color-modes
 //= require @primer/css/core
 //= require @primer/css/product
-//= require @primer/css/color-modes
 
-@import "_base";
+@import '_base';
 
 body {
     font: 13.34px $font-default;
     font-size: small;
     line-height: 1.4;
     counter-reset: h1;
-  }
+}
 
 .markdown-body {
 
@@ -30,6 +30,9 @@ body {
         border: 1px solid #ccc;
         overflow: auto;
         border-radius: 3px;
+        padding-bottom: 8px;
+        padding-top: 8px;
+        position: relative;
 
         /* Prevent the overflow of copy to clipboard button */
         min-height: 3rem;
@@ -40,6 +43,13 @@ body {
             white-space: pre;
             border: none;
             background: transparent;
+        }
+
+        button.btn-octicon {
+            margin: 0 !important;
+            position: absolute !important;
+            top: 8px;
+            right: 8px;
         }
     }
 
@@ -80,14 +90,13 @@ body {
       margin-left: 10px;
       font-size: 15px;
     }
-  }
+}
   
-  .toc-title {
+.toc-title {
     color: #888;
     font-size: 14px;
     line-height: 1.6;
     padding: 2px;
     border-bottom: $border-standard;
     margin-bottom: 3px;
-  }
-  
+}
