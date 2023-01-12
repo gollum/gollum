@@ -1,0 +1,196 @@
+.highlight {
+    background: #fff;
+  
+    .c {
+      color: #998;
+      font-style: italic;
+    }
+  
+    .err {
+      color: #a61717;
+      background-color: #e3d2d2;
+    }
+  
+    .k, .o {
+      font-weight: bold;
+    }
+  
+    .cm, .c1 {
+      color: #998;
+      font-style: italic;
+    }
+  
+    .cp {
+      color: #999;
+      font-weight: bold;
+    }
+  
+    .cs {
+      color: #999;
+      font-weight: bold;
+      font-style: italic;
+    }
+  
+    .gd {
+      color: #000;
+      background-color: #fdd;
+  
+      .x {
+        color: #000;
+        background-color: #faa;
+      }
+    }
+  
+    .ge {
+      font-style: italic;
+    }
+  
+    .gr {
+      color: #a00;
+    }
+  
+    .gh {
+      color: #999;
+    }
+  
+    .gi {
+      color: #000;
+      background-color: #dfd;
+  
+      .x {
+        color: #000;
+        background-color: #afa;
+      }
+    }
+  
+    .go {
+      color: #888;
+    }
+  
+    .gp {
+      color: #555;
+    }
+  
+    .gs {
+      font-weight: bold;
+    }
+  
+    .gt {
+      color: #a00;
+    }
+  
+    .gu {
+      color: #800080;
+      font-weight: bold;
+    }
+  
+    .kc, .kd, .kn, .kp, .kr {
+      font-weight: bold;
+    }
+  
+    .kt {
+      color: #458;
+      font-weight: bold;
+    }
+  
+    .m {
+      color: #099;
+    }
+  
+    .s {
+      color: #d14;
+    }
+  
+    .na, .no, .nv, .vc, .vg, .vi {
+      color: #008080;
+    }
+  
+    .nb {
+      color: #0086B3;
+    }
+  
+    .nc {
+      color: #458;
+      font-weight: bold;
+    }
+  
+    .ni {
+      color: #800080;
+    }
+  
+    .ne, .nf {
+      color: #900;
+      font-weight: bold;
+    }
+  
+    .nn {
+      color: #555;
+    }
+  
+    .nt {
+      color: #000080;
+    }
+  
+    .ow {
+      font-weight: bold;
+    }
+  
+    .w {
+      color: #bbb;
+    }
+  
+    .mf, .mh, .mi, .mo, .il {
+      color: #099;
+    }
+  
+    .sb, .sc, .sd, .s2, .se, .sh, .si, .sx, .s1 {
+      color: #d14;
+    }
+  
+    .sr {
+      color: #009926;
+    }
+  
+    .ss {
+      color: #990073;
+    }
+  
+    .bp {
+      color: #999;
+    }
+  
+    .gc {
+      color: #999;
+      background-color: #EAF2F5;
+    }
+  
+    .gg {
+      color: #000000a0;
+    }
+  }
+  
+  .type-csharp {
+    .highlight {
+      .k, .kt {
+        color: #00F;
+      }
+  
+      .nf {
+        color: #000;
+        font-weight: normal;
+      }
+  
+      .nc {
+        color: #2B91AF;
+      }
+  
+      .nn {
+        color: #000;
+      }
+  
+      .s, .sc {
+        color: #A31515;
+      }
+    }
+  }
+  
