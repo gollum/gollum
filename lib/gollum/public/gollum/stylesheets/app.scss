@@ -9,3 +9,85 @@
 //= require @primer/css/core
 //= require @primer/css/product
 //= require @primer/css/color-modes
+
+@import "_base";
+
+body {
+    font: 13.34px $font-default;
+    font-size: small;
+    line-height: 1.4;
+    counter-reset: h1;
+  }
+
+.markdown-body {
+
+    img {
+        max-width: 100%;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        overflow: auto;
+        border-radius: 3px;
+        position: relative;
+
+        /* Prevent the overflow of copy to clipboard button */
+        min-height: 3rem;
+
+        > tt, > code {
+        margin: 0;
+        padding: 0;
+        white-space: pre;
+        border: none;
+        background: transparent;
+        }
+    }
+
+    pre:hover {
+        button {
+        animation: fade-in 200ms both;
+        }
+    }
+}
+
+/* Table of contents */
+
+.toc {
+    background-color: white;
+    border: $border-standard;
+    padding: 5px 10px;
+    margin-bottom: 1em;
+    border-radius: 3px;
+  
+    ul {
+      padding-left: 10px;
+      margin: 0;
+  
+      li {
+        margin: 0;
+      }
+  
+      ul {
+        font-size: 15px;
+  
+        ul {
+          font-size: 14px;
+        }
+      }
+    }
+  
+    > ul {
+      margin-left: 10px;
+      font-size: 15px;
+    }
+  }
+  
+  .toc-title {
+    color: #888;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 2px;
+    border-bottom: $border-standard;
+    margin-bottom: 3px;
+  }
+  
