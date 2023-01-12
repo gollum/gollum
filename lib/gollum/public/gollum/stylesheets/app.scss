@@ -30,23 +30,22 @@ body {
         border: 1px solid #ccc;
         overflow: auto;
         border-radius: 3px;
-        position: relative;
 
         /* Prevent the overflow of copy to clipboard button */
         min-height: 3rem;
 
         > tt, > code {
-        margin: 0;
-        padding: 0;
-        white-space: pre;
-        border: none;
-        background: transparent;
+            margin: 0;
+            padding: 0;
+            white-space: pre;
+            border: none;
+            background: transparent;
         }
     }
 
     pre:hover {
         button {
-        animation: fade-in 200ms both;
+            animation: fade-in 200ms both;
         }
     }
 }
