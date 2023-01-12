@@ -1,11 +1,11 @@
-//  Simply importing @primer/css/index.scss also imports the unneeded marketing styles, so import the following components manually:
-//= require @primer/css/color-modes
-//= require @primer/css/core
-
+//= require template
 //= require editor
 //= require dialog
 //= require criticmarkup
 //= require tables
 //= require emoji
-//= require template
-//= require spinner
+
+//  Simply importing @primer/css/index.scss also imports the unneeded marketing styles, so import the following components manually:
+//= require @primer/css/core
+//= require @primer/css/product
+//= require @primer/css/color-modes
