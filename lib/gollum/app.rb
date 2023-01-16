@@ -590,10 +590,25 @@ module Precious
     end
 
     get '/*' do
-      show_page_or_file(params[:splat].first)
+      fullpath = params[:splat].first
+      if params.has_key?("raw")
+        show_raw_page(fullpath)
+      else
+        show_page_or_file(fullpath)
+      end
     end
 
     private
+
+    def redirect_to(redirect_path, fullpath, query_params)
+        redirect to("#{encodeURIComponent(redirect_path)}?redirected_from=#{encodeURIComponent(fullpath)}#{query_params}")
+    end
+
+    def page_does_not_exist()
+      @message = "The requested page does not exist."
+      status 404
+      return mustache :error
+    end
 
     def show_history(wikip)
       @name      = wikip.fullname
@@ -632,25 +647,34 @@ module Precious
       elsif file = wiki.file(fullpath, wiki.ref, true)
         show_file(file)
       elsif @redirects_enabled && redirect_path = wiki.redirects[fullpath]
-        redirect to("#{encodeURIComponent(redirect_path)}?redirected_from=#{encodeURIComponent(fullpath)}")
+        redirect_to(redirect_path, fullpath, "")
       else
         if @allow_editing
           path = fullpath[-1] == '/' ? "#{fullpath}#{wiki.index_page}" : fullpath # Append default index page if no page name is supplied
           redirect to("/gollum/create/#{clean_url(encodeURIComponent(path))}")
         else
-          @message = "The requested page does not exist."
-          status 404
-          return mustache :error
+          return page_does_not_exist
         end
+      end
+    end
+
+    def show_raw_page(fullpath)
+      wiki = wiki_new
+      if @redirects_enabled && redirect_path = wiki.redirects[fullpath]
+        redirect_to(redirect_path, fullpath, "&raw")
+      elsif page = wiki.page(fullpath) and file = wiki.file(fullpath, wiki.ref, true)
+        show_file(file)
+      else
+        return page_does_not_exist
       end
     end
 
     def show_file(file)
       return unless file
+      content_type file.mime_type
       if file.on_disk?
         send_file file.on_disk_path, :disposition => 'inline'
       else
-        content_type file.mime_type
         file.raw_data
       end
     end
