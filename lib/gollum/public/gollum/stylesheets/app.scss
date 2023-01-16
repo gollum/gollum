@@ -4,10 +4,11 @@
 //= require tables
 //= require emoji
 //= require dialog
-//= require highlights
 
 //  Simply importing @primer/css/index.scss also imports the unneeded marketing styles, so import the following components manually:
 //= require @primer/css/color-modes
 //= require @primer/css/core
 //= require @primer/css/product
+
+// Our own styling that needs to be defined after Primer is imported
 //= require wiki_content
