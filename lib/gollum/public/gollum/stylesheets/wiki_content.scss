@@ -4,6 +4,10 @@
 @import '_base';
 
 .markdown-body {
+    padding: 1em 1em 1em 0;
+    font-size: 15px;
+    line-height: 1.7;
+    word-wrap: break-word;
 
     img {
         max-width: 100%;
@@ -84,45 +88,70 @@
         }
     }
 
-  /* Table of contents */
+    /* Table of contents */
 
-  .toc {
-    background-color: white;
-    border: $border-standard;
-    padding: 5px 10px;
-    margin-bottom: 1em;
-    border-radius: 3px;
-
-    ul {
-      padding-left: 10px;
-      margin: 0;
-
-      li {
-        margin: 0;
-      }
-
-      ul {
-        font-size: 15px;
+    .toc {
+        background-color: white;
+        border: $border-standard;
+        padding: 5px 10px;
+        margin-bottom: 1em;
+        border-radius: 3px;
 
         ul {
-          font-size: 14px;
+        padding-left: 10px;
+        margin: 0;
+
+        li {
+            margin: 0;
         }
-      }
+
+        ul {
+            font-size: 15px;
+
+            ul {
+            font-size: 14px;
+            }
+        }
+        }
+
+        > ul {
+        margin-left: 10px;
+        font-size: 15px;
+        }
     }
 
-    > ul {
-      margin-left: 10px;
-      font-size: 15px;
+    .toc-title {
+        color: #888;
+        font-size: 14px;
+        line-height: 1.6;
+        padding: 2px;
+        border-bottom: $border-standard;
+        margin-bottom: 3px;
     }
-  }
 
-  .toc-title {
-    color: #888;
-    font-size: 14px;
-    line-height: 1.6;
-    padding: 2px;
-    border-bottom: $border-standard;
-    margin-bottom: 3px;
-  }
+    /* MediaWiki's TOC table -- this does not pertain to gollum's own TOC functionality */
+    table.toc {
+        width: auto;
+        display: inline-table;
 
+        .anchor {
+        display: none;
+        }
+    } 
+
+    a {
+
+        &[id].wiki-toc-anchor {
+        color: inherit;
+        text-decoration: none;
+        }
+    }
+
+    > *:first-child {
+        margin-top: 0 !important;
+    }
+
+        > *:last-child {
+        margin-bottom: 0 !important;
+    }
 }

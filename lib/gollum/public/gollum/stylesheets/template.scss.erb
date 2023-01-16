@@ -11,7 +11,68 @@ img {
   border: 0;
 }
 
-/* Markdown body */
+#footer {
+  margin-bottom: 7em;
+  clear: both;
+}
+
+#header-content .toc,
+#footer-content .toc,
+#sidebar-content .toc {
+  border: none;
+}
+
+#head .header-title {
+  font-size: 1.5em;
+
+  @include largemobile-breakpoint {
+    font-size: 32px;
+  }
+}
+
+// Header styling (link and edit icons) and header enumeration must be defined before primer is imported
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  $anchor-icon-size: 20px;
+
+  position: relative;
+
+  .anchor {
+    display: inline-block;
+    position: absolute;
+    margin-top: 0.1em;
+    width: $anchor-icon-size;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+
+    &:before {
+      content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
+    }
+
+    &:not(.edit) {
+      left: -(calc($anchor-icon-size/2));
+    }
+
+    &.edit {
+      margin-left: calc($anchor-icon-size/2);
+
+      &:before {
+        content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
+      }
+    }
+  }
+
+  &:hover > .anchor,
+  .anchor:focus {
+    opacity: 1;
+  }
+}
 
 .header-enum {
   --header-enum-style: decimal;
@@ -92,100 +153,6 @@ img {
         "." counter(h6, var(--header-enum-style))
         ". ";
     }
-  }
-}
-
-#footer {
-  margin-bottom: 7em;
-  clear: both;
-}
-
-.markdown-body {
-  padding: 1em 1em 1em 0;
-  font-size: 15px;
-  line-height: 1.7;
-  word-wrap: break-word;
-
-  /* MediaWiki's TOC table -- this does not pertain to gollum's own TOC functionality */
-  table.toc {
-    width: auto;
-    display: inline-table;
-
-    .anchor {
-      display: none;
-    }
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    $anchor-icon-size: 20px;
-
-    position: relative;
-
-    .anchor {
-      display: inline-block;
-      position: absolute;
-      margin-top: 0.1em;
-      width: $anchor-icon-size;
-      text-decoration: none;
-      opacity: 0;
-      transition: opacity 0.1s ease-in-out;
-
-      &:before {
-        content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
-      }
-
-      &:not(.edit) {
-        left: -(calc($anchor-icon-size/2));
-      }
-
-      &.edit {
-        margin-left: calc($anchor-icon-size/2);
-
-        &:before {
-          content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
-        }
-      }
-    }
-
-    &:hover > .anchor,
-    .anchor:focus {
-      opacity: 1;
-    }
-  }
-
-  a {
-
-    &[id].wiki-toc-anchor {
-      color: inherit;
-      text-decoration: none;
-    }
-  }
-
-  > *:first-child {
-    margin-top: 0 !important;
-  }
-
-   > *:last-child {
-    margin-bottom: 0 !important;
-  }
-}
-
-#header-content .toc,
-#footer-content .toc,
-#sidebar-content .toc {
-  border: none;
-}
-
-#head .header-title {
-  font-size: 1.5em;
-
-  @include largemobile-breakpoint {
-    font-size: 32px;
   }
 }
 
