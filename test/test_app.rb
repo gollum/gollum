@@ -826,6 +826,14 @@ context "Frontend with lotr" do
     assert last_response.headers.include? 'Content-Disposition'
   end
 
+  test "show raw page" do
+    get "/Bilbo-Baggins.md?raw"
+    assert last_response.ok?
+    # body should contain markdown, should not contain html
+    assert last_response.body.include? '# Bilbo Baggins'
+    assert_equal last_response.body.include?('<html'), false
+  end
+
   # base path requires 'map' in a config.ru to work correctly.
   test "create pages within sub-directories using base path" do
     Precious::App.set(:wiki_options, { :base_path => 'wiki' })
