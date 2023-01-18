@@ -1,7 +1,7 @@
 // Our own styling for everything in the page and subpage body.
 // Should be included *after* primer styling to override the latter.
 
-@import '_base', 'highlights.scss';
+@import '_base';
 
 .markdown-body {
     padding: 1em 1em 1em 0;
