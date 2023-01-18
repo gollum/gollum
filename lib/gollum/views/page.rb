@@ -15,7 +15,6 @@ module Precious
 
       DATE_FORMAT    = "%Y-%m-%d %H:%M:%S"
       DEFAULT_AUTHOR = 'you'
-      @@to_xml       = { :save_with => Nokogiri::XML::Node::SaveOptions::DEFAULT_XHTML ^ 1, :indent => 0, :encoding => 'UTF-8' }
 
       def title
         h1 = @h1_title ? page_header_from_content(@content) : false
@@ -252,7 +251,7 @@ module Precious
             title.remove unless title.empty?
           end
         # .inner_html will cause href escaping on UTF-8
-        doc.css("div#gollum-root").children.to_xml(@@to_xml)
+        doc.css("div#gollum-root").children.to_xml(Gollum::Markup.to_xml_opts)
       end
 
       def table(data)
