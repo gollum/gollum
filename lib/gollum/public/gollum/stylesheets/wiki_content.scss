@@ -1,0 +1,157 @@
+// Our own styling for everything in the page and subpage body.
+// Should be included *after* primer styling to override the latter.
+
+@import '_base';
+
+.markdown-body {
+    padding: 1em 1em 1em 0;
+    font-size: 15px;
+    line-height: 1.7;
+    word-wrap: break-word;
+
+    img {
+        max-width: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      border: $border-standard;
+      border-radius: 3px !important;
+      
+      tr {
+        border-top: 0;
+      }
+      tr th {
+        border-top: 0;
+      }
+      th:first-child {
+        border-left: 0;
+      }
+      th:last-child {
+        border-right: 0;
+      }
+      tr:first-child td {
+        border-top: 0;
+      }
+      tr td:first-child {
+        border-left: 0;
+      }
+      tr:last-child td {
+        border-bottom: 0;
+      }
+      tr td:last-child {
+        border-right: 0;
+      }
+      tfoot {
+        border-top: $border-standard;
+        th {
+          border-bottom: 0;
+        }
+      }
+    }
+    
+    code, pre, tt {
+      font-family: $font-console;
+      font-size: 12px;
+    }  
+
+    pre {
+        border: 1px solid #ccc;
+        overflow: auto;
+        border-radius: 3px;
+        padding-bottom: 8px;
+        padding-top: 8px;
+        position: relative;
+
+        /* Prevent the overflow of copy to clipboard button */
+        min-height: 3rem;
+
+        > tt, > code {
+            margin: 0;
+            padding: 0;
+            white-space: pre;
+            border: none;
+            background: transparent;
+        }
+
+        button.btn-octicon {
+            margin: 0 !important;
+            position: absolute !important;
+            top: 8px;
+            right: 8px;
+        }
+    }
+
+    pre:hover {
+        button {
+            animation: fade-in 200ms both;
+        }
+    }
+
+    /* Table of contents */
+
+    .toc {
+        background-color: white;
+        border: $border-standard;
+        padding: 5px 10px;
+        margin-bottom: 1em;
+        border-radius: 3px;
+
+        ul {
+        padding-left: 10px;
+        margin: 0;
+
+        li {
+            margin: 0;
+        }
+
+        ul {
+            font-size: 15px;
+
+            ul {
+            font-size: 14px;
+            }
+        }
+        }
+
+        > ul {
+        margin-left: 10px;
+        font-size: 15px;
+        }
+    }
+
+    .toc-title {
+        color: #888;
+        font-size: 14px;
+        line-height: 1.6;
+        padding: 2px;
+        border-bottom: $border-standard;
+        margin-bottom: 3px;
+    }
+
+    /* MediaWiki's TOC table -- this does not pertain to gollum's own TOC functionality */
+    table.toc {
+        width: auto;
+        display: inline-table;
+
+        .anchor {
+        display: none;
+        }
+    } 
+
+    a {
+
+        &[id].wiki-toc-anchor {
+        color: inherit;
+        text-decoration: none;
+        }
+    }
+
+    > *:first-child {
+        margin-top: 0 !important;
+    }
+
+        > *:last-child {
+        margin-bottom: 0 !important;
+    }
+}

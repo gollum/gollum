@@ -7,34 +7,72 @@
   @include reset-box-leave-border;
 }
 
-div {
-  display: block;
-}
-
-html {
-  font-family: sans-serif;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-}
-
-html, body {
-  color: #333;
-}
-
-body {
-  background-color: white;
-  font: 13.34px $font-default;
-  font-size: small;
-  line-height: 1.4;
-  counter-reset: h1;
-}
-
 img {
   border: 0;
 }
 
+#footer {
+  margin-bottom: 7em;
+  clear: both;
+}
 
-/* Markdown body */
+#header-content .toc,
+#footer-content .toc,
+#sidebar-content .toc {
+  border: none;
+}
+
+#head .header-title {
+  font-size: 1.5em;
+
+  @include largemobile-breakpoint {
+    font-size: 32px;
+  }
+}
+
+// Header styling (link and edit icons) and header enumeration must be defined before primer is imported
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  $anchor-icon-size: 20px;
+
+  position: relative;
+
+  .anchor {
+    display: inline-block;
+    position: absolute;
+    margin-top: 0.1em;
+    width: $anchor-icon-size;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+
+    &:before {
+      content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
+    }
+
+    &:not(.edit) {
+      left: -(calc($anchor-icon-size/2));
+    }
+
+    &.edit {
+      margin-left: calc($anchor-icon-size/2);
+
+      &:before {
+        content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
+      }
+    }
+  }
+
+  &:hover > .anchor,
+  .anchor:focus {
+    opacity: 1;
+  }
+}
 
 .header-enum {
   --header-enum-style: decimal;
@@ -118,606 +156,6 @@ img {
   }
 }
 
-#footer {
-  margin-bottom: 7em;
-  clear: both;
-}
-
-.markdown-body {
-  padding: 1em 1em 1em 0;
-  font-size: 15px;
-  line-height: 1.7;
-  word-wrap: break-word;
-
-  /* MediaWiki's TOC table -- this does not pertain to gollum's own TOC functionality */
-  table.toc {
-    width: auto;
-    display: inline-table;
-
-    .anchor {
-      display: none;
-    }
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    $anchor-icon-size: 20px;
-
-    position: relative;
-
-    .anchor {
-      display: inline-block;
-      position: absolute;
-      margin-top: 0.1em;
-      width: $anchor-icon-size;
-      text-decoration: none;
-      opacity: 0;
-      transition: opacity 0.1s ease-in-out;
-
-      &:before {
-        content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
-      }
-
-      &:not(.edit) {
-        left: -(calc($anchor-icon-size/2));
-      }
-
-      &.edit {
-        margin-left: calc($anchor-icon-size/2);
-
-        &:before {
-          content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
-        }
-      }
-    }
-
-    &:hover > .anchor,
-    .anchor:focus {
-      opacity: 1;
-    }
-  }
-
-  a {
-    &.absent {
-      color: #c00;
-    }
-
-    &[id].wiki-toc-anchor {
-      color: inherit;
-      text-decoration: none;
-    }
-  }
-
-  > *:first-child {
-    margin-top: 0 !important;
-  }
-
-   > *:last-child {
-    margin-bottom: 0 !important;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    tt, code {
-      font-size: inherit;
-    }
-
-    & + p {
-      margin-top: 0;
-    }
-  }
-
-  h1 {
-    border-bottom: $border-standard;
-    margin-top: 20px;
-    margin-bottom: 10px;
-
-    & + h2 + h3 {
-      margin-top: 30px;
-    }
-  }
-
-  h2 {
-    border-bottom: 1px solid #eee;
-  }
-
-  p, blockquote, ul, ol, dl, table, pre {
-    margin: 15px 0;
-  }
-
-  ul, ol {
-    padding-left: 30px;
-  }
-
-  dl {
-    padding: 0;
-
-    dt {
-      font-size: 14px;
-      font-weight: bold;
-      font-style: italic;
-      padding: 0;
-      margin: 15px 0 5px;
-
-      &:first-child {
-        padding: 0;
-      }
-
-      @include children-truncate-margin;
-    }
-
-    dd {
-      margin: 0 0 15px;
-      padding: 0 15px;
-
-      @include children-truncate-margin;
-    }
-  }
-
-  li {
-    margin: 0px;
-
-    p.first {
-      display: inline-block;
-    }
-  }
-
-  hr {
-  }
-
-  blockquote {
-    border-left: 4px solid #DDD;
-    padding: 0 15px;
-    color: #777;
-
-    @include children-truncate-margin;
-  }
-
-  table {
-    border-collapse: collapse;
-    border: $border-standard;
-    border-radius: 3px !important;
-    
-    tr {
-      border-top: 0;
-    }
-    tr th {
-      border-top: 0;
-    }
-    th:first-child {
-      border-left: 0;
-    }
-    th:last-child {
-      border-right: 0;
-    }
-    tr:first-child td {
-      border-top: 0;
-    }
-    tr td:first-child {
-      border-left: 0;
-    }
-    tr:last-child td {
-      border-bottom: 0;
-    }
-    tr td:last-child {
-      border-right: 0;
-    }
-    tfoot {
-      border-top: $border-standard;
-      th {
-        border-bottom: 0;
-      }
-    }
-  }
-  
-  img {
-    max-width: 100%;
-  }
-
-  span.frame {
-    display: block;
-    overflow: hidden;
-
-    > span {
-      border: $border-standard;
-      display: block;
-      float: left;
-      overflow: hidden;
-      margin: 13px 0 0;
-      padding: 7px;
-      width: auto;
-    }
-
-    span {
-      img {
-        display: block;
-        float: left;
-      }
-
-      span {
-        clear: both;
-        color: #333;
-        display: block;
-        padding: 5px 0 0;
-      }
-    }
-  }
-
-  span.align-center {
-    display: block;
-    overflow: hidden;
-    clear: both;
-
-    > span {
-      display: block;
-      overflow: hidden;
-      margin: 13px auto 0;
-      text-align: center;
-    }
-
-    span {
-      img {
-        margin: 0 auto;
-        text-align: center;
-      }
-    }
-  }
-
-  span.align-right {
-    display: block;
-    overflow: hidden;
-    clear: both;
-
-    > span {
-      display: block;
-      overflow: hidden;
-      margin: 13px 0 0;
-      text-align: right;
-    }
-
-    span {
-      img {
-        margin: 0;
-        text-align: right;
-      }
-    }
-  }
-
-  span.float-left {
-    display: block;
-    margin-right: 13px;
-    overflow: hidden;
-    float: left;
-
-    span {
-      margin: 13px 0 0;
-    }
-  }
-
-  span.float-right {
-    display: block;
-    margin-left: 13px;
-    overflow: hidden;
-    float: right;
-
-    > span {
-      display: block;
-      overflow: hidden;
-      margin: 13px auto 0;
-      text-align: right;
-    }
-  }
-
-  code, pre, tt {
-    font-family: $font-console;
-    font-size: 12px;
-  }
-
-  code, tt {
-    margin: 0 2px;
-    padding: 0 5px;
-    white-space: nowrap;
-    border: $border-standard;
-    background-color: #f8f8f8;
-    border-radius: 3px;
-  }
-
-  pre {
-    background-color: #f8f8f8;
-    border: 1px solid #ccc;
-    font-size: 13px;
-    line-height: 19px;
-    overflow: auto;
-    padding: 6px 10px;
-    border-radius: 3px;
-
-    position: relative;
-
-    /* Prevent the overflow of copy to clipboard button */
-    min-height: 3rem;
-
-    > tt, > code {
-      margin: 0;
-      padding: 0;
-      white-space: pre;
-      border: none;
-      background: transparent;
-    }
-
-    pre, code, tt {
-      background-color: transparent;
-      border: none;
-    }
-
-    pre {
-      margin: 0;
-      padding: 0;
-    }
-  }
-
-  pre:hover {
-    button {
-      animation: fade-in 200ms both;
-    }
-  }
-}
-
-/* Table of contents */
-
-.toc {
-  background-color: white;
-  border: $border-standard;
-  padding: 5px 10px;
-  margin: 0;
-  border-radius: 3px;
-
-  ul {
-    padding-left: 10px;
-    margin: 0;
-
-    li {
-      margin: 0;
-    }
-
-    ul {
-      font-size: 15px;
-
-      ul {
-        font-size: 14px;
-      }
-    }
-  }
-
-  > ul {
-    margin-left: 10px;
-    font-size: 15px;
-  }
-}
-
-.toc-title {
-  color: #888;
-  font-size: 14px;
-  line-height: 1.6;
-  padding: 2px;
-  border-bottom: $border-standard;
-  margin-bottom: 3px;
-}
-
-#header-content .toc,
-#footer-content .toc,
-#sidebar-content .toc {
-  border: none;
-}
-
-#head .header-title {
-  font-size: 1.5em;
-
-  @include largemobile-breakpoint {
-    font-size: 32px;
-  }
-}
-
-/* Highlights */
-
-.highlight {
-  background: #fff;
-
-  .c {
-    color: #998;
-    font-style: italic;
-  }
-
-  .err {
-    color: #a61717;
-    background-color: #e3d2d2;
-  }
-
-  .k, .o {
-    font-weight: bold;
-  }
-
-  .cm, .c1 {
-    color: #998;
-    font-style: italic;
-  }
-
-  .cp {
-    color: #999;
-    font-weight: bold;
-  }
-
-  .cs {
-    color: #999;
-    font-weight: bold;
-    font-style: italic;
-  }
-
-  .gd {
-    color: #000;
-    background-color: #fdd;
-
-    .x {
-      color: #000;
-      background-color: #faa;
-    }
-  }
-
-  .ge {
-    font-style: italic;
-  }
-
-  .gr {
-    color: #a00;
-  }
-
-  .gh {
-    color: #999;
-  }
-
-  .gi {
-    color: #000;
-    background-color: #dfd;
-
-    .x {
-      color: #000;
-      background-color: #afa;
-    }
-  }
-
-  .go {
-    color: #888;
-  }
-
-  .gp {
-    color: #555;
-  }
-
-  .gs {
-    font-weight: bold;
-  }
-
-  .gt {
-    color: #a00;
-  }
-
-  .gu {
-    color: #800080;
-    font-weight: bold;
-  }
-
-  .kc, .kd, .kn, .kp, .kr {
-    font-weight: bold;
-  }
-
-  .kt {
-    color: #458;
-    font-weight: bold;
-  }
-
-  .m {
-    color: #099;
-  }
-
-  .s {
-    color: #d14;
-  }
-
-  .na, .no, .nv, .vc, .vg, .vi {
-    color: #008080;
-  }
-
-  .nb {
-    color: #0086B3;
-  }
-
-  .nc {
-    color: #458;
-    font-weight: bold;
-  }
-
-  .ni {
-    color: #800080;
-  }
-
-  .ne, .nf {
-    color: #900;
-    font-weight: bold;
-  }
-
-  .nn {
-    color: #555;
-  }
-
-  .nt {
-    color: #000080;
-  }
-
-  .ow {
-    font-weight: bold;
-  }
-
-  .w {
-    color: #bbb;
-  }
-
-  .mf, .mh, .mi, .mo, .il {
-    color: #099;
-  }
-
-  .sb, .sc, .sd, .s2, .se, .sh, .si, .sx, .s1 {
-    color: #d14;
-  }
-
-  .sr {
-    color: #009926;
-  }
-
-  .ss {
-    color: #990073;
-  }
-
-  .bp {
-    color: #999;
-  }
-
-  .gc {
-    color: #999;
-    background-color: #EAF2F5;
-  }
-
-  .gg {
-    color: #000000a0;
-  }
-}
-
-.type-csharp {
-  .highlight {
-    .k, .kt {
-      color: #00F;
-    }
-
-    .nf {
-      color: #000;
-      font-weight: normal;
-    }
-
-    .nc {
-      color: #2B91AF;
-    }
-
-    .nn {
-      color: #000;
-    }
-
-    .s, .sc {
-      color: #A31515;
-    }
-  }
-}
-
 div.pagination a.disabled {
   pointer-events: none;
 }
@@ -736,3 +174,4 @@ nav.actions {
     display: none;
    }
 }
+
