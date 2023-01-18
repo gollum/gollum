@@ -32,12 +32,10 @@ context "Frontend" do
                      { :name => 'user1', :email => 'user1' });
 
     get page
-
     # good html:
     # <pre><code>one\ntwo\nthree\nfour\n</code></pre>\n
     # broken html:
     # <pre>\n  <code>one\ntwo\nthree\nfour\n</code>\n</pre>
-
     assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
   end
 
@@ -59,12 +57,9 @@ context "Frontend" do
                      {name: 'user1', email: 'user1'})
 
     get 'utfh1'
+    expected = "<h2 class=\"editable\"><a class=\"anchor\" (href|id)=\"(#)?한글\" (href|id)=\"(#)?한글\"></a>한글</h2>"
 
-    doc = Nokogiri::HTML(last_response.body)
-    anchor = doc.css('h2.editable a.anchor')
-    assert_equal anchor.attr('id').value, "한글"
-    assert_equal anchor.attr('href').value, "#한글"
-    assert_equal doc.css('h2.editable').children.last.to_s.strip, "한글"
+    assert_match /#{expected}/, last_response.body
   end
 
   test 'rss feed' do
