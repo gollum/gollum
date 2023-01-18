@@ -53,6 +53,9 @@ h6 {
 
     &:before {
       content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
+      @media (prefers-color-scheme: dark) {
+        filter: invert(95%) sepia(4%) saturate(753%) hue-rotate(178deg) brightness(88%) contrast(92%);
+      }
     }
 
     &:not(.edit) {
@@ -64,6 +67,9 @@ h6 {
 
       &:before {
         content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
+        @media (prefers-color-scheme: dark) {
+          filter: invert(95%) sepia(4%) saturate(753%) hue-rotate(178deg) brightness(88%) contrast(92%);
+        }
       }
     }
   }
