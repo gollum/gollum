@@ -217,7 +217,7 @@ module Precious
         end
       end
 
-      get %r{/(edit|create)/(\.redirects.gollum|(custom|math|\.config)\.(js|css))} do
+      get %r{/(edit|create)/(\.redirects.gollum|(custom|math\.config)\.(js|css))} do
         forbid('Changing this resource is not allowed.')
       end
 

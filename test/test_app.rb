@@ -669,32 +669,32 @@ context "Frontend" do
   end
 
   test "don't allow changing custom js or css" do
-    Precious::App.set(:wiki_options, { :js => true, :css => true })
+    Precious::App.set(:wiki_options, { :js => true, :css => true, :math_config => 'math.config.js' })
 
     ['create', 'edit'].each do |route|
       ['.css', '.js'].each do |ext|
         get "/gollum/#{route}/custom#{ext}"
-        assert_equal 403, last_response.status, "get /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
+        assert_equal 403, last_response.status, "get /gollum/#{route}/custom#{ext} -- #{last_response.status}"
       end
       get "/gollum/#{route}/math.config.js"
-      assert_equal 403, last_response.status, "get /gollum/#{route}/math.config.js -- #{last_response.inspect}"
+      assert_equal 403, last_response.status, "get /gollum/#{route}/math.config.js -- #{last_response.status}"
     end
 
     ['delete', 'rename', 'edit', 'create'].each do |route|
       ['.css', '.js'].each do |ext|
         post "/gollum/#{route}/custom#{ext}"
-        assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.inspect}"
+        assert_equal 403, last_response.status, "post /gollum/#{route}/custom#{ext} -- #{last_response.status}"
       end
       post "/gollum/#{route}/math.config.js"
-      assert_equal 403, last_response.status, "post /gollum/#{route}/math.config.js -- #{last_response.inspect}"
+      assert_equal 403, last_response.status, "post /gollum/#{route}/math.config.js -- #{last_response.status}"
     end
 
     ['.css', '.js'].each do |ext|
       post "/gollum/revert/custom#{ext}/02796b1450691f90db5d6dc6a816a4980ce80d07/2f6485c2702c7c8b9b6613672337ffa7d933ddcf"
-      assert_equal 403, last_response.status, "post /gollum/revert/custom#{ext} -- #{last_response.inspect}"
+      assert_equal 403, last_response.status, "post /gollum/revert/custom#{ext} -- #{last_response.status}"
     end
 
-    Precious::App.set(:wiki_options, { :js => nil })
+    Precious::App.set(:wiki_options, { :js => nil, :css => nil, :math_config => nil })
   end
 
   test "show edit page with header and footer and sidebar of multibyte" do
@@ -1035,7 +1035,7 @@ context 'Frontend with base path' do
     @wiki = Gollum::Wiki.new(@path)
     @base_path = 'wiki'
     Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {base_path: @base_path, mathjax: true})
+    Precious::App.set(:wiki_options, {base_path: @base_path, math: :mathjax})
   end
 
   teardown do
