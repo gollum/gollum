@@ -125,9 +125,9 @@ MSG
   end
   opts.on('--math [RENDERER]', [:mathjax, :katex], 'Enable rendering of mathematical equations.',
     'Valid renderers: mathjax, katex. Default: katex.') do |mode|
-    puts "To set a custom configuration for #{mode} please add it to \'#{default_math_config}\' and commit it to the repo."
     wiki_options[:math] = mode.nil? ? :katex : mode.to_sym
     wiki_options[:math_config] = default_math_config
+    puts "To set a custom configuration for #{wiki_options[:math]} please add it to \'#{default_math_config}\' and commit it to the repo."
   end
   opts.on('--mathjax', 'Enable rendering of mathematical equations via mathjax.') do |mode|
     puts 'DEPRECATION WARNING: --mathjax. This switch will be removed in the future. Please use: "--math matjax".'
