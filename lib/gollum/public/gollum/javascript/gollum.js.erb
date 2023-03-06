@@ -208,14 +208,25 @@ function enable_code_blocks() {
     button.innerHTML = iconCopyDefault;
     button.onclick = copyToClipboard.bind(this, id);
     button.classList.add(
+      "anim-scale-in",
+      "border",
       "btn",
       "btn-octicon",
-      "border",
+      "m-1",
+      "position-absolute",
+      "right-0",
+      "top-0",
     );
 
     item.id = id;
-    item.parentNode.addEventListener('mouseenter', () => button.hidden = false);
-    item.parentNode.addEventListener('mouseleave', () => button.hidden = true );
+    item.parentNode.addEventListener('mouseenter', () => {
+      button.hidden = false;
+      button.classList.add("anim-scale-in");
+    });
+    item.parentNode.addEventListener('mouseleave', () => {
+      button.classList.remove("anim-scale-in");
+      button.hidden = true;
+    });
     item.parentNode.appendChild(button);
   });
 }
