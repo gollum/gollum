@@ -73,19 +73,6 @@
             border: none;
             background: transparent;
         }
-
-        button.btn-octicon {
-            margin: 0 !important;
-            position: absolute !important;
-            top: 8px;
-            right: 8px;
-        }
-    }
-
-    pre:hover {
-        button {
-            animation: fade-in 200ms both;
-        }
     }
 
     /* Table of contents */
