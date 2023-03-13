@@ -3,16 +3,13 @@ require 'cgi'
 module Precious
   module Views
     class Layout < Mustache
-      include Rack::Utils
       include Sprockets::Helpers
       include Precious::Views::AppHelpers
       include Precious::Views::LocaleHelpers
       include Precious::Views::SprocketsHelpers
       include Precious::Views::RouteHelpers
       include Precious::Views::OcticonHelpers
-
-      alias_method :h, :escape_html
-
+      
       attr_reader :name, :path
 
       def escaped_name
