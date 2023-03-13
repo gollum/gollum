@@ -15,6 +15,7 @@ require 'gollum'
 require 'gollum/assets'
 require 'gollum/views/helpers'
 require 'gollum/views/helpers/locale_helpers'
+require 'gollum/views/template_cascade'
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
@@ -22,7 +23,6 @@ require 'gollum/views/has_user_icons'
 require 'gollum/views/has_math'
 require 'gollum/views/pagination'
 require 'gollum/views/rss.rb'
-require 'gollum/views/template_cascade'
 
 ['sassc', 'sassc-embedded'].each do |gem|
   require gem if Gem::Specification.find {|spec| spec.name == gem}
@@ -118,7 +118,6 @@ module Precious
       @default_keybinding = settings.wiki_options.fetch(:default_keybinding, 'default')
 
       if settings.wiki_options[:template_dir]
-        Precious::Views::Layout.extend Precious::Views::TemplateCascade
         Precious::Views::Layout.template_priority_path = settings.wiki_options[:template_dir]
       end
 

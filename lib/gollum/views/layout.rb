@@ -9,9 +9,22 @@ module Precious
       include Precious::Views::SprocketsHelpers
       include Precious::Views::RouteHelpers
       include Precious::Views::OcticonHelpers
-      
+
       attr_reader :name, :path
 
+      self.extend Precious::Views::TemplateCascade
+
+      # Method should track lib/mustache.rb from Mustache project.
+      def partial(name)
+        path = self.class.first_path_available(name)
+        begin
+          File.read(path)
+        rescue
+          raise if raise_on_context_miss?
+          ""
+        end
+      end
+      
       def escaped_name
         CGI.escape(@name)
       end
