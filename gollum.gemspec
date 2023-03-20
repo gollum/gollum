@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'kramdown-parser-gfm', '~> 1.1.0'
   s.add_dependency 'sinatra', '~> 3.0'
   s.add_dependency 'sinatra-contrib', '~> 3.0'
-  s.add_dependency 'mustache-sinatra', '>= 1.0.1', '< 2'
+  s.add_dependency 'mustache-sinatra', '~> 2.0'
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 4.1'
   s.add_dependency 'octicons', '~> 12.0'

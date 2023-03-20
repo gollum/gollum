@@ -2,7 +2,7 @@ module Precious
   module Views
     module TemplateCascade
       def template_priority_path
-        @@template_priority_path
+        @@template_priority_path ||= nil
       end
 
       def template_priority_path=(path)
@@ -23,17 +23,6 @@ module Precious
       # Method should track lib/mustache/settings.rb from Mustache project.
       def template_file
         @template_file || first_path_available(template_name)
-      end
-
-      # Method should track lib/mustache.rb from Mustache project.
-      def partial(name)
-        path = first_path_available(name)
-        begin
-          File.read(path)
-        rescue
-          raise if raise_on_context_miss?
-          ""
-        end
       end
     end
   end
