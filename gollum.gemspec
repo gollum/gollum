@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.6'
 
   s.name              = 'gollum'
-  s.version           = '5.3.0'
+  s.version           = '5.3.1'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
