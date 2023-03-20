@@ -13,9 +13,12 @@ require 'pathname'
 
 require 'gollum'
 require 'gollum/assets'
+
+# Requirements for loading the layout view:
 require 'gollum/views/helpers'
 require 'gollum/views/helpers/locale_helpers'
 require 'gollum/views/template_cascade'
+
 require 'gollum/views/layout'
 require 'gollum/views/editable'
 require 'gollum/views/has_page'
