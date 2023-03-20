@@ -21,12 +21,12 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_dependency 'rdoc', '~> 6'
-  s.add_dependency 'gollum-lib', '~> 5.1'
+  s.add_dependency 'gollum-lib', '>= 5.2.3', '< 6.0'
   s.add_dependency 'kramdown', '~> 2.3'
   s.add_dependency 'kramdown-parser-gfm', '~> 1.1.0'
   s.add_dependency 'sinatra', '~> 2.0'
   s.add_dependency 'sinatra-contrib', '~> 2.0'
-  s.add_dependency 'mustache-sinatra', '>= 1.0.1', '< 2'
+  s.add_dependency 'mustache-sinatra', '~> 2.0' 
   s.add_dependency 'useragent', '~> 0.16.2'
   s.add_dependency 'gemojione', '~> 4.1'
   s.add_dependency 'octicons', '~> 12.0'
