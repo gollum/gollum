@@ -1,3 +1,7 @@
+# 5.3.0 / 2023-20-03
+
+* Backport fixes from the `master` branch for Ruby 3.2 compatibility.
+
 # 5.3.0 / 2022-05-25
 
 * Feature: allow for overriding only specific Mustache templates/partials (@beporter)
