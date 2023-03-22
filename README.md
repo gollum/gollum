@@ -1,3 +1,5 @@
+**NB: please update to counter a recent XSS vulnerability in gollum-lib: `gem update gollum-lib`, or pull the latest version of the `gollumwiki/gollum:master` Docker image.**
+
 gollum -- A git-based Wiki
 ====================================
 
