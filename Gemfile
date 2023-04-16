@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'warbler', platforms: :jruby
 
+gem 'asciidoctor'
 
 group :test do
   gem 'selenium-webdriver', require: false
