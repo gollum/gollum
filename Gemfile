@@ -18,6 +18,8 @@ gem 'warbler', platforms: :jruby
 # current CI workflows pass, we should only try to install this version of
 # Nokogiri for newer Ruby versions.
 
+gem 'gollum-lib', path: "/Users/bart/Documents/Rails Projects/temp/gollum-lib"
+
 group :test do
   gem 'selenium-webdriver', require: false
   gem 'capybara', require: false

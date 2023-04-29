@@ -192,6 +192,15 @@ module Precious
         end
       end
 
+      include Precious::Views::OcticonHelpers
+      get '/octicon/:name' do
+        begin
+          [200, {'Content-Type' => 'image/svg'}, rocticon_css(params['name'])]
+        rescue RuntimeError
+          not_found
+        end
+      end
+
       get '/emoji/:name' do
         begin
           [200, {'Content-Type' => 'image/png'}, emoji(params['name'])]
