@@ -19,7 +19,7 @@ function injectOcticons(){
         $(div).prepend(data);
       },
       error: function(data, textStatus, errorThrown) {
-        $(div).prepend('<img src="Error.src?raw" title="Requested octicon does not exist." /> ');
+        $(div).prepend('<img class="mr-2" src="Error.src?raw" title="Requested octicon does not exist." /> ');
       }
     })
   });
