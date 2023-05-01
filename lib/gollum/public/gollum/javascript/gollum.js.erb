@@ -1,5 +1,12 @@
 // Helpers
 
+// https://github.com/gollum/gollum/security/dependabot/2
+// Patch in jQuery 3.5.0. Workaround below.
+// TODO upgrade jQuery to > 3.5.0
+jQuery.htmlPrefilter = function( html ) {
+	return html;
+};
+
 // Replace broken user icons with 'person' octicon
 function brokenAvatarImage(image){
   image.onerror = '';
