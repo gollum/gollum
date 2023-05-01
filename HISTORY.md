@@ -1,4 +1,8 @@
-# 5.3.0 / 2023-20-03
+# 5.3.2 / 2023-05-01
+
+* Guard against [CVE-2020-11022](https://github.com/advisories/GHSA-gxr4-xjj5-5px2) (@bartkamphorst)
+
+# 5.3.1 / 2023-03-20
 
 * Backport fixes from the `master` branch for Ruby 3.2 compatibility.
 
