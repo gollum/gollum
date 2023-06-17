@@ -446,7 +446,7 @@ module Precious
         ([0-9a-f]{40})        # match SHA
       }x do |path, version|
         wiki = wiki_new
-        show_history wiki_page(path, wiki.commit_for(version), wiki)
+        show_history wiki_page(path, version, wiki)
       end
 
       get '/history/*' do
