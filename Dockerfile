@@ -41,6 +41,7 @@ RUN apk add --update \
             bash \
             git \
             libc6-compat \
+            openssh \
             shadow \
     && rm -rf /var/cache/apk/* \
     && groupmod -g $GID www-data \
