@@ -82,7 +82,7 @@ context "Precious::Views::Overview" do
     results = [FakePageResult.new("Mordor/Eye-Of-Sauron.md"), FakeFileResult.new("Mordor/Aragorn.pdf"), FakePageResult.new("Mordor/Orc/Saruman.md"), FakeFileResult.new("Mordor/.gitkeep")]
     @page.instance_variable_set("@results", results)
     result = @page.files_folders.first
-    assert_equal result[:icon].start_with?('<svg class="octicon octicon-file-directory'), true
+    assert_equal result[:icon].start_with?('<svg class="octicon octicon-file-directory-fill'), true
     assert_equal result[:type], 'dir'
     assert_equal result[:url], '/gollum/overview/Mordor/Orc/'
     assert_equal result[:is_file], false

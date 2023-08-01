@@ -51,7 +51,7 @@ module Precious
               folder_name = result_path.split('/').first
               folder_path = @path ? "#{@path}/#{folder_name}" : folder_name
               folder_url  = "#{overview_path}/#{folder_path}/"
-              files_and_folders << {name: folder_name, icon: rocticon('file-directory'), type: 'dir', url: folder_url, is_file: false}
+              files_and_folders << {name: folder_name, icon: rocticon('file-directory-fill'), type: 'dir', url: folder_url, is_file: false}
             elsif !HIDDEN_PATHS.include?(result_path)
               file_url = page_route(result.escaped_url_path)
               files_and_folders << {name: result.filename, icon: rocticon('file'), type: 'file', url: file_url, file_path: result.escaped_url_path, is_file: true}

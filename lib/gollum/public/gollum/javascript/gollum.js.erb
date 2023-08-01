@@ -308,7 +308,7 @@ $(document).ready(function() {
         if ($(this).val()) {
           filename = $('input[type=file]').val().split('\\').pop();
           upload_path = '/' + uploadDest + '/' + filename;
-          clipboard_button = '<button class="btn btn-sm mb-2" id="ClipboardJSlink" data-clipboard-text="' + upload_path + '"><%=rocticon('clippy')%></button>'
+          clipboard_button = '<button class="btn btn-sm mb-2" id="ClipboardJSlink" data-clipboard-text="' + upload_path + '"><%=rocticon('paste')%></button>'
           news = 'Your uploaded file will be accessible at<br>' + clipboard_button + '&nbsp;' + upload_path;
           $(".context").html(news);
           $('#gollum-dialog-action-ok').attr('disabled', false);
