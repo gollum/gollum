@@ -60,7 +60,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Install Chromedriver
-        uses: nanasess/setup-chromedriver@v1
+        uses: nanasess/setup-chromedriver@v2
       - run: |
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &

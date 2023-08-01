@@ -175,3 +175,29 @@ nav.actions {
    }
 }
 
+/* `gollum`-provided CSS for the note and warning macros. */
+
+.flash::before {
+  display: inline-block;
+  position: relative;
+  padding-right: 0.7em;
+  vertical-align: middle;
+  width: $gollum-icon-width;
+  height: $gollum-icon-height;
+  padding-bottom: 2px;
+}
+
+.flash.gollum-note::before {
+  content: url('data:image/svg+xml;utf8,<%= rocticon_css(:info) %>');
+}
+.flash.gollum-warning::before {
+  content: url('data:image/svg+xml;utf8,<%= rocticon_css(:alert) %>');
+}
+
+/* `gollum`-provided CSS for the default size of octicons. */
+.gollum-icon .octicon, .flash .octicon {
+    width: $gollum-icon-width;
+    height: $gollum-icon-height;
+}
+
+

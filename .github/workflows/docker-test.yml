@@ -45,7 +45,7 @@ jobs:
           ruby-version: 3.1
           bundler-cache: true
       - name: Install Chromedriver
-        uses: nanasess/setup-chromedriver@v1
+        uses: nanasess/setup-chromedriver@v2
       - run: |
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
