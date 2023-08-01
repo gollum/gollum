@@ -180,10 +180,11 @@ nav.actions {
 .flash::before {
   display: inline-block;
   position: relative;
-  padding-right: 0.5em;
+  padding-right: 0.7em;
   vertical-align: middle;
-  width: 24px;
-  height: 24px;
+  width: $gollum-icon-width;
+  height: $gollum-icon-height;
+  padding-bottom: 2px;
 }
 
 .flash.gollum-note::before {
@@ -194,9 +195,9 @@ nav.actions {
 }
 
 /* `gollum`-provided CSS for the default size of octicons. */
-.octicon {
-    width: 24px;
-    height: 24px;
+.gollum-icon .octicon, .flash .octicon {
+    width: $gollum-icon-width;
+    height: $gollum-icon-height;
 }
 
 
