@@ -14,6 +14,26 @@ function brokenAvatarImage(image){
   return true;
 }
 
+// Find all divs with `data-gollum-icon` name specified and
+// try to inject the corresponding octicon
+function injectOcticons(){ 
+  $("div[data-gollum-icon]").each(function(index, div){
+    var div;
+    var octicon = $(div).data('gollum-icon');
+    $.ajax({
+      url: '/gollum/octicon/' + octicon,
+      success: function(data) {
+        $(div).prepend(data);
+      },
+      error: function(data, textStatus, errorThrown) {
+        $(div).prepend('<img class="mr-2" src="Error.src?raw" title="Requested octicon does not exist." /> ');
+      }
+    })
+  });
+}
+
+
+
 // Get path for named route, prefixing baseUrl if necessary
 // Uses the route definitions in /lib/gollum/views/helpers.rb.
 // For example, routePath('delete') is equivalent to 'delete_path' in the mustache templates.
@@ -227,6 +247,9 @@ $(document).ready(function() {
     }
   }
 
+  // Inject Octicons
+  injectOcticons();
+  
   // Set time in local time
   if (showLocalTime) {
     $(function() {
@@ -438,6 +461,7 @@ $(document).ready(function() {
         var mainDiv = $('#wiki-wrapper', data);
         $('.tabnav-div#preview-content').html(mainDiv);
         preparePage();
+        injectOcticons();
         enable_code_blocks();
         if (sectionAnchor ) { 
           if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
