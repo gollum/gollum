@@ -9,6 +9,10 @@ require 'tempfile'
 #
 #############################################################################
 
+def release_branch
+  ENV.fetch('RELEASE_BRANCH', 'master')
+end
+
 def date
    Time.now.strftime("%Y-%m-%d")
 end
@@ -127,15 +131,16 @@ end
 
 desc 'Create a release build and push to rubygems'
 task :release => :build do
-  unless `git branch` =~ /^\* master$/
-    puts "You must be on the master branch to release!"
+  branch = release_branch
+  unless `git branch` =~ /^\* #{branch}$/
+    puts "You must be on the #{branch} branch to release!"
     exit!
   end
   Rake::Task[:changelog].execute
   sh "git commit --allow-empty -a -m 'Release #{version}'"
-  sh "git pull --rebase origin master"
+  sh "git pull --rebase origin #{branch}"
   sh "git tag v#{version}"
-  sh "git push origin master"
+  sh "git push origin #{branch}"
   sh "git push origin v#{version}"
   sh "gem push pkg/#{name}-#{version}.gem"
 end
