@@ -32,6 +32,12 @@ module Precious
     def remove_leading_and_trailing_slashes(str)
       str.sub(%r{^(/+)}, '').sub(%r{/+$}, '')
     end
+    
+    # https://stackoverflow.com/questions/65423458/ruby-2-7-says-uri-escape-is-obsolete-what-replaces-it/65462786#65462786
+    # Encode URI while leaving slashes intact
+    def encodeURI(uri)
+      encodeURIComponent(uri).gsub('%2F', '/')
+    end
 
     # Remove all slashes from the start of string.
     # Remove all double slashes

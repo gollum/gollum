@@ -612,7 +612,7 @@ module Precious
     private
 
     def redirect_to(redirect_path, fullpath, query_params)
-        redirect to("#{encodeURIComponent(redirect_path)}?redirected_from=#{encodeURIComponent(fullpath)}#{query_params}")
+        redirect to("#{encodeURI(redirect_path)}?redirected_from=#{encodeURI(fullpath)}#{query_params}")
     end
 
     def page_does_not_exist()
