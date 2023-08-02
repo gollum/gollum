@@ -12,15 +12,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: jruby-9.4.0.0
+          bundler: 1.17.3
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake
+      - name: Create war
+        run: bundle exec warble runnable war ${{ github.workspace }}/Gemfile
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
-          draft: true
-          prerelease: false
+          name: Release ${{ github.ref_name }}
+          token:  ${{ secrets.GITHUB_TOKEN }}
           body_path: "LATEST_CHANGES.md"
+          files: |
+            gollum.war
+            LICENSE
