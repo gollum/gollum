@@ -16,7 +16,7 @@ function brokenAvatarImage(image){
 
 // Find all divs with `data-gollum-icon` name specified and
 // try to inject the corresponding octicon
-function injectOcticons(){ 
+function injectOcticons(){
   $("div[data-gollum-icon]").each(function(index, div){
     var div;
     var octicon = $(div).data('gollum-icon');
@@ -73,7 +73,7 @@ function pageName(){
   } else {
       name = pageFullPath.split('/').pop();
       return name.substring(0, name.lastIndexOf('.'));
-  } 
+  }
 }
 
 function pagePath(){
@@ -145,11 +145,31 @@ function flashNotice(type, notice, button_label, button_function, button_type) {
 
 // Check whether the user has allowed their browser to access their system
 // clipboard.
-async function isClipboardAccessDenied() {
+async function checkClipboardAccessDenied() {
   if (navigator.permissions && navigator.permissions.query) {
     return await navigator.permissions.query({name: "clipboard-write"})
       .then((permissionStatus) => permissionStatus.state === "denied")
-      .catch((error) => console.error(error));
+      .catch((error) => {
+
+        // If the error is about a browser not supporting the 'clipboard-write'
+        // PermissionDescriptor member, then we can safely return false, as the
+        // browser should not require clipboard permissions for copy-to-clipboard
+        // functionality. Of the major browsers, only Firefox should encounter
+        // an error as of this writing.
+        //
+        // Here's Firefox's current error message for reference:
+        //
+        // TypeError: 'clipboard-write' (value of 'name' member of
+        //   PermissionDescriptor) is not a valid value for enumeration
+        //   PermissionName.
+        //
+        if (error.message.includes("clipboard-write")) {
+          console.warn(error);
+          return false;
+        } else {
+          console.error(error);
+        }
+      });
   }
 }
 
@@ -169,7 +189,7 @@ function enable_code_blocks() {
   const iconCopyActive = `<%= rocticon 'check', width: 18, height: 18 %>`;
 
   const copyToClipboard = async (codeBlockID) => {
-    if (await isClipboardAccessDenied()) {
+    if (await checkClipboardAccessDenied()) {
       return;
     }
 
@@ -265,7 +285,7 @@ $(document).ready(function() {
 
   // Inject Octicons
   injectOcticons();
-  
+
   // Set time in local time
   if (showLocalTime) {
     $(function() {
@@ -311,10 +331,10 @@ $(document).ready(function() {
             error: function(data, textStatus, errorThrown) {
               $('#wiki-content').removeClass('uploading');
               if (data.status == 409) {
-                flashNotice('error', 'The file you tried to upload already exists. Please rename the file and try again.');  
+                flashNotice('error', 'The file you tried to upload already exists. Please rename the file and try again.');
               } else {
                 flashNotice('error', 'Error uploading file: ' + textStatus + ' ' + errorThrown);
-              }  
+              }
             }
           });
         }
@@ -479,7 +499,7 @@ $(document).ready(function() {
         preparePage();
         injectOcticons();
         enable_code_blocks();
-        if (sectionAnchor ) { 
+        if (sectionAnchor ) {
           if ( sectionHeading = $('a' + '#' + sectionAnchor+'.anchor')[0] ) {
             sectionHeading.scrollIntoView();
           }
@@ -569,7 +589,7 @@ $(document).ready(function() {
     $.GollumEditor({
       section: window.location.hash.substr(1),
       commands: editorHotkeys // Ace's keybindings overrule mousetrap, so add some of gollum's keyboard shortcuts to the editor, as well.
-    }); 
+    });
 
     $("#gollum-editor-submit").click( function(e) {
       e.preventDefault();
@@ -597,10 +617,10 @@ $(document).ready(function() {
             alert('Someone else has modified this page while you were editing it. Please store your version on disk outside of the browser, reload this page and reapply your modifications.');
           } else {
             alert('Error updating page: ' + data.responseText);
-          }  
+          }
         }
       });
-      
+
     });
   }
 
@@ -619,7 +639,7 @@ $(document).ready(function() {
           if (index == 0) {
             input.closest("li").removeClass(selectionColors[1]).addClass(selectionColors[index]);
           } else if (index == 1) {
-            input.closest("li").addClass(selectionColors[index]); 
+            input.closest("li").addClass(selectionColors[index]);
           }
           numSelected = numSelected + 1;
         });
@@ -727,7 +747,7 @@ $(document).ready(function() {
 
   if($('#search-results').length ){
     $('.toggle-context').each(function () {
-      var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden'); 
+      var hiddenContext = $(this).parent().next('div.search-context').find('li:hidden');
       if ( !hiddenContext.length ) {
         $(this).toggle();
       } else {
@@ -748,7 +768,7 @@ $(document).ready(function() {
       $(this).html(newText);
     });
   }
-  
+
   if($('.markdown-body').length ){
     // Set text direction (LTR or RTL)
     preparePage();
