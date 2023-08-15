@@ -10,39 +10,23 @@
     {{>mobilenav}}
   </div>
 
-  <div class="TableObject-item hide-sm hide-md">
-    <a class="btn btn-sm" id="minibutton-home" href="{{page_route}}">
-      Home
-    </a>
+  <div class="TableObject-item hide-sm hide-md" tabindex="0">
+    <a id="minibutton-home" class="btn btn-sm" href="{{page_route}}">Home</a>
   </div>
 
-  <div
-    class="TableObject-item TableObject-item--primary px-2"
-    {{^search}}style="visibility:hidden"{{/search}}
-  >
+  <div class="TableObject-item TableObject-item--primary px-2"
+    {{^search}}style="visibility:hidden"{{/search}} >
     {{>searchbar}}
   </div>
 
   <div class="TableObject-item hide-sm hide-md">
     <div class="BtnGroup d-flex">
       {{#overview}}
-        <a
-          class="btn BtnGroup-item btn-sm"
-          href="{{overview_path}}"
-          id="minibutton-overview"
-        >
-          Overview
-        </a>
+        <a href="{{overview_path}}" class="btn BtnGroup-item btn-sm" id="minibutton-overview"><div tabindex="0">Overview</div></a>
       {{/overview}}
 
       {{#latest_changes}}
-        <a
-          class="btn BtnGroup-item btn-sm"
-          href="{{latest_changes_path}}"
-          id="minibutton-latest-changes"
-        >
-          Latest Changes
-        </a>
+        <a href="{{latest_changes_path}}" class="btn BtnGroup-item btn-sm" id="minibutton-latest-changes"><div tabindex="0">Latest Changes</div></a>
       {{/latest_changes}}
     </div>
   </div>
@@ -50,39 +34,25 @@
   <div class="TableObject-item px-2">
     <div class="BtnGroup d-flex">
       {{#history}}
-        <a
-          class="btn BtnGroup-item btn-sm hide-sm hide-md"
-          href="{{history_path}}/{{escaped_url_path}}/{{version}}"
-          id="minibutton-history"
-        >
-          History
+        <a href="{{history_path}}/{{escaped_url_path}}/{{version}}" id="minibutton-history" class="btn BtnGroup-item btn-sm hide-sm hide-md">
+          <div tabindex="0">History</div>
         </a>
       {{/history}}
 
       {{#allow_editing}}
         {{#allow_uploads}}
-          <button
-            class="btn BtnGroup-item btn-sm hide-sm hide-md
-              minibutton-upload-page"
-          >
+          <button class="btn BtnGroup-item btn-sm hide-sm hide-md minibutton-upload-page">
             Upload
           </button>
         {{/allow_uploads}}
 
         {{#editable}}
-          <button
-            class="btn BtnGroup-item btn-sm hide-sm hide-md
-              minibutton-rename-page"
-          >
+          <button class="btn BtnGroup-item btn-sm hide-sm hide-md minibutton-rename-page">
             Rename
           </button>
-          <a
-            class="btn BtnGroup-item btn-sm hide-sm hide-md"
-            href="{{edit_path}}/{{escaped_url_path}}"
-            id="minibutton-edit-page"
-          >
-            Edit
-          </a>
+            <a href="{{edit_path}}/{{escaped_url_path}}" id="minibutton-edit-page" class="btn BtnGroup-item btn-sm hide-sm hide-md">
+              <div tabindex="0">Edit</div>
+            </a>
         {{/editable}}
       {{/allow_editing}}
     </div>
@@ -91,18 +61,18 @@
   {{#allow_editing}}
     {{#editable}}
       <div class="TableObject-item">
-        <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
+        <button class="btn btn-primary btn-sm minibutton-new-page">
           New
-        </a>
+        </button>
       </div>
     {{/editable}}
 
     {{^editable}}
       {{#newable}}
         <div class="TableObject-item">
-          <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
+          <button class="btn btn-primary btn-sm minibutton-new-page">
             New
-          </a>
+          </button>
         </div>
       {{/newable}}
     {{/editable}}
