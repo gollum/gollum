@@ -105,6 +105,13 @@ ace-builds@^1.13.1:
   resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.13.1.tgz#8afa31a79bea3bb83fbbdf99c4176396a271ceca"
   integrity sha512-HvkZv/AhDRSA4k5Co5Dg8dWOTfID0AQ7Sa5cU6V82fz/XfCA0A/icC3sdBoh9yg0WQoJqbFrRYc+ogr/971Vww==
 
+ace-diff@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/ace-diff/-/ace-diff-3.0.3.tgz#84f685ff3d0b1910539fc39259ac73d8b6581e28"
+  integrity sha512-CJaV9Oi6BWLWGL2Kj//h5BNXlRCRu1GYHPOT7o+ZSAuJv9PaL9FWr/cCf16IuSVDo7oj6VriO+qgoHR8G9McLA==
+  dependencies:
+    diff-match-patch "^1.0.5"
+
 commander@7:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-7.2.0.tgz#a36cb57d0b501ce108e4d20559a150a391d97ab7"
@@ -368,6 +375,11 @@ delaunator@5:
   integrity sha512-AyLvtyJdbv/U1GkiS6gUUzclRoAY4Gs75qkMygJJhU75LW4DNuSF2RMzpxs9jw9Oz1BobHjTdkG3zdP55VxAqw==
   dependencies:
     robust-predicates "^3.0.0"
+
+diff-match-patch@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.5.tgz#abb584d5f10cd1196dfc55aa03701592ae3f7b37"
+  integrity sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==
 
 dompurify@2.4.1:
   version "2.4.1"
