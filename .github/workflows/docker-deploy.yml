@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'contrib/**'
   release:
       types: [published]
 jobs:
