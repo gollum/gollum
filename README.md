@@ -37,7 +37,7 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 
 Gollum runs both on Unix-like systems and on Windows.
 
-Gollum runs either using 'normal' Ruby (MRI) or [JRuby](https://github.com/jruby/jruby) (Ruby on the Java Virtual Machine). On Windows, Gollum runs only using JRuby (either from source, or [prebuilt](#as-a-web-application-resource-java])).
+Gollum runs either using 'normal' Ruby (MRI) or [JRuby](https://github.com/jruby/jruby) (Ruby on the Java Virtual Machine). On Windows, Gollum runs only using JRuby (either from source, or [prebuilt](#as-a-web-application-resource-java)).
 
 On MRI, Gollum uses the [rugged](https://github.com/libgit2/rugged) git library, while on JRuby/Java it utilizes the [rjgit](https://github.com/repotag/rjgit) and [JGit](https://eclipse.dev/jgit/) libraries. See [here](https://github.com/gollum/gollum/wiki/Git-adapters) for more info.
 
