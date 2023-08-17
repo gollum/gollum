@@ -37,9 +37,9 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 
 Gollum runs both on Unix-like systems and on Windows.
 
-Gollum runs either on 'normal' Ruby (MRI), or on Java via [JRuby](https://github.com/jruby/jruby). On Windows, Gollum runs only on JRuby/Java (either from source, or [prebuilt](#as-an-executable-Java-app])).
+Gollum runs either using 'normal' Ruby (MRI) or [JRuby](https://github.com/jruby/jruby) (Ruby on the Java Virtual Machine). On Windows, Gollum runs only using JRuby (either from source, or [prebuilt](#as-a-web-application-resource-Java])).
 
-On MRI, Gollum uses the [rugged](https://github.com/libgit2/rugged) git library, while on Java it utilizes the [rjgit](https://github.com/repotag/rjgit), via its different [adapters](https://github.com/gollum/gollum/wiki/Git-adapters).
+On MRI, Gollum uses the [rugged](https://github.com/libgit2/rugged) git library, while on JRuby/Java it utilizes the [rjgit](https://github.com/repotag/rjgit) and [JGit](https://eclipse.dev/jgit/) libraries. See [here](https://github.com/gollum/gollum/wiki/Git-adapters) for more info.
 
 ## INSTALLATION
 
@@ -61,9 +61,9 @@ To run, simply:
 
 See [here](https://github.com/gollum/gollum/wiki/Gollum-via-Docker) for instructions on how to run Gollum via Docker.
 
-### As an executable Java app
+### As a web application resource (Java)
 
-The [latest Release](https://github.com/gollum/gollum/releases/) of Gollum will always contains a downloadable `gollum.war` file that can be directly executed on any system with a working Java installation:
+The [latest Release](https://github.com/gollum/gollum/releases/) of Gollum will always contain a downloadable `gollum.war` file that can be directly executed on any system with a working Java installation:
 
 `java -jar gollum.war -S gollum <your-gollum-arguments-here>`
 
