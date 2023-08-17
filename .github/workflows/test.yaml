@@ -2,7 +2,15 @@ name: Ruby Build
 on:
   push:
     branches: master
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'contrib/**'
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'contrib/**'
 jobs:
   jruby_build:
     name: JRuby (${{ matrix.ruby }})
