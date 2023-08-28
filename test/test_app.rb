@@ -119,6 +119,15 @@ context "Frontend" do
     assert_equal last_response.status, 412
   end
 
+  test "duplicate page error when editing extension to match already existing page" do
+    page_1 = @wiki.page('A.md')
+    contents = page_1.raw_data
+    page_2 = @wiki.write_page('A', :txt, contents)
+    post "/gollum/edit/A.txt", :content => 'Orcs and such', :page => 'A.txt',
+         :format => :markdown, :message => 'def', :etag => page_1.sha
+    assert_equal last_response.status, 409
+  end
+
   test "edit page with empty message" do
     page_1 = @wiki.page('A')
     post "/gollum/edit/A", :content => 'abc', :page => 'A',

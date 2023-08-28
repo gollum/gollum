@@ -346,6 +346,7 @@ module Precious
           halt 412, {etag: page.sha, text_data: page.text_data}.to_json
         end
 
+        begin
         committer = Gollum::Committer.new(wiki, commit_options)
         commit    = { :committer => committer }
 
@@ -354,6 +355,9 @@ module Precious
         update_wiki_page(wiki, page.footer, params[:footer], commit) if params[:footer]
         update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
         committer.commit
+        rescue Gollum::DuplicatePageError
+          halt 409, "You are trying to save this page under a path (#{page.escaped_url_path}) that already exists." # Signal conflict
+        end
 
       end
 
@@ -369,6 +373,7 @@ module Precious
       end
 
       get '/create/*' do
+        puts "GET CREATE PARAMS: #{params.inspect}"
         forbid unless @allow_editing
         wikip = wiki_page(params[:splat].first)
         @name = wikip.name
