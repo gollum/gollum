@@ -114,12 +114,12 @@
   {{/mathjax}}
   {{#katex}}
   <script type="text/javascript">
-  $(document).ready(function() {
-    page_content_div = $('#wiki-content')[0];
-    if (page_content_div) {
-      renderMathInElement(page_content_div, katex_conf);
-    }
-  });
+      document.addEventListener("DOMContentLoaded", function() {
+          var page_content_div = document.getElementById('wiki-content');
+          if (page_content_div){
+            renderMathInElement(page_content_div, katex_conf);
+          }
+      });
   </script>
   {{/katex}}
 
