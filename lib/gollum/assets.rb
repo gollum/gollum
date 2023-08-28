@@ -2,7 +2,7 @@ require 'octicons'
 
 module Precious
   module Assets
-    MANIFEST = %w(app.js editor.js gollum.mermaid.js katex.js app.css criticmarkup.css fileview.css ie7.css print.css katex/dist/katex.css *.png *.jpg *.svg *.eot *.ttf)
+    MANIFEST = %w(app.js editor.js gollum.mermaid.js gollum.katex.js app.css criticmarkup.css fileview.css ie7.css print.css katex/dist/katex.css *.png *.jpg *.svg *.eot *.ttf)
     ASSET_URL = 'gollum/assets'
 
     def self.sprockets(dir = File.dirname(File.expand_path(__FILE__)))
