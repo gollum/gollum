@@ -61,7 +61,7 @@ jobs:
       - name: Run gollum from Docker
         run: |
           git clone test/examples/lotr.git /tmp/lotr.git
-          RUNNER_TRACKING_ID="" docker run --user $(id -u) --rm -p 4567:4567 -v /tmp/lotr.git:/wiki -e CI=true ${{ env.CI_IMAGE }} --mathjax &
+          RUNNER_TRACKING_ID="" docker run --user $(id -u) --rm -p 4567:4567 -v /tmp/lotr.git:/wiki -e CI=true ${{ env.CI_IMAGE }} --math katex --mermaid &
           sleep 10
           netstat -lt
       - name: Run capybara tests against Dockerized instance

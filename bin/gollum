@@ -122,8 +122,8 @@ MSG
     wiki_options[:per_page_uploads] = true if mode == :page
   end
   opts.on('--math [RENDERER]', [:mathjax, :katex], 'Enable rendering of mathematical equations.',
-    'Valid renderers: mathjax, katex. Default: mathjax.') do |mode|
-    wiki_options[:math] = mode.nil? ? :mathjax : mode.to_sym
+    'Valid renderers: mathjax, katex. Default: katex.') do |mode|
+    wiki_options[:math] = mode.nil? ? :katex : mode.to_sym
   end
   opts.on('--mathjax', 'Enable rendering of mathematical equations via mathjax.') do |mode|
     puts 'DEPRECATION WARNING: --mathjax. This switch will be removed in the future. Please use --math.'
