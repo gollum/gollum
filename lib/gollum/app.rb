@@ -288,7 +288,7 @@ module Precious
           @message = e.message
           mustache :error
         rescue Gollum::DuplicatePageError
-          halt 409 # Signal conflict
+          halt 409, "The file you are trying to upload already exists." # Signal conflict
         end
       end
 
@@ -373,7 +373,6 @@ module Precious
       end
 
       get '/create/*' do
-        puts "GET CREATE PARAMS: #{params.inspect}"
         forbid unless @allow_editing
         wikip = wiki_page(params[:splat].first)
         @name = wikip.name
