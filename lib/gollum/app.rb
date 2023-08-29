@@ -288,7 +288,7 @@ module Precious
           @message = e.message
           mustache :error
         rescue Gollum::DuplicatePageError
-          halt 409 # Signal conflict
+          halt 409, "The file you are trying to upload already exists." # Signal conflict
         end
       end
 
@@ -346,6 +346,7 @@ module Precious
           halt 412, {etag: page.sha, text_data: page.text_data}.to_json
         end
 
+        begin
         committer = Gollum::Committer.new(wiki, commit_options)
         commit    = { :committer => committer }
 
@@ -354,6 +355,9 @@ module Precious
         update_wiki_page(wiki, page.footer, params[:footer], commit) if params[:footer]
         update_wiki_page(wiki, page.sidebar, params[:sidebar], commit) if params[:sidebar]
         committer.commit
+        rescue Gollum::DuplicatePageError
+          halt 409, "You are trying to save this page under a path (#{page.escaped_url_path}) that already exists." # Signal conflict
+        end
 
       end
 
