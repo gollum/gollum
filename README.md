@@ -1,5 +1,3 @@
-**NB: please update to counter a recent XSS vulnerability in gollum-lib: `gem update gollum-lib`, or pull the latest version of the `gollumwiki/gollum:master` Docker image.**
-
 gollum -- A git-based Wiki
 ====================================
 
@@ -37,7 +35,11 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 
 ### SYSTEM REQUIREMENTS
 
-Gollum runs on Unix-like systems using its default [adapter](https://github.com/gollum/rugged_adapter) for [rugged](https://github.com/libgit2/rugged). You can also run Gollum on [JRuby](https://github.com/jruby/jruby) via its [adapter](https://github.com/repotag/gollum-lib_rjgit_adapter) for [RJGit](https://github.com/repotag/rjgit/). On Windows, Gollum runs only on JRuby.
+Gollum runs both on Unix-like systems and on Windows.
+
+Gollum runs either using 'normal' Ruby (MRI) or [JRuby](https://github.com/jruby/jruby) (Ruby on the Java Virtual Machine). On Windows, Gollum runs only using JRuby (either from source, or [prebuilt](#as-a-web-application-resource-java)).
+
+On MRI, Gollum uses the [rugged](https://github.com/libgit2/rugged) git library, while on JRuby/Java it utilizes the [rjgit](https://github.com/repotag/rjgit) and [JGit](https://eclipse.dev/jgit/) libraries. See [here](https://github.com/gollum/gollum/wiki/Git-adapters) for more info.
 
 ## INSTALLATION
 
@@ -58,6 +60,12 @@ To run, simply:
 ### Via Docker
 
 See [here](https://github.com/gollum/gollum/wiki/Gollum-via-Docker) for instructions on how to run Gollum via Docker.
+
+### As a web application resource (Java)
+
+The [latest Release](https://github.com/gollum/gollum/releases/) of Gollum will always contain a downloadable `gollum.war` file that can be directly executed on any system with a working Java installation:
+
+`java -jar gollum.war -S gollum <your-gollum-arguments-here>`
 
 ### Misc
 

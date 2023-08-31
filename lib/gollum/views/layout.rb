@@ -53,10 +53,6 @@ module Precious
         clean_url(custom_path, "custom.js")
       end
 
-      def mathjax_config_path
-        page_route(@mathjax_config)
-      end
-
       def mathjax_js
         "#{page_route('gollum/assets/mathjax/tex-mml-chtml.js')}"
       end

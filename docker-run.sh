@@ -14,5 +14,4 @@ if [ ${GOLLUM_AUTHOR_EMAIL:+1} ]; then
 fi
 
 # Start gollum service
-[[ "$@" != *--mathjax* ]] && echo "WARNING: Mathjax will soon be disabled by default. To explicitly enable it, use --mathjax" >&2
-exec gollum $@ --mathjax
+exec gollum $@
