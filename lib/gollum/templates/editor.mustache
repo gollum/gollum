@@ -55,6 +55,7 @@
       {{/critic_markup}}
 
       <button class="btn btn-sm function-button" id="function-text-direction" title="Reverse Text Direction">{{#octicon}}arrow-both{{/octicon}}</button>
+      
       <button
         aria-label="{{tt.editor.function_bar.help}}"
         class="btn btn-sm function-button"
@@ -63,33 +64,76 @@
         title="{{tt.editor.function_bar.help}}">
         {{#octicon}}question{{/octicon}}
       </button>
+      
     </div>
 
-    <div id="gollum-editor-format-selector">
-      <label for="format">Keybinding</label>
-      <select id="keybinding" name="keybinding" class="form-select input-sm">
-      {{#keybindings}}
-      <option {{#selected}}selected="selected" {{/selected}}value="{{name}}">{{name}}</option>
-      {{/keybindings}}
-      </select>
-      <label for="format">Markup</label>
-      <select id="wiki_format" name="format" class="form-select input-sm">
-      {{#formats}}
-      {{#enabled}}
-      <option {{#selected}}selected="selected" {{/selected}}value="{{id}}" data-ext="{{ext}}">
-        {{name}}
-        </option>
-      {{/enabled}}
-      {{/formats}}
-      {{#formats}}
-      {{^enabled}}
-      <option class="disabled" {{#selected}}selected="selected" {{/selected}}value="{{id}}" data-ext="{{ext}}">
-        {{name}}
-        </option>
-      {{/enabled}}
-      {{/formats}}
-      </select>
-    </div>
+    <div id="gollum-editor-selector-wrapper" class="d-flex flex-wrap float-right">
+      <div id="gollum-editor-keybinding-selector" class="mx-2">
+
+        <details class="details-reset details-overlay">
+          <summary class="btn btn-sm btn-block" aria-haspopup="true">
+            {{#octicon}}gear{{/octicon}}
+            <span class="mr-1">{{default_keybinding}}</span>
+            <div class="dropdown-caret"></div>
+          </summary>
+          <div id="keybinding" class="SelectMenu BasicSelect">
+            <div class="SelectMenu-modal">
+              <header class="SelectMenu-header">
+                <h3 class="SelectMenu-title text-left">Set your preferred keybinding</h3>
+              </header>
+              <div class="SelectMenu-list">
+                {{#keybindings}}
+                <button class="SelectMenu-item" role="menuitemcheckbox" {{#selected}}aria-checked="true"{{/selected}} value="{{name}}">
+                  <!-- <%= octicon "check", class: "SelectMenu-icon SelectMenu-icon--check" %> -->
+                  {{#octicon}}check 16 16 SelectMenu-icon SelectMenu-icon--check{{/octicon}}
+                  {{name}}
+                </button>
+                {{/keybindings}}
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div id="gollum-editor-format-selector"> 
+        <input type="hidden" id="format" name="format" value={{format}}>
+        <details class="details-reset details-overlay">
+          <summary class="btn btn-sm btn-block" aria-haspopup="true">
+            {{#octicon}}pencil{{/octicon}}
+            <span class="mr-1">{{format}}</span>
+            <div class="dropdown-caret"></div>
+          </summary>
+          <div id="wiki_format" class="SelectMenu BasicSelect">
+            <div class="SelectMenu-modal">
+              <header class="SelectMenu-header">
+                <h3 class="SelectMenu-title text-left">Set this page's formatting to</h3>
+              </header>
+              <div class="SelectMenu-list">
+                {{#formats}}
+                {{#enabled}}
+                <button class="SelectMenu-item" value="{{id}}" data-ext="{{ext}}" role="menuitemcheckbox" {{#selected}}aria-checked="true"{{/selected}}>
+                  <!-- <%= octicon "check", class: "SelectMenu-icon SelectMenu-icon--check" %> -->
+                  {{#octicon}}check 16 16 SelectMenu-icon SelectMenu-icon--check{{/octicon}}
+                  {{name}}
+                </button>
+                {{/enabled}}
+                {{/formats}}
+                <div class="SelectMenu-divider text-left">Rendering unavailable for</div>
+                {{#formats}}
+                {{^enabled}}
+                <button class="SelectMenu-item" value="{{id}}" data-ext="{{ext}}" role="menuitemcheckbox" {{#selected}}aria-checked="true"{{/selected}} disabled>
+                  <!-- <%= octicon "check", class: "SelectMenu-icon SelectMenu-icon--check" %> -->
+                  {{#octicon}}check 16 16 SelectMenu-icon SelectMenu-icon--check{{/octicon}}
+                  {{name}}
+                {{/enabled}}
+                {{/formats}}
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>    
+    
   </div>
 
   <div id="gollum-editor-help" class="jaws border rounded-2 overflow-hidden mb-2">

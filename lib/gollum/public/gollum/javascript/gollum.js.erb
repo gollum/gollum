@@ -233,8 +233,6 @@ $(document).ready(function() {
     e.preventDefault();
   } );
 
-
-
   // Inject Octicons
   injectOcticons();
   
@@ -543,8 +541,9 @@ $(document).ready(function() {
       $(this).attr('disabled', true);
 
       var formData = new FormData($('#gollum-editor-form').get(0));
-      var newExt   = '.' + $('#wiki_format option:selected').attr('data-ext');
-      var newPath  = cleanPath(prefixBaseUrl(pagePath() + '/' + pageName() + newExt));
+      var selected = basicSelectGetSelection($('#wiki_format'));
+      var newExt = selected.attr('data-ext');
+      var newPath  = cleanPath(prefixBaseUrl(pagePath() + '/' + pageName() + '.' + newExt));
       var endpoint = $('#gollum-editor-form').attr("action");
 
       $.ajax({
