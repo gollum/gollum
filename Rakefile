@@ -74,8 +74,9 @@ def bundle_katex_fonts(assets_path)
   fonts_source = File.join(NODE_MODULES, fonts_subpath)
   fonts_target = File.join(assets_path, fonts_subpath)
   puts "\n  Copying KaTeX fonts from #{fonts_source} to #{fonts_target}..."
-  `mkdir #{fonts_target}`
-  `cp #{fonts_source}/*.woff2 #{fonts_target}/`
+  `mkdir "#{fonts_target}"`
+  `cp "#{fonts_source}"/*.woff2 "#{fonts_target}"/`
+  puts "... Done."
 end
 
 #############################################################################
