@@ -11,9 +11,11 @@
   </div>
 
   <div class="TableObject-item hide-sm hide-md">
-    <a class="btn btn-sm" id="minibutton-home" href="{{page_route}}">
+    <button class="btn btn-sm" id="minibutton-home" 
+      onclick="window.location.href='{{page_route}}';"
+    >
       Home
-    </a>
+    </button>
   </div>
 
   <div
@@ -26,23 +28,23 @@
   <div class="TableObject-item hide-sm hide-md">
     <div class="BtnGroup d-flex">
       {{#overview}}
-        <a
+        <button
           class="btn BtnGroup-item btn-sm"
-          href="{{overview_path}}"
+          onclick="window.location.href='{{overview_path}}';"
           id="minibutton-overview"
         >
           Overview
-        </a>
+        </button>
       {{/overview}}
 
       {{#latest_changes}}
-        <a
+        <button
           class="btn BtnGroup-item btn-sm"
-          href="{{latest_changes_path}}"
+          onclick="window.location.href='{{latest_changes_path}}';"
           id="minibutton-latest-changes"
         >
           Latest Changes
-        </a>
+        </button>
       {{/latest_changes}}
     </div>
   </div>
@@ -50,20 +52,19 @@
   <div class="TableObject-item px-2">
     <div class="BtnGroup d-flex">
       {{#history}}
-        <a
+        <button
           class="btn BtnGroup-item btn-sm hide-sm hide-md"
-          href="{{history_path}}/{{escaped_url_path}}/{{version}}"
+          onclick="window.location.href='{{history_path}}/{{escaped_url_path}}/{{version}}';"
           id="minibutton-history"
         >
           History
-        </a>
+        </button>
       {{/history}}
 
       {{#allow_editing}}
         {{#allow_uploads}}
           <button
-            class="btn BtnGroup-item btn-sm hide-sm hide-md
-              minibutton-upload-page"
+            class="btn BtnGroup-item btn-sm hide-sm hide-md minibutton-upload-page"
           >
             Upload
           </button>
@@ -71,18 +72,17 @@
 
         {{#editable}}
           <button
-            class="btn BtnGroup-item btn-sm hide-sm hide-md
-              minibutton-rename-page"
+            class="btn BtnGroup-item btn-sm hide-sm hide-md minibutton-rename-page"
           >
             Rename
           </button>
-          <a
+          <button
             class="btn BtnGroup-item btn-sm hide-sm hide-md"
-            href="{{edit_path}}/{{escaped_url_path}}"
+            onclick="window.location.href='{{edit_path}}/{{escaped_url_path}}';"
             id="minibutton-edit-page"
           >
             Edit
-          </a>
+          </button>
         {{/editable}}
       {{/allow_editing}}
     </div>
@@ -91,18 +91,18 @@
   {{#allow_editing}}
     {{#editable}}
       <div class="TableObject-item">
-        <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
+        <button class="btn btn-primary btn-sm minibutton-new-page">
           New
-        </a>
+        </button>
       </div>
     {{/editable}}
 
     {{^editable}}
       {{#newable}}
         <div class="TableObject-item">
-          <a class="btn btn-primary btn-sm minibutton-new-page" href="#">
+          <button class="btn btn-primary btn-sm minibutton-new-page">
             New
-          </a>
+          </button>
         </div>
       {{/newable}}
     {{/editable}}
