@@ -84,10 +84,11 @@ module Precious
         
         def octicon
           lambda do |args|
-            symbol, height, width = args.split(' ')
+            symbol, height, width, *cls = args.split(' ')
             parameters = {}
             parameters[:height] = height if height
             parameters[:width]  = width if width
+            parameters[:class]  = cls.join(' ') if cls
             Octicons::Octicon.new(symbol, parameters).to_svg
           end
         end

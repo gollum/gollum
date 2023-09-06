@@ -1105,6 +1105,7 @@ context "Default keybindings" do
     @path = cloned_testpath "examples/empty.git"
     @wiki = Gollum::Wiki.new @path
     @url = '/gollum/create/test'
+    @selected_menu_item = 'button class="SelectMenu-item" role="menuitemcheckbox" aria-checked="true" '
 
     Precious::App.set :gollum_path, @path
     Precious::App.set :wiki_options, {default_keybinding: nil}
@@ -1121,9 +1122,9 @@ context "Default keybindings" do
   test 'keybinding unset' do
     get @url
 
-    assert_equal last_response.body.include?('selected="selected" value="default"'), false
-    assert_equal last_response.body.include?('selected="selected" value="vim"'), false
-    assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="default"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="vim"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="emacs"'), false
   end
 
   test 'nonexistent keybinding' do
@@ -1131,19 +1132,18 @@ context "Default keybindings" do
 
     get @url
 
-    assert_equal last_response.body.include?('selected="selected" value="default"'), false
-    assert_equal last_response.body.include?('selected="selected" value="vim"'), false
-    assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="default"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="vim"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="emacs"'), false
   end
 
   test 'keybinding `default`' do
     Precious::App.set :wiki_options, {:default_keybinding => 'default'}
 
     get @url
-
-    assert_equal last_response.body.include?('selected="selected" value="default"'), true
-    assert_equal last_response.body.include?('selected="selected" value="vim"'), false
-    assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="default"'), true
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="vim"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="emacs"'), false
   end
 
   test 'keybinding `vim`' do
@@ -1151,9 +1151,9 @@ context "Default keybindings" do
 
     get @url
 
-    assert_equal last_response.body.include?('selected="selected" value="default"'), false
-    assert_equal last_response.body.include?('selected="selected" value="vim"'), true
-    assert_equal last_response.body.include?('selected="selected" value="emacs"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="default"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="vim"'), true
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="emacs"'), false
   end
 
   test 'keybinding `emacs`' do
@@ -1161,9 +1161,9 @@ context "Default keybindings" do
 
     get @url
 
-    assert_equal last_response.body.include?('selected="selected" value="default"'), false
-    assert_equal last_response.body.include?('selected="selected" value="vim"'), false
-    assert_equal last_response.body.include?('selected="selected" value="emacs"'), true
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="default"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="vim"'), false
+    assert_equal last_response.body.include?(@selected_menu_item + 'value="emacs"'), true
   end
 
   def app

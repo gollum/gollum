@@ -70,14 +70,6 @@ a {
       }
     }
 
-
-    #gollum-editor-format-selector {
-
-      @include desktop-breakpoint {
-        clear: none;
-        text-align: right;
-      }
-    }
   }
 
 
@@ -106,6 +98,10 @@ a {
 
 }
 
+
+.BasicSelect .SelectMenu-modal {
+    width: 210px;
+}
 
 /* @section uploads */
 
