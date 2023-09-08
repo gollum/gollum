@@ -38,7 +38,7 @@
   height: 100%;
   padding: 1em;
   overflow: hidden;
-  background-color: white;
+  background-color: var(--color-canvas-default);
   webkit-box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
   moz-box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
   box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
@@ -109,7 +109,6 @@
       }
 
       label {
-        color: #000;
         display: block;
         font-size: 1.2em;
         font-weight: bold;
