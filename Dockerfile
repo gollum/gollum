@@ -45,7 +45,9 @@ RUN apk add --update \
             shadow \
     && rm -rf /var/cache/apk/* \
     && groupmod -g $GID www-data \
-    && adduser -u $UID -S www-data -G www-data
+    && adduser -u $UID -S www-data -G www-data \
+    && git config --file /home/www-data/.gitconfig --add safe.directory /wiki \
+    && chown www-data:www-data /home/www-data/.gitconfig
 
 COPY docker-run.sh /docker-run.sh
 RUN chmod +x /docker-run.sh
