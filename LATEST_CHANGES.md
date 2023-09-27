@@ -13,4 +13,4 @@
 
 ## Fixes & Improvements
 
-* Fix: add git configuration for `/wiki` as safe directory. #2006
+* Fix (Docker image): add git configuration for `/wiki` as safe directory. #2006
