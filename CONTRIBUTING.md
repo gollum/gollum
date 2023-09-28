@@ -71,6 +71,15 @@ Now, you can start setting up Gollum to run locally:
      ```sh
      yarn install
      ```
+  5. Configure the local git repository to use `master` as the default branch
+     when initializing new git repositories:
+     ```sh
+     git config --local init.defaultbranch=master
+     ```
+
+     This is currently required make the test suite pass when running it
+     locally.[^1]
+
 If all went well, you should now be able to run the test suite using the
 following command:
 
@@ -99,6 +108,14 @@ request](#opening-a-pull-request).
 [nodejs]: https://nodejs.org
 [rubylang]: https://www.ruby-lang.org
 [yarn-install]: https://yarnpkg.com/getting-started/install
+
+[^1]: Gollum's test suite will clone and initialize test git repositories using
+      your system's `git` executable. These test git repositories are
+      committed to the codebase, and all of them use `master` as the `HEAD`. If
+      `init.defaultbranch` is set to `main` or something else in your global git
+      configuration file, this will cause many tests to erroneously fail. It's
+      on our to-do list to move these committed git repos to using a `main`
+      branch.
 
 ## Opening a Pull Request
 
