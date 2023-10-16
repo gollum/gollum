@@ -16,6 +16,10 @@ en:
     comparing_versions_of: Comparing versions of
     comparing_from: "Comparing %{before} to %{after}"
     revert: Revert Changes
+  precious/views/edit:
+    edit: Edit
+    preview: Preview
+    title: "Editing %{title}"
   precious/views/error:
     error: Error
   precious/views/history:

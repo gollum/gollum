@@ -3,15 +3,15 @@
     {{>navbar}}
 
     <h1 class="header-title text-center text-md-left py-4">
-      Editing <strong>{{title}}</strong>
+      {{t.title}}
     </h1>
   </div>
 <div class="tabnav">
   <nav class="tabnav-tabs">
     <button href="#" id="edit" class="tabnav-tab selected" aria-current="page">
-      Edit
+      {{t.edit}}
     </button>
-    <button href="#" id="preview" class="tabnav-tab">Preview</button>
+    <button href="#" id="preview" class="tabnav-tab">{{t.preview}}</button>
   </nav>
 </div>
   <div class="tabnav-div" id="edit-content">{{>editor}}</div>
