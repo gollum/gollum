@@ -6,14 +6,19 @@
       {{t.title}}
     </h1>
   </div>
-<div class="tabnav">
-  <nav class="tabnav-tabs">
-    <button id="edit" class="tabnav-tab selected" aria-current="page">
-      {{t.edit}}
-    </button>
-    <button id="preview" class="tabnav-tab">{{t.preview}}</button>
-  </nav>
-</div>
+
+  <div class="tabnav">
+    <nav class="tabnav-tabs">
+      <button id="edit" class="tabnav-tab selected" aria-current="page">
+        {{t.edit}}
+      </button>
+
+      <button id="preview" class="tabnav-tab">
+        {{t.preview}}
+      </button>
+    </nav>
+  </div>
+
   <div class="tabnav-div" id="edit-content">{{>editor}}</div>
 	<div class="tabnav-div" id="preview-content"></div>
 </div>
