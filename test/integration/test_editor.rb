@@ -21,6 +21,32 @@ context "editor interface" do
     Capybara.use_default_driver
   end
 
+  test "editor 'edit' and 'preview' panes render editor and preview, respectively" do
+    create_page title: "Just another test page...", content: <<~TEXT
+      After this page has been created, we will assert that this content is
+      rendered as part of the page preview.
+    TEXT
+
+    current_page_title = find "h1.header-title"
+    assert current_page_title, "Just another test page..."
+
+    click_on "Edit" # Open the editor for the current page.
+
+    editor_container = find ".ace_content"
+    assert editor_container.visible?
+
+    click_on "Preview"
+    refute editor_container.visible?
+
+    within "#wiki-content" do
+      assert_includes page.text,
+        "this content is rendered as part of the page preview"
+    end
+
+    click_on "Edit"
+    assert editor_container.visible?
+  end
+
   test "editor renders help panel" do
     visit "/create/new-article"
 

@@ -28,6 +28,33 @@ def console_log(page, level = :severe)
   page.driver.browser.logs.get(:browser).select { |log| log.level == level.to_s.upcase }
 end
 
+def create_page(title:, content:)
+  visit "/"
+
+  click_on "New"
+  fill_in "Page Name", with: title
+  click_on "OK"
+
+  assert_includes page.text, "Create New Page"
+
+  page_title_field = find "input#gollum-editor-page-title"
+  assert_includes page_title_field.value, title
+
+  within "div.ace_content" do
+    send_keys content
+    assert page.text, content
+  end
+
+  assert page.current_path.start_with? "/gollum/create"
+
+  click_on "Save"
+
+  using_wait_time 10 do
+    escaped_title = title.gsub(" ", "%20")
+    assert page.current_path, "/#{escaped_title}.md"
+  end
+end
+
 def wait_for_ajax
   # https://thoughtbot.com/blog/automatically-wait-for-ajax-with-capybara
   Timeout.timeout(Capybara.default_max_wait_time) do
