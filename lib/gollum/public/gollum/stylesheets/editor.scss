@@ -154,14 +154,10 @@ a {
     padding: 0;
 
     a {
-      border: 1px solid transparent;
-      border-width: 1px 0;
       display: block;
-      font-weight: bold;
       height: 100%;
       width: auto;
       padding: 0.2em 1em;
-      text-shadow: 0 -1px 0 #fff;
       font-size: 0.8em;
 
       @include desktop-breakpoint {
@@ -169,19 +165,13 @@ a {
       }
 
       &:hover {
-        background: #fff;
-        border-color: #f0f0f0;
         text-decoration: none;
-
         box-shadow: none;
       }
 
       &.selected {
         border: $border-standard;
-        border-bottom-color: #e7e7e7;
         border-width: 1px 0;
-        background: #fff;
-        color: #000;
 
         box-shadow: 0 1px 2px #f0f0f0;
       }
@@ -192,12 +182,11 @@ a {
 
 
 #gollum-editor-help-list {
-  background: #fafafa;
+
 
 }
 
 #gollum-editor-help-wrapper {
-  background: #fff;
   overflow: auto;
   height: 17em;
   padding: 1em;
