@@ -34,7 +34,9 @@ require File.expand_path '../helpers', __FILE__
 Gollum::set_git_timeout(120)
 Gollum::set_git_max_filesize(190 * 10**6)
 
-Gollum::Filter::Code.language_handlers[/mermaid/] = Proc.new { |lang, code| "<div class=\"mermaid\">\n#{code}\n</div>" }
+Gollum::Filter::Code.language_handlers[/mermaid/] = Proc.new do |lang, code| 
+  "<div class=\"mermaid_container\"><div class=\"mermaid_source\">\n#{code}\n</div>\n<div class=\"mermaid\">\n#{code}\n</div>\n</div>"
+end
 
 # Run the frontend, based on Sinatra
 #

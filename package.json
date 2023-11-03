@@ -2,7 +2,7 @@
   "dependencies": {
     "@primer/css": "^20.8.0",
     "ace-builds": "^1.13.1",
-    "mermaid": "^9.1.2",
+    "mermaid": "^10.6.0",
     "mousetrap": "^1.6.5"
   },
   "engines": {

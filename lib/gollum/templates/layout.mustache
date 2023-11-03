@@ -83,10 +83,12 @@
   
   {{#mermaid}}
   <script>
+    
   var mermaid_conf = {
     startOnLoad: true,
     securityLevel: 'sandbox'
   };
+  
   </script>
   {{/mermaid}}
   
@@ -95,7 +97,24 @@
   {{#mermaid}}
   {{#sprockets_javascript_tag}}gollum.mermaid.js{{/sprockets_javascript_tag}}
   <script>
+
+    if (window.matchMedia) {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mermaid_conf['theme'] = 'dark';
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        const newColorScheme = event.matches ? "dark" : "default";
+        // Rerender mermaid diagrams with new color scheme
+        $('.mermaid').removeAttr('data-processed').each(function(_, element) {
+          $(element).html($(element).siblings(".mermaid_source").html());
+        });
+        mermaid.initialize({'theme': newColorScheme, startOnLoad: false, securityLevel: 'sandbox'});
+        mermaid.run({querySelector: '.mermaid'});
+
+      });
+    }
     mermaid.initialize(mermaid_conf);
+        
   </script>
   {{/mermaid}}
   
