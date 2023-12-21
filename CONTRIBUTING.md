@@ -21,7 +21,7 @@ Before submitting an issue, **please carefully look through the following places
 
 Security vulnerabilities can be reported directly to the maintainers using these GPG keys:
 
-* [@dometto](https://keys.openpgp.org/vks/v1/by-fingerprint/02354CC9F820B52CC2791979BB8CCC95FD83B795)
+* [@dometto](https://keys.openpgp.org/vks/v1/by-fingerprint/16E08F9EF05BAA7E16165C4750D1BBE8362E93F1)
 
 Lastly, please **consider helping out** by opening a Pull Request!
 
