@@ -123,7 +123,7 @@ Gollum uses the environment variable `APP_ENV` primarily to control how the unde
 
 ## CONFIGURATION
 
-Gollum comes with the following command line options:
+Gollum comes with the command line options listed below. Note that there are some additional 'minor' options to tweak Gollum's behaviour that do not have commandline options, but can be configured in [config.rb](#config-file).
 
 | Option            | Arguments | Description |
 | ----------------- | --------- | ----------- |
@@ -140,8 +140,6 @@ Gollum comes with the following command line options:
 | --css             | none      | Tell Gollum to inject custom CSS into each page. Uses `custom.css` from wiki root.<sup>3</sup> |
 | --js              | none      | Tell Gollum to inject custom JS into each page. Uses `custom.js` from wiki root.<sup>3</sup> |
 | --no-edit         | none      | Disable the feature of editing pages. |
-| --local-time | none      | Use the browser's local timezone instead of the server's for displaying dates. Default: false.
-| --follow-renames, --no-follow-renames  | none      | Follow pages across renames in the History view. Default: true.
 | --allow-uploads   | [MODE]    | Enable file uploads. If set to `dir`, Gollum will store all uploads in the `/uploads/` directory in repository root. If set to `page`, Gollum will store each upload at the currently edited page.<sup>4</sup> |
 | --mathjax         | none      | Enables MathJax (renders mathematical equations). By default, uses the `TeX-AMS-MML_HTMLorMML` config with the `autoload-all` extension.<sup>5</sup> |
 | --critic-markup   | none      | Enable support for annotations using [CriticMarkup](http://criticmarkup.com/). |
@@ -153,7 +151,6 @@ Gollum comes with the following command line options:
 | --template-dir    | [PATH]    | Specify custom mustache template directory. Only overrides templates that exist in this directory. |
 | --template-page   | none      | Use _Template in root as a template for new pages. Must be committed. |
 | --emoji           | none      | Parse and interpret emoji tags (e.g. `:heart:`) except when the leading colon is backslashed (e.g. `\:heart:`). |
-| --default-keybind | none      | Set the default keybinding for the editor. Can be set to `vim`, or `emacs`. |
 | --lenient-tag-lookup | none | Internal links resolve case-insensitively, will treat spaces as hyphens, and will match the first page found with a certain filename, anywhere in the repository. Provides compatibility with Gollum 4.x. |
 | --help            | none      | Display the list of options on the command line. |
 | --version         | none      | Display the current version of Gollum. |
@@ -168,9 +165,11 @@ Gollum comes with the following command line options:
 
 ### Config file
 
-When `--config` option is used, certain inner parts of Gollum can be customized. This is used throughout our wiki for certain user-level alterations, among which [customizing supported markups](https://github.com/gollum/gollum/wiki/Formats-and-extensions) will probably stand out. See [here](https://github.com/gollum/gollum/wiki/Sample-config.rb) for documentation about settings configurable in `config.rb` .
+When `--config` option is used, certain inner parts of Gollum can be customized. This is used throughout our wiki for certain user-level alterations, among which [customizing supported markups](https://github.com/gollum/gollum/wiki/Formats-and-extensions) will probably stand out. 
 
-**All of the mentioned alterations work both for Gollum's config file (`config.rb`) and Rack's config file (`config.ru`).**
+See [here](https://github.com/gollum/gollum/wiki/Sample-config.rb) for documentation about settings configurable in `config.rb`.
+
+**All of the mentioned alterations and options work both for Gollum's config file (`config.rb`) and Rack's config file (`config.ru`).**
 
 ## CONTRIBUTING
 
