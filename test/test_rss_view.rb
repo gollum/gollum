@@ -75,7 +75,7 @@ context "Precious::Views::RSS" do
     #
     assert_match /<description>(.*)<\/description>/m,                       feed
     assert_match /&lt;p&gt; This commit(.*)&lt;\/p&gt;/,                    feed
-    assert_match /&lt;p&gt;Git's documentation(.*)&lt;\/p&gt;/,             feed
+    assert_match /&lt;p&gt;Git&#39;s documentation(.*)&lt;\/p&gt;/,             feed
 
     # Assert that the description contains information about the commit.
     # i.e.:
