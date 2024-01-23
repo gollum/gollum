@@ -475,7 +475,7 @@ context "Frontend" do
 
     post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
 
-    assert_equal 302, last_response.status # redirect is expected
+    assert_equal 303, last_response.status # redirect is expected
     @wiki.clear_cache
     file = @wiki.file("uploads/#{::File.basename(temp_upload_file.path)}")
     assert_equal 'abc', file.raw_data
@@ -488,7 +488,7 @@ context "Frontend" do
     Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
     post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
 
-    assert_equal 302, last_response.status # redirect is expected
+    assert_equal 303, last_response.status # redirect is expected
     @wiki.clear_cache
     # Find the file in a page-specific subdir (here: Home), based on referer
     file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
@@ -502,7 +502,7 @@ context "Frontend" do
     Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
     post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
 
-    assert_equal 302, last_response.status # redirect is expected
+    assert_equal 303, last_response.status # redirect is expected
     @wiki.clear_cache
     # Find the file in a page-specific subdir (here: Home), based on referer
     file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
@@ -516,7 +516,7 @@ context "Frontend" do
     Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
     post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/gollum/edit/foo/Bar.md', 'HTTP_HOST' => 'localhost:4567'}
 
-    assert_equal 302, last_response.status # redirect is expected
+    assert_equal 303, last_response.status # redirect is expected
     @wiki.clear_cache
     # Find the file in a page-specific subdir (here: foo/Bar), based on referer
     file = @wiki.file("uploads/foo/Bar/#{::File.basename(temp_upload_file.path)}")
@@ -530,7 +530,7 @@ context "Frontend" do
     Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
     post "/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'https://localhost:4567/Home.md', 'HTTP_HOST' => 'localhost:4567'}
 
-    assert_equal 302, last_response.status # redirect is expected
+    assert_equal 303, last_response.status # redirect is expected
     @wiki.clear_cache
     # Find the file in a page-specific subdir (here: Home), based on referer
     file = @wiki.file("uploads/Home/#{::File.basename(temp_upload_file.path)}")
@@ -543,7 +543,7 @@ context "Frontend" do
     temp_upload_file.close
     Precious::App.set(:wiki_options, {allow_uploads: true})
     post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
-    assert_equal 302, last_response.status
+    assert_equal 303, last_response.status
     # Post the same file a second time; should result in conflict
     post "/gollum/upload_file", :file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))
     assert_equal 409, last_response.status
@@ -1085,7 +1085,7 @@ context 'Frontend with base path' do
     Precious::App.set(:wiki_options, {allow_uploads: true, per_page_uploads: true})
     post "/wiki/gollum/upload_file", {:file => Rack::Test::UploadedFile.new(::File.open(temp_upload_file))}, {'HTTP_REFERER' => 'http://localhost:4567/wiki/gollum/edit/foo/Bar.md', 'HTTP_HOST' => 'localhost:4567'}
 
-    assert_equal 302, last_response.status # redirect is expected
+    assert_equal 303, last_response.status # redirect is expected
     @wiki.clear_cache
     # Find the file in a page-specific subdir (here: foo/Bar), based on referer
     file = @wiki.file("uploads/foo/Bar/#{::File.basename(temp_upload_file.path)}")

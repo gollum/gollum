@@ -23,7 +23,7 @@ context "Precious::Views::Editing" do
       message: 'def',
       page: 'D'
 
-    assert_equal last_response.status, 302
+    assert_equal last_response.status, 303
 
     refute_nil @wiki.page('D')
   end
