@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'octicons', '~> 19.0'
   s.add_dependency 'sprockets', '~> 4.1'
   s.add_dependency 'sprockets-helpers', '~> 1.2'
-  s.add_dependency 'rss', '~> 0.2.9'
+  s.add_dependency 'rss', '~> 0.3'
   s.add_dependency 'therubyrhino', '~> 2.1.0'
   s.add_dependency 'webrick', '~> 1.7'
   s.add_dependency 'i18n', '~> 1.8'
