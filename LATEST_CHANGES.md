@@ -3,6 +3,7 @@
 # Breaking Changes
 
 * Docker image: removed deprecated automatic activation of --mathjax. Pass '--math mathjax' to continue using mathjax, or '--math' to use KaTeX (see below).
+* RACK_ENV is ignored, please use APP_ENV instead (@svoop).
 
 ## New features
 

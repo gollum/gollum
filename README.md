@@ -22,7 +22,7 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
 	* Can be displayed in all versions, reverted, etc.
 * Gollum strives to be [compatible](https://github.com/gollum/gollum/wiki/5.0-release-notes#compatibility-option) with [GitHub](https://docs.github.com/en/communities/documenting-your-project-with-wikis/about-wikis) and [GitLab](https://docs.gitlab.com/ee/user/project/wiki/#create-or-edit-wiki-pages-locally) wikis.
   * Just clone your GitHub/GitLab wiki and view and edit it locally!
-	
+
 * Gollum supports advanced functionality like:
   * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
   * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
@@ -49,7 +49,7 @@ Ruby is best installed either via [RVM](https://rvm.io/) or a package manager of
 	```
 	gem install gollum
 	```
-	
+
 Installation examples for individual systems can be seen [here](https://github.com/gollum/gollum/wiki/Installation).
 
 To run, simply:
@@ -113,6 +113,13 @@ Gollum can also be run alongside a CAS (Central Authentication Service) SSO (sin
 ### Service
 
 Gollum can also be run as a service. More on that [over here](https://github.com/gollum/gollum/wiki/Gollum-as-a-service).
+
+## ENVIRONMENT
+
+Gollum uses the environment variable `APP_ENV` primarily to control how the underlying Sinatra app behaves:
+
+* `development` – reload the app on every request
+* `production` – load the app only once
 
 ## CONFIGURATION
 

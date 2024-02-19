@@ -205,7 +205,7 @@ MSG
     puts results.empty? ? 'none' : results
     exit 0
   end
-  
+
   opts.separator ''
   opts.separator '  Development:'
 
@@ -282,7 +282,12 @@ if options[:irb]
   end
 else
   require 'gollum/app'
-  Precious::App.set(:environment, ENV.fetch('RACK_ENV', :production).to_sym)
+  # TODO: Remove RACK_ENV fallback once gollum-7 is released (4 lines)
+  if ENV['RACK_ENV'] && !ENV['APP_ENV']
+    warn "[DEPRECATION] RACK_ENV will be ignored as of gollum-6.0.0, please use APP_ENV instead."
+    ENV['APP_ENV'] = ENV['RACK_ENV']
+  end
+  Precious::App.set(:environment, ENV.fetch('APP_ENV', :production).to_sym)
   Precious::App.set(:gollum_path, gollum_path)
   Precious::App.set(:wiki_options, wiki_options)
 
