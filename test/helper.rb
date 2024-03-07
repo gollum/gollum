@@ -28,7 +28,7 @@ else
   Gollum::GIT_ADAPTER = RUBY_PLATFORM == 'java' ? 'rjgit' : 'rugged'
 end
 
-ENV['RACK_ENV'] = 'test'
+ENV['APP_ENV'] = 'test'
 require 'gollum'
 require 'gollum/app'
 
