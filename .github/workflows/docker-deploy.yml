@@ -3,12 +3,12 @@ on:
   push:
     branches:
       - master
+    tags:
+      - "*"
     paths-ignore:
       - '**.md'
       - '**.txt'
       - 'contrib/**'
-  release:
-      types: [published]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,12 +17,13 @@ jobs:
         uses: actions/checkout@v2
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             gollumwiki/gollum
             ghcr.io/gollum/gollum
           tags: |
+            type=ref,event=branch,pattern=master
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
