@@ -12,6 +12,33 @@ def assert_only_expected_errors(log)
   assert_equal [], log.reject {|err| err.message.match?(expected_errors) }
 end
 
+context 'Frontend with katex' do
+  include Capybara::DSL
+
+  setup do
+    @path = cloned_testpath("examples/lotr.git")
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {
+      math: :katex,
+    })
+    Capybara.app = Precious::App
+  end
+
+  test 'no unexpected errors on /Riddles' do
+    visit '/Riddles'
+    log = console_log(page)
+    assert_only_expected_errors(log)
+    assert page.has_css?('.katex-html') 
+  end
+
+  teardown do
+    Capybara.reset_sessions!
+    Capybara.use_default_driver
+  end
+end
+
+
 context 'Frontend with mathjax and mermaid' do
   include Capybara::DSL
 
