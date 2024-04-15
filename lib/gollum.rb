@@ -13,7 +13,7 @@ require 'rhino' if RUBY_PLATFORM == 'java'
 require ::File.expand_path('../gollum/uri_encode_component', __FILE__)
 
 module Gollum
-  VERSION = '5.3.2'
+  VERSION = '5.3.3'
 
   ::I18n.available_locales = [:en]
   ::I18n.load_path = Dir[::File.expand_path("lib/gollum/locales") + "/*.yml"]

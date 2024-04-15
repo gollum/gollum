@@ -4,7 +4,7 @@ require 'shoulda'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'minitest/spec'
-require 'mocha/setup'
+require 'mocha/minitest'
 require 'fileutils'
 require 'tmpdir'
 

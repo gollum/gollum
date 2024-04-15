@@ -115,15 +115,14 @@ end
 
 desc 'Create a release build and push to rubygems'
 task :release => :build do
-  unless `git branch` =~ /^\* master$/
+  unless `git branch` =~ /^\* 5.3.3semver$/
     puts "You must be on the master branch to release!"
     exit!
   end
   Rake::Task[:changelog].execute
   sh "git commit --allow-empty -a -m 'Release #{version}'"
-  sh "git pull --rebase origin master"
+  #sh "git pull --rebase origin master"
   sh "git tag v#{version}"
-  sh "git push origin master"
   sh "git push origin v#{version}"
   sh "gem push pkg/#{name}-#{version}.gem"
 end
@@ -185,7 +184,7 @@ end
 desc 'Build changlog'
 task :changelog do
   [latest_changes_file, history_file].each do |f|
-    unless File.exists?(f)
+    unless File.exist?(f)
       puts "#{f} does not exist but is required to build a new release."
       exit!
     end
