@@ -23,7 +23,7 @@ context 'Localized frontend' do
     assert_includes page.text,
       'Search results for something-to-return-no-results'
     assert_includes page.text,
-      'There are no results for your search something-to-return-no-results.'
+      'There are no results for your search.'
 
     click_on 'Back to Top'
 

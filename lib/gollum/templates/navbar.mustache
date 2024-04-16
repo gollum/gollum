@@ -14,7 +14,7 @@
     <button class="btn btn-sm" id="minibutton-home" 
       onclick="window.location.href='{{page_route}}';"
     >
-      Home
+      {{tt.navbar.home_button}}
     </button>
   </div>
 
@@ -33,7 +33,7 @@
           onclick="window.location.href='{{overview_path}}';"
           id="minibutton-overview"
         >
-          Overview
+          {{tt.navbar.overview_button}}
         </button>
       {{/overview}}
 
@@ -43,7 +43,7 @@
           onclick="window.location.href='{{latest_changes_path}}';"
           id="minibutton-latest-changes"
         >
-          Latest Changes
+          {{tt.navbar.latest_changes_button}}
         </button>
       {{/latest_changes}}
     </div>
@@ -57,7 +57,7 @@
           onclick="window.location.href='{{history_path}}/{{escaped_url_path}}/{{version}}';"
           id="minibutton-history"
         >
-          History
+          {{tt.navbar.history_button}}
         </button>
       {{/history}}
 
@@ -66,7 +66,7 @@
           <button
             class="btn BtnGroup-item btn-sm hide-sm hide-md minibutton-upload-page"
           >
-            Upload
+            {{tt.navbar.upload_button}}
           </button>
         {{/allow_uploads}}
 
@@ -74,14 +74,14 @@
           <button
             class="btn BtnGroup-item btn-sm hide-sm hide-md minibutton-rename-page"
           >
-            Rename
+            {{tt.navbar.rename_button}}
           </button>
           <button
             class="btn BtnGroup-item btn-sm hide-sm hide-md"
             onclick="window.location.href='{{edit_path}}/{{escaped_url_path}}';"
             id="minibutton-edit-page"
           >
-            Edit
+            {{tt.navbar.edit_button}}
           </button>
         {{/editable}}
       {{/allow_editing}}
@@ -92,7 +92,7 @@
     {{#editable}}
       <div class="TableObject-item">
         <button class="btn btn-primary btn-sm minibutton-new-page">
-          New
+          {{tt.navbar.new_button}}
         </button>
       </div>
     {{/editable}}
@@ -101,7 +101,7 @@
       {{#newable}}
         <div class="TableObject-item">
           <button class="btn btn-primary btn-sm minibutton-new-page">
-            New
+            {{tt.navbar.new_button}}
           </button>
         </div>
       {{/newable}}

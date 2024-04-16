@@ -1,0 +1,8 @@
+cn:
+  test_class:
+    author_info:
+      full: 作者 %{author} 来自 %{location}
+    has_invalid_argument: 欢迎使用 %{no_matching_method}
+    hello_world: 你好世界
+  nonexistent_test_class:
+    never_called: 从未调用

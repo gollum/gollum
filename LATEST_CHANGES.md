@@ -11,6 +11,7 @@
 * Add support for downloading page sources with ?raw (@tstein).
 * Add openssh client to docker images for ssh: repo support. (@jagerkin).
 * Add support for mathematical typesetting using KaTeX (@dometto). Users can now choose between MathJax and KaTeX with the --math flag.
+* Add support for more languages (such as: Chinese).
 
 ## Fixes & Improvements
 
