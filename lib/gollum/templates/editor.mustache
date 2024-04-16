@@ -11,7 +11,7 @@
     <label for="page" class="jaws">Page Title</label>
     <input class="form-control mb-2 input-lg input-block text-bold f5" placeholder="Page title" type="text" name="page" id="gollum-editor-page-title" value="{{page_name}}">
     {{#has_path}}
-    <p class="path_note"><strong>NOTE:</strong> This page will be created within the &quot;<strong>{{path}}</strong>&quot; directory</p>
+    <p class="path_note"><strong>{{tt.editor.note.title}}</strong> {{tt.editor.note.content}}</p>
     {{/has_path}}
   </div>
   {{/is_create_page}}
@@ -24,37 +24,37 @@
   <div id="gollum-editor-function-bar" class="border-bottom clearfix mb-2">
     <div id="gollum-editor-function-buttons" class="overflow-auto no-wrap">
       <div class="BtnGroup">
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-h1" title="Heading 1">h1</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-h2" title="Heading 2">h2</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-h3" title="Heading 3">h3</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-h1" title="{{tt.editor.function_bar.heading1.title}}">{{tt.editor.function_bar.heading1.value}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-h2" title="{{tt.editor.function_bar.heading2.title}}">{{tt.editor.function_bar.heading2.value}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-h3" title="{{tt.editor.function_bar.heading3.title}}">{{tt.editor.function_bar.heading3.value}}</button>
       </div>
 
       <div class="BtnGroup">
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-link" title="Link">{{#octicon}}link{{/octicon}}</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-image" title="Image">{{#octicon}}image{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-link" title="{{tt.editor.function_bar.link}}">{{#octicon}}link{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-image" title="{{tt.editor.function_bar.image}}">{{#octicon}}image{{/octicon}}</button>
       </div>
 
       <div class="BtnGroup">
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-bold" title="Bold">{{#octicon}}bold{{/octicon}}</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-italic" title="Italic">{{#octicon}}italic{{/octicon}}</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-code" title="Code">{{#octicon}}code{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-bold" title="{{tt.editor.function_bar.bold}}">{{#octicon}}bold{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-italic" title="{{tt.editor.function_bar.italic}}">{{#octicon}}italic{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-code" title="{{tt.editor.function_bar.code}}">{{#octicon}}code{{/octicon}}</button>
       </div>
 
       <div class="BtnGroup">
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-ul" title="Unordered list">{{#octicon}}list-unordered{{/octicon}}</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-ol" title="Ordered list">{{#octicon}}list-ordered{{/octicon}}</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-blockquote" title="Blockquote">{{#octicon}}quote{{/octicon}}</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-hr" title="Horizontal rule">{{#octicon}}horizontal-rule{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-ul" title="{{tt.editor.function_bar.unordered_list}}">{{#octicon}}list-unordered{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-ol" title="{{tt.editor.function_bar.ordered_list}}">{{#octicon}}list-ordered{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-blockquote" title="{{tt.editor.function_bar.blockquote}}">{{#octicon}}quote{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-hr" title="{{tt.editor.function_bar.horizontal_rule}}">{{#octicon}}horizontal-rule{{/octicon}}</button>
       </div>
 
       {{#critic_markup}}
       <div class="BtnGroup">
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-critic-accept" title="Accept Selected CriticMarkup">{{#octicon}}plus{{/octicon}}</button>
-        <button class="btn btn-sm BtnGroup-item function-button" id="function-critic-reject" title="Reject Selected CriticMarkup">{{#octicon}}dash{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-critic-accept" title="{{tt.editor.function_bar.accept_selected_criticMarkup}}">{{#octicon}}plus{{/octicon}}</button>
+        <button class="btn btn-sm BtnGroup-item function-button" id="function-critic-reject" title="{{tt.editor.function_bar.reject_selected_criticMarkup}}">{{#octicon}}dash{{/octicon}}</button>
       </div>
       {{/critic_markup}}
 
-      <button class="btn btn-sm function-button" id="function-text-direction" title="Reverse Text Direction">{{#octicon}}arrow-both{{/octicon}}</button>
+      <button class="btn btn-sm function-button" id="function-text-direction" title="{{tt.editor.function_bar.reverse_text_direction}}">{{#octicon}}arrow-both{{/octicon}}</button>
       
       <button
         aria-label="{{tt.editor.function_bar.help}}"
@@ -79,7 +79,7 @@
           <div id="keybinding" class="SelectMenu BasicSelect">
             <div class="SelectMenu-modal">
               <header class="SelectMenu-header">
-                <h3 class="SelectMenu-title text-left">Set your preferred keybinding</h3>
+                <h3 class="SelectMenu-title text-left">{{tt.editor.function_bar.keybinding}}</h3>
               </header>
               <div class="SelectMenu-list">
                 {{#keybindings}}
@@ -106,7 +106,7 @@
           <div id="wiki_format" class="SelectMenu BasicSelect">
             <div class="SelectMenu-modal">
               <header class="SelectMenu-header">
-                <h3 class="SelectMenu-title text-left">Set this page's format to</h3>
+                <h3 class="SelectMenu-title text-left">{{tt.editor.function_bar.wiki_format}}</h3>
               </header>
               <div class="SelectMenu-list">
                 {{#formats}}
@@ -118,7 +118,7 @@
                 </button>
                 {{/enabled}}
                 {{/formats}}
-                <div class="SelectMenu-divider text-left">Rendering unavailable for</div>
+                <div class="SelectMenu-divider text-left">{{tt.editor.function_bar.rendering_unavailable_for}}</div>
                 {{#formats}}
                 {{^enabled}}
                 <button class="SelectMenu-item" value="{{id}}" data-ext="{{ext}}" role="menuitemcheckbox" {{#selected}}aria-checked="true"{{/selected}} disabled>
@@ -159,8 +159,8 @@
     </div>
   </div>
   <div id="gollum-autorecover-msg" class="flash my-2" hidden>
-      Autosaved text is available. Click the button to restore it.
-      <button id="gollum-autorecover-button" class="btn btn-sm primary flash-action">Restore Text</button>
+      {{tt.editor.restore_button.prompt}}
+      <button id="gollum-autorecover-button" class="btn btn-sm primary flash-action">{{tt.editor.restore_button.value}}</button>
   </div>
     <textarea id="gollum-editor-body" class="form-control text-mono"
      data-markup-lang="{{format}}" name="content" class="mousetrap">{{content}}</textarea>
@@ -206,8 +206,8 @@
 
     <span class="jaws"><br></span>
 		<div class="form-actions">
-    	<input type="submit" id="gollum-editor-submit" class="btn btn-primary" value="Save" title="Save current changes">
-    	<a id="gollum-editor-cancel" class="btn" type="button" title="Cancel editing" onClick="if(confirm('Cancelling may result in data loss. Are you sure you wish to proceed?')) { window.history.back()}">Cancel</a>
+    	<input type="submit" id="gollum-editor-submit" class="btn btn-primary" value="{{tt.editor.save_button.value}}" title="{{tt.editor.save_button.title}}">
+    	<a id="gollum-editor-cancel" class="btn" type="button" title="{{tt.editor.cancel_button.title}}" onClick="if(confirm('{{tt.editor.cancel_button.confirm}}')) { window.history.back()}">{{tt.editor.cancel_button.value}}</a>
 		</div>
   </fieldset>
 </form>

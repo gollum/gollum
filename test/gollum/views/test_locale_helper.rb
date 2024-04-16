@@ -15,7 +15,7 @@ describe Precious::Views::LocaleHelpers do
   end
 
   def setup
-    I18n.available_locales = [:en, :de]
+    I18n.available_locales = [:en, :de, :cn]
     I18n.load_path = Dir[File.expand_path("test/support/locales" + "/*.yml")]
   end
 

@@ -1,0 +1,103 @@
+cn:
+  create:
+    title: 创建新的页面
+    edit: 编辑
+    preview: 预览
+  navbar:
+    home_button: 首页
+    overview_button: 总览
+    latest_changes_button: 修改记录
+    history_button: 历史版本
+    upload_button: 上传文件
+    rename_button: 重命名
+    edit_button: 编辑
+    new_button: 新建
+  searchbar:
+    placeholder: 搜索
+    aria:
+      label: 站内搜索
+  wiki_content:
+    last_edit: 显示最后修改信息
+    delete_link:
+      title: 删除页面
+      confirm: 确定要删除此页面吗？
+  editor:
+    restore_button:
+      value: 恢复
+      prompt: 自动保存可用，单击按钮恢复。
+    function_bar:
+      heading1:
+        value: 标题1
+        title: 一级标题
+      heading2:
+        value: 标题2
+        title: 二级标题
+      heading3:
+        value: 标题3
+        title: 三级标题
+      link: 链接
+      image: 图片
+      bold: 加粗
+      italic: 斜体
+      code: 代码块
+      unordered_list: 无序列表
+      ordered_list: 有序列表
+      blockquote: 引用块
+      horizontal_rule: 水平标尺
+      accept_selected_criticMarkup: 接受选定的标注
+      reject_selected_criticMarkup: 拒绝选定的标注
+      reverse_text_direction: 反转文本方向
+      help: 帮助
+      keybinding: 设置按键绑定
+      wiki_format: 设置此页面的格式
+      rendering_unavailable_for: 渲染不可用
+    save_button:
+      value: 保存
+      title: 保存当前更改
+    cancel_button:
+      value: 取消
+      title: 取消编辑
+      confirm: 取消编辑可能会导致当前已编辑内容丢失。您确定要继续吗？
+    note:
+      title: "提示："
+      content: "此页面将创建在 %{path} 目录中。"
+  pagination:
+    aria:
+      label: 页码
+      next_page: 下一页
+      previous_page: 上一页
+    next: 前进
+    previous: 后退
+  precious/views/compare:
+    back_to_page_history: 返回历史
+    back_to_top: 回到顶部
+    comparison_of: 比较
+    comparing_versions_of: "%{name} 的版本差异"
+    comparing_from: "%{before} 和 %{after}"
+    revert: 撤销更改
+  precious/views/edit:
+    edit: 编辑
+    preview: 预览
+    title: "编辑 %{title}"
+  precious/views/error:
+    error: 错误
+  precious/views/history:
+    browse_in_history_description: 查看此版本
+    compare_revisions: 比较差异
+    history_for: "%{name} 的历史版本"
+  precious/views/latest_changes:
+    title: 修改记录 (所有页面)
+  precious/views/layout:
+    title: 主页
+  precious/views/overview:
+    back_to_top: 回到顶部
+    delete_confirmation: "确定要删除 %{name} 吗？"
+    no_pages_in: "%{ref} 中没有页面。"
+    title: "%{ref} 总览"
+  precious/views/search:
+    aria:
+      show_all: Show all hits on this page
+    back_to_top: 回到顶部
+    no_results: 找不到任何您要搜索的内容。
+    search_results_for: "%{query} 的搜索结果"
+    title: "%{query} 的搜索结果"

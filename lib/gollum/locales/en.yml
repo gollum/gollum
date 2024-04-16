@@ -1,7 +1,66 @@
 en:
+  create:
+    title: Create New Page
+    edit: Edit
+    preview: Preview
+  navbar:
+    home_button: Home
+    overview_button: Overview
+    latest_changes_button: Latest Changes
+    history_button: History
+    upload_button: Upload
+    rename_button: Rename
+    edit_button: Edit
+    new_button: New
+  searchbar:
+    placeholder: Search
+    aria:
+      label: Search site
+  wiki_content:
+    last_edit: When was this page last modified?
+    delete_link:
+      title: Delete this Page
+      confirm: Are you sure you want to delete this page?
   editor:
+    restore_button:
+      value: Restore Text
+      prompt: Autosaved text is available. Click the button to restore it.
     function_bar:
+      heading1:
+        value: H1
+        title: Heading 1
+      heading2:
+        value: H2
+        title: Heading 2
+      heading3:
+        value: H3
+        title: Heading 3
+      link: Link
+      image: Image
+      bold: Bold
+      italic: Italic
+      code: Code
+      unordered_list: Unordered list
+      ordered_list: Ordered list
+      blockquote: Blockquote
+      horizontal_rule: Horizontal rule
+      accept_selected_criticMarkup: Accept Selected CriticMarkup
+      reject_selected_criticMarkup: Reject Selected CriticMarkup
+      reverse_text_direction: Reverse Text Direction
       help: Help
+      keybinding: Set your preferred keybinding
+      wiki_format: Set this page's format to
+      rendering_unavailable_for: Rendering unavailable for
+    save_button:
+      value: Save
+      title: Save current changes
+    cancel_button:
+      value: Cancel
+      title: Cancel editing
+      confirm: Cancelling may result in data loss. Are you sure you wish to proceed?
+    note:
+      title: "NOTE:"
+      content: "This page will be created within the %{path} directory."
   pagination:
     aria:
       label: Pagination
@@ -13,7 +72,7 @@ en:
     back_to_page_history: Back to Page History
     back_to_top: Back to Top
     comparison_of: Comparison of
-    comparing_versions_of: Comparing versions of
+    comparing_versions_of: "Comparing versions of %{name}"
     comparing_from: "Comparing %{before} to %{after}"
     revert: Revert Changes
   precious/views/edit:
@@ -25,7 +84,7 @@ en:
   precious/views/history:
     browse_in_history_description: Browse the page at this point in the history
     compare_revisions: Compare Revisions
-    history_for: History for
+    history_for: "History for %{name}"
   precious/views/latest_changes:
     title: Latest Changes (Globally)
   precious/views/layout:
@@ -33,13 +92,12 @@ en:
   precious/views/overview:
     back_to_top: Back to Top
     delete_confirmation: "Are you sure you want to delete %{name}?"
-    no_pages_in: There are no pages in
-    on: "on"
+    no_pages_in: "There are no pages in on %{ref}."
     title: "Overview of %{ref}"
   precious/views/search:
     aria:
       show_all: Show all hits on this page
     back_to_top: Back to Top
-    no_results: There are no results for your search
-    search_results_for: Search results for
+    no_results: There are no results for your search.
+    search_results_for: "Search results for %{query}"
     title: "Search results for %{query}"
