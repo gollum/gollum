@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@braintree/sanitize-url@^6.0.0":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.2.tgz#6110f918d273fe2af8ea1c4398a88774bb9fc12f"
-  integrity sha512-Tbsj02wXCbqGmzdnXNk0SOF19ChhRU70BsroIi4Pm6Ehp56in6vch94mfbdQ17DozxkL3BAVjbZ4Qc1a0HFRAg==
+"@braintree/sanitize-url@^6.0.1":
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.4.tgz#923ca57e173c6b232bbbb07347b1be982f03e783"
+  integrity sha512-s3jaWicZd0pkP0jf5ysyHUI/RE7MHos6qlToFcGWXVp+ykHOy77OUMrfbgJ9it2C5bow7OIQwYYaHjk9XlBQ2A==
 
 "@github/auto-check-element@^5.2.0":
   version "5.2.0"
@@ -100,10 +100,56 @@
     "@github/tab-container-element" "^3.1.2"
     "@primer/behaviors" "^1.2.0"
 
-ace-builds@^1.13.1:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.14.0.tgz#85a6733b4fa17b0abc3dbfe38cd8d823cad79716"
-  integrity sha512-3q8LvawomApRCt4cC0OzxVjDsZ609lDbm8l0Xl9uqG06dKEq4RT0YXLUyk7J2SxmqIp5YXzZNw767Dr8GKUruw==
+"@types/d3-scale-chromatic@^3.0.0":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/d3-scale-chromatic/-/d3-scale-chromatic-3.0.3.tgz#fc0db9c10e789c351f4c42d96f31f2e4df8f5644"
+  integrity sha512-laXM4+1o5ImZv3RpFAsTRn3TEkzqkytiOY0Dz0sq5cnd1dtNlk6sHLon4OvqaiJb28T0S/TdsBI3Sjsy+keJrw==
+
+"@types/d3-scale@^4.0.3":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@types/d3-scale/-/d3-scale-4.0.8.tgz#d409b5f9dcf63074464bf8ddfb8ee5a1f95945bb"
+  integrity sha512-gkK1VVTr5iNiYJ7vWDI+yUFFlszhNMtVeneJ6lUTKPjprsvLLI9/tgEGiXJOnlINJA8FyA88gfnQsHbybVZrYQ==
+  dependencies:
+    "@types/d3-time" "*"
+
+"@types/d3-time@*":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/d3-time/-/d3-time-3.0.3.tgz#3c186bbd9d12b9d84253b6be6487ca56b54f88be"
+  integrity sha512-2p6olUZ4w3s+07q3Tm2dbiMZy5pCDfYwtLXXHUnVzXgQlZ/OyPtUz6OL382BkOuGlLXqfT+wqv8Fw2v8/0geBw==
+
+"@types/debug@^4.0.0":
+  version "4.1.12"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.12.tgz#a155f21690871953410df4b6b6f53187f0500917"
+  integrity sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==
+  dependencies:
+    "@types/ms" "*"
+
+"@types/mdast@^3.0.0":
+  version "3.0.15"
+  resolved "https://registry.yarnpkg.com/@types/mdast/-/mdast-3.0.15.tgz#49c524a263f30ffa28b71ae282f813ed000ab9f5"
+  integrity sha512-LnwD+mUEfxWMa1QpDraczIn6k0Ee3SMicuYSSzS6ZYl2gKS09EClnJYGd8Du6rfc5r/GZEk5o1mRb8TaTj03sQ==
+  dependencies:
+    "@types/unist" "^2"
+
+"@types/ms@*":
+  version "0.7.34"
+  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.34.tgz#10964ba0dee6ac4cd462e2795b6bebd407303433"
+  integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
+
+"@types/unist@^2", "@types/unist@^2.0.0":
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.10.tgz#04ffa7f406ab628f7f7e97ca23e290cd8ab15efc"
+  integrity sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==
+
+ace-builds@^1.33:
+  version "1.33.0"
+  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.33.0.tgz#3b6fb993a4b1d3f2b5923aecded098e13e6527d8"
+  integrity sha512-PDvytkZNvAfuh+PaP5Oy3l3sBGd7xMk4NsB+4w/w1e3gjBqEOGeJwcX+wF/SB6mLtT3VfJLrhDNPT3eaCjtR3w==
+
+character-entities@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/character-entities/-/character-entities-2.0.2.tgz#2d09c2e72cd9523076ccb21157dff66ad43fcc22"
+  integrity sha512-shx7oQ0Awen/BRIdkjkvz54PnEEI/EjwXDSIZp86/KKdbafHh1Df/RYGBhn4hbe2+uKC9FnT5UCEdyPz3ai9hQ==
 
 commander@7:
   version "7.2.0"
@@ -114,6 +160,35 @@ commander@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
   integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
+
+cose-base@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/cose-base/-/cose-base-1.0.3.tgz#650334b41b869578a543358b80cda7e0abe0a60a"
+  integrity sha512-s9whTXInMSgAp/NVXVNuVxVKzGH2qck3aQlVHxDCdAEPgtMKwc4Wq6/QKhgdEdgbLSi9rBTAcPoRa6JpiG4ksg==
+  dependencies:
+    layout-base "^1.0.0"
+
+cytoscape-cose-bilkent@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/cytoscape-cose-bilkent/-/cytoscape-cose-bilkent-4.1.0.tgz#762fa121df9930ffeb51a495d87917c570ac209b"
+  integrity sha512-wgQlVIUJF13Quxiv5e1gstZ08rnZj2XaLHGoFMYXz7SkNfCDOOteKBE6SYRfA9WxxI/iBc3ajfDoc6hb/MRAHQ==
+  dependencies:
+    cose-base "^1.0.0"
+
+cytoscape@^3.28.1:
+  version "3.28.1"
+  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.28.1.tgz#f32c3e009bdf32d47845a16a4cd2be2bbc01baf7"
+  integrity sha512-xyItz4O/4zp9/239wCcH8ZcFuuZooEeF8KHRmzjDfGdXsj3OG9MFSMA0pJE0uX3uCN/ygof6hHf4L7lst+JaDg==
+  dependencies:
+    heap "^0.2.6"
+    lodash "^4.17.21"
+
+"d3-array@1 - 2":
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-2.12.1.tgz#e20b41aafcdffdf5d50928004ececf815a465e81"
+  integrity sha512-B0ErZK/66mHtEsR1TkPEEkwdy+WDesimkM5gpZr5Dsg54BiTA5RXtYW5qTLIAcekaS9xfZrzBLF/OAkB3Qn1YQ==
+  dependencies:
+    internmap "^1.0.0"
 
 "d3-array@2 - 3", "d3-array@2.10.0 - 3", "d3-array@2.5.0 - 3", d3-array@3, d3-array@^3.2.0:
   version "3.2.2"
@@ -231,6 +306,11 @@ d3-hierarchy@3:
   dependencies:
     d3-color "1 - 3"
 
+d3-path@1:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-1.0.9.tgz#48c050bb1fe8c262493a8caf5524e3e9591701cf"
+  integrity sha512-VLaYcn81dtHVTjEHd8B+pbe9yHWpXKZUC87PzoFmsFrJqgFwDe/qxfp5MlfsfM1V5E/iVt0MmEbWQ7FVIXh/bg==
+
 "d3-path@1 - 3", d3-path@3, d3-path@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-3.1.0.tgz#22df939032fb5a71ae8b1800d61ddb7851c42526"
@@ -250,6 +330,14 @@ d3-random@3:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/d3-random/-/d3-random-3.0.1.tgz#d4926378d333d9c0bfd1e6fa0194d30aebaa20f4"
   integrity sha512-FXMe9GfxTxqd5D6jFsQ+DJ8BJS4E/fT5mqqdjovykEB2oFbTMDVdg1MGFxfQW+FBOGoB++k8swBrgwSHT1cUXQ==
+
+d3-sankey@^0.12.3:
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/d3-sankey/-/d3-sankey-0.12.3.tgz#b3c268627bd72e5d80336e8de6acbfec9d15d01d"
+  integrity sha512-nQhsBRmM19Ax5xEIPLMY9ZmJ/cDvd1BG3UVvt5h3WRxKg5zGRbvnteTyWAbzeSvlh3tW7ZEmq4VwR5mB3tutmQ==
+  dependencies:
+    d3-array "1 - 2"
+    d3-shape "^1.2.0"
 
 d3-scale-chromatic@3:
   version "3.0.0"
@@ -281,6 +369,13 @@ d3-shape@3:
   integrity sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA==
   dependencies:
     d3-path "^3.1.0"
+
+d3-shape@^1.2.0:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.3.7.tgz#df63801be07bc986bc54f63789b4fe502992b5d7"
+  integrity sha512-EUkvKjqPFUAZyOlhY5gzCxCeI0Aep04LwIRpsZ/mLFelJiUfnK56jo5JMDSE7yyP2kLSb6LtF+S5chMk7uqPqw==
+  dependencies:
+    d3-path "1"
 
 "d3-time-format@2 - 4", d3-time-format@4:
   version "4.1.0"
@@ -323,10 +418,10 @@ d3-zoom@3:
     d3-selection "2 - 3"
     d3-transition "2 - 3"
 
-d3@^7.0.0, d3@^7.7.0:
-  version "7.8.2"
-  resolved "https://registry.yarnpkg.com/d3/-/d3-7.8.2.tgz#2bdb3c178d095ae03b107a18837ae049838e372d"
-  integrity sha512-WXty7qOGSHb7HR7CfOzwN1Gw04MUOzN8qh9ZUsvwycIMb4DYMpY9xczZ6jUorGtO6bR9BPMPaueIKwiDxu9uiQ==
+d3@^7.4.0, d3@^7.8.2:
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-7.9.0.tgz#579e7acb3d749caf8860bd1741ae8d371070cd5d"
+  integrity sha512-e1U46jVP+w7Iut8Jt8ri1YsPOvFpg46k+K8TpCb0P+zjCkjkPnV7WzfDJzMHy1LnA+wj5pLT1wjO901gLXeEhA==
   dependencies:
     d3-array "3"
     d3-axis "3"
@@ -359,13 +454,32 @@ d3@^7.0.0, d3@^7.7.0:
     d3-transition "3"
     d3-zoom "3"
 
-dagre-d3-es@7.0.6:
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/dagre-d3-es/-/dagre-d3-es-7.0.6.tgz#8cab465ff95aca8a1ca2292d07e1fb31b5db83f2"
-  integrity sha512-CaaE/nZh205ix+Up4xsnlGmpog5GGm81Upi2+/SBHxwNwrccBb3K51LzjZ1U6hgvOlAEUsVWf1xSTzCyKpJ6+Q==
+dagre-d3-es@7.0.10:
+  version "7.0.10"
+  resolved "https://registry.yarnpkg.com/dagre-d3-es/-/dagre-d3-es-7.0.10.tgz#19800d4be674379a3cd8c86a8216a2ac6827cadc"
+  integrity sha512-qTCQmEhcynucuaZgY5/+ti3X/rnszKZhEQH/ZdWdtP1tA/y3VoHJzcVrO9pjjJCNpigfscAtoUB5ONcd2wNn0A==
   dependencies:
-    d3 "^7.7.0"
+    d3 "^7.8.2"
     lodash-es "^4.17.21"
+
+dayjs@^1.11.7:
+  version "1.11.10"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.10.tgz#68acea85317a6e164457d6d6947564029a6a16a0"
+  integrity sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==
+
+debug@^4.0.0:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
+  dependencies:
+    ms "2.1.2"
+
+decode-named-character-reference@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/decode-named-character-reference/-/decode-named-character-reference-1.0.2.tgz#daabac9690874c394c81e4162a0304b35d824f0e"
+  integrity sha512-O8x12RzrUF8xyVcY0KJowWsmaJxQbmy0/EtnNtHRpsOcT7dFk5W598coHqBVpmWo1oQQfsCqfCmkZN5DJrZVdg==
+  dependencies:
+    character-entities "^2.0.0"
 
 delaunator@5:
   version "5.0.0"
@@ -374,10 +488,30 @@ delaunator@5:
   dependencies:
     robust-predicates "^3.0.0"
 
-dompurify@2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.4.1.tgz#f9cb1a275fde9af6f2d0a2644ef648dd6847b631"
-  integrity sha512-ewwFzHzrrneRjxzmK6oVz/rZn9VWspGFRDb4/rRtIsM1n36t9AKma/ye8syCpcw+XJ25kOK/hOG7t1j2I2yBqA==
+dequal@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
+  integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
+
+diff@^5.0.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-5.2.0.tgz#26ded047cd1179b78b9537d5ef725503ce1ae531"
+  integrity sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==
+
+dompurify@^3.0.5:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.1.0.tgz#8c6b9fe986969a33aa4686bd829cbe8e14dd9445"
+  integrity sha512-yoU4rhgPKCo+p5UrWWWNKiIq+ToGqmVVhk0PmMYBK4kRsR3/qhemNFL8f6CFmBd4gMwm3F4T7HBoydP5uY07fA==
+
+elkjs@^0.9.0:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/elkjs/-/elkjs-0.9.2.tgz#3d4ef6f17fde06a5d7eaa3063bb875e25e59e972"
+  integrity sha512-2Y/RaA1pdgSHpY0YG4TYuYCD2wh97CRvu22eLG3Kz0pgQ/6KbIFTxsTnDc4MH/6hFlg2L/9qXrDMG0nMjP63iw==
+
+heap@^0.2.6:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/heap/-/heap-0.2.7.tgz#1e6adf711d3f27ce35a81fe3b7bd576c2260a8fc"
+  integrity sha512-2bsegYkkHO+h/9MGbn6KWcE45cHZgPANo5LXF7EvWdT0yT2EguSVO1nDgU5c8+ZOPwp2vMNa7YFsJhVcDR9Sdg==
 
 iconv-lite@0.6:
   version "0.6.3"
@@ -391,10 +525,15 @@ iconv-lite@0.6:
   resolved "https://registry.yarnpkg.com/internmap/-/internmap-2.0.3.tgz#6685f23755e43c524e251d29cbc97248e3061009"
   integrity sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==
 
-katex@^0.16.3:
-  version "0.16.8"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.16.8.tgz#89b453f40e8557f423f31a1009e9298dd99d5ceb"
-  integrity sha512-ftuDnJbcbOckGY11OO+zg3OofESlbR5DRl2cmN8HeWeeFIV7wTXvAOx8kEjZjobhA+9wh2fbKeO6cdcA9Mnovg==
+internmap@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/internmap/-/internmap-1.0.1.tgz#0017cc8a3b99605f0302f2b198d272e015e5df95"
+  integrity sha512-lDB5YccMydFBtasVtxnZ3MRBHuaoE8GKsppq+EchKL2U4nK/DmEpPHNH8MZe5HkMtpSiTSOZwfN0tzYjO/lJEw==
+
+katex@^0.16.10, katex@^0.16.9:
+  version "0.16.10"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.16.10.tgz#6f81b71ac37ff4ec7556861160f53bc5f058b185"
+  integrity sha512-ZiqaC04tp2O5utMsl2TEZTXxa6WSC4yo0fv5ML++D3QZv/vx2Mct0mTlRx3O+uUkjfuAgOkzsCmq5MiUEsDDdA==
   dependencies:
     commander "^8.3.0"
 
@@ -403,36 +542,285 @@ khroma@^2.0.0:
   resolved "https://registry.yarnpkg.com/khroma/-/khroma-2.0.0.tgz#7577de98aed9f36c7a474c4d453d94c0d6c6588b"
   integrity sha512-2J8rDNlQWbtiNYThZRvmMv5yt44ZakX+Tz5ZIp/mN1pt4snn+m030Va5Z4v8xA0cQFDXBwO/8i42xL4QPsVk3g==
 
+kleur@^4.0.3:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.5.tgz#95106101795f7050c6c650f350c683febddb1780"
+  integrity sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==
+
+layout-base@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/layout-base/-/layout-base-1.0.2.tgz#1291e296883c322a9dd4c5dd82063721b53e26e2"
+  integrity sha512-8h2oVEZNktL4BH2JCOI90iD1yXwL6iNW7KcCKT2QZgQJR2vbqDsldCTPRU9NifTCqHZci57XvQQ15YTu+sTYPg==
+
 lodash-es@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
-mermaid@^9.1.2:
-  version "9.3.0"
-  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-9.3.0.tgz#8bd7c4a44b53e4e85c53a0a474442e9c273494ae"
-  integrity sha512-mGl0BM19TD/HbU/LmlaZbjBi//tojelg8P/mxD6pPZTAYaI+VawcyBdqRsoUHSc7j71PrMdJ3HBadoQNdvP5cg==
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+mdast-util-from-markdown@^1.3.0:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz#9421a5a247f10d31d2faed2a30df5ec89ceafcf0"
+  integrity sha512-4xTO/M8c82qBcnQc1tgpNtubGUW/Y1tBQ1B0i5CtSoelOLKFYlElIr3bvgREYYO5iRqbMY1YuqZng0GVOI8Qww==
   dependencies:
-    "@braintree/sanitize-url" "^6.0.0"
-    d3 "^7.0.0"
-    dagre-d3-es "7.0.6"
-    dompurify "2.4.1"
+    "@types/mdast" "^3.0.0"
+    "@types/unist" "^2.0.0"
+    decode-named-character-reference "^1.0.0"
+    mdast-util-to-string "^3.1.0"
+    micromark "^3.0.0"
+    micromark-util-decode-numeric-character-reference "^1.0.0"
+    micromark-util-decode-string "^1.0.0"
+    micromark-util-normalize-identifier "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+    unist-util-stringify-position "^3.0.0"
+    uvu "^0.5.0"
+
+mdast-util-to-string@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/mdast-util-to-string/-/mdast-util-to-string-3.2.0.tgz#66f7bb6324756741c5f47a53557f0cbf16b6f789"
+  integrity sha512-V4Zn/ncyN1QNSqSBxTrMOLpjr+IKdHl2v3KVLoWmDPscP4r9GcCi71gjgvUV1SFSKh92AjAG4peFuBl2/YgCJg==
+  dependencies:
+    "@types/mdast" "^3.0.0"
+
+mermaid@^10.9:
+  version "10.9.0"
+  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-10.9.0.tgz#4d1272fbe434bd8f3c2c150554dc8a23a9bf9361"
+  integrity sha512-swZju0hFox/B/qoLKK0rOxxgh8Cf7rJSfAUc1u8fezVihYMvrJAS45GzAxTVf4Q+xn9uMgitBcmWk7nWGXOs/g==
+  dependencies:
+    "@braintree/sanitize-url" "^6.0.1"
+    "@types/d3-scale" "^4.0.3"
+    "@types/d3-scale-chromatic" "^3.0.0"
+    cytoscape "^3.28.1"
+    cytoscape-cose-bilkent "^4.1.0"
+    d3 "^7.4.0"
+    d3-sankey "^0.12.3"
+    dagre-d3-es "7.0.10"
+    dayjs "^1.11.7"
+    dompurify "^3.0.5"
+    elkjs "^0.9.0"
+    katex "^0.16.9"
     khroma "^2.0.0"
     lodash-es "^4.17.21"
-    moment-mini "^2.24.0"
+    mdast-util-from-markdown "^1.3.0"
     non-layered-tidy-tree-layout "^2.0.2"
-    stylis "^4.1.2"
+    stylis "^4.1.3"
+    ts-dedent "^2.2.0"
     uuid "^9.0.0"
+    web-worker "^1.2.0"
 
-moment-mini@^2.24.0:
-  version "2.29.4"
-  resolved "https://registry.yarnpkg.com/moment-mini/-/moment-mini-2.29.4.tgz#cbbcdc58ce1b267506f28ea6668dbe060a32758f"
-  integrity sha512-uhXpYwHFeiTbY9KSgPPRoo1nt8OxNVdMVoTBYHfSEKeRkIkwGpO+gERmhuhBtzfaeOyTkykSrm2+noJBgqt3Hg==
+micromark-core-commonmark@^1.0.1:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-core-commonmark/-/micromark-core-commonmark-1.1.0.tgz#1386628df59946b2d39fb2edfd10f3e8e0a75bb8"
+  integrity sha512-BgHO1aRbolh2hcrzL2d1La37V0Aoz73ymF8rAcKnohLy93titmv62E0gP8Hrx9PKcKrqCZ1BbLGbP3bEhoXYlw==
+  dependencies:
+    decode-named-character-reference "^1.0.0"
+    micromark-factory-destination "^1.0.0"
+    micromark-factory-label "^1.0.0"
+    micromark-factory-space "^1.0.0"
+    micromark-factory-title "^1.0.0"
+    micromark-factory-whitespace "^1.0.0"
+    micromark-util-character "^1.0.0"
+    micromark-util-chunked "^1.0.0"
+    micromark-util-classify-character "^1.0.0"
+    micromark-util-html-tag-name "^1.0.0"
+    micromark-util-normalize-identifier "^1.0.0"
+    micromark-util-resolve-all "^1.0.0"
+    micromark-util-subtokenize "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.1"
+    uvu "^0.5.0"
+
+micromark-factory-destination@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-factory-destination/-/micromark-factory-destination-1.1.0.tgz#eb815957d83e6d44479b3df640f010edad667b9f"
+  integrity sha512-XaNDROBgx9SgSChd69pjiGKbV+nfHGDPVYFs5dOoDd7ZnMAE+Cuu91BCpsY8RT2NP9vo/B8pds2VQNCLiu0zhg==
+  dependencies:
+    micromark-util-character "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+
+micromark-factory-label@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-factory-label/-/micromark-factory-label-1.1.0.tgz#cc95d5478269085cfa2a7282b3de26eb2e2dec68"
+  integrity sha512-OLtyez4vZo/1NjxGhcpDSbHQ+m0IIGnT8BoPamh+7jVlzLJBH98zzuCoUeMxvM6WsNeh8wx8cKvqLiPHEACn0w==
+  dependencies:
+    micromark-util-character "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+    uvu "^0.5.0"
+
+micromark-factory-space@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-factory-space/-/micromark-factory-space-1.1.0.tgz#c8f40b0640a0150751d3345ed885a080b0d15faf"
+  integrity sha512-cRzEj7c0OL4Mw2v6nwzttyOZe8XY/Z8G0rzmWQZTBi/jjwyw/U4uqKtUORXQrR5bAZZnbTI/feRV/R7hc4jQYQ==
+  dependencies:
+    micromark-util-character "^1.0.0"
+    micromark-util-types "^1.0.0"
+
+micromark-factory-title@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-factory-title/-/micromark-factory-title-1.1.0.tgz#dd0fe951d7a0ac71bdc5ee13e5d1465ad7f50ea1"
+  integrity sha512-J7n9R3vMmgjDOCY8NPw55jiyaQnH5kBdV2/UXCtZIpnHH3P6nHUKaH7XXEYuWwx/xUJcawa8plLBEjMPU24HzQ==
+  dependencies:
+    micromark-factory-space "^1.0.0"
+    micromark-util-character "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+
+micromark-factory-whitespace@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-factory-whitespace/-/micromark-factory-whitespace-1.1.0.tgz#798fb7489f4c8abafa7ca77eed6b5745853c9705"
+  integrity sha512-v2WlmiymVSp5oMg+1Q0N1Lxmt6pMhIHD457whWM7/GUlEks1hI9xj5w3zbc4uuMKXGisksZk8DzP2UyGbGqNsQ==
+  dependencies:
+    micromark-factory-space "^1.0.0"
+    micromark-util-character "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+
+micromark-util-character@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-character/-/micromark-util-character-1.2.0.tgz#4fedaa3646db249bc58caeb000eb3549a8ca5dcc"
+  integrity sha512-lXraTwcX3yH/vMDaFWCQJP1uIszLVebzUa3ZHdrgxr7KEU/9mL4mVgCpGbyhvNLNlauROiNUq7WN5u7ndbY6xg==
+  dependencies:
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+
+micromark-util-chunked@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-chunked/-/micromark-util-chunked-1.1.0.tgz#37a24d33333c8c69a74ba12a14651fd9ea8a368b"
+  integrity sha512-Ye01HXpkZPNcV6FiyoW2fGZDUw4Yc7vT0E9Sad83+bEDiCJ1uXu0S3mr8WLpsz3HaG3x2q0HM6CTuPdcZcluFQ==
+  dependencies:
+    micromark-util-symbol "^1.0.0"
+
+micromark-util-classify-character@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-classify-character/-/micromark-util-classify-character-1.1.0.tgz#6a7f8c8838e8a120c8e3c4f2ae97a2bff9190e9d"
+  integrity sha512-SL0wLxtKSnklKSUplok1WQFoGhUdWYKggKUiqhX+Swala+BtptGCu5iPRc+xvzJ4PXE/hwM3FNXsfEVgoZsWbw==
+  dependencies:
+    micromark-util-character "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+
+micromark-util-combine-extensions@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-combine-extensions/-/micromark-util-combine-extensions-1.1.0.tgz#192e2b3d6567660a85f735e54d8ea6e3952dbe84"
+  integrity sha512-Q20sp4mfNf9yEqDL50WwuWZHUrCO4fEyeDCnMGmG5Pr0Cz15Uo7KBs6jq+dq0EgX4DPwwrh9m0X+zPV1ypFvUA==
+  dependencies:
+    micromark-util-chunked "^1.0.0"
+    micromark-util-types "^1.0.0"
+
+micromark-util-decode-numeric-character-reference@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-decode-numeric-character-reference/-/micromark-util-decode-numeric-character-reference-1.1.0.tgz#b1e6e17009b1f20bc652a521309c5f22c85eb1c6"
+  integrity sha512-m9V0ExGv0jB1OT21mrWcuf4QhP46pH1KkfWy9ZEezqHKAxkj4mPCy3nIH1rkbdMlChLHX531eOrymlwyZIf2iw==
+  dependencies:
+    micromark-util-symbol "^1.0.0"
+
+micromark-util-decode-string@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-decode-string/-/micromark-util-decode-string-1.1.0.tgz#dc12b078cba7a3ff690d0203f95b5d5537f2809c"
+  integrity sha512-YphLGCK8gM1tG1bd54azwyrQRjCFcmgj2S2GoJDNnh4vYtnL38JS8M4gpxzOPNyHdNEpheyWXCTnnTDY3N+NVQ==
+  dependencies:
+    decode-named-character-reference "^1.0.0"
+    micromark-util-character "^1.0.0"
+    micromark-util-decode-numeric-character-reference "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+
+micromark-util-encode@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-encode/-/micromark-util-encode-1.1.0.tgz#92e4f565fd4ccb19e0dcae1afab9a173bbeb19a5"
+  integrity sha512-EuEzTWSTAj9PA5GOAs992GzNh2dGQO52UvAbtSOMvXTxv3Criqb6IOzJUBCmEqrrXSblJIJBbFFv6zPxpreiJw==
+
+micromark-util-html-tag-name@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-html-tag-name/-/micromark-util-html-tag-name-1.2.0.tgz#48fd7a25826f29d2f71479d3b4e83e94829b3588"
+  integrity sha512-VTQzcuQgFUD7yYztuQFKXT49KghjtETQ+Wv/zUjGSGBioZnkA4P1XXZPT1FHeJA6RwRXSF47yvJ1tsJdoxwO+Q==
+
+micromark-util-normalize-identifier@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-normalize-identifier/-/micromark-util-normalize-identifier-1.1.0.tgz#7a73f824eb9f10d442b4d7f120fecb9b38ebf8b7"
+  integrity sha512-N+w5vhqrBihhjdpM8+5Xsxy71QWqGn7HYNUvch71iV2PM7+E3uWGox1Qp90loa1ephtCxG2ftRV/Conitc6P2Q==
+  dependencies:
+    micromark-util-symbol "^1.0.0"
+
+micromark-util-resolve-all@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-resolve-all/-/micromark-util-resolve-all-1.1.0.tgz#4652a591ee8c8fa06714c9b54cd6c8e693671188"
+  integrity sha512-b/G6BTMSg+bX+xVCshPTPyAu2tmA0E4X98NSR7eIbeC6ycCqCeE7wjfDIgzEbkzdEVJXRtOG4FbEm/uGbCRouA==
+  dependencies:
+    micromark-util-types "^1.0.0"
+
+micromark-util-sanitize-uri@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-sanitize-uri/-/micromark-util-sanitize-uri-1.2.0.tgz#613f738e4400c6eedbc53590c67b197e30d7f90d"
+  integrity sha512-QO4GXv0XZfWey4pYFndLUKEAktKkG5kZTdUNaTAkzbuJxn2tNBOr+QtxR2XpWaMhbImT2dPzyLrPXLlPhph34A==
+  dependencies:
+    micromark-util-character "^1.0.0"
+    micromark-util-encode "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+
+micromark-util-subtokenize@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-subtokenize/-/micromark-util-subtokenize-1.1.0.tgz#941c74f93a93eaf687b9054aeb94642b0e92edb1"
+  integrity sha512-kUQHyzRoxvZO2PuLzMt2P/dwVsTiivCK8icYTeR+3WgbuPqfHgPPy7nFKbeqRivBvn/3N3GBiNC+JRTMSxEC7A==
+  dependencies:
+    micromark-util-chunked "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.0"
+    uvu "^0.5.0"
+
+micromark-util-symbol@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-symbol/-/micromark-util-symbol-1.1.0.tgz#813cd17837bdb912d069a12ebe3a44b6f7063142"
+  integrity sha512-uEjpEYY6KMs1g7QfJ2eX1SQEV+ZT4rUD3UcF6l57acZvLNK7PBZL+ty82Z1qhK1/yXIY4bdx04FKMgR0g4IAag==
+
+micromark-util-types@^1.0.0, micromark-util-types@^1.0.1:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/micromark-util-types/-/micromark-util-types-1.1.0.tgz#e6676a8cae0bb86a2171c498167971886cb7e283"
+  integrity sha512-ukRBgie8TIAcacscVHSiddHjO4k/q3pnedmzMQ4iwDcK0FtFCohKOlFbaOL/mPgfnPsL3C1ZyxJa4sbWrBl3jg==
+
+micromark@^3.0.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/micromark/-/micromark-3.2.0.tgz#1af9fef3f995ea1ea4ac9c7e2f19c48fd5c006e9"
+  integrity sha512-uD66tJj54JLYq0De10AhWycZWGQNUvDI55xPgk2sQM5kn1JYlhbCMTtEeT27+vAhW2FBQxLlOmS3pmA7/2z4aA==
+  dependencies:
+    "@types/debug" "^4.0.0"
+    debug "^4.0.0"
+    decode-named-character-reference "^1.0.0"
+    micromark-core-commonmark "^1.0.1"
+    micromark-factory-space "^1.0.0"
+    micromark-util-character "^1.0.0"
+    micromark-util-chunked "^1.0.0"
+    micromark-util-combine-extensions "^1.0.0"
+    micromark-util-decode-numeric-character-reference "^1.0.0"
+    micromark-util-encode "^1.0.0"
+    micromark-util-normalize-identifier "^1.0.0"
+    micromark-util-resolve-all "^1.0.0"
+    micromark-util-sanitize-uri "^1.0.0"
+    micromark-util-subtokenize "^1.0.0"
+    micromark-util-symbol "^1.0.0"
+    micromark-util-types "^1.0.1"
+    uvu "^0.5.0"
 
 mousetrap@^1.6.5:
   version "1.6.5"
   resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
   integrity sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==
+
+mri@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mri/-/mri-1.2.0.tgz#6721480fec2a11a4889861115a48b6cbe7cc8f0b"
+  integrity sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==
+
+ms@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
+  integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
 non-layered-tidy-tree-layout@^2.0.2:
   version "2.0.2"
@@ -449,17 +837,51 @@ rw@1:
   resolved "https://registry.yarnpkg.com/rw/-/rw-1.3.3.tgz#3f862dfa91ab766b14885ef4d01124bfda074fb4"
   integrity sha512-PdhdWy89SiZogBLaw42zdeqtRJ//zFd2PgQavcICDUgJT5oW10QCRKbJ6bg4r0/UY2M6BWd5tkxuGFRvCkgfHQ==
 
+sade@^1.7.3:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/sade/-/sade-1.8.1.tgz#0a78e81d658d394887be57d2a409bf703a3b2701"
+  integrity sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==
+  dependencies:
+    mri "^1.1.0"
+
 "safer-buffer@>= 2.1.2 < 3.0.0":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-stylis@^4.1.2:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.1.3.tgz#fd2fbe79f5fed17c55269e16ed8da14c84d069f7"
-  integrity sha512-GP6WDNWf+o403jrEp9c5jibKavrtLW+/qYGhFxFrG8maXhwTBI7gLLhiBb0o7uFccWN+EOS9aMO6cGHWAO07OA==
+stylis@^4.1.3:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.3.1.tgz#ed8a9ebf9f76fe1e12d462f5cc3c4c980b23a7eb"
+  integrity sha512-EQepAV+wMsIaGVGX1RECzgrcqRRU/0sYOHkeLsZ3fzHaHXZy4DaOOX0vOlGQdlsjkh3mFHAIlVimpwAs4dslyQ==
+
+ts-dedent@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.2.0.tgz#39e4bd297cd036292ae2394eb3412be63f563bb5"
+  integrity sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==
+
+unist-util-stringify-position@^3.0.0:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/unist-util-stringify-position/-/unist-util-stringify-position-3.0.3.tgz#03ad3348210c2d930772d64b489580c13a7db39d"
+  integrity sha512-k5GzIBZ/QatR8N5X2y+drfpWG8IDBzdnVj6OInRNWm1oXrzydiaAT2OQiA8DPRRZyAKb9b6I2a6PxYklZD0gKg==
+  dependencies:
+    "@types/unist" "^2.0.0"
 
 uuid@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
   integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
+
+uvu@^0.5.0:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/uvu/-/uvu-0.5.6.tgz#2754ca20bcb0bb59b64e9985e84d2e81058502df"
+  integrity sha512-+g8ENReyr8YsOc6fv/NVJs2vFdHBnBNdfE49rshrTzDWOlUx4Gq7KOS2GD8eqhy2j+Ejq29+SbKH8yjkAqXqoA==
+  dependencies:
+    dequal "^2.0.0"
+    diff "^5.0.0"
+    kleur "^4.0.3"
+    sade "^1.7.3"
+
+web-worker@^1.2.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/web-worker/-/web-worker-1.3.0.tgz#e5f2df5c7fe356755a5fb8f8410d4312627e6776"
+  integrity sha512-BSR9wyRsy/KOValMgd5kMyr3JzpdeoR9KVId8u5GVlTTAtNChlsE4yTxeY7zMdNSyOmoKBv8NH2qeRY9Tg+IaA==
