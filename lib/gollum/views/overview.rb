@@ -34,7 +34,7 @@ module Precious
           breadcrumb << %{</ol></nav>}
           breadcrumb.join("\n")
         else
-          'Home'
+          '' # Top directory does not display content.
         end
       end
 
