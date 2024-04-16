@@ -49,6 +49,15 @@ context 'Frontend with mathjax and mermaid' do
     assert_only_expected_errors(log)
   end
 
+  test 'mermaid working on Bilbo page' do
+    visit '/Bilbo-Baggins'
+    log = console_log(page)
+    assert_only_expected_errors(log)
+    within_frame(:css, "div.mermaid iframe") do
+      assert page.has_css?('g[id^=flowchart-Erebor]')
+    end
+  end
+ 
   test 'no unexpected errors on editor' do
     visit '/gollum/edit/Bilbo-Baggins'
 
