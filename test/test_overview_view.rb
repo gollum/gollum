@@ -62,7 +62,7 @@ context "Precious::Views::Overview" do
   end
 
   test "breadcrumb with no path" do
-    assert_equal 'Home', @page.breadcrumb
+    assert_equal '', @page.breadcrumb
   end
 
   test "folders first" do
