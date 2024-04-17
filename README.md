@@ -24,10 +24,10 @@ Gollum is a simple wiki system built on top of Git. A Gollum Wiki is simply a gi
   * Just clone your GitHub/GitLab wiki and view and edit it locally!
 
 * Gollum supports advanced functionality like:
-  * [UML diagrams](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
+  * Diagrams using [Mermaid](https://github.com/gollum/gollum/wiki#mermaid-diagrams) or [PlantUML](https://github.com/gollum/gollum/wiki#plantuml-diagrams)
   * [BibTeX and Citation support](https://github.com/gollum/gollum/wiki/BibTeX-and-Citations)
   * Annotations using [CriticMarkup](https://github.com/gollum/gollum/wiki#criticmarkup-annotations)
-  * Mathematics via [MathJax](https://github.com/gollum/gollum/wiki#mathematics)
+  * [Mathematics](https://github.com/gollum/gollum/wiki#mathematics) via KaTeX or MathJax
   * [Macros](https://github.com/gollum/gollum/wiki/Standard-Macros)
   * [Redirects](https://github.com/gollum/gollum/wiki#redirects)
   * [RSS Feed](https://github.com/gollum/gollum/wiki/5.0-release-notes#rss-feed) of latest changes
