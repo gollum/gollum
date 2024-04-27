@@ -284,6 +284,8 @@ else
     # otherwise it will be relative to the CWD
     cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
     require cfg
+    # The options may have been updated. Reload them.
+    wiki_options = Precious::App.wiki_options
   end
 
   base_path = wiki_options[:base_path]
