@@ -16,3 +16,4 @@
 ## Fixes & Improvements
 
 * Fix (Docker image): add git configuration for `/wiki` as safe directory. #2006
+* Fix: use `base_path` as set in config file.
