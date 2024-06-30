@@ -56,16 +56,17 @@ module Precious
   # For use with the --base-path option.
   class MapGollum
     def initialize(base_path)
+      base_route = "/#{remove_leading_and_trailing_slashes(base_path)}"
       @mg = Rack::Builder.new do
 
-        map "/#{base_path}" do
+        map "/#{base_route}" do
           run Precious::App
         end
         map '/' do
-          run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
+          run Proc.new { [302, { 'Location' => "/#{base_route}" }, []] }
         end
         map '/*' do
-          run Proc.new { [302, { 'Location' => "/#{base_path}" }, []] }
+          run Proc.new { [302, { 'Location' => "/#{base_route}" }, []] }
         end
 
       end
