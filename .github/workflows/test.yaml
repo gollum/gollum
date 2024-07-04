@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ['2.7', '3.1', '3.2.1']
+        ruby: ['3.1.4', '3.2.1', '3.3']
     steps:
       - name: Install required system dependencies
         run: |
@@ -55,6 +55,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
+          rubygems: 3.5.14
           bundler-cache: true
       - name: Run tests
         run: bundle exec rake
@@ -79,7 +80,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.2.1'
           bundler-cache: true
       - name: Run tests
         run: bundle exec rake test:capybara
