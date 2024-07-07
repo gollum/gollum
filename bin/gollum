@@ -293,9 +293,9 @@ else
   if base_path.nil?
     Precious::App.run!(options)
   else
-    require 'rack'
+    require 'rackup'
 
-    # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
-    Rack::Server.new(:app => Precious::MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
+    # Rackup::Handler does not work with Ctrl + C. Use Rackup::Server instead.
+    Rackup::Server.new(:app => Precious::MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
   end
 end
