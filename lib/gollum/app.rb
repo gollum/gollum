@@ -103,7 +103,7 @@ module Precious
     }
 
     # Sinatra error handling
-    configure :development, :staging do
+    configure :development, :staging, :gollum_development do
       enable :show_exceptions, :dump_errors
       disable :raise_errors, :clean_trace
     end
@@ -138,7 +138,7 @@ module Precious
       @mermaid = settings.wiki_options.fetch(:mermaid, true)
       Gollum::Filter::Code.language_handlers.delete(/mermaid/) unless @mermaid
 
-      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :development)
+      @use_static_assets = settings.wiki_options.fetch(:static, settings.environment != :gollum_development)
       @static_assets_path = settings.wiki_options.fetch(:static_assets_path, ::File.join(File.dirname(__FILE__), 'public/assets'))
       @mathjax_path = ::File.join(File.dirname(__FILE__), 'public/gollum/javascript/MathJax')
 
