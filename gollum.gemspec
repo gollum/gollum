@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'gollum-lib', '~> 6.0'
   s.add_dependency 'kramdown', '~> 2.3'
   s.add_dependency 'kramdown-parser-gfm', '~> 1.1.0'
+  s.add_dependency 'rack', '>= 3.0'
   s.add_dependency 'rackup', '~> 2.1'
   s.add_dependency 'sinatra', '~> 4.0'
   s.add_dependency 'sinatra-contrib', '~> 4.0'
