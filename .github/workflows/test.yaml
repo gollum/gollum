@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [jruby-9.4.4.0]
+        ruby: [jruby-9.4]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
