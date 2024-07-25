@@ -22,7 +22,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: jruby-9.4
-          bundler: 1.17.3
           bundler-cache: true
       - name: Run tests
         run: bundle exec rake
