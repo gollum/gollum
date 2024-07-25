@@ -214,7 +214,7 @@ end
 desc 'Build changelog'
 task :changelog do
   [latest_changes_file, history_file].each do |f|
-    unless File.exists?(f)
+    unless File.exist?(f)
       puts "#{f} does not exist but is required to build a new release."
       exit!
     end
@@ -271,7 +271,7 @@ task :precompile do
       JS_COMPRESSOR = ::Terser.new
     end
   end
-  
+
   require './lib/gollum/app.rb'
 
   # Next, configure the Sprockets asset pipeline and precompile production-
