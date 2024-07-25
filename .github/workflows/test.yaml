@@ -36,6 +36,9 @@ jobs:
           bundler-cache: true
       - name: Run tests
         run: bundle exec rake
+      - name: Create WAR executable
+        run: bundle exec warble runnable war ${{ github.workspace }}/Gemfile
+
   mri_build:
     name: Ruby (${{ matrix.ruby }})
     runs-on: ubuntu-latest
@@ -59,6 +62,7 @@ jobs:
           bundler-cache: true
       - name: Run tests
         run: bundle exec rake
+
   selenium:
     name: Selenium on MRI
     runs-on: ubuntu-latest
