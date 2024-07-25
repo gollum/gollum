@@ -11,7 +11,7 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Check out repository code
         uses: actions/checkout@v3
       - name: Set up Java
         uses: actions/setup-java@v2
