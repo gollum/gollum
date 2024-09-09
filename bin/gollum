@@ -121,7 +121,7 @@ MSG
     puts "To set a custom configuration for #{wiki_options[:math]} please add it to \'#{default_math_config}\' and commit it to the repo."
   end
   opts.on('--mathjax', 'Enable rendering of mathematical equations via mathjax.') do |mode|
-    puts 'DEPRECATION WARNING: --mathjax. This switch will be removed in the future. Please use: "--math matjax".'
+    puts 'DEPRECATION WARNING: --mathjax. This switch will be removed in the future. Please use: "--math mathjax".'
     puts "If you are using a custom mathjax.config.js, please remame it to #{default_math_config}."
     wiki_options[:math] = :mathjax
     wiki_options[:math_config] = default_math_config
