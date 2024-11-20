@@ -19,19 +19,23 @@ jobs:
       - name: Install required system dependencies
         run: |
           sudo apt-get install -y libyaml-dev
+
       - name: Check Out Repo
         uses: actions/checkout@v2
+
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
-      - name: Cache docker layers
+
+      - name: Cache Docker layers
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-      - name: Build
+
+      - name: Build Docker image
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -43,15 +47,19 @@ jobs:
           outputs: type=docker
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-      - name: Image digest
+
+      - name: Print Docker image digest (SHA256)
         run: echo ${{ steps.docker_build.outputs.digest }}
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2
           bundler-cache: true
+
       - name: Install Chromedriver
         uses: nanasess/setup-chromedriver@v2
+
       - name: Run Capybara tests against a Dockerized Gollum instance
         run: |
           export GOLLUM_CAPYBARA_URL="http://127.0.0.1:4567"
