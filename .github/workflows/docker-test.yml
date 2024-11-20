@@ -50,7 +50,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.1
+          ruby-version: 3.2
           bundler-cache: true
       - name: Install Chromedriver
         uses: nanasess/setup-chromedriver@v2
@@ -58,11 +58,23 @@ jobs:
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
-      - name: Run gollum from Docker
+      - name: Run Capybara tests against a Dockerized Gollum instance
         run: |
-          git clone test/examples/lotr.git /tmp/lotr.git
-          RUNNER_TRACKING_ID="" docker run --user $(id -u) --rm -p 4567:4567 -v /tmp/lotr.git:/wiki -e CI=true ${{ env.CI_IMAGE }} --math katex &
-          sleep 10
-          netstat -lt
-      - name: Run capybara tests against Dockerized instance
-        run: "GOLLUM_CAPYBARA_URL=http://127.0.0.1:4567 bundle exec rake test:capybara"
+          export GOLLUM_CAPYBARA_URL="http://127.0.0.1:4567"
+          export RUNNER_TRACKING_ID=""
+          export WIKI_ROOT="/tmp/lotr.git"
+
+          # Clone a test wiki to run tests against.
+          #
+          git clone test/examples/lotr.git "$WIKI_ROOT"
+
+          # Run a daemonized Docker instance in a normal way, then run tests.
+          #
+          docker run \
+            --detach \
+            --user $(id -u) \
+            --rm \
+            --publish 4567:4567 \
+            --volume "$WIKI_ROOT":/wiki \
+            ${{ env.CI_IMAGE }} --math katex
+          bundle exec rake test:capybara
