@@ -45,8 +45,6 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-      - name: docker state
-        run: docker image ls
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -54,10 +52,6 @@ jobs:
           bundler-cache: true
       - name: Install Chromedriver
         uses: nanasess/setup-chromedriver@v2
-      - run: |
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub &
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
       - name: Run Capybara tests against a Dockerized Gollum instance
         run: |
           export GOLLUM_CAPYBARA_URL="http://127.0.0.1:4567"
