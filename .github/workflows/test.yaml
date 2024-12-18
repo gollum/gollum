@@ -11,6 +11,7 @@ on:
       - '**.md'
       - '**.txt'
       - 'contrib/**'
+
 jobs:
   jruby_build:
     name: JRuby (${{ matrix.ruby }})
@@ -21,9 +22,6 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
@@ -51,9 +49,6 @@ jobs:
           sudo apt-get install -y libyaml-dev
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -78,9 +73,6 @@ jobs:
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
