@@ -58,11 +58,14 @@ context "Frontend" do
 
     get 'utfh1'
 
-    doc = Nokogiri::HTML(last_response.body)
-    anchor = doc.css('h2.editable a.anchor')
-    assert_equal anchor.attr('id').value, "한글"
-    assert_equal anchor.attr('href').value, "#한글"
-    assert_equal doc.css('h2.editable').children.last.to_s.strip, "한글"
+    document = Nokogiri::HTML(last_response.body)
+
+    heading = document.css 'h2.editable'
+    assert_equal heading.text, "한글"
+
+    heading_anchor = heading.at 'a'
+    assert_equal heading_anchor['id'], "한글"
+    assert_equal heading_anchor['href'], "#한글"
   end
 
   test 'rss feed' do
