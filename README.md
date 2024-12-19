@@ -67,6 +67,8 @@ The [latest Release](https://github.com/gollum/gollum/releases/) of Gollum will 
 
 `java -jar gollum.war -S gollum <your-gollum-arguments-here>`
 
+When using the `.war`, please be sure to pass [absolute paths](https://github.com/gollum/gollum/wiki/Gollum-via-Java-WAR#absolute-paths-issue) to your Gollum arguments.
+
 ### Misc
 
 See [below](#running-from-source) for information on running Gollum from source, as a Rack app, and more.
