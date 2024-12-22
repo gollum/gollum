@@ -1,4 +1,4 @@
-FROM ruby:3.1-alpine AS builder
+FROM ruby:3.3-alpine AS builder
 
 RUN apk add --update \
             --no-cache \
@@ -28,7 +28,7 @@ WORKDIR /app
 COPY . /app
 RUN bundle exec rake install
 
-FROM ruby:3.1-alpine
+FROM ruby:3.3-alpine
 
 ARG UID=${UID:-1000}
 ARG GID=${GID:-1000}
