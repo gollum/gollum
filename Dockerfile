@@ -30,8 +30,8 @@ RUN bundle exec rake install
 
 FROM ruby:3.1-alpine
 
-ARG UID=${UID:-1000}
-ARG GID=${GID:-1000}
+ARG UID=1000
+ARG GID=1000
 
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 
