@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.6'
 
   s.name              = 'gollum'
-  s.version           = '6.0.1'
+  s.version           = '6.1.0'
   s.license           = 'MIT'
 
   s.summary     = 'A simple, Git-powered wiki.'
@@ -80,12 +80,12 @@ Gem::Specification.new do |s|
     lib/gollum/public/assets/app-e224b375d824f0171fc926d624dc0887bf453db83f485b1992bc0859c4110e3e.css.gz
     lib/gollum/public/assets/criticmarkup-7b66f7a53b854bc9e4168be5b4725ca38e2bc6e9c41d5c050a9f60d9a94cb405.css
     lib/gollum/public/assets/criticmarkup-7b66f7a53b854bc9e4168be5b4725ca38e2bc6e9c41d5c050a9f60d9a94cb405.css.gz
-    lib/gollum/public/assets/editor-5ac2983673c8540e50683c3ae37f1635882e94a04a1e823776a663740fdb3aa7.js
-    lib/gollum/public/assets/editor-5ac2983673c8540e50683c3ae37f1635882e94a04a1e823776a663740fdb3aa7.js.gz
+    lib/gollum/public/assets/editor-9bef5462bb5dae2db84d6d8d534b55c5bb5a430e11344b3c23f9ea4410312f52.js
+    lib/gollum/public/assets/editor-9bef5462bb5dae2db84d6d8d534b55c5bb5a430e11344b3c23f9ea4410312f52.js.gz
     lib/gollum/public/assets/gollum.katex-e70c1d51a08ebfe759eecbb33fbed54f300ccd7fb8d0e86e251caaf4e50f6b68.js
     lib/gollum/public/assets/gollum.katex-e70c1d51a08ebfe759eecbb33fbed54f300ccd7fb8d0e86e251caaf4e50f6b68.js.gz
-    lib/gollum/public/assets/gollum.mermaid-ccc590b7d9655deec94c9975f25d74fbe38f703c927e26cf81169d63fea7cd50.js
-    lib/gollum/public/assets/gollum.mermaid-ccc590b7d9655deec94c9975f25d74fbe38f703c927e26cf81169d63fea7cd50.js.gz
+    lib/gollum/public/assets/gollum.mermaid-06fd2f5494199db250618043312c27770720504b50c3f6ca99d2d2df529c7da3.js
+    lib/gollum/public/assets/gollum.mermaid-06fd2f5494199db250618043312c27770720504b50c3f6ca99d2d2df529c7da3.js.gz
     lib/gollum/public/assets/katex/dist/fonts/KaTeX_AMS-Regular.woff2
     lib/gollum/public/assets/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2
     lib/gollum/public/assets/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2
