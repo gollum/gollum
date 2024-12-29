@@ -1,10 +1,14 @@
 #!/bin/bash
 
+wiki_is_writable(){
+  tempfile="$(mktemp -p . 2>/dev/null)" && rm "$tempfile"
+}
+
 # Check if /wiki directory exists and is writable
-if [ ! -d "/wiki" ] || [ ! -w "/wiki" ]; then
-  echo "Warning: /wiki directory does not exist or is not writable. Adjust permissions to mapped host volume."
-else
+if [ -d "/wiki" ] && wiki_is_writable; then
   echo "The /wiki directory exists and is writable."
+else
+  echo "Warning: /wiki directory does not exist or is not writable. Adjust permissions to mapped host volume."
 fi
 
 # Initialize the wiki
@@ -21,4 +25,4 @@ if [ ${GOLLUM_AUTHOR_EMAIL:+1} ]; then
 fi
 
 # Start gollum service
-exec gollum $@
+exec gollum "$@"
