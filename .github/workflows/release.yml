@@ -23,6 +23,7 @@ jobs:
         with:
           ruby-version: jruby-9.4
           bundler-cache: true
+          bundler: 2.5
       - name: Run tests
         run: bundle exec rake
       - name: Create war
