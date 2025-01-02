@@ -28,6 +28,15 @@ jobs:
         run: bundle exec rake
       - name: Create war
         run: bundle exec warble runnable war ${{ github.workspace }}/Gemfile
+      - name: Verify that .war has been built
+        run: ls gollum.war
+      - name: Calculate digest for gollum.war
+        run: sha256sum gollum.war > gollum.war.digest.txt && cat gollum.war.digest.txt
+      - name: Add URL of current workflow run to the digest file 
+        run: |
+          echo "You can also find this SHA sum in the build that generated this version of gollum.war:" >> gollum.war.digest.txt
+          echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> gollum.war.digest.txt
+          cat gollum.war.digest.txt
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
@@ -39,3 +48,4 @@ jobs:
           files: |
             gollum.war
             LICENSE
+            gollum.war.digest.txt
