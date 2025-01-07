@@ -19,6 +19,19 @@ module Precious
       env.js_compressor  = ::Precious::Assets::JS_COMPRESSOR if defined?(::Precious::Assets::JS_COMPRESSOR)
       env.css_compressor = :sassc
 
+      options = {
+        sass_config: {
+          quiet_deps: true,
+          silence_deprecations: [
+            'global-builtin',
+            'import'
+          ]
+        }
+      }
+
+      env.register_transformer 'text/sass', 'text/css', Sprockets::SasscProcessor.new(options)
+      env.register_transformer 'text/scss', 'text/css', Sprockets::ScsscProcessor.new(options)
+
       env.context_class.class_eval do
         def base_url
           self.class.class_variable_get(:@@base_url)
