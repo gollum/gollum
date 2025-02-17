@@ -76,16 +76,16 @@ Gem::Specification.new do |s|
     lib/gollum/public/assets/.sprockets-manifest-6c4a0bc907c3e25cb7e69c0faf6e71d2.json
     lib/gollum/public/assets/app-05adca32f8f4f3effe10f8f4cf26dfd6a419ba986bce60d3f51a97e4055d4113.js
     lib/gollum/public/assets/app-05adca32f8f4f3effe10f8f4cf26dfd6a419ba986bce60d3f51a97e4055d4113.js.gz
-    lib/gollum/public/assets/app-e224b375d824f0171fc926d624dc0887bf453db83f485b1992bc0859c4110e3e.css
-    lib/gollum/public/assets/app-e224b375d824f0171fc926d624dc0887bf453db83f485b1992bc0859c4110e3e.css.gz
+    lib/gollum/public/assets/app-9d795231a6c3cc87971d7b6af2678cb3183084136e41aa47b0b2995f24d937d1.css
+    lib/gollum/public/assets/app-9d795231a6c3cc87971d7b6af2678cb3183084136e41aa47b0b2995f24d937d1.css.gz
     lib/gollum/public/assets/criticmarkup-7b66f7a53b854bc9e4168be5b4725ca38e2bc6e9c41d5c050a9f60d9a94cb405.css
     lib/gollum/public/assets/criticmarkup-7b66f7a53b854bc9e4168be5b4725ca38e2bc6e9c41d5c050a9f60d9a94cb405.css.gz
-    lib/gollum/public/assets/editor-9bef5462bb5dae2db84d6d8d534b55c5bb5a430e11344b3c23f9ea4410312f52.js
-    lib/gollum/public/assets/editor-9bef5462bb5dae2db84d6d8d534b55c5bb5a430e11344b3c23f9ea4410312f52.js.gz
+    lib/gollum/public/assets/editor-52c4e18ed80e69236a112b7a226635e8179d790f2c458341af2ed295b260c25c.js
+    lib/gollum/public/assets/editor-52c4e18ed80e69236a112b7a226635e8179d790f2c458341af2ed295b260c25c.js.gz
     lib/gollum/public/assets/gollum.katex-e70c1d51a08ebfe759eecbb33fbed54f300ccd7fb8d0e86e251caaf4e50f6b68.js
     lib/gollum/public/assets/gollum.katex-e70c1d51a08ebfe759eecbb33fbed54f300ccd7fb8d0e86e251caaf4e50f6b68.js.gz
-    lib/gollum/public/assets/gollum.mermaid-06fd2f5494199db250618043312c27770720504b50c3f6ca99d2d2df529c7da3.js
-    lib/gollum/public/assets/gollum.mermaid-06fd2f5494199db250618043312c27770720504b50c3f6ca99d2d2df529c7da3.js.gz
+    lib/gollum/public/assets/gollum.mermaid-845d23a58401ae1e6573d87a9a050b1f5cea01a0d5b1adc9803194d35cb3e5d5.js
+    lib/gollum/public/assets/gollum.mermaid-845d23a58401ae1e6573d87a9a050b1f5cea01a0d5b1adc9803194d35cb3e5d5.js.gz
     lib/gollum/public/assets/katex/dist/fonts/KaTeX_AMS-Regular.woff2
     lib/gollum/public/assets/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2
     lib/gollum/public/assets/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2
