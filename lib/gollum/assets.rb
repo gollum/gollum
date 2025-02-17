@@ -21,11 +21,7 @@ module Precious
 
       options = {
         sass_config: {
-          quiet_deps: true,
-          silence_deprecations: [
-            'global-builtin',
-            'import'
-          ]
+          quiet_deps: true
         }
       }
 
@@ -41,6 +37,19 @@ module Precious
         include ::Precious::Views::OcticonHelpers
       end
       env
+    end
+  end
+end
+
+module Sprockets
+  class SasscProcessor
+    module Functions
+      def rocticon_css(name, parameters = {})
+        symbol = name.value.to_sym
+        octicon = ::Octicons::Octicon.new(symbol, parameters.merge({xmlns: 'http://www.w3.org/2000/svg'}))
+        [:width, :height].each {|option| octicon.options.delete(option)}
+        ::SassC::Script::Value::String.new(octicon.to_svg)
+      end
     end
   end
 end

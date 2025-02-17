@@ -1,6 +1,8 @@
 /* @control dialog */
 
-@import "_base", "_features", "_breakpoint";
+@use "_base";
+@use "_features";
+@use "_breakpoint";
 
 #gollum-dialog-dialog {
   display: block;
@@ -12,14 +14,14 @@
   height: 100%;
   z-index: 999999;
 
-  @include mediummobile-breakpoint {
+  @include breakpoint.mediummobile-breakpoint {
     position: absolute;
     position: fixed;
     width: auto;
     height: auto;
   }
 
-  @include desktop-breakpoint {
+  @include breakpoint.desktop-breakpoint {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -29,7 +31,7 @@
     display: block;
   }
 
-  
+
 }
 
 #gollum-dialog-dialog-inner {
@@ -43,9 +45,9 @@
   moz-box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
   box-shadow: 8px 7px 21px 0px rgba(0,0,0,0.68);
 
-  @include four-edge-position(0px);
+  @include features.four-edge-position(0px);
 
-  @include mediummobile-breakpoint {
+  @include breakpoint.mediummobile-breakpoint {
     margin: auto;
     position: fixed;
 
@@ -58,17 +60,17 @@
     max-width: 450px;
     max-height: 450px;
 
-    @include four-edge-position(10px);
+    @include features.four-edge-position(10px);
 
   }
 
-  @include desktop-breakpoint {
+  @include breakpoint.desktop-breakpoint {
     margin: 0 0 0 -225px;
     position: relative;
 
     width: 450px;
 
-    @include four-edge-position(auto);
+    @include features.four-edge-position(auto);
   }
 
 }
@@ -78,15 +80,15 @@
 
   height: 100%;
 
-  @include alt-box-model;
+  @include features.alt-box-model;
 
-  @include mediummobile-breakpoint {
+  @include breakpoint.mediummobile-breakpoint {
     overflow: hidden;
 
-    @include vertical-gradient(#f7f7f7, #ffffff);
+    @include features.vertical-gradient(#f7f7f7, #ffffff);
   }
 
-  @include desktop-breakpoint {
+  @include breakpoint.desktop-breakpoint {
     height: auto;
   }
 }
@@ -97,8 +99,8 @@
 
   fieldset {
     display: block;
-    @include reset-box;
-    @include clearfix;
+    @include features.reset-box;
+    @include features.clearfix;
 
     .field {
       margin: 0 0 1.5em 0;
@@ -122,7 +124,7 @@
       input {
 
         &.code {
-          font-family: $font-console;
+          font-family: base.$font-console;
         }
       }
 
@@ -131,7 +133,7 @@
         color: #666;
 
         span.path {
-          font-family: $font-console;
+          font-family: base.$font-console;
           font-weight: bold;
         }
       }

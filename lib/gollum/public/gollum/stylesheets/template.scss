@@ -1,10 +1,12 @@
 // Gollum v3 Template
 
-@import "_base", "_breakpoint", "_features";
+@use "_base";
+@use "_breakpoint";
+@use "_features";
 
 /* margin & padding reset*/
 * {
-  @include reset-box-leave-border;
+  @include features.reset-box-leave-border;
 }
 
 img {
@@ -25,7 +27,7 @@ img {
 #head .header-title {
   font-size: 1.5em;
 
-  @include largemobile-breakpoint {
+  @include breakpoint.largemobile-breakpoint {
     font-size: 32px;
   }
 }
@@ -52,7 +54,7 @@ h6 {
     transition: opacity 0.1s ease-in-out;
 
     &:before {
-      content: url('data:image/svg+xml;utf8,<%= rocticon_css(:link) %>');
+      content: url('data:image/svg+xml;utf8,#{rocticon_css(link)}');
     }
 
     &:not(.edit) {
@@ -63,7 +65,7 @@ h6 {
       margin-left: calc($anchor-icon-size/2);
 
       &:before {
-        content: url('data:image/svg+xml;utf8,<%= rocticon_css(:pencil) %>');
+        content: url('data:image/svg+xml;utf8,#{rocticon_css(pencil)}');
       }
     }
   }
@@ -182,23 +184,23 @@ nav.actions {
   position: relative;
   padding-right: 0.7em;
   vertical-align: middle;
-  width: $gollum-icon-width;
-  height: $gollum-icon-height;
+  width: base.$gollum-icon-width;
+  height: base.$gollum-icon-height;
   padding-bottom: 2px;
 }
 
 .flash.gollum-note::before {
-  content: url('data:image/svg+xml;utf8,<%= rocticon_css(:info) %>');
+  content: url('data:image/svg+xml;utf8,#{rocticon_css(info)}');
 }
 .flash.gollum-warning::before {
-  content: url('data:image/svg+xml;utf8,<%= rocticon_css(:alert) %>');
+  content: url('data:image/svg+xml;utf8,#{rocticon_css(alert)}');
 }
 
 /* `gollum`-provided CSS for the default size of octicons. */
 .gollum-icon .octicon, .flash .octicon {
-    width: $gollum-icon-width;
-    height: $gollum-icon-height;
-    fill: $gollum-icon-fillcolor;
+    width: base.$gollum-icon-width;
+    height: base.$gollum-icon-height;
+    fill: base.$gollum-icon-fillcolor;
 }
 
 
