@@ -291,6 +291,7 @@ task :precompile do
     config.manifest    = manifest
   end
 
+  manifest.clobber
   puts "\n  Precompiling assets to #{path}...  \n\n"
   manifest.compile(Precious::Assets::MANIFEST)
   bundle_katex_fonts(path)

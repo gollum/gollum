@@ -47,7 +47,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'terser', '~> 1.1'
 
   # = MANIFEST =
-  s.files = %w[
+  s.files = Dir['lib/gollum/public/assets/**/*'] + %w[
     CONTRIBUTING.md
     Dockerfile
     Gemfile
@@ -73,43 +73,6 @@ Gem::Specification.new do |s|
     lib/gollum/helpers.rb
     lib/gollum/locales/cn.yml
     lib/gollum/locales/en.yml
-    lib/gollum/public/assets/.sprockets-manifest-6c4a0bc907c3e25cb7e69c0faf6e71d2.json
-    lib/gollum/public/assets/app-05adca32f8f4f3effe10f8f4cf26dfd6a419ba986bce60d3f51a97e4055d4113.js
-    lib/gollum/public/assets/app-05adca32f8f4f3effe10f8f4cf26dfd6a419ba986bce60d3f51a97e4055d4113.js.gz
-    lib/gollum/public/assets/app-e224b375d824f0171fc926d624dc0887bf453db83f485b1992bc0859c4110e3e.css
-    lib/gollum/public/assets/app-e224b375d824f0171fc926d624dc0887bf453db83f485b1992bc0859c4110e3e.css.gz
-    lib/gollum/public/assets/criticmarkup-7b66f7a53b854bc9e4168be5b4725ca38e2bc6e9c41d5c050a9f60d9a94cb405.css
-    lib/gollum/public/assets/criticmarkup-7b66f7a53b854bc9e4168be5b4725ca38e2bc6e9c41d5c050a9f60d9a94cb405.css.gz
-    lib/gollum/public/assets/editor-9bef5462bb5dae2db84d6d8d534b55c5bb5a430e11344b3c23f9ea4410312f52.js
-    lib/gollum/public/assets/editor-9bef5462bb5dae2db84d6d8d534b55c5bb5a430e11344b3c23f9ea4410312f52.js.gz
-    lib/gollum/public/assets/gollum.katex-e70c1d51a08ebfe759eecbb33fbed54f300ccd7fb8d0e86e251caaf4e50f6b68.js
-    lib/gollum/public/assets/gollum.katex-e70c1d51a08ebfe759eecbb33fbed54f300ccd7fb8d0e86e251caaf4e50f6b68.js.gz
-    lib/gollum/public/assets/gollum.mermaid-06fd2f5494199db250618043312c27770720504b50c3f6ca99d2d2df529c7da3.js
-    lib/gollum/public/assets/gollum.mermaid-06fd2f5494199db250618043312c27770720504b50c3f6ca99d2d2df529c7da3.js.gz
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_AMS-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Fraktur-Bold.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Fraktur-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Main-Bold.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Main-BoldItalic.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Main-Italic.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Main-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Math-BoldItalic.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Math-Italic.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_SansSerif-Bold.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_SansSerif-Italic.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_SansSerif-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Script-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Size1-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Size2-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Size3-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Size4-Regular.woff2
-    lib/gollum/public/assets/katex/dist/fonts/KaTeX_Typewriter-Regular.woff2
-    lib/gollum/public/assets/katex/dist/katex-709d4191c4f005516a709377f79e468d343f4e6c91a29a6ff188d13d124ba55f.css
-    lib/gollum/public/assets/katex/dist/katex-709d4191c4f005516a709377f79e468d343f4e6c91a29a6ff188d13d124ba55f.css.gz
-    lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css
-    lib/gollum/public/assets/print-512498c368be0d3fb1ba105dfa84289ae48380ec9fcbef948bd4e23b0b095bfb.css.gz
     lib/gollum/public/gollum/javascript/HOWTO_UPDATE_MATHJAX.md
     lib/gollum/public/gollum/javascript/MathJax/a11y/assistive-mml.js
     lib/gollum/public/gollum/javascript/MathJax/a11y/complexity.js
