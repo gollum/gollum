@@ -2,8 +2,7 @@ name: Precompile Assets
 on:
   push:
     branches:
-      - '**'
-  pull_request:
+      - master
 
 jobs:
   precompile-assets:
