@@ -33,6 +33,9 @@ Pass any number of seconds referring to the duration of one full rotation for an
 --------------------------------------------------------------------------------
 */
 
+@use 'sass:list';
+@use 'sass:meta';
+@use 'sass:math';
 
 @mixin spinner-keyframes {
   @-webkit-keyframes spinner-animation {
@@ -95,17 +98,17 @@ Pass any number of seconds referring to the duration of one full rotation for an
   $border: $border-width $border-style $border-color;
   $duration: .65s;
   $background: transparent; //
-  
+
   // Parse arguments:
   @if $args {
     @each $arg in $args {
-      @if length($arg) == 1 {
-        @if type-of($arg) == number {
-          @if unit($arg) != "" {
-            @if unit($arg) == 's' {
+      @if list.length($arg) == 1 {
+        @if meta.type-of($arg) == number {
+          @if math.unit($arg) != "" {
+            @if math.unit($arg) == 's' {
               $duration: $arg;
             }
-            @else if isIn($dimensional-units, unit($arg)) {
+            @else if isIn($dimensional-units, math.unit($arg)) {
               $size: $arg;
             }
             @else {
@@ -117,16 +120,16 @@ Pass any number of seconds referring to the duration of one full rotation for an
           }
         }
       }
-      @else if length($arg) == 2 {
-        $prop: nth($arg, 1);
-        $val: nth($arg, 2);
+      @else if list.length($arg) == 2 {
+        $prop: list.nth($arg, 1);
+        $val: list.nth($arg, 2);
         @if isIn($border-props, $prop) {
           @if $prop == 'border-width' {
-            @if unit($val) == 'px' {
+            @if math.unit($val) == 'px' {
               $border-width: $val;
             }
             @else {
-              @warn "Spinner: \"#{unit($val)}\" is not a valid border-width! Using default border-width.";
+              @warn "Spinner: \"#{math.unit($val)}\" is not a valid border-width! Using default border-width.";
             }
           }
           @else if $prop == 'border-style' {
@@ -138,7 +141,7 @@ Pass any number of seconds referring to the duration of one full rotation for an
             }
           }
           @else if $prop == 'border-color' {
-            @if type-of($val) == color {
+            @if meta.type-of($val) == color {
               $border-color: $val;
             }
             @else {
@@ -147,19 +150,19 @@ Pass any number of seconds referring to the duration of one full rotation for an
           }
         }
         @else if $prop == 'background' {
-          @if type-of($val) == color {
+          @if meta.type-of($val) == color {
             $background: $val;
           }
           @else {
-            @warn "Spinner: \"#{nth($val)}\" is not a valid color for background! Using default \"transparent\".";
+            @warn "Spinner: \"#{list.nth($val)}\" is not a valid color for background! Using default \"transparent\".";
           }
         }
         @else {
-          @warn "Spinner: \"#{nth($arg, 1)}\" is not a valid border property! Using default border.";
+          @warn "Spinner: \"#{list.nth($arg, 1)}\" is not a valid border property! Using default border.";
         }
         $border: $border-width $border-style $border-color;
       }
-      @else if length($arg) == 3 {
+      @else if list.length($arg) == 3 {
         @if isValidBorder($arg) {
           $border: $arg;
         }
@@ -169,9 +172,9 @@ Pass any number of seconds referring to the duration of one full rotation for an
       }
     }
   }
-  
-  
-  
+
+
+
   background-color: transparent;
   border: $border;
   border-radius: 50%;
@@ -196,24 +199,24 @@ Pass any number of seconds referring to the duration of one full rotation for an
   $borderStyles: solid dotted dashed double;
   $validBorder: false;
   $types: ();
-  
-  @if length($border) == length($validBorderTypes) {
+
+  @if list.length($border) == list.length($validBorderTypes) {
     @each $val in $border {
-      @if type-of($val) == number {
-        @if unit($val) == "" {
+      @if meta.type-of($val) == number {
+        @if math.unit($val) == "" {
           @return false;
         }
       }
-      @else if type-of($val) == string {
+      @else if meta.type-of($val) == string {
         @if not isIn($borderStyles, $val) {
           @return false;
         }
       }
-      $types: append($types, type-of($val));
+      $types: append($types, meta.type-of($val));
     }
     $validBorder: hasIdenticalValues($validBorderTypes, $types);
   }
-  
+
   @return $validBorder;
 }
 

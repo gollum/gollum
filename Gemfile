@@ -19,10 +19,11 @@ group :test do
 end
 
 group :development do
-  unless RUBY_PLATFORM.match(/linux-musl$/)
-    gem 'sassc',  '~> 2.4'
-    gem 'sassc-embedded', '~> 1.54'
-  end
+  # TODO: force_ruby_platform here is a temporary workaround.
+  #   See: https://github.com/protocolbuffers/protobuf/issues/16853
+  gem 'google-protobuf', force_ruby_platform: RUBY_PLATFORM.include?('linux-musl')
+
+  gem 'sassc-embedded', '~> 1.80'
 end
 
 gemspec

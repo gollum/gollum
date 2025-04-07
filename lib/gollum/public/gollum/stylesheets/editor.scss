@@ -1,6 +1,8 @@
 // Wiki editor formatting
 
-@import "_base", "_features", "_breakpoint";
+@use "_base";
+@use "_features";
+@use "_breakpoint";
 
 a {
   -moz-outline: none !important;
@@ -31,7 +33,7 @@ a {
   /* @control function-bar */
   #gollum-editor-function-bar  {
 
-    @include desktop-breakpoint {
+    @include breakpoint.desktop-breakpoint {
       overflow: hidden;
     }
 
@@ -43,7 +45,7 @@ a {
       #gollum-editor-function-buttons {
         display: block;
 
-        @include desktop-breakpoint {
+        @include breakpoint.desktop-breakpoint {
           overflow: hidden;
           margin: 0;
           padding: 0 0 1.1em 0;
@@ -59,8 +61,8 @@ a {
 
         span {
           display: block;
-          
-          @include text-conceal-simple;
+
+          @include features.text-conceal-simple;
 
         }
       }
@@ -116,7 +118,7 @@ a {
 
   &.uploading {
     opacity: 1;
-    
+
     & + div {
       display: block;
     }
@@ -126,7 +128,7 @@ a {
 /* @section help */
 #gollum-editor-help {
 
-  @include desktop-breakpoint {
+  @include breakpoint.desktop-breakpoint {
     clear: none;
   }
 }
@@ -136,7 +138,7 @@ a {
   margin: 0;
 
 
-  @include desktop-breakpoint {
+  @include breakpoint.desktop-breakpoint {
     height: 17em;
     width: 18%;
     overflow: auto;
@@ -160,7 +162,7 @@ a {
       text-shadow: 0 -1px 0 #fff;
       font-size: 0.8em;
 
-      @include desktop-breakpoint {
+      @include breakpoint.desktop-breakpoint {
         font-size: 1em;
       }
 
@@ -173,7 +175,7 @@ a {
       }
 
       &.selected {
-        border: $border-standard;
+        border: base.$border-standard;
         border-bottom-color: #e7e7e7;
         border-width: 1px 0;
         background: #fff;
@@ -199,7 +201,7 @@ a {
   padding: 1em;
   clear: both;
 
-  @include desktop-breakpoint {
+  @include breakpoint.desktop-breakpoint {
     clear: none;
   }
 }

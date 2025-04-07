@@ -19,6 +19,15 @@ module Precious
       env.js_compressor  = ::Precious::Assets::JS_COMPRESSOR if defined?(::Precious::Assets::JS_COMPRESSOR)
       env.css_compressor = :sassc
 
+      options = {
+        sass_config: {
+          quiet_deps: true
+        }
+      }
+
+      env.register_transformer 'text/sass', 'text/css', Sprockets::SasscProcessor.new(options)
+      env.register_transformer 'text/scss', 'text/css', Sprockets::ScsscProcessor.new(options)
+
       env.context_class.class_eval do
         def base_url
           self.class.class_variable_get(:@@base_url)
@@ -28,6 +37,19 @@ module Precious
         include ::Precious::Views::OcticonHelpers
       end
       env
+    end
+  end
+end
+
+module Sprockets
+  class SasscProcessor
+    module Functions
+      def rocticon_css(name, parameters = {})
+        symbol = name.value.to_sym
+        octicon = ::Octicons::Octicon.new(symbol, parameters.merge({xmlns: 'http://www.w3.org/2000/svg'}))
+        [:width, :height].each {|option| octicon.options.delete(option)}
+        ::SassC::Script::Value::String.new(octicon.to_svg)
+      end
     end
   end
 end
