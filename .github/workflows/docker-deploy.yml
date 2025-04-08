@@ -1,8 +1,9 @@
 name: Deploy docker
 on:
   push:
-    branches:
-      - master
+    # This workflow will be triggered by the `precompile-assets` workflow on pushes to `master`
+    # branches:
+    #   - master
     tags:
       - "*"
     paths-ignore:
