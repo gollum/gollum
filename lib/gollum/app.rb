@@ -161,6 +161,11 @@ module Precious
     end
 
     namespace '/gollum' do
+
+      before do
+        response.headers['X-Robots-Tag'] = 'noindex'
+      end
+
       get '/feed/' do
         url = "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}"
         changes = wiki_new.latest_changes(::Gollum::Page.log_pagination_options(
