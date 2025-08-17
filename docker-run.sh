@@ -1,7 +1,7 @@
 #!/bin/bash
 
 wiki_is_writable(){
-  tempfile="$(mktemp -p . 2>/dev/null)" && rm "$tempfile"
+  tempfile="$(mktemp -p /wiki 2>/dev/null)" && rm "$tempfile"
 }
 
 # Check if /wiki directory exists and is writable
