@@ -22,7 +22,7 @@ jobs:
         id: hash-before
         run: |
           echo "Hash assets before compilation:" ${{ hashFiles('lib/gollum/public/assets/**/*') }}
-          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
+          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '!lib/gollum/public/assets/**/*.gz', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
       - name: Precompile assets
         run: bundle exec rake precompile
       - name: Create .sprockets-manifest.json without mtime
@@ -32,7 +32,7 @@ jobs:
         id: hash-after
         run: |
           echo "Hash assets after compilation:" ${{ hashFiles('lib/gollum/public/assets/**/*') }}
-          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
+          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '!lib/gollum/public/assets/**/*.gz', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
       - name: Commit
         if: steps.hash-before.outputs.hash != steps.hash-after.outputs.hash
         run: |
