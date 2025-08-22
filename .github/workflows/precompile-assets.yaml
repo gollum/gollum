@@ -1,9 +1,6 @@
 name: Precompile Assets
 on:
-  push:
-    branches:
-      - master
-
+  workflow_dispatch:
 jobs:
   precompile-assets:
     runs-on: ubuntu-latest
@@ -44,8 +41,3 @@ jobs:
           git add -A lib/gollum/public/assets
           git commit -m 'Precompile assets'
           git push
-          # Pushing with the implict token won't trigger another workflow,
-          # so manually trigger the workflow with github cli instead.
-          gh workflow run docker-deploy.yml --repo ${{ github.repository }}
-        env:
-          GH_TOKEN: ${{ github.token }}
