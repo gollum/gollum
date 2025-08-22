@@ -24,6 +24,7 @@ jobs:
       - name: Hash assets
         id: hash-before
         run: |
+          echo "Hash assets before compilation:" ${{ hashFiles('lib/gollum/public/assets/**/*') }}
           echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
       - name: Precompile assets
         run: bundle exec rake precompile
@@ -33,6 +34,7 @@ jobs:
       - name: Hash assets
         id: hash-after
         run: |
+          echo "Hash assets after compilation:" ${{ hashFiles('lib/gollum/public/assets/**/*') }}
           echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
       - name: Commit
         if: steps.hash-before.outputs.hash != steps.hash-after.outputs.hash
