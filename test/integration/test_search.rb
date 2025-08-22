@@ -25,11 +25,10 @@ context "search" do
     visit "/"
 
     search_term = "#find-me"
-
-    fill_in "Search site", with: search_term
+    (find_field 'Search site').fill_in with: search_term
     send_keys :enter
 
-    assert_includes page.text, "Search results for #find-me"
+    find 'h1', text: "Search results for #find-me"
 
     page_one_search_results = find_all ".search-result"
     assert_equal page_one_search_results.count, 10
