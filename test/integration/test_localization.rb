@@ -37,7 +37,7 @@ context 'Localized frontend' do
   test 'can visit overview page' do
     visit "/gollum/overview"
 
-    assert_includes page.text, 'Overview of master'
+    assert_includes page.text, 'Overview of main'
     assert_includes page.text, 'Home'
 
     click_on 'Back to Top'
