@@ -11,7 +11,7 @@ gem 'warbler', git: 'https://github.com/jruby/warbler' if RUBY_PLATFORM == 'java
 #
 # For more information, see: https://github.com/jruby/jruby/issues/8488
 #
-gem 'jar-dependencies', '< 0.5'
+gem 'jar-dependencies', '< 0.6'
 
 group :test do
   gem 'selenium-webdriver', require: false
