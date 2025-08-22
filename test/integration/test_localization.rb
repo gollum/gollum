@@ -15,35 +15,23 @@ context 'Localized frontend' do
 
   test 'can visit search results page' do
     visit '/gollum/search'
-    using_wait_time 10 do
-      fill_in('Search', with: "something-to-return-no-results")
-    end
+    (find_field 'Search').fill_in with: "something-to-return-no-results"
     send_keys :return
     
-    using_wait_time 10 do
-      assert_includes page.text,
-        'Search results for something-to-return-no-results'
-      assert_includes page.text,
-        'There are no results for your search.'
-      click_on 'Back to Top'
-    end
+    find 'h1', text: 'Search results for something-to-return-no-results'
+    find 'p', text: 'There are no results for your search.'
+    click_on 'Back to Top'
 
     visit '/gollum/search'
 
-    using_wait_time 10 do
-      fill_in('Search site', with: "Bilbo")
-    end
+    (find_field 'Search site').fill_in with: "Bilbo"
     send_keys :return
-    
-    using_wait_time 10 do
-      assert_includes page.text, 'Search results for Bilbo'
-      click_on 'Show all hits on this page'
-      click_on 'Bilbo-Baggins.md'
-    end
 
-    using_wait_time 10 do
-      assert page.current_path, '/Bilbo-Baggins.md'
-    end
+    find 'h1', text: 'Search results for Bilbo'
+    click_on 'Show all hits on this page'
+    (find_link 'Bilbo-Baggins.md').click()
+
+    assert page.current_path, '/Bilbo-Baggins.md'
   end
 
   test 'can visit overview page' do
