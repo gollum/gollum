@@ -1,0 +1,147 @@
+name: Build, Test and Deploy docker images
+on:
+  tags:
+    - "*"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'contrib/**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'contrib/**'
+
+jobs:
+  # Compile assets before docker build
+  precompile-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Determining whether assets should be compiled..."
+      - name: Run precompile assets workflow
+        # skip on pull requests or on tag pushes, only compile assets when pushed to master
+        if: github.event_name != 'pull_request' && github.ref == 'master'
+        run: |
+          gh workflow run precompile-assets.yml --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  build-test-deploy:
+    needs: precompile-assets # when this job runs, newly compiled assets will have been committed and pushed to the repo.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install required system dependencies
+        run: |
+          sudo apt-get install -y libyaml-dev
+
+      - name: Check Out Repo
+        uses: actions/checkout@v4
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            gollumwiki/gollum
+            ghcr.io/gollum/gollum
+          tags: |
+            type=ref,event=branch,pattern=master
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+
+      - name: Install Chromedriver
+        uses: nanasess/setup-chromedriver@v2
+      - run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+
+      - name: Build image
+        id: docker_build
+        uses: docker/build-push-action@v6
+        with:
+          context: ./
+          file: ./Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          platforms: linux/amd64, linux/arm64
+
+      - name: Print Docker image digest (SHA256)
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Run Capybara tests against a Dockerized Gollum instance
+        run: |
+          export GOLLUM_CAPYBARA_URL="http://127.0.0.1:4567"
+          export RUNNER_TRACKING_ID=""
+          export WIKI_ROOT="/tmp/lotr.git"
+
+          # Clone a test wiki to run tests against.
+          #
+          git clone test/examples/lotr.git "$WIKI_ROOT"
+
+          # Run a daemonized Docker instance in a normal way, then run tests.
+          #
+          docker run \
+            --detach \
+            --user $(id -u) \
+            --rm \
+            --publish 4567:4567 \
+            --volume "$WIKI_ROOT":/wiki \
+            ${{ steps.docker_build.outputs.digest }} --math katex
+          bundle exec rake test:capybara
+      
+      # Build and test have been succesful: we can now push images to ghcr and DockerHub
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Deploy image # will 'rebuild' the image, but nothing has changed
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./
+          file: ./Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          platforms: linux/amd64, linux/arm64

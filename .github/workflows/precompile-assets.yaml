@@ -1,9 +1,6 @@
 name: Precompile Assets
 on:
-  push:
-    branches:
-      - master
-
+  workflow_dispatch:
 jobs:
   precompile-assets:
     runs-on: ubuntu-latest
@@ -24,7 +21,8 @@ jobs:
       - name: Hash assets
         id: hash-before
         run: |
-          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
+          echo "Hash assets before compilation:" ${{ hashFiles('lib/gollum/public/assets/**/*') }}
+          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '!lib/gollum/public/assets/**/*.gz', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
       - name: Precompile assets
         run: bundle exec rake precompile
       - name: Create .sprockets-manifest.json without mtime
@@ -33,17 +31,14 @@ jobs:
       - name: Hash assets
         id: hash-after
         run: |
-          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
+          echo "Hash assets after compilation:" ${{ hashFiles('lib/gollum/public/assets/**/*') }}
+          echo "hash=${{ hashFiles('lib/gollum/public/assets/**/*', '!lib/gollum/public/assets/.sprockets-manifest-*.json', '!lib/gollum/public/assets/**/*.gz', '/tmp/.sprockets-manifest.json') }}" | tee -a "$GITHUB_OUTPUT"
       - name: Commit
         if: steps.hash-before.outputs.hash != steps.hash-after.outputs.hash
         run: |
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git config user.name github-actions[bot]
           git add -A lib/gollum/public/assets
+          git add yarn.lock
           git commit -m 'Precompile assets'
           git push
-          # Pushing with the implict token won't trigger another workflow,
-          # so manually trigger the workflow with github cli instead.
-          gh workflow run docker-deploy.yml --repo ${{ github.repository }}
-        env:
-          GH_TOKEN: ${{ github.token }}
