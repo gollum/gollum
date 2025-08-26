@@ -1,8 +1,8 @@
 name: Build, Test and Deploy docker images
 on:
-  tags:
-    - "*"
   push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
     branches:
       - master
     paths-ignore:
