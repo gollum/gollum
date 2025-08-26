@@ -23,7 +23,7 @@ jobs:
       - run: echo "Determining whether assets should be compiled..."
       - name: Run precompile assets workflow
         # skip on pull requests or on tag pushes, only compile assets when pushed to master
-        if: github.event_name != 'pull_request' && github.ref == 'master'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
           gh workflow run precompile-assets.yml --repo ${{ github.repository }}
         env:
