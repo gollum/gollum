@@ -10,10 +10,6 @@ on:
       - '**.txt'
       - 'contrib/**'
   pull_request:
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
-      - 'contrib/**'
 
 jobs:
   # Compile assets before docker build
