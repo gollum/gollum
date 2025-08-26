@@ -23,7 +23,7 @@ group :development do
   #   See: https://github.com/protocolbuffers/protobuf/issues/16853
   gem 'google-protobuf', force_ruby_platform: RUBY_PLATFORM.include?('linux-musl')
 
-  gem 'sassc-embedded', '~> 1.80'
+  gem 'sassc-embedded', '~> 1.80' unless RUBY_PLATFORM.include?('linux-musl')
 end
 
 gemspec
