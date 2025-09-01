@@ -13,7 +13,10 @@ RUN apk add --update \
 COPY Gemfile* /tmp/
 COPY gollum.gemspec* /tmp/
 WORKDIR /tmp
-RUN bundle install
+RUN bundle config set without 'development' && \
+    bundle config set without 'test' && \
+    bundle config set --local force_ruby_platform true && \
+    bundle install
 
 RUN gem install \
     asciidoctor \
