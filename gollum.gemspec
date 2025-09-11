@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'shoulda', '~> 3.6.0'
   s.add_development_dependency 'minitest-reporters', '~> 1.3.6'
   s.add_development_dependency 'mocha', '~> 2.0'
-  s.add_development_dependency 'test-unit', '~> 3.3.0'
+  s.add_development_dependency 'test-unit', '~> 3.7.0'
   s.add_development_dependency 'terser', '~> 1.1'
 
   # = MANIFEST =
