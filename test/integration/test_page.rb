@@ -21,6 +21,25 @@ context "viewing a wiki page" do
     Capybara.use_default_driver
   end
 
+  test "include with an absolute path ([[include:/with-absolute-path]])" do
+    create_page title: "Subdirectory 1/Some content", content: <<~TEXT
+      Paragraph one from 'Some content' page.
+
+      Paragraph two from 'Some content' page.
+    TEXT
+
+    create_page title: "Subdirectory 2/Page with another page included", content: <<~TEXT
+      This page uses the `[[include:<path>]]` tag to include content from
+      another wiki page.
+
+      [[include:/Subdirectory 1/Some content.md]]
+    TEXT
+
+    assert_includes page.text, "Page with another page included"
+    assert_includes page.text, "Paragraph one from 'Some content' page."
+    assert_includes page.text, "Paragraph two from 'Some content' page."
+  end
+
   test "'copy to clipboard' functionality on code blocks" do
     create_page title: "Page with code block", content: <<~TEXT
       This page includes a code block. In this test, we will use the provided

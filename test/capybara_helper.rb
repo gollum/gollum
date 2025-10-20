@@ -28,6 +28,14 @@ def console_log(page, level = :severe)
   page.driver.browser.logs.get(:browser).select { |log| log.level == level.to_s.upcase }
 end
 
+# Creates a page as a user might in the browser. Results in a page being created
+# and navigated to.
+#
+# @param title [String] A page title or the full path to the desired output
+#   file relative to the wiki's root. For example, both "Page" and
+#   "Path/To/My/Page.md" are valid titles.
+# @param content [String] The page's content.
+# @return [Void]
 def create_page(title:, content:)
   visit "/"
 
@@ -38,7 +46,8 @@ def create_page(title:, content:)
   assert_includes page.text, "Create New Page"
 
   page_title_field = find "input#gollum-editor-page-title"
-  assert_includes page_title_field.value, title
+
+  assert_includes page_title_field.value, title.split("/").last
 
   within "div.ace_content" do
     send_keys content
