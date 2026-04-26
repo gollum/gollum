@@ -1,3 +1,5 @@
 <form class="search-form" action="{{search_path}}" method="get" id="search-form">
-	<input type="text" class="form-control input-block input-sm" name="q" id="search-query" placeholder="{{tt.searchbar.placeholder}}" aria-label="{{tt.searchbar.aria.label}}" autocomplete="off">
+	<input type="text" class="form-control input-block input-sm" name="q" id="search-query" value="{{query}}" placeholder="{{tt.searchbar.placeholder}}" aria-label="{{tt.searchbar.aria.label}}" autocomplete="off">
+	<input type="hidden" name="ignore_strings" value="{{ignore_strings}}">
+	<input type="hidden" name="ignore_file_types" value="{{ignore_file_types}}">
 </form>

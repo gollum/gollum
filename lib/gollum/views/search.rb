@@ -1,7 +1,7 @@
 module Precious
   module Views
     class Search < Layout
-      attr_reader :query, :search_terms
+      attr_reader :query, :search_terms, :ignore_strings, :ignore_file_types
       include Pagination
 
       def results
@@ -19,7 +19,10 @@ module Precious
       end
 
       def query_string
-        "&q=%s" % CGI.escape(@query)
+        query = "&q=%s" % CGI.escape(@query)
+        query << "&ignore_strings=%s" % CGI.escape(@ignore_strings) unless @ignore_strings.to_s.empty?
+        query << "&ignore_file_types=%s" % CGI.escape(@ignore_file_types) unless @ignore_file_types.to_s.empty?
+        query
       end
 
       def title

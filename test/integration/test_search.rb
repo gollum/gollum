@@ -47,6 +47,46 @@ context "search" do
     assert_equal page_two_search_results.count, 1
   end
 
+  test "ignore file types" do
+    visit "/"
+
+    search_term = "Bilbo"
+    (find_field 'Search site').fill_in with: search_term
+    send_keys :enter
+
+    find 'h1', text: "Search results for Bilbo"
+
+    # Now on search page, apply ignore
+    fill_in 'ignore-file-types', with: 'csv'
+    click_button 'Apply'
+
+    search_results = find_all ".search-result"
+    # Should find Bilbo-Baggins.md but not Data.csv
+    assert search_results.count > 0
+    assert_includes page.text, "Bilbo-Baggins"
+    refute_includes page.text, "Data.csv"
+  end
+
+  test "ignore strings" do
+    visit "/"
+
+    search_term = "Bilbo"
+    (find_field 'Search site').fill_in with: search_term
+    send_keys :enter
+
+    find 'h1', text: "Search results for Bilbo"
+
+    # Now on search page, apply ignore
+    fill_in 'ignore-strings', with: 'Tolkien'
+    click_button 'Apply'
+
+    search_results = find_all ".search-result"
+    # Should find Data.csv but not Bilbo-Baggins.md
+    assert search_results.count > 0
+    assert_includes page.text, "Data.csv"
+    refute_includes page.text, "Bilbo-Baggins"
+  end
+
   def on_page_two?
     page.current_url.include? "page_num=2"
   end

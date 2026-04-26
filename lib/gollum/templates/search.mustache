@@ -5,6 +5,23 @@
     <h1 class="header-title text-center text-md-left py-4">
       {{t.search_results_for}}
     </h1>
+    
+    <form class="search-settings mb-4" action="{{search_path}}" method="get">
+      <input type="hidden" name="q" value="{{query}}">
+      <div class="form-row">
+        <div class="form-group col-md-5">
+          <label for="ignore-strings">Ignore strings</label>
+          <input id="ignore-strings" type="text" class="form-control" name="ignore_strings" value="{{ignore_strings}}" placeholder="comma-separated words">
+        </div>
+        <div class="form-group col-md-5">
+          <label for="ignore-file-types">Ignore file types</label>
+          <input id="ignore-file-types" type="text" class="form-control" name="ignore_file_types" value="{{ignore_file_types}}" placeholder="md,txt,html">
+        </div>
+        <div class="form-group col-md-2 align-self-end">
+          <button type="submit" class="btn btn-primary btn-block">Apply</button>
+        </div>
+      </div>
+    </form>
   </div>
 
 {{#has_results}}

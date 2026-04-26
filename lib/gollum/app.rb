@@ -543,8 +543,14 @@ module Precious
       end
 
       get '/search' do
-        @query     = params[:q] || ''
-        @name      = @query
+        @query             = params[:q] || ''
+        @name              = @query
+        @ignore_strings    = params[:ignore_strings].to_s
+        @ignore_file_types = params[:ignore_file_types].to_s
+
+        ignore_strings = @ignore_strings.split(',').map(&:strip).reject(&:empty?).map(&:downcase)
+        ignore_file_types = @ignore_file_types.split(',').map(&:strip).reject(&:empty?).map { |ext| ext.sub(/^\./, '').downcase }
+
         if @query.empty?
           @results = []
           @search_terms = []
@@ -553,6 +559,22 @@ module Precious
           @max_count = 10
           wiki       = wiki_new
           @results, @search_terms = wiki.search(@query)
+
+          if ignore_file_types.any?
+            @results.reject! do |result|
+              ext = File.extname(result[:name]).delete_prefix('.').downcase
+              ignore_file_types.include?(ext)
+            end
+          end
+
+          if ignore_strings.any?
+            @results.reject! do |result|
+              name_matches = result[:name].to_s.downcase
+              ignore_strings.any? do |term|
+                name_matches.include?(term) || Array(result[:context]).any? { |line| line.to_s.downcase.include?(term) }
+              end
+            end
+          end
         end
         mustache :search
       end
