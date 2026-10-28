@@ -40,6 +40,7 @@ See the [wiki](https://github.com/gollum/gollum/wiki) for extensive documentatio
   - [As a Ruby Gem](#as-a-ruby-gem)
   - [Via Docker](#via-docker)
   - [As a Web Application Resource (Java)](#as-a-web-application-resource-java)
+- [One-Click Deploy](#one-click-deploy)
 - [Markups](#markups)
   - [Markdown Flavors](#markdown-flavors)
 - [Running Gollum](#running-gollum)
@@ -89,6 +90,10 @@ java -jar gollum.war -S gollum <your-gollum-arguments-here>
 ```
 
 When using the `.war`, please be sure to pass [absolute paths](https://github.com/gollum/gollum/wiki/Gollum-via-Java-WAR#absolute-paths-issue) to your Gollum arguments.
+
+## One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Gollum/)
 
 ## Markups
 
